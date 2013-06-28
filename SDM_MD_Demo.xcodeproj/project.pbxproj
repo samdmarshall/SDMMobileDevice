@@ -1,0 +1,765 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
+		2215A84017500DE700AD1981 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A83F17500DE700AD1981 /* CoreFoundation.framework */; };
+		2215A84617500E0100AD1981 /* MobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A84517500E0100AD1981 /* MobileDevice.framework */; };
+		2215A84C17500E2800AD1981 /* MobileDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215A84A17500E2800AD1981 /* MobileDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2215A84D17500E2800AD1981 /* MobileDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215A84B17500E2800AD1981 /* MobileDevice.c */; };
+		2215A85417500E4C00AD1981 /* SDMMDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215A85217500E4C00AD1981 /* SDMMDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2215A85517500E4C00AD1981 /* SDMMDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215A85317500E4C00AD1981 /* SDMMDevice.c */; };
+		2215A87217500F2000AD1981 /* SDMMobileDevice.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A83717500DDC00AD1981 /* SDMMobileDevice.framework */; };
+		2215A8B0175010A300AD1981 /* SDMMDService.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215A8AE175010A300AD1981 /* SDMMDService.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2215A8B1175010A300AD1981 /* SDMMDService.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215A8AF175010A300AD1981 /* SDMMDService.c */; };
+		2215A91F17510CF300AD1981 /* SDMAFCDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215A91D17510CF300AD1981 /* SDMAFCDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2215A92017510CF300AD1981 /* SDMAFCDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215A91E17510CF300AD1981 /* SDMAFCDevice.c */; };
+		2215A9BB175124FD00AD1981 /* SDMMDError.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215A9B9175124FD00AD1981 /* SDMMDError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2215A9BC175124FD00AD1981 /* SDMMDError.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215A9BA175124FD00AD1981 /* SDMMDError.c */; };
+		2215A9FD17512A9F00AD1981 /* SDMMDeviceKeys.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215A9FB17512A9F00AD1981 /* SDMMDeviceKeys.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2215A9FE17512A9F00AD1981 /* SDMMDeviceKeys.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215A9FC17512A9F00AD1981 /* SDMMDeviceKeys.c */; };
+		2215AA411751328100AD1981 /* SDMMRecoveryModeDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AA3F1751328100AD1981 /* SDMMRecoveryModeDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2215AA421751328100AD1981 /* SDMMRecoveryModeDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AA401751328100AD1981 /* SDMMRecoveryModeDevice.c */; };
+		2215AB2C1751876900AD1981 /* MobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A84517500E0100AD1981 /* MobileDevice.framework */; };
+		2215AB4017524E4D00AD1981 /* SDMMRUSBDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB3E17524E4D00AD1981 /* SDMMRUSBDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2215AB4117524E4D00AD1981 /* SDMMRUSBDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AB3F17524E4D00AD1981 /* SDMMRUSBDevice.c */; };
+		2215AB4B17524FEC00AD1981 /* SDMMDFUModeDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB4917524FEC00AD1981 /* SDMMDFUModeDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2215AB4C17524FEC00AD1981 /* SDMMDFUModeDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AB4A17524FEC00AD1981 /* SDMMDFUModeDevice.c */; };
+		2215AB811752596100AD1981 /* SDMAFCIterator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB7F1752596100AD1981 /* SDMAFCIterator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2215AB821752596100AD1981 /* SDMAFCIterator.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AB801752596100AD1981 /* SDMAFCIterator.c */; };
+		2215AB8617525A2700AD1981 /* SDMAFCOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB8417525A2700AD1981 /* SDMAFCOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2215AB8717525A2700AD1981 /* SDMAFCOperation.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AB8517525A2700AD1981 /* SDMAFCOperation.c */; };
+		2215AB8C17525B1100AD1981 /* SDMAFCLock.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB8A17525B1100AD1981 /* SDMAFCLock.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2215AB8D17525B1100AD1981 /* SDMAFCLock.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AB8B17525B1100AD1981 /* SDMAFCLock.c */; };
+		2215AB9117525BA900AD1981 /* SDMMRestoreModeDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB8F17525BA900AD1981 /* SDMMRestoreModeDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2215AB9217525BA900AD1981 /* SDMMRestoreModeDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AB9017525BA900AD1981 /* SDMMRestoreModeDevice.c */; };
+		2215AB9817525D9000AD1981 /* SDMRestorableDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB9617525D9000AD1981 /* SDMRestorableDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2215AB9917525D9000AD1981 /* SDMRestorableDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AB9717525D9000AD1981 /* SDMRestorableDevice.c */; };
+		2215AC0F17526F7900AD1981 /* SDMMobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A83717500DDC00AD1981 /* SDMMobileDevice.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		225AC5C0175B976500A47071 /* SDMMDNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 225AC5BE175B976500A47071 /* SDMMDNotification.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		225AC5C1175B976500A47071 /* SDMMDNotification.c in Sources */ = {isa = PBXBuildFile; fileRef = 225AC5BF175B976500A47071 /* SDMMDNotification.c */; };
+		225ACB46175FBFA300A47071 /* SDMMDDebugger.h in Headers */ = {isa = PBXBuildFile; fileRef = 225ACB44175FBFA300A47071 /* SDMMDDebugger.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		225ACB47175FBFA300A47071 /* SDMMDDebugger.c in Sources */ = {isa = PBXBuildFile; fileRef = 225ACB45175FBFA300A47071 /* SDMMDDebugger.c */; };
+		225ACB75175FC15E00A47071 /* SDMMDConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 225ACB73175FC15E00A47071 /* SDMMDConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		225ACB76175FC15E00A47071 /* SDMMDConnection.c in Sources */ = {isa = PBXBuildFile; fileRef = 225ACB74175FC15E00A47071 /* SDMMDConnection.c */; };
+		225ACD771760C86200A47071 /* SDMMDApplications.h in Headers */ = {isa = PBXBuildFile; fileRef = 225ACD751760C86200A47071 /* SDMMDApplications.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		225ACD781760C86200A47071 /* SDMMDApplications.c in Sources */ = {isa = PBXBuildFile; fileRef = 225ACD761760C86200A47071 /* SDMMDApplications.c */; };
+		225AD7321765FE7700A47071 /* SDMUSBmuxListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 225AD7301765FE7700A47071 /* SDMUSBmuxListener.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		225AD7331765FE7700A47071 /* SDMUSBmuxListener.c in Sources */ = {isa = PBXBuildFile; fileRef = 225AD7311765FE7700A47071 /* SDMUSBmuxListener.c */; };
+		226CCE11176B619E0082A21A /* SDMMDGeneralFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 226CCE10176B619E0082A21A /* SDMMDGeneralFunctions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		226CCF1C176B7BAA0082A21A /* CFRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = 226CCF1B176B7BAA0082A21A /* CFRuntime.h */; };
+		226CD66517708BB60082A21A /* SDMSymbolTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 226CD66317708BB60082A21A /* SDMSymbolTable.h */; };
+		226CD66617708BB60082A21A /* SDMSymbolTable.c in Sources */ = {isa = PBXBuildFile; fileRef = 226CD66417708BB60082A21A /* SDMSymbolTable.c */; };
+		2288EC25177B4629006BF231 /* MDDemoMainSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2288EC24177B4629006BF231 /* MDDemoMainSplitView.m */; };
+		2288EC60177B48FA006BF231 /* SDM_MD_DemoAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 256AC3D90F4B6AC300CF3369 /* SDM_MD_DemoAppDelegate.m */; };
+		2288ECC9177B4F31006BF231 /* MDDemoDeviceTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 2288ECC8177B4F31006BF231 /* MDDemoDeviceTable.m */; };
+		2288ECDB177B5119006BF231 /* MDDemoInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2288ECDA177B5119006BF231 /* MDDemoInfoView.m */; };
+		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		225ACB19175FBBB500A47071 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2215A83617500DDC00AD1981;
+			remoteInfo = SDMMobileDevice;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2215AC1317526F8A00AD1981 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				2215A87217500F2000AD1981 /* SDMMobileDevice.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		1DDD58150DA1D0A300B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		2215A83717500DDC00AD1981 /* SDMMobileDevice.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SDMMobileDevice.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2215A83817500DDC00AD1981 /* SDMMobileDevice-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SDMMobileDevice-Info.plist"; sourceTree = "<group>"; };
+		2215A83F17500DE700AD1981 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		2215A84517500E0100AD1981 /* MobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileDevice.framework; path = /System/Library/PrivateFrameworks/MobileDevice.framework; sourceTree = "<absolute>"; };
+		2215A84A17500E2800AD1981 /* MobileDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileDevice.h; sourceTree = "<group>"; };
+		2215A84B17500E2800AD1981 /* MobileDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = MobileDevice.c; sourceTree = "<group>"; };
+		2215A85217500E4C00AD1981 /* SDMMDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMDevice.h; sourceTree = "<group>"; };
+		2215A85317500E4C00AD1981 /* SDMMDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMDevice.c; sourceTree = "<group>"; };
+		2215A8AE175010A300AD1981 /* SDMMDService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMDService.h; sourceTree = "<group>"; };
+		2215A8AF175010A300AD1981 /* SDMMDService.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMDService.c; sourceTree = "<group>"; };
+		2215A91D17510CF300AD1981 /* SDMAFCDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMAFCDevice.h; sourceTree = "<group>"; };
+		2215A91E17510CF300AD1981 /* SDMAFCDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMAFCDevice.c; sourceTree = "<group>"; };
+		2215A9B9175124FD00AD1981 /* SDMMDError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMDError.h; sourceTree = "<group>"; };
+		2215A9BA175124FD00AD1981 /* SDMMDError.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMDError.c; sourceTree = "<group>"; };
+		2215A9FB17512A9F00AD1981 /* SDMMDeviceKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMDeviceKeys.h; sourceTree = "<group>"; };
+		2215A9FC17512A9F00AD1981 /* SDMMDeviceKeys.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMDeviceKeys.c; sourceTree = "<group>"; };
+		2215AA3F1751328100AD1981 /* SDMMRecoveryModeDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMRecoveryModeDevice.h; sourceTree = "<group>"; };
+		2215AA401751328100AD1981 /* SDMMRecoveryModeDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMRecoveryModeDevice.c; sourceTree = "<group>"; };
+		2215AB3E17524E4D00AD1981 /* SDMMRUSBDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMRUSBDevice.h; sourceTree = "<group>"; };
+		2215AB3F17524E4D00AD1981 /* SDMMRUSBDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMRUSBDevice.c; sourceTree = "<group>"; };
+		2215AB4917524FEC00AD1981 /* SDMMDFUModeDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMDFUModeDevice.h; sourceTree = "<group>"; };
+		2215AB4A17524FEC00AD1981 /* SDMMDFUModeDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMDFUModeDevice.c; sourceTree = "<group>"; };
+		2215AB7F1752596100AD1981 /* SDMAFCIterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMAFCIterator.h; sourceTree = "<group>"; };
+		2215AB801752596100AD1981 /* SDMAFCIterator.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMAFCIterator.c; sourceTree = "<group>"; };
+		2215AB8417525A2700AD1981 /* SDMAFCOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMAFCOperation.h; sourceTree = "<group>"; };
+		2215AB8517525A2700AD1981 /* SDMAFCOperation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMAFCOperation.c; sourceTree = "<group>"; };
+		2215AB8A17525B1100AD1981 /* SDMAFCLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMAFCLock.h; sourceTree = "<group>"; };
+		2215AB8B17525B1100AD1981 /* SDMAFCLock.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMAFCLock.c; sourceTree = "<group>"; };
+		2215AB8F17525BA900AD1981 /* SDMMRestoreModeDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMRestoreModeDevice.h; sourceTree = "<group>"; };
+		2215AB9017525BA900AD1981 /* SDMMRestoreModeDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMRestoreModeDevice.c; sourceTree = "<group>"; };
+		2215AB9617525D9000AD1981 /* SDMRestorableDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMRestorableDevice.h; sourceTree = "<group>"; };
+		2215AB9717525D9000AD1981 /* SDMRestorableDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMRestorableDevice.c; sourceTree = "<group>"; };
+		2215ACE91753AFA500AD1981 /* libMobileDeviceAccess.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMobileDeviceAccess.a; path = "/Volumes/Data/Users/sam/git Projects/SM1Password Sync/build/Debug/libMobileDeviceAccess.a"; sourceTree = "<absolute>"; };
+		2215B2571757A22400AD1981 /* SDMMACAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMACAddress.h; sourceTree = "<group>"; };
+		2215B2581757A22400AD1981 /* SDMMACAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDMMACAddress.m; sourceTree = "<group>"; };
+		2215B29E1757A9D700AD1981 /* SDMNetServiceSpoof.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMNetServiceSpoof.h; sourceTree = "<group>"; };
+		2215B29F1757A9D700AD1981 /* SDMNetServiceSpoof.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDMNetServiceSpoof.m; sourceTree = "<group>"; };
+		225AC5BE175B976500A47071 /* SDMMDNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMDNotification.h; sourceTree = "<group>"; };
+		225AC5BF175B976500A47071 /* SDMMDNotification.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMDNotification.c; sourceTree = "<group>"; };
+		225ACB44175FBFA300A47071 /* SDMMDDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMDDebugger.h; sourceTree = "<group>"; };
+		225ACB45175FBFA300A47071 /* SDMMDDebugger.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMDDebugger.c; sourceTree = "<group>"; };
+		225ACB73175FC15E00A47071 /* SDMMDConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMDConnection.h; sourceTree = "<group>"; };
+		225ACB74175FC15E00A47071 /* SDMMDConnection.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMDConnection.c; sourceTree = "<group>"; };
+		225ACD751760C86200A47071 /* SDMMDApplications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMDApplications.h; sourceTree = "<group>"; };
+		225ACD761760C86200A47071 /* SDMMDApplications.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMDApplications.c; sourceTree = "<group>"; };
+		225AD7301765FE7700A47071 /* SDMUSBmuxListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMUSBmuxListener.h; sourceTree = "<group>"; };
+		225AD7311765FE7700A47071 /* SDMUSBmuxListener.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMUSBmuxListener.c; sourceTree = "<group>"; };
+		226CCE10176B619E0082A21A /* SDMMDGeneralFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMDGeneralFunctions.h; sourceTree = "<group>"; };
+		226CCF1B176B7BAA0082A21A /* CFRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFRuntime.h; sourceTree = "<group>"; };
+		226CD66317708BB60082A21A /* SDMSymbolTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDMSymbolTable.h; path = SDMSymbolTable/SDMSymbolTable.h; sourceTree = "<group>"; };
+		226CD66417708BB60082A21A /* SDMSymbolTable.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = SDMSymbolTable.c; path = SDMSymbolTable/SDMSymbolTable.c; sourceTree = "<group>"; };
+		2288EC23177B4629006BF231 /* MDDemoMainSplitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDDemoMainSplitView.h; sourceTree = "<group>"; };
+		2288EC24177B4629006BF231 /* MDDemoMainSplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDDemoMainSplitView.m; sourceTree = "<group>"; };
+		2288ECC7177B4F31006BF231 /* MDDemoDeviceTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDDemoDeviceTable.h; sourceTree = "<group>"; };
+		2288ECC8177B4F31006BF231 /* MDDemoDeviceTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDDemoDeviceTable.m; sourceTree = "<group>"; };
+		2288ECD9177B5119006BF231 /* MDDemoInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDDemoInfoView.h; sourceTree = "<group>"; };
+		2288ECDA177B5119006BF231 /* MDDemoInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDDemoInfoView.m; sourceTree = "<group>"; };
+		256AC3D80F4B6AC300CF3369 /* SDM_MD_DemoAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDM_MD_DemoAppDelegate.h; sourceTree = "<group>"; };
+		256AC3D90F4B6AC300CF3369 /* SDM_MD_DemoAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDM_MD_DemoAppDelegate.m; sourceTree = "<group>"; };
+		256AC3F00F4B6AF500CF3369 /* SDM_MD_Demo_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDM_MD_Demo_Prefix.pch; sourceTree = "<group>"; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		8D1107310486CEB800E47090 /* SDM_MD_Demo-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SDM_MD_Demo-Info.plist"; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* SDM_MD_Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SDM_MD_Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2215A83517500DDC00AD1981 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2215A84017500DE700AD1981 /* CoreFoundation.framework in Frameworks */,
+				2215A84617500E0100AD1981 /* MobileDevice.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2215AC0F17526F7900AD1981 /* SDMMobileDevice.framework in Frameworks */,
+				2215AB2C1751876900AD1981 /* MobileDevice.framework in Frameworks */,
+				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				2288EC22177B45F5006BF231 /* UI */,
+				256AC3D80F4B6AC300CF3369 /* SDM_MD_DemoAppDelegate.h */,
+				256AC3D90F4B6AC300CF3369 /* SDM_MD_DemoAppDelegate.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2215A83F17500DE700AD1981 /* CoreFoundation.framework */,
+				2215A84517500E0100AD1981 /* MobileDevice.framework */,
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				13E42FB307B3F0F600E4EEF1 /* CoreData.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2215A83717500DDC00AD1981 /* SDMMobileDevice.framework */,
+				8D1107320486CEB800E47090 /* SDM_MD_Demo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2215A85017500E2D00AD1981 /* MobileDevice */ = {
+			isa = PBXGroup;
+			children = (
+				2215A84A17500E2800AD1981 /* MobileDevice.h */,
+				2215A84B17500E2800AD1981 /* MobileDevice.c */,
+				226CCE10176B619E0082A21A /* SDMMDGeneralFunctions.h */,
+				226CCF1B176B7BAA0082A21A /* CFRuntime.h */,
+				2215A85917500E8700AD1981 /* SDMMDService */,
+				225ACB6B175FC13400A47071 /* SDMMDConnection */,
+				225AD72F1765FE3C00A47071 /* SDMUSBmuxListener */,
+				2215A85117500E3700AD1981 /* SDMMDevice */,
+				2215A91C17510CC400AD1981 /* SDMAFCDevice */,
+				225ACD721760C82400A47071 /* SDMMDApplications */,
+				2215A9B7175124D300AD1981 /* SDMMDError */,
+				225AC5BB175B971800A47071 /* SDMMDNotification */,
+			);
+			path = MobileDevice;
+			sourceTree = "<group>";
+		};
+		2215A85117500E3700AD1981 /* SDMMDevice */ = {
+			isa = PBXGroup;
+			children = (
+				2215A85217500E4C00AD1981 /* SDMMDevice.h */,
+				2215A85317500E4C00AD1981 /* SDMMDevice.c */,
+				2215A9FB17512A9F00AD1981 /* SDMMDeviceKeys.h */,
+				2215A9FC17512A9F00AD1981 /* SDMMDeviceKeys.c */,
+				2215AA3F1751328100AD1981 /* SDMMRecoveryModeDevice.h */,
+				2215AA401751328100AD1981 /* SDMMRecoveryModeDevice.c */,
+				2215AB3E17524E4D00AD1981 /* SDMMRUSBDevice.h */,
+				2215AB3F17524E4D00AD1981 /* SDMMRUSBDevice.c */,
+				2215AB4917524FEC00AD1981 /* SDMMDFUModeDevice.h */,
+				2215AB4A17524FEC00AD1981 /* SDMMDFUModeDevice.c */,
+				2215AB8F17525BA900AD1981 /* SDMMRestoreModeDevice.h */,
+				2215AB9017525BA900AD1981 /* SDMMRestoreModeDevice.c */,
+				2215AB9617525D9000AD1981 /* SDMRestorableDevice.h */,
+				2215AB9717525D9000AD1981 /* SDMRestorableDevice.c */,
+			);
+			path = SDMMDevice;
+			sourceTree = "<group>";
+		};
+		2215A85917500E8700AD1981 /* SDMMDService */ = {
+			isa = PBXGroup;
+			children = (
+				2215A8AE175010A300AD1981 /* SDMMDService.h */,
+				2215A8AF175010A300AD1981 /* SDMMDService.c */,
+				225ACB44175FBFA300A47071 /* SDMMDDebugger.h */,
+				225ACB45175FBFA300A47071 /* SDMMDDebugger.c */,
+			);
+			path = SDMMDService;
+			sourceTree = "<group>";
+		};
+		2215A91C17510CC400AD1981 /* SDMAFCDevice */ = {
+			isa = PBXGroup;
+			children = (
+				2215A91D17510CF300AD1981 /* SDMAFCDevice.h */,
+				2215A91E17510CF300AD1981 /* SDMAFCDevice.c */,
+				2215AB7F1752596100AD1981 /* SDMAFCIterator.h */,
+				2215AB801752596100AD1981 /* SDMAFCIterator.c */,
+				2215AB8417525A2700AD1981 /* SDMAFCOperation.h */,
+				2215AB8517525A2700AD1981 /* SDMAFCOperation.c */,
+				2215AB8A17525B1100AD1981 /* SDMAFCLock.h */,
+				2215AB8B17525B1100AD1981 /* SDMAFCLock.c */,
+			);
+			path = SDMAFCDevice;
+			sourceTree = "<group>";
+		};
+		2215A9B7175124D300AD1981 /* SDMMDError */ = {
+			isa = PBXGroup;
+			children = (
+				2215A9B9175124FD00AD1981 /* SDMMDError.h */,
+				2215A9BA175124FD00AD1981 /* SDMMDError.c */,
+			);
+			path = SDMMDError;
+			sourceTree = "<group>";
+		};
+		2215B2561757A1F100AD1981 /* Additions */ = {
+			isa = PBXGroup;
+			children = (
+				2215B2571757A22400AD1981 /* SDMMACAddress.h */,
+				2215B2581757A22400AD1981 /* SDMMACAddress.m */,
+				2215B29E1757A9D700AD1981 /* SDMNetServiceSpoof.h */,
+				2215B29F1757A9D700AD1981 /* SDMNetServiceSpoof.m */,
+			);
+			name = Additions;
+			sourceTree = "<group>";
+		};
+		225AC5BB175B971800A47071 /* SDMMDNotification */ = {
+			isa = PBXGroup;
+			children = (
+				225AC5BE175B976500A47071 /* SDMMDNotification.h */,
+				225AC5BF175B976500A47071 /* SDMMDNotification.c */,
+			);
+			path = SDMMDNotification;
+			sourceTree = "<group>";
+		};
+		225ACB6B175FC13400A47071 /* SDMMDConnection */ = {
+			isa = PBXGroup;
+			children = (
+				225ACB73175FC15E00A47071 /* SDMMDConnection.h */,
+				225ACB74175FC15E00A47071 /* SDMMDConnection.c */,
+			);
+			path = SDMMDConnection;
+			sourceTree = "<group>";
+		};
+		225ACD721760C82400A47071 /* SDMMDApplications */ = {
+			isa = PBXGroup;
+			children = (
+				225ACD751760C86200A47071 /* SDMMDApplications.h */,
+				225ACD761760C86200A47071 /* SDMMDApplications.c */,
+			);
+			path = SDMMDApplications;
+			sourceTree = "<group>";
+		};
+		225AD72F1765FE3C00A47071 /* SDMUSBmuxListener */ = {
+			isa = PBXGroup;
+			children = (
+				225AD7301765FE7700A47071 /* SDMUSBmuxListener.h */,
+				225AD7311765FE7700A47071 /* SDMUSBmuxListener.c */,
+			);
+			path = SDMUSBmuxListener;
+			sourceTree = "<group>";
+		};
+		226CD66217708B810082A21A /* SymbolTable */ = {
+			isa = PBXGroup;
+			children = (
+				226CD66317708BB60082A21A /* SDMSymbolTable.h */,
+				226CD66417708BB60082A21A /* SDMSymbolTable.c */,
+			);
+			name = SymbolTable;
+			sourceTree = "<group>";
+		};
+		2288EC22177B45F5006BF231 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				2288EC23177B4629006BF231 /* MDDemoMainSplitView.h */,
+				2288EC24177B4629006BF231 /* MDDemoMainSplitView.m */,
+				2288ECC7177B4F31006BF231 /* MDDemoDeviceTable.h */,
+				2288ECC8177B4F31006BF231 /* MDDemoDeviceTable.m */,
+				2288ECD9177B5119006BF231 /* MDDemoInfoView.h */,
+				2288ECDA177B5119006BF231 /* MDDemoInfoView.m */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* SDM_MD_Demo */ = {
+			isa = PBXGroup;
+			children = (
+				226CD66217708B810082A21A /* SymbolTable */,
+				2215B2561757A1F100AD1981 /* Additions */,
+				2215A85017500E2D00AD1981 /* MobileDevice */,
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+				2215A83817500DDC00AD1981 /* SDMMobileDevice-Info.plist */,
+				2215ACE91753AFA500AD1981 /* libMobileDeviceAccess.a */,
+			);
+			name = SDM_MD_Demo;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				256AC3F00F4B6AF500CF3369 /* SDM_MD_Demo_Prefix.pch */,
+				29B97316FDCFA39411CA2CEA /* main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107310486CEB800E47090 /* SDM_MD_Demo-Info.plist */,
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		2215A83217500DDC00AD1981 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2215A84C17500E2800AD1981 /* MobileDevice.h in Headers */,
+				2215A85417500E4C00AD1981 /* SDMMDevice.h in Headers */,
+				2215A8B0175010A300AD1981 /* SDMMDService.h in Headers */,
+				2215A91F17510CF300AD1981 /* SDMAFCDevice.h in Headers */,
+				2215A9BB175124FD00AD1981 /* SDMMDError.h in Headers */,
+				2215A9FD17512A9F00AD1981 /* SDMMDeviceKeys.h in Headers */,
+				2215AA411751328100AD1981 /* SDMMRecoveryModeDevice.h in Headers */,
+				2215AB4017524E4D00AD1981 /* SDMMRUSBDevice.h in Headers */,
+				2215AB4B17524FEC00AD1981 /* SDMMDFUModeDevice.h in Headers */,
+				2215AB811752596100AD1981 /* SDMAFCIterator.h in Headers */,
+				2215AB8617525A2700AD1981 /* SDMAFCOperation.h in Headers */,
+				2215AB8C17525B1100AD1981 /* SDMAFCLock.h in Headers */,
+				2215AB9117525BA900AD1981 /* SDMMRestoreModeDevice.h in Headers */,
+				2215AB9817525D9000AD1981 /* SDMRestorableDevice.h in Headers */,
+				225AC5C0175B976500A47071 /* SDMMDNotification.h in Headers */,
+				225ACB46175FBFA300A47071 /* SDMMDDebugger.h in Headers */,
+				225ACB75175FC15E00A47071 /* SDMMDConnection.h in Headers */,
+				225ACD771760C86200A47071 /* SDMMDApplications.h in Headers */,
+				225AD7321765FE7700A47071 /* SDMUSBmuxListener.h in Headers */,
+				226CCE11176B619E0082A21A /* SDMMDGeneralFunctions.h in Headers */,
+				226CCF1C176B7BAA0082A21A /* CFRuntime.h in Headers */,
+				226CD66517708BB60082A21A /* SDMSymbolTable.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		2215A83617500DDC00AD1981 /* SDMMobileDevice */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2215A83C17500DDC00AD1981 /* Build configuration list for PBXNativeTarget "SDMMobileDevice" */;
+			buildPhases = (
+				2215A83217500DDC00AD1981 /* Headers */,
+				2215A83317500DDC00AD1981 /* Resources */,
+				2215A83417500DDC00AD1981 /* Sources */,
+				2215A83517500DDC00AD1981 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SDMMobileDevice;
+			productName = SDMMobileDevice;
+			productReference = 2215A83717500DDC00AD1981 /* SDMMobileDevice.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		8D1107260486CEB800E47090 /* SDM_MD_Demo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "SDM_MD_Demo" */;
+			buildPhases = (
+				2215AC1317526F8A00AD1981 /* Copy Frameworks */,
+				8D1107290486CEB800E47090 /* Resources */,
+				8D11072C0486CEB800E47090 /* Sources */,
+				8D11072E0486CEB800E47090 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				225ACB1A175FBBB500A47071 /* PBXTargetDependency */,
+			);
+			name = SDM_MD_Demo;
+			productInstallPath = "$(HOME)/Applications";
+			productName = SDM_MD_Demo;
+			productReference = 8D1107320486CEB800E47090 /* SDM_MD_Demo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "SDM_MD_Demo" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* SDM_MD_Demo */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2215A83617500DDC00AD1981 /* SDMMobileDevice */,
+				8D1107260486CEB800E47090 /* SDM_MD_Demo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2215A83317500DDC00AD1981 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D1107290486CEB800E47090 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2215A83417500DDC00AD1981 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2215A84D17500E2800AD1981 /* MobileDevice.c in Sources */,
+				2215A85517500E4C00AD1981 /* SDMMDevice.c in Sources */,
+				2215A8B1175010A300AD1981 /* SDMMDService.c in Sources */,
+				2215A92017510CF300AD1981 /* SDMAFCDevice.c in Sources */,
+				2215A9BC175124FD00AD1981 /* SDMMDError.c in Sources */,
+				2215A9FE17512A9F00AD1981 /* SDMMDeviceKeys.c in Sources */,
+				2215AA421751328100AD1981 /* SDMMRecoveryModeDevice.c in Sources */,
+				2215AB4117524E4D00AD1981 /* SDMMRUSBDevice.c in Sources */,
+				2215AB4C17524FEC00AD1981 /* SDMMDFUModeDevice.c in Sources */,
+				2215AB821752596100AD1981 /* SDMAFCIterator.c in Sources */,
+				2215AB8717525A2700AD1981 /* SDMAFCOperation.c in Sources */,
+				2215AB8D17525B1100AD1981 /* SDMAFCLock.c in Sources */,
+				2215AB9217525BA900AD1981 /* SDMMRestoreModeDevice.c in Sources */,
+				2215AB9917525D9000AD1981 /* SDMRestorableDevice.c in Sources */,
+				225AC5C1175B976500A47071 /* SDMMDNotification.c in Sources */,
+				225ACB47175FBFA300A47071 /* SDMMDDebugger.c in Sources */,
+				225ACB76175FC15E00A47071 /* SDMMDConnection.c in Sources */,
+				225ACD781760C86200A47071 /* SDMMDApplications.c in Sources */,
+				225AD7331765FE7700A47071 /* SDMUSBmuxListener.c in Sources */,
+				226CD66617708BB60082A21A /* SDMSymbolTable.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072D0486CEB800E47090 /* main.m in Sources */,
+				2288EC25177B4629006BF231 /* MDDemoMainSplitView.m in Sources */,
+				2288EC60177B48FA006BF231 /* SDM_MD_DemoAppDelegate.m in Sources */,
+				2288ECC9177B4F31006BF231 /* MDDemoDeviceTable.m in Sources */,
+				2288ECDB177B5119006BF231 /* MDDemoInfoView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		225ACB1A175FBBB500A47071 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2215A83617500DDC00AD1981 /* SDMMobileDevice */;
+			targetProxy = 225ACB19175FBBB500A47071 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C165DFE840E0CC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		1DDD58140DA1D0A300B32029 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1DDD58150DA1D0A300B32029 /* English */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		2215A83A17500DDC00AD1981 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
+				);
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INFOPLIST_FILE = "SDMMobileDevice-Info.plist";
+				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				OTHER_LDFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = SDMMobileDevice;
+			};
+			name = Debug;
+		};
+		2215A83B17500DDC00AD1981 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
+				);
+				FRAMEWORK_VERSION = A;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INFOPLIST_FILE = "SDMMobileDevice-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = SDMMobileDevice;
+			};
+			name = Release;
+		};
+		C01FCF4B08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = SDM_MD_Demo_Prefix.pch;
+				INFOPLIST_FILE = "SDM_MD_Demo-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../SM1Password Sync/build/Debug\"",
+				);
+				PRODUCT_NAME = SDM_MD_Demo;
+			};
+			name = Debug;
+		};
+		C01FCF4C08A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
+				);
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = SDM_MD_Demo_Prefix.pch;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INFOPLIST_FILE = "SDM_MD_Demo-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = SDM_MD_Demo;
+				STRIP_STYLE = debugging;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2215A83C17500DDC00AD1981 /* Build configuration list for PBXNativeTarget "SDMMobileDevice" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2215A83A17500DDC00AD1981 /* Debug */,
+				2215A83B17500DDC00AD1981 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "SDM_MD_Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4B08A954540054247B /* Debug */,
+				C01FCF4C08A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "SDM_MD_Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}
