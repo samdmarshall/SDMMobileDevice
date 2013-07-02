@@ -2,12 +2,13 @@
 //  SDM_MD_DemoAppDelegate.m
 //  SDM_MD_Demo
 //
-//  Created by sam on 5/24/13.
+//  Created by Sam Marshall on 5/24/13.
 //  Copyright 2013 Sam Marshall. All rights reserved.
 //
 
 #import "SDM_MD_DemoAppDelegate.h"
 #import "MDDemoMainSplitView.h"
+#import "MobileDevice/MobileDevice.h"
 
 @implementation SDM_MD_DemoAppDelegate
 
@@ -17,13 +18,17 @@
 	MDDemoMainSplitView *splitView = [[MDDemoMainSplitView alloc] initWithFrame:[self.window.contentView bounds]];
 	[self.window.contentView addSubview:splitView];
 	// Insert code here to initialize your application 
-	/*dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-		SDMUSBMuxStartListener(&SDMMDController->usbmuxd);
-		CFArrayRef devices = SDM_AMDCreateDeviceList();
-		dispatch_async(dispatch_get_main_queue(), ^{
-			CFShow(devices);
-		});
-	});*/
+	//dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+		//SDMUSBMuxStartListener(&SDMMDController->usbmuxd);
+		//CFArrayRef devices = SDM_AMDCreateDeviceList();
+		//dispatch_async(dispatch_get_main_queue(), ^{
+			void *createDevice = SDMSTSymbolLookup(SDMMDController->lookupTable, "AMDeviceActivate");
+			printf("%x\n",createDevice);
+			uint32_t test = SDMSTGetArgumentCount(SDMMDController->lookupTable, createDevice);
+			NSLog(@"%i",test);
+
+	//	});
+	//});
 	
 	/*CFArrayRef devices = SDM_AMDCreateDeviceList();
 	for (uint32_t i = 0; i < CFArrayGetCount(devices); i++) {

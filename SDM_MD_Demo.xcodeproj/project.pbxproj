@@ -41,6 +41,21 @@
 		2215AB9817525D9000AD1981 /* SDMRestorableDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB9617525D9000AD1981 /* SDMRestorableDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2215AB9917525D9000AD1981 /* SDMRestorableDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AB9717525D9000AD1981 /* SDMRestorableDevice.c */; };
 		2215AC0F17526F7900AD1981 /* SDMMobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A83717500DDC00AD1981 /* SDMMobileDevice.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		22485231178216D300CD8A99 /* decode.c in Sources */ = {isa = PBXBuildFile; fileRef = 22485224178216D300CD8A99 /* decode.c */; };
+		22485232178216D300CD8A99 /* decode.h in Headers */ = {isa = PBXBuildFile; fileRef = 22485225178216D300CD8A99 /* decode.h */; };
+		22485233178216D300CD8A99 /* extern.h in Headers */ = {isa = PBXBuildFile; fileRef = 22485226178216D300CD8A99 /* extern.h */; };
+		22485234178216D300CD8A99 /* input.c in Sources */ = {isa = PBXBuildFile; fileRef = 22485227178216D300CD8A99 /* input.c */; };
+		22485235178216D300CD8A99 /* input.h in Headers */ = {isa = PBXBuildFile; fileRef = 22485228178216D300CD8A99 /* input.h */; };
+		22485236178216D300CD8A99 /* syn-att.c in Sources */ = {isa = PBXBuildFile; fileRef = 22485229178216D300CD8A99 /* syn-att.c */; };
+		22485237178216D300CD8A99 /* syn-intel.c in Sources */ = {isa = PBXBuildFile; fileRef = 2248522A178216D300CD8A99 /* syn-intel.c */; };
+		22485238178216D300CD8A99 /* syn.c in Sources */ = {isa = PBXBuildFile; fileRef = 2248522B178216D300CD8A99 /* syn.c */; };
+		22485239178216D300CD8A99 /* syn.h in Headers */ = {isa = PBXBuildFile; fileRef = 2248522C178216D300CD8A99 /* syn.h */; };
+		2248523A178216D300CD8A99 /* types.h in Headers */ = {isa = PBXBuildFile; fileRef = 2248522D178216D300CD8A99 /* types.h */; };
+		2248523B178216D300CD8A99 /* udint.h in Headers */ = {isa = PBXBuildFile; fileRef = 2248522E178216D300CD8A99 /* udint.h */; };
+		2248523C178216D300CD8A99 /* udis86.c in Sources */ = {isa = PBXBuildFile; fileRef = 2248522F178216D300CD8A99 /* udis86.c */; };
+		2248523D178216D300CD8A99 /* udis86.h in Headers */ = {isa = PBXBuildFile; fileRef = 22485230178216D300CD8A99 /* udis86.h */; };
+		224852AD17822FE900CD8A99 /* itab.c in Sources */ = {isa = PBXBuildFile; fileRef = 224852AB17822FE900CD8A99 /* itab.c */; };
+		224852AE17822FE900CD8A99 /* itab.h in Headers */ = {isa = PBXBuildFile; fileRef = 224852AC17822FE900CD8A99 /* itab.h */; };
 		225AC5C0175B976500A47071 /* SDMMDNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 225AC5BE175B976500A47071 /* SDMMDNotification.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		225AC5C1175B976500A47071 /* SDMMDNotification.c in Sources */ = {isa = PBXBuildFile; fileRef = 225AC5BF175B976500A47071 /* SDMMDNotification.c */; };
 		225ACB46175FBFA300A47071 /* SDMMDDebugger.h in Headers */ = {isa = PBXBuildFile; fileRef = 225ACB44175FBFA300A47071 /* SDMMDDebugger.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -130,6 +145,21 @@
 		2215B2581757A22400AD1981 /* SDMMACAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDMMACAddress.m; sourceTree = "<group>"; };
 		2215B29E1757A9D700AD1981 /* SDMNetServiceSpoof.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMNetServiceSpoof.h; sourceTree = "<group>"; };
 		2215B29F1757A9D700AD1981 /* SDMNetServiceSpoof.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDMNetServiceSpoof.m; sourceTree = "<group>"; };
+		22485224178216D300CD8A99 /* decode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = decode.c; sourceTree = "<group>"; };
+		22485225178216D300CD8A99 /* decode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = decode.h; sourceTree = "<group>"; };
+		22485226178216D300CD8A99 /* extern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = extern.h; sourceTree = "<group>"; };
+		22485227178216D300CD8A99 /* input.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = input.c; sourceTree = "<group>"; };
+		22485228178216D300CD8A99 /* input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = input.h; sourceTree = "<group>"; };
+		22485229178216D300CD8A99 /* syn-att.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "syn-att.c"; sourceTree = "<group>"; };
+		2248522A178216D300CD8A99 /* syn-intel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "syn-intel.c"; sourceTree = "<group>"; };
+		2248522B178216D300CD8A99 /* syn.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = syn.c; sourceTree = "<group>"; };
+		2248522C178216D300CD8A99 /* syn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = syn.h; sourceTree = "<group>"; };
+		2248522D178216D300CD8A99 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
+		2248522E178216D300CD8A99 /* udint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = udint.h; sourceTree = "<group>"; };
+		2248522F178216D300CD8A99 /* udis86.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = udis86.c; sourceTree = "<group>"; };
+		22485230178216D300CD8A99 /* udis86.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = udis86.h; path = ../SDMSymbolTable/udis86.h; sourceTree = "<group>"; };
+		224852AB17822FE900CD8A99 /* itab.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = itab.c; sourceTree = "<group>"; };
+		224852AC17822FE900CD8A99 /* itab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = itab.h; sourceTree = "<group>"; };
 		225AC5BE175B976500A47071 /* SDMMDNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMDNotification.h; sourceTree = "<group>"; };
 		225AC5BF175B976500A47071 /* SDMMDNotification.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMDNotification.c; sourceTree = "<group>"; };
 		225ACB44175FBFA300A47071 /* SDMMDDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMDDebugger.h; sourceTree = "<group>"; };
@@ -142,8 +172,8 @@
 		225AD7311765FE7700A47071 /* SDMUSBmuxListener.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMUSBmuxListener.c; sourceTree = "<group>"; };
 		226CCE10176B619E0082A21A /* SDMMDGeneralFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMDGeneralFunctions.h; sourceTree = "<group>"; };
 		226CCF1B176B7BAA0082A21A /* CFRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFRuntime.h; sourceTree = "<group>"; };
-		226CD66317708BB60082A21A /* SDMSymbolTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDMSymbolTable.h; path = SDMSymbolTable/SDMSymbolTable.h; sourceTree = "<group>"; };
-		226CD66417708BB60082A21A /* SDMSymbolTable.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = SDMSymbolTable.c; path = SDMSymbolTable/SDMSymbolTable.c; sourceTree = "<group>"; };
+		226CD66317708BB60082A21A /* SDMSymbolTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDMSymbolTable.h; path = ../SDMSymbolTable/SDMSymbolTable.h; sourceTree = "<group>"; };
+		226CD66417708BB60082A21A /* SDMSymbolTable.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = SDMSymbolTable.c; path = ../SDMSymbolTable/SDMSymbolTable.c; sourceTree = "<group>"; };
 		2288EC23177B4629006BF231 /* MDDemoMainSplitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDDemoMainSplitView.h; sourceTree = "<group>"; };
 		2288EC24177B4629006BF231 /* MDDemoMainSplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDDemoMainSplitView.m; sourceTree = "<group>"; };
 		2288ECC7177B4F31006BF231 /* MDDemoDeviceTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDDemoDeviceTable.h; sourceTree = "<group>"; };
@@ -308,6 +338,28 @@
 			name = Additions;
 			sourceTree = "<group>";
 		};
+		22485223178216D300CD8A99 /* libudis86 */ = {
+			isa = PBXGroup;
+			children = (
+				224852AB17822FE900CD8A99 /* itab.c */,
+				224852AC17822FE900CD8A99 /* itab.h */,
+				22485224178216D300CD8A99 /* decode.c */,
+				22485225178216D300CD8A99 /* decode.h */,
+				22485226178216D300CD8A99 /* extern.h */,
+				22485227178216D300CD8A99 /* input.c */,
+				22485228178216D300CD8A99 /* input.h */,
+				22485229178216D300CD8A99 /* syn-att.c */,
+				2248522A178216D300CD8A99 /* syn-intel.c */,
+				2248522B178216D300CD8A99 /* syn.c */,
+				2248522C178216D300CD8A99 /* syn.h */,
+				2248522D178216D300CD8A99 /* types.h */,
+				2248522E178216D300CD8A99 /* udint.h */,
+				2248522F178216D300CD8A99 /* udis86.c */,
+			);
+			name = libudis86;
+			path = ../SDMSymbolTable/libudis86;
+			sourceTree = SOURCE_ROOT;
+		};
 		225AC5BB175B971800A47071 /* SDMMDNotification */ = {
 			isa = PBXGroup;
 			children = (
@@ -347,6 +399,8 @@
 		226CD66217708B810082A21A /* SymbolTable */ = {
 			isa = PBXGroup;
 			children = (
+				22485223178216D300CD8A99 /* libudis86 */,
+				22485230178216D300CD8A99 /* udis86.h */,
 				226CD66317708BB60082A21A /* SDMSymbolTable.h */,
 				226CD66417708BB60082A21A /* SDMSymbolTable.c */,
 			);
@@ -440,6 +494,14 @@
 				226CCE11176B619E0082A21A /* SDMMDGeneralFunctions.h in Headers */,
 				226CCF1C176B7BAA0082A21A /* CFRuntime.h in Headers */,
 				226CD66517708BB60082A21A /* SDMSymbolTable.h in Headers */,
+				22485232178216D300CD8A99 /* decode.h in Headers */,
+				22485233178216D300CD8A99 /* extern.h in Headers */,
+				22485235178216D300CD8A99 /* input.h in Headers */,
+				22485239178216D300CD8A99 /* syn.h in Headers */,
+				2248523A178216D300CD8A99 /* types.h in Headers */,
+				2248523B178216D300CD8A99 /* udint.h in Headers */,
+				2248523D178216D300CD8A99 /* udis86.h in Headers */,
+				224852AE17822FE900CD8A99 /* itab.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -553,6 +615,13 @@
 				225ACD781760C86200A47071 /* SDMMDApplications.c in Sources */,
 				225AD7331765FE7700A47071 /* SDMUSBmuxListener.c in Sources */,
 				226CD66617708BB60082A21A /* SDMSymbolTable.c in Sources */,
+				22485231178216D300CD8A99 /* decode.c in Sources */,
+				22485234178216D300CD8A99 /* input.c in Sources */,
+				22485236178216D300CD8A99 /* syn-att.c in Sources */,
+				22485237178216D300CD8A99 /* syn-intel.c in Sources */,
+				22485238178216D300CD8A99 /* syn.c in Sources */,
+				2248523C178216D300CD8A99 /* udis86.c in Sources */,
+				224852AD17822FE900CD8A99 /* itab.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

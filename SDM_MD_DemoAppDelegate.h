@@ -2,7 +2,7 @@
 //  SDM_MD_DemoAppDelegate.h
 //  SDM_MD_Demo
 //
-//  Created by sam on 5/24/13.
+//  Created by Sam Marshall on 5/24/13.
 //  Copyright 2013 Sam Marshall. All rights reserved.
 //
 
