@@ -64,9 +64,10 @@ typedef struct sdmmd_am_device SDM_AMDeviceClass;
 
 #define SDMMD_AMDeviceRef SDM_AMDeviceClass*
 
-void* SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFTypeRef record, uint32_t session);
+#pragma mark -
 
 void* SDMMD_AMDeviceActivate(SDMMD_AMDeviceRef device, CFDictionaryRef options);
+void* SDMMD_AMDeviceDeactivate(SDMMD_AMDeviceRef device);
 void* SDMMD_AMDeviceStartSession(SDMMD_AMDeviceRef device);
 void* SDMMD_AMDeviceStopSession(SDMMD_AMDeviceRef device);
 void* SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef service_name, CFDictionaryRef options, uint32_t *handle);

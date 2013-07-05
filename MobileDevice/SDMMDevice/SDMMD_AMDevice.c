@@ -86,6 +86,41 @@ void* SDMMD_send_activation(SDMMD_AMDeviceRef device, CFDictionaryRef dict) {
 	return result;
 }
 
+void* SDMMD_send_activation(SDMMD_AMDeviceRef device) {
+	void* result = 0xe8000007;
+	CFMutableDictionaryRef message = NULL;
+	if (device) {
+		result = 0xe800000b;
+		if (device->ivars.device_active) {
+			result = 0xe8000007;
+			if (dict) {
+				CFMutableDictionaryRef messageDict = SDMMD__CreateMessageDict(CFSTR("Deactivate"));
+				result = 0xe8000003;
+				if (messageDict) {
+					result = SDMMD_lockconn_send_message(device, messageDict);
+					if (result == 0) {
+						result = SDMMD_lockconn_receive_message(device, &message);
+						if (result == 0) {
+							CFTypeRef msg = CFDictionaryGetValue(message, CFSTR("Error"));
+							if (msg) {
+								result = 0xe8000013;
+								if (CFGetTypeID(msg) == CFStringGetTypeID()) {
+									SDMMD__ConvertLockdowndError(message);
+								}
+							}
+						}
+					}
+				}
+				if (messageDict)
+					CFRelease(messageDict);
+			}
+		}
+	}
+	if (message)
+		CFRelease(message);
+	return result;
+}
+
 void* SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFTypeRef record, uint32_t session) {
 	void* result = 0xe8000007;
 	CFTypeRef var32 = NULL;
@@ -267,6 +302,26 @@ void* SDMMD_AMDeviceActivate(SDMMD_AMDeviceRef device, CFDictionaryRef options) 
 			if (result != 0) {
 				char *reason = SDMMD_AMDErrorString(result);
 				printf("SDMMD_AMDeviceActivate: Could not activate device %u %s.\n",device->ivars.device_id,reason);
+			}
+			SDMMD__mutex_unlock(device->ivars.mutex_lock);
+		} else {
+			result = 0xe8000084;
+		}
+	} else {
+		result = 0xe8000007;
+	}
+	return result;
+}
+
+void* SDMMD_AMDeviceDeactivate(SDMMD_AMDeviceRef device) {
+	void* result = 0x0;
+	if (device) {
+		if (device->ivars.device_active) {
+			SDMMD__mutex_lock(device->ivars.mutex_lock);
+			result = SDMMD_send_deactivation(device);
+			if (result != 0) {
+				char *reason = SDMMD_AMDErrorString(result);
+				printf("SDMMD_AMDeviceDeactivate: Could not deactivatedevice %u: %s\n",device->ivars.device_id,reason);
 			}
 			SDMMD__mutex_unlock(device->ivars.mutex_lock);
 		} else {
