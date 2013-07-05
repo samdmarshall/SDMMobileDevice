@@ -1,5 +1,5 @@
 /*
- *  SDMMD_AFC.h
+ *  SDMMD_Functions.h
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,30 +16,35 @@
  * 
  */
 
-#ifndef _SDM_MD_AFC_H_
-#define _SDM_MD_AFC_H_
+#ifndef _SDM_MD_FUNCTIONS_H_
+#define _SDM_MD_FUNCTIONS_H_
 
 #include <CoreFoundation/CoreFoundation.h>
 
-typedef struct SDMMD_AFCHeader {
-	uint64_t header;
-	uint64_t a;
-	uint64_t b;
-	uint64_t c;
-	uint64_t d;
-} __attribute__ ((packed)) SDMMD_AFCHeader;
+static int SDMMD__mutex_lock(pthread_mutex_t *mutex) {
+	return pthread_mutex_lock(mutex);
+}
 
-#define SDMMD_AFCHeaderRef SDMMD_AFCHeader*
+static int SDMMD__mutex_unlock(pthread_mutex_t *mutex) {
+	return pthread_mutex_unlock(mutex);
+}
 
-char* SDMMD_AFCStringCopy(char *dest, uint32_t destLength, char *source, uint32_t sourceLength);
-char* SDMMD_AFCPacketTypeName(uint32_t packetType);
-void* SDMMD_AFCSendStatusExtended(CFTypeRef, void*, uint32_t packetType, CFDictionaryRef ref);
-void* SDMMD_AFCSendStatus(CFTypeRef a, void*b, void*c);
-void* SDMMD_AFCSendDataPacket(CFTypeRef a, void*b, uint32_t *dataBytePtr, uint32_t dataLength);
-void* SDMMD_AFCSendHeader(CFTypeRef a, void*b);
-void* SDMMD_AFCReadPacket(CFTypeRef a, CFTypeRef* b, CFTypeRef* c, CFTypeRef* d);
-void* SDMMD_AFCReadPacketBody(CFTypeRef a,void*b, CFDataRef* c, uint32_t *readLength);
-void* SDMMD_AFCSendPacket(CFTypeRef a,CFTypeRef b,void*c, uint32_t size);
-uint32_t SDMMD_AFCHeaderInit(SDMMD_AFCHeaderRef header,void*b,void*c,void*d,void*e);
+static CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type) {
+	CFMutableDictionaryRef dict = CFDictionaryCreateMutable(NULL, NULL, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+	if (dict) {
+		CFDictionarySetValue(dict, CFSTR("Request"), type);
+		CFDictionarySetValue(dict, CFSTR("ProtocolVersion"), CFSTR("2"));
+		char *appName = getprogname();
+		if (appName) {
+			CFStringRef name = CFStringCreateWithCString(kCFAllocatorDefault, appName, 0x8000100);
+			if (name) {
+				CFDictionarySetValue(dict, CFSTR("Label"), name);
+				CFRelease(name);
+			}
+		}
+	}
+	return dict;
+	
+}
 
 #endif

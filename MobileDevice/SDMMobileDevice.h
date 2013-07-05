@@ -1,5 +1,5 @@
 /*
- *  SDMMD_AFC.h
+ *  SDMMobileDevice.h
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,30 +16,12 @@
  * 
  */
 
-#ifndef _SDM_MD_AFC_H_
-#define _SDM_MD_AFC_H_
+#ifndef _SDM_MOBILE_DEVICE_H_
+#define _SDM_MOBILE_DEVICE_H_
 
-#include <CoreFoundation/CoreFoundation.h>
-
-typedef struct SDMMD_AFCHeader {
-	uint64_t header;
-	uint64_t a;
-	uint64_t b;
-	uint64_t c;
-	uint64_t d;
-} __attribute__ ((packed)) SDMMD_AFCHeader;
-
-#define SDMMD_AFCHeaderRef SDMMD_AFCHeader*
-
-char* SDMMD_AFCStringCopy(char *dest, uint32_t destLength, char *source, uint32_t sourceLength);
-char* SDMMD_AFCPacketTypeName(uint32_t packetType);
-void* SDMMD_AFCSendStatusExtended(CFTypeRef, void*, uint32_t packetType, CFDictionaryRef ref);
-void* SDMMD_AFCSendStatus(CFTypeRef a, void*b, void*c);
-void* SDMMD_AFCSendDataPacket(CFTypeRef a, void*b, uint32_t *dataBytePtr, uint32_t dataLength);
-void* SDMMD_AFCSendHeader(CFTypeRef a, void*b);
-void* SDMMD_AFCReadPacket(CFTypeRef a, CFTypeRef* b, CFTypeRef* c, CFTypeRef* d);
-void* SDMMD_AFCReadPacketBody(CFTypeRef a,void*b, CFDataRef* c, uint32_t *readLength);
-void* SDMMD_AFCSendPacket(CFTypeRef a,CFTypeRef b,void*c, uint32_t size);
-uint32_t SDMMD_AFCHeaderInit(SDMMD_AFCHeaderRef header,void*b,void*c,void*d,void*e);
+#include "SDMMD_Functions.h"
+#include "SDMMD_AMDevice.h"
+#include "SDMMD_AFC.h"
+#include "SDMMD_Error.h"
 
 #endif

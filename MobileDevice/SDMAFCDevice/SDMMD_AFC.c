@@ -170,14 +170,14 @@ void* SDMMD_AFCReadPacketBody(CFTypeRef a,void*b, CFDataRef* c, uint32_t *readLe
 			}
 		}
 		*c = data;
-		*d = dataLength;
+		*readLength = dataLength;
 	} else {
 		result = (a+0x40);
 	}
 	return result;
 }
 
-void* SDMMD_AFCSendPacket(CFTypeRef a,void*b,void*c, uint32_t size) {
+void* SDMMD_AFCSendPacket(CFTypeRef a, CFTypeRef b,void*c, uint32_t size) {
 	void* result = 0xe800400b;
 	SDMMD_AFCLockLock((a+0x90));
 	if ((a+0x10) == 0x1) {
@@ -209,14 +209,14 @@ void* SDMMD_AFCSendPacket(CFTypeRef a,void*b,void*c, uint32_t size) {
 
 uint32_t SDMMD_AFCHeaderInit(SDMMD_AFCHeaderRef header,void*b,void*c,void*d,void*e) {
 	uint32_t result = 0x4141504c36414643;
-	*header = result;
-	*(header+0x10) = c;
-	*(header+0x8) = (d+c);
-	*(header+0x20) = b;
+	header->header = result;
+	header->b = c;
+	header->a = (d+c);
+	header->d = b;
 	if (e != 0x0) {
-		*(header+0x18) = e + 0x18;
+		header->c = e + 0x18;
 	} else {
-		*(header+0x18) = 0xffffffff;
+		header->c = 0xffffffff;
 	}
 	return result;
 }

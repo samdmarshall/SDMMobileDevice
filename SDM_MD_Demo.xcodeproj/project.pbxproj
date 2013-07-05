@@ -80,6 +80,12 @@
 		2288ECDB177B5119006BF231 /* MDDemoInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2288ECDA177B5119006BF231 /* MDDemoInfoView.m */; };
 		22AD8E5A17871506002ACFB1 /* SDMMD_AFC.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD8E5817871506002ACFB1 /* SDMMD_AFC.h */; };
 		22AD8E5B17871506002ACFB1 /* SDMMD_AFC.c in Sources */ = {isa = PBXBuildFile; fileRef = 22AD8E5917871506002ACFB1 /* SDMMD_AFC.c */; };
+		22AD8E651787465A002ACFB1 /* SDMMD_AMDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD8E631787465A002ACFB1 /* SDMMD_AMDevice.h */; };
+		22AD8E661787465A002ACFB1 /* SDMMD_AMDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 22AD8E641787465A002ACFB1 /* SDMMD_AMDevice.c */; };
+		22AD8E7417875346002ACFB1 /* SDMMD_Error.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD8E7217875346002ACFB1 /* SDMMD_Error.h */; };
+		22AD8E7517875346002ACFB1 /* SDMMD_Error.c in Sources */ = {isa = PBXBuildFile; fileRef = 22AD8E7317875346002ACFB1 /* SDMMD_Error.c */; };
+		22AD8E7917875B1E002ACFB1 /* SDMMD_Functions.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD8E7817875B1E002ACFB1 /* SDMMD_Functions.h */; };
+		22AD8E8417875BAA002ACFB1 /* SDMMobileDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD8E8317875BAA002ACFB1 /* SDMMobileDevice.h */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -191,6 +197,12 @@
 		2288ECDA177B5119006BF231 /* MDDemoInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDDemoInfoView.m; sourceTree = "<group>"; };
 		22AD8E5817871506002ACFB1 /* SDMMD_AFC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AFC.h; sourceTree = "<group>"; };
 		22AD8E5917871506002ACFB1 /* SDMMD_AFC.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AFC.c; sourceTree = "<group>"; };
+		22AD8E631787465A002ACFB1 /* SDMMD_AMDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AMDevice.h; sourceTree = "<group>"; };
+		22AD8E641787465A002ACFB1 /* SDMMD_AMDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AMDevice.c; sourceTree = "<group>"; };
+		22AD8E7217875346002ACFB1 /* SDMMD_Error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Error.h; sourceTree = "<group>"; };
+		22AD8E7317875346002ACFB1 /* SDMMD_Error.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_Error.c; sourceTree = "<group>"; };
+		22AD8E7817875B1E002ACFB1 /* SDMMD_Functions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Functions.h; sourceTree = "<group>"; };
+		22AD8E8317875BAA002ACFB1 /* SDMMobileDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMobileDevice.h; sourceTree = "<group>"; };
 		256AC3D80F4B6AC300CF3369 /* SDM_MD_DemoAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDM_MD_DemoAppDelegate.h; sourceTree = "<group>"; };
 		256AC3D90F4B6AC300CF3369 /* SDM_MD_DemoAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDM_MD_DemoAppDelegate.m; sourceTree = "<group>"; };
 		256AC3F00F4B6AF500CF3369 /* SDM_MD_Demo_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDM_MD_Demo_Prefix.pch; sourceTree = "<group>"; };
@@ -266,9 +278,11 @@
 		2215A85017500E2D00AD1981 /* MobileDevice */ = {
 			isa = PBXGroup;
 			children = (
+				22AD8E8317875BAA002ACFB1 /* SDMMobileDevice.h */,
 				2215A84A17500E2800AD1981 /* MobileDevice.h */,
 				2215A84B17500E2800AD1981 /* MobileDevice.c */,
 				226CCE10176B619E0082A21A /* SDMMDGeneralFunctions.h */,
+				22AD8E7817875B1E002ACFB1 /* SDMMD_Functions.h */,
 				226CCF1B176B7BAA0082A21A /* CFRuntime.h */,
 				2215A85917500E8700AD1981 /* SDMMDService */,
 				225ACB6B175FC13400A47071 /* SDMMDConnection */,
@@ -285,6 +299,8 @@
 		2215A85117500E3700AD1981 /* SDMMDevice */ = {
 			isa = PBXGroup;
 			children = (
+				22AD8E631787465A002ACFB1 /* SDMMD_AMDevice.h */,
+				22AD8E641787465A002ACFB1 /* SDMMD_AMDevice.c */,
 				2215A85217500E4C00AD1981 /* SDMMDevice.h */,
 				2215A85317500E4C00AD1981 /* SDMMDevice.c */,
 				2215A9FB17512A9F00AD1981 /* SDMMDeviceKeys.h */,
@@ -334,6 +350,8 @@
 		2215A9B7175124D300AD1981 /* SDMMDError */ = {
 			isa = PBXGroup;
 			children = (
+				22AD8E7217875346002ACFB1 /* SDMMD_Error.h */,
+				22AD8E7317875346002ACFB1 /* SDMMD_Error.c */,
 				2215A9B9175124FD00AD1981 /* SDMMDError.h */,
 				2215A9BA175124FD00AD1981 /* SDMMDError.c */,
 			);
@@ -522,6 +540,10 @@
 				22485B4C178488ED00CD8A99 /* disasm.h in Headers */,
 				22485C1B17849BEC00CD8A99 /* arm_decode.h in Headers */,
 				22AD8E5A17871506002ACFB1 /* SDMMD_AFC.h in Headers */,
+				22AD8E651787465A002ACFB1 /* SDMMD_AMDevice.h in Headers */,
+				22AD8E7417875346002ACFB1 /* SDMMD_Error.h in Headers */,
+				22AD8E7917875B1E002ACFB1 /* SDMMD_Functions.h in Headers */,
+				22AD8E8417875BAA002ACFB1 /* SDMMobileDevice.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -645,6 +667,8 @@
 				22485B4D178488ED00CD8A99 /* disasm.c in Sources */,
 				22485C1C17849BEC00CD8A99 /* arm_decode.c in Sources */,
 				22AD8E5B17871506002ACFB1 /* SDMMD_AFC.c in Sources */,
+				22AD8E661787465A002ACFB1 /* SDMMD_AMDevice.c in Sources */,
+				22AD8E7517875346002ACFB1 /* SDMMD_Error.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
