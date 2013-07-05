@@ -34,10 +34,10 @@ CFRuntimeClass* SDM_AMDeviceRuntimeClassCreate() {
 		if (!runtimeClass) {
 			functionCall dealloc, equal, description, debug;
 			runtimeClass = malloc(sizeof(CFRuntimeClass));
-			dealloc = SDMSTSymbolLookup(SDMMDController->lookupTable, "AMDeviceFinalize");
-			equal = SDMSTSymbolLookup(SDMMDController->lookupTable, "AMDeviceEqual");
-			description = SDMSTSymbolLookup(SDMMDController->lookupTable, "AMDeviceCopyFormattingDescription");
-			debug = SDMSTSymbolLookup(SDMMDController->lookupTable, "AMDeviceCopyDebugDescription");
+			dealloc = SDMSTCreateFunction(SDMMDController->lookupTable, "AMDeviceFinalize")->offset;
+			equal = SDMSTCreateFunction(SDMMDController->lookupTable, "AMDeviceEqual")->offset;
+			description = SDMSTCreateFunction(SDMMDController->lookupTable, "AMDeviceCopyFormattingDescription")->offset;
+			debug = SDMSTCreateFunction(SDMMDController->lookupTable, "AMDeviceCopyDebugDescription")->offset;
 			runtimeClass = (CFRuntimeClass *){0x0, "AMDevice", NULL, NULL, dealloc, equal, NULL, description, debug, NULL};
 		}
 	});
@@ -46,7 +46,7 @@ CFRuntimeClass* SDM_AMDeviceRuntimeClassCreate() {
 
 SDM_AMDeviceRef SDM_AMDeviceCreateEmpty() {
 	SDM_AMDeviceRef device = (SDM_AMDeviceRef)malloc(sizeof(SDM_AMDeviceClass));
-	functionCall createDevice = SDMSTSymbolLookup(SDMMDController->lookupTable, "CreateEmptyDeviceRef");
+	functionCall createDevice = SDMSTCreateFunction(SDMMDController->lookupTable, "CreateEmptyDeviceRef")->offset;
 	if (createDevice) {
 		device = (SDM_AMDeviceRef)createDevice();			
 	}	
@@ -117,7 +117,7 @@ CFArrayRef SDM_AMDCreateDeviceList() {
 
 sdmmd_return_t SDM_AMDeviceConnectByAddressAndPort(SDM_AMDeviceRef device) {
 	sdmmd_return_t result = 0x0;
-	functionCall deviceConnectByAddressAndPort = SDMSTSymbolLookup(SDMMDController->lookupTable, "AMDeviceConnectByAddressAndPort");
+	functionCall deviceConnectByAddressAndPort = SDMSTCreateFunction(SDMMDController->lookupTable, "AMDeviceConnectByAddressAndPort")->offset;
 	if (deviceConnectByAddressAndPort) {
 		result = (sdmmd_return_t)deviceConnectByAddressAndPort(device);
 	}
@@ -126,7 +126,7 @@ sdmmd_return_t SDM_AMDeviceConnectByAddressAndPort(SDM_AMDeviceRef device) {
 
 SDM_AMDeviceRef SDM_AMDeviceCreateCopy(SDM_AMDeviceRef device) {
 	SDM_AMDeviceRef result = NULL;
-	functionCall deviceCreateCopy = SDMSTSymbolLookup(SDMMDController->lookupTable, "AMDeviceCreateCopy");
+	functionCall deviceCreateCopy = SDMSTCreateFunction(SDMMDController->lookupTable, "AMDeviceCreateCopy")->offset;
 	if (deviceCreateCopy) {
 		result = (SDM_AMDeviceRef)deviceCreateCopy(device);
 	}

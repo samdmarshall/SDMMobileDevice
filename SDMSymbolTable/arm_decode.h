@@ -1,6 +1,6 @@
 /*
- *  SDMMDConnection.c
- *  SDM_MD_Demo
+ *  arm_decode.h
+ *  SDMSymbolTable
  *
  *  Copyright (c) 2013, Sam Marshall
  *  All rights reserved.
@@ -16,33 +16,19 @@
  * 
  */
 
-#ifndef _SDMMDCONNECTION_C_
-#define _SDMMDCONNECTION_C_
+#ifndef _SDMARMDECODE_H_
+#define _SDMARMDECODE_H_
 
-#include "SDMMDConnection.h"
-#import <dlfcn.h>
-#import "MobileDevice.h"
+#include <stdint.h>
 
-typedef void* (*functionCall)();
+typedef struct ARMInstruction {
+	uint8_t cc;
+} __attribute__ ((packed)) ARMInstruction;
 
-SDM_AMConnectionRef SDM_AMDServiceConnectionCreate(CFAllocatorRef allocator, SDM_AMDeviceRef device, CFDictionaryRef dict) {
-	SDM_AMConnectionRef results = NULL;
-	SDMSTFunctionCall serviceConnectionCreate = SDMSTCreateFunction(SDMMDController->lookupTable, "AMDServiceConnectionCreate")->offset;
-	if (serviceConnectionCreate) {
-		results = (SDM_AMConnectionRef)serviceConnectionCreate(allocator, device, dict);
-	}
-	return results;
-}
+typedef struct ThumbInstruction {
+	uint16_t data;
+} __attribute__ ((packed)) ThumbInstruction;
 
-sdmmd_return_t SDM_AMDServiceConnectionInvalidate(SDM_AMConnectionRef connection) {
-	sdmmd_return_t results = 0x0;
-	SDMSTFunctionCall serviceConnectionInvalidate = SDMSTCreateFunction(SDMMDController->lookupTable, "AMDServiceConnectionInvalidate")->offset;
-	if (serviceConnectionInvalidate) {
-		results = (sdmmd_return_t)serviceConnectionInvalidate(connection);
-	}
-	return results;
-}
 
 
 #endif
-

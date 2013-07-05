@@ -1,5 +1,5 @@
 /*
- *  SDMMDConnection.c
+ *  SDMMD_AFC.h
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,33 +16,27 @@
  * 
  */
 
-#ifndef _SDMMDCONNECTION_C_
-#define _SDMMDCONNECTION_C_
+#ifndef _SDM_MD_AFC_H_
+#define _SDM_MD_AFC_H_
 
-#include "SDMMDConnection.h"
-#import <dlfcn.h>
-#import "MobileDevice.h"
+typedef struct SDMMD_AFCHeader {
+	uint64_t header;
+	uint64_t a;
+	uint64_t b;
+	uint64_t c;
+} __attribute__ ((packed)) SDMMD_AFCHeader;
 
-typedef void* (*functionCall)();
+#define SDMMD_AFCHeaderRef SDMMD_AFCHeader*
 
-SDM_AMConnectionRef SDM_AMDServiceConnectionCreate(CFAllocatorRef allocator, SDM_AMDeviceRef device, CFDictionaryRef dict) {
-	SDM_AMConnectionRef results = NULL;
-	SDMSTFunctionCall serviceConnectionCreate = SDMSTCreateFunction(SDMMDController->lookupTable, "AMDServiceConnectionCreate")->offset;
-	if (serviceConnectionCreate) {
-		results = (SDM_AMConnectionRef)serviceConnectionCreate(allocator, device, dict);
-	}
-	return results;
-}
-
-sdmmd_return_t SDM_AMDServiceConnectionInvalidate(SDM_AMConnectionRef connection) {
-	sdmmd_return_t results = 0x0;
-	SDMSTFunctionCall serviceConnectionInvalidate = SDMSTCreateFunction(SDMMDController->lookupTable, "AMDServiceConnectionInvalidate")->offset;
-	if (serviceConnectionInvalidate) {
-		results = (sdmmd_return_t)serviceConnectionInvalidate(connection);
-	}
-	return results;
-}
-
+char* SDMMD_AFCStringCopy(char *dest, uint32_t destLength, char *source, uint32_t sourceLength);
+char* SDMMD_AFCPacketTypeName(uint32_t packetType);
+void* SDMMD_AFCSendStatusExtended(CFTypeRef, void*, uint32_t packetType, CFDictionaryRef ref);
+void* SDMMD_AFCSendStatus(CFTypeRef a, void*b, void*c);
+void* SDMMD_AFCSendDataPacket(CFTypeRef a, void*b, void*c, void*d);
+void* SDMMD_AFCSendHeader(CFTypeRef a, void*b);
+void* SDMMD_AFCReadPacket(CFTypeRef a, CFTypeRef* b, CFTypeRef* c, CFTypeRef* d));
+void* SDMMD_AFCReadPacketBody(CFTypeRef a,void*b, CFDataRef* c, uint32_t *readLength);
+void* SDMMD_AFCSendPacket(CFTypeRef a,void*b,void*c, uint32_t size);
+uint32_t SDMMD_AFCHeaderInit(SDMMD_AFCHeaderRef header,void*b,void*c,void*d,void*e);
 
 #endif
-

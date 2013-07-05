@@ -22,10 +22,11 @@
 		//SDMUSBMuxStartListener(&SDMMDController->usbmuxd);
 		//CFArrayRef devices = SDM_AMDCreateDeviceList();
 		//dispatch_async(dispatch_get_main_queue(), ^{
-			void *createDevice = SDMSTSymbolLookup(SDMMDController->lookupTable, "AMDeviceActivate");
-			printf("%x\n",createDevice);
-			uint32_t test = SDMSTGetArgumentCount(SDMMDController->lookupTable, createDevice);
-			NSLog(@"%i",test);
+	/*for (uint32_t i = 0; i < SDMMDController->lookupTable->symbolCount; i++) {
+   		struct SDMSTFunction *function = SDMSTCreateFunction(SDMMDController->lookupTable, SDMMDController->lookupTable->table[i].name);
+   		printf("void* SDMMD%s(%i);\n",SDMMDController->lookupTable->table[i].name,function->argc);
+   		SDMSTFunctionRelease(function);
+	}*/
 
 	//	});
 	//});
