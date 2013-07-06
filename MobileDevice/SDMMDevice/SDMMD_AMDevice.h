@@ -20,38 +20,46 @@
 #define _SDM_MD_ADMDEVICE_H_
 
 #include <CoreFoundation/CoreFoundation.h>
+#include <openssl/ssl.h>
+
+typedef struct SDMMD_lockdown_conn {
+	uint64_t connection;			// 0
+	SSL *ssl; 						// 8
+	uint64_t unknown0;				// 16
+	uint64_t unknown1;				// 24
+} __attribute__ ((packed)) SDMMD_lockdown_conn;
 
 typedef struct AMDeviceClassHeader {
 	unsigned char header[16];		// AMDeviceClass CF Header 
 } __attribute ((packed)) AMDeviceClassHeader; // size 0x10
 
 typedef struct AMDeviceClassBody {
-	int32_t device_id;				// 16
-	int32_t location_id;			// 20
-	uint16_t product_id;			// 24
-	int16_t padding0;				// 26
-	int32_t unknown1;				// 28
-	CFStringRef unique_device_id;	// 32
-	int32_t unknown2;				// 36
-	int32_t connection_type;		// 40 (1 for USB, 2 for WiFi)
-	unsigned char unknown3[4];		// 44
-	int32_t lockdown_conn;			// 48
-	unsigned char unknown4[4];		// 52
-	int32_t session;				// 56 needs to be not zero in AMDeviceSecureStartService  -- connection
-	int32_t padding1;				// 60
-	pthread_mutex_t mutex_lock;		// 64
-	unsigned char unknown5[60];		// 68
-	CFStringRef service_name;		// 128 bonjour service name
-	unsigned int unknown6;			// 132
-	int32_t interface_index;		// 136
-	int8_t device_active;			// 140
-	unsigned char unknown7[3];		// 141
-	int32_t unknown8;				// 144
-	unsigned char unknown9[4];		// 148
-	CFDataRef network_address;		// 152 stores a sockaddr_storage
-	unsigned char unknown10[4];		// 156
-	CFDataRef unknown11;			// 160 
-	unsigned char unknown12[4];		// 164
+	int32_t device_id;					// 16
+	int32_t location_id;				// 20
+	uint16_t product_id;				// 24
+	int16_t padding0;					// 26
+	int32_t unknown1;					// 28
+	CFStringRef unique_device_id;		// 32
+	int32_t unknown2;					// 36
+	int32_t connection_type;			// 40 (1 for USB, 2 for WiFi)
+	unsigned char unknown3[4];			// 44
+	SDMMD_lockdown_conn *lockdown_conn; // 48
+	unsigned char unknown4[4];			// 52
+	int32_t session;					// 56 needs to be not zero in AMDeviceSecureStartService  -- connection
+	int32_t padding1;					// 60
+	pthread_mutex_t mutex_lock;			// 64
+	unsigned char unknown5[60];			// 68
+	CFStringRef service_name;			// 128 bonjour service name
+	unsigned int unknown6;				// 132
+	int32_t interface_index;			// 136
+	int8_t device_active;				// 140
+	unsigned char unknown7[3];			// 141
+	int32_t unknown8;					// 144
+	unsigned char unknown9[4];			// 148
+	CFDataRef network_address;			// 152 stores a sockaddr_storage
+	unsigned char unknown10[4];			// 156
+	CFDataRef unknown11;				// 160 
+	unsigned char unknown12[4];			// 164
 } __attribute__ ((packed)) AMDeviceClassBody; // size 0x98
 
 typedef struct sdmmd_am_device {
@@ -68,8 +76,17 @@ typedef struct sdmmd_am_device SDM_AMDeviceClass;
 
 void* SDMMD_AMDeviceActivate(SDMMD_AMDeviceRef device, CFDictionaryRef options);
 void* SDMMD_AMDeviceDeactivate(SDMMD_AMDeviceRef device);
+
+void* SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device);
+void* SDMMD_AMDeviceDisconnect(SDMMD_AMDeviceRef device);
+
+bool SDMMD_AMDeviceIsValid(SDMMD_AMDeviceRef device);
+
+bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device);
+
 void* SDMMD_AMDeviceStartSession(SDMMD_AMDeviceRef device);
 void* SDMMD_AMDeviceStopSession(SDMMD_AMDeviceRef device);
+
 void* SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef service_name, CFDictionaryRef options, uint32_t *handle);
 
 uint32_t SDMMD_AMDeviceUSBDeviceID(SDMMD_AMDeviceRef device);
