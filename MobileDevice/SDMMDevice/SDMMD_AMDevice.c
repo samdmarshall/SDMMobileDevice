@@ -495,6 +495,27 @@ bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device) {
 	return result;
 }
 
+void* SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFDictionaryRef record, ) {
+	void* result = 0xe8000007;
+	if (device) {
+		if (device->ivars.device_active) {
+			SDMMD__mutex_lock(device->ivars.mutex_lock);
+			if (record) {
+				CFTypeRef chapCert = CFDictionaryGetValue(record, @"ChaperoneCertificate");
+				
+			}
+			result = 0xe8000082;
+			if (device->ivars.connection_type == 1) {
+				uint32_t var76;
+				result = SDMMD_copy_lockdown_value(device, 0x0, CFSTR(""), &var76);
+				
+			}
+			SDMMD__mutex_unlock(device->ivars.mutex_lock);
+		}
+	}
+	return result;
+}
+
 uint32_t SDMMD_AMDeviceUSBDeviceID(SDMMD_AMDeviceRef device) {
 	uint32_t result = 0x0;
 	if (device) {
