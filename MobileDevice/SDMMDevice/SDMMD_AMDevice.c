@@ -25,8 +25,8 @@
 #include <errno.h>
 #include <openssl/bio.h>
 
-sdmmd_return_t SDMMD__ConvertLockdowndError(CFStringRef error) {
-	sdmmd_return_t result = 0xe8000013;
+sdmmd_dl_return_t SDMMD__ConvertLockdowndError(CFStringRef error) {
+	sdmmd_dl_return_t result = 0xe8000013;
 	if (error) {
 		if (CFStringCompare(error, CFSTR("InvalidResponse"), 0) == 0) result = 0xe8000013;
 		else if (CFStringCompare(error, CFSTR("MissingKey"), 0) == 0) result = 0xe8000014;

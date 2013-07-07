@@ -113,4 +113,44 @@ struct SDMMD_DebugReturnCode {
 
 #define sdmmd_debug_return_t struct SDMMD_DebugReturnCode
 
+typedef enum SDMMD_LockdownError {
+	LD_ERR_OK = 0x0,
+	LD_ERR_InvalidResponse = 0xe8000013,
+	LD_ERR_MissingKey = 0xe8000014,
+	LD_ERR_MissingValue = 0xe8000015,
+	LD_ERR_GetProhibited = 0xe8000016,
+	LD_ERR_SetProhibited = 0xe8000017,
+	LD_ERR_RemoveProhibited = 0xe8000018,
+	LD_ERR_ImmutableValue = 0xe8000019,
+	LD_ERR_PasswordProtected = 0xe800001a,
+	LD_ERR_MissingHostID = 0xe800001b,
+	LD_ERR_InvalidHostID = 0xe800001c,
+	LD_ERR_SessionActive = 0xe800001d,
+	LD_ERR_SessionInactive = 0xe800001e,
+	LD_ERR_MissingSessionID = 0xe800001f,
+	LD_ERR_InvalidSessionID = 0xe8000020,
+	LD_ERR_MissingService = 0xe8000021,
+	LD_ERR_InvalidService = 0xe8000022,
+	LD_ERR_InvalidCheckin = 0xe8000023,
+	LD_ERR_CheckinTimeout = 0xe8000024,
+	LD_ERR_MissingPairRecord = 0xe8000025,
+	LD_ERR_InvalidActivationRecord = 0xe8000026,
+	LD_ERR_MissingActivationRecord = 0xe8000027,
+	LD_ERR_WrongDroid = 0xe8000028,
+	LD_ERR_ServiceLimit = 0xe800005b,
+	LD_ERR_InvalidPairRecord = 0xe800005c,
+	LD_ERR_ServiceProhibited = 0xe800005d,
+	LD_ERR_CheckinSetupFailed = 0xe800005e,
+	LD_ERR_CheckinConnectionFailed = 0xe800005f,
+	LD_ERR_CheckinReceiveFailed = 0xe8000060,
+	LD_ERR_CheckinResponseFailed = 0xe8000061,
+	LD_ERR_CheckinSendFailed = 0xe8000062,
+	LD_ERR_SavePairRecordFailed = 0xe8000068,
+	LD_ERR_EscrowLocked = 0xe8000081,
+	LD_ERR_PairingProhibitedOverThisConnection = 0xe8000082,
+	LD_ERR_NotAValidChaperoneHost = 0xe8000083,
+} SDMMD_LockdownError;
+
+#define sdmmd_dl_return_t enum SDMMD_LockdownError
+
 #endif
