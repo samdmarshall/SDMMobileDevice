@@ -23,12 +23,121 @@
 #include "SDMMD_Functions.h"
 #include <string.h>
 #include <errno.h>
+#include <openssl/bio.h>
 
 SDMMD_lockdown_conn* SDMMD_lockdown_connection_create(SDMMD_lockdown_conn *lockdown) {
 	if (lockdown)
 		free(lockdown);
 	lockdown = calloc(0x1, 0x20);
 	return lockdown;
+}
+
+X509* SDMMD__decode_certificate(CFTypeRef cert) {
+	X509* result = NULL;
+	if (cert) {
+		BIO *newBIO = SDMMD__create_bio_from_data(cert);
+		if (newBIO == 0) {
+			printf("_decode_certificate: Could not create BIO from CFData.\n");
+		} else {
+			result = PEM_read_bio_X509(newBIO, 0x0, 0x0, 0x0);
+			if (result == NULL) {
+				printf("_decode_certificate: PEM_read_bio_X509 failed.\n");
+			}
+			BIO_free(newBIO);
+		}
+		
+	}
+	return result;
+}
+
+SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostCert, CFTypeRef deviceCert, CFTypeRef hostPrivKey, uint32_t num) {
+	SSL *ssl;
+	SSL_CTX *sslCTX;
+	sdmmd_return_t result = 0x0;
+	BIO_METHOD *bioMethod = BIO_s_socket();
+	BIO *bioSocket = BIO_new(bioMethod);
+	if (bioSocket) {
+		BIO_int_ctrl(bioSocket, 0x68, 0x0, lockdown_conn->connection);
+		X509 *cert = SDMMD__decode_certificate(hostCert);
+		if (cert == 0) {
+			printf("_create_ssl_context: Could not certificate.\n");
+		}
+		uint32_t var_32 = 0x0;
+		BIO *dataBIO = SDMMD__create_bio_from_data(hostPrivKey);
+		if (dataBIO == 0) {
+			printf("_create_ssl_context: Could not decode private key.\n");
+			if (cert) {
+				X509_free(cert);
+				result = 0x0;
+			}
+		} else {
+			PEM_read_bio_RSAPrivateKey(bioSocket, &var_32, 0x0, 0x0);
+			BIO_free(bioSocket);
+			if (var_32) {
+				if (hostCert) {
+					sslCTX = SSL_CTX_new(SSLv3_method());
+					if (sslCTX) {
+						result = SSL_CTX_use_certificate(sslCTX, cert);
+						if (result == 0)
+							printf("_create_ssl_context: Could not set certificate.\n");
+						result = SSL_CTX_use_RSAPrivateKey(sslCTX, hostPrivKey);
+						if (result == 0)
+							printf("_create_ssl_context: Could not set private key.\n");
+					} else {
+						printf("_create_ssl_context: Could not create SSLv3 context.\n");
+					}
+				}
+				RSA_free(hostPrivKey);
+				if (cert)
+					X509_free(cert);
+				if (sslCTX) {
+					ssl = SSL_new(sslCTX);
+					if (ssl) {
+						if (num) {
+							SSL_set_connect_state(ssl);
+						} else {
+							SSL_set_accept_state(ssl);
+						}
+						SSL_set_verify(ssl, 0x3, SDMMD__ssl_verify_callback);
+						SSL_set_verify_depth(ssl, 0x0);
+						SSL_set_bio(ssl, bioSocket, bioSocket);
+						SSL_set_ex_data(ssl, SDMMD_peer_certificate_data_index, deviceCert);
+						result = SSL_do_handshake(ssl);
+						if (result == 1) {
+							SSL_CTX_free(sslCTX);
+						} else {
+							uint32_t err = SSL_get_error(ssl, result);
+							if (result) {
+								char *reason = ssl_strerror(ssl, result);
+								printf("lockssl_handshake: SSL handshake fatal lower level error %d: %s.\n", result, reason);
+							} else {
+								char *reason = ssl_strerror(ssl, 0x0);
+								printf("lockssl_handshake: SSL handshake controlled failure %d: %s.\n", result, reason);
+							}
+							SSL_free(ssl);
+						}
+					} else {
+						printf("_create_ssl: Could not create SSL thing.\n");
+					}
+				}
+			} else {
+				printf("_create_ssl_context: Could not decode private key.\n");
+				if (cert) {
+					X509_free(cert);
+					result = 0x0;
+				}
+			}
+		}
+	} else {
+		printf("lockssl_handshake: Could not create SSL bio.\n");
+	}
+	return ssl;
+}
+
+sdmmd_return_t SDMMD_lockconn_enable_ssl(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostCert, CFTypeRef deviceCert, CFTypeRef hostPrivKey, uint32_t num) {
+	sdmmd_return_t result = 0x0;
+	lockdown_conn->ssl = SDMMD_lockssl_handshake(lockdown_conn, hostCert, hostPrivKey, deviceCert, num);
+	return result;
 }
 
 void* SDMMD_lockconn_send_message(SDMMD_AMDeviceRef device, CFDictionaryRef dict) {
@@ -83,6 +192,49 @@ void* SDMMD_lockconn_receive_message(SDMMD_AMDeviceRef device, CFDictionaryRef *
 		if (result == 0x0) {
 			result = 0xe8000004;
 		}
+	}
+	return result;
+}
+
+sdmmd_return_t SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key, CFErrorRef *err) {
+	sdmmd_return_t result = 0x0;
+	if (device) {
+		if (device->ivars.lockdown_conn) {
+			CFMutableDictionaryRef getVal = SDMMD__CreateMessageDict(CFSTR("GetValue"));
+			if (getVal) {
+				CFMutableDictionaryRef response;
+				if (domain)
+					CFDictionarySetValue(getVal, CFSTR("Domain"), domain);
+				if (key)
+					CFDictionarySetValue(getVal, CFSTR("Key"), domain);
+					
+				result = SDMMD_lockconn_send_message(device, getVal);
+				if (result == 0x0) {
+					result = SDMMD_lockconn_receive_message(device, &response);
+					if (result == 0x0) {
+						CFTypeRef err = CFDictionaryGetValue(response, CFSTR("Error"));
+						if (err) {
+							if (CFGetTypeID(err) == CFStringGetTypeID())
+								result = SDMMD__ConvertLockdowndError(err);
+							else
+								result = 0xe8000013;
+						} else {
+							CFTypeRef value = CFDictionaryGetValue(response, CFSTR("Value"));
+							if (value)
+								result = value;
+							else
+								result = 0x0;
+						}
+					}
+				}
+			} else {
+				result = 0xe8000003;
+			}
+		} else {
+			result = 0xe800000b;
+		}
+	} else {
+		result = 0xe8000007;
 	}
 	return result;
 }
@@ -606,8 +758,8 @@ void* SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFDictionaryRef re
 			}
 			result = 0xe8000082;
 			if (device->ivars.connection_type == 1) {
-				uint32_t var76;
-				result = SDMMD_copy_lockdown_value(device, 0x0, CFSTR(""), &var76);
+				CFErrorRef err;
+				result = SDMMD_copy_lockdown_value(device, NULL, CFSTR(""), &err);
 				
 			}
 			SDMMD__mutex_unlock(&(device->ivars.mutex_lock));
@@ -652,6 +804,22 @@ uint16_t SDMMD_AMDeviceUSBProductID(SDMMD_AMDeviceRef device) {
 
 uint32_t SDMMD_AMDeviceGetConnectionID(SDMMD_AMDeviceRef device) {
 	return SDMMD_AMDeviceUSBDeviceID(device);
+}
+
+CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key) {
+	CFTypeRef value = NULL;
+	if (device->ivars.device_active) {
+		if (!domain)
+			domain = CFStringGetCString(domain, "NULL", 256, kCFStringEncodingUTF8);
+		if (!key)
+			key = CFStringGetCString(domain, "NULL", 256, kCFStringEncodingUTF8);
+			
+		SDMMD__mutex_lock(&(device->ivars.mutex_lock));
+		uint32_t var12;
+		value = SDMMD_copy_lockdown_value(device, domain, key, &var12);
+		SDMMD__mutex_unlock(&(device->ivars.mutex_lock));
+	}
+	return value;
 }
 
 #endif

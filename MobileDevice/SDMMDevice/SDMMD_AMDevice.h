@@ -95,4 +95,6 @@ uint32_t SDMMD_AMDeviceUSBLocationID(SDMMD_AMDeviceRef device);
 uint16_t SDMMD_AMDeviceUSBProductID(SDMMD_AMDeviceRef device);
 uint32_t SDMMD_AMDeviceGetConnectionID(SDMMD_AMDeviceRef device);
 
+CFTypeRef SDMMD_DeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key);
+
 #endif
