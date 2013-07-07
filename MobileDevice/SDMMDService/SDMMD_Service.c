@@ -15,10 +15,10 @@
  *  THIS SOFTWARE IS PROVIDED BY Sam Marshall ''AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL Sam Marshall BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-#ifndef _SDMMDSERVICE_C_
-#define _SDMMDSERVICE_C_
+#ifndef _SDM_MD_SERVICE_C_
+#define _SDM_MD_SERVICE_C_
 
-#include "SDMMDService.h"
+#include "SDMMD_Service.h"
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/select.h>
@@ -45,7 +45,7 @@ int32_t CheckIfExpectingResponse(uint32_t handle, uint32_t timeout) {
 }
 
 
-sdmmd_return_t SDMMDServiceSend(uint32_t handle, CFDataRef data) {
+sdmmd_return_t SDMMD_ServiceSend(uint32_t handle, CFDataRef data) {
 	uint32_t msgLen = (data ? CFDataGetLength(data) : 0);
 	if (msgLen) {
 	    uint32_t size = htonl((uint32_t)msgLen);
@@ -61,7 +61,7 @@ sdmmd_return_t SDMMDServiceSend(uint32_t handle, CFDataRef data) {
 	return MDERR_OK;
 }
 
-sdmmd_return_t SDMMDServiceReceive(uint32_t handle, CFDataRef *data) {
+sdmmd_return_t SDMMD_ServiceReceive(uint32_t handle, CFDataRef *data) {
 	uint32_t size = (data && *data ? (uint32_t)CFDataGetLength(*data) : 0);
 	if (size) {
 		if (CheckIfExpectingResponse(handle, 1000)) {
@@ -101,13 +101,13 @@ sdmmd_return_t SDMMDServiceReceive(uint32_t handle, CFDataRef *data) {
 	return MDERR_OK;
 }
 
-sdmmd_return_t SDMMDServiceSendMessage(uint32_t handle, CFPropertyListRef data) {
-	return ((data) ? SDMMDServiceSend(handle, data) : MDERR_DICT_NOT_LOADED);
+sdmmd_return_t SDMMD_ServiceSendMessage(uint32_t handle, CFPropertyListRef data) {
+	return ((data) ? SDMMD_ServiceSend(handle, data) : MDERR_DICT_NOT_LOADED);
 }
 
-sdmmd_return_t SDMMDServiceReceiveMessage(uint32_t handle, CFPropertyListRef *data) {
+sdmmd_return_t SDMMD_ServiceReceiveMessage(uint32_t handle, CFPropertyListRef *data) {
 	CFDataRef dataBuffer = NULL;
-	if (SDM_MD_CallSuccessful(SDMMDServiceReceive(handle, &dataBuffer))) {
+	if (SDM_MD_CallSuccessful(SDMMD_ServiceReceive(handle, &dataBuffer))) {
 		*data = CFPropertyListCreateWithData(0, dataBuffer, kCFPropertyListImmutable, NULL, NULL);
 		return MDERR_OK;
 	} else {

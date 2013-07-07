@@ -16,8 +16,8 @@
  * 
  */
 
-#ifndef _SDMMD_SERVICE_H_
-#define _SDMMD_SERVICE_H_
+#ifndef _SDM_MD_SERVICE_H_
+#define _SDM_MD_SERVICE_H_
 
 #import <CoreFoundation/CoreFoundation.h>
 #import "SDMMD_Error.h"
