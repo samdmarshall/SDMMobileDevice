@@ -30,8 +30,8 @@ SDMMobileDeviceRef InitializeSDMMobileDevice() {
 	dispatch_once(&once, ^{
 		if (!controller) {
 			controller = (SDMMobileDeviceRef)malloc(sizeof(struct sdm_mobiledevice));
-			controller->usbmuxd = SDMUSBMuxCreate();
-			SDMUSBMuxStartListener(&controller->usbmuxd);
+			controller->usbmuxd = SDMMD_USBMuxCreate();
+			SDMMD_USBMuxStartListener(&controller->usbmuxd);
 			controller->deviceList = CFArrayCreate(kCFAllocatorDefault, NULL, 0, &kCFTypeArrayCallBacks);
 			SSL_library_init();
 			ERR_load_crypto_strings();
@@ -52,6 +52,20 @@ SDMMobileDeviceRef InitializeSDMMobileDevice() {
 		}
 	});
 	return controller;
+}
+
+void SDMMD_AMDeviceNotificationSubscribe() {
+	SDMMD_MCP;
+	if (SDMMD_MCP->usbmuxd == 0) {
+		SDMMD_MCP->usbmuxd = SDMMD_USBMuxCreate();
+		SDMMD_USBMuxStartListener(&SDMMD_MCP->usbmuxd);
+	}
+}
+
+void SDMMD_AMDeviceNotificationUnsubscribe() {
+	if (SDMMD_MCP->usbmuxd) {
+		SDMMD_USBMuxClose(SDMMD_MCP->usbmuxd);
+	}
 }
 
 #endif

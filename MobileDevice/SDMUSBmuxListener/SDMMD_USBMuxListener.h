@@ -16,8 +16,8 @@
  * 
  */
 
-#ifndef _SDMUSBMUXLISTENER_H_
-#define _SDMUSBMUXLISTENER_H_
+#ifndef _SDM_MD_USBMUXLISTENER_H_
+#define _SDM_MD_USBMUXLISTENER_H_
 
 #import <CoreFoundation/CoreFoundation.h>
 
@@ -40,7 +40,7 @@ typedef struct USBMuxPacket {
 
 typedef void (*callbackFunction)(void *, struct USBMuxPacket *);
 
-struct USBmuxListenerClass {
+struct USBMuxListenerClass {
 	uint32_t socket;
 	bool isActive;
 	dispatch_queue_t socketQueue;
@@ -53,27 +53,27 @@ struct USBmuxListenerClass {
 	callbackFunction deviceListCallback;
 	callbackFunction listenerListCallback;
 	CFMutableArrayRef responses;
-} USBmuxListenerClass;
+} USBMuxListenerClass;
 
-typedef struct USBmuxListenerClass SDM_USBMuxListenerClass;
+typedef struct USBMuxListenerClass SDM_USBMuxListenerClass;
 
-#define SDMUSBMuxListenerRef SDM_USBMuxListenerClass*
+#define SDMMD_USBMuxListenerRef SDM_USBMuxListenerClass*
 
-typedef enum SDMUSBMuxPacketMessageType {
-	kSDMUSBMuxPacketInvalidType = 0x0,
-	kSDMUSBMuxPacketConnectType = 0x1,
-	kSDMUSBMuxPacketListenType = 0x2,
-	kSDMUSBMuxPacketResultType = 0x3,
-	kSDMUSBMuxPacketAttachType = 0x4,
-	kSDMUSBMuxPacketDetachType = 0x5,
-	kSDMUSBMuxPacketLogsType = 0x6,
-	kSDMUSBMuxPacketListDevicesType = 0x7,
-	kSDMUSBMuxPacketListListenersType = 0x8
-} SDMUSBMuxPacketMessageType;
+typedef enum SDMMD_USBMuxPacketMessageType {
+	kSDMMD_USBMuxPacketInvalidType = 0x0,
+	kSDMMD_USBMuxPacketConnectType = 0x1,
+	kSDMMD_USBMuxPacketListenType = 0x2,
+	kSDMMD_USBMuxPacketResultType = 0x3,
+	kSDMMD_USBMuxPacketAttachType = 0x4,
+	kSDMMD_USBMuxPacketDetachType = 0x5,
+	kSDMMD_USBMuxPacketLogsType = 0x6,
+	kSDMMD_USBMuxPacketListDevicesType = 0x7,
+	kSDMMD_USBMuxPacketListListenersType = 0x8
+} SDMMD_USBMuxPacketMessageType;
 
-#define kKnownSDMUSBMuxPacketMessageType 0x9
+#define kKnownSDMMD_USBMuxPacketMessageType 0x9
 
-static CFStringRef SDMUSBMuxPacketMessage[kKnownSDMUSBMuxPacketMessageType] = {
+static CFStringRef SDMMD_USBMuxPacketMessage[kKnownSDMMD_USBMuxPacketMessageType] = {
 	CFSTR("Invalid"),
 	CFSTR("Connect"),
 	CFSTR("Listen"),
@@ -85,26 +85,28 @@ static CFStringRef SDMUSBMuxPacketMessage[kKnownSDMUSBMuxPacketMessageType] = {
 	CFSTR("ListListeners")
 };
 
-typedef enum SDMUSBMuxResultCodeType {
-	SDMUSBMuxResult_OK = 0x0,
-	SDMUSBMuxResult_BadCommand = 0x1,
-	SDMUSBMuxResult_BadDevice = 0x2,
-	SDMUSBMuxResult_ConnectionRefused = 0x3,
-	SDMUSBMuxResult_Unknown0 = 0x4,
-	SDMUSBMuxResult_Unknown1 = 0x5,
-	SDMUSBMuxResult_BadVersion = 0x6,
-	SDMUSBMuxResult_Unknown2 = 0x7
-} SDMUSBMuxResultCodeType;
+typedef enum SDMMD_USBMuxResultCodeType {
+	SDMMD_USBMuxResult_OK = 0x0,
+	SDMMD_USBMuxResult_BadCommand = 0x1,
+	SDMMD_USBMuxResult_BadDevice = 0x2,
+	SDMMD_USBMuxResult_ConnectionRefused = 0x3,
+	SDMMD_USBMuxResult_Unknown0 = 0x4,
+	SDMMD_USBMuxResult_Unknown1 = 0x5,
+	SDMMD_USBMuxResult_BadVersion = 0x6,
+	SDMMD_USBMuxResult_Unknown2 = 0x7
+} SDMMD_USBMuxResultCodeType;
 
 #pragma mark -
 #pragma mark Functions
 #pragma mark -
 
-SDMUSBMuxListenerRef SDMUSBMuxCreate();
-void SDMUSBMuxStartListener(SDMUSBMuxListenerRef *listener);
-void SDMUSBMuxListenerSend(SDMUSBMuxListenerRef listener, struct USBMuxPacket *packet);
-void SDMUSBMuxListenerReceive(SDMUSBMuxListenerRef listener, struct USBMuxPacket *packet);
-struct USBMuxPacket * SDMUSBMuxCreatePacketType(SDMUSBMuxPacketMessageType type, CFDictionaryRef payload);
+SDMMD_USBMuxListenerRef SDMMD_USBMuxCreate();
+void SDMMD_USBMuxClose(SDMMD_USBMuxListenerRef listener);
+void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener);
+void SDMMD_USBMuxListenerSend(SDMMD_USBMuxListenerRef listener, struct USBMuxPacket *packet);
+void SDMMD_USBMuxListenerReceive(SDMMD_USBMuxListenerRef listener, struct USBMuxPacket *packet);
 
+struct USBMuxPacket * SDMMD_USBMuxCreatePacketType(SDMMD_USBMuxPacketMessageType type, CFDictionaryRef payload);
 void USBMuxPacketRelease(struct USBMuxPacket *packet);
+
 #endif

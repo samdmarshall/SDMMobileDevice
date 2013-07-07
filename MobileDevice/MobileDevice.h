@@ -50,7 +50,7 @@
 #import "SDMSymbolTable.h"
 
 typedef struct sdm_mobiledevice {
-	SDMUSBMuxListenerRef usbmuxd;
+	SDMMD_USBMuxListenerRef usbmuxd;
 	CFArrayRef deviceList;
 	struct SDMSTLibrarySymbolTable *lookupTable;
 } __attribute__ ((packed)) sdm_mobiledevice;

@@ -23,7 +23,7 @@
 #include "SDMMD_USBMuxListener.h"
 
 typedef struct sdm_mobiledevice {
-	SDMUSBMuxListenerRef usbmuxd;
+	SDMMD_USBMuxListenerRef usbmuxd;
 	CFArrayRef deviceList;
 	pthread_mutex_t *sslLocks;
 } __attribute__ ((packed)) sdm_mobiledevice;
@@ -31,6 +31,8 @@ typedef struct sdm_mobiledevice {
 #define SDMMobileDeviceRef struct sdm_mobiledevice*
 
 SDMMobileDeviceRef InitializeSDMMobileDevice();
+void SDMMD_AMDeviceNotificationSubscribe();
+void SDMMD_AMDeviceNotificationUnsubscribe();
 
 #define SDMMD_MCP InitializeSDMMobileDevice()
 

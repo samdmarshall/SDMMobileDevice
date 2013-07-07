@@ -93,5 +93,4 @@ uint32_t SDMMD_AMDeviceUSBDeviceID(SDMMD_AMDeviceRef device);
 uint32_t SDMMD_AMDeviceUSBLocationID(SDMMD_AMDeviceRef device);
 uint16_t SDMMD_AMDeviceUSBProductID(SDMMD_AMDeviceRef device);
 
-
 #endif
