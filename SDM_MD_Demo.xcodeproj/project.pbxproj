@@ -134,7 +134,6 @@
 		225ACD761760C86200A47071 /* SDMMD_Applications.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_Applications.c; sourceTree = "<group>"; };
 		225AD7301765FE7700A47071 /* SDMMD_USBMuxListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_USBMuxListener.h; sourceTree = "<group>"; };
 		225AD7311765FE7700A47071 /* SDMMD_USBMuxListener.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_USBMuxListener.c; sourceTree = "<group>"; };
-		226CCF1B176B7BAA0082A21A /* CFRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFRuntime.h; sourceTree = "<group>"; };
 		2288EC23177B4629006BF231 /* MDDemoMainSplitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDDemoMainSplitView.h; sourceTree = "<group>"; };
 		2288EC24177B4629006BF231 /* MDDemoMainSplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDDemoMainSplitView.m; sourceTree = "<group>"; };
 		2288ECC7177B4F31006BF231 /* MDDemoDeviceTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDDemoDeviceTable.h; sourceTree = "<group>"; };
@@ -231,7 +230,6 @@
 			children = (
 				22AD8E8317875BAA002ACFB1 /* SDMMobileDevice.h */,
 				22AD8E7817875B1E002ACFB1 /* SDMMD_Functions.h */,
-				226CCF1B176B7BAA0082A21A /* CFRuntime.h */,
 				22AD8F231789B3DF002ACFB1 /* SDMMD_MCP.h */,
 				22AD8F241789B3DF002ACFB1 /* SDMMD_MCP.c */,
 				225ACB6B175FC13400A47071 /* SDMMDConnection */,
