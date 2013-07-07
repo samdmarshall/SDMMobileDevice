@@ -25,5 +25,7 @@
 #include "SDMMD_Error.h"
 #include "SDMMD_MCP.h"
 #include "SDMMD_USBMuxListener.h"
+#include "SDMMD_Service.h"
+#include "SDMMD_Debugger.h"
 
 #endif

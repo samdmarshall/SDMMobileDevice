@@ -183,7 +183,7 @@ void* SDMMD_AFCSendPacket(CFTypeRef a, CFTypeRef b,void*c, uint32_t size) {
 	if ((a+0x10) == 0x1) {
 		if (c == 0x0)
 			result = 0xe8004007;
-		if ((b+0x10) + size > 0x2000) {
+		if (((char*)b+0x10) + size > 0x2000) {
 			result = SDMMD_AFCSendHeader(a, b);
 			if (result == 0x0) {
 				result = SDMMD_AFCSendData(a, c, size);

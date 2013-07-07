@@ -21,6 +21,7 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <openssl/ssl.h>
+#include "SDMMD_Error.h"
 
 typedef struct SDMMD_lockdown_conn {
 	uint64_t connection;			// 0
@@ -77,17 +78,17 @@ typedef struct sdmmd_am_device SDM_AMDeviceClass;
 void* SDMMD_AMDeviceActivate(SDMMD_AMDeviceRef device, CFDictionaryRef options);
 void* SDMMD_AMDeviceDeactivate(SDMMD_AMDeviceRef device);
 
-void* SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device);
-void* SDMMD_AMDeviceDisconnect(SDMMD_AMDeviceRef device);
+sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device);
+sdmmd_return_t SDMMD_AMDeviceDisconnect(SDMMD_AMDeviceRef device);
 
 bool SDMMD_AMDeviceIsValid(SDMMD_AMDeviceRef device);
 
 bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device);
 
-void* SDMMD_AMDeviceStartSession(SDMMD_AMDeviceRef device);
-void* SDMMD_AMDeviceStopSession(SDMMD_AMDeviceRef device);
+sdmmd_return_t SDMMD_AMDeviceStartSession(SDMMD_AMDeviceRef device);
+sdmmd_return_t SDMMD_AMDeviceStopSession(SDMMD_AMDeviceRef device);
 
-void* SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef service_name, CFDictionaryRef options, uint32_t *handle);
+sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef service_name, CFDictionaryRef options, uint32_t *handle);
 
 uint32_t SDMMD_AMDeviceUSBDeviceID(SDMMD_AMDeviceRef device);
 uint32_t SDMMD_AMDeviceUSBLocationID(SDMMD_AMDeviceRef device);

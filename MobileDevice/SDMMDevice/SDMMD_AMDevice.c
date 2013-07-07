@@ -55,7 +55,7 @@ SDMMD_lockdown_conn* SDMMD_lockdown_connection_create(SDMMD_lockdown_conn *lockd
 
 bool SDMMD_isDeviceAttached(uint32_t device_id) {
 	bool result = false;
-	CFArrayRef devices = SDMMD_USBMuxCopyDeviceArray();
+	CFArrayRef devices = CFArrayCreateCopy(kCFAllocatorDefault, SDMMD_MCP->deviceList);
 	if (devices) {
 		for (uint32_t i = 0; i < CFArrayGetCount(devices); i++) {
 			CFDictionaryRef device = CFArrayGetValueAtIndex(devices, i);
@@ -245,8 +245,8 @@ void* SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFTypeRef record, uint3
 	return result;
 }
 
-void* SDMMD_AMDeviceStartSession(SDMMD_AMDeviceRef device) {
-	void* result = 0xe8000007;
+sdmmd_return_t SDMMD_AMDeviceStartSession(SDMMD_AMDeviceRef device) {
+	sdmmd_return_t result = 0xe8000007;
 	CFTypeRef record = NULL;
 	CFTypeRef key = NULL;
 	if (device) {
@@ -273,8 +273,8 @@ void* SDMMD_AMDeviceStartSession(SDMMD_AMDeviceRef device) {
 	return result;
 }
 
-void* SDMMD_AMDeviceStopSession(SDMMD_AMDeviceRef device) {
-	void* result = 0x0;
+sdmmd_return_t SDMMD_AMDeviceStopSession(SDMMD_AMDeviceRef device) {
+	sdmmd_return_t result = 0x0;
 	if (device) {
 		result = 0xe8000084;
 		if (device->ivars.device_active) {
@@ -298,8 +298,8 @@ void* SDMMD_AMDeviceStopSession(SDMMD_AMDeviceRef device) {
 	return result;
 }
 
-void* SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef service, CFDictionaryRef options, uint32_t *handle) {
-	void* result = 0xe8000007;
+sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef service, CFDictionaryRef options, uint32_t *handle) {
+	sdmmd_return_t result = 0xe8000007;
 	CFTypeRef var16 = NULL;
 	CFTypeRef var13 = NULL;
 	uint32_t socket = 0xffffffff;
@@ -388,8 +388,8 @@ void* SDMMD_AMDeviceDeactivate(SDMMD_AMDeviceRef device) {
 	return result;
 }
 
-void* SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
-	void* result = 0x0;
+sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
+	sdmmd_return_t result = 0x0;
 	uint32_t socket = 0xffffffff;
 	if (device) {
 		result = 0xe8000084;
@@ -443,8 +443,8 @@ void* SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 	return result;
 }
 
-void* SDMMD_AMDeviceDisconnect(SDMMD_AMDeviceRef device) {
-	void* result = 0x0;
+sdmmd_return_t SDMMD_AMDeviceDisconnect(SDMMD_AMDeviceRef device) {
+	sdmmd_return_t result = 0x0;
 	if (device) {
 		SDMMD__mutex_lock(&(device->ivars.mutex_lock));
 		result = SDMMD_lockdown_connection_destory(device->ivars.lockdown_conn);

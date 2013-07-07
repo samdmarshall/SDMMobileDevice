@@ -19,8 +19,8 @@
 #ifndef _SDMMD_SERVICE_H_
 #define _SDMMD_SERVICE_H_
 
-#include <CoreFoundation/CoreFoundation.h>
-#include "SDMMD_Error.h"
+#import <CoreFoundation/CoreFoundation.h>
+#import "SDMMD_Error.h"
 
 #pragma mark -
 #pragma mark Service List
