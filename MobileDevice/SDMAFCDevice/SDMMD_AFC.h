@@ -20,6 +20,7 @@
 #define _SDM_MD_AFC_H_
 
 #include <CoreFoundation/CoreFoundation.h>
+#include "SDMMD_Error.h"
 
 static char *gAFCPacketTypeNames[39] = {
 	"Invalid",
@@ -74,6 +75,8 @@ typedef struct SDMMD_AFCHeader {
 #define SDMMD_AFCHeaderRef SDMMD_AFCHeader*
 
 void SDMMD_AFCLog(uint32_t level, const char *format, ...);
+void* SDMMD_AFCSetErrorInfoWithArgs(uint32_t level, uint32_t mask, uint32_t code, char *file, uint32_t line, char *call);
+sdmmd_return_t SDMMD__AFCSetErrorResult(uint32_t level, uint32_t code, uint32_t line, char *call);
 
 char* SDMMD_AFCStringCopy(char *dest, uint32_t destLength, char *source, uint32_t sourceLength);
 char* SDMMD_AFCPacketTypeName(uint32_t packetType);

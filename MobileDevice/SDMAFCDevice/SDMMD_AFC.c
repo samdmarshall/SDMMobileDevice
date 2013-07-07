@@ -29,6 +29,15 @@ void SDMMD_AFCLog(uint32_t level, const char *format, ...) {
 	va_end(args);
 }
 
+void* SDMMD_AFCSetErrorInfoWithArgs(uint32_t level, uint32_t mask, uint32_t code, char *file, uint32_t line, char *call);
+
+sdmmd_return_t SDMMD__AFCSetErrorResult(uint32_t level, uint32_t code, uint32_t line, char *call) {
+	sdmmd_return_t result = 0x0;
+	SDMMD_AFCLog(0x5, "Setting error result %d, %d, %s, %d\n", 0xffffffff, code, __FILE__, line);
+	result = SDMMD_AFCSetErrorInfoWithArgs(level, 0xffffffff, code, __FILE__, line, call);
+	return result;
+}
+
 char* SDMMD_AFCStringCopy(char *dest, uint32_t destLength, char *source, uint32_t sourceLength) {
 	if (sourceLength) {
 		if (sourceLength < destLength) {
@@ -169,7 +178,7 @@ void* SDMMD_AFCReadPacketBody(CFTypeRef a,void*b, CFDataRef* c, uint32_t *readLe
 			CFTypeRef allocRef = CFGetAllocator(a);
 			data = CFAllocatorAllocate(allocRef, dataLength, 0x0);
 			if (result == 0x0) {
-				result = SDMMD___AFCSetErrorResult(0x0, 0xe8004003, 0x24d, "CFAllocatorAllocate");
+				result = SDMMD__AFCSetErrorResult(0x0, 0xe8004003, __LINE__, "CFAllocatorAllocate");
 			}
 			result = SDMMD_AFCReadData(a, data, dataLength);
 			if (result == 0x0) {
