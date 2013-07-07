@@ -124,25 +124,6 @@
 		2215B2581757A22400AD1981 /* SDMMACAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDMMACAddress.m; sourceTree = "<group>"; };
 		2215B29E1757A9D700AD1981 /* SDMNetServiceSpoof.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMNetServiceSpoof.h; sourceTree = "<group>"; };
 		2215B29F1757A9D700AD1981 /* SDMNetServiceSpoof.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDMNetServiceSpoof.m; sourceTree = "<group>"; };
-		22485224178216D300CD8A99 /* decode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = decode.c; sourceTree = "<group>"; };
-		22485225178216D300CD8A99 /* decode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = decode.h; sourceTree = "<group>"; };
-		22485226178216D300CD8A99 /* extern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = extern.h; sourceTree = "<group>"; };
-		22485227178216D300CD8A99 /* input.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = input.c; sourceTree = "<group>"; };
-		22485228178216D300CD8A99 /* input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = input.h; sourceTree = "<group>"; };
-		22485229178216D300CD8A99 /* syn-att.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "syn-att.c"; sourceTree = "<group>"; };
-		2248522A178216D300CD8A99 /* syn-intel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "syn-intel.c"; sourceTree = "<group>"; };
-		2248522B178216D300CD8A99 /* syn.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = syn.c; sourceTree = "<group>"; };
-		2248522C178216D300CD8A99 /* syn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = syn.h; sourceTree = "<group>"; };
-		2248522D178216D300CD8A99 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
-		2248522E178216D300CD8A99 /* udint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = udint.h; sourceTree = "<group>"; };
-		2248522F178216D300CD8A99 /* udis86.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = udis86.c; sourceTree = "<group>"; };
-		22485230178216D300CD8A99 /* udis86.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = udis86.h; path = ../SDMSymbolTable/udis86.h; sourceTree = "<group>"; };
-		224852AB17822FE900CD8A99 /* itab.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = itab.c; sourceTree = "<group>"; };
-		224852AC17822FE900CD8A99 /* itab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = itab.h; sourceTree = "<group>"; };
-		22485B4A178488ED00CD8A99 /* disasm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = disasm.h; sourceTree = "<group>"; };
-		22485B4B178488ED00CD8A99 /* disasm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = disasm.c; sourceTree = "<group>"; };
-		22485C1917849BEC00CD8A99 /* arm_decode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arm_decode.h; sourceTree = "<group>"; };
-		22485C1A17849BEC00CD8A99 /* arm_decode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = arm_decode.c; sourceTree = "<group>"; };
 		225AC5BE175B976500A47071 /* SDMMD_Notification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Notification.h; sourceTree = "<group>"; };
 		225AC5BF175B976500A47071 /* SDMMD_Notification.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_Notification.c; sourceTree = "<group>"; };
 		225ACB44175FBFA300A47071 /* SDMMD_Debugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Debugger.h; sourceTree = "<group>"; };
@@ -154,8 +135,6 @@
 		225AD7301765FE7700A47071 /* SDMMD_USBMuxListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_USBMuxListener.h; sourceTree = "<group>"; };
 		225AD7311765FE7700A47071 /* SDMMD_USBMuxListener.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_USBMuxListener.c; sourceTree = "<group>"; };
 		226CCF1B176B7BAA0082A21A /* CFRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFRuntime.h; sourceTree = "<group>"; };
-		226CD66317708BB60082A21A /* SDMSymbolTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDMSymbolTable.h; path = ../SDMSymbolTable/SDMSymbolTable.h; sourceTree = "<group>"; };
-		226CD66417708BB60082A21A /* SDMSymbolTable.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = SDMSymbolTable.c; path = ../SDMSymbolTable/SDMSymbolTable.c; sourceTree = "<group>"; };
 		2288EC23177B4629006BF231 /* MDDemoMainSplitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDDemoMainSplitView.h; sourceTree = "<group>"; };
 		2288EC24177B4629006BF231 /* MDDemoMainSplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDDemoMainSplitView.m; sourceTree = "<group>"; };
 		2288ECC7177B4F31006BF231 /* MDDemoDeviceTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDDemoDeviceTable.h; sourceTree = "<group>"; };
@@ -337,28 +316,6 @@
 			name = Additions;
 			sourceTree = "<group>";
 		};
-		22485223178216D300CD8A99 /* libudis86 */ = {
-			isa = PBXGroup;
-			children = (
-				224852AB17822FE900CD8A99 /* itab.c */,
-				224852AC17822FE900CD8A99 /* itab.h */,
-				22485224178216D300CD8A99 /* decode.c */,
-				22485225178216D300CD8A99 /* decode.h */,
-				22485226178216D300CD8A99 /* extern.h */,
-				22485227178216D300CD8A99 /* input.c */,
-				22485228178216D300CD8A99 /* input.h */,
-				22485229178216D300CD8A99 /* syn-att.c */,
-				2248522A178216D300CD8A99 /* syn-intel.c */,
-				2248522B178216D300CD8A99 /* syn.c */,
-				2248522C178216D300CD8A99 /* syn.h */,
-				2248522D178216D300CD8A99 /* types.h */,
-				2248522E178216D300CD8A99 /* udint.h */,
-				2248522F178216D300CD8A99 /* udis86.c */,
-			);
-			name = libudis86;
-			path = ../SDMSymbolTable/libudis86;
-			sourceTree = SOURCE_ROOT;
-		};
 		225AC5BB175B971800A47071 /* SDMMDNotification */ = {
 			isa = PBXGroup;
 			children = (
@@ -395,22 +352,6 @@
 			path = SDMUSBmuxListener;
 			sourceTree = "<group>";
 		};
-		226CD66217708B810082A21A /* SDMSymbolTable */ = {
-			isa = PBXGroup;
-			children = (
-				22485223178216D300CD8A99 /* libudis86 */,
-				22485230178216D300CD8A99 /* udis86.h */,
-				226CD66317708BB60082A21A /* SDMSymbolTable.h */,
-				226CD66417708BB60082A21A /* SDMSymbolTable.c */,
-				22485B4A178488ED00CD8A99 /* disasm.h */,
-				22485B4B178488ED00CD8A99 /* disasm.c */,
-				22485C1917849BEC00CD8A99 /* arm_decode.h */,
-				22485C1A17849BEC00CD8A99 /* arm_decode.c */,
-			);
-			name = SDMSymbolTable;
-			path = ../SDMSymbolTable;
-			sourceTree = "<group>";
-		};
 		2288EC22177B45F5006BF231 /* UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -421,13 +362,12 @@
 				2288ECD9177B5119006BF231 /* MDDemoInfoView.h */,
 				2288ECDA177B5119006BF231 /* MDDemoInfoView.m */,
 			);
-			name = UI;
+			path = UI;
 			sourceTree = "<group>";
 		};
 		29B97314FDCFA39411CA2CEA /* SDM_MD_Demo */ = {
 			isa = PBXGroup;
 			children = (
-				226CD66217708B810082A21A /* SDMSymbolTable */,
 				2215B2561757A1F100AD1981 /* Additions */,
 				2215A85017500E2D00AD1981 /* MobileDevice */,
 				080E96DDFE201D6D7F000001 /* Classes */,
