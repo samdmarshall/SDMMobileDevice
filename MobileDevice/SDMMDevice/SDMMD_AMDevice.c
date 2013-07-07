@@ -32,6 +32,14 @@ SDMMD_lockdown_conn* SDMMD_lockdown_connection_create(SDMMD_lockdown_conn *lockd
 	return lockdown;
 }
 
+BIO* SDMMD__create_bio_from_data(CFDataRef data) {
+	BIO *bio = NULL;
+	if (data) {
+		bio = BIO_new_mem_buf(CFDataGetBytePtr(data),CFDataGetLength(data));
+	}
+	return bio;
+}
+
 X509* SDMMD__decode_certificate(CFTypeRef cert) {
 	X509* result = NULL;
 	if (cert) {
@@ -49,6 +57,8 @@ X509* SDMMD__decode_certificate(CFTypeRef cert) {
 	}
 	return result;
 }
+
+void SDMMD__ssl_verify_callback();
 
 SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostCert, CFTypeRef deviceCert, CFTypeRef hostPrivKey, uint32_t num) {
 	SSL *ssl;
@@ -101,7 +111,7 @@ SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostC
 						SSL_set_verify(ssl, 0x3, SDMMD__ssl_verify_callback);
 						SSL_set_verify_depth(ssl, 0x0);
 						SSL_set_bio(ssl, bioSocket, bioSocket);
-						SSL_set_ex_data(ssl, SDMMD_peer_certificate_data_index, deviceCert);
+						SSL_set_ex_data(ssl, 0x0, deviceCert);
 						result = SSL_do_handshake(ssl);
 						if (result == 1) {
 							SSL_CTX_free(sslCTX);
