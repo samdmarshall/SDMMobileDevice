@@ -41,7 +41,7 @@ sdmmd_return_t SDMMD_StartDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDM
 			*connection = SDMMD_AMDServiceConnectionCreate(kCFAllocatorDefault, device, dict);
 			uint32_t con = 0;
 			result = SDMMD_AMDeviceStartService(device, CFSTR(AMSVC_DEBUG_SERVER), NULL, &con);
-			(*connection)->body.socket = con;
+			(*connection)->ivars.socket = con;
 		}
 	}
 	return result;
@@ -96,7 +96,7 @@ sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, 
 	commandData[pos++] = kHexEncode[checksum & 0xf];
 	
 	CFDataRef sending = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, (UInt8 *)commandData, pos+3, kCFAllocatorDefault);
-	sdmmd_return_t result = SDMMD_ServiceSend(connection->body.socket, sending);
+	sdmmd_return_t result = SDMMD_ServiceSend(connection->ivars.socket, sending);
 	if (SDM_MD_CallSuccessful(result)) {
 		result = SDMMD_DebuggingReceive(connection, &data).result;
 	}
@@ -108,17 +108,17 @@ sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, 
 sdmmd_debug_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef connection, CFDataRef *data) {
 	unsigned char ackBuffer[1];
 	CFDataRef ackData = CFDataCreate(kCFAllocatorDefault, ackBuffer, 1);
-	sdmmd_return_t result = SDMMD_ServiceReceive(connection->body.socket, &ackData);	
+	sdmmd_return_t result = SDMMD_ServiceReceive(connection->ivars.socket, &ackData);	
 	if (CFDataGetBytePtr(ackData)[0] == '+') {
 		unsigned char commandBuffer[1];
 		CFDataRef commandData = CFDataCreate(kCFAllocatorDefault, commandBuffer, 1);
-		result = SDMMD_ServiceReceive(connection->body.socket, &commandData);	
+		result = SDMMD_ServiceReceive(connection->ivars.socket, &commandData);	
 		if (CFDataGetBytePtr(commandData)[0] == '$') {
 			char *response = malloc(sizeof(char));			
 			uint32_t position = 0, checksumCount = 3;
 			while (checksumCount) {
 				CFDataRef responseData = CFDataCreate(kCFAllocatorDefault, (UInt8 *)&response[position], 1);
-				result = SDMMD_ServiceReceive(connection->body.socket, &responseData);
+				result = SDMMD_ServiceReceive(connection->ivars.socket, &responseData);
 				response[position] = CFDataGetBytePtr(responseData)[0];
 				if (response[position] == '#' || checksumCount < 3) {
 					checksumCount--;

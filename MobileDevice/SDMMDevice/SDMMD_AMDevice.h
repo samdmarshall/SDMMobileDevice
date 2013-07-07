@@ -81,8 +81,8 @@ typedef struct sdmmd_am_device SDM_AMDeviceClass;
 
 #pragma mark -
 
-void* SDMMD_AMDeviceActivate(SDMMD_AMDeviceRef device, CFDictionaryRef options);
-void* SDMMD_AMDeviceDeactivate(SDMMD_AMDeviceRef device);
+sdmmd_return_t SDMMD_AMDeviceActivate(SDMMD_AMDeviceRef device, CFDictionaryRef options);
+sdmmd_return_t SDMMD_AMDeviceDeactivate(SDMMD_AMDeviceRef device);
 
 sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device);
 sdmmd_return_t SDMMD_AMDeviceDisconnect(SDMMD_AMDeviceRef device);
@@ -90,6 +90,7 @@ sdmmd_return_t SDMMD_AMDeviceDisconnect(SDMMD_AMDeviceRef device);
 bool SDMMD_AMDeviceIsValid(SDMMD_AMDeviceRef device);
 
 bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device);
+sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFDictionaryRef record);
 
 sdmmd_return_t SDMMD_AMDeviceStartSession(SDMMD_AMDeviceRef device);
 sdmmd_return_t SDMMD_AMDeviceStopSession(SDMMD_AMDeviceRef device);

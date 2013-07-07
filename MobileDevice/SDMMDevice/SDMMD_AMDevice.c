@@ -654,8 +654,8 @@ sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef 
 	return result;
 }
 
-void* SDMMD_AMDeviceActivate(SDMMD_AMDeviceRef device, CFDictionaryRef options) {
-	void* result = 0x0;
+sdmmd_return_t SDMMD_AMDeviceActivate(SDMMD_AMDeviceRef device, CFDictionaryRef options) {
+	sdmmd_return_t result = 0x0;
 	if (device) {
 		if (device->ivars.device_active) {
 			SDMMD__mutex_lock(&(device->ivars.mutex_lock));
@@ -674,8 +674,8 @@ void* SDMMD_AMDeviceActivate(SDMMD_AMDeviceRef device, CFDictionaryRef options) 
 	return result;
 }
 
-void* SDMMD_AMDeviceDeactivate(SDMMD_AMDeviceRef device) {
-	void* result = 0x0;
+sdmmd_return_t SDMMD_AMDeviceDeactivate(SDMMD_AMDeviceRef device) {
+	sdmmd_return_t result = 0x0;
 	if (device) {
 		if (device->ivars.device_active) {
 			SDMMD__mutex_lock(&(device->ivars.mutex_lock));
@@ -803,8 +803,8 @@ bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device) {
 	return result;
 }
 
-void* SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFDictionaryRef record) {
-	void* result = 0xe8000007;
+sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFDictionaryRef record) {
+ 	sdmmd_return_t result = 0xe8000007;
 	if (device) {
 		if (device->ivars.device_active) {
 			SDMMD__mutex_lock(&(device->ivars.mutex_lock));
