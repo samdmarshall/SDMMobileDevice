@@ -23,6 +23,7 @@
 #include "SDMMD_Functions.h"
 #include <openssl/ssl.h>
 #include <openssl/err.h>
+#include <openssl/crypto.h>
 
 SDMMobileDeviceRef InitializeSDMMobileDevice() {
 	static SDMMobileDeviceRef controller = nil;

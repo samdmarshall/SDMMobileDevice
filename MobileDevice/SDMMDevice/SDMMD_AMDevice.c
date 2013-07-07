@@ -22,6 +22,70 @@
 #include "SDMMD_AMDevice.h"
 #include "SDMMD_Functions.h"
 #include <string.h>
+#include <errno.h>
+
+SDMMD_lockdown_conn* SDMMD_lockdown_connection_create(SDMMD_lockdown_conn *lockdown) {
+	if (lockdown)
+		free(lockdown);
+	lockdown = calloc(0x1, 0x20);
+	return lockdown;
+}
+
+void* SDMMD_lockconn_send_message(SDMMD_AMDeviceRef device, CFDictionaryRef dict) {
+	void* result = 0xe800002d;
+	if (device->ivars.lockdown_conn && dict) {
+		CFDataRef xml = CFPropertyListCreateXMLData(kCFAllocatorDefault, dict);
+		if (xml) {
+			uint32_t xmlLength = CFDataGetLength(xml);
+			char *xmlPtr = CFDataGetBytePtr(xml);
+			uint32_t sentLen = 0;
+			if (device->ivars.lockdown_conn->ssl)
+				sentLen = SSL_write(device->ivars.lockdown_conn->connection, &xmlLength, 0x4);
+			else
+				sentLen = send(device->ivars.lockdown_conn->connection, &xmlLength, 0x4, 0x0);
+				
+			if (sentLen == 0x4 || (device->ivars.lockdown_conn->ssl && sentLen == 0)) {
+				if (device->ivars.lockdown_conn->ssl)
+					sentLen = SSL_write(device->ivars.lockdown_conn->connection, &xmlPtr, xmlLength);
+				else
+					sentLen = send(device->ivars.lockdown_conn->connection, &xmlPtr, xmlLength, 0x0);
+			} else {
+				if (device->ivars.lockdown_conn->ssl) {
+					char *err = SDMMD_ssl_strerror(device->ivars.lockdown_conn->ssl, sentLen);
+					printf("SDMMD_lockconn_send_message: Could not send all 4 bytes of size %d: %s.\n",sentLen,err);
+				}
+			}
+			
+			if (sentLen < xmlLength) {
+				if (device->ivars.lockdown_conn->ssl) {
+					char *err = SDMMD_ssl_strerror(device->ivars.lockdown_conn->ssl, sentLen);
+					printf("SDMMD_lockconn_send_message: Could not send message: %s.\n",xmlPtr,err);
+				}
+			}
+		} else {
+			printf("SDMMD_lockconn_send_message: Could not encode message as XML.\n");
+		}
+	} else {
+		result = SDMMD_AMDeviceIsValid(device);
+		if (result == 0x0) {
+			result = 0xe800002d;
+		}
+	}
+	return result;
+}
+
+void* SDMMD_lockconn_receive_message(SDMMD_AMDeviceRef device, CFDictionaryRef *dict) {
+	void* result = 0x0;
+	if (device->ivars.lockdown_conn) {
+		
+	} else {
+		result = SDMMD_AMDeviceIsValid(device);
+		if (result == 0x0) {
+			result = 0xe8000004;
+		}
+	}
+	return result;
+}
 
 void* SDMMD_lockdown_connection_destory(SDMMD_lockdown_conn *lockdownCon) {
 	void* result = 0x0;
@@ -46,11 +110,45 @@ void* SDMMD_lockdown_connection_destory(SDMMD_lockdown_conn *lockdownCon) {
 	return result;
 }
 
-SDMMD_lockdown_conn* SDMMD_lockdown_connection_create(SDMMD_lockdown_conn *lockdown) {
-	if (lockdown)
-		free(lockdown);
-	lockdown = calloc(0x1, 0x20);
-	return lockdown;
+sdmmd_return_t SDMMD_copy_daemon_name(SDMMD_AMDeviceRef device, CFStringRef *name) {
+	sdmmd_return_t result = 0;
+	CFDictionaryRef response = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+	if (device) {
+		if (device->ivars.lockdown_conn) {
+			if (name) {
+				CFMutableDictionaryRef queryDict = SDMMD__CreateMessageDict(CFSTR("QueryType"));
+				if (queryDict) {
+					result = SDMMD_lockconn_send_message(device, queryDict);
+					if (result == 0) {
+						result = SDMMD_lockconn_receive_message(device, &response);
+						if (result == 0) {
+							CFTypeRef val = CFDictionaryGetValue(response, CFSTR("Error"));
+							if (val == NULL) {
+								val = CFDictionaryGetValue(response, CFSTR("Type"));
+								if (val) {
+									if (CFGetTypeID(val) == CFStringGetTypeID()) {
+										CFRetain(val);
+										name = val;
+									}
+								} else {
+									result = 0xe8000013;
+								}
+							}
+						}
+					}
+				} else {
+					result = 0xe8000003;
+				}
+			} else {
+				result = 0xe8000007;
+			}
+		} else {
+			result = 0xe800000b;
+		}
+	} else {
+		result = 0xe8000007;
+	}
+	return result;
 }
 
 bool SDMMD_isDeviceAttached(uint32_t device_id) {
@@ -340,7 +438,7 @@ sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef 
 			SSL_free(ssl_enabled);
 		if (socket != 0xff)  {
 			if(close(socket)) {
-				printf("SDMMD_AMDeviceStartService: close(2) con socket %d failed: %d\n",socket,SDMMD__error());
+				printf("SDMMD_AMDeviceStartService: close(2) con socket %d failed: %d\n",socket,errno);
 			}
 		}
 	}
@@ -436,7 +534,7 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 	if (socket != 0xff) {
 		result = close(socket);
 		if (result == 0) {
-			uint32_t errorNum = SDMMD__error();
+			uint32_t errorNum = errno;
 			printf("SDMMD_AMDeviceConnect: close(2) on socket %d socket, faild: %d.\n",socket, errorNum);
 		}
 	}
@@ -482,9 +580,9 @@ bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device) {
 		char *buffer;
 		bool statResult = stat$INODE64(path, buffer);
 		if (statResult) {
-			uint32_t errorNum = error();
+			uint32_t errorNum = errno;
 			if (errorNum != 2) {
-				errorNum = error();
+				errorNum = errno;
 				char *errStr = strerror(errorNum);
 				printf("SDMMD_AMDeviceIsPaired: Could not stat %s: %s\n",path, errStr);
 			}
@@ -550,6 +648,10 @@ uint16_t SDMMD_AMDeviceUSBProductID(SDMMD_AMDeviceRef device) {
 		printf("SDMMD_AMDeviceUSBProductID: No device\n");
 	}
 	return result;
+}
+
+uint32_t SDMMD_AMDeviceGetConnectionID(SDMMD_AMDeviceRef device) {
+	return SDMMD_AMDeviceUSBDeviceID(device);
 }
 
 #endif

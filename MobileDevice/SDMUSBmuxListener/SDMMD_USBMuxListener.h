@@ -19,7 +19,7 @@
 #ifndef _SDM_MD_USBMUXLISTENER_H_
 #define _SDM_MD_USBMUXLISTENER_H_
 
-#import <CoreFoundation/CoreFoundation.h>
+#include <CoreFoundation/CoreFoundation.h>
 
 #pragma mark -
 #pragma mark TYPES

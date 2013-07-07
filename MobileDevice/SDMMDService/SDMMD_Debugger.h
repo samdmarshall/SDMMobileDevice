@@ -1,5 +1,5 @@
 /*
- *  SDMMDDebugger.h
+ *  SDMMD_Debugger.h
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -15,11 +15,13 @@
  *  THIS SOFTWARE IS PROVIDED BY Sam Marshall ''AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL Sam Marshall BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-#ifndef _SDMMDDEBUGGER_H_
-#define _SDMMDDEBUGGER_H_
+#ifndef _SDM_MD_DEBUGGER_H_
+#define _SDM_MD_DEBUGGER_H_
 
 #include "SDMMD_AMDevice.h"
 #include "SDMMD_Error.h"
+#include "SDMMD_Connection.h"
+#include "SDMMD_Service.h"
 
 #pragma mark -
 #pragma mark TYPES
@@ -166,12 +168,12 @@ static struct SDMMD_DebugCommandType KnownDebugCommands[kNumberOfDebugCommands] 
 #pragma mark FUNCTIONS
 #pragma mark -
 
-kern_return_t SDMMD_StartDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDM_AMDebugConnectionRef *connection);
-kern_return_t SDMMD_StopDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDM_AMDebugConnectionRef *connection);
+sdmmd_return_t SDMMD_StartDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDMMD_AMDebugConnectionRef *connection);
+sdmmd_return_t SDMMD_StopDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDMMD_AMDebugConnectionRef *connection);
 
 CFStringRef SDMMD_EncodeForDebuggingCommand(CFStringRef command);
 
-sdmmd_debug_return_t SDMMD_DebuggingSend(SDM_AMDebugConnectionRef connection, SDMMDDebugCommandType commandType, CFStringRef command);
-sdmmd_debug_return_t SDMMD_DebuggingReceive(SDM_AMDebugConnectionRef connection, CFDataRef *data);
+sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, SDMMD_DebugCommandType commandType, CFStringRef command);
+sdmmd_debug_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef connection, CFDataRef *data);
 
 #endif

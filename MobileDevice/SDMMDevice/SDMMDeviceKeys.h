@@ -19,7 +19,7 @@
 #ifndef _SDMMDEVICEKEYS_H_
 #define _SDMMDEVICEKEYS_H_
 
-#import "SDMMDevice.h"
+#include "SDMMDevice.h"
 
 #pragma mark -
 #pragma mark General Domain Keys

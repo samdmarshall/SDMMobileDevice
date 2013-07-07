@@ -1,5 +1,5 @@
 /*
- *  SDMMDService.c
+ *  SDMMD_Service.c
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall

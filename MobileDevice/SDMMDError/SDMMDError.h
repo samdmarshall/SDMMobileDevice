@@ -1,5 +1,5 @@
 /*
- *  SDMMDError.h
+ *  SDMMD_Error.h
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,10 +16,10 @@
  * 
  */
 
-#ifndef _SDMMDERROR_H_
-#define _SDMMDERROR_H_
+#ifndef _SDM_MD_ERROR_H_
+#define _SDM_MD_ERROR_H_
 
-#import <CoreFoundation/CoreFoundation.h>
+#include <CoreFoundation/CoreFoundation.h>
 
 typedef enum SDMMDErrorCodes {
 	MDERR_OK = 0x0,

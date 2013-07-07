@@ -20,6 +20,14 @@
 #define _SDM_MD_AFC_C_
 
 #include "SDMMD_AFC.h"
+#include <string.h>
+
+void SDMMD_AFCLog(uint32_t level, const char *format, ...) {
+	va_list args;
+	va_start(args, format);
+	vprintf(format, args);
+	va_end(args);
+}
 
 char* SDMMD_AFCStringCopy(char *dest, uint32_t destLength, char *source, uint32_t sourceLength) {
 	if (sourceLength) {
@@ -36,7 +44,7 @@ char* SDMMD_AFCStringCopy(char *dest, uint32_t destLength, char *source, uint32_
 char* SDMMD_AFCPacketTypeName(uint32_t packetType) {
 	char *name = "Unknown";
 	if (packetType != 0x0 && packetType <= 0x28) {
-		name = _gAFCPacketTypeNames[packetType*8];
+		name = gAFCPacketTypeNames[packetType];
 	}
 	return name;
 }
@@ -50,7 +58,7 @@ void* SDMMD_AFCSendStatusExtended(CFTypeRef a, void*b, uint32_t packetType, CFDi
 	if ((a+0x44) == 0x0) {
 		uint32_t length = 0x30;
 		CFDataRef afcData = NULL;
-		if (ref != 0x0 && ((a+0x80) & 1) != 0x0) {
+		if (ref != 0x0 && ((uint32_t)((char*)a+0x80) & 1) != 0x0) {
 			afcData = SDMMD___AFCCreateAFCDataWithDictionary(ref);
 			length += CFDataGetLength(afcData);
 		}
@@ -72,7 +80,7 @@ void* SDMMD_AFCSendStatusExtended(CFTypeRef a, void*b, uint32_t packetType, CFDi
 		}
 		CFRelease(afcData);
 	} else {
-		result = (a+0x40);	
+		result = ((char*)a+0x40);	
 	}
 	return result;
 }
@@ -90,13 +98,13 @@ void* SDMMD_AFCSendDataPacket(CFTypeRef a, void*b, uint32_t *dataBytePtr, uint32
 	void* result = 0x0;
 	SDMMD_AFCLog(0x5, "Writing data packet with data length %u\n",dataLength);
 	if ((a+0x44) != 0x0) {
-		result = (a+0x40);
+		result = ((char*)a+0x40);
 	} else {
 		uint64_t header = 0x4141504c36414643;
 		uint32_t packetLength = dataLength + 0x28;
 		uint32_t data32 = 0x0;
 		if (b != 0x0) {
-			data32 = (b+0x18);
+			data32 = ((char*)b+0x18);
 		} else {
 			data32 = 0xffffffff;
 		}
@@ -111,7 +119,7 @@ void* SDMMD_AFCSendDataPacket(CFTypeRef a, void*b, uint32_t *dataBytePtr, uint32
 void* SDMMD_AFCSendHeader(CFTypeRef a, void*b) {
 	void* result = 0x0;
 	if ((a+0x44) != 0x0) {
-		result = (a+0x40);
+		result = ((char*)a+0x40);
 	} else {
 		SDMMD_AFCLogPacketInfo(0x4, "AFCSendHeader", b);
 		result = SDMMD_AFCSendData(a, b, 0x10);
@@ -125,8 +133,9 @@ void* SDMMD_AFCReadPacket(CFTypeRef a, CFTypeRef* b, CFTypeRef* c, CFTypeRef* d)
 	CFTypeRef packetBody0 = 0x0;
 	uint32_t packetBody1 = 0x0;
 	SDMMD_AFCLockLock((a+0x90));
+	uint32_t packetHeaderUnknown = 0x0;
 	if ((a+0x10) == 0x1) {
-		result = SDMMD_AFCReadPacketHeader(a, , 0x80, packetHeader);
+		result = SDMMD_AFCReadPacketHeader(a, &packetHeaderUnknown, 0x80, packetHeader);
 		if (result == 0x0) {
 			result = SDMMD_AFCReadPacketBody(a, packetHeader, &packetBody0, &packetBody1);
 			if (result == 0x0) {
@@ -156,7 +165,7 @@ void* SDMMD_AFCReadPacketBody(CFTypeRef a,void*b, CFDataRef* c, uint32_t *readLe
 	if ((a+0x44) == 0x0) {
 		uint32_t dataLength = (b+0x8);
 		CFDataRef data = NULL;
-		if (dataLength-(b+0x10) != 0x0) {
+		if (dataLength-((uint32_t)(char*)b+0x10) != 0x0) {
 			CFTypeRef allocRef = CFGetAllocator(a);
 			data = CFAllocatorAllocate(allocRef, dataLength, 0x0);
 			if (result == 0x0) {
@@ -177,7 +186,7 @@ void* SDMMD_AFCReadPacketBody(CFTypeRef a,void*b, CFDataRef* c, uint32_t *readLe
 	return result;
 }
 
-void* SDMMD_AFCSendPacket(CFTypeRef a, CFTypeRef b,void*c, uint32_t size) {
+void* SDMMD_AFCSendPacket(CFTypeRef a, CFTypeRef b, void* c, uint32_t size) {
 	void* result = 0xe800400b;
 	SDMMD_AFCLockLock((a+0x90));
 	if ((a+0x10) == 0x1) {
@@ -190,8 +199,8 @@ void* SDMMD_AFCSendPacket(CFTypeRef a, CFTypeRef b,void*c, uint32_t size) {
 			}
 		} else {
 			char *data = malloc(0x2000);
-			if (data != 0x0) {
-				memcpy((b+0x10) + data, c, size);
+			if (data) {
+				memcpy(data, c, size);
 				SDMMD_AFCLogPacketInfo(0x4, "AFCSendHeader", b);
 				result = SDMMD_AFCSendData(a, data, size);
 				free(data);
@@ -211,7 +220,7 @@ uint32_t SDMMD_AFCHeaderInit(SDMMD_AFCHeaderRef header,void*b,void*c,void*d,void
 	uint32_t result = 0x4141504c36414643;
 	header->header = result;
 	header->b = c;
-	header->a = (d+c);
+	header->a = (uint32_t)d+(uint32_t)c;
 	header->d = b;
 	if (e != 0x0) {
 		header->c = e + 0x18;

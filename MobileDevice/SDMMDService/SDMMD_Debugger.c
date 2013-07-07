@@ -1,5 +1,5 @@
 /*
- *  SDMMDDebugger.c
+ *  SDMMD_Debugger.c
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,11 +16,10 @@
  * 
  */
 
-#ifndef _SDMMD_DEBUGGER_C_
-#define _SDMMD_DEBUGGER_C_
+#ifndef _SDM_MD_DEBUGGER_C_
+#define _SDM_MD_DEBUGGER_C_
 
 #include "SDMMD_Debugger.h"
-#include "SDMMD_Service.h"
 
 static char *kHexEncode = "0123456789ABCDEF";
 #define kHexDecode(byte) ((byte >= '0' && byte <= '9') ? (byte - '0') : ( (byte >= 'a' && byte <= 'f') ? (10 + byte - 'a') : ((byte >= 'A' && byte <= 'F') ? (10 + byte - 'A') : byte)))
@@ -33,13 +32,13 @@ uint32_t GenerateChecksumForData(char *strPtr, uint32_t length) {
 	return checksum;
 }
 
-sdmmd_return_t SDMMD_StartDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDM_AMDebugConnectionRef *connection) {
+sdmmd_return_t SDMMD_StartDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDMMD_AMDebugConnectionRef *connection) {
 	sdmmd_return_t result = SDMMD_AMDeviceConnect(device);
 	if (SDM_MD_CallSuccessful(result)) {
 		result = SDMMD_AMDeviceStartSession(device);
 		if (SDM_MD_CallSuccessful(result)) {
 			CFDictionaryRef dict = NULL;
-			*connection = SDM_AMDServiceConnectionCreate(kCFAllocatorDefault, device, dict);
+			*connection = SDMMD_AMDServiceConnectionCreate(kCFAllocatorDefault, device, dict);
 			uint32_t con = 0;
 			result = SDMMD_AMDeviceStartService(device, CFSTR(AMSVC_DEBUG_SERVER), NULL, &con);
 			(*connection)->body.socket = con;
@@ -48,7 +47,7 @@ sdmmd_return_t SDMMD_StartDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDM
 	return result;
 }
 
-kern_return_t SDMMD_StopDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDM_AMDebugConnectionRef *connection) {
+sdmmd_return_t SDMMD_StopDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDMMD_AMDebugConnectionRef *connection) {
 	sdmmd_return_t result = MDERR_OK;
 	if (SDM_MD_CallSuccessful(result)) {
 		result = SDMMD_AMDeviceStopSession(device);
@@ -73,7 +72,7 @@ CFStringRef SDMMD_EncodeForDebuggingCommand(CFStringRef command) {
 	return CFStringCreateWithBytesNoCopy(kCFAllocatorDefault, encodedCommand, length*2, kCFStringEncodingUTF8, true, kCFAllocatorDefault);
 }
 
-sdmmd_debug_return_t SDMMD_DebuggingSend(SDM_AMDebugConnectionRef connection, SDMMD_DebugCommandType commandType, CFStringRef encodedCommand) {
+sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, SDMMD_DebugCommandType commandType, CFStringRef encodedCommand) {
 	CFDataRef data = NULL;
 	char *commandData = malloc(sizeof(char));
 	uint32_t pos = 0;
@@ -106,7 +105,7 @@ sdmmd_debug_return_t SDMMD_DebuggingSend(SDM_AMDebugConnectionRef connection, SD
 	return (sdmmd_debug_return_t){result, data};
 }
 
-sdmmd_debug_return_t SDMMD_DebuggingReceive(SDM_AMDebugConnectionRef connection, CFDataRef *data) {
+sdmmd_debug_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef connection, CFDataRef *data) {
 	unsigned char ackBuffer[1];
 	CFDataRef ackData = CFDataCreate(kCFAllocatorDefault, ackBuffer, 1);
 	sdmmd_return_t result = SDMMD_ServiceReceive(connection->body.socket, &ackData);	

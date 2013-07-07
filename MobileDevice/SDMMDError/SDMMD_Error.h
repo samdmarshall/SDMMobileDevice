@@ -19,7 +19,7 @@
 #ifndef _SDM_MD_ERROR_H_
 #define _SDM_MD_ERROR_H_
 
-#import <CoreFoundation/CoreFoundation.h>
+#include <CoreFoundation/CoreFoundation.h>
 
 typedef enum SDMMD_ErrorCodes {
 	MDERR_OK = 0x0,

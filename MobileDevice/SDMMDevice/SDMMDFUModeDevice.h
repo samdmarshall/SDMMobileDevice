@@ -19,7 +19,7 @@
 #ifndef _SDMMDFUMODEDEVICE_H_
 #define _SDMMDFUMODEDEVICE_H_
 
-#import "SDMMDevice.h"
+#include "SDMMDevice.h"
 
 #pragma mark -
 #pragma mark TYPES

@@ -23,6 +23,8 @@
 #include <openssl/crypto.h>
 #include <pthread.h>
 #include <openssl/ssl.h>
+#include <openssl/err.h>
+#include <stdio.h>
 #include "SDMMD_MCP.h"
 
 static void * _sdm_md__stack_chk_guard = NULL;
@@ -88,6 +90,72 @@ static unsigned long SDMMD_openSSLThreadIDCallBack() {
 
 static uint32_t SDMMD_lockssl_init() {
 	return SSL_get_ex_new_index(0x0, "peer certificate data", 0x0, 0x0, 0x0);
+}
+
+static char* SDMMD_ssl_strerror(SSL *ssl, uint32_t length) {
+	char *code = "SSL_ERROR_NONE";
+	uint32_t result = SSL_get_error(ssl, length);
+	if (result < 0x8) {
+		switch (result) {
+			case 1: {
+				result = ERR_peek_error();
+				if (result) {
+					code = "SSL_ERROR_SSL";
+				} else {
+					code = "SSL_ERROR_SSL unknown error";
+				}
+				break;
+			};
+			case 2: {
+				code = "SSL_ERROR_WANT_READ";
+				break;
+			};
+			case 3: {
+				code = "SSL_ERROR_WANT_WRITE";
+				break;
+			};
+			case 4: {
+				code = "SSL_ERROR_WANT_X509_LOOKUP";
+				break;
+			};
+			case 5: {
+				result = ERR_peek_error();
+				if (result == 0) {
+					if (length == 0) {
+						code = "SSL_ERROR_SYSCALL (Early EOF reached)";	
+					} else {
+						code = "SSL_ERROR_SYSCALL errno";
+					}
+				} else if (result != 0) {
+					code = "SSL_ERROR_SYSCALL internal";
+				} else {
+					code = "SSL_ERROR_SYSCALL (WTFERROR)";
+				}
+				break;
+			};
+			case 6: {
+				code = "SSL_ERROR_ZERO_RETURN";
+				break;
+			};
+			case 7: {
+				code = "SSL_ERROR_WANT_CONNECT";
+				break;
+			};
+			case 8: {
+				code = "SSL_ERROR_WANT_ACCEPT";
+				break;
+			};
+			default: {
+				code = "Unknown SLL error";
+				break;
+			};
+		}
+	} else {
+		ERR_print_errors_fp(stderr);
+		code = "Unknown SLL error type";
+	}
+	ERR_clear_error();
+	return code;
 }
 
 #endif

@@ -1,5 +1,5 @@
 /*
- *  SDMMDConnection.h
+ *  SDMMD_Connection.h
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,12 +16,12 @@
  * 
  */
 
-#ifndef _SDMMDCONNECTION_H_
-#define _SDMMDCONNECTION_H_
+#ifndef _SDM_MD_CONNECTION_H_
+#define _SDM_MD_CONNECTION_H_
 
-#import <CoreFoundation/CoreFoundation.h>
-#import "SDMMDError.h"
-#import "SDMMDevice.h"
+#include <CoreFoundation/CoreFoundation.h>
+#include "SDMMD_Error.h"
+#include "SDMMD_AMDevice.h"
 
 typedef struct AMConnectionClassHeader {
 	unsigned char header[16];		// AMConnectionClass CF Header 
@@ -45,14 +45,14 @@ typedef struct am_connection {
 } __attribute__ ((packed)) am_connection;
 
 /* Classes */
-typedef struct am_connection SDM_AMConnectionClass;
+typedef struct am_connection SDMMD_AMConnectionClass;
 
-#define SDM_AMConnectionRef SDM_AMConnectionClass*
+#define SDMMD_AMConnectionRef SDMMD_AMConnectionClass*
 
 #pragma mark -
 #pragma mark FUNCTIONS
 #pragma mark -
-SDM_AMConnectionRef SDM_AMDServiceConnectionCreate(CFAllocatorRef allocator, SDM_AMDeviceRef device, CFDictionaryRef dict);
-sdmmd_return_t SDM_AMDServiceConnectionInvalidate(SDM_AMConnectionRef connection);
+SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(CFAllocatorRef allocator, SDMMD_AMDeviceRef device, CFDictionaryRef dict);
+sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connection);
 
 #endif

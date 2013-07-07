@@ -1,5 +1,5 @@
 /*
- *  SDMMDService.h
+ *  SDMMD_Service.h
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -19,8 +19,8 @@
 #ifndef _SDM_MD_SERVICE_H_
 #define _SDM_MD_SERVICE_H_
 
-#import <CoreFoundation/CoreFoundation.h>
-#import "SDMMD_Error.h"
+#include <CoreFoundation/CoreFoundation.h>
+#include "SDMMD_Error.h"
 
 #pragma mark -
 #pragma mark Service List

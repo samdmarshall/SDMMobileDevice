@@ -1,5 +1,5 @@
 /*
- *  SDMMDConnection.c
+ *  SDMMD_Connection.c
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,31 +16,17 @@
  * 
  */
 
-#ifndef _SDMMDCONNECTION_C_
-#define _SDMMDCONNECTION_C_
+#ifndef _SDM_MD_CONNECTION_C_
+#define _SDM_MD_CONNECTION_C_
 
-#include "SDMMDConnection.h"
-#import <dlfcn.h>
-#import "MobileDevice.h"
+#include "SDMMD_Connection.h"
 
-typedef void* (*functionCall)();
-
-SDM_AMConnectionRef SDM_AMDServiceConnectionCreate(CFAllocatorRef allocator, SDM_AMDeviceRef device, CFDictionaryRef dict) {
-	SDM_AMConnectionRef results = NULL;
-	SDMSTFunctionCall serviceConnectionCreate = SDMSTCreateFunction(SDMMDController->lookupTable, "AMDServiceConnectionCreate")->offset;
-	if (serviceConnectionCreate) {
-		results = (SDM_AMConnectionRef)serviceConnectionCreate(allocator, device, dict);
-	}
-	return results;
+SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(CFAllocatorRef allocator, SDMMD_AMDeviceRef device, CFDictionaryRef dict) {
+	
 }
 
-sdmmd_return_t SDM_AMDServiceConnectionInvalidate(SDM_AMConnectionRef connection) {
-	sdmmd_return_t results = 0x0;
-	SDMSTFunctionCall serviceConnectionInvalidate = SDMSTCreateFunction(SDMMDController->lookupTable, "AMDServiceConnectionInvalidate")->offset;
-	if (serviceConnectionInvalidate) {
-		results = (sdmmd_return_t)serviceConnectionInvalidate(connection);
-	}
-	return results;
+sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connection) {
+	
 }
 
 

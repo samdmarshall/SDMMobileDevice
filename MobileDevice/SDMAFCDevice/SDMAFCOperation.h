@@ -19,7 +19,7 @@
 #ifndef _SDMAFCOPERATION_H_
 #define _SDMAFCOPERATION_H_
 
-#import "SDMAFCLock.h"
+#include "SDMAFCLock.h"
 
 #pragma mark -
 #pragma mark TYPES

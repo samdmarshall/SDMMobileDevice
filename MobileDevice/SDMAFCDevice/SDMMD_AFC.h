@@ -21,6 +21,48 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
+static char *gAFCPacketTypeNames[39] = {
+	"Invalid",
+	"Status",
+	"Data",
+	"ReadDirectory",
+	"ReadFile",
+	"WriteFile",
+	"WritePart",
+	"TruncFile",
+	"RemovePath",
+	"MakeDirectory",
+	"GetFileInfo",
+	"GetDeviceInfo",
+	"WriteFileAtomic",
+	"FileRefOpen",
+	"FileRefOpenResult",
+	"FileRefRead",
+	"FileRefWrite",
+	"FileRefSeek",
+	"FileRefTell",
+	"FileRefTellResult",
+	"FileRefClose",
+	"FileRefSetFileSize",
+	"GetConnectionInfo",
+	"SetConnectionOptions",
+	"RenamePath",
+	"SetFSBlockSize",
+	"SetSocketBlockSize",
+	"FileRefLock",
+	"MakeLink",
+	"GetFileHash",
+	"SetModTime",
+	"GetFileHashWithRange",
+	"FileRefSetImmutableHint",
+	"GetSizeOfPathContents",
+	"RemovePathAndContents",
+	"DirectoryEnumeratorRefOpen",
+	"DirectoryEnumeratorRefOpenResult",
+	"DirectoryEnumeratorRefRead",
+	"DirectoryEnumeratorRefClose"
+};
+
 typedef struct SDMMD_AFCHeader {
 	uint64_t header;
 	uint64_t a;
@@ -30,6 +72,8 @@ typedef struct SDMMD_AFCHeader {
 } __attribute__ ((packed)) SDMMD_AFCHeader;
 
 #define SDMMD_AFCHeaderRef SDMMD_AFCHeader*
+
+void SDMMD_AFCLog(uint32_t level, const char *format, ...);
 
 char* SDMMD_AFCStringCopy(char *dest, uint32_t destLength, char *source, uint32_t sourceLength);
 char* SDMMD_AFCPacketTypeName(uint32_t packetType);
