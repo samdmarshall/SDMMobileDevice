@@ -20,6 +20,8 @@
 #define _SDM_MD_AMDEVICE_C_
 
 #include "SDMMD_AMDevice.h"
+#include "SDMMD_Functions.h"
+#include <string.h>
 
 void* SDMMD_lockdown_connection_destory(SDMMD_lockdown_conn *lockdownCon) {
 	void* result = 0x0;
@@ -250,7 +252,7 @@ void* SDMMD_AMDeviceStartSession(SDMMD_AMDeviceRef device) {
 	if (device) {
 		result = 0xe8000084;
 		if (device->ivars.device_active) {
-			SDMMD__mutex_lock(device->ivars.mutex_lock);
+			SDMMD__mutex_lock(&(device->ivars.mutex_lock));
 			result = SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(device->ivars.unique_device_id, &record);
 			if (result == 0) {
 				result = SDMMD_send_session_start(device, record, device->ivars.session);
@@ -265,7 +267,7 @@ void* SDMMD_AMDeviceStartSession(SDMMD_AMDeviceRef device) {
 					printf("SDMMD_AMDeviceStartSession: Could not start session with device %u: %s\n",device->ivars.device_id,reason);
 				}
 			} 
-			SDMMD__mutex_unlock(device->ivars.mutex_lock);
+			SDMMD__mutex_unlock(&(device->ivars.mutex_lock));
 		}
 	}
 	return result;
@@ -276,7 +278,7 @@ void* SDMMD_AMDeviceStopSession(SDMMD_AMDeviceRef device) {
 	if (device) {
 		result = 0xe8000084;
 		if (device->ivars.device_active) {
-			SDMMD__mutex_lock(device->ivars.mutex_lock);
+			SDMMD__mutex_lock(&(device->ivars.mutex_lock));
 			result = 0xe800001e;
 			if (device->ivars.session != 0) {
 				device->ivars.session = NULL;
@@ -287,7 +289,7 @@ void* SDMMD_AMDeviceStopSession(SDMMD_AMDeviceRef device) {
 				}
 				CFRelease(device->ivars.session);
 			}
-			SDMMD__mutex_unlock(device->ivars.mutex_lock);
+			SDMMD__mutex_unlock(&(device->ivars.mutex_lock));
 		}
 	} else {
 		result = 0xe8000007;
@@ -350,13 +352,13 @@ void* SDMMD_AMDeviceActivate(SDMMD_AMDeviceRef device, CFDictionaryRef options) 
 	void* result = 0x0;
 	if (device) {
 		if (device->ivars.device_active) {
-			SDMMD__mutex_lock(device->ivars.mutex_lock);
+			SDMMD__mutex_lock(&(device->ivars.mutex_lock));
 			result = SDMMD_send_activation(device, options);
 			if (result != 0) {
 				char *reason = SDMMD_AMDErrorString(result);
 				printf("SDMMD_AMDeviceActivate: Could not activate device %u %s.\n",device->ivars.device_id,reason);
 			}
-			SDMMD__mutex_unlock(device->ivars.mutex_lock);
+			SDMMD__mutex_unlock(&(device->ivars.mutex_lock));
 		} else {
 			result = 0xe8000084;
 		}
@@ -370,13 +372,13 @@ void* SDMMD_AMDeviceDeactivate(SDMMD_AMDeviceRef device) {
 	void* result = 0x0;
 	if (device) {
 		if (device->ivars.device_active) {
-			SDMMD__mutex_lock(device->ivars.mutex_lock);
+			SDMMD__mutex_lock(&(device->ivars.mutex_lock));
 			result = SDMMD_send_deactivation(device);
 			if (result != 0) {
 				char *reason = SDMMD_AMDErrorString(result);
 				printf("SDMMD_AMDeviceDeactivate: Could not deactivate device %u: %s\n",device->ivars.device_id,reason);
 			}
-			SDMMD__mutex_unlock(device->ivars.mutex_lock);
+			SDMMD__mutex_unlock(&(device->ivars.mutex_lock));
 		} else {
 			result = 0xe8000084;
 		}
@@ -392,7 +394,7 @@ void* SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 	if (device) {
 		result = 0xe8000084;
 		if (device->ivars.device_active == 1) {
-			SDMMD__mutex_lock(device->ivars.mutex_lock);
+			SDMMD__mutex_lock(&(device->ivars.mutex_lock));
 			if (device->ivars.lockdown_conn == 0) {
 				uint32_t status = SDMMD__connect_to_port(device, 0x7ef2, 0x1, &socket, 0x0);
 				if (status == 0) {
@@ -426,7 +428,7 @@ void* SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 					result = 0xe8000084;
 				}
 			}
-			SDMMD__mutex_unlock(device->ivars.mutex_lock);
+			SDMMD__mutex_unlock(&(device->ivars.mutex_lock));
 		}
 	} else {
 		result = 0xe8000007;
@@ -444,14 +446,14 @@ void* SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 void* SDMMD_AMDeviceDisconnect(SDMMD_AMDeviceRef device) {
 	void* result = 0x0;
 	if (device) {
-		SDMMD__mutex_lock(device->ivars.mutex_lock);
+		SDMMD__mutex_lock(&(device->ivars.mutex_lock));
 		result = SDMMD_lockdown_connection_destory(device->ivars.lockdown_conn);
 		device->ivars.lockdown_conn = NULL;
 		if (device->ivars.session) {
-			CFRelease(device->ivars.session);
+			CFRelease((CFTypeRef)(device->ivars.session));
 			device->ivars.session = NULL;
 		}
-		SDMMD__mutex_unlock(device->ivars.mutex_lock);
+		SDMMD__mutex_unlock(&(device->ivars.mutex_lock));
 	} else {
 		result = 0xe8000007;
 	}
@@ -473,10 +475,10 @@ bool SDMMD_AMDeviceIsValid(SDMMD_AMDeviceRef device) {
 bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device) {
 	bool result = false;
 	if (device) {
-		SDMMD__mutex_lock(device->ivars.mutex_lock);
+		SDMMD__mutex_lock(&(device->ivars.mutex_lock));
 		char *path;
 		SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
-		SDMMD__mutex_unlock(device->ivars.mutex_lock);
+		SDMMD__mutex_unlock(&(device->ivars.mutex_lock));
 		char *buffer;
 		bool statResult = stat$INODE64(path, buffer);
 		if (statResult) {
@@ -495,13 +497,13 @@ bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device) {
 	return result;
 }
 
-void* SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFDictionaryRef record, ) {
+void* SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFDictionaryRef record) {
 	void* result = 0xe8000007;
 	if (device) {
 		if (device->ivars.device_active) {
-			SDMMD__mutex_lock(device->ivars.mutex_lock);
+			SDMMD__mutex_lock(&(device->ivars.mutex_lock));
 			if (record) {
-				CFTypeRef chapCert = CFDictionaryGetValue(record, @"ChaperoneCertificate");
+				CFTypeRef chapCert = CFDictionaryGetValue(record, CFSTR("ChaperoneCertificate"));
 				
 			}
 			result = 0xe8000082;
@@ -510,7 +512,7 @@ void* SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFDictionaryRef re
 				result = SDMMD_copy_lockdown_value(device, 0x0, CFSTR(""), &var76);
 				
 			}
-			SDMMD__mutex_unlock(device->ivars.mutex_lock);
+			SDMMD__mutex_unlock(&(device->ivars.mutex_lock));
 		}
 	}
 	return result;
@@ -519,9 +521,9 @@ void* SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFDictionaryRef re
 uint32_t SDMMD_AMDeviceUSBDeviceID(SDMMD_AMDeviceRef device) {
 	uint32_t result = 0x0;
 	if (device) {
-		SDMMD__mutex_lock(device->ivars.mutex_lock);
+		SDMMD__mutex_lock(&(device->ivars.mutex_lock));
 		result = device->ivars.device_id;
-		SDMMD__mutex_unlock(device->ivars.mutex_lock);
+		SDMMD__mutex_unlock(&(device->ivars.mutex_lock));
 	}
 	return result;
 }
@@ -529,9 +531,9 @@ uint32_t SDMMD_AMDeviceUSBDeviceID(SDMMD_AMDeviceRef device) {
 uint32_t SDMMD_AMDeviceUSBLocationID(SDMMD_AMDeviceRef device) {
 	uint32_t result = 0x0;
 	if (device) {
-		SDMMD__mutex_lock(device->ivars.mutex_lock);
+		SDMMD__mutex_lock(&(device->ivars.mutex_lock));
 		result = device->ivars.location_id;
-		SDMMD__mutex_unlock(device->ivars.mutex_lock);
+		SDMMD__mutex_unlock(&(device->ivars.mutex_lock));
 	} else {
 		printf("SDMMD_AMDeviceUSBLocationID: No device\n");
 	}
@@ -541,9 +543,9 @@ uint32_t SDMMD_AMDeviceUSBLocationID(SDMMD_AMDeviceRef device) {
 uint16_t SDMMD_AMDeviceUSBProductID(SDMMD_AMDeviceRef device) {
 	uint16_t result = 0x0;
 	if (device) {
-		SDMMD__mutex_lock(device->ivars.mutex_lock);
+		SDMMD__mutex_lock(&(device->ivars.mutex_lock));
 		result = device->ivars.product_id & 0xffff;
-		SDMMD__mutex_unlock(device->ivars.mutex_lock);
+		SDMMD__mutex_unlock(&(device->ivars.mutex_lock));
 	} else {
 		printf("SDMMD_AMDeviceUSBProductID: No device\n");
 	}

@@ -1,5 +1,5 @@
 /*
- *  SDMMobileDevice.h
+ *  SDMMD_MCP.c
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,14 +16,42 @@
  * 
  */
 
-#ifndef _SDM_MOBILE_DEVICE_H_
-#define _SDM_MOBILE_DEVICE_H_
+#ifndef _SDM_MD_MCP_C_
+#define _SDM_MD_MCP_C_
 
-#include "SDMMD_Functions.h"
-#include "SDMMD_AMDevice.h"
-#include "SDMMD_AFC.h"
-#include "SDMMD_Error.h"
 #include "SDMMD_MCP.h"
-#include "SDMMD_USBMuxListener.h"
+#include "SDMMD_Functions.h"
+#include <openssl/ssl.h>
+#include <openssl/err.h>
+
+SDMMobileDeviceRef InitializeSDMMobileDevice() {
+	static SDMMobileDeviceRef controller = nil;
+	static dispatch_once_t once;
+	dispatch_once(&once, ^{
+		if (!controller) {
+			controller = (SDMMobileDeviceRef)malloc(sizeof(struct sdm_mobiledevice));
+			controller->usbmuxd = SDMUSBMuxCreate();
+			SDMUSBMuxStartListener(&controller->usbmuxd);
+			controller->deviceList = CFArrayCreate(kCFAllocatorDefault, NULL, 0, &kCFTypeArrayCallBacks);
+			SSL_library_init();
+			ERR_load_crypto_strings();
+			SSL_load_error_strings();
+			uint32_t result = CRYPTO_get_locking_callback();
+			if (result == 0) {
+				uint32_t numLocks = CRYPTO_num_locks();
+				controller->sslLocks = calloc(numLocks, 0x40);
+				if (controller->sslLocks) {
+					for (uint32_t i = 0; i < numLocks; i++) {
+						sdmmd_mutex_init(controller->sslLocks[i]);
+					}
+					CRYPTO_set_locking_callback(SDMMD_openSSLLockCallBack);
+					CRYPTO_set_id_callback(SDMMD_openSSLThreadIDCallBack);
+				}
+			}
+			SDMMD_lockssl_init();
+		}
+	});
+	return controller;
+}
 
 #endif

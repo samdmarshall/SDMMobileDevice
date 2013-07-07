@@ -45,7 +45,7 @@
 
 #import "SDMMDApplications.h"
 
-#import "SDMUSBmuxListener.h"
+#import "SDMMD_USBMuxListener.h"
 
 #import "SDMSymbolTable.h"
 

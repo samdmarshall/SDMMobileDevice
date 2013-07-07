@@ -1,5 +1,5 @@
 /*
- *  SDMMobileDevice.h
+ *  SDMMD_MCP.h
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,14 +16,22 @@
  * 
  */
 
-#ifndef _SDM_MOBILE_DEVICE_H_
-#define _SDM_MOBILE_DEVICE_H_
+#ifndef _SDM_MD_MCP_H_
+#define _SDM_MD_MCP_H_
 
-#include "SDMMD_Functions.h"
-#include "SDMMD_AMDevice.h"
-#include "SDMMD_AFC.h"
-#include "SDMMD_Error.h"
-#include "SDMMD_MCP.h"
+#include <CoreFoundation/CoreFoundation.h>
 #include "SDMMD_USBMuxListener.h"
+
+typedef struct sdm_mobiledevice {
+	SDMUSBMuxListenerRef usbmuxd;
+	CFArrayRef deviceList;
+	pthread_mutex_t *sslLocks;
+} __attribute__ ((packed)) sdm_mobiledevice;
+
+#define SDMMobileDeviceRef struct sdm_mobiledevice*
+
+SDMMobileDeviceRef InitializeSDMMobileDevice();
+
+#define SDMMD_MCP InitializeSDMMobileDevice()
 
 #endif

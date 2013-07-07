@@ -35,7 +35,7 @@ char* SDMMD_AFCStringCopy(char *dest, uint32_t destLength, char *source, uint32_
 
 char* SDMMD_AFCPacketTypeName(uint32_t packetType) {
 	char *name = "Unknown";
-	if (packet != 0x0 && packet <= 0x28) {
+	if (packetType != 0x0 && packetType <= 0x28) {
 		name = _gAFCPacketTypeNames[packetType*8];
 	}
 	return name;
