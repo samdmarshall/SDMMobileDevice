@@ -1,5 +1,5 @@
 /*
- *  SDMMDFUModeDevice.c
+ *  SDMMD_AFCDevice.c
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,9 +16,10 @@
  * 
  */
 
-#ifndef _SDMMDFUMODEDEVICE_C_
-#define _SDMMDFUMODEDEVICE_C_
+#ifndef _SDM_MD_AFCDEVICE_C_
+#define _SDM_MD_AFCDEVICE_C_
 
-#include "SDMMDFUModeDevice.h"
+#include "SDMMD_AFCDevice.h"
+
 
 #endif

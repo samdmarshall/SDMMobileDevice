@@ -1,5 +1,5 @@
 /*
- *  SDMMDError.c
+ *  SDMMD_MRecoveryModeDevice.c
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,10 +16,9 @@
  * 
  */
 
-#ifndef _SDMMDERROR_C_
-#define _SDMMDERROR_C_
+#ifndef _SDM_MD_MRECOVERYMODEDEVICE_C_
+#define _SDM_MD_MRECOVERYMODEDEVICE_C_
 
-#include "SDMMDError.h"
-
+#include "SDMMD_MRecoveryModeDevice.h"
 
 #endif

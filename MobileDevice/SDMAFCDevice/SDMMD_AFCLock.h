@@ -1,5 +1,5 @@
 /*
- *  SDMMRestoreModeDevice.h
+ *  SDMMD_AFCLock.h
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,43 +16,35 @@
  * 
  */
 
-#ifndef _SDMMRESTOREMODEDEVICE_H_
-#define _SDMMRESTOREMODEDEVICE_H_
+#ifndef _SDM_MD_AFCLOCK_H_
+#define _SDM_MD_AFCLOCK_H_
 
-#import "SDMMDevice.h"
+#include <stdint.h>
 
-typedef struct AMRestoreModeDeviceClassHeader {
+#pragma mark -
+#pragma mark TYPES
+#pragma mark -
+
+typedef struct AFCLockClassHeader {
 	unsigned char header[16];
-} __attribute__ ((packed)) AMRestoreModeDeviceClassHeader; // 0x10
+} __attribute__ ((packed)) AFCLockClassHeader; // 0x10
 
-typedef struct AMRestoreModeDeviceClassBody {
-	// 10
-	// 24
-	int32_t d;			// 32
-	int32_t a;			// 40
-	int32_t b;			// 44
-	int32_t c;			// 48
-	// 56
-	// 64
-	// 72
-	// 80
-	int32_t e;			// 88
-	int32_t f;			// 92
-	int32_t g;			// 96
-	int64_t h;			// 104
-	int64_t i;			// 112
-	int64_t j;			// 120
-	int64_t k;			// 128
-	// 136
-} __attribute__ ((packed)) AMRestoreModeDeviceClassBody; // 0x88
+typedef struct AFCLockClassBody {
+	int32_t mutex_lock;			// 16
+	unsigned char padding[44];	// 20
+} __attribute__ ((packed)) AFCLockClassBody; // 0x40
 
-typedef struct am_restore_device {
-	struct AMRestoreModeDeviceClassHeader head;
-	struct AMRestoreModeDeviceClassBody body;
-} __attribute__ ((packed)) am_restore_device;
+typedef struct afc_lock {
+	struct AFCLockClassHeader base;
+	struct AFCLockClassBody ivars;
+} __attribute__ ((packed)) afc_lock;
 
-typedef struct am_restore_device SDM_AMRestoreModeDeviceClass;
+typedef struct afc_lock SDMMD_AFCLockClass;
 
-#define SDM_AMRestoreModeDeviceRef SDM_AMRestoreModeDeviceClass*
+#define SDMMD_AFCLockRef SDMMD_AFCLockClass*
+
+#pragma mark -
+#pragma mark FUNCTIONS
+#pragma mark -
 
 #endif

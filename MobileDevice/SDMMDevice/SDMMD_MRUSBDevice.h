@@ -1,5 +1,5 @@
 /*
- *  SDMRestorableDevice.h
+ *  SDMMD_MRUSBDevice.h
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,34 +16,24 @@
  * 
  */
 
-#ifndef _SDMMRESTORABLEDEVICE_H_
-#define _SDMMRESTORABLEDEVICE_H_
+#ifndef _SDM_MD_MRUSBDEVICE_H_
+#define _SDM_MD_MRUSBDEVICE_H_
 
-typedef struct AMRestorableDeviceClassHeader {
-	unsigned char header[16];
-} __attribute__ ((packed)) AMRestorableDeviceClassHeader; // 0x10
+typedef struct AMRUSBDeviceClassHeader {
 
-typedef struct AMRestorableDeviceClassBody {
-	// 10
-	// 24
-	// 32
-	// 40
-	// 48
-	// 56
-	// 64
-	// 72
-	// 80
-	// 88
-	// 96
-} __attribute__ ((packed)) AMRestorableDeviceClassBody; // 0x58
+} __attribute__ ((packed)) AMRUSBDeviceClassHeader;
 
-typedef struct am_restorable_device {
-	struct AMRestorableDeviceClassHeader head;
-	struct AMRestorableDeviceClassBody body;
-} __attribute__ ((packed)) am_restorable_device;
+typedef struct AMRUSBDeviceClassBody {
+	
+} __attribute__ ((packed)) AMRUSBDeviceClassBody;
 
-typedef struct am_restorable_device SDM_AMRestorableDeviceClass;
+typedef struct am_rusb_device {
+	struct AMRUSBDeviceClassHeader base;
+	struct AMRUSBDeviceClassBody ivars;
+} __attribute__ ((packed)) am_rusb_device;
 
-#define SDM_AMRestorableDeviceRef SDM_AMRestorableDeviceClass*
+typedef struct am_rusb_device SDMMD_AMRUSBDeviceClass;
+
+#define SDMMD_AMRUSBDeviceRef SDMMD_AMRUSBDeviceClass*
 
 #endif

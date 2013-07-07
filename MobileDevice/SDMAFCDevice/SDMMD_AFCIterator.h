@@ -1,5 +1,5 @@
 /*
- *  SDMMRestoreModeDevice.c
+ *  SDMMD_AFCIterator.h
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,5 +16,38 @@
  * 
  */
 
-#include "SDMMRestoreModeDevice.h"
+#ifndef _SDM_MD_AFCITERATOR_H_
+#define _SDM_MD_AFCITERATOR_H_
 
+#include <CoreFoundation/CoreFoundation.h>
+
+#pragma mark -
+#pragma mark TYPES
+#pragma mark -
+
+typedef struct AFCIteratorClassHeader {
+	unsigned char header[16];		// CF Object header
+} __attribute__ ((packed)) AFCIteratorClassHeader; // 0x10
+
+typedef struct AFCIteratorClassBody {
+	// 16
+	CFArrayRef keys_values;			// 24
+	int32_t count0;					// 32
+	CFMutableDataRef key_buffer; 	// 40
+	CFMutableDataRef value_buffer;	// 48
+} __attribute__ ((packed)) AFCIteratorClassBody; // 0x28
+
+typedef struct afc_iterator {
+	struct AFCIteratorClassHeader base;
+	struct AFCIteratorClassBody ivars;
+} __attribute__ ((packed)) afc_iterator;
+
+typedef struct afc_iterator SDMMD_AFCIteratorClass;
+
+#define SDMMD_AFCIteratorRef SDMMD_AFCIteratorClass*
+
+#pragma mark -
+#pragma mark FUNCTIONS
+#pragma mark -
+
+#endif

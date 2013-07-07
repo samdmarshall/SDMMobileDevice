@@ -22,6 +22,12 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <openssl/ssl.h>
 #include "SDMMD_Error.h"
+#include "SDMMD_Keys.h"
+#include "SDMMD_MRecoveryModeDevice.h"
+#include "SDMMD_MRUSBDevice.h"
+#include "SDMMD_MDFUModeDevice.h"
+#include "SDMMD_MRestoreModeDevice.h"
+#include "SDMMD_MRestorableDevice.h"
 
 typedef struct SDMMD_lockdown_conn {
 	uint64_t connection;			// 0

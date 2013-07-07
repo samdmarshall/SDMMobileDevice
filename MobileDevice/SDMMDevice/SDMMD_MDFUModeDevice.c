@@ -1,5 +1,5 @@
 /*
- *  SDMMDeviceKeys.c
+ *  SDMMD_MDFUModeDevice.c
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,20 +16,9 @@
  * 
  */
 
-#ifndef _SDMMDEVICEKEYS_C_
-#define _SDMMDEVICEKEYS_C_
+#ifndef _SDM_MD_MDFUMODEDEVICE_C_
+#define _SDM_MD_MDFUMODEDEVICE_C_
 
-#include "SDMMDeviceKeys.h"
-
-CFTypeRef SDMDeviceCopyValue(SDM_AMDeviceRef device, CFStringRef domain, CFStringRef key) {
-	CFTypeRef value = NULL;
-	if (SDM_MD_CallSuccessful(AMDeviceConnect(device))) {
-		AMDeviceStartSession(device);
-		value = AMDeviceCopyValue(device, domain, key);
-		AMDeviceStopSession(device);
-		AMDeviceDisconnect(device);
-	}
-	return value;
-}
+#include "SDMMD_MDFUModeDevice.h"
 
 #endif

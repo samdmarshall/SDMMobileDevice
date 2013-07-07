@@ -1,5 +1,5 @@
 /*
- *  SDMAFCIterator.h
+ *  SDMMD_AFCDevice.h
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,38 +16,66 @@
  * 
  */
 
-#ifndef _SDMAFCITERATOR_H_
-#define _SDMAFCITERATOR_H_
+#ifndef _SDM_MD_AFCDEVICE_H_
+#define _SDM_MD_AFCDEVICE_H_
 
-#import <CoreFoundation/CoreFoundation.h>
+#include <CoreFoundation/CoreFoundation.h>
+#include "SDMMD_Error.h"
+#include "SDMMD_AFCLock.h"
 
 #pragma mark -
 #pragma mark TYPES
 #pragma mark -
 
-typedef struct AFCIteratorClassHeader {
-	unsigned char header[16];		// CF Object header
-} __attribute__ ((packed)) AFCIteratorClassHeader; // 0x10
+#define SDMMD_AFCConditionRef int32_t
 
-typedef struct AFCIteratorClassBody {
-	// 16
-	CFArrayRef keys_values;			// 24
-	int32_t count0;					// 32
-	CFMutableDataRef key_buffer; 	// 40
-	CFMutableDataRef value_buffer;	// 48
-} __attribute__ ((packed)) AFCIteratorClassBody; // 0x28
+typedef struct AFCConnectionClassHeader {
+	unsigned char header[16];
+} __attribute__ ((packed)) AFCConnectionClassHeader; // 0x10
 
-typedef struct afc_iterator {
-	struct AFCIteratorClassHeader head;
-	struct AFCIteratorClassBody body;
-} __attribute__ ((packed)) afc_iterator;
+typedef struct AFCConnectionClassBody {
+	int32_t state;							// 16 set to 0x1
+	SDMMD_AFCConditionRef cond0;			// 24
+	int8_t is_valid1;						// 32
+	SDMMD_AFCConditionRef cond_signal;		// 40
+	CFSocketRef socket;						// 48
+	int32_t socket0;						// 56
+	int8_t connection_active;				// 60
+	unsigned char padding0[3];				// 61		
+	int32_t status_ptr;						// 64
+	int8_t e;								// 68
+	int32_t last_error;						// 72 last error
+	int32_t operation_count;				// 80 on sending operation is incremented
+	int32_t fs_block_size;					// 88
+	int32_t socket_block_size;				// 96
+	int32_t io_timeout;						// 104 set to 0x3c
+	int32_t h;								// 112 set to 0x1
+	int32_t context;						// 120
+	SDMMD_AFCLockRef lock0;					// 136
+	SDMMD_AFCLockRef lock1;					// 144
+	CFMutableArrayRef operation_enqueue;	// 152
+	CFMutableArrayRef operation_dequeue;	// 160
+	CFMutableSetRef file_descriptors;		// 168
+	CFMutableSetRef directory_enumerator; 	// 176
+	CFRunLoopSourceRef source;				// 192
+	CFRunLoopRef runloop;					// 200
+	int32_t secure_context;					// 216
+	void *callback;							// 224
+	int32_t queue;							// 1264
+} __attribute__ ((packed)) AFCConnectionClassBody; // 0x4f0
 
-typedef struct afc_iterator SDM_AFCIteratorClass;
+typedef struct afc_connection {
+	struct AFCConnectionClassHeader base;
+	struct AFCConnectionClassBody ivars;
+} __attribute__ ((packed)) afc_connection;
 
-#define SDM_AFCIteratorRef SDM_AFCIteratorClass*
+typedef struct afc_connection SDMMD_AFCConnectionClass;
+
+#define SDMMD_AFCConnectionRef SDMMD_AFCConnectionClass*
 
 #pragma mark -
 #pragma mark FUNCTIONS
 #pragma mark -
+
 
 #endif

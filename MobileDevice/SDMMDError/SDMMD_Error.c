@@ -16,5 +16,9 @@
  * 
  */
 
+#ifndef _SDM_MD_ERROR_C_
+#define _SDM_MD_ERROR_C_
+
 #include "SDMMD_Error.h"
 
+#endif

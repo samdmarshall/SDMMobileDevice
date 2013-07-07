@@ -1,5 +1,5 @@
 /*
- *  SDMRestorableDevice.c
+ *  SDMMD_MRestoreModeDevice.h
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,5 +16,43 @@
  * 
  */
 
-#include "SDMRestorableDevice.h"
+#ifndef _SDM_MD_MRESTOREMODEDEVICE_H_
+#define _SDM_MD_MRESTOREMODEDEVICE_H_
 
+#include "SDMMD_AMDevice.h"
+
+typedef struct AMRestoreModeDeviceClassHeader {
+	unsigned char header[16];
+} __attribute__ ((packed)) AMRestoreModeDeviceClassHeader; // 0x10
+
+typedef struct AMRestoreModeDeviceClassBody {
+	// 10
+	// 24
+	int32_t d;			// 32
+	int32_t a;			// 40
+	int32_t b;			// 44
+	int32_t c;			// 48
+	// 56
+	// 64
+	// 72
+	// 80
+	int32_t e;			// 88
+	int32_t f;			// 92
+	int32_t g;			// 96
+	int64_t h;			// 104
+	int64_t i;			// 112
+	int64_t j;			// 120
+	int64_t k;			// 128
+	// 136
+} __attribute__ ((packed)) AMRestoreModeDeviceClassBody; // 0x88
+
+typedef struct am_restore_device {
+	struct AMRestoreModeDeviceClassHeader base;
+	struct AMRestoreModeDeviceClassBody ivars;
+} __attribute__ ((packed)) am_restore_device;
+
+typedef struct am_restore_device SDMMD_AMRestoreModeDeviceClass;
+
+#define SDMMD_AMRestoreModeDeviceRef SDMMD_AMRestoreModeDeviceClass*
+
+#endif

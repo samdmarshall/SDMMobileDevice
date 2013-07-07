@@ -1,5 +1,5 @@
 /*
- *  SDMAFCDevice.h
+ *  SDMMD_MRecoveryModeDevice.h
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,67 +16,59 @@
  * 
  */
 
-#ifndef _SDMAFCDEVICE_H_
-#define _SDMAFCDEVICE_H_
+#ifndef _SDM_MD_MRECOVERYMODEDEVICE_H_
+#define _SDM_MD_MRECOVERYMODEDEVICE_H_
 
-#import <CoreFoundation/CoreFoundation.h>
-#import "SDMMDError.h"
-#import "SDMAFCLock.h"
+#include "SDMMD_AMDevice.h"
+#include "SDMMD_MRUSBDevice.h"
 
 #pragma mark -
 #pragma mark TYPES
 #pragma mark -
 
-#define SDM_AFCConditionRef int32_t
-
-typedef struct AFCConnectionClassHeader {
+typedef struct AMRecoveryModeDeviceClassHeader {
 	unsigned char header[16];
-} __attribute__ ((packed)) AFCConnectionClassHeader; // 0x10
+} __attribute__ ((packed)) AMRecoveryModeDeviceClassHeader; // size 0x10
 
-typedef struct AFCConnectionClassBody {
-	int32_t state;							// 16 set to 0x1
-	SDM_AFCConditionRef cond0;				// 24
-	int8_t is_valid1;						// 32
-	SDM_AFCConditionRef cond_signal;		// 40
-	CFSocketRef socket;						// 48
-	int32_t socket0;						// 56
-	int8_t connection_active;				// 60
-	unsigned char padding0[3];				// 61		
-	int32_t status_ptr;						// 64
-	int8_t e;								// 68
-	int32_t last_error;						// 72 last error
-	int32_t operation_count;				// 80 on sending operation is incremented
-	int32_t fs_block_size;					// 88
-	int32_t socket_block_size;				// 96
-	int32_t io_timeout;						// 104 set to 0x3c
-	int32_t h;								// 112 set to 0x1
-	int32_t context;						// 120
-	SDM_AFCLockRef lock0;					// 136
-	SDM_AFCLockRef lock1;					// 144
-	CFMutableArrayRef operation_enqueue;	// 152
-	CFMutableArrayRef operation_dequeue;	// 160
-	CFMutableSetRef file_descriptors;		// 168
-	CFMutableSetRef directory_enumerator; 	// 176
-	CFRunLoopSourceRef source;				// 192
-	CFRunLoopRef runloop;					// 200
-	int32_t secure_context;					// 216
-	void *callback;							// 224
-	int32_t queue;							// 1264
-} __attribute__ ((packed)) AFCConnectionClassBody; // 0x4f0
+typedef struct AMRecoveryModeDeviceClassBody {
+	// 16
+	// 24
+	int32_t current_progress;		// 32
+	int32_t overall_progress;		// 36
+	SDMMD_AMRUSBDeviceRef device;		// 40 what is this?
+	int32_t zero0;					// 48
+	int8_t device_is_recovery_mode;	// 56 product Id is equal to 0x1281
+	int32_t d;						// 57
+	int8_t c; 						// 61
+	// 64
+	// 72
+	int8_t firmware_info_loaded;	// 80
+	int32_t chip_id;				// 88
+	int32_t board_id;				// 92
+	int32_t security_epoch;			// 96
+	CFStringRef serial_number;		// 112
+	CFStringRef IMEI;				// 120
+	int64_t ecid;					// 136
+	int32_t security_domain;		// 148
+	int8_t production_mode;			// 152
+	// 160
+} __attribute__ ((packed)) AMRecoveryModeDeviceClassBody; // size 0x98
 
-typedef struct afc_connection {
-	struct AFCConnectionClassHeader head;
-	struct AFCConnectionClassBody body;
-} __attribute__ ((packed)) afc_connection;
+typedef struct am_recovery_device {
+	struct AMRecoveryModeDeviceClassHeader base;
+	struct AMRecoveryModeDeviceClassBody ivars;
+} __attribute__ ((packed)) am_recovery_device;
 
-typedef struct afc_connection SDM_AFCConnectionClass;
+typedef struct am_recovery_device SDMMD_AMRecoveryModeDeviceClass;
 
-#define SDM_AFCConnectionRef SDM_AFCConnectionClass*
+#define SDMMD_AMRecoveryModeDeviceRef SDMMD_AMRecoveryModeDeviceClass*
+
 
 #pragma mark -
 #pragma mark FUNCTIONS
 #pragma mark -
 
-sdmmd_afc_return_t AFCDeviceInfoOpen(SDM_AFCConnectionRef conn, CFDictionaryRef *dict);
+sdmmd_return_t SDMMD_AMRecoveryModeDeviceCreate(CFAllocatorRef allocator, void *unknown);
+sdmmd_return_t SDMMD_AMRestoreGetResolvedBoardConfig(int32_t board_id, int32_t chip_id, void *unknown);
 
 #endif

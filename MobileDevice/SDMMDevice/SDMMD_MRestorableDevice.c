@@ -1,5 +1,5 @@
 /*
- *  SDMAFCLock.c
+ *  SDMMD_RestorableDevice.c
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,5 +16,9 @@
  * 
  */
 
-#include "SDMAFCLock.h"
+#ifndef _SDM_MD_MRESTORABLEDEVICE_C_
+#define _SDM_MD_MRESTORABLEDEVICE_C_
 
+#include "SDMMD_MRestorableDevice.h"
+
+#endif

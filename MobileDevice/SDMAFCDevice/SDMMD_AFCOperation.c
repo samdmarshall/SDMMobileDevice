@@ -1,5 +1,5 @@
 /*
- *  MobileDevice.c
+ *  SDMMD_AFCOperation.c
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,24 +16,9 @@
  * 
  */
 
-#ifndef _SDMMOBILEDEVICE_C_
-#define _SDMMOBILEDEVICE_C_
+#ifndef _SDM_MD_AFCOPERATION_C_
+#define _SDM_MD_AFCOPERATION_C_
 
-#include "MobileDevice.h"
-
-SDMMobileDeviceRef InitializeSDMMobileDevice() {
-	static SDMMobileDeviceRef controller = nil;
-	static dispatch_once_t once;
-	dispatch_once(&once, ^{
-		if (!controller) {
-			controller = (SDMMobileDeviceRef)malloc(sizeof(struct sdm_mobiledevice));
-			controller->usbmuxd = SDMUSBMuxCreate();
-			SDMUSBMuxStartListener(&controller->usbmuxd);
-			controller->deviceList = CFArrayCreate(kCFAllocatorDefault, NULL, 0, &kCFTypeArrayCallBacks);
-			controller->lookupTable = SDMSTLoadLibrary("/System/Library/PrivateFrameworks/MobileDevice.framework/Versions/A/MobileDevice");
-		}
-	});
-	return controller;
-}
+#include "SDMMD_AFCOperation.h"
 
 #endif

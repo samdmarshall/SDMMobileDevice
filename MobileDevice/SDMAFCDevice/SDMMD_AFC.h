@@ -21,6 +21,10 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 #include "SDMMD_Error.h"
+#include "SDMMD_AFCDevice.h"
+#include "SDMMD_AFCIterator.h"
+#include "SDMMD_AFCOperation.h"
+#include "SDMMD_AFCLock.h"
 
 static char *gAFCPacketTypeNames[39] = {
 	"Invalid",

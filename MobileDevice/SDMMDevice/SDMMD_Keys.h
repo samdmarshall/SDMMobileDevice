@@ -1,5 +1,5 @@
 /*
- *  SDMMDeviceKeys.h
+ *  SDMMD_Keys.h
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,10 +16,8 @@
  * 
  */
 
-#ifndef _SDMMDEVICEKEYS_H_
-#define _SDMMDEVICEKEYS_H_
-
-#include "SDMMDevice.h"
+#ifndef _SDM_MD_KEYS_H_
+#define _SDM_MD_KEYS_H_
 
 #pragma mark -
 #pragma mark General Domain Keys
@@ -338,14 +336,5 @@
 #define kPurpleBuddyDomain						"com.apple.purplebuddy"
 
 #define kSetupState								"SetupState"
-
-#pragma mark -
-#pragma mark FUNCTIONS
-#pragma mark -
-
-CFTypeRef AMDeviceCopyValue(SDM_AMDeviceRef device, CFStringRef domain, CFStringRef key);
-
-CFTypeRef SDMDeviceCopyValue(SDM_AMDeviceRef device, CFStringRef domain, CFStringRef key);
-
 
 #endif

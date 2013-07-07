@@ -1,5 +1,5 @@
 /*
- *  SDMAFCOperation.c
+ *  SDMMD_MRUSBDevice.c
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,5 +16,10 @@
  * 
  */
 
-#include "SDMAFCOperation.h"
+#ifndef _SDM_MD_MRUSBDEVICE_C_
+#define _SDM_MD_MRUSBDEVICE_C_
 
+#include "SDMMD_MRUSBDevice.h"
+
+
+#endif

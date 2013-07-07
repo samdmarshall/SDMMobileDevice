@@ -1,5 +1,5 @@
 /*
- *  SDMUSBmuxListener.h
+ *  SDMMD_USBmuxListener.h
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall

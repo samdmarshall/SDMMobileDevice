@@ -1,5 +1,5 @@
 /*
- *  SDMMDFUModeDevice.h
+ *  SDMMD_RestorableDevice.h
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,43 +16,34 @@
  * 
  */
 
-#ifndef _SDMMDFUMODEDEVICE_H_
-#define _SDMMDFUMODEDEVICE_H_
+#ifndef _SDM_MD_MRESTORABLEDEVICE_H_
+#define _SDM_MD_MRESTORABLEDEVICE_H_
 
-#include "SDMMDevice.h"
+typedef struct AMRestorableDeviceClassHeader {
+	unsigned char header[16];
+} __attribute__ ((packed)) AMRestorableDeviceClassHeader; // 0x10
 
-#pragma mark -
-#pragma mark TYPES
-#pragma mark -
-
-typedef struct AMDFUModeDeviceClassHeader {
-	unsigned char header[16];	// 16
-} __attribute__ ((packed)) AMDFUModeDeviceClassHeader; // 0x10
-
-typedef struct AMDFUModeDeviceClassBody {
-	// 16
+typedef struct AMRestorableDeviceClassBody {
+	// 10
 	// 24
-	uint32_t current_progress;	// 32
-	uint32_t overall_progress;	// 36
+	// 32
 	// 40
-	int8_t a;					// 48
-	int32_t valid_product; 		// 52
+	// 48
 	// 56
-} __attribute__ ((packed)) AMDFUModeDeviceClassBody; // 0x30
+	// 64
+	// 72
+	// 80
+	// 88
+	// 96
+} __attribute__ ((packed)) AMRestorableDeviceClassBody; // 0x58
 
-typedef struct am_dfu_device {
-	struct AMDFUModeDeviceClassHeader head;
-	struct AMDFUModeDeviceClassBody body;
-} __attribute__ ((packed)) am_dfu_device;
+typedef struct am_restorable_device {
+	struct AMRestorableDeviceClassHeader base;
+	struct AMRestorableDeviceClassBody ivars;
+} __attribute__ ((packed)) am_restorable_device;
 
-typedef struct am_dfu_device SDM_AMDFUModeDeviceClass;
+typedef struct am_restorable_device SDMMD_AMRestorableDeviceClass;
 
-#define SDM_AMDFUModeDeviceRef SDM_AMDFUModeDeviceClass*
-
-#pragma mark -
-#pragma mark FUNCTIONS
-#pragma mark -
-
-sdmmd_return_t AMDFUModeDeviceCreate(CFAllocatorRef allocator, void *unknown);
+#define SDMMD_AMRestorableDeviceRef SDMMD_AMRestorableDeviceClass*
 
 #endif

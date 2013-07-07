@@ -1,5 +1,5 @@
 /*
- *  SDMMDNotification.c
+ *  SDMMD_MRestoreModeDevice.c
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,10 +16,9 @@
  * 
  */
 
-#ifndef _SDMMDNOTIFICATION_C_
-#define _SDMMDNOTIFICATION_C_
+#ifndef _SDM_MD_MRESTOREMODEDEVICE_C_
+#define _SDM_MD_MRESTOREMODEDEVICE_C_
 
-#include "SDMMDNotification.h"
-
+#include "SDMMD_MRestoreModeDevice.h"
 
 #endif

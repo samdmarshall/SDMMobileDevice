@@ -1,5 +1,5 @@
 /*
- *  SDMMDNotification.h
+ *  SDMMD_AFCLock.c
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,27 +16,9 @@
  * 
  */
 
-#ifndef _SDMMDNOTIFICATION_H_
-#define _SDMMDNOTIFICATION_H_
+#ifndef _SDM_MD_AFCLOCK_C_
+#define _SDM_MD_AFCLOCK_C_
 
-#pragma mark -
-#pragma mark Notification Service Names
-#pragma mark -
-
-#define kNotificationiTunesSyncWillStart				"com.apple.itunes-mobdev.syncWillStart"
-#define kNotificationiTunesSyncLock						"com.apple.itunes-mobdev.syncLockRequest"
-#define kNotificationiTunesSyncDidStart					"com.apple.itunes-mobdev.syncDidStart"
-#define kNotificationiTunesSyncDidFinish				"com.apple.itunes-mobdev.syncDidFinish"
-
-#define kNotificationLockdownActivationState			"com.apple.mobile.lockdown.activation_state"
-#define kNotificationDeviceNameChange					"com.apple.mobile.lockdown.device_name_changed"
-#define kNotificationAppUninstalled						"com.apple.mobile.application_uninstalled"
-#define kNotificationAppInstalled						"com.apple.mobile.application_installed"
-#define kNotificationiTunesAppInstalled					"com.apple.itunesstored.application_installed"
-#define kNotificationShutDown							"com.apple.springboard.deviceWillShutDown"
-#define kNotificationProvisionProfileInstalled			"MISProvisioningProfileInstalled"
-#define kNotificationProvisionProfileRemoved			"MISProvisioningProfileRemoved"
-#define kNotificationProfileListChanged					"com.apple.ManagedConfiguration.profileListChanged"
-
+#include "SDMMD_AFCLock.h"
 
 #endif

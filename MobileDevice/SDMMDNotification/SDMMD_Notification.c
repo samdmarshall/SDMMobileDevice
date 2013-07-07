@@ -1,5 +1,5 @@
 /*
- *  SDMMRUSBDevice.h
+ *  SDMMD_Notification.c
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,24 +16,10 @@
  * 
  */
 
-#ifndef _SDMMRUSBDEVICE_H_
-#define _SDMMRUSBDEVICE_H_
+#ifndef _SDM_MD_NOTIFICATION_C_
+#define _SDM_MD_NOTIFICATION_C_
 
-typedef struct AMRUSBDeviceClassHeader {
+#include "SDMMD_Notification.h"
 
-} __attribute__ ((packed)) AMRUSBDeviceClassHeader;
-
-typedef struct AMRUSBDeviceClassBody {
-	
-} __attribute__ ((packed)) AMRUSBDeviceClassBody;
-
-typedef struct am_rusb_device {
-	struct AMRUSBDeviceClassHeader head;
-	struct AMRUSBDeviceClassBody body;
-} __attribute__ ((packed)) am_rusb_device;
-
-typedef struct am_rusb_device SDM_AMRUSBDeviceClass;
-
-#define SDM_AMRUSBDeviceRef SDM_AMRUSBDeviceClass*
 
 #endif

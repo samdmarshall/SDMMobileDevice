@@ -1,5 +1,5 @@
 /*
- *  SDMAFCLock.h
+ *  SDMMD_Applications.c
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,35 +16,29 @@
  * 
  */
 
-#ifndef _SDMAFCLOCK_H_
-#define _SDMAFCLOCK_H_
+#ifndef _SDM_MD_APPLICATIONS_C_
+#define _SDM_MD_APPLICATIONS_C_
 
-#import <stdint.h>
+#include "SDMMD_Applications.h"
 
-#pragma mark -
-#pragma mark TYPES
-#pragma mark -
+#define kAppLookupMasterKey "ReturnAttributes"
 
-typedef struct AFCLockClassHeader {
-	unsigned char header[16];
-} __attribute__ ((packed)) AFCLockClassHeader; // 0x10
+sdmmd_return_t AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef *results);
 
-typedef struct AFCLockClassBody {
-	int32_t mutex_lock;			// 16
-	unsigned char padding[44];	// 20
-} __attribute__ ((packed)) AFCLockClassBody; // 0x40
-
-typedef struct afc_lock {
-	struct AFCLockClassHeader head;
-	struct AFCLockClassBody body;
-} __attribute__ ((packed)) afc_lock;
-
-typedef struct afc_lock SDM_AFCLockClass;
-
-#define SDM_AFCLockRef SDM_AFCLockClass*
-
-#pragma mark -
-#pragma mark FUNCTIONS
-#pragma mark -
+/*sdmmd_return_t SDM_AMDeviceLookupApplications(SDM_AMDeviceRef device, CFArrayRef options, CFDictionaryRef *results) {
+	sdmmd_return_t result = SDMMD_AMDeviceConnect(device);
+	if (SDM_MD_CallSuccessful(result)) {
+		result = SDMMD_AMDeviceStartSession(device);
+		if (SDM_MD_CallSuccessful(result)) {
+			CFMutableDictionaryRef optionsDict = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, NULL, NULL);
+			CFDictionaryAddValue(optionsDict, CFSTR(kAppLookupMasterKey), options);
+			result = AMDeviceLookupApplications(device, optionsDict, results);
+			CFRelease(optionsDict);
+			SDMMD_AMDeviceStopSession(device);
+		}
+		AMDeviceDisconnect(device);
+	}
+	return result;
+}*/
 
 #endif

@@ -1,5 +1,5 @@
 /*
- *  SDMMRecoveryModeDevice.c
+ *  SDMMD_Notification.h
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,9 +16,27 @@
  * 
  */
 
-#ifndef _SDMMRECOVERYMODEDEVICE_C_
-#define _SDMMRECOVERYMODEDEVICE_C_
+#ifndef _SDM_MD_NOTIFICATION_H_
+#define _SDM_MD_NOTIFICATION_H_
 
-#include "SDMMRecoveryModeDevice.h"
+#pragma mark -
+#pragma mark Notification Service Names
+#pragma mark -
+
+#define kNotificationiTunesSyncWillStart				"com.apple.itunes-mobdev.syncWillStart"
+#define kNotificationiTunesSyncLock						"com.apple.itunes-mobdev.syncLockRequest"
+#define kNotificationiTunesSyncDidStart					"com.apple.itunes-mobdev.syncDidStart"
+#define kNotificationiTunesSyncDidFinish				"com.apple.itunes-mobdev.syncDidFinish"
+
+#define kNotificationLockdownActivationState			"com.apple.mobile.lockdown.activation_state"
+#define kNotificationDeviceNameChange					"com.apple.mobile.lockdown.device_name_changed"
+#define kNotificationAppUninstalled						"com.apple.mobile.application_uninstalled"
+#define kNotificationAppInstalled						"com.apple.mobile.application_installed"
+#define kNotificationiTunesAppInstalled					"com.apple.itunesstored.application_installed"
+#define kNotificationShutDown							"com.apple.springboard.deviceWillShutDown"
+#define kNotificationProvisionProfileInstalled			"MISProvisioningProfileInstalled"
+#define kNotificationProvisionProfileRemoved			"MISProvisioningProfileRemoved"
+#define kNotificationProfileListChanged					"com.apple.ManagedConfiguration.profileListChanged"
+
 
 #endif

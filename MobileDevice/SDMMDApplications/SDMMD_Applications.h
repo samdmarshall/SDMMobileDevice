@@ -1,5 +1,5 @@
 /*
- *  SDMMDApplications.h
+ *  SDMMD_Applications.h
  *  SDM_MD_Demo
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,11 +16,11 @@
  * 
  */
 
-#ifndef _SDMMDAPPLICATIONS_H_
-#define _SDMMDAPPLICATIONS_H_
+#ifndef _SDM_MD_APPLICATIONS_H_
+#define _SDM_MD_APPLICATIONS_H_
 
-#import "SDMMDError.h"
-#import "SDMMDevice.h"
+#include "SDMMD_Error.h"
+#include "SDMMD_AMDevice.h"
 
 #pragma mark -
 #pragma mark TYPES
@@ -70,6 +70,6 @@
 #pragma mark FUNCTIONS
 #pragma mark -
 
-sdmmd_return_t SDM_AMDeviceLookupApplications(SDM_AMDeviceRef device, CFArrayRef options, CFDictionaryRef *results);
+sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFArrayRef options, CFDictionaryRef *results);
 
 #endif
