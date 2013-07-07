@@ -1,6 +1,6 @@
 /*
  *  SDMMD_AFCIterator.h
- *  SDM_MD_Demo
+ *  SDMMobileDevice
  *
  *  Copyright (c) 2013, Sam Marshall
  *  All rights reserved.
@@ -19,7 +19,7 @@
 #ifndef _SDM_MD_AFCITERATOR_H_
 #define _SDM_MD_AFCITERATOR_H_
 
-#include <CoreFoundation/CoreFoundation.h>
+#import <CoreFoundation/CoreFoundation.h>
 
 #pragma mark -
 #pragma mark TYPES

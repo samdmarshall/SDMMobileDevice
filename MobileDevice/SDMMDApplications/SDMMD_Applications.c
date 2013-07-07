@@ -1,6 +1,6 @@
 /*
  *  SDMMD_Applications.c
- *  SDM_MD_Demo
+ *  SDMMobileDevice
  *
  *  Copyright (c) 2013, Sam Marshall
  *  All rights reserved.
@@ -21,7 +21,7 @@
 
 #include "SDMMD_Applications.h"
 
-#define kAppLookupMasterKey "ReturnAttributes"
+#define kAppLookupMasterKey								"ReturnAttributes"
 
 sdmmd_return_t AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef *results);
 

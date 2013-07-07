@@ -1,6 +1,6 @@
 /*
  *  SDMMD_MRestoreModeDevice.h
- *  SDM_MD_Demo
+ *  SDMMobileDevice
  *
  *  Copyright (c) 2013, Sam Marshall
  *  All rights reserved.
@@ -19,7 +19,7 @@
 #ifndef _SDM_MD_MRESTOREMODEDEVICE_H_
 #define _SDM_MD_MRESTOREMODEDEVICE_H_
 
-#include "SDMMD_AMDevice.h"
+#import "SDMMD_AMDevice.h"
 
 typedef struct AMRestoreModeDeviceClassHeader {
 	unsigned char header[16];

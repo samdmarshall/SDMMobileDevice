@@ -1,6 +1,6 @@
 /*
  *  SDMMD_Keys.h
- *  SDM_MD_Demo
+ *  SDMMobileDevice
  *
  *  Copyright (c) 2013, Sam Marshall
  *  All rights reserved.
@@ -336,5 +336,9 @@
 #define kPurpleBuddyDomain						"com.apple.purplebuddy"
 
 #define kSetupState								"SetupState"
+
+#pragma mark -
+#pragma mark FUNCTIONS
+#pragma mark -
 
 #endif

@@ -1,6 +1,6 @@
 /*
  *  SDMMD_MCP.c
- *  SDM_MD_Demo
+ *  SDMMobileDevice
  *
  *  Copyright (c) 2013, Sam Marshall
  *  All rights reserved.
