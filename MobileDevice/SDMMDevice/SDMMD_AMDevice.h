@@ -81,6 +81,8 @@ typedef struct sdmmd_am_device SDM_AMDeviceClass;
 
 #pragma mark -
 
+SDMMD_AMDeviceRef SDMMD_AMDeviceCreateCopy(SDMMD_AMDeviceRef device);
+
 sdmmd_return_t SDMMD_AMDeviceActivate(SDMMD_AMDeviceRef device, CFDictionaryRef options);
 sdmmd_return_t SDMMD_AMDeviceDeactivate(SDMMD_AMDeviceRef device);
 
@@ -101,9 +103,16 @@ uint32_t SDMMD_AMDeviceUSBDeviceID(SDMMD_AMDeviceRef device);
 uint32_t SDMMD_AMDeviceUSBLocationID(SDMMD_AMDeviceRef device);
 uint16_t SDMMD_AMDeviceUSBProductID(SDMMD_AMDeviceRef device);
 uint32_t SDMMD_AMDeviceGetConnectionID(SDMMD_AMDeviceRef device);
+bool SDMMD_AMDeviceIsAttached(SDMMD_AMDeviceRef device);
 
-CFTypeRef SDMMD_DeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key);
+
+CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key);
 
 SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dict);
+CFArrayRef SDMMD_AMDCreateDeviceList();
+
+sdmmd_sim_return_t SDMMD_GetSIMStatusCode(SDMMD_AMDeviceRef device);
+sdmmd_activation_return_t SDMMD_GetActivationStatus(SDMMD_AMDeviceRef device);
+
 
 #endif

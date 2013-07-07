@@ -878,4 +878,108 @@ CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, 
 	return value;
 }
 
+SDMMD_AMDeviceRef SDMMD_AMDeviceCreateEmpty() {
+	return (SDMMD_AMDeviceRef)malloc(sizeof(SDM_AMDeviceClass));
+}
+
+SDMMD_AMDeviceRef SDM_AMDeviceCreateFromProperties(CFDictionaryRef dictionary) {
+	SDMMD_AMDeviceRef device = NULL;
+	if (dictionary) {
+		device = SDMMD_AMDeviceCreateEmpty();
+		if (device) {
+			CFDictionaryRef properties = (CFDictionaryContainsKey(dictionary, CFSTR("Properties")) ? CFDictionaryGetValue(dictionary, CFSTR("Properties")) : dictionary);
+			
+			CFNumberRef deviceId = CFDictionaryGetValue(properties, CFSTR("DeviceID"));
+			CFNumberGetValue(deviceId, 0x3, &device->ivars.device_id);
+			
+			CFStringRef serialNumber = CFDictionaryGetValue(properties, CFSTR("SerialNumber"));
+			device->ivars.unique_device_id = serialNumber;
+			
+			CFStringRef linkType = CFDictionaryGetValue(properties, CFSTR("ConnectionType"));
+			if (CFStringCompare(linkType, CFSTR("USB"), 0) == 0) {
+				device->ivars.connection_type = 0x1;
+				
+				CFNumberRef productId = CFDictionaryGetValue(properties, CFSTR("ProductID"));
+				CFNumberGetValue(productId, 0x2, &device->ivars.product_id);
+				
+				CFNumberRef locationId = CFDictionaryGetValue(properties, CFSTR("LocationID"));
+				CFNumberGetValue(locationId, 0x4, &device->ivars.location_id);
+				
+			} else if (CFStringCompare(linkType, CFSTR("WiFi"), 0) == 0) {
+				device->ivars.connection_type = 0x2;
+								
+			} else {
+				
+			}
+			
+			device->ivars.device_active = 0x1;
+			device->ivars.unknown8 = 0x0;
+			device->ivars.network_address = NULL;
+			kern_return_t result = sdmmd_mutex_init(device->ivars.mutex_lock);
+			printf("%x\n",result);
+		}
+	}
+	return device;
+}
+
+bool SDMMD_AMDeviceIsAttached(SDMMD_AMDeviceRef device) {
+	bool result = false;
+	struct USBMuxPacket *devicesPacket = SDMMD_USBMuxCreatePacketType(kSDMMD_USBMuxPacketListDevicesType, NULL);
+	SDMMD_USBMuxListenerSend(SDMMD_MCP->usbmuxd, devicesPacket);
+	for (uint32_t i = 0x0; i < CFArrayGetCount(SDMMD_MCP->deviceList); i++) {
+		SDMMD_AMDeviceRef deviceCheck = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(SDMMD_MCP->deviceList, i);
+		if (SDMMD_AMDeviceGetConnectionID(device) == SDMMD_AMDeviceGetConnectionID(deviceCheck)) {
+			result = true;
+			break;
+		}
+	}
+	USBMuxPacketRelease(devicesPacket);
+	return result;
+}
+
+CFArrayRef SDMMD_AMDCreateDeviceList() {
+	struct USBMuxPacket *devicesPacket = SDMMD_USBMuxCreatePacketType(kSDMMD_USBMuxPacketListDevicesType, NULL);
+	SDMMD_USBMuxListenerSend(SDMMD_MCP->usbmuxd, devicesPacket);
+	USBMuxPacketRelease(devicesPacket);
+	return SDMMD_MCP->deviceList;
+}
+
+SDMMD_AMDeviceRef SDMMD_AMDeviceCreateCopy(SDMMD_AMDeviceRef device) {
+	SDMMD_AMDeviceRef copy = (SDMMD_AMDeviceRef)malloc(sizeof(SDM_AMDeviceClass));
+	memcpy(copy, device, sizeof(SDM_AMDeviceClass));
+	return copy;
+}
+
+sdmmd_sim_return_t SDMMD_GetSIMStatusCode(SDMMD_AMDeviceRef device) {
+	sdmmd_sim_return_t result = KnownSIMCodes[0];
+	CFStringRef deviceSIMStatus = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kSIMStatus));
+	if (deviceSIMStatus) {
+		for (uint32_t i = 1; i < kKnownSIMCodesNum; i++) {
+			if (CFStringCompare(deviceSIMStatus, KnownSIMCodes[i].codeName, 0) == kCFCompareEqualTo) {
+				result = KnownSIMCodes[i];
+				break;
+			}
+		}
+	}
+	if (deviceSIMStatus)
+		CFRelease(deviceSIMStatus);
+	return result;
+}
+
+sdmmd_activation_return_t SDMMD_GetActivationStatus(SDMMD_AMDeviceRef device) {
+	sdmmd_activation_return_t result = KnownActivationStates[0];
+	CFStringRef deviceActivationState = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kActivationState));
+	if (deviceActivationState) {
+		for (uint32_t i = 1; i < kKnownActivationStatesNum; i++) {
+			if (CFStringCompare(deviceActivationState, KnownActivationStates[i].statusName, 0) == kCFCompareEqualTo) {
+				result = KnownActivationStates[i];
+				break;
+			}
+		}
+	}
+	if(deviceActivationState)
+		CFRelease(deviceActivationState);
+	return result;
+}
+
 #endif

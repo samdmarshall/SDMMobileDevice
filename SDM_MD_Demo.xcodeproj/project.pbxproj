@@ -97,8 +97,6 @@
 		2215A83817500DDC00AD1981 /* SDMMobileDevice-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SDMMobileDevice-Info.plist"; sourceTree = "<group>"; };
 		2215A83F17500DE700AD1981 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		2215A84517500E0100AD1981 /* MobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileDevice.framework; path = /System/Library/PrivateFrameworks/MobileDevice.framework; sourceTree = "<absolute>"; };
-		2215A85217500E4C00AD1981 /* SDMMDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMDevice.h; sourceTree = "<group>"; };
-		2215A85317500E4C00AD1981 /* SDMMDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMDevice.c; sourceTree = "<group>"; };
 		2215A8AE175010A300AD1981 /* SDMMD_Service.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Service.h; sourceTree = "<group>"; };
 		2215A8AF175010A300AD1981 /* SDMMD_Service.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_Service.c; sourceTree = "<group>"; };
 		2215A91D17510CF300AD1981 /* SDMMD_AFCDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AFCDevice.h; sourceTree = "<group>"; };
@@ -250,8 +248,6 @@
 				22AD8E631787465A002ACFB1 /* SDMMD_AMDevice.h */,
 				22AD8E641787465A002ACFB1 /* SDMMD_AMDevice.c */,
 				2215A9FB17512A9F00AD1981 /* SDMMD_Keys.h */,
-				2215A85217500E4C00AD1981 /* SDMMDevice.h */,
-				2215A85317500E4C00AD1981 /* SDMMDevice.c */,
 				2215AA3F1751328100AD1981 /* SDMMD_MRecoveryModeDevice.h */,
 				2215AA401751328100AD1981 /* SDMMD_MRecoveryModeDevice.c */,
 				2215AB3E17524E4D00AD1981 /* SDMMD_MRUSBDevice.h */,
