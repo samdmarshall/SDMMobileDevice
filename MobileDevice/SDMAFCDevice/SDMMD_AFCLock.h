@@ -19,7 +19,9 @@
 #ifndef _SDM_MD_AFCLOCK_H_
 #define _SDM_MD_AFCLOCK_H_
 
+#include "SDMMD_Error.h"
 #include <stdint.h>
+#include <pthread.h>
 
 #pragma mark -
 #pragma mark TYPES
@@ -30,7 +32,7 @@ typedef struct AFCLockClassHeader {
 } __attribute__ ((packed)) AFCLockClassHeader; // 0x10
 
 typedef struct AFCLockClassBody {
-	int32_t mutex_lock;			// 16
+	pthread_mutex_t mutex_lock;	// 16
 	unsigned char padding[44];	// 20
 } __attribute__ ((packed)) AFCLockClassBody; // 0x40
 
@@ -46,5 +48,8 @@ typedef struct afc_lock SDMMD_AFCLockClass;
 #pragma mark -
 #pragma mark FUNCTIONS
 #pragma mark -
+
+sdmmd_return_t SDMMD_AFCLockLock(SDMMD_AFCLockRef lock);
+sdmmd_return_t SDMMD_AFCLockUnlock(SDMMD_AFCLockRef lock);
 
 #endif

@@ -15,6 +15,7 @@
  *  THIS SOFTWARE IS PROVIDED BY Sam Marshall ''AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL Sam Marshall BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
+
 #ifndef _SDM_MD_SERVICE_C_
 #define _SDM_MD_SERVICE_C_
 
@@ -77,26 +78,6 @@ sdmmd_return_t SDMMD_ServiceReceive(uint32_t handle, CFDataRef *data) {
 			free(buffer);
 		}
 		return MDERR_OK;
-			/*size_t rc = recv(handle, &size, size, 0);
-			if (rc == (uint32_t)CFDataGetLength(*data)) {
-				size = ntohl(size);
-				if (size) {
-					unsigned char *buffer = malloc(rc);
-					size_t remainder = rc;
-					while (remainder) {
-						size_t recieved = recv(handle, &buffer[size-remainder], remainder, 0);
-						remainder -= recieved;
-					}
-					CFDataRef dataBuffer = CFDataCreateWithBytesNoCopy(0, buffer, size, kCFAllocatorDefault);
-					*data = CFDataCreateCopy(kCFAllocatorDefault, dataBuffer);
-					free(buffer);
-					CFRelease(dataBuffer);
-				}
-				return MDERR_OK;
-			} else {
-				return MDERR_QUERY_FAILED;
-			}
-		}*/
 	}
 	return MDERR_OK;
 }

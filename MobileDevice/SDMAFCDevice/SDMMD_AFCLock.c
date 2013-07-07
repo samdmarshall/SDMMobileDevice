@@ -21,4 +21,25 @@
 
 #include "SDMMD_AFCLock.h"
 
+sdmmd_return_t SDMMD_AFCLockLock(SDMMD_AFCLockRef lock) {
+	sdmmd_return_t result = 0xe8004017;
+	if (lock) {
+		result = pthread_mutex_lock(&(lock->ivars.mutex_lock));
+	} else {
+		result = 0xe8004007;
+	}
+	return result;
+}
+
+sdmmd_return_t SDMMD_AFCLockUnlock(SDMMD_AFCLockRef lock) {
+	sdmmd_return_t result = 0xe8004017;
+	if (lock) {
+		result = pthread_mutex_unlock(&(lock->ivars.mutex_lock));
+	} else {
+		result = 0xe8004007;
+	}
+	return result;
+}
+
+
 #endif

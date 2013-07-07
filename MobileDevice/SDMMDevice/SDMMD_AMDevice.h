@@ -103,4 +103,6 @@ uint32_t SDMMD_AMDeviceGetConnectionID(SDMMD_AMDeviceRef device);
 
 CFTypeRef SDMMD_DeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key);
 
+SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dict);
+
 #endif
