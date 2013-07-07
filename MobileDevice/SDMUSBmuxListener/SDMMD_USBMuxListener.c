@@ -114,7 +114,7 @@ void SDMMD_USBMuxResponseCallback(void *context, struct USBMuxPacket *packet) {
 }
 
 void SDMMD_USBMuxAttachedCallback(void *context, struct USBMuxPacket *packet) {
-	SDMMD_AMDeviceRef newDevice = AMDeviceCreateFromProperties(packet->payload);
+	SDMMD_AMDeviceRef newDevice = SDMMD_AMDeviceCreateFromProperties(packet->payload);
 	if (newDevice && !CFArrayContainsValue(SDMMD_MCP->deviceList, CFRangeMake(0x0, CFArrayGetCount(SDMMD_MCP->deviceList)), newDevice)) {
 		CFMutableArrayRef updateWithNew = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, SDMMD_MCP->deviceList);
 		CFArrayAppendValue(updateWithNew, newDevice);
@@ -133,7 +133,7 @@ void SDMMD_USBMuxDetachedCallback(void *context, struct USBMuxPacket *packet) {
 	uint32_t removeCounter = 0x0;
 	for (uint32_t i = 0x0; i < CFArrayGetCount(SDMMD_MCP->deviceList); i++) {
 		SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(SDMMD_MCP->deviceList, i);
-		if (detachedId == AMDeviceGetConnectionID(device)) {
+		if (detachedId == SDMMD_AMDeviceGetConnectionID(device)) {
 			CFArrayRemoveValueAtIndex(updateWithRemove, i-removeCounter);
 			removeCounter++;
 			CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotification"), device, NULL, true);
@@ -151,7 +151,7 @@ void SDMMD_USBMuxLogsCallback(void *context, struct USBMuxPacket *packet) {
 void SDMMD_USBMuxDeviceListCallback(void *context, struct USBMuxPacket *packet) {
 	CFArrayRef devices = CFDictionaryGetValue(packet->payload, CFSTR("DeviceList"));
 	for (uint32_t i = 0x0; i < CFArrayGetCount(devices); i++) {
-		SDMMD_AMDeviceRef deviceFromList = AMDeviceCreateFromProperties(CFArrayGetValueAtIndex(devices, i));
+		SDMMD_AMDeviceRef deviceFromList = SDMMD_AMDeviceCreateFromProperties(CFArrayGetValueAtIndex(devices, i));
 		if (deviceFromList && !CFArrayContainsValue(SDMMD_MCP->deviceList, CFRangeMake(0x0, CFArrayGetCount(SDMMD_MCP->deviceList)), deviceFromList)) {
 			((SDMMD_USBMuxListenerRef)context)->attachedCallback(context, packet);
 		}

@@ -9,77 +9,55 @@
 /* Begin PBXBuildFile section */
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		2215A84017500DE700AD1981 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A83F17500DE700AD1981 /* CoreFoundation.framework */; };
-		2215A84617500E0100AD1981 /* MobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A84517500E0100AD1981 /* MobileDevice.framework */; };
 		2215A87217500F2000AD1981 /* SDMMobileDevice.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A83717500DDC00AD1981 /* SDMMobileDevice.framework */; };
 		2215AB2C1751876900AD1981 /* MobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A84517500E0100AD1981 /* MobileDevice.framework */; };
 		2215AC0F17526F7900AD1981 /* SDMMobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A83717500DDC00AD1981 /* SDMMobileDevice.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		22485231178216D300CD8A99 /* decode.c in Sources */ = {isa = PBXBuildFile; fileRef = 22485224178216D300CD8A99 /* decode.c */; };
-		22485232178216D300CD8A99 /* decode.h in Headers */ = {isa = PBXBuildFile; fileRef = 22485225178216D300CD8A99 /* decode.h */; };
-		22485233178216D300CD8A99 /* extern.h in Headers */ = {isa = PBXBuildFile; fileRef = 22485226178216D300CD8A99 /* extern.h */; };
-		22485234178216D300CD8A99 /* input.c in Sources */ = {isa = PBXBuildFile; fileRef = 22485227178216D300CD8A99 /* input.c */; };
-		22485235178216D300CD8A99 /* input.h in Headers */ = {isa = PBXBuildFile; fileRef = 22485228178216D300CD8A99 /* input.h */; };
-		22485236178216D300CD8A99 /* syn-att.c in Sources */ = {isa = PBXBuildFile; fileRef = 22485229178216D300CD8A99 /* syn-att.c */; };
-		22485237178216D300CD8A99 /* syn-intel.c in Sources */ = {isa = PBXBuildFile; fileRef = 2248522A178216D300CD8A99 /* syn-intel.c */; };
-		22485238178216D300CD8A99 /* syn.c in Sources */ = {isa = PBXBuildFile; fileRef = 2248522B178216D300CD8A99 /* syn.c */; };
-		22485239178216D300CD8A99 /* syn.h in Headers */ = {isa = PBXBuildFile; fileRef = 2248522C178216D300CD8A99 /* syn.h */; };
-		2248523A178216D300CD8A99 /* types.h in Headers */ = {isa = PBXBuildFile; fileRef = 2248522D178216D300CD8A99 /* types.h */; };
-		2248523B178216D300CD8A99 /* udint.h in Headers */ = {isa = PBXBuildFile; fileRef = 2248522E178216D300CD8A99 /* udint.h */; };
-		2248523C178216D300CD8A99 /* udis86.c in Sources */ = {isa = PBXBuildFile; fileRef = 2248522F178216D300CD8A99 /* udis86.c */; };
-		2248523D178216D300CD8A99 /* udis86.h in Headers */ = {isa = PBXBuildFile; fileRef = 22485230178216D300CD8A99 /* udis86.h */; };
-		224852AD17822FE900CD8A99 /* itab.c in Sources */ = {isa = PBXBuildFile; fileRef = 224852AB17822FE900CD8A99 /* itab.c */; };
-		224852AE17822FE900CD8A99 /* itab.h in Headers */ = {isa = PBXBuildFile; fileRef = 224852AC17822FE900CD8A99 /* itab.h */; };
-		22485B4C178488ED00CD8A99 /* disasm.h in Headers */ = {isa = PBXBuildFile; fileRef = 22485B4A178488ED00CD8A99 /* disasm.h */; };
-		22485B4D178488ED00CD8A99 /* disasm.c in Sources */ = {isa = PBXBuildFile; fileRef = 22485B4B178488ED00CD8A99 /* disasm.c */; };
-		22485C1B17849BEC00CD8A99 /* arm_decode.h in Headers */ = {isa = PBXBuildFile; fileRef = 22485C1917849BEC00CD8A99 /* arm_decode.h */; };
-		22485C1C17849BEC00CD8A99 /* arm_decode.c in Sources */ = {isa = PBXBuildFile; fileRef = 22485C1A17849BEC00CD8A99 /* arm_decode.c */; };
 		225ACB46175FBFA300A47071 /* SDMMD_Debugger.h in Headers */ = {isa = PBXBuildFile; fileRef = 225ACB44175FBFA300A47071 /* SDMMD_Debugger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		225ACB47175FBFA300A47071 /* SDMMD_Debugger.c in Sources */ = {isa = PBXBuildFile; fileRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */; };
 		225AD7321765FE7700A47071 /* SDMMD_USBMuxListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 225AD7301765FE7700A47071 /* SDMMD_USBMuxListener.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		225AD7331765FE7700A47071 /* SDMMD_USBMuxListener.c in Sources */ = {isa = PBXBuildFile; fileRef = 225AD7311765FE7700A47071 /* SDMMD_USBMuxListener.c */; };
-		226CD66517708BB60082A21A /* SDMSymbolTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 226CD66317708BB60082A21A /* SDMSymbolTable.h */; };
-		226CD66617708BB60082A21A /* SDMSymbolTable.c in Sources */ = {isa = PBXBuildFile; fileRef = 226CD66417708BB60082A21A /* SDMSymbolTable.c */; };
 		2288EC25177B4629006BF231 /* MDDemoMainSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2288EC24177B4629006BF231 /* MDDemoMainSplitView.m */; };
 		2288EC60177B48FA006BF231 /* SDM_MD_DemoAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 256AC3D90F4B6AC300CF3369 /* SDM_MD_DemoAppDelegate.m */; };
 		2288ECC9177B4F31006BF231 /* MDDemoDeviceTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 2288ECC8177B4F31006BF231 /* MDDemoDeviceTable.m */; };
 		2288ECDB177B5119006BF231 /* MDDemoInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2288ECDA177B5119006BF231 /* MDDemoInfoView.m */; };
-		22AD8E5A17871506002ACFB1 /* SDMMD_AFC.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD8E5817871506002ACFB1 /* SDMMD_AFC.h */; };
+		22AD8E5A17871506002ACFB1 /* SDMMD_AFC.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD8E5817871506002ACFB1 /* SDMMD_AFC.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22AD8E5B17871506002ACFB1 /* SDMMD_AFC.c in Sources */ = {isa = PBXBuildFile; fileRef = 22AD8E5917871506002ACFB1 /* SDMMD_AFC.c */; };
-		22AD8E651787465A002ACFB1 /* SDMMD_AMDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD8E631787465A002ACFB1 /* SDMMD_AMDevice.h */; };
+		22AD8E651787465A002ACFB1 /* SDMMD_AMDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD8E631787465A002ACFB1 /* SDMMD_AMDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22AD8E661787465A002ACFB1 /* SDMMD_AMDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 22AD8E641787465A002ACFB1 /* SDMMD_AMDevice.c */; };
-		22AD8E7417875346002ACFB1 /* SDMMD_Error.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD8E7217875346002ACFB1 /* SDMMD_Error.h */; };
+		22AD8E7417875346002ACFB1 /* SDMMD_Error.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD8E7217875346002ACFB1 /* SDMMD_Error.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22AD8E7517875346002ACFB1 /* SDMMD_Error.c in Sources */ = {isa = PBXBuildFile; fileRef = 22AD8E7317875346002ACFB1 /* SDMMD_Error.c */; };
-		22AD8E7917875B1E002ACFB1 /* SDMMD_Functions.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD8E7817875B1E002ACFB1 /* SDMMD_Functions.h */; };
-		22AD8F251789B3DF002ACFB1 /* SDMMD_MCP.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD8F231789B3DF002ACFB1 /* SDMMD_MCP.h */; };
+		22AD8E7917875B1E002ACFB1 /* SDMMD_Functions.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD8E7817875B1E002ACFB1 /* SDMMD_Functions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22AD8F251789B3DF002ACFB1 /* SDMMD_MCP.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD8F231789B3DF002ACFB1 /* SDMMD_MCP.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22AD8F261789B3DF002ACFB1 /* SDMMD_MCP.c in Sources */ = {isa = PBXBuildFile; fileRef = 22AD8F241789B3DF002ACFB1 /* SDMMD_MCP.c */; };
-		22AD8FD41789BAB5002ACFB1 /* SDMMobileDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD8E8317875BAA002ACFB1 /* SDMMobileDevice.h */; };
-		22AD91C21789D715002ACFB1 /* SDMMD_Service.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215A8AE175010A300AD1981 /* SDMMD_Service.h */; };
+		22AD8FD41789BAB5002ACFB1 /* SDMMobileDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD8E8317875BAA002ACFB1 /* SDMMobileDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22AD91C21789D715002ACFB1 /* SDMMD_Service.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215A8AE175010A300AD1981 /* SDMMD_Service.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22AD91C31789D715002ACFB1 /* SDMMD_Service.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215A8AF175010A300AD1981 /* SDMMD_Service.c */; };
-		22AD91C41789D71A002ACFB1 /* SDMMD_Connection.h in Headers */ = {isa = PBXBuildFile; fileRef = 225ACB73175FC15E00A47071 /* SDMMD_Connection.h */; };
+		22AD91C41789D71A002ACFB1 /* SDMMD_Connection.h in Headers */ = {isa = PBXBuildFile; fileRef = 225ACB73175FC15E00A47071 /* SDMMD_Connection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22AD91C51789D71A002ACFB1 /* SDMMD_Connection.c in Sources */ = {isa = PBXBuildFile; fileRef = 225ACB74175FC15E00A47071 /* SDMMD_Connection.c */; };
 		22AD92471789DC7E002ACFB1 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AD92461789DC7E002ACFB1 /* libssl.dylib */; };
 		22AD924B1789DCA7002ACFB1 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AD924A1789DCA7002ACFB1 /* libcrypto.dylib */; };
 		22AD9330178A1441002ACFB1 /* SDMMD_AFCDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215A91E17510CF300AD1981 /* SDMMD_AFCDevice.c */; };
-		22AD9331178A1441002ACFB1 /* SDMMD_AFCDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215A91D17510CF300AD1981 /* SDMMD_AFCDevice.h */; };
+		22AD9331178A1441002ACFB1 /* SDMMD_AFCDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215A91D17510CF300AD1981 /* SDMMD_AFCDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22AD9332178A1441002ACFB1 /* SDMMD_AFCIterator.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AB801752596100AD1981 /* SDMMD_AFCIterator.c */; };
-		22AD9333178A1442002ACFB1 /* SDMMD_AFCIterator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB7F1752596100AD1981 /* SDMMD_AFCIterator.h */; };
+		22AD9333178A1442002ACFB1 /* SDMMD_AFCIterator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB7F1752596100AD1981 /* SDMMD_AFCIterator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22AD9334178A1442002ACFB1 /* SDMMD_AFCLock.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AB8B17525B1100AD1981 /* SDMMD_AFCLock.c */; };
-		22AD9335178A1443002ACFB1 /* SDMMD_AFCLock.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB8A17525B1100AD1981 /* SDMMD_AFCLock.h */; };
+		22AD9335178A1443002ACFB1 /* SDMMD_AFCLock.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB8A17525B1100AD1981 /* SDMMD_AFCLock.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22AD9336178A1444002ACFB1 /* SDMMD_AFCOperation.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AB8517525A2700AD1981 /* SDMMD_AFCOperation.c */; };
-		22AD9337178A1444002ACFB1 /* SDMMD_AFCOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB8417525A2700AD1981 /* SDMMD_AFCOperation.h */; };
+		22AD9337178A1444002ACFB1 /* SDMMD_AFCOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB8417525A2700AD1981 /* SDMMD_AFCOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22AD9340178A14C3002ACFB1 /* SDMMD_Notification.c in Sources */ = {isa = PBXBuildFile; fileRef = 225AC5BF175B976500A47071 /* SDMMD_Notification.c */; };
-		22AD9341178A14C6002ACFB1 /* SDMMD_Notification.h in Headers */ = {isa = PBXBuildFile; fileRef = 225AC5BE175B976500A47071 /* SDMMD_Notification.h */; };
+		22AD9341178A14C6002ACFB1 /* SDMMD_Notification.h in Headers */ = {isa = PBXBuildFile; fileRef = 225AC5BE175B976500A47071 /* SDMMD_Notification.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22AD9345178A1562002ACFB1 /* SDMMD_Applications.c in Sources */ = {isa = PBXBuildFile; fileRef = 225ACD761760C86200A47071 /* SDMMD_Applications.c */; };
-		22AD9346178A1565002ACFB1 /* SDMMD_Applications.h in Headers */ = {isa = PBXBuildFile; fileRef = 225ACD751760C86200A47071 /* SDMMD_Applications.h */; };
-		22AD9347178A1609002ACFB1 /* SDMMD_MRecoveryModeDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AA3F1751328100AD1981 /* SDMMD_MRecoveryModeDevice.h */; };
-		22AD9348178A160B002ACFB1 /* SDMMD_Keys.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215A9FB17512A9F00AD1981 /* SDMMD_Keys.h */; };
+		22AD9346178A1565002ACFB1 /* SDMMD_Applications.h in Headers */ = {isa = PBXBuildFile; fileRef = 225ACD751760C86200A47071 /* SDMMD_Applications.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22AD9347178A1609002ACFB1 /* SDMMD_MRecoveryModeDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AA3F1751328100AD1981 /* SDMMD_MRecoveryModeDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22AD9348178A160B002ACFB1 /* SDMMD_Keys.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215A9FB17512A9F00AD1981 /* SDMMD_Keys.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22AD9349178A1622002ACFB1 /* SDMMD_MRecoveryModeDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AA401751328100AD1981 /* SDMMD_MRecoveryModeDevice.c */; };
 		22AD934F178A1675002ACFB1 /* SDMMD_MRUSBDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AB3F17524E4D00AD1981 /* SDMMD_MRUSBDevice.c */; };
-		22AD9350178A1678002ACFB1 /* SDMMD_MRUSBDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB3E17524E4D00AD1981 /* SDMMD_MRUSBDevice.h */; };
-		22AD9355178A16CF002ACFB1 /* SDMMD_MDFUModeDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB4917524FEC00AD1981 /* SDMMD_MDFUModeDevice.h */; };
+		22AD9350178A1678002ACFB1 /* SDMMD_MRUSBDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB3E17524E4D00AD1981 /* SDMMD_MRUSBDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22AD9355178A16CF002ACFB1 /* SDMMD_MDFUModeDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB4917524FEC00AD1981 /* SDMMD_MDFUModeDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22AD9356178A16CF002ACFB1 /* SDMMD_MDFUModeDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AB4A17524FEC00AD1981 /* SDMMD_MDFUModeDevice.c */; };
 		22AD9359178A1759002ACFB1 /* SDMMD_MRestorableDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AB9717525D9000AD1981 /* SDMMD_MRestorableDevice.c */; };
-		22AD935A178A175E002ACFB1 /* SDMMD_MRestorableDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB9617525D9000AD1981 /* SDMMD_MRestorableDevice.h */; };
-		22AD9369178A17AF002ACFB1 /* SDMMD_MRestoreModeDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB8F17525BA900AD1981 /* SDMMD_MRestoreModeDevice.h */; };
+		22AD935A178A175E002ACFB1 /* SDMMD_MRestorableDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB9617525D9000AD1981 /* SDMMD_MRestorableDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22AD9369178A17AF002ACFB1 /* SDMMD_MRestoreModeDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB8F17525BA900AD1981 /* SDMMD_MRestoreModeDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22AD936A178A17B0002ACFB1 /* SDMMD_MRestoreModeDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AB9017525BA900AD1981 /* SDMMD_MRestoreModeDevice.c */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -212,7 +190,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2215A84017500DE700AD1981 /* CoreFoundation.framework in Frameworks */,
-				2215A84617500E0100AD1981 /* MobileDevice.framework in Frameworks */,
 				22AD92471789DC7E002ACFB1 /* libssl.dylib in Frameworks */,
 				22AD924B1789DCA7002ACFB1 /* libcrypto.dylib in Frameworks */,
 			);
@@ -502,17 +479,6 @@
 			files = (
 				225ACB46175FBFA300A47071 /* SDMMD_Debugger.h in Headers */,
 				225AD7321765FE7700A47071 /* SDMMD_USBMuxListener.h in Headers */,
-				226CD66517708BB60082A21A /* SDMSymbolTable.h in Headers */,
-				22485232178216D300CD8A99 /* decode.h in Headers */,
-				22485233178216D300CD8A99 /* extern.h in Headers */,
-				22485235178216D300CD8A99 /* input.h in Headers */,
-				22485239178216D300CD8A99 /* syn.h in Headers */,
-				2248523A178216D300CD8A99 /* types.h in Headers */,
-				2248523B178216D300CD8A99 /* udint.h in Headers */,
-				2248523D178216D300CD8A99 /* udis86.h in Headers */,
-				224852AE17822FE900CD8A99 /* itab.h in Headers */,
-				22485B4C178488ED00CD8A99 /* disasm.h in Headers */,
-				22485C1B17849BEC00CD8A99 /* arm_decode.h in Headers */,
 				22AD8E5A17871506002ACFB1 /* SDMMD_AFC.h in Headers */,
 				22AD8E651787465A002ACFB1 /* SDMMD_AMDevice.h in Headers */,
 				22AD8E7417875346002ACFB1 /* SDMMD_Error.h in Headers */,
@@ -628,16 +594,6 @@
 			files = (
 				225ACB47175FBFA300A47071 /* SDMMD_Debugger.c in Sources */,
 				225AD7331765FE7700A47071 /* SDMMD_USBMuxListener.c in Sources */,
-				226CD66617708BB60082A21A /* SDMSymbolTable.c in Sources */,
-				22485231178216D300CD8A99 /* decode.c in Sources */,
-				22485234178216D300CD8A99 /* input.c in Sources */,
-				22485236178216D300CD8A99 /* syn-att.c in Sources */,
-				22485237178216D300CD8A99 /* syn-intel.c in Sources */,
-				22485238178216D300CD8A99 /* syn.c in Sources */,
-				2248523C178216D300CD8A99 /* udis86.c in Sources */,
-				224852AD17822FE900CD8A99 /* itab.c in Sources */,
-				22485B4D178488ED00CD8A99 /* disasm.c in Sources */,
-				22485C1C17849BEC00CD8A99 /* arm_decode.c in Sources */,
 				22AD8E5B17871506002ACFB1 /* SDMMD_AFC.c in Sources */,
 				22AD8E661787465A002ACFB1 /* SDMMD_AMDevice.c in Sources */,
 				22AD8E7517875346002ACFB1 /* SDMMD_Error.c in Sources */,
