@@ -52,7 +52,9 @@ typedef struct am_connection SDMMD_AMConnectionClass;
 #pragma mark -
 #pragma mark FUNCTIONS
 #pragma mark -
-SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(CFAllocatorRef allocator, SDMMD_AMDeviceRef device, CFDictionaryRef dict);
+
+SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, void* unknown);
+SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(uint32_t socket, SDMMD_AMDeviceRef device, CFDictionaryRef dict);
 sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connection);
 
 #endif

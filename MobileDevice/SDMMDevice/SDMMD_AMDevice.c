@@ -21,55 +21,10 @@
 
 #include "SDMMD_AMDevice.h"
 #include "SDMMD_Functions.h"
+#include "SDMMD_Service.h"
 #include <string.h>
 #include <errno.h>
 #include <openssl/bio.h>
-
-sdmmd_dl_return_t SDMMD__ConvertLockdowndError(CFStringRef error) {
-	sdmmd_dl_return_t result = 0xe8000013;
-	if (error) {
-		if (CFStringCompare(error, CFSTR("InvalidResponse"), 0) == 0) result = 0xe8000013;
-		else if (CFStringCompare(error, CFSTR("MissingKey"), 0) == 0) result = 0xe8000014;
-		else if (CFStringCompare(error, CFSTR("MissingValue"), 0) == 0) result = 0xe8000015;
-		else if (CFStringCompare(error, CFSTR("GetProhibited"), 0) == 0) result = 0xe8000016;
-		else if (CFStringCompare(error, CFSTR("SetProhibited"), 0) == 0) result = 0xe8000017;
-		else if (CFStringCompare(error, CFSTR("RemoveProhibited"), 0) == 0) result = 0xe8000018;
-		else if (CFStringCompare(error, CFSTR("ImmutableValue"), 0) == 0) result = 0xe8000019;
-		else if (CFStringCompare(error, CFSTR("PasswordProtected"), 0) == 0) result = 0xe800001a;
-		else if (CFStringCompare(error, CFSTR("MissingHostID"), 0) == 0) result = 0xe800001b;
-		else if (CFStringCompare(error, CFSTR("InvalidHostID"), 0) == 0) result = 0xe800001c;
-		else if (CFStringCompare(error, CFSTR("SessionActive"), 0) == 0) result = 0xe800001d;
-		else if (CFStringCompare(error, CFSTR("SessionInactive"), 0) == 0) result = 0xe800001e;
-		else if (CFStringCompare(error, CFSTR("MissingSessionID"), 0) == 0) result = 0xe800001f;
-		else if (CFStringCompare(error, CFSTR("InvalidSessionID"), 0) == 0) result = 0xe8000020;
-		else if (CFStringCompare(error, CFSTR("MissingService"), 0) == 0) result = 0xe8000021;
-		else if (CFStringCompare(error, CFSTR("InvalidService"), 0) == 0) result = 0xe8000022;
-		else if (CFStringCompare(error, CFSTR("ServiceLimit"), 0) == 0) result = 0xe800005b;
-		else if (CFStringCompare(error, CFSTR("CheckinSetupFailed"), 0) == 0) result = 0xe800005e;
-		else if (CFStringCompare(error, CFSTR("InvalidCheckin"), 0) == 0) result = 0xe8000023;
-		else if (CFStringCompare(error, CFSTR("CheckinTimeout"), 0) == 0) result = 0xe8000024;
-		else if (CFStringCompare(error, CFSTR("CheckinConnectionFailed"), 0) == 0) result = 0xe800005f;
-		else if (CFStringCompare(error, CFSTR("CheckinReceiveFailed"), 0) == 0) result = 0xe8000060;
-		else if (CFStringCompare(error, CFSTR("CheckinResponseFailed"), 0) == 0) result = 0xe8000061;
-		else if (CFStringCompare(error, CFSTR("CheckinOutOfMemory"), 0) == 0) result = 0xe8000069;
-		else if (CFStringCompare(error, CFSTR("CheckinSendFailed"), 0) == 0) result = 0xe8000062;
-		else if (CFStringCompare(error, CFSTR("MissingPairRecord"), 0) == 0) result = 0xe8000025;
-		else if (CFStringCompare(error, CFSTR("SavePairRecordFailed"), 0) == 0) result = 0xe8000068;
-		else if (CFStringCompare(error, CFSTR("InvalidPairRecord"), 0) == 0) result = 0xe800005c;
-		else if (CFStringCompare(error, CFSTR("InvalidActivationRecord"), 0) == 0) result = 0xe8000026;
-		else if (CFStringCompare(error, CFSTR("MissingActivationRecord"), 0) == 0) result = 0xe8000027;
-		else if (CFStringCompare(error, CFSTR("ServiceProhibited"), 0) == 0) result = 0xe800005d;
-		else if (CFStringCompare(error, CFSTR("WrongDroid"), 0) == 0) result = 0xe8000028;
-		else if (CFStringCompare(error, CFSTR("EscrowLocked"), 0) == 0) result = 0xe8000081;
-		else if (CFStringCompare(error, CFSTR("NotAValidChaperoneHost"), 0) == 0) result = 0xe8000083;
-		else if (CFStringCompare(error, CFSTR("PairingProhibitedOverThisConnection"), 0) == 0) result = 0xe8000082;
-		else {
-			//result = SDMMD__AddNewAMDError(error);
-			result = 0xffffffff;
-		}		
-	}
-	return result;
-}
 
 SDMMD_lockdown_conn* SDMMD_lockdown_connection_create(SDMMD_lockdown_conn *lockdown) {
 	if (lockdown)

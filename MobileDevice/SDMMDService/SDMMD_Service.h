@@ -21,6 +21,7 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 #include "SDMMD_Error.h"
+#include "SDMMD_Connection.h"
 
 #pragma mark -
 #pragma mark Service List

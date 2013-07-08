@@ -158,4 +158,14 @@ static char* SDMMD_ssl_strerror(SSL *ssl, uint32_t length) {
 	return code;
 }
 
+static char* SDMCFStringGetString(CFStringRef str) {
+	char *cstr = calloc(1, CFStringGetLength(str)+1);
+	CFStringGetCString(str, cstr, CFStringGetLength(str), CFStringGetFastestEncoding(str));
+	return cstr;
+}
+
+static char* SDMCFURLGetString(CFURLRef url) {
+	return SDMCFStringGetString(CFURLGetString(url));
+}
+
 #endif

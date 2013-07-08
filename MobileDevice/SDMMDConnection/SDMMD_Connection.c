@@ -21,8 +21,28 @@
 
 #include "SDMMD_Connection.h"
 
-SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(CFAllocatorRef allocator, SDMMD_AMDeviceRef device, CFDictionaryRef dict) {
-	
+SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, void* unknown) {
+	SDMMD_AMConnectionRef handle = NULL;
+	CFDictionaryRef dict = CFDictionaryCreate(kCFAllocatorDefault, CFSTR("CloseOnInvalidate"), kCFBooleanFalse, 0x1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+	if (dict) {
+		handle = SDMMD_AMDServiceConnectionCreate(socket, unknown, dict);
+		CFRelease(dict);
+	}
+	return handle;
+}
+
+SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(uint32_t socket, SDMMD_AMDeviceRef device, CFDictionaryRef dict) {
+	SDMMD_AMConnectionRef handle = calloc(0x1, sizeof(SDMMD_AMConnectionClass));
+	handle->ivars.socket = socket;
+	handle->ivars.secure_context = device;
+	handle->ivars.one0 = 0x1;
+	handle->ivars.one1 = 0x1;
+	if (dict) {
+		CFTypeRef value = CFDictionaryGetValue(dict, CFSTR("CloseOnInvalidate"));
+		if (CFEqual(value, kCFBooleanFalse))
+			handle->ivars.one0 = 0x0;
+	}
+	return handle;
 }
 
 sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connection) {

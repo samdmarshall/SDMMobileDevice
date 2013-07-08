@@ -71,5 +71,5 @@
 #pragma mark -
 
 sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFArrayRef options, CFDictionaryRef *results);
-
+sdmmd_return_t SDMMD_AMDeviceInstallApplication(uint32_t socket, CFStringRef path, CFDictionaryRef options, void* installCallback, void* unknown);
 #endif
