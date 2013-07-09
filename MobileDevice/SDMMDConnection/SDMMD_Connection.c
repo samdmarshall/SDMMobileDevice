@@ -21,6 +21,43 @@
 
 #include "SDMMD_Connection.h"
 
+sdmmd_return_t SDMMD_perform_command(CFSocketRef socket, CFStringRef command, void* unknown, void* callback, void* unknown1, ...) {
+	sdmmd_return_t result = 0x0;
+	CFMutableDictionaryRef dict = SDMMD_create_dict();
+	if (dict) {
+		CFDictionarySetValue(dict, CFSTR("Command"), command);
+		va_list args;
+		va_start(args, unknown1);
+		CFTypeRef key, value;
+		while (key = va_arg(args)) {
+			value = va_arg(args);
+			CFDictionarySetValue(dict, key, value);
+		}
+		va_end(args);
+		result = SDMMD_ServiceSendMessage(CFSocketGetNative(socket), dict);
+		if (result == 0) {
+			CFDictionaryRef response;
+			SDMMD_ServiceReceiveMessage(CFSocketGetNative(socket), &response);
+			CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
+			if (error) {
+				result = SDMMD__ConvertServiceError(error);
+				printf("call_and_response: GOT AN ERROR 0x%08x.\n",result);
+			} else {
+				CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
+				if (status) {
+					if (CFStringCompare(status, CFSTR("Complete"), 0) == 0) {
+						CFTypeRef responseValue = CFDictionaryGetValue(response, CFSTR("LookupResult"));
+					}
+				}
+			}
+			
+		}
+	} else {
+		result = 0xe8000001;
+	}
+	return result;
+}
+
 SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, void* unknown) {
 	SDMMD_AMConnectionRef handle = NULL;
 	CFDictionaryRef dict = CFDictionaryCreate(kCFAllocatorDefault, CFSTR("CloseOnInvalidate"), kCFBooleanFalse, 0x1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);

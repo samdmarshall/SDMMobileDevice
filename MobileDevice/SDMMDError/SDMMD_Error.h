@@ -153,6 +153,7 @@ typedef enum SDMMD_LockdownError {
 sdmmd_dl_return_t SDMMD__ConvertLockdowndError(CFStringRef error);
 
 typedef enum SDMMD_ServiceError {
+	SVC_ERR_OK = 0x0;
 	SVC_ERR_ApplicationAlreadyInstalled = 0xe8000036,
 	SVC_ERR_ApplicationMoveFailed = 0xe8000037,
 	SVC_ERR_ApplicationSINFCaptureFailed = 0xe8000038,
@@ -216,6 +217,8 @@ typedef enum SDMMD_ServiceError {
 
 #define sdmmd_svc_return_t enum SDMMD_ServiceError
 
-#define SDM_MD_CallSuccessful(result_code) ((result_code == MDERR_OK) || (result_code == MDERR_AFC_OK) || (result_code == MDERR_USBMUX_OK) || (result_code == LD_ERR_OK))
+sdmmd_svc_return_t SDMMD__ConvertServiceError(CFStringRef error);
+
+#define SDM_MD_CallSuccessful(result_code) ((result_code == MDERR_OK) || (result_code == MDERR_AFC_OK) || (result_code == MDERR_USBMUX_OK) || (result_code == LD_ERR_OK) || (result_code == SVC_ERR_OK))
 
 #endif
