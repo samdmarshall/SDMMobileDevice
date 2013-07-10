@@ -412,6 +412,14 @@ void SDMMD_AMDServiceConnectionSetServiceName(SDMMD_AMConnectionRef *connection,
 		CFStringGetCString(service, (*connection)->ivars.service, 0x80, 0x8000100);
 }
 
+uint32_t SDMMD_AMDServiceConnectionGetSocket(SDMMD_AMConnectionRef connection) {
+	return connection->ivars.socket;
+}
+
+SSL* SDMMD_AMDServiceConnectionGetSecureIOContext(SDMMD_AMConnectionRef connection) {
+	return connection->ivars.secure_context;
+}
+
 sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connection) {
 	
 }

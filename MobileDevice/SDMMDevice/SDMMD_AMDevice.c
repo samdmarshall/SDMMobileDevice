@@ -62,7 +62,39 @@ X509* SDMMD__decode_certificate(CFTypeRef cert) {
 	return result;
 }
 
-int SDMMD__ssl_verify_callback(int, X509_STORE_CTX*);
+bool SDMMD__ssl_verify_callback(int value, X509_STORE_CTX *store) {
+	bool result = true;
+	X509 *cert = NULL;
+	if (value || (X509_STORE_CTX_get_error(store) + 0xffffffffffffffec < 0x2)) {
+		void* var_8 = NULL;
+		void* var_16 = NULL;
+		if (X509_STORE_CTX_get_current_cert(store)) {
+			X509* storeCert = X509_STORE_CTX_get_ex_data(store, SSL_get_ex_data_X509_STORE_CTX_idx());
+			void* data = SSL_get_ex_data(storeCert, 0x0);
+			cert = SDMMD__decode_certificate(data);
+			void* data1 = i2d_X509(storeCert, NULL);
+			void* data2 = i2d_X509(store, NULL);
+			if (data1 == data2) {
+				i2d_X509(storeCert, &var_16);
+				i2d_X509(store, &var_8);
+				result = !memcmp(var_8, var_16, 0xffffffff);				
+			}
+			
+		} else {
+			printf("_ssl_verify_callback: Error verifying cert: unable to compare.\n");
+			result = false;
+		}
+		if (cert)
+			X509_free(cert);
+		if (var_8)
+			CRYPTO_free(var_8);
+		if (var_16)
+			CRYPTO_free(var_16);
+	} else {
+		printf("_ssl_verify_callback: Error verifying cert: (%d %s).\n",store, X509_verify_cert_error_string(cert));
+	}
+	return result;
+}
 
 SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostCert, CFTypeRef deviceCert, CFTypeRef hostPrivKey, uint32_t num) {
 	SSL *ssl;
@@ -151,6 +183,22 @@ SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostC
 sdmmd_return_t SDMMD_lockconn_enable_ssl(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostCert, CFTypeRef deviceCert, CFTypeRef hostPrivKey, uint32_t num) {
 	sdmmd_return_t result = 0x0;
 	lockdown_conn->ssl = SDMMD_lockssl_handshake(lockdown_conn, hostCert, hostPrivKey, deviceCert, num);
+	return result;
+}
+
+sdmmd_return_t SDMMD_lockconn_disable_ssl(SDMMD_lockdown_conn *lockdown_conn) {
+	sdmmd_return_t result = 0x0;
+	if (lockdown_conn->ssl) {
+		result = SSL_shutdown(lockdown_conn->connection);
+		if (result == 0) {
+			result = SSL_shutdown(lockdown_conn->ssl);
+		}
+		if (result == 0xff) {
+			printf("lockconn_disable_ssl: Could not shutdown SSL connection %d.\n", 0xffffffff);
+		}
+		SSL_free(lockdown_conn->ssl);
+		lockdown_conn->ssl = NULL;
+	}
 	return result;
 }
 
@@ -319,42 +367,6 @@ bool SDMMD_isDeviceAttached(uint32_t device_id) {
 						break;
 					}
 				}
-			}
-		}
-	}
-	return result;
-}
-
-void SDMMD__PairingRecordPathForIdentifier(CFStringRef udid, char *path) {
-	
-}
-
-sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SDMMD_AMDeviceRef device, CFDictionaryRef *dict) {
-	sdmmd_return_t result = 0xe8000007;
-	if (device) {
-		if (dict) {
-			result = 0xe8000003;
-			CFTypeRef bonjourId = SDMMD_AMDCopySystemBonjourUniqueID();
-			if (bonjourId) {
-				char *path = calloc(1, sizeof(char)*0x400);
-				SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
-				CFDictionaryRef fileDict = SDMMD__CreateDictFromFileContents(path);
-				result = 0xe8000025;
-				if (fileDict) {
-					CFTypeRef systemId = CFDictionaryGetValue(fileDict, CFSTR("SystemBUID"));
-					if (systemId) {
-						if (CFGetTypeID(systemId) == CFStringGetTypeID()) {
-							printf("SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier: Could not store pairing record at '%s'.\n",path);
-							result = 0xe800000a;
-						}
-					} else {
-						CFDictionarySetValue(fileDict, systemId, bonjourId);
-						SDMMD_store_dict(fileDict, path, 1);
-					}
-					CFRelease(fileDict);
-				}
-				free(path);
-				CFRelease(bonjourId);
 			}
 		}
 	}

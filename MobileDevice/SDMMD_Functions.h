@@ -25,7 +25,10 @@
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 #include <stdio.h>
+#include <uuid/uuid.h>
 #include "SDMMD_MCP.h"
+#include "SDMMD_Error.h"
+#include "SDMMD_AMDevice.h"
 
 static void * _sdm_md__stack_chk_guard = NULL;
 
@@ -170,6 +173,92 @@ static char* SDMCFStringGetString(CFStringRef str) {
 
 static char* SDMCFURLGetString(CFURLRef url) {
 	return SDMCFStringGetString(CFURLGetString(url));
+}
+
+static void SDMMD__PairingRecordPathForIdentifier(CFStringRef udid, char *path) {
+	
+}
+
+static CFTypeRef SDMMD_CreateUUID() {
+	uuid_t uu;
+	char *uuid;
+	uuid_generate(&uu);
+	uuid_unparse(&uu, uuid);
+	return CFStringCreateWithCString(NULL, uuid, 0x8000100);
+}
+
+static sdmmd_return_t SDMMD_store_dict(CFDictionaryRef dict, char *path, uint32_t mode) {
+	sdmmd_return_t result = 0x0;
+	char *tmp = calloc(1, strlen(path)+5);
+	strcpy(tmp, path);
+	strcat(tmp, ".tmp");
+	unlink(tmp);
+	FILE* ref = open(tmp, 0xa01);
+	if (ref) {
+		CFDataRef xml = CFPropertyListCreateXMLData(kCFAllocatorDefault, dict);
+		if (xml) {
+			result = write(ref, CFDataGetBytePtr(xml), CFDataGetLength(xml));
+			result = rename(tmp, path);
+		}
+		close(ref);
+		result = chmod(path, 0x1b6);
+	}
+	return result;
+}
+
+static CFTypeRef SDMMD_AMDCopySystemBonjourUniqueID() {
+	char *record;
+	bzero(record, 0x401);
+	CFTypeRef value;
+	SDMMD__PairingRecordPathForIdentifier(CFSTR("SystemConfiguration"), &record);
+	CFMutableDictionaryRef dict = SDMMD__CreateDictFromFileContents(record);
+	if (dict == 0) {
+		dict = SDMMD_create_dict();
+	}
+	if (dict) {
+		value = CFDictionaryGetValue(dict, CFSTR("SystemBUID"));
+		if (value == 0) {
+			value = SDMMD_CreateUUID();
+			CFDictionarySetValue(dict, CFSTR("SystemBUID"), value);
+			SDMMD_store_dict(dict, record, 0x1);
+		}
+		if (value == 0) {
+			printf("SDMMD_AMDCopySystemBonjourUniqueID: Could not generate UUID!\n");
+		}
+	}
+	return value;
+}
+
+static sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SDMMD_AMDeviceRef device, CFDictionaryRef *dict) {
+	sdmmd_return_t result = 0xe8000007;
+	if (device) {
+		if (dict) {
+			result = 0xe8000003;
+			CFTypeRef bonjourId = SDMMD_AMDCopySystemBonjourUniqueID();
+			if (bonjourId) {
+				char *path = calloc(1, sizeof(char)*0x400);
+				SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
+				CFDictionaryRef fileDict = SDMMD__CreateDictFromFileContents(path);
+				result = 0xe8000025;
+				if (fileDict) {
+					CFTypeRef systemId = CFDictionaryGetValue(fileDict, CFSTR("SystemBUID"));
+					if (systemId) {
+						if (CFGetTypeID(systemId) == CFStringGetTypeID()) {
+							printf("SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier: Could not store pairing record at '%s'.\n",path);
+							result = 0xe800000a;
+						}
+					} else {
+						CFDictionarySetValue(fileDict, systemId, bonjourId);
+						SDMMD_store_dict(fileDict, path, 1);
+					}
+					CFRelease(fileDict);
+				}
+				free(path);
+				CFRelease(bonjourId);
+			}
+		}
+	}
+	return result;
 }
 
 #endif
