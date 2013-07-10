@@ -77,6 +77,10 @@ static CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type) {
 	
 }
 
+static CFMutableDictionaryRef SDMMD_create_dict() {
+	return CFDictionaryCreateMutable(NULL, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+}
+
 static void SDMMD_openSSLLockCallBack(int mode, int n, const char * file, int line) {
 	if (mode & CRYPTO_LOCK)
 		SDMMD__mutex_lock(&SDMMD_MCP->sslLocks[n]);

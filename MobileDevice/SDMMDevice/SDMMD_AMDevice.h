@@ -97,8 +97,6 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFDiction
 sdmmd_return_t SDMMD_AMDeviceStartSession(SDMMD_AMDeviceRef device);
 sdmmd_return_t SDMMD_AMDeviceStopSession(SDMMD_AMDeviceRef device);
 
-sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef service_name, CFDictionaryRef options, uint32_t *handle);
-
 uint32_t SDMMD_AMDeviceUSBDeviceID(SDMMD_AMDeviceRef device);
 uint32_t SDMMD_AMDeviceUSBLocationID(SDMMD_AMDeviceRef device);
 uint16_t SDMMD_AMDeviceUSBProductID(SDMMD_AMDeviceRef device);
@@ -114,5 +112,13 @@ CFArrayRef SDMMD_AMDCreateDeviceList();
 sdmmd_sim_return_t SDMMD_GetSIMStatusCode(SDMMD_AMDeviceRef device);
 sdmmd_activation_return_t SDMMD_GetActivationStatus(SDMMD_AMDeviceRef device);
 
+SDMMD_lockdown_conn* SDMMD_lockdown_connection_create(SDMMD_lockdown_conn *lockdown);
+sdmmd_return_t SDMMD_lockconn_enable_ssl(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostCert, CFTypeRef deviceCert, CFTypeRef hostPrivKey, uint32_t num);
+SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostCert, CFTypeRef deviceCert, CFTypeRef hostPrivKey, uint32_t num);
+sdmmd_return_t SDMMD_lockconn_send_message(SDMMD_AMDeviceRef device, CFDictionaryRef dict);
+sdmmd_return_t SDMMD_lockconn_receive_message(SDMMD_AMDeviceRef device, CFDictionaryRef *dict);
+sdmmd_return_t SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key, CFErrorRef *err);
+
+sdmmd_return_t SDMMD_lockdown_connection_destory(SDMMD_lockdown_conn *lockdownCon);
 
 #endif

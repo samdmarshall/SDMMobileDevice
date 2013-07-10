@@ -38,10 +38,8 @@ sdmmd_return_t SDMMD_StartDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDM
 		result = SDMMD_AMDeviceStartSession(device);
 		if (SDM_MD_CallSuccessful(result)) {
 			CFDictionaryRef dict = NULL;
-			*connection = SDMMD_AMDServiceConnectionCreate(kCFAllocatorDefault, device, dict);
-			uint32_t con = 0;
-			result = SDMMD_AMDeviceStartService(device, CFSTR(AMSVC_DEBUG_SERVER), NULL, &con);
-			(*connection)->ivars.socket = con;
+			*connection = SDMMD_AMDServiceConnectionCreate(0, NULL, dict);
+			result = SDMMD_AMDeviceStartService(device, CFSTR(AMSVC_DEBUG_SERVER), NULL, connection);
 		}
 	}
 	return result;

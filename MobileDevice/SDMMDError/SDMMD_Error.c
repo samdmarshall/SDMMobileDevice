@@ -81,7 +81,7 @@ sdmmd_svc_return_t SDMMD__ConvertServiceError(CFStringRef error) {
 		else if (CFStringCompare(error, CFSTR("BundleVerificationFailed"), 0) == 0) result = 0xe800003c;
 		else if (CFStringCompare(error, CFSTR("CarrierBundleCopyFailed"), 0) == 0) result = 0xe800003d;
 		else if (CFStringCompare(error, CFSTR("CarrierBundleDirectoryCreationFailed"), 0) == 0) result = 0xe800003e;
-		else if (CFStringCompare(error, CFSTR("CarrierBundleMissingSupportedSIMs"); result = 0xe800003f;
+		else if (CFStringCompare(error, CFSTR("CarrierBundleMissingSupportedSIMs"), 0) == 0) result = 0xe800003f;
 		else if (CFStringCompare(error, CFSTR("CommCenterNotificationFailed"), 0) == 0) result = 0xe8000040;
 		else if (CFStringCompare(error, CFSTR("ContainerCreationFailed"), 0) == 0) result = 0xe8000041;
 		else if (CFStringCompare(error, CFSTR("ContainerP0wnFailed"), 0) == 0) result = 0xe8000042;

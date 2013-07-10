@@ -22,6 +22,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include "SDMMD_Error.h"
 #include "SDMMD_AMDevice.h"
+#include <openssl/ssl.h>
 
 typedef struct AMConnectionClassHeader {
 	unsigned char header[16];		// AMConnectionClass CF Header 
@@ -30,13 +31,13 @@ typedef struct AMConnectionClassHeader {
 typedef struct AMConnectionClassBody {
 	uint32_t socket;			// 16
 	unsigned char unknown0[4];	// 20
-	int32_t secure_context;		// 24
+	SSL *secure_context;		// 24
 	unsigned char unknown1[4];	// 28
-	int8_t one0;				// 32
+	int8_t closeOnInvalid;		// 32
 	int8_t one1;				// 33
 	unsigned char unknown2[2];	// 34
-	int32_t device_id; 			// 36
-	unsigned char unknown3[112];// 40
+	SDMMD_AMDeviceRef device;	// 36
+	char service[128];			// 40
 } __attribute__ ((packed)) AMConnectionClassBody; // size 0x98
 
 typedef struct am_connection {
@@ -53,8 +54,15 @@ typedef struct am_connection SDMMD_AMConnectionClass;
 #pragma mark FUNCTIONS
 #pragma mark -
 
-SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, void* unknown);
-SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(uint32_t socket, SDMMD_AMDeviceRef device, CFDictionaryRef dict);
+SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, SSL* ssl);
+SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(uint32_t socket, SSL* ssl, CFDictionaryRef dict);
+
+sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef service, CFDictionaryRef options, SDMMD_AMConnectionRef *connection);
+sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStringRef service, CFDictionaryRef options, SDMMD_AMConnectionRef *connection);
+
+void SDMMD_AMDServiceConnectionSetServiceName(SDMMD_AMConnectionRef *connection, CFStringRef service);
+void SDMMD_AMDServiceConnectionSetDevice(SDMMD_AMConnectionRef *connection, SDMMD_AMDeviceRef device);
+
 sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connection);
 
 #endif

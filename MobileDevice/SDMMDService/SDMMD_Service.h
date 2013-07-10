@@ -43,6 +43,8 @@
 #define AMSVC_INSTALLATION_PROXY	"com.apple.mobile.installation_proxy"
 #define AMSVC_HOUSE_ARREST			"com.apple.mobile.house_arrest"
 
+#define AMSVC_LOCKDOWN				"com.apple.mobile.lockdown"
+
 #define AMSVC_MIS_AGENT				"com.apple.misagent"
 
 #define AMSVC_FILE_RELAY			"com.apple.mobile.file_relay"

@@ -27,5 +27,6 @@
 #include "SDMMD_USBMuxListener.h"
 #include "SDMMD_Applications.h"
 #include "SDMMD_Notification.h"
+#include "SDMMD_Debugger.h"
 
 #endif

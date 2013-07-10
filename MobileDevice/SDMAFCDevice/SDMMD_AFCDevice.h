@@ -42,7 +42,7 @@ typedef struct AFCConnectionClassBody {
 	int32_t socket0;						// 56
 	int8_t connection_active;				// 60
 	unsigned char padding0[3];				// 61		
-	int32_t status_ptr;						// 64
+	int32_t statusPtr;						// 64
 	int8_t e;								// 68
 	int32_t last_error;						// 72 last error
 	int32_t operation_count;				// 80 on sending operation is incremented
@@ -51,6 +51,9 @@ typedef struct AFCConnectionClassBody {
 	int32_t io_timeout;						// 104 set to 0x3c
 	int32_t h;								// 112 set to 0x1
 	int32_t context;						// 120
+	int32_t i;								// 124
+	int32_t j;								// 128
+	int32_t k;								// 132
 	SDMMD_AFCLockRef lock0;					// 136
 	SDMMD_AFCLockRef lock1;					// 144
 	CFMutableArrayRef operation_enqueue;	// 152

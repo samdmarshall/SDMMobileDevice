@@ -153,7 +153,7 @@ typedef enum SDMMD_LockdownError {
 sdmmd_dl_return_t SDMMD__ConvertLockdowndError(CFStringRef error);
 
 typedef enum SDMMD_ServiceError {
-	SVC_ERR_OK = 0x0;
+	SVC_ERR_OK = 0x0,
 	SVC_ERR_ApplicationAlreadyInstalled = 0xe8000036,
 	SVC_ERR_ApplicationMoveFailed = 0xe8000037,
 	SVC_ERR_ApplicationSINFCaptureFailed = 0xe8000038,
@@ -213,7 +213,7 @@ typedef enum SDMMD_ServiceError {
 	SVC_ERR_InstallProhibited = 0xe8000097,
 	SVC_ERR_UninstallProhibited = 0xe8000098,
 	SVC_ERR_MissingBundleVersion = 0xe800009c,
-};
+} SDMMD_ServiceError;
 
 #define sdmmd_svc_return_t enum SDMMD_ServiceError
 
