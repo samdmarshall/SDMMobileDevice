@@ -225,6 +225,12 @@ static char* SDMMD_AMDErrorString(uint32_t error) {
 	return SDMMD_ServiceConnectionErrorString[error+0x17ffffff];
 }
 
+static char* SDMMD_AFCConnectionErrorString[24] = {"kAFCSuccess", "kAFCUndefinedError", "kAFCBadHeaderError", "kAFCNoResourcesError", "kAFCReadError", "kAFCWriteError", "kAFCUnknownPacketError", "kAFCInvalidArgumentError", "kAFCNotFoundError", "kAFCIsDirectoryError", "kAFCPermissionError", "kAFCNotConnectedError", "kAFCTimeOutError", "kAFCOverrunError", "kAFCEOFError", "kAFCUnsupportedError", "kAFCFileExistsError", "kAFCBusyError", "kAFCNoSpaceError", "kAFCWouldBlockError", "kAFCInputOutputError", "kAFCInterruptedError", "kAFCInProgressError", "kAFCInternalError"};
+
+static char* SDMMD_AFCErrorString(uint32_t error) {
+	return SDMMD_AFCConnectionErrorString[error];
+}
+
 #define SDM_MD_CallSuccessful(result_code) ((result_code == MDERR_OK) || (result_code == MDERR_AFC_OK) || (result_code == MDERR_USBMUX_OK) || (result_code == LD_ERR_OK) || (result_code == SVC_ERR_OK))
 
 #endif
