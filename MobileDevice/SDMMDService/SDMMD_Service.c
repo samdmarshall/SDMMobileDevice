@@ -24,14 +24,18 @@
 #include <sys/types.h>
 #include <sys/select.h>
 
-int32_t CheckIfExpectingResponse(uint32_t handle, uint32_t timeout) {
+int32_t CheckIfExpectingResponse(SocketConnection handle, uint32_t timeout) {
 	fd_set fds;
 	int32_t returnValue = -1;
 	struct timeval to;
 	struct timeval *pto;
 
 	FD_ZERO(&fds);
-	FD_SET(handle, &fds);
+	if (handle.isSSL) {
+		FD_SET(handle.socket.ssl, &fds);
+	} else {
+		FD_SET(handle.socket.conn, &fds);
+	}
 
 	if (timeout > 0) {
 		to.tv_sec = (time_t) (timeout / 1000);
@@ -40,19 +44,31 @@ int32_t CheckIfExpectingResponse(uint32_t handle, uint32_t timeout) {
 	} else {
 		pto = NULL;
 	}
-	returnValue = select(handle + 1, &fds, NULL, NULL, pto);
-	
+	if (handle.isSSL) {
+		returnValue = select(handle.socket.ssl + 1, &fds, NULL, NULL, pto);
+	} else {
+		returnValue = select(handle.socket.conn + 1, &fds, NULL, NULL, pto);
+	}
 	return returnValue;
 }
 
 
-sdmmd_return_t SDMMD_ServiceSend(uint32_t handle, CFDataRef data) {
+sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 	uint32_t msgLen = (data ? CFDataGetLength(data) : 0);
 	if (msgLen) {
-	    uint32_t size = htonl((uint32_t)msgLen);
-		uint32_t result = send(handle, &size, sizeof(size), 0);
+	    uint32_t size = (handle.isSSL ? msgLen : htonl((uint32_t)msgLen));
+		uint32_t result;
+		if (handle.isSSL) {
+			result = SSL_write(handle.socket.ssl, &size, sizeof(size));
+		} else {
+			result = send(handle.socket.conn, &size, sizeof(size), 0);
+		}
 		if (result == sizeof(size)) {
-			result = send(handle, CFDataGetBytePtr(data), msgLen, 0);
+			if (handle.isSSL) {
+				result = SSL_write(handle.socket.ssl, &size, msgLen);
+			} else {
+				result = send(handle.socket.conn, CFDataGetBytePtr(data), msgLen, 0);
+			}
 			if (result == msgLen) {
 				return (result == msgLen ? MDERR_OK : MDERR_QUERY_FAILED);
 			}
@@ -62,14 +78,19 @@ sdmmd_return_t SDMMD_ServiceSend(uint32_t handle, CFDataRef data) {
 	return MDERR_OK;
 }
 
-sdmmd_return_t SDMMD_ServiceReceive(uint32_t handle, CFDataRef *data) {
+sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 	uint32_t size = (data && *data ? (uint32_t)CFDataGetLength(*data) : 0);
 	if (size) {
 		if (CheckIfExpectingResponse(handle, 1000)) {
 			unsigned char *buffer = malloc(size);
 			uint32_t remainder = size;
 			while (remainder) {
-				size_t recieved = recv(handle, &buffer[size-remainder], remainder, 0);
+				size_t recieved;
+				if (handle.isSSL) {
+					recieved = SSL_read(handle.socket.ssl, &buffer[size-remainder], remainder);
+				} else {
+					recieved = recv(handle.socket.conn, &buffer[size-remainder], remainder, 0);
+				}
 				if (!recieved)
 					break;
 				remainder -= recieved;
@@ -82,11 +103,11 @@ sdmmd_return_t SDMMD_ServiceReceive(uint32_t handle, CFDataRef *data) {
 	return MDERR_OK;
 }
 
-sdmmd_return_t SDMMD_ServiceSendMessage(uint32_t handle, CFPropertyListRef data) {
+sdmmd_return_t SDMMD_ServiceSendMessage(SocketConnection handle, CFPropertyListRef data) {
 	return ((data) ? SDMMD_ServiceSend(handle, data) : MDERR_DICT_NOT_LOADED);
 }
 
-sdmmd_return_t SDMMD_ServiceReceiveMessage(uint32_t handle, CFPropertyListRef *data) {
+sdmmd_return_t SDMMD_ServiceReceiveMessage(SocketConnection handle, CFPropertyListRef *data) {
 	CFDataRef dataBuffer = NULL;
 	if (SDM_MD_CallSuccessful(SDMMD_ServiceReceive(handle, &dataBuffer))) {
 		*data = CFPropertyListCreateWithData(0, dataBuffer, kCFPropertyListImmutable, NULL, NULL);

@@ -158,33 +158,19 @@ sdmmd_return_t SDMMD_lockconn_send_message(SDMMD_AMDeviceRef device, CFDictionar
 	sdmmd_return_t result = 0xe800002d;
 	if (device->ivars.lockdown_conn && dict) {
 		CFDataRef xml = CFPropertyListCreateXMLData(kCFAllocatorDefault, dict);
-		if (xml) {
-			uint32_t xmlLength = CFDataGetLength(xml);
-			char *xmlPtr = (char*)CFDataGetBytePtr(xml);
-			uint32_t sentLen = 0;
-			if (device->ivars.lockdown_conn->ssl)
-				sentLen = SSL_write(device->ivars.lockdown_conn->ssl, &xmlLength, 0x4);
-			else
-				sentLen = send(device->ivars.lockdown_conn->connection, &xmlLength, 0x4, 0x0);
-				
-			if (sentLen == 0x4 || (device->ivars.lockdown_conn->ssl && sentLen == 0)) {
-				if (device->ivars.lockdown_conn->ssl)
-					sentLen = SSL_write(device->ivars.lockdown_conn->ssl, &xmlPtr, xmlLength);
-				else
-					sentLen = send(device->ivars.lockdown_conn->connection, &xmlPtr, xmlLength, 0x0);
-			} else {
-				if (device->ivars.lockdown_conn->ssl) {
-					char *err = SDMMD_ssl_strerror(device->ivars.lockdown_conn->ssl, sentLen);
-					printf("SDMMD_lockconn_send_message: Could not send all 4 bytes of size %d: %s.\n",sentLen,err);
-				}
-			}
+		if (xml) {			
+			//uint32_t xmlLength = CFDataGetLength(xml);
+			//char *xmlPtr = (char*)CFDataGetBytePtr(xml);
+			//uint32_t sentLen = 0;
+			SDMMD_ServiceSendMessage((SocketConnection){device->ivars.lockdown_conn->ssl, device->ivars.lockdown_conn->connection}, xml);
 			
-			if (sentLen < xmlLength) {
-				if (device->ivars.lockdown_conn->ssl) {
-					char *err = SDMMD_ssl_strerror(device->ivars.lockdown_conn->ssl, sentLen);
-					printf("SDMMD_lockconn_send_message: Could not send message: %s.\n",err);
-				}
-			}
+			
+			/*if (device->ivars.lockdown_conn->ssl) {
+				sentLen = SSL_write(device->ivars.lockdown_conn->ssl, &xmlLength, 0x4);
+				sentLen = SSL_write(device->ivars.lockdown_conn->ssl, &xmlPtr, xmlLength);
+			} else {
+				SDMMD_ServiceSendMessage(device->ivars.lockdown_conn->connection, xml);
+			}*/
 		} else {
 			printf("SDMMD_lockconn_send_message: Could not encode message as XML.\n");
 		}
@@ -337,6 +323,10 @@ bool SDMMD_isDeviceAttached(uint32_t device_id) {
 		}
 	}
 	return result;
+}
+
+void SDMMD__PairingRecordPathForIdentifier(CFStringRef udid, char *path) {
+	
 }
 
 sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SDMMD_AMDeviceRef device, CFDictionaryRef *dict) {
@@ -807,9 +797,9 @@ CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, 
 	CFTypeRef value = NULL;
 	if (device->ivars.device_active) {
 		if (!domain)
-			domain = CFStringSetCString(domain, "NULL", 256, kCFStringEncodingUTF8);
+			domain = CFStringGetCString(domain, "NULL", 256, kCFStringEncodingUTF8);
 		if (!key)
-			key = CFStringSetCString(domain, "NULL", 256, kCFStringEncodingUTF8);
+			key = CFStringGetCString(domain, "NULL", 256, kCFStringEncodingUTF8);
 			
 		SDMMD__mutex_lock(&(device->ivars.mutex_lock));
 		CFErrorRef err;

@@ -23,6 +23,15 @@
 #include "SDMMD_Error.h"
 #include "SDMMD_Connection.h"
 
+
+typedef struct SocketConnection {
+	bool isSSL;
+	union {
+		SSL *ssl;
+		uint32_t conn;
+	} socket;
+} SocketConnection;
+
 #pragma mark -
 #pragma mark Service List
 #pragma mark -
@@ -86,9 +95,9 @@
 #pragma mark Service Command Functions
 #pragma mark -
 
-sdmmd_return_t SDMMD_ServiceSend(uint32_t handle, CFDataRef data);
-sdmmd_return_t SDMMD_ServiceReceive(uint32_t handle, CFDataRef *data);
-sdmmd_return_t SDMMD_ServiceSendMessage(uint32_t handle, CFPropertyListRef data);
-sdmmd_return_t SDMMD_ServiceReceiveMessage(uint32_t handle, CFPropertyListRef *data);
+sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data);
+sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data);
+sdmmd_return_t SDMMD_ServiceSendMessage(SocketConnection handle, CFPropertyListRef data);
+sdmmd_return_t SDMMD_ServiceReceiveMessage(SocketConnection handle, CFPropertyListRef *data);
 
 #endif

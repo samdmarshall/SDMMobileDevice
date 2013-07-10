@@ -37,10 +37,10 @@ sdmmd_return_t SDMMD_perform_command(CFSocketRef socket, CFStringRef command, vo
 			CFDictionarySetValue(dict, key, value);
 		}
 		va_end(args);
-		result = SDMMD_ServiceSendMessage(CFSocketGetNative(socket), dict);
+		result = SDMMD_ServiceSendMessage((SocketConnection){false, CFSocketGetNative(socket)}, dict);
 		if (result == 0) {
 			CFDictionaryRef response;
-			result = SDMMD_ServiceReceiveMessage(CFSocketGetNative(socket), &response);
+			result = SDMMD_ServiceReceiveMessage((SocketConnection){false, CFSocketGetNative(socket)}, &response);
 			if (result == 0) {
 				CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
 				if (error) {
