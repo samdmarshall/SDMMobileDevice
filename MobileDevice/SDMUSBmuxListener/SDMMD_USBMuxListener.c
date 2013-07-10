@@ -203,6 +203,32 @@ void SDMMD_USBMuxClose(SDMMD_USBMuxListenerRef listener) {
 	free(listener);
 }
 
+sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port, uint32_t *socketConn) {
+	sdmmd_return_t result = 0x0;
+	uint32_t sock = socket(0x1,0x1,0x0);
+	uint32_t mask = 0x10400;
+	if (setsockopt(sock, 0xffff, 0x1001, &mask, 0x4)) {
+		result = 0x1;
+	}
+	mask = 0x10400;
+	if (setsockopt(sock, 0xffff, 0x1002, &mask, 0x4)) {
+		result = 0x2;
+	}
+	mask = 0x1;
+	if (setsockopt(sock, 0xffff, 0x1022, &mask, 0x4)) {
+		result = 0x3;
+	}
+	if (!result) {
+		char *mux = "/var/run/usbmuxd";
+		struct sockaddr address;
+		address.sa_family = 0x6a01;
+		strlcpy(address.sa_data, mux, 0x68);
+		result = connect(sock, &address, 0x6a);
+		*socketConn = sock;
+	}
+	return result;
+}
+
 void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 	dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0x0), ^{
 		uint32_t sock = socket(0x1,0x1,0x0);

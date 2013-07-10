@@ -626,6 +626,55 @@ sdmmd_return_t SDMMD_AMDeviceDeactivate(SDMMD_AMDeviceRef device) {
 	return result;
 }
 
+sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, bool hasTimeout, uint32_t *socketConn, bool isSSL) {
+	sdmmd_return_t result = 0x0;
+	uint32_t sock = 0xffffffff;
+	uint32_t mask = 0x1;
+	if (device) {
+		if (socket) {
+			result = 0xe8000084;
+			if (device->ivars.device_active) {
+				if (isSSL && device->ivars.connection_type == 0) {
+					uint32_t dataLen = CFDataGetLength(device->ivars.unknown11);
+					uint32_t *address = calloc(1, dataLen); 
+					if (dataLen == 0x80) {
+						CFDataGetBytes(device->ivars.unknown11, CFRangeMake(0, dataLen), address);
+						sock = socket(0x2, 0x1, 0x0);
+						if (setsockopt(sock, 0xffff, 0x1022, &mask, 0x4)) {
+							
+						}
+						connect(sock, address, 0x10);
+					} else {
+						printf("_AMDeviceConnectByAddressAndPort: doesn't look like a sockaddr_storage.\n");
+						result = 0xe8000065;
+					}
+				} else {
+					result = SDMMD_USBMuxConnectByPort(device->ivars.device_id, port, &sock);
+					if (result) {
+						result = 0xe8000065;
+					}
+				}
+				if (setsockopt(sock, 0xffff, 0x1022, &mask, 0x4)) {
+					
+				}
+				if (setsockopt(sock, 0xffff, 0x1005, &mask, 0x10)) {
+					
+				}
+				if (setsockopt(sock, 0xffff, 0x1006, &mask, 0x10)) {
+					
+				}
+				*socketConn = sock;
+			}
+			if (sock != 0xff) {
+				if (close(sock) == 0xff) {
+					printf("_connect_to_port: close(2) on socket %d failed: %d.\n",sock,errno);
+				}
+			}
+		}
+	}
+	return result;
+}
+
 sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 	sdmmd_return_t result = 0x0;
 	uint32_t socket = 0xffffffff;
