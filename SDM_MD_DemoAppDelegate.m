@@ -19,12 +19,13 @@
 	[self.window.contentView addSubview:splitView];
 	// Insert code here to initialize your application 
 	SDMMD_MCP;
-	CFArrayRef devices = SDMMD_MCP->deviceList;
-	SDMMD_AMDeviceRef device;
+	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
 	for (uint32_t i = 0; i < CFArrayGetCount(devices); i++) {
-		device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, i);
-		sdmmd_return_t result = SDMMD_AMDeviceConnect(device);
-		printf("code: %08x %s\n",result,SDMMD_AMDErrorString(result));
+		SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, i);
+		uint32_t result = SDMMD_AMDeviceDisconnect(device);
+		printf("disconnect: %08x\n",result);
+		result = SDMMD_AMDeviceConnect(device);
+		printf("connect: %08x\n",result);
 	}
 }
 

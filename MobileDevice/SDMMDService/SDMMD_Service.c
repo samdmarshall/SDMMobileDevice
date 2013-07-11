@@ -54,19 +54,21 @@ int32_t CheckIfExpectingResponse(SocketConnection handle, uint32_t timeout) {
 sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 	uint32_t msgLen = (data ? CFDataGetLength(data) : 0);
 	if (msgLen) {
-	    uint32_t size = (handle.isSSL ? msgLen : htonl((uint32_t)msgLen));
+	    //uint32_t size = (handle.isSSL ? msgLen : htonl((uint32_t)msgLen));
 		uint32_t result;
 		if (handle.isSSL) {
 			result = SSL_write(handle.socket.ssl, &msgLen, sizeof(uint32_t));
 		} else {
 			result = send(handle.socket.conn, &msgLen, sizeof(uint32_t), 0);
 		}
+		printf("result1: %i\n",result);
 		if (result == sizeof(uint32_t)) {
 			if (handle.isSSL) {
 				result = SSL_write(handle.socket.ssl, CFDataGetBytePtr(data), msgLen);
 			} else {
 				result = send(handle.socket.conn, CFDataGetBytePtr(data), msgLen, 0);
 			}
+			printf("result2: %i\n",result);
 			if (result == msgLen) {
 				return (result == msgLen ? MDERR_OK : MDERR_QUERY_FAILED);
 			}

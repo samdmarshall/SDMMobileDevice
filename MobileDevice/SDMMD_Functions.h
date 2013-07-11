@@ -56,12 +56,12 @@ static kern_return_t sdmmd_mutex_init(pthread_mutex_t thread) {
 	return result;
 }
 
-static int SDMMD__mutex_lock(pthread_mutex_t *mutex) {
-	return pthread_mutex_lock(mutex);
+static int SDMMD__mutex_lock(pthread_mutex_t mutex) {
+	return pthread_mutex_lock(&mutex);
 }
 
-static int SDMMD__mutex_unlock(pthread_mutex_t *mutex) {
-	return pthread_mutex_unlock(mutex);
+static int SDMMD__mutex_unlock(pthread_mutex_t mutex) {
+	return pthread_mutex_unlock(&mutex);
 }
 
 static CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
@@ -132,9 +132,9 @@ static CFMutableDictionaryRef SDMMD_create_dict() {
 
 static void SDMMD_openSSLLockCallBack(int mode, int n, const char * file, int line) {
 	if (mode & CRYPTO_LOCK)
-		SDMMD__mutex_lock(&SDMMD_MCP->sslLocks[n]);
+		SDMMD__mutex_lock(SDMMD_MCP->sslLocks[n]);
 	else
-		SDMMD__mutex_unlock(&SDMMD_MCP->sslLocks[n]);
+		SDMMD__mutex_unlock(SDMMD_MCP->sslLocks[n]);
 }
 
 static unsigned long SDMMD_openSSLThreadIDCallBack() {

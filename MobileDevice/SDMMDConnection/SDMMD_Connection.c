@@ -163,7 +163,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 		if (device->ivars.device_active) {
 			if ((device->ivars.session) && (service) && (connection)) {
 				//loc_0x6e9d0;
-				SDMMD__mutex_lock(&(device->ivars.mutex_lock));
+				SDMMD__mutex_lock(device->ivars.mutex_lock);
 				bool timeoutConnection = false;
 				bool closeOnInvalidate = true;
 				bool directSocket = false;
@@ -402,7 +402,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 		}
 	}
 	if (mutexLock) {
-		SDMMD__mutex_unlock(&(device->ivars.mutex_lock));
+		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 	}
 	printf("AMDeviceSecureStartService: Returned %x starting service %s on device at port %d, out fd = %d.\n", result, cservice, port, socket);
 	free(cservice);

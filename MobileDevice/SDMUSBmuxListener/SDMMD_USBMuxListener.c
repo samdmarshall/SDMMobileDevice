@@ -213,7 +213,7 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port
 	if (setsockopt(sock, 0xffff, 0x1002, &mask, 0x4)) {
 		result = 0x2;
 	}
-	mask = 0x1;
+	mask = 0x10400;
 	if (setsockopt(sock, 0xffff, 0x1022, &mask, 0x4)) {
 		result = 0x3;
 	}
