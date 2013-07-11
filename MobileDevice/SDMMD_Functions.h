@@ -53,7 +53,6 @@ static kern_return_t sdmmd_mutex_init(pthread_mutex_t thread) {
 	return result;
 }
 
-
 static int SDMMD__mutex_lock(pthread_mutex_t *mutex) {
 	return pthread_mutex_lock(mutex);
 }

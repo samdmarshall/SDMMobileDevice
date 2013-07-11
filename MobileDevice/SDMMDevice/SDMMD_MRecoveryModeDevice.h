@@ -63,7 +63,6 @@ typedef struct am_recovery_device SDMMD_AMRecoveryModeDeviceClass;
 
 #define SDMMD_AMRecoveryModeDeviceRef SDMMD_AMRecoveryModeDeviceClass*
 
-
 #pragma mark -
 #pragma mark FUNCTIONS
 #pragma mark -
