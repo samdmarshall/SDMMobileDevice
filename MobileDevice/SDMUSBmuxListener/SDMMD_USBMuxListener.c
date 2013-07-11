@@ -223,7 +223,17 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port
 		address.sa_family = 0x6a01;
 		strlcpy(address.sa_data, mux, 0x68);
 		result = connect(sock, &address, 0x6a);
+		ioctl(sock, 0x8004667e);
 		*socketConn = sock;
+	}
+	if (*socketConn) {
+		CFMutableDictionaryRef dict = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+		CFNumberRef deviceNum = CFNumberCreate(kCFAllocatorDefault, 0x3, &device->ivars.device_id);
+		CFDictionarySetValue(dict, CFSTR("DeviceID"), deviceNum);
+		struct USBMuxPacket *connect = SDMMD_USBMuxCreatePacketType(kSDMMD_USBMuxPacketConnectType, dict);
+		SDMMD_USBMuxSend(*socketConn, connect);
+		SDMMD_USBMuxReceive(*socketConn, connect);
+		CFShow(connect->payload);
 	}
 	return result;
 }
@@ -364,7 +374,7 @@ void SDMMD_USBMuxReceive(uint32_t sock, struct USBMuxPacket *packet) {
 }
 
 struct USBMuxPacket * SDMMD_USBMuxCreatePacketType(SDMMD_USBMuxPacketMessageType type, CFDictionaryRef dict) {
-	struct USBMuxPacket *packet = (struct USBMuxPacket *)malloc(sizeof(struct USBMuxPacket));
+	struct USBMuxPacket *packet = (struct USBMuxPacket *)calloc(1, sizeof(struct USBMuxPacket));
 	if (/*type == kSDMMD_USBMuxPacketListenType || */type == kSDMMD_USBMuxPacketConnectType) {
 		packet->timeout = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*0x1e);
 	} else {
@@ -392,10 +402,12 @@ struct USBMuxPacket * SDMMD_USBMuxCreatePacketType(SDMMD_USBMuxPacketMessageType
 		CFDictionarySetValue((CFMutableDictionaryRef)packet->payload, CFSTR("PortNumber"), portNumber);
 		CFRelease(portNumber);
 	}
-	uint32_t connection = 0x0;
-	CFNumberRef connectionType = CFNumberCreate(kCFAllocatorDefault, 0x9, &connection);
-	CFDictionarySetValue((CFMutableDictionaryRef)packet->payload, CFSTR("ConnType"), connectionType);
-	CFRelease(connectionType);
+	if (type == kSDMMD_USBMuxPacketListenType) {
+		uint32_t connection = 0x0;
+		CFNumberRef connectionType = CFNumberCreate(kCFAllocatorDefault, 0x9, &connection);
+		CFDictionarySetValue((CFMutableDictionaryRef)packet->payload, CFSTR("ConnType"), connectionType);
+		CFRelease(connectionType);
+	}
 
 	CFDataRef xmlData = CFPropertyListCreateXMLData(kCFAllocatorDefault, packet->payload);
 	packet->body.length = 0x10 + CFDataGetLength(xmlData);

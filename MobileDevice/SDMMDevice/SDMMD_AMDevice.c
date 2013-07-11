@@ -29,6 +29,55 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/select.h>
+#include "CFRuntime.h"
+#include <CoreFoundation/CFBase.h>
+#include <CoreFoundation/CFString.h>
+
+static Boolean SDMMD_AMDeviceRefEqual(CFTypeRef cf1, CFTypeRef cf2) {
+    SDMMD_AMDeviceRef device1 = (SDMMD_AMDeviceRef)cf1;
+    SDMMD_AMDeviceRef device2 = (SDMMD_AMDeviceRef)cf2;
+	return (device1->ivars.device_id == device2->ivars.device_id);
+}
+
+static CFStringRef SDMMD_AMDeviceRefCopyFormattingDesc(CFTypeRef cf, CFDictionaryRef formatOpts) {
+    SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)cf;
+    return CFStringCreateWithFormat(CFGetAllocator(device), NULL, CFSTR("<SDMMD_AMDeviceRef %p>{device = %d}"), device, device->ivars.device_id);
+}
+
+static CFStringRef SDMMD_AMDeviceRefCopyDebugDesc(CFTypeRef cf) {
+    SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)cf;
+    return CFStringCreateWithFormat(CFGetAllocator(device), NULL, CFSTR("<SDMMD_AMDeviceRef %p>{device = %d}"), device, device->ivars.device_id);
+}
+
+static void SDMMD_AMDeviceRefFinalize(CFTypeRef cf) {
+    SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)cf;
+}
+
+static CFTypeID _kSDMMD_AMDeviceRefID = _kCFRuntimeNotATypeID;
+
+static CFRuntimeClass _kSDMMD_AMDeviceRefClass = {0};
+
+/* Something external to this file is assumed to call this
+ * before the EXRange class is used.
+ */
+void SDMMD_AMDeviceRefClassInitialize(void) {
+    _kSDMMD_AMDeviceRefClass.version = 0;
+    _kSDMMD_AMDeviceRefClass.className = "SDMMD_AMDeviceRef";
+    _kSDMMD_AMDeviceRefClass.init = NULL;
+    _kSDMMD_AMDeviceRefClass.copy = NULL;
+    _kSDMMD_AMDeviceRefClass.finalize = SDMMD_AMDeviceRefFinalize;
+    _kSDMMD_AMDeviceRefClass.equal = SDMMD_AMDeviceRefEqual;
+    _kSDMMD_AMDeviceRefClass.hash = NULL;
+    _kSDMMD_AMDeviceRefClass.copyFormattingDesc = SDMMD_AMDeviceRefCopyFormattingDesc;
+    _kSDMMD_AMDeviceRefClass.copyDebugDesc = SDMMD_AMDeviceRefCopyDebugDesc;
+	_kSDMMD_AMDeviceRefClass.reclaim = NULL;
+    _kSDMMD_AMDeviceRefID = _CFRuntimeRegisterClass((const CFRuntimeClass * const)&_kSDMMD_AMDeviceRefClass);
+}
+
+CFTypeID SDMMD_AMDeviceRefGetTypeID(void) {
+    return _kSDMMD_AMDeviceRefID;
+}
+
 
 SDMMD_lockdown_conn* SDMMD_lockdown_connection_create(SDMMD_lockdown_conn *lockdown) {
 	if (lockdown)
@@ -220,7 +269,11 @@ sdmmd_return_t SDMMD_lockconn_send_message(SDMMD_AMDeviceRef device, CFDictionar
 			if (useSSL)
 				conn = (SocketConnection){true, {.ssl = device->ivars.lockdown_conn->ssl}};
 			else
-				conn = (SocketConnection){false , {.conn = device->ivars.lockdown_conn->connection}};
+				conn = (SocketConnection){false, {.conn = device->ivars.lockdown_conn->connection}};
+			
+			uint32_t length = CFDataGetLength(xml);
+			CFDataRef size = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, &length, 0x4, kCFAllocatorNull);
+			SDMMD_ServiceSend(conn, size);
 			SDMMD_ServiceSendMessage(conn, xml);
 			
 			
@@ -747,8 +800,9 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 					result = 0xe800000b;
 					if (socket != 0xff) {
 						device->ivars.lockdown_conn = SDMMD_lockdown_connection_create(device->ivars.lockdown_conn);
+						device->ivars.lockdown_conn->connection = socket;
 						result = 0xe8000003;
-						if (device->ivars.lockdown_conn != 0) {
+						if (device->ivars.lockdown_conn) {
 							CFStringRef daemon = NULL;
 							status = SDMMD_copy_daemon_name(device, &daemon);
 							if (daemon) {
@@ -994,9 +1048,9 @@ CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, 
 	CFTypeRef value = NULL;
 	if (device->ivars.device_active) {
 		if (!domain)
-			CFStringGetCString(domain, "NULL", 256, kCFStringEncodingUTF8);
+			domain = CFSTR("NULL");
 		if (!key)
-			CFStringGetCString(key, "NULL", 256, kCFStringEncodingUTF8);
+			key = CFSTR("NULL");
 			
 		SDMMD__mutex_lock(&(device->ivars.mutex_lock));
 		CFErrorRef err;
@@ -1007,7 +1061,10 @@ CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, 
 }
 
 SDMMD_AMDeviceRef SDMMD_AMDeviceCreateEmpty() {
-	return (SDMMD_AMDeviceRef)malloc(sizeof(SDM_AMDeviceClass));
+	uint32_t extra = sizeof(AMDeviceClassBody);
+	SDMMD_AMDeviceRef device = calloc(0x1, sizeof(SDM_AMDeviceClass));
+	device = (SDMMD_AMDeviceRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, _kSDMMD_AMDeviceRefID, extra, NULL);//(SDMMD_AMDeviceRef)malloc(sizeof(SDM_AMDeviceClass));
+	return device;
 }
 
 SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary) {
@@ -1016,7 +1073,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 		device = SDMMD_AMDeviceCreateEmpty();
 		if (device) {
 			CFDictionaryRef properties = (CFDictionaryContainsKey(dictionary, CFSTR("Properties")) ? CFDictionaryGetValue(dictionary, CFSTR("Properties")) : dictionary);
-			
+
 			CFNumberRef deviceId = CFDictionaryGetValue(properties, CFSTR("DeviceID"));
 			CFNumberGetValue(deviceId, 0x3, &device->ivars.device_id);
 			
@@ -1044,7 +1101,6 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 			device->ivars.unknown8 = 0x0;
 			device->ivars.network_address = NULL;
 			kern_return_t result = sdmmd_mutex_init(device->ivars.mutex_lock);
-			printf("%x\n",result);
 		}
 	}
 	return device;

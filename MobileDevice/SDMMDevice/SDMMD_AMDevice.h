@@ -74,13 +74,18 @@ typedef struct sdmmd_am_device {
 	struct AMDeviceClassBody ivars;
 } __attribute__ ((packed)) sdmmd_am_device;
 
+
+CFTypeID SDMMD_AMDeviceGetTypeID(void);
+
 /* Classes */
 typedef struct sdmmd_am_device SDM_AMDeviceClass;
 
 #define SDMMD_AMDeviceRef SDM_AMDeviceClass*
 
 #pragma mark -
+void SDMMD_AMDeviceRefClassInitialize();
 
+SDMMD_AMDeviceRef SDMMD_AMDeviceCreateEmpty();
 SDMMD_AMDeviceRef SDMMD_AMDeviceCreateCopy(SDMMD_AMDeviceRef device);
 
 sdmmd_return_t SDMMD_AMDeviceActivate(SDMMD_AMDeviceRef device, CFDictionaryRef options);

@@ -25,12 +25,15 @@
 #include <openssl/err.h>
 #include <openssl/crypto.h>
 
+static SDMMobileDeviceRef controller = nil;
+static dispatch_once_t once;
+
+
 SDMMobileDeviceRef InitializeSDMMobileDevice() {
-	static SDMMobileDeviceRef controller = nil;
-	static dispatch_once_t once;
 	dispatch_once(&once, ^{
 		if (!controller) {
 			controller = (SDMMobileDeviceRef)malloc(sizeof(struct sdm_mobiledevice));
+			SDMMD_AMDeviceRefClassInitialize();
 			controller->usbmuxd = SDMMD_USBMuxCreate();
 			SDMMD_USBMuxStartListener(&controller->usbmuxd);
 			controller->deviceList = CFArrayCreate(kCFAllocatorDefault, NULL, 0, &kCFTypeArrayCallBacks);
@@ -45,8 +48,8 @@ SDMMobileDeviceRef InitializeSDMMobileDevice() {
 					for (uint32_t i = 0; i < numLocks; i++) {
 						sdmmd_mutex_init(controller->sslLocks[i]);
 					}
-					CRYPTO_set_locking_callback(SDMMD_openSSLLockCallBack);
-					CRYPTO_set_id_callback(SDMMD_openSSLThreadIDCallBack);
+					//CRYPTO_set_locking_callback(SDMMD_openSSLLockCallBack);
+					//CRYPTO_set_id_callback(SDMMD_openSSLThreadIDCallBack);
 				}
 			}
 			SDMMD_lockssl_init();

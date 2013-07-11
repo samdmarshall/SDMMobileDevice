@@ -57,13 +57,13 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 	    uint32_t size = (handle.isSSL ? msgLen : htonl((uint32_t)msgLen));
 		uint32_t result;
 		if (handle.isSSL) {
-			result = SSL_write(handle.socket.ssl, &size, sizeof(size));
+			result = SSL_write(handle.socket.ssl, &msgLen, sizeof(uint32_t));
 		} else {
-			result = send(handle.socket.conn, &size, sizeof(size), 0);
+			result = send(handle.socket.conn, &msgLen, sizeof(uint32_t), 0);
 		}
-		if (result == sizeof(size)) {
+		if (result == sizeof(uint32_t)) {
 			if (handle.isSSL) {
-				result = SSL_write(handle.socket.ssl, &size, msgLen);
+				result = SSL_write(handle.socket.ssl, CFDataGetBytePtr(data), msgLen);
 			} else {
 				result = send(handle.socket.conn, CFDataGetBytePtr(data), msgLen, 0);
 			}
