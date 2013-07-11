@@ -67,8 +67,8 @@ sdmmd_dl_return_t SDMMD__ConvertLockdowndError(CFStringRef error) {
 	return result;
 }
 
-sdmmd_svc_return_t SDMMD__ConvertServiceError(CFStringRef error) {
-	sdmmd_svc_return_t result = 0xe8000045;
+sdmmd_return_t SDMMD__ConvertServiceError(CFStringRef error) {
+	sdmmd_return_t result = 0xe8000045;
 	if (error) {
 		if (CFStringCompare(error, CFSTR("AlreadyArchived"), 0) == 0) result = 0xe800005a;
 		else if (CFStringCompare(error, CFSTR("APIInternalError"), 0) == 0) result = 0xe8000067; 
