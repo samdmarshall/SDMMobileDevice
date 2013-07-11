@@ -24,7 +24,7 @@
 #include "SDMMD_Functions.h"
 #include "SDMMD_AMDevice.h"
 
-sdmmd_return_t SDMMD_perform_command(CFSocketRef socket, CFStringRef command, void* unknown, void (*callback)(CFTypeRef , void*), void* unknown1, ...) {
+sdmmd_return_t SDMMD_perform_command(CFSocketRef socket, CFStringRef command, void* unknown, void (*callback)(CFTypeRef type, void* data), void* unknown1, ...) {
 	sdmmd_return_t result = 0x0;
 	CFMutableDictionaryRef dict = SDMMD_create_dict();
 	if (dict) {
@@ -40,7 +40,7 @@ sdmmd_return_t SDMMD_perform_command(CFSocketRef socket, CFStringRef command, vo
 		result = SDMMD_ServiceSendMessage((SocketConnection){false, {.conn = CFSocketGetNative(socket)}}, dict);
 		if (result == 0) {
 			CFDictionaryRef response;
-			result = SDMMD_ServiceReceiveMessage((SocketConnection){false, {.conn = CFSocketGetNative(socket)}}, &response);
+			result = SDMMD_ServiceReceiveMessage((SocketConnection){false, {.conn = CFSocketGetNative(socket)}}, (CFPropertyListRef*)&response);
 			if (result == 0) {
 				CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
 				if (error) {
@@ -73,7 +73,8 @@ sdmmd_return_t SDMMD_perform_command(CFSocketRef socket, CFStringRef command, vo
 
 SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, SSL *ssl) {
 	SDMMD_AMConnectionRef handle = NULL;
-	CFDictionaryRef dict = CFDictionaryCreate(kCFAllocatorDefault, CFSTR("CloseOnInvalidate"), kCFBooleanFalse, 0x1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+	CFStringRef closeInvalid = CFSTR("CloseOnInvalidate");
+	CFDictionaryRef dict = CFDictionaryCreate(kCFAllocatorDefault, (const void**)&closeInvalid, (const void**)&kCFBooleanFalse, 0x1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 	if (dict) {
 		handle = SDMMD_AMDServiceConnectionCreate(socket, ssl, dict);
 		CFRelease(dict);
@@ -270,7 +271,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 							if (enableSSL) {
 								//loc_6ee70;
 								printf("AMDeviceSecureStartService: SSL requested for service %s with device %s.\n", cservice, (device->ivars.unique_device_id ? SDMCFStringGetString(device->ivars.unique_device_id) : "device with no name"));
-								CFDictionaryRef record = NULL;
+								CFMutableDictionaryRef record = NULL;
 								if (socket != 0xff) {
 									result = 0xe8000007;
 									if (device->ivars.device_active) {
@@ -470,7 +471,7 @@ SSL* SDMMD_AMDServiceConnectionGetSecureIOContext(SDMMD_AMConnectionRef connecti
 }
 
 sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connection) {
-	
+	return 0x0;
 }
 
 

@@ -63,22 +63,26 @@ X509* SDMMD__decode_certificate(CFTypeRef cert) {
 	return result;
 }
 
-bool SDMMD__ssl_verify_callback(int value, X509_STORE_CTX *store) {
+int SDMMD__ssl_verify_callback(int value, X509_STORE_CTX *store) {
 	bool result = true;
-	X509 *cert = NULL;
+	X509 *cert, *decoded = NULL;
 	if (value || (X509_STORE_CTX_get_error(store) + 0xffffffffffffffec < 0x2)) {
 		unsigned char* var_8;
 		unsigned char* var_16;
-		if (X509_STORE_CTX_get_current_cert(store)) {
-			char* storeCert = X509_STORE_CTX_get_ex_data(store, SSL_get_ex_data_X509_STORE_CTX_idx());
-			void* data = SSL_get_ex_data(storeCert, 0x0);
-			cert = SDMMD__decode_certificate(data);
-			uint32_t data1 = i2d_X509(storeCert, NULL);
-			uint32_t data2 = i2d_X509(store, NULL);
+		cert = X509_STORE_CTX_get_current_cert(store);
+		if (cert) {
+			SSL *storeSSL = (SSL *)X509_STORE_CTX_get_ex_data(store, SSL_get_ex_data_X509_STORE_CTX_idx());
+			void* data = SSL_get_ex_data(storeSSL, 0x0);
+			decoded = SDMMD__decode_certificate(data);
+			uint32_t data1 = i2d_X509(cert, NULL);
+			uint32_t data2 = i2d_X509(decoded, NULL);
 			if (data1 == data2) {
-				i2d_X509(storeCert, &var_16);
-				i2d_X509(store, &var_8);
-				result = !memcmp(var_8, var_16, 0xffffffff);				
+				uint32_t length1 = i2d_X509(cert, &var_16);
+				uint32_t length2 = i2d_X509(decoded, &var_8);
+				if (length1 == length2)
+					result = !memcmp(var_8, var_16, length1);
+				else
+					result = false;
 			}
 			
 		} else {
@@ -92,7 +96,7 @@ bool SDMMD__ssl_verify_callback(int value, X509_STORE_CTX *store) {
 		if (var_16)
 			CRYPTO_free(var_16);
 	} else {
-		printf("_ssl_verify_callback: Error verifying cert: (%d %s).\n",store, X509_verify_cert_error_string(cert));
+		printf("_ssl_verify_callback: Error verifying cert: (%d %s).\n", value, X509_verify_cert_error_string(X509_STORE_CTX_get_error(store)));
 	}
 	return result;
 }
@@ -148,14 +152,14 @@ SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostC
 						SSL_set_verify(ssl, 0x3, SDMMD__ssl_verify_callback);
 						SSL_set_verify_depth(ssl, 0x0);
 						SSL_set_bio(ssl, bioSocket, bioSocket);
-						SSL_set_ex_data(ssl, 0x0, deviceCert);
+						SSL_set_ex_data(ssl, 0x0, (void*)deviceCert);
 						result = SSL_do_handshake(ssl);
 						if (result == 1) {
 							SSL_CTX_free(sslCTX);
 						} else {
 							uint32_t err = SSL_get_error(ssl, result);
 							if (result) {
-								char *reason = SDMMD_ssl_strerror(ssl, result);
+								char *reason = SDMMD_ssl_strerror(ssl, err);
 								printf("lockssl_handshake: SSL handshake fatal lower level error %d: %s.\n", result, reason);
 							} else {
 								char *reason = SDMMD_ssl_strerror(ssl, 0x0);
@@ -247,7 +251,7 @@ sdmmd_return_t SDMMD_lockconn_receive_message(SDMMD_AMDeviceRef device, CFDictio
 			conn = (SocketConnection){true, {.ssl = device->ivars.lockdown_conn->ssl}};
 		else
 			conn = (SocketConnection){false , {.conn = device->ivars.lockdown_conn->connection}};
-		SDMMD_ServiceReceiveMessage(conn, *dict);
+		SDMMD_ServiceReceiveMessage(conn, (CFPropertyListRef*)*dict);
 		
 	} else {
 		result = SDMMD_AMDeviceIsValid(device);
@@ -365,7 +369,7 @@ sdmmd_return_t SDMMD_copy_daemon_name(SDMMD_AMDeviceRef device, CFStringRef *nam
 sdmmd_return_t SDMMD__CopyEscrowBag(SDMMD_AMDeviceRef device, CFDataRef *bag) {
 	sdmmd_return_t result = 0xe8000007;
 	if (device) {
-		CFDictionaryRef dict;
+		CFMutableDictionaryRef dict;
 		result = SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(device, &dict);
 		if (result == 0) {
 			CFTypeRef wifiValue, bagValue;
@@ -485,7 +489,7 @@ sdmmd_return_t SDMMD_send_deactivation(SDMMD_AMDeviceRef device) {
 	return result;
 }
 
-sdmmd_return_t SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFTypeRef record, uint32_t session) {
+sdmmd_return_t SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFTypeRef record, CFTypeRef session) {
 	sdmmd_return_t result = 0xe8000007;
 	CFTypeRef var32 = NULL;
 	if (device) {
@@ -554,7 +558,7 @@ sdmmd_return_t SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFTypeRef reco
 	return result;
 }
 
-sdmmd_return_t SDMMD_send_session_stop(SDMMD_AMDeviceRef device, uint32_t session) {
+sdmmd_return_t SDMMD_send_session_stop(SDMMD_AMDeviceRef device, CFTypeRef session) {
 	sdmmd_return_t result = 0xe8000007;
 	if (device) {
 		result = 0xe800000b;
@@ -691,7 +695,7 @@ sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, b
 			if (device->ivars.device_active) {
 				if (isSSL && device->ivars.connection_type == 0) {
 					uint32_t dataLen = CFDataGetLength(device->ivars.unknown11);
-					uint32_t *address = calloc(1, dataLen); 
+					struct sockaddr *address = calloc(1, dataLen); 
 					if (dataLen == 0x80) {
 						CFDataGetBytes(device->ivars.unknown11, CFRangeMake(0, dataLen), address);
 						sock = socket(0x2, 0x1, 0x0);
@@ -792,7 +796,7 @@ sdmmd_return_t SDMMD_AMDeviceDisconnect(SDMMD_AMDeviceRef device) {
 		device->ivars.lockdown_conn = NULL;
 		if (device->ivars.session) {
 			CFRelease((CFTypeRef)(device->ivars.session));
-			device->ivars.session = NULL;
+			device->ivars.session = 0x0;
 		}
 		SDMMD__mutex_unlock(&(device->ivars.mutex_lock));
 	} else {

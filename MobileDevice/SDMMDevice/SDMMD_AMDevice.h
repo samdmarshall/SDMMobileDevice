@@ -52,7 +52,7 @@ typedef struct AMDeviceClassBody {
 	unsigned char unknown3[4];			// 44
 	SDMMD_lockdown_conn *lockdown_conn; // 48
 	unsigned char unknown4[4];			// 52
-	int32_t session;					// 56 needs to be not zero in AMDeviceSecureStartService  -- connection
+	CFTypeRef session;					// 56 needs to be not zero in AMDeviceSecureStartService  -- connection
 	int32_t padding1;					// 60
 	pthread_mutex_t mutex_lock;			// 64
 	unsigned char unknown5[60];			// 68

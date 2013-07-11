@@ -8,7 +8,7 @@
 
 #import "SDM_MD_DemoAppDelegate.h"
 #import "MDDemoMainSplitView.h"
-#import "MobileDevice/MobileDevice.h"
+#import "SDMMobileDevice/SDMMobileDevice.h"
 
 @implementation SDM_MD_DemoAppDelegate
 

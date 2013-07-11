@@ -286,7 +286,7 @@ static CFTypeRef SDMMD_AMDCopySystemBonjourUniqueID() {
 	return value;
 }
 
-static sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SDMMD_AMDeviceRef device, CFDictionaryRef *dict) {
+static sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SDMMD_AMDeviceRef device, CFMutableDictionaryRef *dict) {
 	sdmmd_return_t result = 0xe8000007;
 	if (device) {
 		if (dict) {
