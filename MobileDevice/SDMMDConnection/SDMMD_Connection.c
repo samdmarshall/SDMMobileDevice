@@ -137,7 +137,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 						if (CFEqual(bag, kCFBooleanTrue)) {
 							result = SDMMD__CopyEscrowBag(device, &escrowBag);
 							if (result) {
-								printf("AMDeviceSecureStartService: Could not get escrow keybag for device %s!\n", (device->ivars.unique_device_id ? device->ivars.unique_device_id : "device with no name"));
+								printf("AMDeviceSecureStartService: Could not get escrow keybag for device %s!\n", (device->ivars.unique_device_id ? SDMCFStringGetString(device->ivars.unique_device_id) : "device with no name"));
 								mutexLock = true;
 								//loc_6ee29;
 								ssl = NULL;
@@ -190,7 +190,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 						} else {
 							if (escrowBag) {
 								//loc_6ed6b;
-								printf("AMDeviceSecureStartService: Escrow bag mismatch for device %s!", (device->ivars.unique_device_id ? device->ivars.unique_device_id : "device with no name"));
+								printf("AMDeviceSecureStartService: Escrow bag mismatch for device %s!", (device->ivars.unique_device_id ? SDMCFStringGetString(device->ivars.unique_device_id) : "device with no name"));
 								char *path = calloc(1, sizeof(char)*0x400);
 								SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
 								CFDictionaryRef fileDict = SDMMD__CreateDictFromFileContents(path);
@@ -220,7 +220,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 							//loc_0x6ee60;
 							if (enableSSL) {
 								//loc_6ee70;
-								printf("AMDeviceSecureStartService: SSL requested for service %s with device %s.\n", cservice, (device->ivars.unique_device_id ? device->ivars.unique_device_id : "device with no name"));
+								printf("AMDeviceSecureStartService: SSL requested for service %s with device %s.\n", cservice, (device->ivars.unique_device_id ? SDMCFStringGetString(device->ivars.unique_device_id) : "device with no name"));
 								CFDictionaryRef record = NULL;
 								if (socket != 0xff) {
 									result = 0xe8000007;
@@ -239,7 +239,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 												CFTypeRef deviceCertVal = CFDictionaryGetValue(record, CFSTR("DeviceCertificate"));
 												CFTypeRef rootPrivKeyVal = CFDictionaryGetValue(record, CFSTR("RootPrivateKey"));
 												if (deviceCertVal && rootPrivKeyVal) {
-													ssl = SDMMD_lockssl_handshake(&(device->ivars.lockdown_conn), rootCertVal, deviceCertVal, rootPrivKeyVal, 0x1);
+													ssl = SDMMD_lockssl_handshake((device->ivars.lockdown_conn), rootCertVal, deviceCertVal, rootPrivKeyVal, 0x1);
 													if (ssl) {
 														result = 0x0;
 													} else {
@@ -298,7 +298,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 							}
 						} else {
 							//loc_6ed09;
-							printf("AMDeviceSecureStartService: Could not connect to \"%s\" service on port %d, device %d - %s.", cservice, port, device->ivars.device_id, device->ivars.unique_device_id);
+							printf("AMDeviceSecureStartService: Could not connect to \"%s\" service on port %d, device %d - %s.", cservice, port, device->ivars.device_id, SDMCFStringGetString(device->ivars.unique_device_id));
 							//loc_6ee29;
 							ssl = NULL;
 						}
@@ -368,15 +368,15 @@ sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef 
 			if (device->ivars.device_active) {
 				CFMutableDictionaryRef optionsCopy;
 				if (options)
-				 	optionsCopy = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, NULL, options);
+				 	optionsCopy = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0x0, options);
 				else
-					optionsCopy = CFDictionaryCreateMutable(kCFAllocatorDefault, NULL, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+					optionsCopy = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 				if (optionsCopy) {
 					CFDictionarySetValue(optionsCopy, CFSTR("CloseOnInvalidate"), kCFBooleanFalse);
 					result = SDMMD_AMDeviceSecureStartService(device, service, optionsCopy, connection);
 					if (result == 0) {
-						socket = SDMMD_AMDServiceConnectionGetSocket(connection);
-						ssl_enabled = SDMMD_AMDServiceConnectionGetSecureIOContext(connection);
+						socket = SDMMD_AMDServiceConnectionGetSocket(*connection);
+						ssl_enabled = SDMMD_AMDServiceConnectionGetSecureIOContext(*connection);
 						if (ssl_enabled) {
 							result = 0xe800007f;
 						} else {

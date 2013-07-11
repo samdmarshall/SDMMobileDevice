@@ -181,7 +181,7 @@ static void SDMMD__PairingRecordPathForIdentifier(CFStringRef udid, char *path) 
 
 static CFTypeRef SDMMD_CreateUUID() {
 	uuid_t uu;
-	char *uuid;
+	char uuid[16];
 	uuid_generate(&uu);
 	uuid_unparse(&uu, uuid);
 	return CFStringCreateWithCString(NULL, uuid, 0x8000100);
@@ -210,7 +210,7 @@ static CFTypeRef SDMMD_AMDCopySystemBonjourUniqueID() {
 	char *record;
 	bzero(record, 0x401);
 	CFTypeRef value;
-	SDMMD__PairingRecordPathForIdentifier(CFSTR("SystemConfiguration"), &record);
+	SDMMD__PairingRecordPathForIdentifier(CFSTR("SystemConfiguration"), record);
 	CFMutableDictionaryRef dict = SDMMD__CreateDictFromFileContents(record);
 	if (dict == 0) {
 		dict = SDMMD_create_dict();

@@ -66,8 +66,8 @@ bool SDMMD__ssl_verify_callback(int value, X509_STORE_CTX *store) {
 	bool result = true;
 	X509 *cert = NULL;
 	if (value || (X509_STORE_CTX_get_error(store) + 0xffffffffffffffec < 0x2)) {
-		void* var_8 = NULL;
-		void* var_16 = NULL;
+		unsigned char* var_8 = NULL;
+		unsigned char* var_16 = NULL;
 		if (X509_STORE_CTX_get_current_cert(store)) {
 			X509* storeCert = X509_STORE_CTX_get_ex_data(store, SSL_get_ex_data_X509_STORE_CTX_idx());
 			void* data = SSL_get_ex_data(storeCert, 0x0);
@@ -858,9 +858,9 @@ CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, 
 	CFTypeRef value = NULL;
 	if (device->ivars.device_active) {
 		if (!domain)
-			domain = CFStringGetCString(domain, "NULL", 256, kCFStringEncodingUTF8);
+			CFStringGetCString(domain, "NULL", 256, kCFStringEncodingUTF8);
 		if (!key)
-			key = CFStringGetCString(domain, "NULL", 256, kCFStringEncodingUTF8);
+			CFStringGetCString(key, "NULL", 256, kCFStringEncodingUTF8);
 			
 		SDMMD__mutex_lock(&(device->ivars.mutex_lock));
 		CFErrorRef err;
