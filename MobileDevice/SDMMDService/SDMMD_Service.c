@@ -31,9 +31,7 @@ int32_t CheckIfExpectingResponse(SocketConnection handle, uint32_t timeout) {
 	struct timeval *pto;
 
 	FD_ZERO(&fds);
-	if (handle.isSSL) {
-		FD_SET(handle.socket.ssl, &fds);
-	} else {
+	if (!handle.isSSL) {
 		FD_SET(handle.socket.conn, &fds);
 	}
 
@@ -44,10 +42,10 @@ int32_t CheckIfExpectingResponse(SocketConnection handle, uint32_t timeout) {
 	} else {
 		pto = NULL;
 	}
-	if (handle.isSSL) {
-		returnValue = select(handle.socket.ssl + 1, &fds, NULL, NULL, pto);
-	} else {
+	if (!handle.isSSL) {
 		returnValue = select(handle.socket.conn + 1, &fds, NULL, NULL, pto);
+	} else {
+		returnValue = 0;
 	}
 	return returnValue;
 }

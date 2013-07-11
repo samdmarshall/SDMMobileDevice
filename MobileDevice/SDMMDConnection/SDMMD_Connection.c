@@ -37,10 +37,10 @@ sdmmd_return_t SDMMD_perform_command(CFSocketRef socket, CFStringRef command, vo
 			CFDictionarySetValue(dict, key, value);
 		}
 		va_end(args);
-		result = SDMMD_ServiceSendMessage((SocketConnection){false, CFSocketGetNative(socket)}, dict);
+		result = SDMMD_ServiceSendMessage((SocketConnection){false, {.conn = CFSocketGetNative(socket)}}, dict);
 		if (result == 0) {
 			CFDictionaryRef response;
-			result = SDMMD_ServiceReceiveMessage((SocketConnection){false, CFSocketGetNative(socket)}, &response);
+			result = SDMMD_ServiceReceiveMessage((SocketConnection){false, {.conn = CFSocketGetNative(socket)}}, &response);
 			if (result == 0) {
 				CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
 				if (error) {
@@ -94,6 +94,55 @@ SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(uint32_t socket, SSL* ssl
 	}
 	return handle;
 }
+
+sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef service, CFTypeRef escrowBag, uint32_t *port, bool *enableSSL) {
+	sdmmd_return_t result = 0xe8000007;
+	if (device) {
+		result = 0xe800000b;
+		if (device->ivars.lockdown_conn) {
+			result = 0xe8000007;
+			if (service) {
+				if (port != 0 && enableSSL != 0) {
+					CFMutableDictionaryRef dict = SDMMD__CreateMessageDict(CFSTR("StartService"));
+					result = 0xe8000003;
+					if (dict) {
+						CFDictionarySetValue(dict, CFSTR("Service"), service);
+						if (escrowBag)
+							CFDictionarySetValue(dict, CFSTR("EscrowBag"), escrowBag);
+						result = SDMMD_lockconn_send_message(device, dict);
+						if (result == 0) {
+							CFDictionaryRef response;
+							result = SDMMD_lockconn_receive_message(device, &response);
+							if (result == 0) {
+								result = 0xe8000013;
+								CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
+								if (error) {
+									if (CFGetTypeID(error) == CFStringGetTypeID()) {
+										result = SDMMD__ConvertLockdowndError(error);
+									}
+								} else {
+									CFTypeRef portNumber = CFDictionaryGetValue(response, CFSTR("Port"));
+									if (portNumber) {
+										if (CFGetTypeID(portNumber) == CFNumberGetTypeID()) {
+											CFNumberGetValue(portNumber, 0x9, port);
+										}
+									}
+									CFTypeRef sslService = CFDictionaryGetValue(response, CFSTR("EnableServiceSSL"));
+									if (sslService) {
+										*enableSSL = (CFEqual(sslService, kCFBooleanTrue) ? true : false);
+									}
+									result = 0x0;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return result;
+}
+
 
 sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStringRef service, CFDictionaryRef options, SDMMD_AMConnectionRef *connection) {
     uint32_t port = 0x0;
@@ -193,7 +242,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 								printf("AMDeviceSecureStartService: Escrow bag mismatch for device %s!", (device->ivars.unique_device_id ? SDMCFStringGetString(device->ivars.unique_device_id) : "device with no name"));
 								char *path = calloc(1, sizeof(char)*0x400);
 								SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
-								CFDictionaryRef fileDict = SDMMD__CreateDictFromFileContents(path);
+								CFMutableDictionaryRef fileDict = SDMMD__CreateDictFromFileContents(path);
 								ssl = NULL;
 								if (fileDict) {
 									CFDictionaryRemoveValue(fileDict, CFSTR("EscrowBag"));
@@ -226,7 +275,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 									result = 0xe8000007;
 									if (device->ivars.device_active) {
 										//loc_0x6efb4;
-										result = SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(device->ivars.unique_device_id, &record);
+										result = SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(device, &record);
 										if (result == 0x0) {
 											//loc_6efd0;
 											CFTypeRef rootCertVal = CFDictionaryGetValue(record, CFSTR("RootCertificate"));

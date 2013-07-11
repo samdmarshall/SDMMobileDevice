@@ -20,6 +20,8 @@
 #define _SDM_MD_USBMUXLISTENER_H_
 
 #include <CoreFoundation/CoreFoundation.h>
+#include "SDMMD_Error.h"
+#include "SDMMD_AMDevice.h"
 
 #pragma mark -
 #pragma mark TYPES
@@ -99,6 +101,8 @@ typedef enum SDMMD_USBMuxResultCodeType {
 #pragma mark -
 #pragma mark Functions
 #pragma mark -
+
+sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port, uint32_t *socketConn);
 
 SDMMD_USBMuxListenerRef SDMMD_USBMuxCreate();
 void SDMMD_USBMuxClose(SDMMD_USBMuxListenerRef listener);

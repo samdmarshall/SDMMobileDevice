@@ -26,6 +26,9 @@
 #include <openssl/err.h>
 #include <stdio.h>
 #include <uuid/uuid.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 #include "SDMMD_MCP.h"
 #include "SDMMD_Error.h"
 #include "SDMMD_AMDevice.h"
@@ -59,6 +62,50 @@ static int SDMMD__mutex_lock(pthread_mutex_t *mutex) {
 
 static int SDMMD__mutex_unlock(pthread_mutex_t *mutex) {
 	return pthread_mutex_unlock(mutex);
+}
+
+static CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
+	CFMutableDictionaryRef dict = NULL;
+	if (path) {
+		struct stat pathStat;
+		uint32_t result = lstat(path, &pathStat);
+		if (result != 0xff) {
+			uint32_t ref = open(path, 0x0);
+			if (ref) {
+				struct stat fileStat;
+				result = fstat(ref, &fileStat);
+				if (result != 0xff) {
+					unsigned char *data = calloc(1, fileStat.st_size);
+					result = read(ref, data, fileStat.st_size);
+					if (result == fileStat.st_size) {
+						CFDataRef fileData = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, data, result, kCFAllocatorNull);
+						if (fileData) {
+							CFTypeRef propList = CFPropertyListCreateWithData(kCFAllocatorDefault, fileData, kCFPropertyListMutableContainersAndLeaves, NULL, NULL);
+							if (propList) {
+								if (CFGetTypeID(propList) == CFDictionaryGetTypeID()) {
+									dict = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0x0, propList);
+								} else {
+									printf("_CreateDictFromFileAtPath: Plist from file %s was not dictionary type.\n",path);
+								}	
+							} else {
+								printf("_CreateDictFromFileAtPath: Could not create plist from file %s.\n",path);
+							}
+							CFRelease(fileData);
+						}
+					} else {
+						printf("_CreateDictFromFileAtPath: Could not read contents at file %s.\n",path);
+					}
+				} else {
+					printf("_CreateDictFromFileAtPath: Could not fstat.\n");
+				}
+			} else {
+				printf("_CreateDictFromFileAtPath: Could not open file %s\n",path);
+			}
+		} else {
+			printf("_CreateDictFromFileAtPath: Could not lstat.\n");
+		}
+	}
+	return dict;
 }
 
 static CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type) {
@@ -175,14 +222,25 @@ static char* SDMCFURLGetString(CFURLRef url) {
 }
 
 static void SDMMD__PairingRecordPathForIdentifier(CFStringRef udid, char *path) {
-	
+	if (!path)
+		path = calloc(0x1, 0x1000);
+	char *udidCSTR = calloc(0x1, 0x400);
+	char *recordPath = calloc(0x1, 0x400);
+	CFStringGetCString(CFSTR("/var/db/lockdown/"), recordPath, 0x400, 0x8000100);
+	CFStringGetCString(udid, udidCSTR, 0x400, 0x8000100);
+	strcat(path, recordPath);
+	strcat(path, "/");
+	strcat(path, udidCSTR);
+	strcat(path, ".plist");
+	free(udidCSTR);
+	free(recordPath);
 }
 
 static CFTypeRef SDMMD_CreateUUID() {
 	uuid_t uu;
 	char uuid[16];
-	uuid_generate(&uu);
-	uuid_unparse(&uu, uuid);
+	uuid_generate(uu);
+	uuid_unparse(uu, uuid);
 	return CFStringCreateWithCString(NULL, uuid, 0x8000100);
 }
 
@@ -192,7 +250,7 @@ static sdmmd_return_t SDMMD_store_dict(CFDictionaryRef dict, char *path, uint32_
 	strcpy(tmp, path);
 	strcat(tmp, ".tmp");
 	unlink(tmp);
-	FILE* ref = open(tmp, 0xa01);
+	uint32_t ref = open(tmp, 0xa01);
 	if (ref) {
 		CFDataRef xml = CFPropertyListCreateXMLData(kCFAllocatorDefault, dict);
 		if (xml) {
@@ -237,7 +295,7 @@ static sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SD
 			if (bonjourId) {
 				char *path = calloc(1, sizeof(char)*0x400);
 				SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
-				CFDictionaryRef fileDict = SDMMD__CreateDictFromFileContents(path);
+				CFMutableDictionaryRef fileDict = SDMMD__CreateDictFromFileContents(path);
 				result = 0xe8000025;
 				if (fileDict) {
 					CFTypeRef systemId = CFDictionaryGetValue(fileDict, CFSTR("SystemBUID"));

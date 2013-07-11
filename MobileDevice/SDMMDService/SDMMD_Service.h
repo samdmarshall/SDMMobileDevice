@@ -23,7 +23,6 @@
 #include "SDMMD_Error.h"
 #include "SDMMD_Connection.h"
 
-
 typedef struct SocketConnection {
 	bool isSSL;
 	union {

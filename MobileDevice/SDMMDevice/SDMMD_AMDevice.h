@@ -86,13 +86,14 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateCopy(SDMMD_AMDeviceRef device);
 sdmmd_return_t SDMMD_AMDeviceActivate(SDMMD_AMDeviceRef device, CFDictionaryRef options);
 sdmmd_return_t SDMMD_AMDeviceDeactivate(SDMMD_AMDeviceRef device);
 
+sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, bool hasTimeout, uint32_t *socketConn, bool isSSL);
 sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device);
 sdmmd_return_t SDMMD_AMDeviceDisconnect(SDMMD_AMDeviceRef device);
 
 bool SDMMD_AMDeviceIsValid(SDMMD_AMDeviceRef device);
 
 bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device);
-sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFDictionaryRef record);
+sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutableDictionaryRef record);
 
 sdmmd_return_t SDMMD_AMDeviceStartSession(SDMMD_AMDeviceRef device);
 sdmmd_return_t SDMMD_AMDeviceStopSession(SDMMD_AMDeviceRef device);
@@ -112,12 +113,14 @@ CFArrayRef SDMMD_AMDCreateDeviceList();
 sdmmd_sim_return_t SDMMD_GetSIMStatusCode(SDMMD_AMDeviceRef device);
 sdmmd_activation_return_t SDMMD_GetActivationStatus(SDMMD_AMDeviceRef device);
 
+sdmmd_return_t SDMMD__CopyEscrowBag(SDMMD_AMDeviceRef device, CFDataRef *bag);
+
 SDMMD_lockdown_conn* SDMMD_lockdown_connection_create(SDMMD_lockdown_conn *lockdown);
 sdmmd_return_t SDMMD_lockconn_enable_ssl(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostCert, CFTypeRef deviceCert, CFTypeRef hostPrivKey, uint32_t num);
 SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostCert, CFTypeRef deviceCert, CFTypeRef hostPrivKey, uint32_t num);
 sdmmd_return_t SDMMD_lockconn_send_message(SDMMD_AMDeviceRef device, CFDictionaryRef dict);
 sdmmd_return_t SDMMD_lockconn_receive_message(SDMMD_AMDeviceRef device, CFDictionaryRef *dict);
-sdmmd_return_t SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key, CFErrorRef *err);
+CFTypeRef SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key, CFErrorRef *err);
 
 sdmmd_return_t SDMMD_lockdown_connection_destory(SDMMD_lockdown_conn *lockdownCon);
 
