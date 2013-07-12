@@ -23,7 +23,9 @@
 	for (uint32_t i = 0; i < CFArrayGetCount(devices); i++) {
 		SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, i);
 		uint32_t result = SDMMD_AMDeviceConnect(device);
-		printf("connect: %08x\n",result);
+		printf("connect: 0x%08x\n",result);
+		result = SDMMD_AMDeviceStartSession(device);
+		printf("start session: 0x%08x\n",result);
 	}
 }
 

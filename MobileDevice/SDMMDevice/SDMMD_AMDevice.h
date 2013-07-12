@@ -32,8 +32,8 @@
 typedef struct SDMMD_lockdown_conn {
 	uint64_t connection;			// 0
 	SSL *ssl; 						// 8
-	uint64_t unknown0;				// 16
-	uint64_t unknown1;				// 24
+	uint64_t *pointer;				// 16
+	uint64_t length;				// 24
 } __attribute__ ((packed)) SDMMD_lockdown_conn;
 
 typedef struct AMDeviceClassHeader {

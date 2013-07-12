@@ -122,7 +122,6 @@ static CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type) {
 			}
 		}
 	}
-	CFShow(dict);
 	return dict;
 	
 }
@@ -227,7 +226,7 @@ static void SDMMD__PairingRecordPathForIdentifier(CFStringRef udid, char *path) 
 		path = calloc(0x1, 0x1000);
 	char *udidCSTR = calloc(0x1, 0x400);
 	char *recordPath = calloc(0x1, 0x400);
-	CFStringGetCString(CFSTR("/var/db/lockdown/"), recordPath, 0x400, 0x8000100);
+	CFStringGetCString(CFSTR("/var/db/lockdown"), recordPath, 0x400, 0x8000100);
 	CFStringGetCString(udid, udidCSTR, 0x400, 0x8000100);
 	strcat(path, recordPath);
 	strcat(path, "/");
@@ -265,8 +264,7 @@ static sdmmd_return_t SDMMD_store_dict(CFDictionaryRef dict, char *path, uint32_
 }
 
 static CFTypeRef SDMMD_AMDCopySystemBonjourUniqueID() {
-	char *record;
-	bzero(record, 0x401);
+	char *record = calloc(0x1, 0x401);
 	CFTypeRef value;
 	SDMMD__PairingRecordPathForIdentifier(CFSTR("SystemConfiguration"), record);
 	CFMutableDictionaryRef dict = SDMMD__CreateDictFromFileContents(record);
@@ -302,12 +300,16 @@ static sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SD
 					CFTypeRef systemId = CFDictionaryGetValue(fileDict, CFSTR("SystemBUID"));
 					if (systemId) {
 						if (CFGetTypeID(systemId) == CFStringGetTypeID()) {
-							printf("SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier: Could not store pairing record at '%s'.\n",path);
-							result = 0xe800000a;
+							CFDictionarySetValue(fileDict, CFSTR("SystemBUID"), bonjourId);
+							result = SDMMD_store_dict(fileDict, path, 1);
+							if (result) {
+								printf("SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier: Could not store pairing record at '%s'.\n",path);
+								result = 0xe800000a;
+							} else {
+								CFRetain(fileDict);
+								*dict = fileDict;
+							}
 						}
-					} else {
-						CFDictionarySetValue(fileDict, systemId, bonjourId);
-						SDMMD_store_dict(fileDict, path, 1);
 					}
 					CFRelease(fileDict);
 				}

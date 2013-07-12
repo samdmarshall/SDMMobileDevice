@@ -77,32 +77,40 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 }
 
 sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
-	uint32_t size = (data && *data ? (uint32_t)CFDataGetLength(*data) : 0);
-	if (size) {
-		if (CheckIfExpectingResponse(handle, 1000)) {
-			unsigned char *buffer = malloc(size);
-			uint32_t remainder = size;
+	size_t recieved;
+	uint32_t length = 0;
+	if (CheckIfExpectingResponse(handle, 1000)) {
+		if (handle.isSSL) {
+			recieved = SSL_read(handle.socket.ssl, &length, 0x4);
+			printf("ssl %i\n",recieved);
+		} else {
+			recieved = recv(handle.socket.conn, &length, 0x4, 0);
+			printf("normal %i\n",recieved);
+		}
+		printf("length %i\n",length);
+		if (recieved == 0x4) {
+			unsigned char *buffer = calloc(0x1, length);
+			uint32_t remainder = length;
 			while (remainder) {
-				size_t recieved;
 				if (handle.isSSL) {
-					recieved = SSL_read(handle.socket.ssl, &buffer[size-remainder], remainder);
+					recieved = SSL_read(handle.socket.ssl, &buffer[length-remainder], remainder);
 				} else {
-					recieved = recv(handle.socket.conn, &buffer[size-remainder], remainder, 0);
+					recieved = recv(handle.socket.conn, &buffer[length-remainder], remainder, 0);
 				}
 				if (!recieved)
 					break;
 				remainder -= recieved;
 			}
-			*data = CFDataCreate(kCFAllocatorDefault, buffer, size);
+			*data = CFDataCreate(kCFAllocatorDefault, buffer, length);
 			free(buffer);
 		}
-		return MDERR_OK;
 	}
 	return MDERR_OK;
 }
 
 sdmmd_return_t SDMMD_ServiceSendMessage(SocketConnection handle, CFPropertyListRef data) {
-	return ((data) ? SDMMD_ServiceSend(handle, data) : MDERR_DICT_NOT_LOADED);
+	CFDataRef xmlData = CFPropertyListCreateXMLData(kCFAllocatorDefault, data);
+	return ((data) ? SDMMD_ServiceSend(handle, xmlData) : MDERR_DICT_NOT_LOADED);
 }
 
 sdmmd_return_t SDMMD_ServiceReceiveMessage(SocketConnection handle, CFPropertyListRef *data) {
