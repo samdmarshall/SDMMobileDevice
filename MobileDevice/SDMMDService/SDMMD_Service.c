@@ -88,7 +88,7 @@ sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 			printf("normal %i\n",recieved);
 		}
 		printf("length %i\n",length);
-		if (recieved == 0x4) {
+		if (sizeof(length) == 0x4) {
 			unsigned char *buffer = calloc(0x1, length);
 			uint32_t remainder = length;
 			while (remainder) {
