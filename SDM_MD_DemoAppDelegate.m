@@ -22,9 +22,7 @@
 	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
 	for (uint32_t i = 0; i < CFArrayGetCount(devices); i++) {
 		SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, i);
-		uint32_t result = SDMMD_AMDeviceDisconnect(device);
-		printf("disconnect: %08x\n",result);
-		result = SDMMD_AMDeviceConnect(device);
+		uint32_t result = SDMMD_AMDeviceConnect(device);
 		printf("connect: %08x\n",result);
 	}
 }

@@ -34,9 +34,9 @@ SDMMobileDeviceRef InitializeSDMMobileDevice() {
 		if (!controller) {
 			controller = (SDMMobileDeviceRef)malloc(sizeof(struct sdm_mobiledevice));
 			SDMMD_AMDeviceRefClassInitialize();
+			controller->deviceList = CFArrayCreate(kCFAllocatorDefault, NULL, 0, &kCFTypeArrayCallBacks);
 			controller->usbmuxd = SDMMD_USBMuxCreate();
 			SDMMD_USBMuxStartListener(&controller->usbmuxd);
-			controller->deviceList = CFArrayCreate(kCFAllocatorDefault, NULL, 0, &kCFTypeArrayCallBacks);
 			SSL_library_init();
 			ERR_load_crypto_strings();
 			SSL_load_error_strings();

@@ -122,6 +122,7 @@ static CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type) {
 			}
 		}
 	}
+	CFShow(dict);
 	return dict;
 	
 }

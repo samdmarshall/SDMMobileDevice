@@ -274,9 +274,7 @@ sdmmd_return_t SDMMD_lockconn_send_message(SDMMD_AMDeviceRef device, CFDictionar
 			//CFDataRef size = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, &length, 0x4, kCFAllocatorNull);
 			//CFShow(size);
 			//result = SDMMD_ServiceSend(conn, size);
-			printf("send to socket: %i\n",conn.socket.conn);
 			result = SDMMD_ServiceSendMessage(conn, xml);
-			printf("send data: %08x\n",result);
 			
 			/*if (device->ivars.lockdown_conn->ssl) {
 				sentLen = SSL_write(device->ivars.lockdown_conn->ssl, &xmlLength, 0x4);
@@ -388,23 +386,25 @@ sdmmd_return_t SDMMD_copy_daemon_name(SDMMD_AMDeviceRef device, CFStringRef *nam
 				CFMutableDictionaryRef queryDict = SDMMD__CreateMessageDict(CFSTR("QueryType"));
 				if (queryDict) {
 					result = SDMMD_lockconn_send_message(device, queryDict);
-					printf("send: %08x\n",result);
 					if (result == 0) {
 						result = SDMMD_lockconn_receive_message(device, &response);
-						printf("recv: %08x\n",result);
 						CFShow(response);
 						if (result == 0) {
-							CFTypeRef val = CFDictionaryGetValue(response, CFSTR("Error"));
-							if (val == NULL) {
-								val = CFDictionaryGetValue(response, CFSTR("Type"));
-								if (val) {
-									if (CFGetTypeID(val) == CFStringGetTypeID()) {
-										CFRetain(val);
-										*name = val;
+							if (response && CFDictionaryGetCount(response)) {
+								CFTypeRef val = CFDictionaryGetValue(response, CFSTR("Error"));
+								if (val == NULL) {
+									val = CFDictionaryGetValue(response, CFSTR("Type"));
+									if (val) {
+										if (CFGetTypeID(val) == CFStringGetTypeID()) {
+											CFRetain(val);
+											*name = val;
+										}
+									} else {
+										result = 0xe8000013;
 									}
-								} else {
-									result = 0xe8000013;
 								}
+							} else {
+								response = 0x0;
 							}
 						}
 					}
@@ -420,6 +420,7 @@ sdmmd_return_t SDMMD_copy_daemon_name(SDMMD_AMDeviceRef device, CFStringRef *nam
 	} else {
 		result = 0xe8000007;
 	}
+	printf("copy name result: 0x%08x\n",result);
 	return result;
 }
 
@@ -771,7 +772,7 @@ sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, b
 						result = 0xe8000065;
 					}
 				}
-				if (setsockopt(sock, 0xffff, 0x1022, &mask, 0x4)) {
+				/*if (setsockopt(sock, 0xffff, 0x1022, &mask, 0x4)) {
 					
 				}
 				mask = 0x19;
@@ -780,7 +781,7 @@ sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, b
 				}
 				if (setsockopt(sock, 0xffff, 0x1006, &mask, 0x10)) {
 					
-				}
+				}*/
 				*socketConn = sock;
 			}
 			/*if (sock != 0xff) {
@@ -802,18 +803,14 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 			SDMMD__mutex_lock(device->ivars.mutex_lock);
 			if (device->ivars.lockdown_conn == 0) {
 				uint32_t status = SDMMD__connect_to_port(device, 0x7ef2, 0x1, &socket, 0x0);
-				printf("socket! %i\n",socket);
 				if (status == 0) {
 					result = 0xe800000b;
 					if (socket != 0xff) {
 						device->ivars.lockdown_conn = SDMMD_lockdown_connection_create(socket);
-						printf("new socket %i\n",device->ivars.lockdown_conn->connection);
 						result = 0xe8000003;
 						if (device->ivars.lockdown_conn->connection) {
-							printf("getting daemon name...\n");
 							CFStringRef daemon = NULL;
 							status = SDMMD_copy_daemon_name(device, &daemon);
-							CFShow(daemon);
 							if (daemon) {
 								result = 0xe8000013;
 								if (CFStringCompare(daemon, CFSTR(AMSVC_LOCKDOWN), 0x0) != 0x0) {
@@ -823,6 +820,8 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 									SDMMD_AMDeviceDisconnect(device);
 									result = 0xe8000028;
 								}
+							} else {
+								result = status;
 							}
 						}
 					}
@@ -1086,7 +1085,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 			CFDictionaryRef properties = (CFDictionaryContainsKey(dictionary, CFSTR("Properties")) ? CFDictionaryGetValue(dictionary, CFSTR("Properties")) : dictionary);
 
 			CFNumberRef deviceId = CFDictionaryGetValue(properties, CFSTR("DeviceID"));
-			CFNumberGetValue(deviceId, 0x3, &device->ivars.device_id);
+			CFNumberGetValue(deviceId, 0x4, &device->ivars.device_id);
 			
 			CFStringRef serialNumber = CFDictionaryGetValue(properties, CFSTR("SerialNumber"));
 			device->ivars.unique_device_id = serialNumber;
@@ -1100,6 +1099,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 				
 				CFNumberRef locationId = CFDictionaryGetValue(properties, CFSTR("LocationID"));
 				CFNumberGetValue(locationId, 0x4, &device->ivars.location_id);
+				printf("testing if USB connection.\n");
 				
 			} else if (CFStringCompare(linkType, CFSTR("WiFi"), 0) == 0) {
 				device->ivars.connection_type = 0x2;

@@ -205,17 +205,20 @@ void SDMMD_USBMuxClose(SDMMD_USBMuxListenerRef listener) {
 sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port, uint32_t *socketConn) {
 	sdmmd_return_t result = 0x0;
 	uint32_t sock = socket(0x1,0x1,0x0);
-	uint32_t mask = 0x10400;
+	uint32_t mask = 0x00010400;
 	if (setsockopt(sock, 0xffff, 0x1001, &mask, 0x4)) {
 		result = 0x1;
+		printf("SDMMD_USBMuxConnectByPort: setsockopt SO_SNDBUF failed: %d - %s\\n", errno, strerror(errno));
 	}
-	mask = 0x10400;
+	mask = 0x00010400;
 	if (setsockopt(sock, 0xffff, 0x1002, &mask, 0x4)) {
 		result = 0x2;
+		printf("SDMMD_USBMuxConnectByPort: setsockopt SO_RCVBUF failed: %d - %s\\n", errno, strerror(errno));
 	}
-	mask = 0x10400;
+	mask = 0x1;
 	if (setsockopt(sock, 0xffff, 0x1022, &mask, 0x4)) {
 		result = 0x3;
+		printf("SDMMD_USBMuxConnectByPort: setsockopt SO_NOSIGPIPE failed: %d - %s\\n", errno, strerror(errno));
 	}
 	if (!result) {
 		char *mux = "/var/run/usbmuxd";
@@ -233,7 +236,6 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port
 		struct USBMuxPacket *connect = SDMMD_USBMuxCreatePacketType(kSDMMD_USBMuxPacketConnectType, dict);
 		SDMMD_USBMuxSend(*socketConn, connect);
 		SDMMD_USBMuxReceive(*socketConn, connect);
-		CFShow(connect->payload);
 	}
 	return result;
 }
@@ -245,14 +247,17 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 		uint32_t code = 0x0;
 		if (setsockopt(sock, 0xffff, 0x1001, &mask, 0x4)) {
 			code = 0x1;
+			printf("SDMMD_USBMuxStartListener: setsockopt SO_SNDBUF failed: %d - %s\\n", errno, strerror(errno));
 		}
 		mask = 0x10400;
 		if (setsockopt(sock, 0xffff, 0x1002, &mask, 0x4)) {
 			code = 0x2;
+			printf("SDMMD_USBMuxStartListener: setsockopt SO_RCVBUF failed: %d - %s\\n", errno, strerror(errno));
 		}
 		mask = 0x1;
 		if (setsockopt(sock, 0xffff, 0x1022, &mask, 0x4)) {
 			code = 0x3;
+			printf("SDMMD_USBMuxStartListener: setsockopt SO_NOSIGPIPE failed: %d - %s\\n", errno, strerror(errno));
 		}
 		if (!code) {
 			char *mux = "/var/run/usbmuxd";
@@ -397,7 +402,7 @@ struct USBMuxPacket * SDMMD_USBMuxCreatePacketType(SDMMD_USBMuxPacketMessageType
 	}
 	CFDictionarySetValue((CFMutableDictionaryRef)packet->payload, CFSTR("MessageType"), SDMMD_USBMuxPacketMessage[type]);
 	if (type == kSDMMD_USBMuxPacketConnectType) {
-		uint16_t port = htons(0x7ef2);
+		uint16_t port = 0x7ef2; //htons(0x7ef2);
 		CFNumberRef portNumber = CFNumberCreate(kCFAllocatorDefault, 0x2, &port);
 		CFDictionarySetValue((CFMutableDictionaryRef)packet->payload, CFSTR("PortNumber"), portNumber);
 		CFRelease(portNumber);
