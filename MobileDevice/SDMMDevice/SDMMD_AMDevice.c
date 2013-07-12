@@ -420,7 +420,6 @@ sdmmd_return_t SDMMD_copy_daemon_name(SDMMD_AMDeviceRef device, CFStringRef *nam
 	} else {
 		result = 0xe8000007;
 	}
-	printf("copy name result: 0x%08x\n",result);
 	return result;
 }
 

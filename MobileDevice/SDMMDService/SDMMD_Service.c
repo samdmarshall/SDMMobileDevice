@@ -61,14 +61,12 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 		} else {
 			result = send(handle.socket.conn, &msgLen, sizeof(uint32_t), 0);
 		}
-		printf("result1: %i\n",result);
 		if (result == sizeof(uint32_t)) {
 			if (handle.isSSL) {
 				result = SSL_write(handle.socket.ssl, CFDataGetBytePtr(data), msgLen);
 			} else {
 				result = send(handle.socket.conn, CFDataGetBytePtr(data), msgLen, 0);
 			}
-			printf("result2: %i\n",result);
 			if (result == msgLen) {
 				return (result == msgLen ? MDERR_OK : MDERR_QUERY_FAILED);
 			}
