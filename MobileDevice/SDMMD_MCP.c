@@ -28,7 +28,6 @@
 static SDMMobileDeviceRef controller = nil;
 static dispatch_once_t once;
 
-
 SDMMobileDeviceRef InitializeSDMMobileDevice() {
 	dispatch_once(&once, ^{
 		if (!controller) {

@@ -40,14 +40,14 @@
 	[super dealloc];
 }
 
-- (CGFloat)splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMax ofSubviewAt:(NSInteger)dividerIndex {
-	NSView *subview = [[splitView subviews] objectAtIndex:dividerIndex];
+- (CGFloat)splitView:(NSSplitView *)_splitView constrainMaxCoordinate:(CGFloat)proposedMax ofSubviewAt:(NSInteger)dividerIndex {
+	NSView *subview = [[_splitView subviews] objectAtIndex:dividerIndex];
 	CGFloat maximumSize = (dividerIndex ? 765 : 275);
 	return subview.frame.origin.x + maximumSize;
 }
 
-- (CGFloat)splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMin ofSubviewAt:(NSInteger)dividerIndex {
-	NSView *subview = [[splitView subviews] objectAtIndex:dividerIndex];
+- (CGFloat)splitView:(NSSplitView *)_splitView constrainMinCoordinate:(CGFloat)proposedMin ofSubviewAt:(NSInteger)dividerIndex {
+	NSView *subview = [[_splitView subviews] objectAtIndex:dividerIndex];
 	CGFloat minimumSize = (dividerIndex ? 690 : 200);
 	return subview.frame.origin.x + minimumSize;
 }

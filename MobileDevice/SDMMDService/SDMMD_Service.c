@@ -53,12 +53,13 @@ int32_t CheckIfExpectingResponse(SocketConnection handle, uint32_t timeout) {
 
 sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 	uint32_t msgLen = (data ? CFDataGetLength(data) : 0);
-	printf("data length: %i\n",msgLen);
 	if (msgLen) {
 	    msgLen = (handle.isSSL ? msgLen : htonl((uint32_t)msgLen));
 		uint32_t result;
 		if (handle.isSSL) {
+			msgLen = htonl(msgLen);
 			result = SSL_write(handle.socket.ssl, &msgLen, sizeof(uint32_t));
+			msgLen = ntohl(msgLen);
 		} else {
 			result = send(handle.socket.conn, &msgLen, sizeof(uint32_t), 0);
 		}
@@ -68,7 +69,6 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 			} else {
 				result = send(handle.socket.conn, CFDataGetBytePtr(data), ntohl(msgLen), 0);
 			}
-			printf("data sent: 0x%08x\n",result);
 			if (result == msgLen) {
 				return (result == msgLen ? MDERR_OK : MDERR_QUERY_FAILED);
 			}
@@ -87,8 +87,7 @@ sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 		} else {
 			recieved = recv(handle.socket.conn, &length, 0x4, 0);
 		}
-		length = (handle.isSSL ? length : ntohl(length));
-		printf("receive length: %i\n",length);
+		length = ntohl(length);
 		if (sizeof(length) == 0x4) {
 			unsigned char *buffer = calloc(0x1, length);
 			uint32_t remainder = length;

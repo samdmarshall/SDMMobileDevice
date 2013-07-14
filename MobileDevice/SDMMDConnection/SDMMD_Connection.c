@@ -112,7 +112,7 @@ sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef se
 							CFDictionarySetValue(dict, CFSTR("EscrowBag"), escrowBag);
 						result = SDMMD_lockconn_send_message(device, dict);
 						if (result == 0) {
-							CFDictionaryRef response;
+							CFMutableDictionaryRef response;
 							result = SDMMD_lockconn_receive_message(device, &response);
 							if (result == 0) {
 								result = 0xe8000013;

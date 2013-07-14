@@ -30,7 +30,9 @@
 		printf("validate: 0x%08x\n",result);
 		result = SDMMD_AMDeviceStartSession(device);
 		printf("start session: 0x%08x\n",result);
-		CFShow(SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kDeviceName)));
+		CFShow(device->ivars.session);
+		result = SDMMD_AMDeviceStopSession(device);
+		printf("stop session: 0x%08x\n",result);
 	}
 }
 

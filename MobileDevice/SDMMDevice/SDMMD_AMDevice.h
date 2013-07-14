@@ -52,7 +52,7 @@ typedef struct AMDeviceClassBody {
 	unsigned char unknown3[4];			// 44
 	SDMMD_lockdown_conn *lockdown_conn; // 48
 	unsigned char unknown4[4];			// 52
-	CFTypeRef session;					// 56 needs to be not zero in AMDeviceSecureStartService  -- connection
+	CFStringRef session;				// 56 needs to be not zero in AMDeviceSecureStartService  -- connection
 	int32_t padding1;					// 60
 	pthread_mutex_t mutex_lock;			// 64
 	unsigned char unknown5[60];			// 68
@@ -125,7 +125,7 @@ SDMMD_lockdown_conn* SDMMD_lockdown_connection_create(uint32_t socket);
 sdmmd_return_t SDMMD_lockconn_enable_ssl(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostCert, CFTypeRef deviceCert, CFTypeRef hostPrivKey, uint32_t num);
 SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostCert, CFTypeRef deviceCert, CFTypeRef hostPrivKey, uint32_t num);
 sdmmd_return_t SDMMD_lockconn_send_message(SDMMD_AMDeviceRef device, CFDictionaryRef dict);
-sdmmd_return_t SDMMD_lockconn_receive_message(SDMMD_AMDeviceRef device, CFDictionaryRef *dict);
+sdmmd_return_t SDMMD_lockconn_receive_message(SDMMD_AMDeviceRef device, CFMutableDictionaryRef *dict);
 CFTypeRef SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key, CFErrorRef *err);
 
 sdmmd_return_t SDMMD_lockdown_connection_destory(SDMMD_lockdown_conn *lockdownCon);
