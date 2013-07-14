@@ -192,9 +192,9 @@ SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostC
 						printf("_create_ssl_context: Could not create SSLv3 context.\n");
 					}
 				}
-				//RSA_free(rsa);
-				//if (cert)
-				//	X509_free(cert);
+				RSA_free(rsa);
+				if (cert)
+					X509_free(cert);
 				if (sslCTX) {
 					ssl = SSL_new(sslCTX);
 					if (ssl) {
@@ -923,7 +923,7 @@ sdmmd_return_t SDMMD_AMDeviceDisconnect(SDMMD_AMDeviceRef device) {
 		device->ivars.lockdown_conn = NULL;
 		if (device->ivars.session) {
 			CFRelease((CFTypeRef)(device->ivars.session));
-			device->ivars.session = 0x0;
+			device->ivars.session = NULL;
 		}
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 	} else {
