@@ -32,7 +32,7 @@ sdmmd_return_t SDMMD_perform_command(CFSocketRef socket, CFStringRef command, vo
 		va_list args;
 		va_start(args, unknown1);
 		CFTypeRef key, value;
-		while (key = va_arg(args, CFTypeRef)) {
+		while ((key = va_arg(args, CFTypeRef))) {
 			value = va_arg(args, CFTypeRef);
 			CFDictionarySetValue(dict, key, value);
 		}
@@ -52,7 +52,7 @@ sdmmd_return_t SDMMD_perform_command(CFSocketRef socket, CFStringRef command, vo
 						if (CFStringCompare(status, CFSTR("Complete"), 0) == 0) {
 							CFTypeRef responseValue = CFDictionaryGetValue(response, CFSTR("LookupResult"));
 							if (responseValue) {
-								&callback(responseValue, unknown1);
+								(void)&callback(responseValue, unknown1);
 							}
 						}
 					}

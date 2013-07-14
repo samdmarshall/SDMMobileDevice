@@ -39,7 +39,7 @@ SDMMobileDeviceRef InitializeSDMMobileDevice() {
 			SSL_library_init();
 			ERR_load_crypto_strings();
 			SSL_load_error_strings();
-			uint32_t result = CRYPTO_get_locking_callback();
+			/*uint32_t result = CRYPTO_get_locking_callback();
 			if (result == 0) {
 				uint32_t numLocks = CRYPTO_num_locks();
 				controller->sslLocks = calloc(numLocks, 0x40);
@@ -50,7 +50,7 @@ SDMMobileDeviceRef InitializeSDMMobileDevice() {
 					//CRYPTO_set_locking_callback(SDMMD_openSSLLockCallBack);
 					//CRYPTO_set_id_callback(SDMMD_openSSLThreadIDCallBack);
 				}
-			}
+			}*/
 			controller->peer_certificate_data_index = SDMMD_lockssl_init();
 		}
 	});

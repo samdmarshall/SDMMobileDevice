@@ -28,7 +28,7 @@
 		CFStringRef encodedPath = SDMMD_EncodeForDebuggingCommand(CFSTR(""));
 		CFStringRef containerPath = SDMMD_EncodeForDebuggingCommand(CFSTR(""));
 		sdmmd_debug_return_t dresult;
-		NSString *commandformat = [NSString stringWithFormat:@"%d,0,%@",(uint32_t)CFStringGetLength(encodedPath),encodedPath];
+		CFStringRef commandformat = (CFStringRef)[NSString stringWithFormat:@"%d,0,%@",(uint32_t)CFStringGetLength(encodedPath),encodedPath];
 		dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugA], commandformat);
 		CFShow(dresult.data);
 		dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugH], CFSTR("c0"));
