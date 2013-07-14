@@ -72,7 +72,7 @@ CFStringRef SDMMD_EncodeForDebuggingCommand(CFStringRef command) {
 
 sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, SDMMD_DebugCommandType commandType, CFStringRef encodedCommand) {
 	CFDataRef data = NULL;
-	char *commandData = malloc(sizeof(char));
+	char *commandData = calloc(1, sizeof(char));
 	uint32_t pos = 0;
 	commandData[pos++] = '$';
 	for (uint32_t i = 0; i < strlen(commandType.code); i++) {
@@ -80,12 +80,13 @@ sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, 
 		commandData = realloc(commandData, sizeof(char)*(pos+1));
 	}
 	if (encodedCommand) {
-		unsigned char *commandString = malloc(CFStringGetLength(encodedCommand));
+		unsigned char *commandString = calloc(1, CFStringGetLength(encodedCommand)+1);
 		uint32_t length = CFStringGetBytes(encodedCommand, CFRangeMake(0,CFStringGetLength(encodedCommand)), kCFStringEncodingUTF8, 0, true, commandString, CFStringGetLength(encodedCommand), NULL);
 		for (uint32_t i = 0; i < length; i++) {
 			commandData[pos++] = commandString[i];
 			commandData = realloc(commandData, sizeof(char)*(pos+1));
 		}
+		free(commandString);
 	}
 	uint32_t checksum = GenerateChecksumForData(&commandData[1], pos-1);
 	commandData = realloc(commandData, sizeof(char)*(pos+3));

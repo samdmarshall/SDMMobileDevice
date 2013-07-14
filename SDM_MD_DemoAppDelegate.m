@@ -22,7 +22,21 @@
 	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
 	for (uint32_t i = 0; i < CFArrayGetCount(devices); i++) {
 		SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, i);
-		uint32_t result = SDMMD_AMDeviceConnect(device);
+		SDMMD_AMDebugConnectionRef debugConn = NULL;
+		uint32_t result = SDMMD_StartDebuggingSessionOnDevice(device, &debugConn);
+		printf("debug start: 0x%08x\n",result);
+		CFStringRef encodedPath = SDMMD_EncodeForDebuggingCommand(CFSTR(""));
+		CFStringRef containerPath = SDMMD_EncodeForDebuggingCommand(CFSTR(""));
+		sdmmd_debug_return_t dresult;
+		NSString *commandformat = [NSString stringWithFormat:@"%d,0,%@",(uint32_t)CFStringGetLength(encodedPath),encodedPath];
+		dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugA], commandformat);
+		CFShow(dresult.data);
+		dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugH], CFSTR("c0"));
+		CFShow(dresult.data);
+		
+		result = SDMMD_StopDebuggingSessionOnDevice(device, &debugConn);
+		printf("debug stop: 0x%08x\n",result);
+		/*uint32_t result = SDMMD_AMDeviceConnect(device);
 		printf("connect: 0x%08x\n",result);
 		bool paired = SDMMD_AMDeviceIsPaired(device);
 		printf("paired status: %s\n",(paired ? "yes" : "no"));
@@ -30,9 +44,16 @@
 		printf("validate: 0x%08x\n",result);
 		result = SDMMD_AMDeviceStartSession(device);
 		printf("start session: 0x%08x\n",result);
-		CFShow(SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kDeviceName)));
+		
+		CFMutableDictionaryRef dict = NULL;
+		SDMMD_AMConnectionRef connection = SDMMD_AMDServiceConnectionCreate(0, NULL, dict);
+		result = SDMMD_AMDeviceStartService(device, CFSTR(AMSVC_SPRINGBOARD_SERVICES), NULL, connection);
+		printf("service start: 0x%08x\n",result);
+		
 		result = SDMMD_AMDeviceStopSession(device);
 		printf("stop session: 0x%08x\n",result);
+		result = SDMMD_AMDeviceDisconnect(device);
+		printf("disconnect: 0x%08x\n",result);*/
 	}
 }
 

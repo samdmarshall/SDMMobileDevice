@@ -107,9 +107,12 @@ sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 	return MDERR_OK;
 }
 
-sdmmd_return_t SDMMD_ServiceSendMessage(SocketConnection handle, CFPropertyListRef data) {
-	CFDataRef xmlData = CFPropertyListCreateXMLData(kCFAllocatorDefault, data);
-	return ((data) ? SDMMD_ServiceSend(handle, xmlData) : MDERR_DICT_NOT_LOADED);
+sdmmd_return_t SDMMD_ServiceSendMessage(SocketConnection handle, CFPropertyListRef data, CFPropertyListFormat format) {
+	CFErrorRef error;
+	CFDataRef xmlData = CFPropertyListCreateData(kCFAllocatorDefault, data, format, 0, &error);
+	sdmmd_return_t result = ((data) ? SDMMD_ServiceSend(handle, xmlData) : MDERR_DICT_NOT_LOADED);
+	CFRelease(xmlData);
+	return result;
 }
 
 sdmmd_return_t SDMMD_ServiceReceiveMessage(SocketConnection handle, CFPropertyListRef *data) {

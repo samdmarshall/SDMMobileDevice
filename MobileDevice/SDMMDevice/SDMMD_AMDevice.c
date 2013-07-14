@@ -156,8 +156,8 @@ int SDMMD__ssl_verify_callback(int value, X509_STORE_CTX *store) {
 }
 
 SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostCert, CFTypeRef deviceCert, CFTypeRef hostPrivKey, uint32_t num) {
-	SSL *ssl;
-	SSL_CTX *sslCTX;
+	SSL *ssl = NULL;
+	SSL_CTX *sslCTX = NULL;
 	sdmmd_return_t result = 0x0;
 	BIO_METHOD *bioMethod = BIO_s_socket();
 	BIO *bioSocket = BIO_new(bioMethod);
@@ -279,7 +279,7 @@ sdmmd_return_t SDMMD_lockconn_send_message(SDMMD_AMDeviceRef device, CFDictionar
 			//CFDataRef size = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, &length, 0x4, kCFAllocatorNull);
 			//CFShowsize);
 			//result = SDMMD_ServiceSend(conn, size);
-			SDMMD_ServiceSendMessage(conn, dict);
+			SDMMD_ServiceSendMessage(conn, dict, kCFPropertyListXMLFormat_v1_0);
 			/*if (device->ivars.lockdown_conn->ssl) {
 				sentLen = SSL_write(device->ivars.lockdown_conn->ssl, &xmlLength, 0x4);
 				sentLen = SSL_write(device->ivars.lockdown_conn->ssl, &xmlPtr, xmlLength);
@@ -347,6 +347,7 @@ CFTypeRef SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain
 					CFDictionarySetValue(getVal, CFSTR("Key"), key);
 				
 				result = SDMMD_lockconn_send_message(device, getVal);
+				CFRelease(getVal);
 				if (result == 0x0) {
 					result = SDMMD_lockconn_receive_message(device, &response);
 					if (result == 0x0) {
@@ -408,6 +409,7 @@ sdmmd_return_t SDMMD_send_validate_pair(SDMMD_AMDeviceRef device, CFStringRef ho
 					if (host) {
 						CFDictionarySetValue(dict, CFSTR("PairRecord"), host);
 						result = SDMMD_lockconn_send_message(device, dict);
+						CFRelease(host);
 						if (result == 0x0) {
 							CFMutableDictionaryRef response;
 							result = SDMMD_lockconn_receive_message(device, &response);
@@ -425,6 +427,7 @@ sdmmd_return_t SDMMD_send_validate_pair(SDMMD_AMDeviceRef device, CFStringRef ho
 							} 
 						}
 					}
+					CFRelease(dict);
 				} else {
 					result = 0xe8000003;
 				}
@@ -442,13 +445,14 @@ sdmmd_return_t SDMMD_send_validate_pair(SDMMD_AMDeviceRef device, CFStringRef ho
 
 sdmmd_return_t SDMMD_copy_daemon_name(SDMMD_AMDeviceRef device, CFStringRef *name) {
 	sdmmd_return_t result = 0;
-	CFMutableDictionaryRef response = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+	CFMutableDictionaryRef response = NULL;
 	if (device) {
 		if (device->ivars.lockdown_conn->connection) {
 			if (name) {
 				CFMutableDictionaryRef queryDict = SDMMD__CreateMessageDict(CFSTR("QueryType"));
 				if (queryDict) {
 					result = SDMMD_lockconn_send_message(device, queryDict);
+					CFRelease(queryDict);
 					if (result == 0) {
 						result = SDMMD_lockconn_receive_message(device, &response);
 						if (result == 0) {
@@ -492,13 +496,15 @@ sdmmd_return_t SDMMD__CopyEscrowBag(SDMMD_AMDeviceRef device, CFDataRef *bag) {
 		CFMutableDictionaryRef dict;
 		result = SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(device, &dict);
 		if (result == 0) {
-			CFTypeRef wifiValue, bagValue;
+			CFTypeRef wifiValue = NULL, bagValue;
 			if (!CFDictionaryContainsKey(dict, CFSTR("WiFiMACAddress"))) {
 				wifiValue = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR("WiFiMACAddress"));
 				if (CFGetTypeID(wifiValue) == CFStringGetTypeID()) {
 					CFDictionarySetValue(dict, CFSTR("WiFiMACAddress"), wifiValue);
 				}
 			}
+			if (wifiValue)
+				CFRelease(wifiValue);
 			bagValue = CFDictionaryGetValue(dict, CFSTR("EscrowBag"));
 			if (bagValue) {
 				if (CFGetTypeID(bagValue) == CFDataGetTypeID()) {
@@ -536,6 +542,7 @@ bool SDMMD_isDeviceAttached(uint32_t device_id) {
 				}
 			}
 		}
+		CFRelease(devices);
 	}
 	return result;
 }
@@ -628,6 +635,7 @@ sdmmd_return_t SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFDictionaryRe
 						//if (bonjourId)
 						//	 CFDictionarySetValue(message, CFSTR("HostID"), bonjourId);
 						result = SDMMD_lockconn_send_message(device, message);
+						CFRelease(message);
 						if (result == 0) {
 							CFMutableDictionaryRef recvDict;
 							result = SDMMD_lockconn_receive_message(device, &recvDict);
@@ -654,12 +662,12 @@ sdmmd_return_t SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFDictionaryRe
 													SDMMD_AMDeviceConnect(device);
 													result = 0xe8000013;
 												}
-												if (sessionId)
-													CFRelease(sessionId);													
 											} else {
+												CFRetain(sessionId);
 												*session = sessionId;
 											}
 										}
+										CFRelease(sessionId);
 									}
 								} else {
 									result = 0xe8000013;
@@ -668,6 +676,7 @@ sdmmd_return_t SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFDictionaryRe
 									}
 								}
 							}
+							CFRelease(recvDict);
 						}
 					}
 				}
@@ -694,6 +703,7 @@ sdmmd_return_t SDMMD_send_session_stop(SDMMD_AMDeviceRef device, CFTypeRef sessi
 				if (dict) {
 					CFDictionarySetValue(dict, CFSTR("SessionID"), session);
 					result = SDMMD_lockconn_send_message(device, dict);
+					CFRelease(dict);
 					if (result == 0) {
 						result = SDMMD_lockconn_receive_message(device, &response);
 						if (result == 0) {
@@ -964,6 +974,7 @@ sdmmd_return_t SDMMD_AMDeviceValidatePairing(SDMMD_AMDeviceRef device) {
 				} else {
 					result = 0xe800005c;
 				}
+				CFRelease(dict);
 			} else {
 				result = 0xe8000025;
 			}

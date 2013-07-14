@@ -233,9 +233,11 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port
 		CFMutableDictionaryRef dict = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 		CFNumberRef deviceNum = CFNumberCreate(kCFAllocatorDefault, 0x3, &device->ivars.device_id);
 		CFDictionarySetValue(dict, CFSTR("DeviceID"), deviceNum);
+		CFRelease(deviceNum);
 		struct USBMuxPacket *connect = SDMMD_USBMuxCreatePacketType(kSDMMD_USBMuxPacketConnectType, dict);
 		SDMMD_USBMuxSend(*socketConn, connect);
 		SDMMD_USBMuxReceive(*socketConn, connect);
+		CFRelease(dict);
 	}
 	return result;
 }
