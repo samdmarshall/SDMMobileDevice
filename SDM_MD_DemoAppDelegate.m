@@ -25,14 +25,14 @@
 		SDMMD_AMDebugConnectionRef debugConn = NULL;
 		uint32_t result = SDMMD_StartDebuggingSessionOnDevice(device, &debugConn);
 		printf("debug start: 0x%08x\n",result);
-		CFStringRef encodedPath = SDMMD_EncodeForDebuggingCommand(CFSTR(""));
+		/*CFStringRef encodedPath = SDMMD_EncodeForDebuggingCommand(CFSTR(""));
 		CFStringRef containerPath = SDMMD_EncodeForDebuggingCommand(CFSTR(""));
 		sdmmd_debug_return_t dresult;
 		CFStringRef commandformat = (CFStringRef)[NSString stringWithFormat:@"%d,0,%@",(uint32_t)CFStringGetLength(encodedPath),encodedPath];
 		dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugA], commandformat);
 		CFShow(dresult.data);
 		dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugH], CFSTR("c0"));
-		CFShow(dresult.data);
+		CFShow(dresult.data);*/
 		
 		result = SDMMD_StopDebuggingSessionOnDevice(device, &debugConn);
 		printf("debug stop: 0x%08x\n",result);

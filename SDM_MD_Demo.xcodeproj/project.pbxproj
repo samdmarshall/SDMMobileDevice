@@ -10,8 +10,7 @@
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		2215A84017500DE700AD1981 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A83F17500DE700AD1981 /* CoreFoundation.framework */; };
 		2215A87217500F2000AD1981 /* SDMMobileDevice.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A83717500DDC00AD1981 /* SDMMobileDevice.framework */; };
-		2215AB2C1751876900AD1981 /* MobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A84517500E0100AD1981 /* MobileDevice.framework */; };
-		2215AC0F17526F7900AD1981 /* SDMMobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A83717500DDC00AD1981 /* SDMMobileDevice.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		2215AC0F17526F7900AD1981 /* SDMMobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A83717500DDC00AD1981 /* SDMMobileDevice.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		225ACB46175FBFA300A47071 /* SDMMD_Debugger.h in Headers */ = {isa = PBXBuildFile; fileRef = 225ACB44175FBFA300A47071 /* SDMMD_Debugger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		225ACB47175FBFA300A47071 /* SDMMD_Debugger.c in Sources */ = {isa = PBXBuildFile; fileRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */; };
 		225AD7321765FE7700A47071 /* SDMMD_USBMuxListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 225AD7301765FE7700A47071 /* SDMMD_USBMuxListener.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -160,7 +159,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2215AC0F17526F7900AD1981 /* SDMMobileDevice.framework in Frameworks */,
-				2215AB2C1751876900AD1981 /* MobileDevice.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
