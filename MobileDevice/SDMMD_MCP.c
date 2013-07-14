@@ -52,7 +52,7 @@ SDMMobileDeviceRef InitializeSDMMobileDevice() {
 					//CRYPTO_set_id_callback(SDMMD_openSSLThreadIDCallBack);
 				}
 			}
-			SDMMD_lockssl_init();
+			controller->peer_certificate_data_index = SDMMD_lockssl_init();
 		}
 	});
 	return controller;

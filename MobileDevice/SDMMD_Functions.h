@@ -112,7 +112,7 @@ static CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type) {
 	CFMutableDictionaryRef dict = CFDictionaryCreateMutable(NULL, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 	if (dict) {
 		CFDictionarySetValue(dict, CFSTR("Request"), type);
-		CFDictionarySetValue(dict, CFSTR("ProtocolVersion"), CFSTR("2"));
+		//CFDictionarySetValue(dict, CFSTR("ProtocolVersion"), CFSTR("2"));
 		char *appName = (char *)getprogname();
 		if (appName) {
 			CFStringRef name = CFStringCreateWithCString(kCFAllocatorDefault, appName, 0x8000100);

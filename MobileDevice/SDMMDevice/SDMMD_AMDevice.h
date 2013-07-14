@@ -96,6 +96,7 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device);
 sdmmd_return_t SDMMD_AMDeviceDisconnect(SDMMD_AMDeviceRef device);
 
 bool SDMMD_AMDeviceIsValid(SDMMD_AMDeviceRef device);
+sdmmd_return_t SDMMD_AMDeviceValidatePairing(SDMMD_AMDeviceRef device);
 
 bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device);
 sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutableDictionaryRef record);

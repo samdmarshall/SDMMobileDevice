@@ -43,7 +43,7 @@ int32_t CheckIfExpectingResponse(SocketConnection handle, uint32_t timeout) {
 		pto = NULL;
 	}
 	if (!handle.isSSL) {
-		returnValue = select(handle.socket.conn + 1, &fds, NULL, NULL, pto);
+		returnValue = select(handle.socket.conn + 1, &fds, 0x0, 0x0, pto);
 	} else {
 		returnValue = 0;
 	}
@@ -53,8 +53,9 @@ int32_t CheckIfExpectingResponse(SocketConnection handle, uint32_t timeout) {
 
 sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 	uint32_t msgLen = (data ? CFDataGetLength(data) : 0);
+	printf("data length: %i\n",msgLen);
 	if (msgLen) {
-	    //uint32_t size = (handle.isSSL ? msgLen : htonl((uint32_t)msgLen));
+	    msgLen = (handle.isSSL ? msgLen : htonl((uint32_t)msgLen));
 		uint32_t result;
 		if (handle.isSSL) {
 			result = SSL_write(handle.socket.ssl, &msgLen, sizeof(uint32_t));
@@ -65,8 +66,9 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 			if (handle.isSSL) {
 				result = SSL_write(handle.socket.ssl, CFDataGetBytePtr(data), msgLen);
 			} else {
-				result = send(handle.socket.conn, CFDataGetBytePtr(data), msgLen, 0);
+				result = send(handle.socket.conn, CFDataGetBytePtr(data), ntohl(msgLen), 0);
 			}
+			printf("data sent: 0x%08x\n",result);
 			if (result == msgLen) {
 				return (result == msgLen ? MDERR_OK : MDERR_QUERY_FAILED);
 			}
@@ -79,15 +81,14 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 	size_t recieved;
 	uint32_t length = 0;
-	if (CheckIfExpectingResponse(handle, 1000)) {
+	if (CheckIfExpectingResponse(handle, 10000)) {
 		if (handle.isSSL) {
 			recieved = SSL_read(handle.socket.ssl, &length, 0x4);
-			printf("ssl %i\n",recieved);
 		} else {
 			recieved = recv(handle.socket.conn, &length, 0x4, 0);
-			printf("normal %i\n",recieved);
 		}
-		printf("length %i\n",length);
+		length = (handle.isSSL ? length : ntohl(length));
+		printf("receive length: %i\n",length);
 		if (sizeof(length) == 0x4) {
 			unsigned char *buffer = calloc(0x1, length);
 			uint32_t remainder = length;
@@ -116,7 +117,11 @@ sdmmd_return_t SDMMD_ServiceSendMessage(SocketConnection handle, CFPropertyListR
 sdmmd_return_t SDMMD_ServiceReceiveMessage(SocketConnection handle, CFPropertyListRef *data) {
 	CFDataRef dataBuffer = NULL;
 	if (SDM_MD_CallSuccessful(SDMMD_ServiceReceive(handle, &dataBuffer))) {
-		*data = CFPropertyListCreateWithData(0, dataBuffer, kCFPropertyListImmutable, NULL, NULL);
+		if (dataBuffer && CFDataGetLength(dataBuffer)) {
+			*data = CFPropertyListCreateWithData(0, dataBuffer, kCFPropertyListImmutable, NULL, NULL);
+		} else {
+			*data = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+		}
 		return MDERR_OK;
 	} else {
 		return MDERR_QUERY_FAILED;

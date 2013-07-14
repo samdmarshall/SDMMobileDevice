@@ -24,8 +24,13 @@
 		SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, i);
 		uint32_t result = SDMMD_AMDeviceConnect(device);
 		printf("connect: 0x%08x\n",result);
+		bool paired = SDMMD_AMDeviceIsPaired(device);
+		printf("paired status: %s\n",(paired ? "yes" : "no"));
+		result = SDMMD_AMDeviceValidatePairing(device);
+		printf("validate: 0x%08x\n",result);
 		result = SDMMD_AMDeviceStartSession(device);
 		printf("start session: 0x%08x\n",result);
+		CFShow(SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kDeviceName)));
 	}
 }
 
