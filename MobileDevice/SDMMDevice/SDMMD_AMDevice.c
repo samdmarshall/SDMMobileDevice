@@ -333,7 +333,7 @@ sdmmd_return_t SDMMD_lockconn_receive_message(SDMMD_AMDeviceRef device, CFMutabl
 	return result;
 }
 
-CFTypeRef SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key, CFErrorRef *err) {
+CFTypeRef SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key, CFStringRef *err) {
 	CFTypeRef value = NULL;
 	sdmmd_return_t result = 0x0;
 	if (device) {
@@ -341,19 +341,19 @@ CFTypeRef SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain
 			CFMutableDictionaryRef getVal = SDMMD__CreateMessageDict(CFSTR("GetValue"));
 			if (getVal) {
 				CFMutableDictionaryRef response;
-				if (domain)
+				if (CFStringCompare(domain, CFSTR("NULL"), 0) != 0)
 					CFDictionarySetValue(getVal, CFSTR("Domain"), domain);
-				if (key)
+				if (CFStringCompare(key, CFSTR("NULL"), 0) != 0)
 					CFDictionarySetValue(getVal, CFSTR("Key"), key);
-					
+				
 				result = SDMMD_lockconn_send_message(device, getVal);
 				if (result == 0x0) {
 					result = SDMMD_lockconn_receive_message(device, &response);
 					if (result == 0x0) {
-						CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
-						if (error) {
-							if (CFGetTypeID(error) == CFStringGetTypeID())
-								result = SDMMD__ConvertLockdowndError(error);
+						*err = CFDictionaryGetValue(response, CFSTR("Error"));
+						if (*err) {
+							if (CFGetTypeID(*err) == CFStringGetTypeID())
+								result = SDMMD__ConvertLockdowndError(*err);
 							else
 								result = 0xe8000013;
 						} else {
@@ -1158,7 +1158,7 @@ CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, 
 			key = CFSTR("NULL");
 			
 		SDMMD__mutex_lock(device->ivars.mutex_lock);
-		CFErrorRef err;
+		CFStringRef err;
 		value = SDMMD_copy_lockdown_value(device, domain, key, &err);
 		if (err) {
 			CFShow(err);
