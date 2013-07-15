@@ -38,7 +38,7 @@ SDMMobileDevice is an OS X framework and can be used in two ways:
 1. [Bundled Framework](#bundled-framework)
 2. [Source Code](#source-code)
 
-**Special Note: [Entitlements](#entitlements)**
+**Special Note: [Entitlements](#entitlements-where-applicable)**
 
 
 
