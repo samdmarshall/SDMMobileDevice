@@ -17,7 +17,16 @@ _SDMMobileDevice is a framework that can be used interchangeably with Apple's pr
 ***
 
 ### What can this project do for me?
-This framework gives access to a number of technologies that have previously been "off limits" to developers. Due to being a private and undocumented API, MobileDevice.framework has not been something that can be safely interacted with.
+This framework gives access to a number of technologies that have previously been "off limits" to developers. Due to being a private and undocumented API, MobileDevice.framework has not been something that can be safely interacted with. This framework provides access to:
+
+1. Detecting attached iOS devices
+2. Querying iOS devices for software and hardware configurations
+3. Communication with device services
+4. Sandbox access to applications installed on iOS devices
+5. Installation of applications onto iOS devices
+6. File transfers
+
+
 
 ***
 
@@ -26,6 +35,10 @@ SDMMobileDevice is an OS X framework and can be used in two ways:
 
 1. [Bundled Framework](#bundled-framework)
 2. [Source Code](#source-code)
+
+**Special Note: [Entitlements](#Entitlements)**
+
+
 
 #### Bundled Framework
 You are already almost done!
@@ -42,3 +55,9 @@ If you wish you use this as source code, it will require the following libraries
 * libssl.dylib
 
 If you have trouble locating any of these, please look at the "-Framework" xcode project file to get the paths for these libraries.
+
+
+#### Entitlements
+This framework will require entitlements to access the following locations:  
+`/var/run/usbmuxd` (read/write access to this file)  
+`/var/db/lockdown/` (read/write access to this directory)
