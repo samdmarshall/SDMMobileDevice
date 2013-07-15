@@ -1273,6 +1273,68 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateCopy(SDMMD_AMDeviceRef device) {
 	return copy;
 }
 
+sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef dict, void* three, void* four) {
+	sdmmd_return_t result = 0xe800002f;
+	if (dict) {
+		CFTypeRef imageType = CFDictionaryGetValue(dict, CFSTR("ImageType"));
+		if (imageType) {
+			CFTypeRef signature = CFDictionaryGetValue(dict, CFSTR("ImageSignature"));
+			char *cpath = calloc(1, 0x401);
+			Boolean pathCopy = CFStringGetCString(path, cpath, 0x400, 0x8000100);
+			if (pathCopy) {
+				char thing;
+				result = SDMMD_AMDeviceDigestFile(cpath, 0x0, &thing);
+				if (result == 0) {
+					SDMMD_AMDeviceRef deviceCopy = SDMMD_AMDeviceCreateCopy(device);
+					result = 0xe8000001;
+					if (deviceCopy) {
+						SDMMD_AMConnectionRef connection = NULL;
+						result = SDMMD_AMDeviceSecureStartSessionedService(device, CFSTR(AMSVC_DEBUG_IMAGE_MOUNT), &connection);
+						if (result == 0) {
+							SDMMD_fire_callback(three, four, CFSTR("LookingUpImage"));							
+							if (connection) {
+								CFMutableDictionaryRef commandDict = SDMMD_create_dict();
+								if (commandDict) {
+									CFDictionarySetValue(commandDict, CFSTR("Command"), CFSTR("LookupImage"));
+									CFDictionarySetValue(commandDict, CFSTR("ImageType"), imageType);
+									result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(connection), commandDict, kCFPropertyListXMLFormat_v1_0);
+									if (result == 0) {
+										CFDictionaryRef response;
+										result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&response);
+										if (result == 0) {
+											CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
+											if (error) {
+												// convert error
+											} else {
+												CFTypeRef image = CFDictionaryGetValue(response, CFSTR("ImagePresent"));
+												if (image) {
+													
+												}
+											}
+										}
+									}
+								} else {
+									result = 0xe8000003;
+								}
+							} else {
+								result = 0xe8000007;
+							}
+						}
+					}
+				} else {
+					printf("SDMMD_AMDeviceMountImage: Could not digest %s\n",cpath);
+					result = 0xe8000031;
+				}
+			} else {
+				result = 0xe8000007;
+			}
+		} else {
+			result = 0xe8000030;
+		}
+	}
+	return result;
+}
+
 sdmmd_sim_return_t SDMMD_GetSIMStatusCode(SDMMD_AMDeviceRef device) {
 	sdmmd_sim_return_t result = KnownSIMCodes[0];
 	CFStringRef deviceSIMStatus = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kSIMStatus));

@@ -85,7 +85,7 @@ SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, SSL *ssl) 
 SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(uint32_t socket, SSL* ssl, CFDictionaryRef dict) {
 	SDMMD_AMConnectionRef handle = calloc(0x1, sizeof(SDMMD_AMConnectionClass));
 	handle->ivars.socket = socket;
-	handle->ivars.secure_context = ssl;
+	handle->ivars.ssl = ssl;
 	handle->ivars.closeOnInvalid = true;
 	handle->ivars.one1 = 0x1;
 	if (dict) {
@@ -470,13 +470,31 @@ uint32_t SDMMD_AMDServiceConnectionGetSocket(SDMMD_AMConnectionRef connection) {
 }
 
 SSL* SDMMD_AMDServiceConnectionGetSecureIOContext(SDMMD_AMConnectionRef connection) {
-	return connection->ivars.secure_context;
+	return connection->ivars.ssl;
 }
 
 sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connection) {
 	return 0x0;
 }
 
+sdmmd_return_t SDMMD_AMDeviceSecureStartSessionedService(SDMMD_AMDeviceRef device, CFStringRef service, SDMMD_AMConnectionRef *connection) {
+	sdmmd_return_t result = 0x0;
+	if (device) {
+		result = SDMMD_AMDeviceConnect(device);
+		if (result == 0) {
+			result = SDMMD_AMDeviceStartSession(device);
+			if (result == 0) {
+				result = SDMMD_AMDeviceSecureStartService(device, service, NULL, connection);
+				if (result) {
+					printf("SDMMD_AMDeviceSecureStartSessionedService: Could not start service %s for device %i.\n", SDMCFStringGetString(service), device->ivars.device_id);
+				}
+				result = SDMMD_AMDeviceStopSession(device);
+			}
+			result = SDMMD_AMDeviceDisconnect(device);
+		}
+	}
+	return result;
+}
 
 #endif
 

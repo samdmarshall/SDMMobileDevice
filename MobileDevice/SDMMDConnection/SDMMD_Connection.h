@@ -31,7 +31,7 @@ typedef struct AMConnectionClassHeader {
 typedef struct AMConnectionClassBody {
 	uint32_t socket;			// 16
 	unsigned char unknown0[4];	// 20
-	SSL *secure_context;		// 24
+	SSL *ssl;					// 24
 	unsigned char unknown1[4];	// 28
 	int8_t closeOnInvalid;		// 32
 	int8_t one1;				// 33
@@ -67,5 +67,7 @@ uint32_t SDMMD_AMDServiceConnectionGetSocket(SDMMD_AMConnectionRef connection);
 SSL* SDMMD_AMDServiceConnectionGetSecureIOContext(SDMMD_AMConnectionRef connection);
 
 sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connection);
+
+sdmmd_return_t SDMMD_AMDeviceSecureStartSessionedService(SDMMD_AMDeviceRef device, CFStringRef service, SDMMD_AMConnectionRef *connection);
 
 #endif
