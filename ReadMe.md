@@ -12,7 +12,7 @@ SDMMobileDevice
 ### What is this?
 SDMMobileDevice is a framework that enables access to communicating with iOS devices. 
 
-* SDMMobileDevice is a framework that can be used interchangeably with Apple's private framework MobileDevice.framework
+_SDMMobileDevice is a framework that can be used interchangeably with Apple's private framework MobileDevice.framework_
 
 ***
 
@@ -32,7 +32,7 @@ You are already almost done!
 
 1. Add the SDMMobileDevice-Framework.xcodeproj file into your existing Xcode project or workspace. 
 2. Add it as a dependency and link against it.
-3. Add #import <SDMMobileDevice/SDMMobileDevice.h> to your source code
+3. Add `#import <SDMMobileDevice/SDMMobileDevice.h>` to your source code
 
 #### Source Code
 If you wish you use this as source code, it will require the following libraries:
