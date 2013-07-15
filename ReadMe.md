@@ -10,7 +10,9 @@ SDMMobileDevice
 ***
 
 ### What is this?
-SDMMobileDevice is a framework that enables access to communicating with iOS devices. 
+SDMMobileDevice is a framework that enables access to communicating with iOS devices. This framework serves as a public and documented way to interact with iOS devices and the services that exist on iOS devices. 
+
+[Technical Abstract](./SDMMobileDeviceAbstract.pdf)
 
 _SDMMobileDevice is a framework that can be used interchangeably with Apple's private framework MobileDevice.framework_
 
@@ -36,7 +38,7 @@ SDMMobileDevice is an OS X framework and can be used in two ways:
 1. [Bundled Framework](#bundled-framework)
 2. [Source Code](#source-code)
 
-**Special Note: [Entitlements](#Entitlements)**
+**Special Note: [Entitlements](#entitlements)**
 
 
 
@@ -57,7 +59,7 @@ If you wish you use this as source code, it will require the following libraries
 If you have trouble locating any of these, please look at the "-Framework" xcode project file to get the paths for these libraries.
 
 
-#### Entitlements
+#### Entitlements (where applicable)
 This framework will require entitlements to access the following locations:  
 `/var/run/usbmuxd` (read/write access to this file)  
 `/var/db/lockdown/` (read/write access to this directory)
