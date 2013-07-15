@@ -33,6 +33,10 @@
 #include "SDMMD_Error.h"
 #include "SDMMD_AMDevice.h"
 
+#if WIN32
+#define CFRangeMake(a, b) (CFRange){a, b}
+#endif
+
 static void * _sdm_md__stack_chk_guard = NULL;
 
 static void _sdm_md__stack_chk_guard_setup() {
