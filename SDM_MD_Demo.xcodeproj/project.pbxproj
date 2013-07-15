@@ -10,7 +10,6 @@
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		2215A84017500DE700AD1981 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A83F17500DE700AD1981 /* CoreFoundation.framework */; };
 		2215A87217500F2000AD1981 /* SDMMobileDevice.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A83717500DDC00AD1981 /* SDMMobileDevice.framework */; };
-		2215AC0F17526F7900AD1981 /* SDMMobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A83717500DDC00AD1981 /* SDMMobileDevice.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		225ACB46175FBFA300A47071 /* SDMMD_Debugger.h in Headers */ = {isa = PBXBuildFile; fileRef = 225ACB44175FBFA300A47071 /* SDMMD_Debugger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		225ACB47175FBFA300A47071 /* SDMMD_Debugger.c in Sources */ = {isa = PBXBuildFile; fileRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */; };
 		225AD7321765FE7700A47071 /* SDMMD_USBMuxListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 225AD7301765FE7700A47071 /* SDMMD_USBMuxListener.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -45,6 +44,7 @@
 		22AD9369178A17AF002ACFB1 /* SDMMD_MRestoreModeDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB8F17525BA900AD1981 /* SDMMD_MRestoreModeDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22AD936A178A17B0002ACFB1 /* SDMMD_MRestoreModeDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AB9017525BA900AD1981 /* SDMMD_MRestoreModeDevice.c */; };
 		22AD9A45178F2CBF002ACFB1 /* CFRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD9A44178F2CBF002ACFB1 /* CFRuntime.h */; };
+		22ADA79F17937E56002ACFB1 /* SDMMobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A83717500DDC00AD1981 /* SDMMobileDevice.framework */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -82,7 +82,6 @@
 		2215A83717500DDC00AD1981 /* SDMMobileDevice.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SDMMobileDevice.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2215A83817500DDC00AD1981 /* SDMMobileDevice-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SDMMobileDevice-Info.plist"; sourceTree = "<group>"; };
 		2215A83F17500DE700AD1981 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		2215A84517500E0100AD1981 /* MobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileDevice.framework; path = /System/Library/PrivateFrameworks/MobileDevice.framework; sourceTree = "<absolute>"; };
 		2215A8AE175010A300AD1981 /* SDMMD_Service.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Service.h; sourceTree = "<group>"; };
 		2215A8AF175010A300AD1981 /* SDMMD_Service.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_Service.c; sourceTree = "<group>"; };
 		2215A91D17510CF300AD1981 /* SDMMD_AFCDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AFCDevice.h; sourceTree = "<group>"; };
@@ -158,8 +157,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2215AC0F17526F7900AD1981 /* SDMMobileDevice.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+				22ADA79F17937E56002ACFB1 /* SDMMobileDevice.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,8 +178,9 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				22AD924A1789DCA7002ACFB1 /* libcrypto.dylib */,
+				22AD92461789DC7E002ACFB1 /* libssl.dylib */,
 				2215A83F17500DE700AD1981 /* CoreFoundation.framework */,
-				2215A84517500E0100AD1981 /* MobileDevice.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 			);
 			name = "Linked Frameworks";
@@ -341,8 +341,6 @@
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				2215A83817500DDC00AD1981 /* SDMMobileDevice-Info.plist */,
-				22AD92461789DC7E002ACFB1 /* libssl.dylib */,
-				22AD924A1789DCA7002ACFB1 /* libcrypto.dylib */,
 			);
 			name = SDM_MD_Demo;
 			sourceTree = "<group>";
@@ -554,12 +552,10 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				FRAMEWORK_VERSION = A;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -569,10 +565,11 @@
 				GCC_PREFIX_HEADER = "";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "SDMMobileDevice-Info.plist";
-				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				INSTALL_PATH = "";
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = SDMMobileDevice;
+				STRIP_STYLE = all;
 			};
 			name = Debug;
 		};
@@ -585,10 +582,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				FRAMEWORK_VERSION = A;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
@@ -597,11 +591,13 @@
 				GCC_PREFIX_HEADER = "";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "SDMMobileDevice-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
+				INSTALL_PATH = "";
+				LD_DYLIB_INSTALL_NAME = "";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = SDMMobileDevice;
+				STRIP_STYLE = debugging;
 			};
 			name = Release;
 		};
@@ -610,10 +606,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
@@ -622,10 +615,7 @@
 				GCC_PREFIX_HEADER = SDM_MD_Demo_Prefix.pch;
 				INFOPLIST_FILE = "SDM_MD_Demo-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../SM1Password Sync/build/Debug\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = SDM_MD_Demo;
 			};
 			name = Debug;
@@ -638,8 +628,8 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
+					"@executable_path/../Frameworks",
 					"$(inherited)",
-					"\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
 				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
