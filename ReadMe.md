@@ -2,7 +2,7 @@ SDMMobileDevice
 ===============
 
 ## Table of Contents
-* [License](./blob/master/LICENSE)
+* [License](./LICENSE)
 * [What is this?]()
 * [What can this project do for me?]()
 * [How do I use this?]()
