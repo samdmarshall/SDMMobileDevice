@@ -25,7 +25,7 @@
 typedef struct sdm_mobiledevice {
 	SDMMD_USBMuxListenerRef usbmuxd;
 	CFArrayRef deviceList;
-	pthread_mutex_t *sslLocks;
+	//pthread_mutex_t *sslLocks;
 	uint64_t peer_certificate_data_index;
 } __attribute__ ((packed)) sdm_mobiledevice;
 
