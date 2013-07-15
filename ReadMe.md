@@ -17,15 +17,15 @@ _SDMMobileDevice is a framework that can be used interchangeably with Apple's pr
 ***
 
 ### What can this project do for me?
-
+This framework gives access to a number of technologies that have previously been "off limits" to developers. Due to being a private and undocumented API, MobileDevice.framework has not been something that can be safely interacted with.
 
 ***
 
 ### How do I use this?
 SDMMobileDevice is an OS X framework and can be used in two ways:
 
-1. Bundled Framework
-2. Source Code
+1. [Bundled Framework](#bundled-framework)
+2. [Source Code](#source-code)
 
 #### Bundled Framework
 You are already almost done!

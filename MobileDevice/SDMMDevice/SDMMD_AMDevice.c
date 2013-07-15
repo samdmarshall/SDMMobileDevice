@@ -50,7 +50,27 @@ static CFStringRef SDMMD_AMDeviceRefCopyDebugDesc(CFTypeRef cf) {
 }
 
 static void SDMMD_AMDeviceRefFinalize(CFTypeRef cf) {
-    //SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)cf;
+    SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)cf;
+	if (device->ivars.unique_device_id)
+		CFRelease(device->ivars.unique_device_id);
+	if (device->ivars.lockdown_conn) {
+		if (device->ivars.lockdown_conn->connection)
+			close(device->ivars.lockdown_conn->connection);
+		if (device->ivars.lockdown_conn->ssl)
+			SSL_free(device->ivars.lockdown_conn->ssl);
+	}
+	if (device->ivars.session)
+		CFRelease(device->ivars.session);
+	//if (device->ivars.mutex_lock)
+		
+	if (device->ivars.service_name)
+		CFRelease(device->ivars.service_name);
+	if (device->ivars.network_address)
+		CFRelease(device->ivars.network_address);
+	if (device->ivars.unknown11)
+		CFRelease(device->ivars.unknown11);
+	if (device)
+		free(device);
 }
 
 static CFTypeID _kSDMMD_AMDeviceRefID = _kCFRuntimeNotATypeID;

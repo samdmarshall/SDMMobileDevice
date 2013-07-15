@@ -116,7 +116,7 @@ static CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type) {
 	CFMutableDictionaryRef dict = CFDictionaryCreateMutable(NULL, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 	if (dict) {
 		CFDictionarySetValue(dict, CFSTR("Request"), type);
-		//CFDictionarySetValue(dict, CFSTR("ProtocolVersion"), CFSTR("2"));
+		CFDictionarySetValue(dict, CFSTR("ProtocolVersion"), CFSTR("2"));
 		char *appName = (char *)getprogname();
 		if (appName) {
 			CFStringRef name = CFStringCreateWithCString(kCFAllocatorDefault, appName, 0x8000100);
@@ -134,12 +134,12 @@ static CFMutableDictionaryRef SDMMD_create_dict() {
 	return CFDictionaryCreateMutable(NULL, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 }
 
-static void SDMMD_openSSLLockCallBack(int mode, int n, const char * file, int line) {
+/*static void SDMMD_openSSLLockCallBack(int mode, int n, const char * file, int line) {
 	if (mode & CRYPTO_LOCK)
 		SDMMD__mutex_lock(SDMMD_MCP->sslLocks[n]);
 	else
 		SDMMD__mutex_unlock(SDMMD_MCP->sslLocks[n]);
-}
+}*/
 
 static unsigned long SDMMD_openSSLThreadIDCallBack() {
 	return (unsigned long)pthread_self();
@@ -296,7 +296,7 @@ static sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SD
 			result = 0xe8000003;
 			CFTypeRef bonjourId = SDMMD_AMDCopySystemBonjourUniqueID();
 			if (bonjourId) {
-				char *path = calloc(1, sizeof(char)*0x400);
+				char *path = calloc(1, sizeof(char)*0x401);
 				SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
 				CFMutableDictionaryRef fileDict = SDMMD__CreateDictFromFileContents(path);
 				result = 0xe8000025;

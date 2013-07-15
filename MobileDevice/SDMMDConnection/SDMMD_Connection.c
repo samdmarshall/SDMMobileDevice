@@ -52,7 +52,7 @@ sdmmd_return_t SDMMD_perform_command(CFSocketRef socket, CFStringRef command, vo
 						if (CFStringCompare(status, CFSTR("Complete"), 0) == 0) {
 							CFTypeRef responseValue = CFDictionaryGetValue(response, CFSTR("LookupResult"));
 							if (responseValue) {
-								(void)&callback(responseValue, unknown1);
+								(callback)(responseValue, unknown1);
 							}
 						}
 					}
