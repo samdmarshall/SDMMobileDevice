@@ -3,9 +3,9 @@ SDMMobileDevice
 
 ## Table of Contents
 * [License](./LICENSE)
-* [What is this?]()
-* [What can this project do for me?]()
-* [How do I use this?]()
+* [What is this?](#what-is-this)
+* [What can this project do for me?](#what-can-this-project-do-for-me)
+* [How do I use this?](#how-do-i-use-this)
 
 ***
 
@@ -32,7 +32,7 @@ You are already almost done!
 
 1. Add the SDMMobileDevice-Framework.xcodeproj file into your existing Xcode project or workspace. 
 2. Add it as a dependency and link against it.
-3. Add `#import <SDMMobileDevice/SDMMobileDevice.h>` to your source code
+3. Add `#include <SDMMobileDevice/SDMMobileDevice.h>` to your source code
 
 #### Source Code
 If you wish you use this as source code, it will require the following libraries:
