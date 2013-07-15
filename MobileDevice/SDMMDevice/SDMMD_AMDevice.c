@@ -1273,9 +1273,22 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateCopy(SDMMD_AMDeviceRef device) {
 	return copy;
 }
 
+Boolean SDMMD_device_os_is_at_least(SDMMD_AMDeviceRef device, CFStringRef version) {
+	Boolean result = false;
+	if (device) {
+		SDMMD_AMDeviceConnect(device);
+		CFStringRef prodVers = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kProductVersion));
+		if (prodVers) {
+				result = (CFStringCompare(prodVers, version, 0x40) != 0xff ? true : false);
+		}
+	}
+	return result;
+}
+
 sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef dict, void* three, void* four) {
 	sdmmd_return_t result = 0xe800002f;
 	if (dict) {
+		CFTypeRef digest;
 		CFTypeRef imageType = CFDictionaryGetValue(dict, CFSTR("ImageType"));
 		if (imageType) {
 			CFTypeRef signature = CFDictionaryGetValue(dict, CFSTR("ImageSignature"));
@@ -1302,14 +1315,22 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 										CFDictionaryRef response;
 										result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&response);
 										if (result == 0) {
-											CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
-											if (error) {
-												// convert error
-											} else {
-												CFTypeRef image = CFDictionaryGetValue(response, CFSTR("ImagePresent"));
-												if (image) {
-													
+											if (response) {
+												CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
+												if (error) {
+													// convert error
+												} else {
+													CFTypeRef image = CFDictionaryGetValue(response, CFSTR("ImagePresent"));
+													if (image) {
+														if (CFEqual(image, kCFBooleanTrue)) {
+															digest = CFDictionaryGetValue(response, CFSTR("ImageDigest"));
+														} else {
+															response = 0xe8000034;
+														}
+													}
 												}
+											} else {
+												result = 0xe8000004;
 											}
 										}
 									}
@@ -1318,6 +1339,62 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 								}
 							} else {
 								result = 0xe8000007;
+							}
+							Boolean supported = SDMMD_device_os_is_at_least(device, CFSTR("7.0"));
+							bool mounted = false;
+							if (supported) {
+								SDMMD_fire_callback(three, four, CFSTR("CopyingImage"));
+								result = SDMMD_copy_image(device, path);
+								if (result) {
+									SDMMD_fire_callback(three, four, CFSTR("StreamingImage"));
+									char fspath;
+									CFTypeRef fsRep = CFStringGetFileSystemRepresentation(path, &fspath, 0x400);
+									if (fsRep) {
+										
+									} else {
+										result = 0xe8000001;
+									}
+								}
+								if (!mounted) {
+									SDMMD_fire_callback(three, four, CFSTR("MountingImage"));
+									CFMutableDictionaryRef mountDict = SDMMD_create_dict();
+									if (mountDict) {
+										CFDictionarySetValue(mountDict, CFSTR("Command"), CFSTR("MountImage"));
+										CFDictionarySetValue(mountDict, CFSTR("ImageType"), imageType);
+										CFDictionarySetValue(mountDict, CFSTR("ImagePath"), CFSTR("/var/mobile/Media/PublicStaging/staging.dimage"));
+										CFDictionarySetValue(mountDict, CFSTR("ImageSignature"), signature);
+										result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(connection), mountDict, kCFPropertyListXMLFormat_v1_0);
+										if (result == 0) {
+											CFDictionaryRef response;
+											result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&response);
+											if (result == 0) {
+												if (response) {
+													CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
+													if (error) {
+														// convert error
+													} else {
+														CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
+														if (status) {
+															if (CFEqual(status, CFSTR("Complete"))) {
+																mounted = true;
+															} else {
+																response = 0xe8000034;
+															}
+														}
+													}
+												} else {
+													result = 0xe8000004;
+												}
+											} else {
+												result = 0xe8000004;
+											}
+										}
+									}
+								}
+							}
+							if (mounted) {
+								result = SDMMD__hangup_with_image_mounter_service();
+								// insert error code
 							}
 						}
 					}

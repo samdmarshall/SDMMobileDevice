@@ -44,10 +44,10 @@ sdmmd_return_t AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDictionary
 	return result;
 }*/
 
-sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(CFSocketRef socketRef, uint32_t socket, CFURLRef path, CFDictionaryRef options, void* installCallback, void* unknown) {
+sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn, uint32_t socket, CFURLRef path, CFDictionaryRef options, void* installCallback, void* unknown) {
 	sdmmd_return_t result = 0x0;
 	SDMMD_AMConnectionRef connection = NULL;
-	bool hasConnection = (socketRef ? true : false);
+	bool hasConnection = (conn ? true : false);
 	if (!socket) {
 		result = SDMMD_AMDeviceSecureStartService(socket, CFSTR(AMSVC_INSTALLATION_PROXY), 0x0, &connection);
 		if (result == 0) {
@@ -86,7 +86,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(CFSocketRef socketRef, uin
 sdmmd_return_t SDMMD_AMDeviceInstallApplication(uint32_t socket, CFStringRef path, CFDictionaryRef options, void* installCallback, void* unknown) {
 	printf("SDMMD_AMDeviceInstallApplication: Entry.\n");
 	sdmmd_return_t result = 0x0;
-	CFSocketRef conn = SDMMD__CreateTemporaryServConn(socket, 0x0);
+	SDMMD_AMConnectionRef conn = SDMMD__CreateTemporaryServConn(socket, 0x0);
 	if (conn) {
 		CFURLRef url = SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(path);
 		if (url) {

@@ -24,7 +24,7 @@
 #include "SDMMD_Functions.h"
 #include "SDMMD_AMDevice.h"
 
-sdmmd_return_t SDMMD_perform_command(CFSocketRef socket, CFStringRef command, void* unknown, void (*callback)(CFTypeRef type, void* data), void* unknown1, ...) {
+sdmmd_return_t SDMMD_perform_command(CFSocketRef socket, CFStringRef command, uint64_t code, void (*callback)(CFDictionaryRef dict, void* arg), void* unknown1, ...) {
 	sdmmd_return_t result = 0x0;
 	CFMutableDictionaryRef dict = SDMMD_create_dict();
 	if (dict) {
