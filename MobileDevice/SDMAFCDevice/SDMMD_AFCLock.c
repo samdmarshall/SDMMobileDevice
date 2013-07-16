@@ -21,6 +21,7 @@
 
 #include "SDMMD_AFCLock.h"
 #include "CFRuntime.h"
+#include "SDMMD_Functions.h"
 
 SDMMD_AFCLockRef SDMMD_AFCLockCreate() {
 	uint32_t extra = sizeof(AFCLockClassBody);

@@ -21,6 +21,9 @@
 
 #include "SDMMD_AFCDevice.h"
 #include "CFRuntime.h"
+#include <sys/types.h>
+#include <sys/event.h>
+#include <sys/time.h>
 
 SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(void*a, uint32_t sock,void*c,void*d,void*e) {
 	uint32_t extra = sizeof(AFCConnectionClassBody);

@@ -78,7 +78,7 @@ char* SDMMD_AFCPacketTypeName(uint32_t packetType) {
 sdmmd_return_t SDMMD_AFCSendStatusExtended(SDMMD_AFCConnectionRef afcConn, void*b, uint32_t packetType, CFDictionaryRef ref) {
 	sdmmd_return_t result = 0x0;
 	SDMMD_AFCLog(0x5, "Writing status packet %d info %p\\n",packetType,ref);
-	if (afcConn && packetType+0x17ffbffe >= 0x15) {
+	if (afcConn && packetType >= 0x15) {
 		SDMMD_AFCLog(0x5, "Oh no!");
 	}
 	if (afcConn->ivars.e == 0x0) {
@@ -255,7 +255,7 @@ uint32_t SDMMD_AFCHeaderInit(SDMMD_AFCHeaderRef header, uint32_t command, uint32
 	return header->signature;
 }
 
-sdmmd_return_t SDMMD_AFCValidateHeader(SDMMD_AFCHeaderRef header, uint32_t command, void*b, void*c, void*d) {
+sdmmd_return_t SDMMD_AFCValidateHeader(SDMMD_AFCHeaderRef header, uint32_t command, void*b, void*c, uint64_t d) {
 	if (header->signature != 0x434641364c504141) {
 		if (d != 0x4141504c36414643) {
 			return SDMMD___AFCSetErrorResult();

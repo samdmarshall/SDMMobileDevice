@@ -84,10 +84,10 @@ static const void* SDMMD___AppendValue(const void* append, void* context) {
 	}
 	if (CFGetTypeID(append) == CFStringGetTypeID()) {
 		uint32_t length = CFStringGetLength(append);
-		CFAllocatorRef alloc = CFAllocatorAllocate(kCFAllocatorDefault, length*8+1, kCFAllocatorDefault);
-		CFStringGetBytes(append, CFRangeMake(0x0, length), 0x8000100, 0x0, 0x0, alloc, (length*8), 0x0);
-		CFDataAppendBytes(context, alloc, (length*8));
-		CFAllocatorDeallocate(kCFAllocatorDefault, alloc);
+		char *alloc = calloc(1, length*8+1);
+		CFStringGetBytes(append, CFRangeMake(0x0, length), 0x8000100, 0x0, 0x0, (UInt8*)alloc, (length*8), 0x0);
+		CFDataAppendBytes(context, (UInt8*)alloc, (length*8));
+		free(alloc);
 	}
 	return NULL;
 }
