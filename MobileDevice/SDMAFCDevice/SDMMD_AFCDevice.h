@@ -22,12 +22,11 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include "SDMMD_Error.h"
 #include "SDMMD_AFCLock.h"
+#include "SDMMD_AFCCondition.h"
 
 #pragma mark -
 #pragma mark TYPES
 #pragma mark -
-
-#define SDMMD_AFCConditionRef int32_t
 
 typedef struct AFCConnectionClassHeader {
 	unsigned char header[16];
@@ -39,7 +38,7 @@ typedef struct AFCConnectionClassBody {
 	int8_t is_valid1;						// 32
 	SDMMD_AFCConditionRef cond_signal;		// 40
 	CFSocketRef socket;						// 48
-	int32_t socket0;						// 56
+	int32_t handle;							// 56
 	int8_t connection_active;				// 60
 	unsigned char padding0[3];				// 61		
 	int32_t statusPtr;						// 64
@@ -64,7 +63,9 @@ typedef struct AFCConnectionClassBody {
 	CFRunLoopRef runloop;					// 200
 	int32_t secure_context;					// 216
 	void *callback;							// 224
-	int32_t queue;							// 1264
+	int32_t queue;							// 1256
+	CFTypeRef fileDescriptors0;				// 1260
+	CFTypeRef fileDescriptors1;				// 1264
 } __attribute__ ((packed)) AFCConnectionClassBody; // 0x4f0
 
 typedef struct afc_connection {
@@ -79,6 +80,8 @@ typedef struct afc_connection SDMMD_AFCConnectionClass;
 #pragma mark -
 #pragma mark FUNCTIONS
 #pragma mark -
+
+SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(void*a, uint32_t sock,void*c,void*d,void*e);
 
 
 #endif

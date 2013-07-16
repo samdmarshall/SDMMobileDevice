@@ -68,6 +68,37 @@ static int SDMMD__mutex_unlock(pthread_mutex_t mutex) {
 	return pthread_mutex_unlock(&mutex);
 }
 
+static const void* SDMMD___AppendValue(const void* append, void* context) {
+	if (CFGetTypeID(append) == CFNumberGetTypeID()) {
+		if (CFNumberIsFloatType(append)) {
+			float num = 0;
+			CFNumberGetValue(append, 0xd, &num);
+			append = CFStringCreateWithFormat(kCFAllocatorDefault, 0x0, CFSTR("%g"), num);
+		} else {
+			uint64_t num = 0;
+			CFNumberGetValue(append, 0x4, &num);
+			append = CFStringCreateWithFormat(kCFAllocatorDefault, 0x0, CFSTR("%qi"), num);
+		}
+	} else if (CFGetTypeID(append) == CFBooleanGetTypeID()) {
+		append = (CFEqual(append, kCFBooleanTrue) ? CFSTR("1") : CFSTR("0"));
+	}
+	if (CFGetTypeID(append) == CFStringGetTypeID()) {
+		uint32_t length = CFStringGetLength(append);
+		CFAllocatorRef alloc = CFAllocatorAllocate(kCFAllocatorDefault, length*8+1, kCFAllocatorDefault);
+		CFStringGetBytes(append, CFRangeMake(0x0, length), 0x8000100, 0x0, 0x0, alloc, (length*8), 0x0);
+		CFDataAppendBytes(context, alloc, (length*8));
+		CFAllocatorDeallocate(kCFAllocatorDefault, alloc);
+	}
+	return NULL;
+}
+
+static void SDMMD___ConvertDictEntry(const void* key, const void* value, void* context) {
+	if (key && value) {
+		SDMMD___AppendValue(key, context);
+		SDMMD___AppendValue(value, context); 
+	}
+}
+
 static CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
 	CFMutableDictionaryRef dict = NULL;
 	if (path) {

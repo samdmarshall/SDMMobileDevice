@@ -20,7 +20,34 @@
 #define _SDM_MD_AFCDEVICE_C_
 
 #include "SDMMD_AFCDevice.h"
+#include "CFRuntime.h"
 
-
+SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(void*a, uint32_t sock,void*c,void*d,void*e) {
+	uint32_t extra = sizeof(AFCConnectionClassBody);
+	SDMMD_AFCConnectionRef connection = calloc(0x1, sizeof(SDMMD_AFCConnectionClass));
+	connection = (SDMMD_AFCConnectionRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, _kSDMMD_AFCConnectionRefID, extra, NULL);
+	if (connection) {
+		connection->ivars.state = 0x1;
+		connection->ivars.cond0 = SDMMD_AFCConditionCreate();
+		connection->ivars.cond_signal = SDMMD_AFCConditionCreate();
+		connection->ivars.handle = sock;
+		connection->ivars.connection_active = (c ? true : false);
+		connection->ivars.statusPtr = 0x0;
+		connection->ivars.e = false;
+		connection->ivars.operation_count = 0x0;
+		connection->ivars.fs_block_size = 0x100000;
+		connection->ivars.socket_block_size = 0x100000;
+		connection->ivars.io_timeout = 0x3c;
+		connection->ivars.h = 1;
+		connection->ivars.context = e;
+		connection->ivars.lock0 = SDMMD_AFCLockCreate();
+		connection->ivars.lock1 = SDMMD_AFCLockCreate();
+		connection->ivars.operation_enqueue = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
+		connection->ivars.operation_dequeue = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
+		connection->ivars.secure_context = d;
+		connection->ivars.queue = kqueue();
+	}
+	return connection;
+}
 
 #endif

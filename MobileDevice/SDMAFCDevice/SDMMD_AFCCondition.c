@@ -1,6 +1,6 @@
 /*
- *  SDMMD_AFCLock.h
- *  SDMMobileDevice
+ *  SDMMD_AFCCondition.c
+*  SDMMobileDevice
  *
  *  Copyright (c) 2013, Sam Marshall
  *  All rights reserved.
@@ -16,40 +16,50 @@
  * 
  */
 
-#ifndef _SDM_MD_AFCLOCK_H_
-#define _SDM_MD_AFCLOCK_H_
+#ifndef _SDM_MD_AFCCONDITION_C_
+#define _SDM_MD_AFCCONDITION_C_
 
-#include "SDMMD_Error.h"
-#include <stdint.h>
-#include <pthread.h>
+#include "SDMMD_AFCCondition.h"
+#include "CFRuntime.h"
 
-#pragma mark -
-#pragma mark TYPES
-#pragma mark -
+SDMMD_AFCConditionRef SDMMD_AFCConditionCreate() {
+	uint32_t extra = sizeof(AFCConditionClassBody);
+	SDMMD_AFCConditionRef cond = calloc(0x1, sizeof(SDMMD_AFCConditionClass));
+	cond = (SDMMD_AFCConditionRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, _kSDMMD_AFCConditionRefID, extra, NULL);
+	if (cond) {
+		pthread_mutex_init(&cond->ivars.mutex_lock,0x0);
+		pthread_cond_init(&cond->ivars.mutex_cond,0x0);
+		cond->ivars.signaled = false;
+	}
+	return cond;
+}
 
-typedef struct AFCLockClassHeader {
-	unsigned char header[16];
-} __attribute__ ((packed)) AFCLockClassHeader; // 0x10
 
-typedef struct AFCLockClassBody {
-	pthread_mutex_t mutex_lock;	// 16
-	unsigned char padding[44];	// 20
-} __attribute__ ((packed)) AFCLockClassBody; // 0x40
+bool SDMMD_AFCConditionIsSignaled(SDMMD_AFCConditionRef cond) {
+	return cond->ivars.signaled;
+}
 
-typedef struct afc_lock {
-	struct AFCLockClassHeader base;
-	struct AFCLockClassBody ivars;
-} __attribute__ ((packed)) afc_lock;
+sdmmd_return_t SDMMD_AFCConditionSignal(SDMMD_AFCConditionRef cond) {
+	sdmmd_return_t result = pthread_mutex_lock(&cond->ivars.mutex_lock);
+	if (result == 0) {
+		cond->ivars.signaled = true;
+		result = pthread_cond_broadcast(&cond->ivars.mutex_cond);
+		pthread_mutex_unlock(&cond->ivars.mutex_lock);
+	}
+	return result;
+}
 
-typedef struct afc_lock SDMMD_AFCLockClass;
-
-#define SDMMD_AFCLockRef SDMMD_AFCLockClass*
-
-#pragma mark -
-#pragma mark FUNCTIONS
-#pragma mark -
-SDMMD_AFCLockRef SDMMD_AFCLockCreate();
-sdmmd_return_t SDMMD_AFCLockLock(SDMMD_AFCLockRef lock);
-sdmmd_return_t SDMMD_AFCLockUnlock(SDMMD_AFCLockRef lock);
+sdmmd_return_t SDMMD_AFCConditionWait(SDMMD_AFCConditionRef cond) {
+	sdmmd_return_t result = pthread_mutex_lock(&cond->ivars.mutex_lock);
+	if (result == 0) {
+		if (cond->ivars.signaled) {
+			struct timespec waittime = {0x0, 0x000000008e0004c0};
+			pthread_cond_timedwait(&cond->ivars.mutex_cond,&cond->ivars.mutex_lock,&waittime);
+		}
+		pthread_mutex_unlock(&cond->ivars.mutex_lock);
+	}
+	return result;
+	
+}
 
 #endif

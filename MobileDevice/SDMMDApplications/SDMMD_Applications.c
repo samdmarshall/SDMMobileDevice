@@ -44,6 +44,44 @@ sdmmd_return_t AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDictionary
 	return result;
 }*/
 
+/*sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFStringRef path, CFDictionaryRef options, void* transferCallback, void* unknown) {
+	sdmmd_return_t result = 0xe8000007;
+	if (path) {
+		if (conn) {
+			char *cpath = calloc(0x1, 0x401);
+			Boolean status = CFStringGetCString(path, cpath, 0x401, 0x8000100);
+			if (status) {
+				CFURLRef deviceURL = SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(path);
+				if (deviceURL) {
+					CFStringRef lastComp = CFURLCopyLastPathComponent(deviceURL);
+					if (lastComp) {
+						CFURLRef base = SDMMD__AMDCFURLCreateWithFileSystemPathRelativeToBase(kCFAllocatorDefault, CFSTR("PublicStaging"), 0x0, 0x1);
+						CFURLRef copy = CFURLCreateCopyAppendingPathComponent(kCFAllocatorDefault, base, lastComp, true);
+						char *copyPath;
+						result = SDMMD__AMDCFURLGetCStringForFileSystemPath(copy, copyPath);
+						SDMMD_fire_callback_767f4(transferCallback, unknown, 0x0, CFSTR("PreflightingTransfer"));
+						SDMMD_preflight_transfer();
+						SDMMD_fire_callback_767f4(transferCallback, unknown, 0x0, CFSTR("TransferingPackage"));
+						result = SDMMD_AFCConnectionCreate();
+						if (result == 0) {
+							result = SDMMD_check_can_touch();
+							if (result == 0) {
+								CFURLRef parent = CFURLCreateCopyDeletingLastPathComponent(r12, r13);
+								result = SDMMD_make_path(r15, parent);
+							}
+						}
+					} else {
+						result = 0xe8000001;
+					}
+				}
+			} else {
+				result = 0xe8000001;
+			}
+		}
+	}
+	return result;
+}*/
+
 sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn, uint32_t socket, CFURLRef path, CFDictionaryRef options, void* installCallback, void* unknown) {
 	sdmmd_return_t result = 0x0;
 	SDMMD_AMConnectionRef connection = NULL;

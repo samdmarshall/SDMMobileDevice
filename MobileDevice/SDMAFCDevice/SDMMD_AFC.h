@@ -25,6 +25,7 @@
 #include "SDMMD_AFCIterator.h"
 #include "SDMMD_AFCOperation.h"
 #include "SDMMD_AFCLock.h"
+#include "SDMMD_AFCCondition.h"
 
 static char *gAFCPacketTypeNames[39] = {
 	"Invalid",
@@ -69,11 +70,11 @@ static char *gAFCPacketTypeNames[39] = {
 };
 
 typedef struct SDMMD_AFCHeader {
-	uint64_t header;
-	uint64_t a;
-	uint64_t b;
-	uint64_t c;
-	uint64_t d;
+	uint64_t signature;
+	uint64_t packetLen;
+	uint64_t headerLen;
+	uint64_t pid;
+	uint64_t type;
 } __attribute__ ((packed)) SDMMD_AFCHeader;
 
 #define SDMMD_AFCHeaderRef SDMMD_AFCHeader*
@@ -91,6 +92,6 @@ sdmmd_return_t SDMMD_AFCSendHeader(SDMMD_AFCConnectionRef afcConn, void*b);
 sdmmd_return_t SDMMD_AFCReadPacket(SDMMD_AFCConnectionRef afcConn, CFTypeRef* b, CFTypeRef* c, CFTypeRef* d);
 sdmmd_return_t SDMMD_AFCReadPacketBody(CFTypeRef a,void*b, CFDataRef* c, uint32_t *readLength);
 sdmmd_return_t SDMMD_AFCSendPacket(SDMMD_AFCConnectionRef afcConn, CFTypeRef b, void* c, uint32_t size);
-uint32_t SDMMD_AFCHeaderInit(SDMMD_AFCHeaderRef header,void*b,void*c,void*d,void*e);
+uint32_t SDMMD_AFCHeaderInit(SDMMD_AFCHeaderRef header, uint32_t command, uint32_t size, uint32_t data, uint32_t unknown);
 
 #endif

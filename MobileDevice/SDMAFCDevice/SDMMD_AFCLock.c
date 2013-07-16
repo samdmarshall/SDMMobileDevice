@@ -20,6 +20,17 @@
 #define _SDM_MD_AFCLOCK_C_
 
 #include "SDMMD_AFCLock.h"
+#include "CFRuntime.h"
+
+SDMMD_AFCLockRef SDMMD_AFCLockCreate() {
+	uint32_t extra = sizeof(AFCLockClassBody);
+	SDMMD_AFCLockRef lock = calloc(0x1, sizeof(SDMMD_AFCLockClass));
+	lock = (SDMMD_AFCLockRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, _kSDMMD_AFCLockRefID, extra, NULL);
+	if (lock) {
+		sdmmd_mutex_init(lock->ivars.mutex_lock);
+	}
+	return lock;
+}
 
 sdmmd_return_t SDMMD_AFCLockLock(SDMMD_AFCLockRef lock) {
 	sdmmd_return_t result = 0xe8004017;

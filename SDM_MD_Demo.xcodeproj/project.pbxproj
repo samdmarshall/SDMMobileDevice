@@ -45,6 +45,20 @@
 		22AD936A178A17B0002ACFB1 /* SDMMD_MRestoreModeDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AB9017525BA900AD1981 /* SDMMD_MRestoreModeDevice.c */; };
 		22AD9A45178F2CBF002ACFB1 /* CFRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD9A44178F2CBF002ACFB1 /* CFRuntime.h */; };
 		22ADA79F17937E56002ACFB1 /* SDMMobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A83717500DDC00AD1981 /* SDMMobileDevice.framework */; };
+		22ADA89417958897002ACFB1 /* SDMMD_Notification.h in Headers */ = {isa = PBXBuildFile; fileRef = 225AC5BE175B976500A47071 /* SDMMD_Notification.h */; };
+		22ADA89517958898002ACFB1 /* SDMMD_Notification.c in Sources */ = {isa = PBXBuildFile; fileRef = 225AC5BF175B976500A47071 /* SDMMD_Notification.c */; };
+		22ADA89B179588B0002ACFB1 /* SDMMD_AFCLock.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB8A17525B1100AD1981 /* SDMMD_AFCLock.h */; };
+		22ADA89C179588B0002ACFB1 /* SDMMD_AFCLock.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AB8B17525B1100AD1981 /* SDMMD_AFCLock.c */; };
+		22ADA89F179588B7002ACFB1 /* SDMMD_AFCIterator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB7F1752596100AD1981 /* SDMMD_AFCIterator.h */; };
+		22ADA8A0179588B7002ACFB1 /* SDMMD_AFCIterator.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AB801752596100AD1981 /* SDMMD_AFCIterator.c */; };
+		22ADA8A3179588C1002ACFB1 /* SDMMD_AFCOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AB8417525A2700AD1981 /* SDMMD_AFCOperation.h */; };
+		22ADA8A4179588C1002ACFB1 /* SDMMD_AFCOperation.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AB8517525A2700AD1981 /* SDMMD_AFCOperation.c */; };
+		22ADA8A7179588C8002ACFB1 /* SDMMD_AFC.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD8E5817871506002ACFB1 /* SDMMD_AFC.h */; };
+		22ADA8A8179588C8002ACFB1 /* SDMMD_AFC.c in Sources */ = {isa = PBXBuildFile; fileRef = 22AD8E5917871506002ACFB1 /* SDMMD_AFC.c */; };
+		22ADA8AB179588D2002ACFB1 /* SDMMD_AFCDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215A91E17510CF300AD1981 /* SDMMD_AFCDevice.c */; };
+		22ADA8AC179588D2002ACFB1 /* SDMMD_AFCDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215A91D17510CF300AD1981 /* SDMMD_AFCDevice.h */; };
+		22ADA90B1795998B002ACFB1 /* SDMMD_AFCCondition.h in Headers */ = {isa = PBXBuildFile; fileRef = 22ADA9091795998B002ACFB1 /* SDMMD_AFCCondition.h */; };
+		22ADA90C1795998B002ACFB1 /* SDMMD_AFCCondition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22ADA90A1795998B002ACFB1 /* SDMMD_AFCCondition.c */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -132,6 +146,8 @@
 		22AD92461789DC7E002ACFB1 /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
 		22AD924A1789DCA7002ACFB1 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		22AD9A44178F2CBF002ACFB1 /* CFRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFRuntime.h; sourceTree = "<group>"; };
+		22ADA9091795998B002ACFB1 /* SDMMD_AFCCondition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AFCCondition.h; sourceTree = "<group>"; };
+		22ADA90A1795998B002ACFB1 /* SDMMD_AFCCondition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AFCCondition.c; sourceTree = "<group>"; };
 		256AC3D80F4B6AC300CF3369 /* SDM_MD_DemoAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDM_MD_DemoAppDelegate.h; sourceTree = "<group>"; };
 		256AC3D90F4B6AC300CF3369 /* SDM_MD_DemoAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDM_MD_DemoAppDelegate.m; sourceTree = "<group>"; };
 		256AC3F00F4B6AF500CF3369 /* SDM_MD_Demo_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDM_MD_Demo_Prefix.pch; sourceTree = "<group>"; };
@@ -269,6 +285,8 @@
 				2215AB8517525A2700AD1981 /* SDMMD_AFCOperation.c */,
 				2215AB8A17525B1100AD1981 /* SDMMD_AFCLock.h */,
 				2215AB8B17525B1100AD1981 /* SDMMD_AFCLock.c */,
+				22ADA9091795998B002ACFB1 /* SDMMD_AFCCondition.h */,
+				22ADA90A1795998B002ACFB1 /* SDMMD_AFCCondition.c */,
 			);
 			path = SDMAFCDevice;
 			sourceTree = "<group>";
@@ -396,6 +414,13 @@
 				22AD935A178A175E002ACFB1 /* SDMMD_MRestorableDevice.h in Headers */,
 				22AD9369178A17AF002ACFB1 /* SDMMD_MRestoreModeDevice.h in Headers */,
 				22AD9A45178F2CBF002ACFB1 /* CFRuntime.h in Headers */,
+				22ADA89417958897002ACFB1 /* SDMMD_Notification.h in Headers */,
+				22ADA89B179588B0002ACFB1 /* SDMMD_AFCLock.h in Headers */,
+				22ADA89F179588B7002ACFB1 /* SDMMD_AFCIterator.h in Headers */,
+				22ADA8A3179588C1002ACFB1 /* SDMMD_AFCOperation.h in Headers */,
+				22ADA8A7179588C8002ACFB1 /* SDMMD_AFC.h in Headers */,
+				22ADA8AC179588D2002ACFB1 /* SDMMD_AFCDevice.h in Headers */,
+				22ADA90B1795998B002ACFB1 /* SDMMD_AFCCondition.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,6 +526,13 @@
 				22AD9356178A16CF002ACFB1 /* SDMMD_MDFUModeDevice.c in Sources */,
 				22AD9359178A1759002ACFB1 /* SDMMD_MRestorableDevice.c in Sources */,
 				22AD936A178A17B0002ACFB1 /* SDMMD_MRestoreModeDevice.c in Sources */,
+				22ADA89517958898002ACFB1 /* SDMMD_Notification.c in Sources */,
+				22ADA89C179588B0002ACFB1 /* SDMMD_AFCLock.c in Sources */,
+				22ADA8A0179588B7002ACFB1 /* SDMMD_AFCIterator.c in Sources */,
+				22ADA8A4179588C1002ACFB1 /* SDMMD_AFCOperation.c in Sources */,
+				22ADA8A8179588C8002ACFB1 /* SDMMD_AFC.c in Sources */,
+				22ADA8AB179588D2002ACFB1 /* SDMMD_AFCDevice.c in Sources */,
+				22ADA90C1795998B002ACFB1 /* SDMMD_AFCCondition.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

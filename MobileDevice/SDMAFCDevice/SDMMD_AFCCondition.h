@@ -1,6 +1,6 @@
 /*
- *  SDMMD_AFCLock.h
- *  SDMMobileDevice
+ *  SDMMD_AFCCondition.h
+*  SDMMobileDevice
  *
  *  Copyright (c) 2013, Sam Marshall
  *  All rights reserved.
@@ -16,40 +16,42 @@
  * 
  */
 
-#ifndef _SDM_MD_AFCLOCK_H_
-#define _SDM_MD_AFCLOCK_H_
+#ifndef _SDM_MD_AFCCONDITION_H_
+#define _SDM_MD_AFCCONDITION_H_
 
 #include "SDMMD_Error.h"
-#include <stdint.h>
 #include <pthread.h>
 
 #pragma mark -
 #pragma mark TYPES
 #pragma mark -
 
-typedef struct AFCLockClassHeader {
+typedef struct AFCConditionClassHeader {
 	unsigned char header[16];
-} __attribute__ ((packed)) AFCLockClassHeader; // 0x10
+} __attribute__ ((packed)) AFCConditionClassHeader; // 0x10
 
-typedef struct AFCLockClassBody {
+typedef struct AFCConditionClassBody {
 	pthread_mutex_t mutex_lock;	// 16
-	unsigned char padding[44];	// 20
-} __attribute__ ((packed)) AFCLockClassBody; // 0x40
+	pthread_cond_t mutex_cond; 	// 80
+	bool signaled; 				// 128
+} __attribute__ ((packed)) AFCConditionClassBody; // 0x78
 
-typedef struct afc_lock {
-	struct AFCLockClassHeader base;
-	struct AFCLockClassBody ivars;
-} __attribute__ ((packed)) afc_lock;
+typedef struct afc_condition {
+	struct AFCConditionClassHeader base;
+	struct AFCConditionClassBody ivars;
+} __attribute__ ((packed)) afc_condition;
 
-typedef struct afc_lock SDMMD_AFCLockClass;
+typedef struct afc_condition SDMMD_AFCConditionClass;
 
-#define SDMMD_AFCLockRef SDMMD_AFCLockClass*
+#define SDMMD_AFCConditionRef SDMMD_AFCConditionClass*
 
 #pragma mark -
 #pragma mark FUNCTIONS
 #pragma mark -
-SDMMD_AFCLockRef SDMMD_AFCLockCreate();
-sdmmd_return_t SDMMD_AFCLockLock(SDMMD_AFCLockRef lock);
-sdmmd_return_t SDMMD_AFCLockUnlock(SDMMD_AFCLockRef lock);
+
+SDMMD_AFCConditionRef SDMMD_AFCConditionCreate();
+bool SDMMD_AFCConditionIsSignaled(SDMMD_AFCConditionRef cond);
+sdmmd_return_t SDMMD_AFCConditionSignal(SDMMD_AFCConditionRef cond);
+sdmmd_return_t SDMMD_AFCConditionWait(SDMMD_AFCConditionRef cond);
 
 #endif

@@ -21,6 +21,15 @@
 
 #include "SDMMD_AFC.h"
 #include <string.h>
+#include "SDMMD_Functions.h"
+
+CFMutableDataRef SDMMD___AFCCreateAFCDataWithDictionary(CFDictionaryRef dict) {
+	CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault, kCFAllocatorDefault);
+	if (data) {
+		CFDictionaryApplyFunction(dict, SDMMD___ConvertDictEntry, data);
+	}
+	return data;
+}
 
 void SDMMD_AFCLog(uint32_t level, const char *format, ...) {
 	va_list args;
@@ -29,7 +38,15 @@ void SDMMD_AFCLog(uint32_t level, const char *format, ...) {
 	va_end(args);
 }
 
-sdmmd_return_t SDMMD_AFCSetErrorInfoWithArgs(uint32_t level, uint32_t mask, uint32_t code, char *file, uint32_t line, char *call);
+sdmmd_return_t SDMMD_AFCSetErrorInfoWithArgs(uint32_t level, uint32_t mask, uint32_t code, char *file, uint32_t line, char *call) {
+	sdmmd_return_t result = 0x0;
+	CFTypeRef err;
+	SDMMD_AFCErrorInfoCreateWithArgs(err, mask, code, file, line, call);
+	if (err) {
+		
+	}
+	return result;
+}
 
 sdmmd_return_t SDMMD__AFCSetErrorResult(uint32_t level, uint32_t code, uint32_t line, char *call) {
 	sdmmd_return_t result = 0x0;
@@ -225,18 +242,29 @@ sdmmd_return_t SDMMD_AFCSendPacket(SDMMD_AFCConnectionRef afcConn, CFTypeRef b, 
 	return result;
 }
 
-uint32_t SDMMD_AFCHeaderInit(SDMMD_AFCHeaderRef header,void*b,void*c,void*d,void*e) {
-	uint32_t result = 0x4141504c36414643;
-	header->header = result;
-	header->b = c;
-	header->a = (uint32_t)d+(uint32_t)c;
-	header->d = b;
-	if (e != 0x0) {
-		header->c = e + 0x18;
+uint32_t SDMMD_AFCHeaderInit(SDMMD_AFCHeaderRef header, uint32_t command, uint32_t size, uint32_t data, uint32_t unknown) {
+	header->signature = 0x4141504c36414643;
+	header->headerLen = size;
+	header->packetLen = data+size;
+	header->type = command;
+	if (unknown) {
+		header->pid = unknown + 0x18;
 	} else {
-		header->c = 0xffffffff;
+		header->pid = 0xffffffff;
 	}
-	return result;
+	return header->signature;
+}
+
+sdmmd_return_t SDMMD_AFCValidateHeader(SDMMD_AFCHeaderRef header, uint32_t command, void*b, void*c, void*d) {
+	if (header->signature != 0x434641364c504141) {
+		if (d != 0x4141504c36414643) {
+			return SDMMD___AFCSetErrorResult();
+		} else {
+			
+		}
+	} else {
+		
+	}
 }
 
 #endif
