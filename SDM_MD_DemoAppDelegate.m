@@ -18,13 +18,16 @@
 	MDDemoMainSplitView *splitView = [[MDDemoMainSplitView alloc] initWithFrame:[self.window.contentView bounds]];
 	[self.window.contentView addSubview:splitView];
 	// Insert code here to initialize your application 
+	NSArray *keys = [NSArray arrayWithObjects:CFSTR(kActivationPublicKey), CFSTR(kActivationState), CFSTR(kActivationStateAcknowledged), CFSTR(kActiveWirelessTechnology), CFSTR(kActivityURL), CFSTR(kAirplaneMode), CFSTR(kApNonce), CFSTR(kBasebandBoardSerialNumber), CFSTR(kBasebandBootloaderVersion), CFSTR(kBasebandGoldCertId), CFSTR(kBasebandKeyHashInformation), CFSTR(kBasebandNonce), CFSTR(kBasebandSerialNumber), CFSTR(kBasebandStatus), CFSTR(kBasebandVersion), CFSTR(kBoardId), CFSTR(kBluetoothAddress), CFSTR(kBrickState), CFSTR(kBuildVersion), CFSTR(kCarrierBuild), CFSTR(kCarrierBundleInfo), CFSTR(kCarrierBundleInfoArray), CFSTR(kChipID), CFSTR(kCompassCalibration), CFSTR(kCPUArchitecture), CFSTR(kDeviceCertificate), CFSTR(kDeviceClass), CFSTR(kDeviceColor), CFSTR(kDeviceEnclosureColor), CFSTR(kDeviceName), CFSTR(kDevicePublicKey), CFSTR(kDeviceVariant), CFSTR(kDieID), CFSTR(kEthernetAddress), CFSTR(kFirmwarePreflightInfo), CFSTR(kFirmwareVersion), CFSTR(kFirstTime), CFSTR(kHardwareModel), CFSTR(kHardwarePlatform), CFSTR(kHostAttached), CFSTR(kIMLockdownEverRegisteredKey), CFSTR(kIntegratedCircuitCardIdentity), CFSTR(kInternationalMobileEquipmentIdentity), CFSTR(kInternationalMobileSubscriberIdentity), CFSTR(kiTunesHasConnected), CFSTR(kMarketingName), CFSTR(kMLBSerialNumber), CFSTR(kMobileEquipmentIdentifier), CFSTR(kMobileSubscriberCountryCode), CFSTR(kMobileSubscriberNetworkCode), CFSTR(kModelNumber), CFSTR(kNonVolatileRAM), CFSTR(kPartitionType), CFSTR(kPasswordProtected), CFSTR(kPhoneNumber), CFSTR(kProductionSOC), CFSTR(kProductType), CFSTR(kProductVersion), CFSTR(kProtocolVersion), CFSTR(kProximitySensorCalibration), CFSTR(kRegionInfo), CFSTR(kReleaseType), CFSTR(kRentalClockBias), CFSTR(kSBLockdownEverRegisteredKey), CFSTR(kSerialNumber), CFSTR(kShowMarketing), CFSTR(kSIMGID1), CFSTR(kSIMGID2), CFSTR(kSIMStatus), CFSTR(kSIMTrayStatus), CFSTR(kSoftwareBehavior), CFSTR(kSoftwareBundleVersion), CFSTR(kSupportedDeviceFamilies), CFSTR(kTelephonyCapability), CFSTR(kTimeIntervalSince1970), CFSTR(kTimeZone), CFSTR(kTimeZoneOffsetFromUTC), CFSTR(kTrustedHostAttached), CFSTR(kUniqueChipID), CFSTR(kUniqueDeviceID), CFSTR(kUseActivityURL), CFSTR(kUseRaptorCerts), CFSTR(kUses24HourClock), CFSTR(kWeDelivered), CFSTR(kWiFiAddress), nil];
+	
 	SDMMD_MCP;
 	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
 	for (uint32_t i = 0; i < CFArrayGetCount(devices); i++) {
 		SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, i);
-		SDMMD_AMDebugConnectionRef debugConn = NULL;
-		uint32_t result = SDMMD_StartDebuggingSessionOnDevice(device, &debugConn);
-		printf("debug start: 0x%08x\n",result);
+		
+		//SDMMD_AMDebugConnectionRef debugConn = NULL;
+		//uint32_t result = SDMMD_StartDebuggingSessionOnDevice(device, &debugConn);
+		//printf("debug start: 0x%08x\n",result);
 		/*CFStringRef encodedPath = SDMMD_EncodeForDebuggingCommand(CFSTR(""));
 		CFStringRef containerPath = SDMMD_EncodeForDebuggingCommand(CFSTR(""));
 		sdmmd_debug_return_t dresult;
@@ -34,9 +37,10 @@
 		dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugH], CFSTR("c0"));
 		CFShow(dresult.data);*/
 		
-		result = SDMMD_StopDebuggingSessionOnDevice(device, &debugConn);
-		printf("debug stop: 0x%08x\n",result);
-		/*uint32_t result = SDMMD_AMDeviceConnect(device);
+		//result = SDMMD_StopDebuggingSessionOnDevice(device, &debugConn);
+		//printf("debug stop: 0x%08x\n",result);
+		
+		uint32_t result = SDMMD_AMDeviceConnect(device);
 		printf("connect: 0x%08x\n",result);
 		bool paired = SDMMD_AMDeviceIsPaired(device);
 		printf("paired status: %s\n",(paired ? "yes" : "no"));
@@ -45,15 +49,26 @@
 		result = SDMMD_AMDeviceStartSession(device);
 		printf("start session: 0x%08x\n",result);
 		
-		CFMutableDictionaryRef dict = NULL;
+		/*for (NSString *key in keys) {
+			CFTypeRef value = SDMMD_AMDeviceCopyValue(device, NULL, key);
+			NSLog(@"%@: %@",key, value);
+		}*/
+		
+		CFDictionaryRef response;
+		CFDictionaryRef dict = SDMMD_ApplicationLookupDictionary();
+		result = SDM_AMDeviceLookupApplications(device, dict, &response);
+		printf("lookup: 0x%08x\n",result);
+		CFShow(response);
+		/*CFMutableDictionaryRef dict = NULL;
 		SDMMD_AMConnectionRef connection = SDMMD_AMDServiceConnectionCreate(0, NULL, dict);
 		result = SDMMD_AMDeviceStartService(device, CFSTR(AMSVC_SPRINGBOARD_SERVICES), NULL, connection);
-		printf("service start: 0x%08x\n",result);
+		printf("service start: 0x%08x\n",result);*/
+		
 		
 		result = SDMMD_AMDeviceStopSession(device);
 		printf("stop session: 0x%08x\n",result);
 		result = SDMMD_AMDeviceDisconnect(device);
-		printf("disconnect: 0x%08x\n",result);*/
+		printf("disconnect: 0x%08x\n",result);
 	}
 }
 

@@ -111,7 +111,8 @@ sdmmd_return_t SDMMD_ServiceSendMessage(SocketConnection handle, CFPropertyListR
 	CFErrorRef error;
 	CFDataRef xmlData = CFPropertyListCreateData(kCFAllocatorDefault, data, format, 0, &error);
 	sdmmd_return_t result = ((data) ? SDMMD_ServiceSend(handle, xmlData) : MDERR_DICT_NOT_LOADED);
-	CFRelease(xmlData);
+	if (xmlData)
+		CFRelease(xmlData);
 	return result;
 }
 

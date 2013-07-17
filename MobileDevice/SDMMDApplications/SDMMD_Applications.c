@@ -26,23 +26,52 @@
 
 #define kAppLookupMasterKey "ReturnAttributes"
 
-sdmmd_return_t AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef *results);
-
-/*sdmmd_return_t SDM_AMDeviceLookupApplications(SDM_AMDeviceRef device, CFArrayRef options, CFDictionaryRef *results) {
-	sdmmd_return_t result = SDMMD_AMDeviceConnect(device);
-	if (SDM_MD_CallSuccessful(result)) {
-		result = SDMMD_AMDeviceStartSession(device);
-		if (SDM_MD_CallSuccessful(result)) {
-			CFMutableDictionaryRef optionsDict = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, NULL, NULL);
-			CFDictionaryAddValue(optionsDict, CFSTR(kAppLookupMasterKey), options);
-			result = AMDeviceLookupApplications(device, optionsDict, results);
-			CFRelease(optionsDict);
-			SDMMD_AMDeviceStopSession(device);
+void SDMMD_browse_callback(CFDictionaryRef dict, void* response) {
+	if (response) {
+		CFTypeRef list = CFDictionaryGetValue(dict, CFSTR("CurrentList"));
+		if (list) {
+			uint32_t count = CFArrayGetCount(list);
+			for (uint32_t i = 0; i < count; i++) {
+				CFTypeRef item = CFArrayGetValueAtIndex(list, i);
+				if (item) {
+					CFTypeRef bundleId = CFDictionaryGetValue(item, CFSTR(kAppLookupKeyCFBundleIdentifier));
+					CFDictionarySetValue(response, bundleId, item);
+					CFShow(bundleId);
+				}
+			}
+		} else {
+			CFTypeRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
+			if (status) {
+				if (!CFEqual(status, CFSTR("Complete"))) {
+					printf("browse_callback: bad status.\n");
+				}
+			}
 		}
-		AMDeviceDisconnect(device);
+	}
+}
+
+sdmmd_return_t SDM_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef *response) {
+	sdmmd_return_t result = 0xe8000007;
+	if (device) {
+		if (options) {
+			SDMMD_AMConnectionRef conn;
+			result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_INSTALLATION_PROXY), 0x0, &conn);
+			if (result == 0) {
+				CFMutableDictionaryRef dict = SDMMD_create_dict();
+				result = 0xe8000003;
+				if (dict) {
+					result = SDMMD_perform_command(conn, CFSTR("Browse"), 0x0, SDMMD_browse_callback, 2, dict, CFSTR("ClientOptions"), options);
+					if (!result) {
+						*response = dict;
+					}
+				}
+			} else {
+				printf("SDMMD_AMDeviceLookupApplications: Was unable to start the install service on the device: %i\n",device->ivars.device_id);
+			}
+		}
 	}
 	return result;
-}*/
+}
 
 /*sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFStringRef path, CFDictionaryRef options, void* transferCallback, void* unknown) {
 	sdmmd_return_t result = 0xe8000007;
@@ -100,7 +129,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn
 			CFStringRef format = CFStringCreateWithFormat(kCFAllocatorDefault, 0x0, CFSTR("%s%c%s"), "PublicStaging", 0x2f, SDMCFURLGetString(lastComp));
 			if (format) {
 				printf("SDMMD_AMDeviceSecureInstallApplication: Attempting install of %s.\n",SDMCFStringGetString(format));
-				result = SDMMD_perform_command(connection, CFSTR("Install"), 0x0, installCallback, unknown, CFSTR("PackagePath"), format, CFSTR("ClientOptions"), options);
+				result = SDMMD_perform_command(connection, CFSTR("Install"), 0x0, installCallback, 4, unknown, CFSTR("PackagePath"), format, CFSTR("ClientOptions"), options);
 				if (result) {
 					printf("SDMMD_AMDeviceSecureInstallApplication: Old style of install failed for (%s).\n",SDMCFStringGetString(format));
 				}
@@ -121,7 +150,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn
 	return result;
 }
 
-sdmmd_return_t SDMMD_AMDeviceInstallApplication(uint32_t socket, CFStringRef path, CFDictionaryRef options, void* installCallback, void* unknown) {
+/*sdmmd_return_t SDMMD_AMDeviceInstallApplication(uint32_t socket, CFStringRef path, CFDictionaryRef options, void* installCallback, void* unknown) {
 	printf("SDMMD_AMDeviceInstallApplication: Entry.\n");
 	sdmmd_return_t result = 0x0;
 	SDMMD_AMConnectionRef conn = SDMMD__CreateTemporaryServConn(socket, 0x0);
@@ -138,6 +167,6 @@ sdmmd_return_t SDMMD_AMDeviceInstallApplication(uint32_t socket, CFStringRef pat
 		result = 0xe8000001;
 	}
 	return result;
-}
+}*/
 
 #endif

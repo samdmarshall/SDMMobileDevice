@@ -24,23 +24,31 @@
 #include "SDMMD_Functions.h"
 #include "SDMMD_AMDevice.h"
 
-sdmmd_return_t SDMMD_perform_command(CFSocketRef socket, CFStringRef command, uint64_t code, void (*callback)(CFDictionaryRef dict, void* arg), void* unknown1, ...) {
+sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef command, uint64_t code, void (*callback)(CFDictionaryRef dict, void* arg), uint32_t argsCount, void* paramStart, ...) {
 	sdmmd_return_t result = 0x0;
-	CFMutableDictionaryRef dict = SDMMD_create_dict();
-	if (dict) {
-		CFDictionarySetValue(dict, CFSTR("Command"), command);
+	CFMutableDictionaryRef message = SDMMD_create_dict();
+	if (message) {
+		CFDictionarySetValue(message, CFSTR("Command"), command);
 		va_list args;
-		va_start(args, unknown1);
+		va_start(args, paramStart);
 		CFTypeRef key, value;
-		while ((key = va_arg(args, CFTypeRef))) {
+		for (uint32_t i = 0; i < argsCount; i++) {
+			key = va_arg(args, CFTypeRef);
 			value = va_arg(args, CFTypeRef);
-			CFDictionarySetValue(dict, key, value);
+			CFDictionarySetValue(message, key, value);
+			i++;
 		}
 		va_end(args);
-		result = SDMMD_ServiceSendMessage((SocketConnection){false, {.conn = CFSocketGetNative(socket)}}, dict, kCFPropertyListXMLFormat_v1_0);
+		SocketConnection sock;
+		if (conn->ivars.ssl)
+			sock = (SocketConnection){true, {.ssl = conn->ivars.ssl}};
+		else
+			sock = (SocketConnection){false, {.conn = conn->ivars.socket}};
+			
+		result = SDMMD_ServiceSendMessage(sock, message, kCFPropertyListXMLFormat_v1_0);
 		if (result == 0) {
 			CFDictionaryRef response;
-			result = SDMMD_ServiceReceiveMessage((SocketConnection){false, {.conn = CFSocketGetNative(socket)}}, (CFPropertyListRef*)&response);
+			result = SDMMD_ServiceReceiveMessage(sock, (CFPropertyListRef*)&response);
 			if (result == 0) {
 				CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
 				if (error) {
@@ -52,7 +60,7 @@ sdmmd_return_t SDMMD_perform_command(CFSocketRef socket, CFStringRef command, ui
 						if (CFStringCompare(status, CFSTR("Complete"), 0) == 0) {
 							CFTypeRef responseValue = CFDictionaryGetValue(response, CFSTR("LookupResult"));
 							if (responseValue) {
-								(callback)(responseValue, unknown1);
+								(callback)(responseValue, paramStart);
 							}
 						}
 					}
