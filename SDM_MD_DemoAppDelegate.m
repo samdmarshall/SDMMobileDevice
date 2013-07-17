@@ -49,16 +49,16 @@
 		result = SDMMD_AMDeviceStartSession(device);
 		printf("start session: 0x%08x\n",result);
 		
-		/*for (NSString *key in keys) {
+		for (NSString *key in keys) {
 			CFTypeRef value = SDMMD_AMDeviceCopyValue(device, NULL, key);
 			NSLog(@"%@: %@",key, value);
-		}*/
+		}
 		
-		CFDictionaryRef response;
-		CFDictionaryRef dict = SDMMD_ApplicationLookupDictionary();
-		result = SDM_AMDeviceLookupApplications(device, dict, &response);
-		printf("lookup: 0x%08x\n",result);
-		CFShow(response);
+		//CFDictionaryRef response;
+		//CFArrayRef values = SDMMD_ApplicationLookupDictionary();
+		//result = SDM_AMDeviceLookupApplications(device, values, &response);
+		//printf("lookup: 0x%08x\n",result);
+		//CFShow(response);
 		/*CFMutableDictionaryRef dict = NULL;
 		SDMMD_AMConnectionRef connection = SDMMD_AMDServiceConnectionCreate(0, NULL, dict);
 		result = SDMMD_AMDeviceStartService(device, CFSTR(AMSVC_SPRINGBOARD_SERVICES), NULL, connection);

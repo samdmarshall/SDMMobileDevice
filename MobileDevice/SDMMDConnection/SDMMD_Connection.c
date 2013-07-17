@@ -45,6 +45,7 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 		else
 			sock = (SocketConnection){false, {.conn = conn->ivars.socket}};
 			
+		CFShow(message);
 		result = SDMMD_ServiceSendMessage(sock, message, kCFPropertyListXMLFormat_v1_0);
 		if (result == 0) {
 			CFDictionaryRef response;

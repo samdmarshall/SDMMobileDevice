@@ -356,12 +356,9 @@ static sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SD
 	return result;
 }
 
-static CFDictionaryRef SDMMD_ApplicationLookupDictionary() {
-	CFMutableDictionaryRef dict = CFDictionaryCreateMutable(NULL, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+static CFArrayRef SDMMD_ApplicationLookupDictionary() {
 	const void* values[23] = {CFSTR("CFBundleIdentifier"), CFSTR("ApplicationDSID"), CFSTR("ApplicationType"), CFSTR("CFBundleExecutable"), CFSTR("CFBundleDisplayName"), CFSTR("CFBundleIconFile"), CFSTR("CFBundleName"), CFSTR("CFBundleShortVersionString"), CFSTR("CFBundleSupportedPlatforms"), CFSTR("CFBundleURLTypes"), CFSTR("CFBundleVersion"), CFSTR("CodeInfoIdentifier"), CFSTR("Container"), CFSTR("Entitlements"), CFSTR("HasSettingsBundle"), CFSTR("IsUpgradeable"), CFSTR("MinimumOSVersion"), CFSTR("Path"), CFSTR("SignerIdentity"), CFSTR("UIDeviceFamily"), CFSTR("UIFileSharingEnabled"), 	CFSTR("UIStatusBarHidden"), 	CFSTR("UISupportedInterfaceOrientations")};
-	CFArrayRef value = CFArrayCreate(kCFAllocatorDefault, values, 23, &kCFTypeArrayCallBacks);
-	CFDictionarySetValue(dict, CFSTR("ReturnAttributes"), value);
-	return dict;
+	return CFArrayCreate(kCFAllocatorDefault, values, 23, &kCFTypeArrayCallBacks);
 }
 
 #endif

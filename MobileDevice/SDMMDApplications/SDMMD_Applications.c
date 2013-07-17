@@ -27,6 +27,8 @@
 #define kAppLookupMasterKey "ReturnAttributes"
 
 void SDMMD_browse_callback(CFDictionaryRef dict, void* response) {
+	printf("testing123!\n");
+	CFShow(dict);
 	if (response) {
 		CFTypeRef list = CFDictionaryGetValue(dict, CFSTR("CurrentList"));
 		if (list) {
@@ -50,7 +52,7 @@ void SDMMD_browse_callback(CFDictionaryRef dict, void* response) {
 	}
 }
 
-sdmmd_return_t SDM_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef *response) {
+sdmmd_return_t SDM_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFArrayRef options, CFDictionaryRef *response) {
 	sdmmd_return_t result = 0xe8000007;
 	if (device) {
 		if (options) {
