@@ -61,20 +61,33 @@
 		
 		result = SDMMD_AMDeviceLookupApplications(device, optionsDict, &response);
 		printf("lookup: 0x%08x\n",result);
-		if (result)
-			printf("error: %s\n",SDMMD_AMDErrorString(result));
-		if (response)
-			CFShow(response);
-		/*CFMutableDictionaryRef dict = NULL;
-		SDMMD_AMConnectionRef connection = SDMMD_AMDServiceConnectionCreate(0, NULL, dict);
-		result = SDMMD_AMDeviceStartService(device, CFSTR(AMSVC_SPRINGBOARD_SERVICES), NULL, connection);
-		printf("service start: 0x%08x\n",result);*/
-		
-		
 		result = SDMMD_AMDeviceStopSession(device);
 		printf("stop session: 0x%08x\n",result);
 		result = SDMMD_AMDeviceDisconnect(device);
 		printf("disconnect: 0x%08x\n",result);
+		CFDictionaryRef app = CFDictionaryGetValue(response, CFSTR("com.tapbots.TweetbotPad"));
+		if (app) {
+				SDMMD_AMDebugConnectionRef debugConn;
+				result = SDMMD_StartDebuggingSessionOnDevice(device, &debugConn);
+				printf("debug start: 0x%08x\n",result);
+				CFStringRef encodedPath = SDMMD_EncodeForDebuggingCommand(CFDictionaryGetValue(app, CFSTR("Path")));
+				CFStringRef containerPath = SDMMD_EncodeForDebuggingCommand(CFDictionaryGetValue(app, CFSTR("Container")));
+				sdmmd_debug_return_t dresult;
+				//dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugQSetMaxPacketSize], SDMMD_EncodeForDebuggingCommand(CFSTR("1024")));
+				//CFShow(dresult.data);
+				//dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugQSetWorkingDir], containerPath);
+				//CFShow(dresult.data);
+				NSString *commandformat = [NSString stringWithFormat:@"%d,0,%@",(uint32_t)CFStringGetLength(encodedPath),encodedPath];
+				dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugA], (CFStringRef)commandformat);
+				CFShow(dresult.data);
+				dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugH], CFSTR("c0"));
+				CFShow(dresult.data);
+				dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugc], CFSTR(""));
+				CFShow(dresult.data);
+
+				result = SDMMD_StopDebuggingSessionOnDevice(device, &debugConn);
+				printf("debug stop: 0x%08x\n",result);
+		}	
 	}
 }
 

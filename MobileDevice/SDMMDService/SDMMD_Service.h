@@ -100,7 +100,7 @@ sdmmd_return_t SDMMD_ServiceSendMessage(SocketConnection handle, CFPropertyListR
 sdmmd_return_t SDMMD_ServiceReceiveMessage(SocketConnection handle, CFPropertyListRef *data);
 sdmmd_return_t SDMMD_ServiceSendStream(SocketConnection handle, CFPropertyListRef data, CFPropertyListFormat format);
 sdmmd_return_t SDMMD_ServiceReceiveStream(SocketConnection handle, CFPropertyListRef *data);
-
+sdmmd_return_t SDMMD_DirectServiceReceive(SocketConnection handle, CFDataRef *data);
 SocketConnection SDMMD_TranslateConnectionToSocket(SDMMD_AMConnectionRef connection);
 
 #endif

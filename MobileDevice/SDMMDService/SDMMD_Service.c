@@ -107,6 +107,31 @@ sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 	return MDERR_OK;
 }
 
+sdmmd_return_t SDMMD_DirectServiceReceive(SocketConnection handle, CFDataRef *data) {
+	uint32_t size = (data && *data ? (uint32_t)CFDataGetLength(*data) : 0);
+	if (size) {
+		if (CheckIfExpectingResponse(handle, 1000)) {
+			unsigned char *buffer = malloc(size);
+			uint32_t remainder = size;
+			size_t recieved;
+			while (remainder) {
+				if (handle.isSSL) {
+					recieved = SSL_read(handle.socket.ssl, &buffer[size-remainder], remainder);
+				} else {
+					recieved = recv(handle.socket.conn, &buffer[size-remainder], remainder, 0);
+				}
+				if (!recieved)
+					break;
+				remainder -= recieved;
+			}
+			*data = CFDataCreate(kCFAllocatorDefault, buffer, size);
+			free(buffer);
+		}
+		return MDERR_OK;
+	}
+	return MDERR_OK;
+}
+
 sdmmd_return_t SDMMD_ServiceSendMessage(SocketConnection handle, CFPropertyListRef data, CFPropertyListFormat format) {
 	CFErrorRef error;
 	CFDataRef xmlData = CFPropertyListCreateData(kCFAllocatorDefault, data, format, 0, &error);
