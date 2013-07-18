@@ -49,24 +49,33 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 		if (result == 0) {
 			CFDictionaryRef response = NULL;
 			result = SDMMD_ServiceReceiveStream(sock, (CFPropertyListRef*)&response);
-			if (result == 0 && response != NULL) {
-				printf("Getting perform_command response:\n");
-				CFShow(response);
-				CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
-				if (error) {
-					result = SDMMD__ConvertServiceError(error);
-					printf("call_and_response: GOT AN ERROR 0x%08x.\n",result);
-				} else {
-					CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
-					if (status) {
-						if (CFStringCompare(status, CFSTR("Complete"), 0) == 0) {
-							CFTypeRef responseValue = CFDictionaryGetValue(response, CFSTR("LookupResult"));
-							if (responseValue) {
-								(callback)(responseValue, paramStart);
+			if (result == 0 && response) {
+				while (result == 0) {
+					//CFShow(response);
+					CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
+					if (error) {
+						result = SDMMD__ConvertServiceError(error);
+						printf("call_and_response: GOT AN ERROR 0x%08x.\n",result);
+					} else {
+						CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
+						if (status) {
+							if (CFStringCompare(status, CFSTR("Complete"), 0) != 0) {
+								CFArrayRef responses = CFDictionaryGetValue(response, CFSTR("CurrentList"));
+								if (responses) {
+									uint32_t count = CFArrayGetCount(responses);
+									for (uint32_t i = 0; i < count; i++) {
+										CFDictionaryRef value = CFArrayGetValueAtIndex(responses, i);
+										(callback)(value, paramStart);
+									}
+								}
+							} else {
+								break;
 							}
 						}
 					}
+					SDMMD_ServiceReceiveStream(sock, (CFPropertyListRef*)&response);
 				}
+				printf("end receive!\n");
 			} else {
 				result = 0xe800002e;
 				printf("call_and_response: Could not receive response from proxy.\n");

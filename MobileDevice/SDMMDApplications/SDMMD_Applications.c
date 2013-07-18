@@ -27,8 +27,13 @@
 #define kAppLookupMasterKey "ReturnAttributes"
 
 void SDMMD_browse_callback(CFDictionaryRef dict, void* response) {
-	CFShow(dict);
-	if (response) {
+	if (dict) {
+		CFTypeRef bundleId = CFDictionaryGetValue(dict, CFSTR(kAppLookupKeyCFBundleIdentifier));
+		CFDictionarySetValue(response, bundleId, dict);
+		CFShow(bundleId);
+	}
+	
+	/*if (response) {
 		CFTypeRef list = CFDictionaryGetValue(dict, CFSTR("CurrentList"));
 		if (list) {
 			uint32_t count = CFArrayGetCount(list);
@@ -48,7 +53,7 @@ void SDMMD_browse_callback(CFDictionaryRef dict, void* response) {
 				}
 			}
 		}
-	}
+	}*/
 }
 
 sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef *response) {
@@ -62,7 +67,7 @@ sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDict
 				CFMutableDictionaryRef dict = SDMMD_create_dict();
 				result = 0xe8000003;
 				if (dict) {
-					result = SDMMD_perform_command(conn, CFSTR("Browse"), 0x0, SDMMD_browse_callback, 2, NULL, CFSTR("ClientOptions"), options);
+					result = SDMMD_perform_command(conn, CFSTR("Browse"), 0x0, SDMMD_browse_callback, 2, dict, CFSTR("ClientOptions"), options);
 					if (!result) {
 						*response = dict;
 					}
