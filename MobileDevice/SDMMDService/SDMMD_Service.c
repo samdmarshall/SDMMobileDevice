@@ -130,6 +130,40 @@ sdmmd_return_t SDMMD_ServiceReceiveMessage(SocketConnection handle, CFPropertyLi
 	}
 }
 
+sdmmd_return_t SDMMD_ServiceSendStream(SocketConnection handle, CFPropertyListRef data, CFPropertyListFormat format) {
+	CFStringRef errStr;
+	CFWriteStreamRef write = CFWriteStreamCreateWithAllocatedBuffers(kCFAllocatorDefault, kCFAllocatorDefault);
+	CFWriteStreamOpen(write);
+	uint32_t length = CFPropertyListWriteToStream(data, write, format, &errStr);
+	CFDataRef xmlData = CFWriteStreamCopyProperty(write, kCFStreamPropertyDataWritten);
+	sdmmd_return_t result = ((data) ? SDMMD_ServiceSend(handle, xmlData) : MDERR_DICT_NOT_LOADED);
+	if (xmlData)
+		CFRelease(xmlData);
+	CFWriteStreamClose(write);
+	if (write)
+		CFRelease(write);
+	return result;
+}
+
+sdmmd_return_t SDMMD_ServiceReceiveStream(SocketConnection handle, CFPropertyListRef *data) {
+	CFDataRef dataBuffer = NULL;
+	if (SDM_MD_CallSuccessful(SDMMD_ServiceReceive(handle, &dataBuffer))) {
+		if (dataBuffer && CFDataGetLength(dataBuffer)) {
+			CFReadStreamRef read = CFReadStreamCreateWithBytesNoCopy(kCFAllocatorDefault, CFDataGetBytePtr(dataBuffer), CFDataGetLength(dataBuffer), kCFAllocatorNull);
+			CFReadStreamOpen(read);
+			*data = CFPropertyListCreateWithStream(kCFAllocatorDefault, read, CFDataGetLength(dataBuffer), 0x2, 0, NULL);
+			//*data = CFPropertyListCreateWithData(0, dataBuffer, kCFPropertyListImmutable, NULL, NULL);
+			CFReadStreamClose(read);
+			if (read)
+				CFRelease(read);
+		}
+		return MDERR_OK;
+	} else {
+		return MDERR_QUERY_FAILED;
+	}
+}
+
+
 SocketConnection SDMMD_TranslateConnectionToSocket(SDMMD_AMConnectionRef connection) {
 	SocketConnection sock;
 	if (connection->ivars.ssl) {

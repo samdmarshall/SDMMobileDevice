@@ -45,12 +45,13 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 		else
 			sock = (SocketConnection){false, {.conn = conn->ivars.socket}};
 			
-		CFShow(message);
-		result = SDMMD_ServiceSendMessage(sock, message, kCFPropertyListXMLFormat_v1_0);
+		result = SDMMD_ServiceSendStream(sock, message, kCFPropertyListXMLFormat_v1_0);
 		if (result == 0) {
-			CFDictionaryRef response;
-			result = SDMMD_ServiceReceiveMessage(sock, (CFPropertyListRef*)&response);
-			if (result == 0) {
+			CFDictionaryRef response = NULL;
+			result = SDMMD_ServiceReceiveStream(sock, (CFPropertyListRef*)&response);
+			if (result == 0 && response != NULL) {
+				printf("Getting perform_command response:\n");
+				CFShow(response);
 				CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
 				if (error) {
 					result = SDMMD__ConvertServiceError(error);
@@ -141,6 +142,7 @@ sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef se
 									}
 									CFTypeRef sslService = CFDictionaryGetValue(response, CFSTR("EnableServiceSSL"));
 									if (sslService) {
+										CFShow(CFEqual(sslService, kCFBooleanTrue));
 										*enableSSL = (CFEqual(sslService, kCFBooleanTrue) ? true : false);
 									} else {
 										*enableSSL = false;
@@ -181,6 +183,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 				bool closeOnInvalidate = true;
 				bool directSocket = false;
 				bool canConnect = true;
+				CFShow(options);
 				if (options) {
 					//loc_6e9fc;
 					CFTypeRef closeVal = CFDictionaryGetValue(options, CFSTR("CloseOnInvalidate"));
@@ -278,7 +281,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 						}
 					} else {
 						//loc_6ecd2;
-						result = SDMMD__connect_to_port(device, port & 0xffff, timeoutConnection, &socket, ((uint32_t)ssl & 0x1) & 0xff);
+						result = SDMMD__connect_to_port(device, port, timeoutConnection, &socket, ((uint32_t)ssl & 0x1) & 0xff);
 						if (result == 0x0) {
 							//loc_0x6ee60;
 							if (enableSSL) {

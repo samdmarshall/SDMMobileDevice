@@ -27,7 +27,6 @@
 #define kAppLookupMasterKey "ReturnAttributes"
 
 void SDMMD_browse_callback(CFDictionaryRef dict, void* response) {
-	printf("testing123!\n");
 	CFShow(dict);
 	if (response) {
 		CFTypeRef list = CFDictionaryGetValue(dict, CFSTR("CurrentList"));
@@ -52,17 +51,18 @@ void SDMMD_browse_callback(CFDictionaryRef dict, void* response) {
 	}
 }
 
-sdmmd_return_t SDM_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFArrayRef options, CFDictionaryRef *response) {
+sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef *response) {
 	sdmmd_return_t result = 0xe8000007;
 	if (device) {
 		if (options) {
-			SDMMD_AMConnectionRef conn;
+			CFDictionaryRef dict = NULL;
+			SDMMD_AMConnectionRef conn = SDMMD_AMDServiceConnectionCreate(0, NULL, dict);
 			result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_INSTALLATION_PROXY), 0x0, &conn);
 			if (result == 0) {
 				CFMutableDictionaryRef dict = SDMMD_create_dict();
 				result = 0xe8000003;
 				if (dict) {
-					result = SDMMD_perform_command(conn, CFSTR("Browse"), 0x0, SDMMD_browse_callback, 2, dict, CFSTR("ClientOptions"), options);
+					result = SDMMD_perform_command(conn, CFSTR("Browse"), 0x0, SDMMD_browse_callback, 2, NULL, CFSTR("ClientOptions"), options);
 					if (!result) {
 						*response = dict;
 					}

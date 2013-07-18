@@ -357,8 +357,8 @@ static sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SD
 }
 
 static CFArrayRef SDMMD_ApplicationLookupDictionary() {
-	const void* values[23] = {CFSTR("CFBundleIdentifier"), CFSTR("ApplicationDSID"), CFSTR("ApplicationType"), CFSTR("CFBundleExecutable"), CFSTR("CFBundleDisplayName"), CFSTR("CFBundleIconFile"), CFSTR("CFBundleName"), CFSTR("CFBundleShortVersionString"), CFSTR("CFBundleSupportedPlatforms"), CFSTR("CFBundleURLTypes"), CFSTR("CFBundleVersion"), CFSTR("CodeInfoIdentifier"), CFSTR("Container"), CFSTR("Entitlements"), CFSTR("HasSettingsBundle"), CFSTR("IsUpgradeable"), CFSTR("MinimumOSVersion"), CFSTR("Path"), CFSTR("SignerIdentity"), CFSTR("UIDeviceFamily"), CFSTR("UIFileSharingEnabled"), 	CFSTR("UIStatusBarHidden"), 	CFSTR("UISupportedInterfaceOrientations")};
-	return CFArrayCreate(kCFAllocatorDefault, values, 23, &kCFTypeArrayCallBacks);
+	const void* values[5] = {CFSTR("CFBundleIdentifier"), CFSTR("CFBundleDisplayName"), CFSTR("CFBundleName"), CFSTR("Container"), CFSTR("Path")};
+	return CFArrayCreate(kCFAllocatorDefault, values, 5, &kCFTypeArrayCallBacks);
 }
 
 #endif
