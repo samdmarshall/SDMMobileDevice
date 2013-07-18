@@ -136,7 +136,10 @@ sdmmd_return_t SDMMD_ServiceSendStream(SocketConnection handle, CFPropertyListRe
 	CFWriteStreamOpen(write);
 	uint32_t length = CFPropertyListWriteToStream(data, write, format, &errStr);
 	CFDataRef xmlData = CFWriteStreamCopyProperty(write, kCFStreamPropertyDataWritten);
-	sdmmd_return_t result = ((data) ? SDMMD_ServiceSend(handle, xmlData) : MDERR_DICT_NOT_LOADED);
+	sdmmd_return_t result = MDERR_DICT_NOT_LOADED;
+	if (length == CFDataGetLength(xmlData)) {
+		result = ((data) ? SDMMD_ServiceSend(handle, xmlData) : MDERR_DICT_NOT_LOADED);
+	}
 	if (xmlData)
 		CFRelease(xmlData);
 	CFWriteStreamClose(write);
@@ -152,7 +155,6 @@ sdmmd_return_t SDMMD_ServiceReceiveStream(SocketConnection handle, CFPropertyLis
 			CFReadStreamRef read = CFReadStreamCreateWithBytesNoCopy(kCFAllocatorDefault, CFDataGetBytePtr(dataBuffer), CFDataGetLength(dataBuffer), kCFAllocatorNull);
 			CFReadStreamOpen(read);
 			*data = CFPropertyListCreateWithStream(kCFAllocatorDefault, read, CFDataGetLength(dataBuffer), 0x2, 0, NULL);
-			//*data = CFPropertyListCreateWithData(0, dataBuffer, kCFPropertyListImmutable, NULL, NULL);
 			CFReadStreamClose(read);
 			if (read)
 				CFRelease(read);

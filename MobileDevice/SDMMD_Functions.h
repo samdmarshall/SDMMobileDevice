@@ -361,4 +361,16 @@ static CFArrayRef SDMMD_ApplicationLookupDictionary() {
 	return CFArrayCreate(kCFAllocatorDefault, values, 5, &kCFTypeArrayCallBacks);
 }
 
+static CFURLRef SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(CFStringRef path) {
+	char *cpath = calloc(1, 0x401);
+	CFURLRef url = NULL;
+	if (CFStringGetCString(path, cpath, 0x400, 0x8000100)) {
+		struct stat buf;
+		lstat(cpath, &buf);
+		CFURLRef base = CFURLCreateWithString(kCFAllocatorDefault, CFSTR("file://localhost/"), NULL);
+		url = CFURLCreateWithFileSystemPathRelativeToBase(kCFAllocatorDefault, path, kCFURLPOSIXPathStyle, S_ISDIR(buf.st_mode), base);
+	}
+	return url;
+}
+
 #endif

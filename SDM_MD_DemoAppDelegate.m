@@ -54,7 +54,7 @@
 			NSLog(@"%@: %@",key, value);
 		}*/
 		
-		CFMutableDictionaryRef response = SDMMD_create_dict();;
+		CFDictionaryRef response;
 		CFArrayRef values = SDMMD_ApplicationLookupDictionary();
 		CFMutableDictionaryRef optionsDict = SDMMD_create_dict();
 		CFDictionarySetValue(optionsDict, CFSTR("ReturnAttributes"), values);
@@ -71,10 +71,10 @@
 		printf("service start: 0x%08x\n",result);*/
 		
 		
-		//result = SDMMD_AMDeviceStopSession(device);
-		//printf("stop session: 0x%08x\n",result);
-		//result = SDMMD_AMDeviceDisconnect(device);
-		//printf("disconnect: 0x%08x\n",result);
+		result = SDMMD_AMDeviceStopSession(device);
+		printf("stop session: 0x%08x\n",result);
+		result = SDMMD_AMDeviceDisconnect(device);
+		printf("disconnect: 0x%08x\n",result);
 	}
 }
 
