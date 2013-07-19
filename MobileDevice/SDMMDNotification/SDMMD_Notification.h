@@ -28,15 +28,42 @@
 #define kNotificationiTunesSyncDidStart					"com.apple.itunes-mobdev.syncDidStart"
 #define kNotificationiTunesSyncDidFinish				"com.apple.itunes-mobdev.syncDidFinish"
 
+#define kNotificationiTunesSyncCancel					"com.apple.itunes-client.syncCancelRequest"
+#define kNotificationiTunesSyncSuspend					"com.apple.itunes-client.syncSuspendRequest"
+#define kNotificationiTunesSyncResume					"com.apple.itunes-client.syncResumeRequest"
+
+#define kNotificationMobileSyncStarted					"com.apple.MobileSync.SyncAgent.kSyncAgentSyncStarted"
+#define kNotificationMobileSyncEnded					"com.apple.MobileSync.SyncAgent.kSyncAgentSyncEnded"
+
+#define kNotificationDataSyncDomainChanged				"com.apple.mobile.data_sync.domain_changed"
+
 #define kNotificationLockdownActivationState			"com.apple.mobile.lockdown.activation_state"
-#define kNotificationDeviceNameChange					"com.apple.mobile.lockdown.device_name_changed"
+#define kNotificationLockdownDeviceNameChange			"com.apple.mobile.lockdown.device_name_changed"
+#define kNotificationLockdownTrustedHost				"com.apple.mobile.lockdown.trusted_host_attached"
+#define kNotificationLockdownHostDetatch				"com.apple.mobile.lockdown.host_detached"
+#define kNotificationLockdownHostAttach					"com.apple.mobile.lockdown.host_attached"
+#define kNotificationLockdownPhoneChanged				"com.apple.mobile.lockdown.phone_number_changed"
+#define kNotificationLockdownRegFailed					"com.apple.mobile.lockdown.registration_failed"
+#define kNotificationLockdownActivationState			"com.apple.mobile.lockdown.activation_state"
+#define kNotificationLockdownBrickState					"com.apple.mobile.lockdown.brick_state"
+
+#define kNotificationDevImageMounted					"com.apple.mobile.developer_image_mounted"
+
 #define kNotificationAppUninstalled						"com.apple.mobile.application_uninstalled"
 #define kNotificationAppInstalled						"com.apple.mobile.application_installed"
+
 #define kNotificationiTunesAppInstalled					"com.apple.itunesstored.application_installed"
-#define kNotificationShutDown							"com.apple.springboard.deviceWillShutDown"
+
+#define kNotificationSpringboardShutDown				"com.apple.springboard.deviceWillShutDown"
+#define kNotificationSpringboardAttemptActivation		"com.apple.springboard.attemptactivation"
+
 #define kNotificationProvisionProfileInstalled			"MISProvisioningProfileInstalled"
 #define kNotificationProvisionProfileRemoved			"MISProvisioningProfileRemoved"
+
 #define kNotificationProfileListChanged					"com.apple.ManagedConfiguration.profileListChanged"
+
+#define kNotificationLanguageChanged					"com.apple.language.changed"
+#define kNotificationContactsPrefsChanged				"com.apple.AddressBook.PreferenceChanged"
 
 
 #endif
