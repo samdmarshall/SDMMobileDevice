@@ -45,9 +45,14 @@ typedef struct afc_lock SDMMD_AFCLockClass;
 
 #define SDMMD_AFCLockRef SDMMD_AFCLockClass*
 
+CFTypeID SDMMD_AFCLockGetTypeID(void);
+
 #pragma mark -
 #pragma mark FUNCTIONS
 #pragma mark -
+
+void SDMMD_AFCLockRefClassInitialize(void);
+
 SDMMD_AFCLockRef SDMMD_AFCLockCreate();
 sdmmd_return_t SDMMD_AFCLockLock(SDMMD_AFCLockRef lock);
 sdmmd_return_t SDMMD_AFCLockUnlock(SDMMD_AFCLockRef lock);

@@ -77,9 +77,6 @@ static CFTypeID _kSDMMD_AMDeviceRefID = _kCFRuntimeNotATypeID;
 
 static CFRuntimeClass _kSDMMD_AMDeviceRefClass = {0};
 
-/* Something external to this file is assumed to call this
- * before the EXRange class is used.
- */
 void SDMMD_AMDeviceRefClassInitialize(void) {
     _kSDMMD_AMDeviceRefClass.version = 0;
     _kSDMMD_AMDeviceRefClass.className = "SDMMD_AMDeviceRef";
@@ -97,7 +94,6 @@ void SDMMD_AMDeviceRefClassInitialize(void) {
 CFTypeID SDMMD_AMDeviceRefGetTypeID(void) {
     return _kSDMMD_AMDeviceRefID;
 }
-
 
 SDMMD_lockdown_conn* SDMMD_lockdown_connection_create(uint32_t socket) {
 	SDMMD_lockdown_conn *lockdown = calloc(0x1, sizeof(SDMMD_lockdown_conn));
@@ -1281,6 +1277,7 @@ Boolean SDMMD_device_os_is_at_least(SDMMD_AMDeviceRef device, CFStringRef versio
 		if (prodVers) {
 				result = (CFStringCompare(prodVers, version, 0x40) != 0xff ? true : false);
 		}
+		CFRelease(prodVers);
 	}
 	return result;
 }

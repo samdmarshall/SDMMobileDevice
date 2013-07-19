@@ -25,6 +25,10 @@
 #include <sys/event.h>
 #include <sys/time.h>
 
+static CFTypeID _kSDMMD_AFCConnectionRefID = _kCFRuntimeNotATypeID;
+
+static CFRuntimeClass _kSDMMD_AFCConnectionRefClass = {0};
+
 SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(void*a, uint32_t sock,void*c,void*d,void*e) {
 	uint32_t extra = sizeof(AFCConnectionClassBody);
 	SDMMD_AFCConnectionRef connection = calloc(0x1, sizeof(SDMMD_AFCConnectionClass));
@@ -51,6 +55,24 @@ SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(void*a, uint32_t sock,void*c,vo
 		connection->ivars.queue = kqueue();
 	}
 	return connection;
+}
+
+void SDMMD_AFCConnectionRefClassInitialize(void) {
+    _kSDMMD_AFCConnectionRefClass.version = 0;
+    _kSDMMD_AFCConnectionRefClass.className = "SDMMD_AFCConnectionRef";
+    _kSDMMD_AFCConnectionRefClass.init = SDMMD_AFCConnectionCreate;
+    _kSDMMD_AFCConnectionRefClass.copy = NULL;
+    _kSDMMD_AFCConnectionRefClass.finalize = NULL;
+    _kSDMMD_AFCConnectionRefClass.equal = NULL;
+    _kSDMMD_AFCConnectionRefClass.hash = NULL;
+    _kSDMMD_AFCConnectionRefClass.copyFormattingDesc = NULL;
+    _kSDMMD_AFCConnectionRefClass.copyDebugDesc = NULL;
+	_kSDMMD_AFCConnectionRefClass.reclaim = NULL;
+    _kSDMMD_AFCConnectionRefID = _CFRuntimeRegisterClass((const CFRuntimeClass * const)&_kSDMMD_AFCConnectionRefClass);
+}
+
+CFTypeID SDMMD_AFCConnectionGetTypeID(void) {
+    return _kSDMMD_AFCConnectionRefID;
 }
 
 #endif

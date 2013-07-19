@@ -21,13 +21,47 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 #include "SDMMD_Error.h"
-#include "SDMMD_AFCDevice.h"
-#include "SDMMD_AFCIterator.h"
-#include "SDMMD_AFCOperation.h"
-#include "SDMMD_AFCLock.h"
-#include "SDMMD_AFCCondition.h"
+#include "SDMMD_Service.h"
+//#include "SDMMD_AFCDevice.h"
+//#include "SDMMD_AFCIterator.h"
+//#include "SDMMD_AFCOperation.h"
+//#include "SDMMD_AFCLock.h"
+//#include "SDMMD_AFCCondition.h"
 
-static char *gAFCPacketTypeNames[39] = {
+#pragma mark -
+#pragma mark TYPES
+#pragma mark -
+
+typedef struct AFCConnectionClass {
+	SDMMD_AMConnectionRef handle;
+	dispatch_queue_t operationQueue;
+	dispatch_semaphore_t semaphore;
+	uint64_t operationCount;
+} AFCConnectionClass;
+
+#define SDMMD_AFCConnectionRef AFCConnectionClass*
+
+typedef struct SDMMD_AFCPacketHeader {
+	uint64_t signature;
+	uint64_t packetLen;
+	uint64_t headerLen;
+	uint64_t pid;
+	uint64_t type;
+} __attribute__ ((packed)) SDMMD_AFCPacketHeader;
+
+typedef struct AFCPacket {
+	SDMMD_AFCPacketHeader header;
+	void* data;
+} AFCPacket;
+
+typedef struct AFCOperation {
+	AFCPacket *packet;
+	dispatch_time_t timeout;
+} AFCOperation;
+
+#define SDMMD_AFCOperationRef AFCOperation*
+
+static char* SDMMD_gAFCPacketTypeNames[39] = {
 	"Invalid",
 	"Status",
 	"Data",
@@ -69,17 +103,24 @@ static char *gAFCPacketTypeNames[39] = {
 	"DirectoryEnumeratorRefClose"
 };
 
-typedef struct SDMMD_AFCHeader {
-	uint64_t signature;
-	uint64_t packetLen;
-	uint64_t headerLen;
-	uint64_t pid;
-	uint64_t type;
-} __attribute__ ((packed)) SDMMD_AFCHeader;
+#pragma mark -
+#pragma mark Functions
+#pragma mark -
 
-#define SDMMD_AFCHeaderRef SDMMD_AFCHeader*
+SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(SDMMD_AMConnectionRef conn);
+void SDMMD_AFCConnectionRelease(SDMMD_AFCConnectionRef);
 
-void SDMMD_AFCLog(uint32_t level, const char *format, ...);
+sdmmd_return_t SDMMD_AFCConnectionPerformOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOperationRef op);
+
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateRemovePath(CFStringRef path);
+
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateRenamePath(CFStringRef old, CFStringRef new);
+
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateLinkPath(uint64_t linkType, CFStringRef target, CFStringRef link);
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetFileHash(CFStringRef path);
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateSetModTime(CFStringRef ref);
+
+/*void SDMMD_AFCLog(uint32_t level, const char *format, ...);
 sdmmd_return_t SDMMD_AFCSetErrorInfoWithArgs(uint32_t level, uint32_t mask, uint32_t code, char *file, uint32_t line, char *call);
 sdmmd_return_t SDMMD__AFCSetErrorResult(uint32_t level, uint32_t code, uint32_t line, char *call);
 
@@ -91,7 +132,6 @@ sdmmd_return_t SDMMD_AFCSendDataPacket(SDMMD_AFCConnectionRef afcConn, void*b, u
 sdmmd_return_t SDMMD_AFCSendHeader(SDMMD_AFCConnectionRef afcConn, void*b);
 sdmmd_return_t SDMMD_AFCReadPacket(SDMMD_AFCConnectionRef afcConn, CFTypeRef* b, CFTypeRef* c, CFTypeRef* d);
 sdmmd_return_t SDMMD_AFCReadPacketBody(CFTypeRef a,void*b, CFDataRef* c, uint32_t *readLength);
-sdmmd_return_t SDMMD_AFCSendPacket(SDMMD_AFCConnectionRef afcConn, CFTypeRef b, void* c, uint32_t size);
-uint32_t SDMMD_AFCHeaderInit(SDMMD_AFCHeaderRef header, uint32_t command, uint32_t size, uint32_t data, uint32_t unknown);
+sdmmd_return_t SDMMD_AFCSendPacket(SDMMD_AFCConnectionRef afcConn, CFTypeRef b, void* c, uint32_t size);*/
 
 #endif

@@ -337,8 +337,4 @@
 
 #define kSetupState								"SetupState"
 
-#pragma mark -
-#pragma mark FUNCTIONS
-#pragma mark -
-
 #endif

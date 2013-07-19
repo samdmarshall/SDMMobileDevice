@@ -45,9 +45,14 @@ typedef struct afc_condition SDMMD_AFCConditionClass;
 
 #define SDMMD_AFCConditionRef SDMMD_AFCConditionClass*
 
+CFTypeID SDMMD_AFCConditionGetTypeID(void);
+
 #pragma mark -
 #pragma mark FUNCTIONS
 #pragma mark -
+
+void SDMMD_AFCConditionRefClassInitialize(void);
+
 
 SDMMD_AFCConditionRef SDMMD_AFCConditionCreate();
 bool SDMMD_AFCConditionIsSignaled(SDMMD_AFCConditionRef cond);

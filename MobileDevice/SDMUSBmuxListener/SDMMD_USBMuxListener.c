@@ -164,7 +164,7 @@ void SDMMD_USBMuxListenerListCallback(void *context, struct USBMuxPacket *packet
 }
 
 SDMMD_USBMuxListenerRef SDMMD_USBMuxCreate() {
-	SDMMD_USBMuxListenerRef listener = (SDMMD_USBMuxListenerRef)malloc(sizeof(struct USBMuxListenerClass));
+	SDMMD_USBMuxListenerRef listener = (SDMMD_USBMuxListenerRef)calloc(1, sizeof(struct USBMuxListenerClass));
 	listener->socket = 0x0;
 	listener->isActive = false;
 	listener->socketQueue = dispatch_queue_create("com.samdmarshall.sdmmobiledevice.socketQueue", NULL);

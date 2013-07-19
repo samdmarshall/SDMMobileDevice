@@ -40,9 +40,10 @@ typedef struct AFCConnectionClassBody {
 	CFSocketRef socket;						// 48
 	int32_t handle;							// 56
 	int8_t connection_active;				// 60
-	unsigned char padding0[3];				// 61		
+	int8_t dispose_secure_on_invalid;		// 61
+	unsigned char padding0[2];				// 62		
 	int32_t statusPtr;						// 64
-	int8_t e;								// 68
+	int8_t fatal_error;						// 68
 	int32_t last_error;						// 72 last error
 	int32_t operation_count;				// 80 on sending operation is incremented
 	int32_t fs_block_size;					// 88
@@ -59,10 +60,11 @@ typedef struct AFCConnectionClassBody {
 	CFMutableArrayRef operation_dequeue;	// 160
 	CFMutableSetRef file_descriptors;		// 168
 	CFMutableSetRef directory_enumerator; 	// 176
-	CFRunLoopSourceRef source;				// 192
+	CFRunLoopSourceRef source;				// 184
 	CFRunLoopRef runloop;					// 200
-	int32_t secure_context;					// 216
+	int32_t secure_context;					// 208
 	void *callback;							// 224
+	SDMMD_AFCLockRef lock2;					// 248
 	int32_t queue;							// 1256
 	CFTypeRef fileDescriptors0;				// 1260
 	CFTypeRef fileDescriptors1;				// 1264
@@ -77,9 +79,13 @@ typedef struct afc_connection SDMMD_AFCConnectionClass;
 
 #define SDMMD_AFCConnectionRef SDMMD_AFCConnectionClass*
 
+CFTypeID SDMMD_AFCConnectionGetTypeID(void);
+
 #pragma mark -
 #pragma mark FUNCTIONS
 #pragma mark -
+
+void SDMMD_AFCConnectionRefClassInitialize(void);
 
 SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(void*a, uint32_t sock,void*c,void*d,void*e);
 

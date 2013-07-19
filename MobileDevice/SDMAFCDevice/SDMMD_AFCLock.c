@@ -23,6 +23,28 @@
 #include "CFRuntime.h"
 #include "SDMMD_Functions.h"
 
+static CFTypeID _kSDMMD_AFCLockRefID = _kCFRuntimeNotATypeID;
+
+static CFRuntimeClass _kSDMMD_AFCLockRefClass = {0};
+
+void SDMMD_AFCLockRefClassInitialize(void) {
+    _kSDMMD_AFCLockRefClass.version = 0;
+    _kSDMMD_AFCLockRefClass.className = "SDMMD_AFCLockRef";
+    _kSDMMD_AFCLockRefClass.init = NULL;
+    _kSDMMD_AFCLockRefClass.copy = NULL;
+    _kSDMMD_AFCLockRefClass.finalize = NULL;
+    _kSDMMD_AFCLockRefClass.equal = NULL;
+    _kSDMMD_AFCLockRefClass.hash = NULL;
+    _kSDMMD_AFCLockRefClass.copyFormattingDesc = NULL;
+    _kSDMMD_AFCLockRefClass.copyDebugDesc = NULL;
+	_kSDMMD_AFCLockRefClass.reclaim = NULL;
+    _kSDMMD_AFCLockRefID = _CFRuntimeRegisterClass((const CFRuntimeClass * const)&_kSDMMD_AFCLockRefClass);
+}
+
+CFTypeID SDMMD_AFCLockGetTypeID(void) {
+    return _kSDMMD_AFCLockRefID;
+}
+
 SDMMD_AFCLockRef SDMMD_AFCLockCreate() {
 	uint32_t extra = sizeof(AFCLockClassBody);
 	SDMMD_AFCLockRef lock = calloc(0x1, sizeof(SDMMD_AFCLockClass));

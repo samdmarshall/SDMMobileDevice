@@ -77,6 +77,23 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 	return MDERR_OK;
 }
 
+sdmmd_return_t SDMMD_DirectServiceSend(SocketConnection handle, CFDataRef data) {
+	uint32_t msgLen = (data ? CFDataGetLength(data) : 0);
+	if (msgLen) {
+		uint32_t result;
+		if (handle.isSSL) {
+			result = SSL_write(handle.socket.ssl, CFDataGetBytePtr(data), msgLen);
+		} else {
+			result = send(handle.socket.conn, CFDataGetBytePtr(data), msgLen, 0);
+		}
+		if (result == msgLen) {
+			return (result == msgLen ? MDERR_OK : MDERR_QUERY_FAILED);
+		}
+		return MDERR_QUERY_FAILED;
+	}
+	return MDERR_OK;
+}
+
 sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 	size_t recieved;
 	uint32_t length = 0;

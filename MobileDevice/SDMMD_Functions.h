@@ -246,6 +246,19 @@ static char* SDMMD_ssl_strerror(SSL *ssl, uint32_t length) {
 	return code;
 }
 
+static CFStringRef SDMGetCurrentDateString() {
+	CFLocaleRef currentLocale = CFLocaleCopyCurrent();
+	CFDateRef date = CFDateCreate(kCFAllocatorDefault, CFAbsoluteTimeGetCurrent());
+	CFDateFormatterRef customDateFormatter = CFDateFormatterCreate(NULL, currentLocale, kCFDateFormatterNoStyle, kCFDateFormatterNoStyle);
+	CFStringRef customDateFormat = CFSTR("yyyy-MM-dd*HH:mm:ss");
+	CFDateFormatterSetFormat(customDateFormatter, customDateFormat);
+	CFStringRef customFormattedDateString = CFDateFormatterCreateStringWithDate(NULL, customDateFormatter, date);
+	CFRelease(currentLocale);
+	CFRelease(date);
+	CFRelease(customDateFormatter);
+	return customFormattedDateString;
+}
+
 static char* SDMCFStringGetString(CFStringRef str) {
 	char *cstr = calloc(1, CFStringGetLength(str)+1);
 	CFStringGetCString(str, cstr, CFStringGetLength(str), CFStringGetFastestEncoding(str));

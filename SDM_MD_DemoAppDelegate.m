@@ -48,24 +48,29 @@
 		printf("validate: 0x%08x\n",result);
 		result = SDMMD_AMDeviceStartSession(device);
 		printf("start session: 0x%08x\n",result);
+		CFDictionaryRef dict = NULL;
+		SDMMD_AMConnectionRef conn = SDMMD_AMDServiceConnectionCreate(0, NULL, dict);
+		result = SDMMD_AMDeviceStartService(device, CFSTR(AMSVC_AFC), 0x0, &conn);
+		printf("service: 0x%08x\n",result);
 		
 		/*for (NSString *key in keys) {
 			CFTypeRef value = SDMMD_AMDeviceCopyValue(device, NULL, key);
 			NSLog(@"%@: %@",key, value);
 		}*/
 		
-		CFDictionaryRef response;
+		/*CFDictionaryRef response;
 		CFArrayRef values = SDMMD_ApplicationLookupDictionary();
 		CFMutableDictionaryRef optionsDict = SDMMD_create_dict();
 		CFDictionarySetValue(optionsDict, CFSTR("ReturnAttributes"), values);
 		
 		result = SDMMD_AMDeviceLookupApplications(device, optionsDict, &response);
-		printf("lookup: 0x%08x\n",result);
+		printf("lookup: 0x%08x\n",result);*/
 		result = SDMMD_AMDeviceStopSession(device);
 		printf("stop session: 0x%08x\n",result);
 		result = SDMMD_AMDeviceDisconnect(device);
 		printf("disconnect: 0x%08x\n",result);
-		CFDictionaryRef app = CFDictionaryGetValue(response, CFSTR("com.tapbots.TweetbotPad"));
+		
+		/*CFDictionaryRef app = CFDictionaryGetValue(response, CFSTR("com.tapbots.TweetbotPad"));
 		if (app) {
 				SDMMD_AMDebugConnectionRef debugConn;
 				result = SDMMD_StartDebuggingSessionOnDevice(device, &debugConn);
@@ -89,7 +94,7 @@
 				//CFShow(dresult.data);
 				result = SDMMD_StopDebuggingSessionOnDevice(device, &debugConn);
 				printf("debug stop: 0x%08x\n",result);
-		}	
+		}	*/
 	}
 }
 

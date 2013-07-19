@@ -22,6 +22,28 @@
 #include "SDMMD_AFCCondition.h"
 #include "CFRuntime.h"
 
+static CFTypeID _kSDMMD_AFCConditionRefID = _kCFRuntimeNotATypeID;
+
+static CFRuntimeClass _kSDMMD_AFCConditionRefClass = {0};
+
+void SDMMD_AFCConditionRefClassInitialize(void) {
+    _kSDMMD_AFCConditionRefClass.version = 0;
+    _kSDMMD_AFCConditionRefClass.className = "SDMMD_AFCConditionRef";
+    _kSDMMD_AFCConditionRefClass.init = NULL;
+    _kSDMMD_AFCConditionRefClass.copy = NULL;
+    _kSDMMD_AFCConditionRefClass.finalize = NULL;
+    _kSDMMD_AFCConditionRefClass.equal = NULL;
+    _kSDMMD_AFCConditionRefClass.hash = NULL;
+    _kSDMMD_AFCConditionRefClass.copyFormattingDesc = NULL;
+    _kSDMMD_AFCConditionRefClass.copyDebugDesc = NULL;
+	_kSDMMD_AFCConditionRefClass.reclaim = NULL;
+    _kSDMMD_AFCConditionRefID = _CFRuntimeRegisterClass((const CFRuntimeClass * const)&_kSDMMD_AFCConditionRefClass);
+}
+
+CFTypeID SDMMD_AFCConditionGetTypeID(void) {
+    return _kSDMMD_AFCConditionRefID;
+}
+
 SDMMD_AFCConditionRef SDMMD_AFCConditionCreate() {
 	uint32_t extra = sizeof(AFCConditionClassBody);
 	SDMMD_AFCConditionRef cond = calloc(0x1, sizeof(SDMMD_AFCConditionClass));
@@ -33,7 +55,6 @@ SDMMD_AFCConditionRef SDMMD_AFCConditionCreate() {
 	}
 	return cond;
 }
-
 
 bool SDMMD_AFCConditionIsSignaled(SDMMD_AFCConditionRef cond) {
 	return cond->ivars.signaled;
