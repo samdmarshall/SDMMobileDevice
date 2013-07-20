@@ -207,7 +207,6 @@ sdmmd_return_t SDMMD_ServiceReceiveStream(SocketConnection handle, CFPropertyLis
 	}
 }
 
-
 SocketConnection SDMMD_TranslateConnectionToSocket(SDMMD_AMConnectionRef connection) {
 	SocketConnection sock;
 	if (connection->ivars.ssl) {
