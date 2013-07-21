@@ -26,11 +26,11 @@
 #pragma mark TYPES
 #pragma mark -
 
-typedef struct AMRecoveryModeDeviceClassHeader {
+struct AMRecoveryModeDeviceClassHeader {
 	unsigned char header[16];
 } __attribute__ ((packed)) AMRecoveryModeDeviceClassHeader; // size 0x10
 
-typedef struct AMRecoveryModeDeviceClassBody {
+struct AMRecoveryModeDeviceClassBody {
 	// 16
 	// 24
 	int32_t current_progress;		// 32

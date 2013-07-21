@@ -27,14 +27,14 @@
 #pragma mark TYPES
 #pragma mark -
 
-typedef struct USBMuxPacketBody {
+struct USBMuxPacketBody {
 	uint32_t length;
 	uint32_t reserved;
 	uint32_t type;
 	uint32_t tag;
 } __attribute__ ((packed)) USBMuxPacketBody;
 
-typedef struct USBMuxPacket {
+struct USBMuxPacket {
 	dispatch_time_t timeout;
 	struct USBMuxPacketBody body;
 	CFPropertyListRef payload;

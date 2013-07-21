@@ -24,11 +24,11 @@
 #include "SDMMD_AMDevice.h"
 #include <openssl/ssl.h>
 
-typedef struct AMConnectionClassHeader {
+struct AMConnectionClassHeader {
 	unsigned char header[16];		// AMConnectionClass CF Header 
 } __attribute ((packed)) AMConnectionClassHeader; // size 0x10
 
-typedef struct AMConnectionClassBody {
+struct AMConnectionClassBody {
 	uint32_t socket;			// 16
 	unsigned char unknown0[4];	// 20
 	SSL *ssl;					// 24

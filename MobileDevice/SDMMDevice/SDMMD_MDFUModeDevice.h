@@ -25,11 +25,11 @@
 #pragma mark TYPES
 #pragma mark -
 
-typedef struct AMDFUModeDeviceClassHeader {
+struct AMDFUModeDeviceClassHeader {
 	unsigned char header[16];	// 16
 } __attribute__ ((packed)) AMDFUModeDeviceClassHeader; // 0x10
 
-typedef struct AMDFUModeDeviceClassBody {
+struct AMDFUModeDeviceClassBody {
 	// 16
 	// 24
 	uint32_t current_progress;	// 32

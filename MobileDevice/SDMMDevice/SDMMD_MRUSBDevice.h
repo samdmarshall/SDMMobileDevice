@@ -19,11 +19,11 @@
 #ifndef _SDM_MD_MRUSBDEVICE_H_
 #define _SDM_MD_MRUSBDEVICE_H_
 
-typedef struct AMRUSBDeviceClassHeader {
+struct AMRUSBDeviceClassHeader {
 
 } __attribute__ ((packed)) AMRUSBDeviceClassHeader;
 
-typedef struct AMRUSBDeviceClassBody {
+struct AMRUSBDeviceClassBody {
 	
 } __attribute__ ((packed)) AMRUSBDeviceClassBody;
 

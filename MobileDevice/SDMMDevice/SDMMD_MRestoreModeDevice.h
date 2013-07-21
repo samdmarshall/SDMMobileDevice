@@ -21,11 +21,11 @@
 
 #import "SDMMD_AMDevice.h"
 
-typedef struct AMRestoreModeDeviceClassHeader {
+struct AMRestoreModeDeviceClassHeader {
 	unsigned char header[16];
 } __attribute__ ((packed)) AMRestoreModeDeviceClassHeader; // 0x10
 
-typedef struct AMRestoreModeDeviceClassBody {
+struct AMRestoreModeDeviceClassBody {
 	// 10
 	// 24
 	int32_t d;			// 32

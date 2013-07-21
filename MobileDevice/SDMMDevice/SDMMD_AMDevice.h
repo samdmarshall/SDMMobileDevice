@@ -36,11 +36,11 @@ typedef struct SDMMD_lockdown_conn {
 	uint64_t length;				// 24
 } __attribute__ ((packed)) SDMMD_lockdown_conn;
 
-typedef struct AMDeviceClassHeader {
+struct AMDeviceClassHeader {
 	unsigned char header[16];		// AMDeviceClass CF Header 
 } __attribute ((packed)) AMDeviceClassHeader; // size 0x10
 
-typedef struct AMDeviceClassBody {
+struct AMDeviceClassBody {
 	int32_t device_id;					// 16
 	int32_t location_id;				// 20
 	uint16_t product_id;				// 24

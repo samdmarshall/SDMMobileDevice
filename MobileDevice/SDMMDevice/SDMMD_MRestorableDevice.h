@@ -19,11 +19,11 @@
 #ifndef _SDM_MD_MRESTORABLEDEVICE_H_
 #define _SDM_MD_MRESTORABLEDEVICE_H_
 
-typedef struct AMRestorableDeviceClassHeader {
+struct AMRestorableDeviceClassHeader {
 	unsigned char header[16];
 } __attribute__ ((packed)) AMRestorableDeviceClassHeader; // 0x10
 
-typedef struct AMRestorableDeviceClassBody {
+struct AMRestorableDeviceClassBody {
 	// 10
 	// 24
 	// 32
