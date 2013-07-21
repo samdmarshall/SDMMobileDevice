@@ -37,7 +37,7 @@ typedef struct AMRestorableDeviceClassBody {
 	// 96
 } __attribute__ ((packed)) AMRestorableDeviceClassBody; // 0x58
 
-typedef struct am_restorable_device {
+struct am_restorable_device {
 	struct AMRestorableDeviceClassHeader base;
 	struct AMRestorableDeviceClassBody ivars;
 } __attribute__ ((packed)) am_restorable_device;

@@ -22,7 +22,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include "SDMMD_USBMuxListener.h"
 
-typedef struct sdm_mobiledevice {
+struct sdm_mobiledevice {
 	SDMMD_USBMuxListenerRef usbmuxd;
 	CFArrayRef deviceList;
 	uint64_t peer_certificate_data_index;

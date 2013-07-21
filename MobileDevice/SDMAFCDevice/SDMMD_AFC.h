@@ -32,14 +32,14 @@
 #pragma mark TYPES
 #pragma mark -
 
-typedef struct AFCConnectionClass {
+struct sdmmd_AFCConnectionClass {
 	SDMMD_AMConnectionRef handle;
 	dispatch_queue_t operationQueue;
 	dispatch_semaphore_t semaphore;
 	uint64_t operationCount;
-} AFCConnectionClass;
+} sdmmd_AFCConnectionClass;
 
-#define SDMMD_AFCConnectionRef AFCConnectionClass*
+#define SDMMD_AFCConnectionRef struct sdmmd_AFCConnectionClass*
 
 typedef struct SDMMD_AFCPacketHeader {
 	uint64_t signature;
@@ -49,17 +49,17 @@ typedef struct SDMMD_AFCPacketHeader {
 	uint64_t type;
 } __attribute__ ((packed)) SDMMD_AFCPacketHeader;
 
-typedef struct AFCPacket {
+struct sdmmd_AFCPacket {
 	SDMMD_AFCPacketHeader header;
 	void* data;
-} AFCPacket;
+} sdmmd_AFCPacket;
 
-typedef struct AFCOperation {
-	AFCPacket *packet;
+struct sdmmd_AFCOperation {
+	struct sdmmd_AFCPacket *packet;
 	dispatch_time_t timeout;
-} AFCOperation;
+} sdmmd_AFCOperation;
 
-#define SDMMD_AFCOperationRef AFCOperation*
+#define SDMMD_AFCOperationRef sdmmd_AFCOperation*
 
 static char* SDMMD_gAFCPacketTypeNames[39] = {
 	"Invalid",

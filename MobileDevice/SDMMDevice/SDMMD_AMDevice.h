@@ -69,7 +69,7 @@ typedef struct AMDeviceClassBody {
 	unsigned char unknown12[4];			// 164
 } __attribute__ ((packed)) AMDeviceClassBody; // size 0x98
 
-typedef struct sdmmd_am_device {
+struct sdmmd_am_device {
 	struct AMDeviceClassHeader base;
 	struct AMDeviceClassBody ivars;
 } __attribute__ ((packed)) sdmmd_am_device;
@@ -78,9 +78,8 @@ typedef struct sdmmd_am_device {
 CFTypeID SDMMD_AMDeviceGetTypeID(void);
 
 /* Classes */
-typedef struct sdmmd_am_device SDM_AMDeviceClass;
 
-#define SDMMD_AMDeviceRef SDM_AMDeviceClass*
+#define SDMMD_AMDeviceRef struct sdmmd_am_device*
 
 #pragma mark -
 void SDMMD_AMDeviceRefClassInitialize();

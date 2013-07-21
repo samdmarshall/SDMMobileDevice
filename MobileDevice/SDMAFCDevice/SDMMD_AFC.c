@@ -113,7 +113,7 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateOpenFile(CFStringRef path, uint16_
 	op->packet = calloc(1, sizeof(AFCPacket));
 	char *cpath = SDMCFStringGetString(path);
 	op->packet->data = calloc(1, strlen(cpath)+2);
-	op->packet->data = mode;
+	op->packet->data = (void*)mode;
 	memcpy(&op->packet->data[2], cpath, strlen(cpath));
 	SDMMD_AFCHeaderInit(&op->packet->header, 0xd, strlen(cpath)+0x31, 0x0, 0x0);
 	free(cpath);

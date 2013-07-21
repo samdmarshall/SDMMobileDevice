@@ -48,7 +48,10 @@
 		22ADA89417958897002ACFB1 /* SDMMD_Notification.h in Headers */ = {isa = PBXBuildFile; fileRef = 225AC5BE175B976500A47071 /* SDMMD_Notification.h */; };
 		22ADA89517958898002ACFB1 /* SDMMD_Notification.c in Sources */ = {isa = PBXBuildFile; fileRef = 225AC5BF175B976500A47071 /* SDMMD_Notification.c */; };
 		22ADA9C91796E404002ACFB1 /* SDMMD_Applications.c in Sources */ = {isa = PBXBuildFile; fileRef = 225ACD761760C86200A47071 /* SDMMD_Applications.c */; };
-		22ADAEB417997052002ACFB1 /* SDMMD_AFC.c in Sources */ = {isa = PBXBuildFile; fileRef = 22AD8E5917871506002ACFB1 /* SDMMD_AFC.c */; };
+		22D5F31D179C823800C34745 /* SDMMD_Applications.h in Headers */ = {isa = PBXBuildFile; fileRef = 225ACD751760C86200A47071 /* SDMMD_Applications.h */; };
+		22D5F31E179C823800C34745 /* SDMMD_Applications.c in Sources */ = {isa = PBXBuildFile; fileRef = 225ACD761760C86200A47071 /* SDMMD_Applications.c */; };
+		22D5F321179C824900C34745 /* SDMMD_AFC.c in Sources */ = {isa = PBXBuildFile; fileRef = 22AD8E5917871506002ACFB1 /* SDMMD_AFC.c */; };
+		22D5F322179C824A00C34745 /* SDMMD_AFC.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD8E5817871506002ACFB1 /* SDMMD_AFC.h */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -407,6 +410,8 @@
 				22AD9369178A17AF002ACFB1 /* SDMMD_MRestoreModeDevice.h in Headers */,
 				22AD9A45178F2CBF002ACFB1 /* CFRuntime.h in Headers */,
 				22ADA89417958897002ACFB1 /* SDMMD_Notification.h in Headers */,
+				22D5F31D179C823800C34745 /* SDMMD_Applications.h in Headers */,
+				22D5F322179C824A00C34745 /* SDMMD_AFC.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -513,6 +518,8 @@
 				22AD9359178A1759002ACFB1 /* SDMMD_MRestorableDevice.c in Sources */,
 				22AD936A178A17B0002ACFB1 /* SDMMD_MRestoreModeDevice.c in Sources */,
 				22ADA89517958898002ACFB1 /* SDMMD_Notification.c in Sources */,
+				22D5F31E179C823800C34745 /* SDMMD_Applications.c in Sources */,
+				22D5F321179C824900C34745 /* SDMMD_AFC.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -526,7 +533,6 @@
 				2288ECC9177B4F31006BF231 /* MDDemoDeviceTable.m in Sources */,
 				2288ECDB177B5119006BF231 /* MDDemoInfoView.m in Sources */,
 				22ADA9C91796E404002ACFB1 /* SDMMD_Applications.c in Sources */,
-				22ADAEB417997052002ACFB1 /* SDMMD_AFC.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

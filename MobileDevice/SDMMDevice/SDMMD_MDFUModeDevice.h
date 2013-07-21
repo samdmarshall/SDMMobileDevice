@@ -40,7 +40,7 @@ typedef struct AMDFUModeDeviceClassBody {
 	// 56
 } __attribute__ ((packed)) AMDFUModeDeviceClassBody; // 0x30
 
-typedef struct am_dfu_device {
+struct am_dfu_device {
 	struct AMDFUModeDeviceClassHeader base;
 	struct AMDFUModeDeviceClassBody ivars;
 } __attribute__ ((packed)) am_dfu_device;

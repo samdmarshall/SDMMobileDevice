@@ -27,7 +27,7 @@ typedef struct AMRUSBDeviceClassBody {
 	
 } __attribute__ ((packed)) AMRUSBDeviceClassBody;
 
-typedef struct am_rusb_device {
+struct am_rusb_device {
 	struct AMRUSBDeviceClassHeader base;
 	struct AMRUSBDeviceClassBody ivars;
 } __attribute__ ((packed)) am_rusb_device;

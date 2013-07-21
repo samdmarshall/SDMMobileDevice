@@ -40,7 +40,7 @@ typedef struct AMConnectionClassBody {
 	char service[128];			// 40
 } __attribute__ ((packed)) AMConnectionClassBody; // size 0x98
 
-typedef struct am_connection {
+struct am_connection {
 	struct AMConnectionClassHeader base;
 	struct AMConnectionClassBody ivars;
 } __attribute__ ((packed)) am_connection;

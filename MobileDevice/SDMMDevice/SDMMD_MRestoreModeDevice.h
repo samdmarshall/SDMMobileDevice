@@ -46,7 +46,7 @@ typedef struct AMRestoreModeDeviceClassBody {
 	// 136
 } __attribute__ ((packed)) AMRestoreModeDeviceClassBody; // 0x88
 
-typedef struct am_restore_device {
+struct am_restore_device {
 	struct AMRestoreModeDeviceClassHeader base;
 	struct AMRestoreModeDeviceClassBody ivars;
 } __attribute__ ((packed)) am_restore_device;

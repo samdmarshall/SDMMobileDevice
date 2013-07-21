@@ -54,7 +54,7 @@ typedef struct AMRecoveryModeDeviceClassBody {
 	// 160
 } __attribute__ ((packed)) AMRecoveryModeDeviceClassBody; // size 0x98
 
-typedef struct am_recovery_device {
+struct am_recovery_device {
 	struct AMRecoveryModeDeviceClassHeader base;
 	struct AMRecoveryModeDeviceClassBody ivars;
 } __attribute__ ((packed)) am_recovery_device;

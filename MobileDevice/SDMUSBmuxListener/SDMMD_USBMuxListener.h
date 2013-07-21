@@ -57,9 +57,7 @@ struct USBMuxListenerClass {
 	CFMutableArrayRef responses;
 } USBMuxListenerClass;
 
-typedef struct USBMuxListenerClass SDM_USBMuxListenerClass;
-
-#define SDMMD_USBMuxListenerRef SDM_USBMuxListenerClass*
+#define SDMMD_USBMuxListenerRef struct USBMuxListenerClass*
 
 typedef enum SDMMD_USBMuxPacketMessageType {
 	kSDMMD_USBMuxPacketInvalidType = 0x0,
