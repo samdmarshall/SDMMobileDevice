@@ -46,9 +46,7 @@ struct am_connection {
 } __attribute__ ((packed)) am_connection;
 
 /* Classes */
-typedef struct am_connection SDMMD_AMConnectionClass;
-
-#define SDMMD_AMConnectionRef SDMMD_AMConnectionClass*
+#define SDMMD_AMConnectionRef struct am_connection*
 
 #pragma mark -
 #pragma mark FUNCTIONS

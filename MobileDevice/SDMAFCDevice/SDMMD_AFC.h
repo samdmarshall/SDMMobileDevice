@@ -59,7 +59,7 @@ struct sdmmd_AFCOperation {
 	dispatch_time_t timeout;
 } sdmmd_AFCOperation;
 
-#define SDMMD_AFCOperationRef sdmmd_AFCOperation*
+#define SDMMD_AFCOperationRef struct sdmmd_AFCOperation*
 
 static char* SDMMD_gAFCPacketTypeNames[39] = {
 	"Invalid",

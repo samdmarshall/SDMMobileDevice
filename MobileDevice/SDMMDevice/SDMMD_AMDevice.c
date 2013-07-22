@@ -1197,7 +1197,7 @@ CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, 
 
 SDMMD_AMDeviceRef SDMMD_AMDeviceCreateEmpty() {
 	uint32_t extra = sizeof(AMDeviceClassBody);
-	SDMMD_AMDeviceRef device = calloc(0x1, sizeof(SDM_AMDeviceClass));
+	SDMMD_AMDeviceRef device = calloc(0x1, sizeof(struct sdmmd_am_device));
 	device = (SDMMD_AMDeviceRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, _kSDMMD_AMDeviceRefID, extra, NULL);//(SDMMD_AMDeviceRef)malloc(sizeof(SDM_AMDeviceClass));
 	return device;
 }
@@ -1264,8 +1264,8 @@ CFArrayRef SDMMD_AMDCreateDeviceList() {
 }
 
 SDMMD_AMDeviceRef SDMMD_AMDeviceCreateCopy(SDMMD_AMDeviceRef device) {
-	SDMMD_AMDeviceRef copy = (SDMMD_AMDeviceRef)malloc(sizeof(SDM_AMDeviceClass));
-	memcpy(copy, device, sizeof(SDM_AMDeviceClass));
+	SDMMD_AMDeviceRef copy = (SDMMD_AMDeviceRef)malloc(sizeof(struct sdmmd_am_device));
+	memcpy(copy, device, sizeof(struct sdmmd_am_device));
 	return copy;
 }
 

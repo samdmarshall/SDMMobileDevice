@@ -100,7 +100,7 @@ SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, SSL *ssl) 
 }
 
 SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(uint32_t socket, SSL* ssl, CFDictionaryRef dict) {
-	SDMMD_AMConnectionRef handle = calloc(0x1, sizeof(SDMMD_AMConnectionClass));
+	SDMMD_AMConnectionRef handle = calloc(0x1, sizeof(struct am_connection));
 	handle->ivars.socket = socket;
 	handle->ivars.ssl = ssl;
 	handle->ivars.closeOnInvalid = true;
