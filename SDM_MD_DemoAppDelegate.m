@@ -24,7 +24,7 @@
 	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
 	for (uint32_t i = 0; i < CFArrayGetCount(devices); i++) {
 		SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, i);
-		
+		uint32_t result;
 		//SDMMD_AMDebugConnectionRef debugConn = NULL;
 		//uint32_t result = SDMMD_StartDebuggingSessionOnDevice(device, &debugConn);
 		//printf("debug start: 0x%08x\n",result);
@@ -40,7 +40,7 @@
 		//result = SDMMD_StopDebuggingSessionOnDevice(device, &debugConn);
 		//printf("debug stop: 0x%08x\n",result);
 		
-		uint32_t result = SDMMD_AMDeviceConnect(device);
+		/*uint32_t result = SDMMD_AMDeviceConnect(device);
 		printf("connect: 0x%08x\n",result);
 		bool paired = SDMMD_AMDeviceIsPaired(device);
 		printf("paired status: %s\n",(paired ? "yes" : "no"));
@@ -53,48 +53,57 @@
 		result = SDMMD_AMDeviceStartService(device, CFSTR(AMSVC_AFC), 0x0, &conn);
 		printf("service: 0x%08x\n",result);
 		
-		/*for (NSString *key in keys) {
-			CFTypeRef value = SDMMD_AMDeviceCopyValue(device, NULL, key);
-			NSLog(@"%@: %@",key, value);
-		}*/
+		//for (NSString *key in keys) {
+		//	CFTypeRef value = SDMMD_AMDeviceCopyValue(device, NULL, key);
+		//	NSLog(@"%@: %@",key, value);
+		//}
 		
-		/*CFDictionaryRef response;
+		CFDictionaryRef response;
 		CFArrayRef values = SDMMD_ApplicationLookupDictionary();
 		CFMutableDictionaryRef optionsDict = SDMMD_create_dict();
 		CFDictionarySetValue(optionsDict, CFSTR("ReturnAttributes"), values);
 		
 		result = SDMMD_AMDeviceLookupApplications(device, optionsDict, &response);
-		printf("lookup: 0x%08x\n",result);*/
+		printf("lookup: 0x%08x\n",result);
+		
+		
 		result = SDMMD_AMDeviceStopSession(device);
 		printf("stop session: 0x%08x\n",result);
 		result = SDMMD_AMDeviceDisconnect(device);
-		printf("disconnect: 0x%08x\n",result);
-		
-		/*CFDictionaryRef app = CFDictionaryGetValue(response, CFSTR("com.tapbots.TweetbotPad"));
-		if (app) {
+		printf("disconnect: 0x%08x\n",result);*/
+			//CFDictionaryRef app = CFDictionaryGetValue(response, CFSTR("com.samdmarshall.Rdar"));
+			//if (app) {
 				SDMMD_AMDebugConnectionRef debugConn;
 				result = SDMMD_StartDebuggingSessionOnDevice(device, &debugConn);
 				printf("debug start: 0x%08x\n",result);
-				CFStringRef encodedPath = SDMMD_EncodeForDebuggingCommand(CFDictionaryGetValue(app, CFSTR("Path")));
-				CFStringRef containerPath = SDMMD_EncodeForDebuggingCommand(CFDictionaryGetValue(app, CFSTR("Container")));
-				sdmmd_debug_return_t dresult;
-				dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugQSetMaxPacketSize], SDMMD_EncodeForDebuggingCommand(CFSTR("1024")));
+				//CFShow(CFDictionaryGetValue(app, CFSTR("Path")));
+				//CFStringRef encodedPath = SDMMD_EncodeForDebuggingCommand(CFDictionaryGetValue(app, CFSTR("Path")));
+				//CFStringRef containerPath = SDMMD_EncodeForDebuggingCommand(CFDictionaryGetValue(app, CFSTR("Container")));
+				//CFShow(encodedPath);
+				//CFShow(containerPath);
+				//sdmmd_debug_return_t dresult;
+				/*dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugQSetMaxPacketSize], SDMMD_EncodeForDebuggingCommand(CFSTR("1024")));
 				CFShow(dresult.data);
 				dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugQSetWorkingDir], containerPath);
 				CFShow(dresult.data);
-				NSString *commandformat = [NSString stringWithFormat:@"%d,0,%@",(uint32_t)CFStringGetLength(encodedPath),encodedPath];
-				dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugA], (CFStringRef)commandformat);
+				//NSString *commandformat = [NSString stringWithFormat:@"%d,0,%@",(uint32_t)CFStringGetLength(encodedPath),encodedPath];
+				//dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugA], (CFStringRef)commandformat);
+				//CFShow(dresult.data);
+				dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugqLaunchSuccess], CFSTR(""));
+				CFShow(dresult.data);
+				dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugqGetPid], CFSTR(""));
 				CFShow(dresult.data);
 				dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugH], CFSTR("c0"));
 				CFShow(dresult.data);
 				dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugc], CFSTR(""));
-				CFShow(dresult.data);
+				CFShow(dresult.data);*/
+				
 				//sleep(5);
 				//dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugk], CFSTR(""));
 				//CFShow(dresult.data);
-				result = SDMMD_StopDebuggingSessionOnDevice(device, &debugConn);
-				printf("debug stop: 0x%08x\n",result);
-		}	*/
+				//result = SDMMD_StopDebuggingSessionOnDevice(device, &debugConn);
+				//printf("debug stop: 0x%08x\n",result);
+				//}
 	}
 }
 

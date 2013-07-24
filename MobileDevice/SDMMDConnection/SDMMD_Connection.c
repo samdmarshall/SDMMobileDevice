@@ -272,6 +272,8 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 							}
 						}
 					} else {
+						printf("SERVICE: %s!\n",cservice);
+						printf("PORT: %i!\n",port);
 						result = SDMMD__connect_to_port(device, port, timeoutConnection, &socket, ((uint32_t)ssl & 0x1) & 0xff);
 						if (result == 0x0) {
 							if (enableSSL) {

@@ -108,7 +108,7 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetDeviceInfo() {
 	return op;
 }
 
-SDMMD_AFCOperationRef SDMMD_AFCOperationCreateOpenFile(CFStringRef path, uint16_t mode) {
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateOpenFile(CFStringRef path, uint16_t mode, void* *fileRef) {
 	SDMMD_AFCOperationRef op = calloc(1, sizeof(struct sdmmd_AFCOperation));
 	op->packet = calloc(1, sizeof(struct sdmmd_AFCPacket));
 	char *cpath = SDMCFStringGetString(path);
@@ -117,6 +117,22 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateOpenFile(CFStringRef path, uint16_
 	memcpy(&op->packet->data[2], cpath, strlen(cpath));
 	SDMMD_AFCHeaderInit(&op->packet->header, 0xd, strlen(cpath)+0x31, 0x0, 0x0);
 	free(cpath);
+	return op;
+}
+
+/*
+SDMMD_AFCOperationRef SDMMD
+	SDMMD_AFCOperationRef op = calloc(1, sizeof(struct sdmmd_AFCOperation));
+	op->packet = calloc(1, sizeof(struct sdmmd_AFCPacket));
+	SDMMD_AFCHeaderInit(&op->packet->header, , , 0x0, 0x0);
+	return op;
+}
+*/
+
+SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateReadOperation(void* fileRef ) {
+	SDMMD_AFCOperationRef op = calloc(1, sizeof(struct sdmmd_AFCOperation));
+	op->packet = calloc(1, sizeof(struct sdmmd_AFCPacket));
+	SDMMD_AFCHeaderInit(&op->packet->header, 0xf, 0x38, 0x0, 0x0);
 	return op;
 }
 
@@ -206,6 +222,21 @@ sdmmd_return_t SDMMD_AFCReceiveOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 	response->packet = packet;
 	response->timeout = 0;
 	*op = response;
+	return result;
+}
+
+sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOperationRef op, void* *response) {
+	__block sdmmd_return_t result = 0x0;
+	dispatch_sync(conn->operationQueue, ^{
+		conn->semaphore = dispatch_semaphore_create(0x0);
+		result = SDMMD_AFCSendOperation(conn, op);
+		dispatch_semaphore_wait(conn->semaphore, op->timeout);
+		SDMMD_AFCOperationRef response;
+		SDMMD_AFCReceiveOperation(conn, &response);
+		
+		dispatch_release(conn->semaphore);
+		conn->operationCount++;
+	});
 	return result;
 }
 
