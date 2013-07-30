@@ -20,7 +20,7 @@
 	// Insert code here to initialize your application 
 	//NSArray *keys = [NSArray arrayWithObjects:CFSTR(kActivationPublicKey), CFSTR(kActivationState), CFSTR(kActivationStateAcknowledged), CFSTR(kActiveWirelessTechnology), CFSTR(kActivityURL), CFSTR(kAirplaneMode), CFSTR(kApNonce), CFSTR(kBasebandBoardSerialNumber), CFSTR(kBasebandBootloaderVersion), CFSTR(kBasebandGoldCertId), CFSTR(kBasebandKeyHashInformation), CFSTR(kBasebandNonce), CFSTR(kBasebandSerialNumber), CFSTR(kBasebandStatus), CFSTR(kBasebandVersion), CFSTR(kBoardId), CFSTR(kBluetoothAddress), CFSTR(kBrickState), CFSTR(kBuildVersion), CFSTR(kCarrierBuild), CFSTR(kCarrierBundleInfo), CFSTR(kCarrierBundleInfoArray), CFSTR(kChipID), CFSTR(kCompassCalibration), CFSTR(kCPUArchitecture), CFSTR(kDeviceCertificate), CFSTR(kDeviceClass), CFSTR(kDeviceColor), CFSTR(kDeviceEnclosureColor), CFSTR(kDeviceName), CFSTR(kDevicePublicKey), CFSTR(kDeviceVariant), CFSTR(kDieID), CFSTR(kEthernetAddress), CFSTR(kFirmwarePreflightInfo), CFSTR(kFirmwareVersion), CFSTR(kFirstTime), CFSTR(kHardwareModel), CFSTR(kHardwarePlatform), CFSTR(kHostAttached), CFSTR(kIMLockdownEverRegisteredKey), CFSTR(kIntegratedCircuitCardIdentity), CFSTR(kInternationalMobileEquipmentIdentity), CFSTR(kInternationalMobileSubscriberIdentity), CFSTR(kiTunesHasConnected), CFSTR(kMarketingName), CFSTR(kMLBSerialNumber), CFSTR(kMobileEquipmentIdentifier), CFSTR(kMobileSubscriberCountryCode), CFSTR(kMobileSubscriberNetworkCode), CFSTR(kModelNumber), CFSTR(kNonVolatileRAM), CFSTR(kPartitionType), CFSTR(kPasswordProtected), CFSTR(kPhoneNumber), CFSTR(kProductionSOC), CFSTR(kProductType), CFSTR(kProductVersion), CFSTR(kProtocolVersion), CFSTR(kProximitySensorCalibration), CFSTR(kRegionInfo), CFSTR(kReleaseType), CFSTR(kRentalClockBias), CFSTR(kSBLockdownEverRegisteredKey), CFSTR(kSerialNumber), CFSTR(kShowMarketing), CFSTR(kSIMGID1), CFSTR(kSIMGID2), CFSTR(kSIMStatus), CFSTR(kSIMTrayStatus), CFSTR(kSoftwareBehavior), CFSTR(kSoftwareBundleVersion), CFSTR(kSupportedDeviceFamilies), CFSTR(kTelephonyCapability), CFSTR(kTimeIntervalSince1970), CFSTR(kTimeZone), CFSTR(kTimeZoneOffsetFromUTC), CFSTR(kTrustedHostAttached), CFSTR(kUniqueChipID), CFSTR(kUniqueDeviceID), CFSTR(kUseActivityURL), CFSTR(kUseRaptorCerts), CFSTR(kUses24HourClock), CFSTR(kWeDelivered), CFSTR(kWiFiAddress), nil];
 	
-	SDMMD_MCP;
+	/*SDMMD_MCP;
 	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
 	for (uint32_t i = 0; i < CFArrayGetCount(devices); i++) {
 		SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, i);
@@ -35,12 +35,12 @@
 		dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugA], commandformat);
 		CFShow(dresult.data);
 		dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugH], CFSTR("c0"));
-		CFShow(dresult.data);*/
+		CFShow(dresult.data);
 		
 		//result = SDMMD_StopDebuggingSessionOnDevice(device, &debugConn);
 		//printf("debug stop: 0x%08x\n",result);
 		
-		/*uint32_t result = SDMMD_AMDeviceConnect(device);
+		result = SDMMD_AMDeviceConnect(device);
 		printf("connect: 0x%08x\n",result);
 		bool paired = SDMMD_AMDeviceIsPaired(device);
 		printf("paired status: %s\n",(paired ? "yes" : "no"));
@@ -58,24 +58,24 @@
 		//	NSLog(@"%@: %@",key, value);
 		//}
 		
-		CFDictionaryRef response;
-		CFArrayRef values = SDMMD_ApplicationLookupDictionary();
-		CFMutableDictionaryRef optionsDict = SDMMD_create_dict();
-		CFDictionarySetValue(optionsDict, CFSTR("ReturnAttributes"), values);
+		//CFDictionaryRef response;
+		//CFArrayRef values = SDMMD_ApplicationLookupDictionary();
+		//CFMutableDictionaryRef optionsDict = SDMMD_create_dict();
+		//CFDictionarySetValue(optionsDict, CFSTR("ReturnAttributes"), values);
 		
-		result = SDMMD_AMDeviceLookupApplications(device, optionsDict, &response);
-		printf("lookup: 0x%08x\n",result);
-		
+		//result = SDMMD_AMDeviceLookupApplications(device, optionsDict, &response);
+		//printf("lookup: 0x%08x\n",result);
+		//CFShow(response);
 		
 		result = SDMMD_AMDeviceStopSession(device);
 		printf("stop session: 0x%08x\n",result);
 		result = SDMMD_AMDeviceDisconnect(device);
-		printf("disconnect: 0x%08x\n",result);*/
+		printf("disconnect: 0x%08x\n",result);
 			//CFDictionaryRef app = CFDictionaryGetValue(response, CFSTR("com.samdmarshall.Rdar"));
 			//if (app) {
-				SDMMD_AMDebugConnectionRef debugConn;
-				result = SDMMD_StartDebuggingSessionOnDevice(device, &debugConn);
-				printf("debug start: 0x%08x\n",result);
+				//SDMMD_AMDebugConnectionRef debugConn;
+				//result = SDMMD_StartDebuggingSessionOnDevice(device, &debugConn);
+				//printf("debug start: 0x%08x\n",result);
 				//CFShow(CFDictionaryGetValue(app, CFSTR("Path")));
 				//CFStringRef encodedPath = SDMMD_EncodeForDebuggingCommand(CFDictionaryGetValue(app, CFSTR("Path")));
 				//CFStringRef containerPath = SDMMD_EncodeForDebuggingCommand(CFDictionaryGetValue(app, CFSTR("Container")));
@@ -96,7 +96,7 @@
 				dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugH], CFSTR("c0"));
 				CFShow(dresult.data);
 				dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugc], CFSTR(""));
-				CFShow(dresult.data);*/
+				CFShow(dresult.data);
 				
 				//sleep(5);
 				//dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugk], CFSTR(""));
@@ -104,7 +104,7 @@
 				//result = SDMMD_StopDebuggingSessionOnDevice(device, &debugConn);
 				//printf("debug stop: 0x%08x\n",result);
 				//}
-	}
+	}*/
 }
 
 @end

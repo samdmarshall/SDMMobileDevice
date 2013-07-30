@@ -32,6 +32,7 @@
 #include "SDMMD_MCP.h"
 #include "SDMMD_Error.h"
 #include "SDMMD_AMDevice.h"
+#include "SDMMD_Applications.h"
 
 #if WIN32
 #define CFRangeMake(a, b) (CFRange){a, b}
@@ -370,8 +371,8 @@ static sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SD
 }
 
 static CFArrayRef SDMMD_ApplicationLookupDictionary() {
-	const void* values[5] = {CFSTR("CFBundleIdentifier"), CFSTR("CFBundleDisplayName"), CFSTR("CFBundleName"), CFSTR("Container"), CFSTR("Path")};
-	return CFArrayCreate(kCFAllocatorDefault, values, 5, &kCFTypeArrayCallBacks);
+	const void* values[6] = {CFSTR(kAppLookupKeyCFBundleIdentifier), CFSTR(kAppLookupKeyApplicationType), CFSTR(kAppLookupKeyCFBundleDisplayName), CFSTR(kAppLookupKeyCFBundleName), CFSTR(kAppLookupKeyContainer), CFSTR(kAppLookupKeyPath)};
+	return CFArrayCreate(kCFAllocatorDefault, values, 6, &kCFTypeArrayCallBacks);
 }
 
 static CFURLRef SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(CFStringRef path) {

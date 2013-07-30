@@ -7,7 +7,8 @@
 //
 
 #import "MDDemoDeviceTable.h"
-
+#import "MDDemoDevice.h"
+#import <SDMMobileDevice/SDMMobileDevice.h>
 
 @implementation MDDemoDeviceTable
 
@@ -25,15 +26,26 @@
 		[column setWidth:self.bounds.size.width];
 		[self.deviceTable addTableColumn:column];
 		[self.deviceTable setAllowsColumnSelection:NO];
-		[self.deviceTable setAllowsEmptySelection:NO];
+		[self.deviceTable setAllowsEmptySelection:YES];
 		[self.deviceTable setAllowsMultipleSelection:NO];
 		[self.deviceTable setAllowsColumnResizing:NO];
 		[self.deviceTable setAllowsColumnReordering:NO];
 		[self.deviceTable setUsesAlternatingRowBackgroundColors:YES];
+		[self.deviceTable drawGridInClipRect:self.bounds];
+		[self.deviceTable drawBackgroundInClipRect:self.bounds];
+		[self.deviceTable setGridStyleMask:NSTableViewSolidVerticalGridLineMask];
+		[self.deviceTable setTarget:self];
+		[self.deviceTable setDoubleAction:@selector(updateAppList:)];
+		[self updateDevices];
 		self.deviceTable.delegate = self;
 		self.deviceTable.dataSource = self;
 		[self addSubview:self.deviceTable];
+		[self.deviceTable setFrame:self.bounds];
 		[self setNeedsDisplay:YES];
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateDeviceTable:) name:@"SDMMD_USBMuxListenerDeviceAttachedNotificationFinished" object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateDeviceTable:) name:@"SDMMD_USBMuxListenerDeviceDetachedNotificationFinished" object:nil];
+
     }
     return self;
 }
@@ -47,15 +59,46 @@
 	return YES;
 }
 
+- (void)updateDeviceTable:(NSNotification *)notification {
+	[self updateDevices];
+}
+
+- (void)updateDevices {
+	SDMMD_MCP;
+	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
+	NSMutableArray *list = [NSMutableArray new];
+	for (uint32_t i = 0; i < CFArrayGetCount(devices); i++) {
+		MDDemoDevice *device = [[MDDemoDevice alloc] initWithDevice:(SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, i)];
+		[list addObject:device];
+	}
+	if (dataSource != nil)
+		[dataSource release];
+	dataSource = [list copy];
+	[list release];
+	int row = [self.deviceTable selectedRow];
+	if (row != -1)
+		[self.deviceTable deselectRow:row];
+	[self.deviceTable reloadData];
+}
+
+- (void)updateAppList:(id)object {
+	int row = [self.deviceTable selectedRow];
+	if (row != -1)
+		[[[[self superview] superview] infoView] setActiveDevice:[dataSource objectAtIndex:row]]; 
+}
+
 #pragma mark -
 #pragma mark NSTableViewDelegate + NSTableViewDataSource
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
-	return [dataSource count];
+	return [dataSource count] + ((self.bounds.size.height - ([dataSource count]*[tableView rowHeight]))/[tableView rowHeight]);
 }
 
-- (NSCell *)tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-	NSCell *newCell = [[NSCell alloc] initTextCell:@"Testing"];
-	return newCell;
+- (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
+	return (rowIndex < dataSource.count ? [[dataSource objectAtIndex:rowIndex] name] : nil);
+}
+
+- (BOOL)tableView:(NSTableView *)aTableView shouldSelectRow:(NSInteger)rowIndex {
+	return (rowIndex < dataSource.count ? true : false);
 }
 
 @end

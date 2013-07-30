@@ -14,4 +14,13 @@
 @property (nonatomic, retain) NSTableView *deviceTable;
 @property (nonatomic, retain) NSArray *dataSource;
 
+- (id)initWithFrame:(NSRect)frame;
+
+- (void)updateDevices;
+
+#pragma mark -
+#pragma mark NSTableViewDelegate + NSTableViewDataSource
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView;
+- (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex;
+
 @end

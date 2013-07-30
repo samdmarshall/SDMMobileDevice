@@ -123,6 +123,7 @@ void SDMMD_USBMuxAttachedCallback(void *context, struct USBMuxPacket *packet) {
 		SDMMD_MCP->deviceList = CFArrayCreateCopy(kCFAllocatorDefault, updateWithNew);
 		CFRelease(updateWithNew);
 	}
+	CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotificationFinished"), newDevice, NULL, true);
 }
 
 void SDMMD_USBMuxDetachedCallback(void *context, struct USBMuxPacket *packet) {
@@ -141,7 +142,8 @@ void SDMMD_USBMuxDetachedCallback(void *context, struct USBMuxPacket *packet) {
 	}
 	CFRelease(SDMMD_MCP->deviceList);
 	SDMMD_MCP->deviceList = CFArrayCreateCopy(kCFAllocatorDefault, updateWithRemove);
-	CFRelease(updateWithRemove);	
+	CFRelease(updateWithRemove);
+	CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotificationFinished"), NULL, NULL, true);
 }
 
 void SDMMD_USBMuxLogsCallback(void *context, struct USBMuxPacket *packet) {
@@ -388,7 +390,7 @@ void SDMMD_USBMuxReceive(uint32_t sock, struct USBMuxPacket *packet) {
 
 struct USBMuxPacket * SDMMD_USBMuxCreatePacketType(SDMMD_USBMuxPacketMessageType type, CFDictionaryRef dict) {
 	struct USBMuxPacket *packet = (struct USBMuxPacket *)calloc(1, sizeof(struct USBMuxPacket));
-	if (/*type == kSDMMD_USBMuxPacketListenType || */type == kSDMMD_USBMuxPacketConnectType) {
+	if (type == kSDMMD_USBMuxPacketListenType || type == kSDMMD_USBMuxPacketConnectType) {
 		packet->timeout = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*0x1e);
 	} else {
 		packet->timeout = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*0x5);

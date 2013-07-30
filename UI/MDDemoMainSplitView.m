@@ -37,6 +37,8 @@
 
 - (void)dealloc {
 	[splitView release];
+	[deviceList release];
+	[infoView release];
 	[super dealloc];
 }
 

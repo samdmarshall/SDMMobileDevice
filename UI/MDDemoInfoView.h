@@ -7,10 +7,15 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "MDDemoDevice.h"
 
+@interface MDDemoInfoView : NSView <NSTableViewDelegate, NSTableViewDataSource> {}
 
-@interface MDDemoInfoView : NSView {
+@property (nonatomic, retain) NSTableView *appList;
+@property (nonatomic, retain) NSArray *dataSource;
+@property (nonatomic, retain) MDDemoDevice *device;
+@property (nonatomic, readwrite) SDMMD_AMDebugConnectionRef debugConn;
 
-}
+- (void)setActiveDevice:(MDDemoDevice *)device;
 
 @end
