@@ -15,6 +15,8 @@
 @property (nonatomic, retain) NSArray *dataSource;
 @property (nonatomic, retain) MDDemoDevice *device;
 @property (nonatomic, readwrite) SDMMD_AMDebugConnectionRef debugConn;
+@property (nonatomic, retain) NSTextField *appName;
+@property (nonatomic, retain) NSTextField *appPath;
 
 - (void)setActiveDevice:(MDDemoDevice *)device;
 

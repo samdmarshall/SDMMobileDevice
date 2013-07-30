@@ -9,6 +9,8 @@
 #import "MDDemoDeviceTable.h"
 #import "MDDemoDevice.h"
 #import <SDMMobileDevice/SDMMobileDevice.h>
+#import "MDDemoInfoView.h"
+#import "MDDemoMainSplitView.h"
 
 @implementation MDDemoDeviceTable
 
@@ -84,7 +86,7 @@
 - (void)updateAppList:(id)object {
 	int row = [self.deviceTable selectedRow];
 	if (row != -1)
-		[[[[self superview] superview] infoView] setActiveDevice:[dataSource objectAtIndex:row]]; 
+		[(MDDemoInfoView*)[(MDDemoMainSplitView*)[[self superview] superview] infoView] setActiveDevice:[dataSource objectAtIndex:row]]; 
 }
 
 #pragma mark -

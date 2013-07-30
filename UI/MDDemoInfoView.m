@@ -14,6 +14,8 @@
 @synthesize dataSource;
 @synthesize device;
 @synthesize debugConn;
+@synthesize appName;
+@synthesize appPath;
 
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
@@ -42,7 +44,36 @@
 		[self.appList setFrame:self.bounds];
 		[self setNeedsDisplay:YES];
 		
-		NSButton *run = [[NSButton alloc] initWithFrame:CGRectMake(0,0,100, 50)];
+		NSButton *run = [[NSButton alloc] initWithFrame:CGRectMake(self.bounds.origin.x+300 + ((self.bounds.size.width-300)/2)-150, 2*(self.bounds.size.height/3), 100, 25)];
+		NSButton *quit = [[NSButton alloc] initWithFrame:CGRectMake(self.bounds.origin.x+300 + ((self.bounds.size.width-300)/2)+50, 2*(self.bounds.size.height/3), 100, 25)];
+		[run setButtonType:NSMomentaryLightButton];
+		[run setBezelStyle:NSRoundedBezelStyle];
+		[quit setButtonType:NSMomentaryLightButton];
+		[quit setBezelStyle:NSRoundedBezelStyle];
+		[run setTitle:@"Run App"];
+		[quit setTitle:@"Quit App"];
+		[run setAction:@selector(runApp:)];
+		[quit setAction:@selector(quitApp:)];
+		[run setTarget:self];
+		[quit setTarget:self];
+		
+		[self addSubview:run];
+		[self addSubview:quit];
+		
+		appName = [[NSTextField alloc] initWithFrame:CGRectMake(self.bounds.origin.x+300 + ((self.bounds.size.width-300)/2)-200, (self.bounds.size.height/3), 400, 25)];
+		[appName setEditable:NO];
+		[appName setBackgroundColor:[NSColor clearColor]];
+		[appName setBordered:NO];
+		[appName setAlignment:NSCenterTextAlignment];
+		[self addSubview:appName];
+		
+		appPath = [[NSTextField alloc] initWithFrame:CGRectMake(self.bounds.origin.x+300, (self.bounds.size.height/3) + 100, (self.bounds.size.width-300), 25)];
+		[appPath setEditable:NO];
+		[appPath setBackgroundColor:[NSColor clearColor]];
+		[appPath setBordered:NO];
+		[appPath setAlignment:NSCenterTextAlignment];
+		[self addSubview:appPath];
+		
     }
     return self;
 }
@@ -53,6 +84,9 @@
 	if (row != -1) {
 		app = (CFDictionaryRef)[self.dataSource objectAtIndex:row];
 		
+		[appPath setStringValue:CFDictionaryGetValue(app, @"Container")];
+		[appName setStringValue:CFDictionaryGetValue(app, @"CFBundleDisplayName")];
+
 		sdmmd_return_t result = SDMMD_StartDebuggingSessionOnDevice(self.device.device, &debugConn);
 		printf("debug start: 0x%08x\n",result);
 		if (result) {
@@ -63,44 +97,48 @@
 	}
 }
 
-- (IBAction)runApp {
-	int row = [self.appList selectedRow];
-	CFDictionaryRef app;
-	if (row != -1) {
-		app = (CFDictionaryRef)[self.dataSource objectAtIndex:row];
-	
-		sdmmd_return_t result = SDMMD_StartDebuggingSessionOnDevice(self.device.device, &debugConn);
-		printf("debug start: 0x%08x\n",result);
-		
-		CFShow(CFDictionaryGetValue(app, CFSTR("Path")));
-		CFStringRef encodedPath = SDMMD_EncodeForDebuggingCommand(CFDictionaryGetValue(app, CFSTR("Path")));
-		CFStringRef containerPath = SDMMD_EncodeForDebuggingCommand(CFDictionaryGetValue(app, CFSTR("Container")));
-		CFShow(encodedPath);
-		CFShow(containerPath);
-		sdmmd_debug_return_t dresult;
-		dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugQSetMaxPacketSize], SDMMD_EncodeForDebuggingCommand(CFSTR("1024")));
-		CFShow(dresult.data);
-		dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugQSetWorkingDir], containerPath);
-		CFShow(dresult.data);
-		NSString *commandformat = [NSString stringWithFormat:@"%d,0,%@",(uint32_t)CFStringGetLength(encodedPath),encodedPath];
-		dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugA], (CFStringRef)commandformat);
-		CFShow(dresult.data);
-		dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugqLaunchSuccess], CFSTR(""));
-		CFShow(dresult.data);
-		dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugqGetPid], CFSTR(""));
-		CFShow(dresult.data);
-		dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugH], CFSTR("c0"));
-		CFShow(dresult.data);
-		dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugc], CFSTR(""));
-		CFShow(dresult.data);
-	}
+- (IBAction)runApp:(id)sender {
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0x0), ^{
+		int row = [self.appList selectedRow];
+		CFDictionaryRef app;
+		if (row != -1) {
+			app = (CFDictionaryRef)[self.dataSource objectAtIndex:row];
+			
+			sdmmd_return_t result = SDMMD_StartDebuggingSessionOnDevice(self.device.device, &debugConn);
+			printf("debug start: 0x%08x\n",result);
+			
+			CFShow(CFDictionaryGetValue(app, CFSTR("Path")));
+			CFStringRef encodedPath = SDMMD_EncodeForDebuggingCommand(CFDictionaryGetValue(app, CFSTR("Path")));
+			CFStringRef containerPath = SDMMD_EncodeForDebuggingCommand(CFDictionaryGetValue(app, CFSTR("Container")));
+			CFShow(encodedPath);
+			CFShow(containerPath);
+			sdmmd_debug_return_t dresult;
+			dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugQSetMaxPacketSize], SDMMD_EncodeForDebuggingCommand(CFSTR("1024")));
+			CFShow(dresult.data);
+			dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugQSetWorkingDir], containerPath);
+			CFShow(dresult.data);
+			NSString *commandformat = [NSString stringWithFormat:@"%d,0,%@",(uint32_t)CFStringGetLength(encodedPath),encodedPath];
+			dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugA], (CFStringRef)commandformat);
+			CFShow(dresult.data);
+			//dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugqLaunchSuccess], CFSTR(""));
+			//CFShow(dresult.data);
+			//dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugqGetPid], CFSTR(""));
+			//CFShow(dresult.data);
+			dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugH], CFSTR("c0"));
+			CFShow(dresult.data);
+			dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugc], CFSTR(""));
+			CFShow(dresult.data);
+		}
+	});
 }
 
-- (IBAction)quitApp {
-	sdmmd_debug_return_t dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugk], CFSTR(""));
-	CFShow(dresult.data);
-	sdmmd_return_t result = SDMMD_StopDebuggingSessionOnDevice(self.device.device, &debugConn);
-	printf("debug stop: 0x%08x\n",result);
+- (IBAction)quitApp:(id)sender {
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0x0), ^{
+		sdmmd_debug_return_t dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugk], CFSTR(""));
+		CFShow(dresult.data);
+		sdmmd_return_t result = SDMMD_StopDebuggingSessionOnDevice(self.device.device, &debugConn);
+		printf("debug stop: 0x%08x\n",result);
+	});
 }
 
 - (void)setActiveDevice:(MDDemoDevice *)sentdevice {
