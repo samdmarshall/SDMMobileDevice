@@ -1,5 +1,5 @@
 /*
- *  SDMMD_MCP.h
+ *  SDMMobileDeviceAPI.c
  *  SDMMobileDevice
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,24 +16,28 @@
  * 
  */
 
-#ifndef _SDM_MD_MCP_H_
-#define _SDM_MD_MCP_H_
+#ifndef _SDM_MD_API_C_
+#define _SDM_MD_API_C_
 
-#include <CoreFoundation/CoreFoundation.h>
-#include "SDMMD_USBMuxListener.h"
+#include "SDMMobileDeviceAPI.h"
 
-struct sdm_mobiledevice {
-	SDMMD_USBMuxListenerRef usbmuxd;
-	CFArrayRef deviceList;
-	uint64_t peer_certificate_data_index;
-} __attribute__ ((packed)) sdm_mobiledevice;
+void InitializeSDMMobileDeviceManager() {
+	SDMMobileDeviceManager = SDMMobileDevice;
+}
 
-#define SDMMobileDeviceRef struct sdm_mobiledevice*
-
-SDMMobileDeviceRef InitializeSDMMobileDevice();
-void SDMMD_AMDeviceNotificationSubscribe();
-void SDMMD_AMDeviceNotificationUnsubscribe();
-
-#define SDMMobileDevice InitializeSDMMobileDevice()
+CFTypeRef SDMMDeviceGetValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key) {
+	CFTypeRef response;
+	sdmmd_return_t result = 0x0;
+	result = SDMMD_AMDeviceConnect(device);
+	if (result == 0) {
+		result = SDMMD_AMDeviceStartSession(device);
+		response = SDMMD_AMDeviceCopyValue(device, domain, key);
+		if (result == 0) {
+			result = SDMMD_AMDeviceStopSession(device);
+		}
+		result = SDMMD_AMDeviceDisconnect(device);
+	}
+	return response;
+}
 
 #endif

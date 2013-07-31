@@ -46,18 +46,18 @@ SDMMobileDeviceRef InitializeSDMMobileDevice() {
 }
 
 void SDMMD_AMDeviceNotificationSubscribe() {
-	SDMMD_MCP;
-	if (SDMMD_MCP->usbmuxd == 0) {
-		SDMMD_MCP->usbmuxd = SDMMD_USBMuxCreate();
-		SDMMD_USBMuxStartListener(&SDMMD_MCP->usbmuxd);
+	SDMMobileDevice;
+	if (SDMMobileDevice->usbmuxd == 0) {
+		SDMMobileDevice->usbmuxd = SDMMD_USBMuxCreate();
+		SDMMD_USBMuxStartListener(&SDMMobileDevice->usbmuxd);
 	} else {
 		printf("Initializing this library starts the usbmuxd listener automatically, there isn't a need to call this to start listening for devices.\n");
 	}
 }
 
 void SDMMD_AMDeviceNotificationUnsubscribe() {
-	if (SDMMD_MCP->usbmuxd) {
-		SDMMD_USBMuxClose(SDMMD_MCP->usbmuxd);
+	if (SDMMobileDevice->usbmuxd) {
+		SDMMD_USBMuxClose(SDMMobileDevice->usbmuxd);
 	}
 }
 

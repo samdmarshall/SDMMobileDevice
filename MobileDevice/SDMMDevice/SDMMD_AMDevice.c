@@ -136,7 +136,7 @@ int SDMMD__ssl_verify_callback(int value, X509_STORE_CTX *store) {
 		cert = X509_STORE_CTX_get_current_cert(store);
 		if (cert) {
 			SSL *storeSSL = (SSL *)X509_STORE_CTX_get_ex_data(store, SSL_get_ex_data_X509_STORE_CTX_idx());
-			CFDataRef data = SSL_get_ex_data(storeSSL, SDMMD_MCP->peer_certificate_data_index);
+			CFDataRef data = SSL_get_ex_data(storeSSL, SDMMobileDevice->peer_certificate_data_index);
 			decoded = SDMMD__decode_certificate(data);
 			uint32_t data1 = i2d_X509(cert, NULL);
 			uint32_t data2 = i2d_X509(decoded, NULL);
@@ -222,7 +222,7 @@ SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostC
 						SSL_set_verify(ssl, 0x3, SDMMD__ssl_verify_callback);
 						SSL_set_verify_depth(ssl, 0x0);
 						SSL_set_bio(ssl, bioSocket, bioSocket);
-						SSL_set_ex_data(ssl, SDMMD_MCP->peer_certificate_data_index, (void*)deviceCert);
+						SSL_set_ex_data(ssl, SDMMobileDevice->peer_certificate_data_index, (void*)deviceCert);
 						result = SSL_do_handshake(ssl);
 						if (result == 1) {
 							SSL_CTX_free(sslCTX);
@@ -542,7 +542,7 @@ sdmmd_return_t SDMMD__CopyEscrowBag(SDMMD_AMDeviceRef device, CFDataRef *bag) {
 
 bool SDMMD_isDeviceAttached(uint32_t device_id) {
 	bool result = false;
-	CFArrayRef devices = CFArrayCreateCopy(kCFAllocatorDefault, SDMMD_MCP->deviceList);
+	CFArrayRef devices = CFArrayCreateCopy(kCFAllocatorDefault, SDMMobileDevice->deviceList);
 	if (devices) {
 		for (uint32_t i = 0; i < CFArrayGetCount(devices); i++) {
 			CFDictionaryRef device = CFArrayGetValueAtIndex(devices, i);
@@ -1244,9 +1244,9 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 bool SDMMD_AMDeviceIsAttached(SDMMD_AMDeviceRef device) {
 	bool result = false;
 	struct USBMuxPacket *devicesPacket = SDMMD_USBMuxCreatePacketType(kSDMMD_USBMuxPacketListDevicesType, NULL);
-	SDMMD_USBMuxListenerSend(SDMMD_MCP->usbmuxd, devicesPacket);
-	for (uint32_t i = 0x0; i < CFArrayGetCount(SDMMD_MCP->deviceList); i++) {
-		SDMMD_AMDeviceRef deviceCheck = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(SDMMD_MCP->deviceList, i);
+	SDMMD_USBMuxListenerSend(SDMMobileDevice->usbmuxd, devicesPacket);
+	for (uint32_t i = 0x0; i < CFArrayGetCount(SDMMobileDevice->deviceList); i++) {
+		SDMMD_AMDeviceRef deviceCheck = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(SDMMobileDevice->deviceList, i);
 		if (SDMMD_AMDeviceGetConnectionID(device) == SDMMD_AMDeviceGetConnectionID(deviceCheck)) {
 			result = true;
 			break;
@@ -1258,9 +1258,9 @@ bool SDMMD_AMDeviceIsAttached(SDMMD_AMDeviceRef device) {
 
 CFArrayRef SDMMD_AMDCreateDeviceList() {
 	struct USBMuxPacket *devicesPacket = SDMMD_USBMuxCreatePacketType(kSDMMD_USBMuxPacketListDevicesType, NULL);
-	SDMMD_USBMuxListenerSend(SDMMD_MCP->usbmuxd, devicesPacket);
+	SDMMD_USBMuxListenerSend(SDMMobileDevice->usbmuxd, devicesPacket);
 	USBMuxPacketRelease(devicesPacket);
-	return SDMMD_MCP->deviceList;
+	return SDMMobileDevice->deviceList;
 }
 
 SDMMD_AMDeviceRef SDMMD_AMDeviceCreateCopy(SDMMD_AMDeviceRef device) {

@@ -1,5 +1,5 @@
 /*
- *  SDMMD_MCP.h
+ *  SDMMobileDeviceAPI.h
  *  SDMMobileDevice
  *
  *  Copyright (c) 2013, Sam Marshall
@@ -16,24 +16,40 @@
  * 
  */
 
-#ifndef _SDM_MD_MCP_H_
-#define _SDM_MD_MCP_H_
+#ifndef _SDM_MD_API_H_
+#define _SDM_MD_API_H_
 
-#include <CoreFoundation/CoreFoundation.h>
-#include "SDMMD_USBMuxListener.h"
+#include "SDMMobileDevice.h"
 
-struct sdm_mobiledevice {
-	SDMMD_USBMuxListenerRef usbmuxd;
-	CFArrayRef deviceList;
-	uint64_t peer_certificate_data_index;
-} __attribute__ ((packed)) sdm_mobiledevice;
+/*
+ This is an API wrapper created for using this framework.
+ */
 
-#define SDMMobileDeviceRef struct sdm_mobiledevice*
+SDMMobileDeviceRef SDMMobileDeviceManager;
 
-SDMMobileDeviceRef InitializeSDMMobileDevice();
-void SDMMD_AMDeviceNotificationSubscribe();
-void SDMMD_AMDeviceNotificationUnsubscribe();
+// call this first as it is necessary to see devices
+void InitializeSDMMobileDeviceManager();
 
-#define SDMMobileDevice InitializeSDMMobileDevice()
+// returns data from the specified device based on the domain and key requested. See SDMMD_Keys.h for list of domains and key pairs
+CFTypeRef SDMMDeviceGetValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key);
+
+// returns the status code of the SIM (tray)
+extern sdmmd_sim_return_t SDMMD_GetSIMStatusCode(SDMMD_AMDeviceRef device);
+
+// returns the activation status of a device
+extern sdmmd_activation_return_t SDMMD_GetActivationStatus(SDMMD_AMDeviceRef device);
+
+// returns the USB device ID of a device object
+extern uint32_t SDMMD_AMDeviceUSBDeviceID(SDMMD_AMDeviceRef device);
+
+// returns the USB Location ID of a device object
+extern uint32_t SDMMD_AMDeviceUSBLocationID(SDMMD_AMDeviceRef device);
+
+// returns the USB Product ID of a device object
+extern uint16_t SDMMD_AMDeviceUSBProductID(SDMMD_AMDeviceRef device);
+
+// returns CFArray of SDMMD_AMDeviceRef objects
+extern CFArrayRef SDMMD_AMDCreateDeviceList();
+
 
 #endif

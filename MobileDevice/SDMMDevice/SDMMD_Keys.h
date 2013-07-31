@@ -23,6 +23,8 @@
 #pragma mark General Domain Keys
 #pragma mark -
 
+// these keys require no domain, pass NULL as the domain
+
 #define kActivationPublicKey 					"ActivationPublicKey"
 #define kActivationState						"ActivationState"
 #define kActivationStateAcknowledged			"ActivationStateAcknowledged"

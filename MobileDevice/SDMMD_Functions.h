@@ -168,9 +168,9 @@ static CFMutableDictionaryRef SDMMD_create_dict() {
 
 /*static void SDMMD_openSSLLockCallBack(int mode, int n, const char * file, int line) {
 	if (mode & CRYPTO_LOCK)
-		SDMMD__mutex_lock(SDMMD_MCP->sslLocks[n]);
+		SDMMD__mutex_lock(SDMMobileDevice->sslLocks[n]);
 	else
-		SDMMD__mutex_unlock(SDMMD_MCP->sslLocks[n]);
+		SDMMD__mutex_unlock(SDMMobileDevice->sslLocks[n]);
 }*/
 
 static unsigned long SDMMD_openSSLThreadIDCallBack() {

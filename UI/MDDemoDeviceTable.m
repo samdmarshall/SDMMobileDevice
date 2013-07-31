@@ -66,7 +66,7 @@
 }
 
 - (void)updateDevices {
-	SDMMD_MCP;
+	SDMMobileDevice;
 	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
 	NSMutableArray *list = [NSMutableArray new];
 	for (uint32_t i = 0; i < CFArrayGetCount(devices); i++) {
