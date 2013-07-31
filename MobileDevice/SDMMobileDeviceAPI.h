@@ -30,6 +30,9 @@ SDMMobileDeviceRef SDMMobileDeviceManager;
 // call this first as it is necessary to see devices
 void InitializeSDMMobileDeviceManager();
 
+// call this only when all device communication is finished and app is ready to close
+void FinalizeSDMMobileDeviceManager();
+
 // returns data from the specified device based on the domain and key requested. See SDMMD_Keys.h for list of domains and key pairs
 CFTypeRef SDMMDeviceGetValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key);
 

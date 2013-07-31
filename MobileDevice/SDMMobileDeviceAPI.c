@@ -25,6 +25,10 @@ void InitializeSDMMobileDeviceManager() {
 	SDMMobileDeviceManager = SDMMobileDevice;
 }
 
+void FinalizeSDMMobileDeviceManager() {
+	SDMMD_AMDeviceNotificationUnsubscribe();
+}
+
 CFTypeRef SDMMDeviceGetValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key) {
 	CFTypeRef response;
 	sdmmd_return_t result = 0x0;
