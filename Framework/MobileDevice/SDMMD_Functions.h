@@ -38,26 +38,13 @@
 #define CFRangeMake(a, b) (CFRange){a, b}
 #endif
 
-static void * _sdm_md__stack_chk_guard = NULL;
-
-static void _sdm_md__stack_chk_guard_setup() {
-    unsigned char * p;
-    p = (unsigned char *) &_sdm_md__stack_chk_guard;
-	*p =  0x00000aff;
-}
-
 static kern_return_t sdmmd_mutex_init(pthread_mutex_t thread) {
 	kern_return_t result = 0x0;
-	_sdm_md__stack_chk_guard_setup();
-	void *stack_check_again = &_sdm_md__stack_chk_guard;
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_init(&attr);
 	pthread_mutexattr_settype(&attr, 0x2);
 	pthread_mutex_init(&thread, &attr);
 	result = pthread_mutexattr_destroy(&attr);
-	if (_sdm_md__stack_chk_guard == stack_check_again) {
-		result = 0xdeadbeef;
-	}
 	return result;
 }
 
@@ -84,7 +71,7 @@ static const void* SDMMD___AppendValue(const void* append, void* context) {
 		append = (CFEqual(append, kCFBooleanTrue) ? CFSTR("1") : CFSTR("0"));
 	}
 	if (CFGetTypeID(append) == CFStringGetTypeID()) {
-		uint32_t length = CFStringGetLength(append);
+		uint32_t length = (uint32_t)CFStringGetLength(append);
 		char *alloc = calloc(1, length*8+1);
 		CFStringGetBytes(append, CFRangeMake(0x0, length), 0x8000100, 0x0, 0x0, (UInt8*)alloc, (length*8), 0x0);
 		CFDataAppendBytes(context, (UInt8*)alloc, (length*8));
@@ -112,7 +99,7 @@ static CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
 				result = fstat(ref, &fileStat);
 				if (result != 0xff) {
 					unsigned char *data = calloc(1, fileStat.st_size);
-					result = read(ref, data, fileStat.st_size);
+					result = (uint32_t)read(ref, data, fileStat.st_size);
 					if (result == fileStat.st_size) {
 						CFDataRef fileData = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, data, result, kCFAllocatorNull);
 						if (fileData) {
@@ -187,7 +174,7 @@ static char* SDMMD_ssl_strerror(SSL *ssl, uint32_t length) {
 	if (result < 0x8) {
 		switch (result) {
 			case 1: {
-				result = ERR_peek_error();
+				result = (uint32_t)ERR_peek_error();
 				if (result) {
 					code = "SSL_ERROR_SSL";
 				} else {
@@ -208,7 +195,7 @@ static char* SDMMD_ssl_strerror(SSL *ssl, uint32_t length) {
 				break;
 			};
 			case 5: {
-				result = ERR_peek_error();
+				result = (uint32_t)ERR_peek_error();
 				if (result == 0) {
 					if (length == 0) {
 						code = "SSL_ERROR_SYSCALL (Early EOF reached)";	
@@ -303,7 +290,7 @@ static sdmmd_return_t SDMMD_store_dict(CFDictionaryRef dict, char *path, uint32_
 	if (ref) {
 		CFDataRef xml = CFPropertyListCreateXMLData(kCFAllocatorDefault, dict);
 		if (xml) {
-			result = write(ref, CFDataGetBytePtr(xml), CFDataGetLength(xml));
+			result = (sdmmd_return_t)write(ref, CFDataGetBytePtr(xml), CFDataGetLength(xml));
 			result = rename(tmp, path);
 		}
 		close(ref);

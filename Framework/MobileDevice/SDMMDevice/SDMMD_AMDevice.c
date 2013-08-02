@@ -370,7 +370,7 @@ CFTypeRef SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain
 						*err = CFDictionaryGetValue(response, CFSTR("Error"));
 						if (*err) {
 							if (CFGetTypeID(*err) == CFStringGetTypeID())
-								result = SDMMD__ConvertLockdowndError(*err);
+								result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(*err);
 							else
 								result = 0xe8000013;
 						} else {
@@ -436,7 +436,7 @@ sdmmd_return_t SDMMD_send_validate_pair(SDMMD_AMDeviceRef device, CFStringRef ho
 									result = 0x0;
 								} else {
 									if (CFGetTypeID(error) == CFStringGetTypeID())
-										result = SDMMD__ConvertLockdowndError(error);
+										result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(error);
 									else
 										result = 0xe8000013;
 								}
@@ -583,7 +583,7 @@ sdmmd_return_t SDMMD_send_activation(SDMMD_AMDeviceRef device, CFDictionaryRef d
 							if (msg) {
 								result = 0xe8000013;
 								if (CFGetTypeID(msg) == CFStringGetTypeID()) {
-									result = SDMMD__ConvertLockdowndError(msg);
+									result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(msg);
 								}
 							}
 						}
@@ -617,7 +617,7 @@ sdmmd_return_t SDMMD_send_deactivation(SDMMD_AMDeviceRef device) {
 						if (msg) {
 							result = 0xe8000013;
 							if (CFGetTypeID(msg) == CFStringGetTypeID()) {
-								result = SDMMD__ConvertLockdowndError(msg);
+								result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(msg);
 							}
 						}
 					}
@@ -688,7 +688,7 @@ sdmmd_return_t SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFDictionaryRe
 								} else {
 									result = 0xe8000013;
 									if (CFGetTypeID(resultStr) == CFStringGetTypeID()) {
-										result = SDMMD__ConvertLockdowndError(resultStr);
+										result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(resultStr);
 									}
 								}
 							}
@@ -725,7 +725,7 @@ sdmmd_return_t SDMMD_send_session_stop(SDMMD_AMDeviceRef device, CFTypeRef sessi
 						if (result == 0) {
 							CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
 							if (error && CFGetTypeID(error) == CFStringGetTypeID()) {
-								result = SDMMD__ConvertLockdowndError(error);
+								result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(error);
 							} else {
 								printf("disabling secure connection.\n");
 								SDMMD_lockconn_disable_ssl(device->ivars.lockdown_conn);

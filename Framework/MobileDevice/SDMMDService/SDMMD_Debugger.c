@@ -46,7 +46,7 @@ sdmmd_return_t SDMMD_StartDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDM
 }
 
 sdmmd_return_t SDMMD_StopDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDMMD_AMDebugConnectionRef *connection) {
-	sdmmd_return_t result = MDERR_OK;
+	sdmmd_return_t result = kAMDSuccess;
 	if (SDM_MD_CallSuccessful(result)) {
 		result = SDMMD_AMDeviceStopSession(device);
 		if (SDM_MD_CallSuccessful(result)) {
@@ -129,7 +129,7 @@ sdmmd_debug_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef connectio
 			if (kHexDecode(response[position-2]) == ((checksum >> 4) & 0xf) && kHexDecode(response[position-1]) == (checksum & 0xf)) {
 				*data = CFDataCreate(kCFAllocatorDefault, (UInt8 *)response, position-3);
 			} else {
-				result = MDERR_QUERY_FAILED;
+				result = kAMDInvalidResponseError;
 			}
 		}
 	}

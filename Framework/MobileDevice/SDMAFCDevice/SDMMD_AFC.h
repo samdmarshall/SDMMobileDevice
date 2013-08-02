@@ -107,6 +107,10 @@ static char* SDMMD_gAFCPacketTypeNames[39] = {
 #pragma mark Functions
 #pragma mark -
 
+static inline char*  SDMMD_GetPacketTypeName(uint32_t type) {
+	return SDMMD_gAFCPacketTypeNames[type];
+}
+
 SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(SDMMD_AMConnectionRef conn);
 void SDMMD_AFCConnectionRelease(SDMMD_AFCConnectionRef);
 

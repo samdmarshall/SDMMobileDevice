@@ -21,15 +21,6 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
-typedef enum SDMMD_ErrorCodes {
-	MDERR_OK = 0x0,
-	MDERR_SYSCALL = 0x01,
-	MDERR_OUT_OF_MEMORY = 0x03,
-	MDERR_QUERY_FAILED = 0x04,
-	MDERR_INVALID_ARGUMENT = 0x0B,
-	MDERR_DICT_NOT_LOADED = 0x25
-} SDMMD_ErrorCodes;
-
 typedef enum SDMMD_Errors {
 	kAMDSuccess = 0x0,
 	kAMDUndefinedError,
@@ -193,7 +184,7 @@ typedef enum SDMMD_Errors {
 #define sdmmd_return_t enum SDMMD_Errors
 
 struct SDMMD_DebugReturnCode {
-	enum SDMMD_ErrorCodes result;
+	enum SDMMD_Errors result;
 	CFDataRef data;
 } SDMMD_DebugReturnCode;
 

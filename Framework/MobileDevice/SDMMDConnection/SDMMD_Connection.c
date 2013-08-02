@@ -137,7 +137,7 @@ sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef se
 								CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
 								if (error) {
 									if (CFGetTypeID(error) == CFStringGetTypeID()) {
-										result = SDMMD__ConvertLockdowndError(error);
+										result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(error);
 									}
 								} else {
 									CFTypeRef portNumber = CFDictionaryGetValue(response, CFSTR("Port"));

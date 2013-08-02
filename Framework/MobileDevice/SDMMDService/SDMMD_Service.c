@@ -69,12 +69,12 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 				result = send(handle.socket.conn, CFDataGetBytePtr(data), msgLen, 0);
 			}
 			if (result == msgLen) {
-				return (result == msgLen ? MDERR_OK : MDERR_QUERY_FAILED);
+				return (result == msgLen ? kAMDSuccess : kAMDInvalidResponseError);
 			}
 		}
-		return MDERR_QUERY_FAILED;
+		return kAMDNotConnectedError;
 	}
-	return MDERR_OK;
+	return kAMDSuccess;
 }
 
 sdmmd_return_t SDMMD_DirectServiceSend(SocketConnection handle, CFDataRef data) {
@@ -87,11 +87,11 @@ sdmmd_return_t SDMMD_DirectServiceSend(SocketConnection handle, CFDataRef data) 
 			result = send(handle.socket.conn, CFDataGetBytePtr(data), msgLen, 0);
 		}
 		if (result == msgLen) {
-			return (result == msgLen ? MDERR_OK : MDERR_QUERY_FAILED);
+			return (result == msgLen ? kAMDSuccess : kAMDNotConnectedError);
 		}
-		return MDERR_QUERY_FAILED;
+		return kAMDNotConnectedError;
 	}
-	return MDERR_OK;
+	return kAMDSuccess;
 }
 
 sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
@@ -121,7 +121,7 @@ sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 			free(buffer);
 		}
 	}
-	return MDERR_OK;
+	return kAMDSuccess;
 }
 
 sdmmd_return_t SDMMD_DirectServiceReceive(SocketConnection handle, CFDataRef *data) {
@@ -144,15 +144,15 @@ sdmmd_return_t SDMMD_DirectServiceReceive(SocketConnection handle, CFDataRef *da
 			*data = CFDataCreate(kCFAllocatorDefault, buffer, size);
 			free(buffer);
 		}
-		return MDERR_OK;
+		return kAMDSuccess;
 	}
-	return MDERR_OK;
+	return kAMDSuccess;
 }
 
 sdmmd_return_t SDMMD_ServiceSendMessage(SocketConnection handle, CFPropertyListRef data, CFPropertyListFormat format) {
 	CFErrorRef error;
 	CFDataRef xmlData = CFPropertyListCreateData(kCFAllocatorDefault, data, format, 0, &error);
-	sdmmd_return_t result = ((data) ? SDMMD_ServiceSend(handle, xmlData) : MDERR_DICT_NOT_LOADED);
+	sdmmd_return_t result = ((data) ? SDMMD_ServiceSend(handle, xmlData) : kAMDInvalidArgumentError);
 	if (xmlData)
 		CFRelease(xmlData);
 	return result;
@@ -166,9 +166,9 @@ sdmmd_return_t SDMMD_ServiceReceiveMessage(SocketConnection handle, CFPropertyLi
 		} else {
 			*data = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 		}
-		return MDERR_OK;
+		return kAMDSuccess;
 	} else {
-		return MDERR_QUERY_FAILED;
+		return kAMDNotConnectedError;
 	}
 }
 
@@ -178,9 +178,9 @@ sdmmd_return_t SDMMD_ServiceSendStream(SocketConnection handle, CFPropertyListRe
 	CFWriteStreamOpen(write);
 	uint32_t length = CFPropertyListWriteToStream(data, write, format, &errStr);
 	CFDataRef xmlData = CFWriteStreamCopyProperty(write, kCFStreamPropertyDataWritten);
-	sdmmd_return_t result = MDERR_DICT_NOT_LOADED;
+	sdmmd_return_t result = kAMDInvalidArgumentError;
 	if (length == CFDataGetLength(xmlData)) {
-		result = ((data) ? SDMMD_ServiceSend(handle, xmlData) : MDERR_DICT_NOT_LOADED);
+		result = ((data) ? SDMMD_ServiceSend(handle, xmlData) : kAMDInvalidArgumentError);
 	}
 	if (xmlData)
 		CFRelease(xmlData);
@@ -201,9 +201,9 @@ sdmmd_return_t SDMMD_ServiceReceiveStream(SocketConnection handle, CFPropertyLis
 			if (read)
 				CFRelease(read);
 		}
-		return MDERR_OK;
+		return kAMDSuccess;
 	} else {
-		return MDERR_QUERY_FAILED;
+		return kAMDNotConnectedError;
 	}
 }
 
