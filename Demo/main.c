@@ -24,7 +24,7 @@ void DemoOne() {
 	printf("%i device(s) connected!\n",numberOfDevices);
 	
 	
-	if (numberOfDevices) {
+	/*if (numberOfDevices) {
 		// return type (uint32_t) corresponds with known return codes (SDMMD_Error.h)
 		sdmmd_return_t result;
 
@@ -72,7 +72,7 @@ void DemoOne() {
 				result = SDMMD_AMDeviceDisconnect(device);
 			}
 		}
-	}
+	}*/
 }
 
 void DemoTwo() {
@@ -118,4 +118,8 @@ void DemoTwo() {
 			}
 		}
 	}
+}
+
+void DemoThree() {
+	
 }

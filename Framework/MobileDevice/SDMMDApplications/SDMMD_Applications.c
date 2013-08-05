@@ -57,7 +57,7 @@ sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDict
 	return result;
 }
 
-/*sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFStringRef path, CFDictionaryRef options, void* transferCallback, void* unknown) {
+sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFStringRef path, CFDictionaryRef options, void* transferCallback, void* unknown) {
 	sdmmd_return_t result = 0xe8000007;
 	if (path) {
 		if (conn) {
@@ -81,6 +81,46 @@ sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDict
 							if (result == 0) {
 								CFURLRef parent = CFURLCreateCopyDeletingLastPathComponent(r12, r13);
 								result = SDMMD_make_path(r15, parent);
+								if (result == 0) {
+									result = SDMMD_nuke_path(r15, r13);
+									if (result | 0x8 == 0x8) {
+										result = lstat();
+										if (result != 0xff) {
+											f ((var_84 & 0xffff & 0xf000) != 0xa000) {
+												if (rax == 0x8000) {
+													rax = _copy_touch_file(&var_224, var_24, var_32, r15, &var_256, &var_1296);
+													rbx = rax;
+												} else {
+													if (rax == 0x4000) {
+														rax = _copy_directory(&var_224, var_24, var_32, r15, &var_256, &var_1296);
+														rbx = rax;
+													} else {
+														_mobdevlog(0x3, "transfer_package", @"Don't know how to copy this type of file: %s", &var_256);
+													}
+												}
+											} else {
+												rax = _copy_symlink(r15, &var_256, &var_1296);
+												rbx = rax;
+											}
+											r14 = 0x0;
+											if (rbx != 0x0) {
+												rax = _AFCErrorString(rbx);
+												r9 = rax;
+												_mobdevlog(0x3, "transfer_package", @"Could not copy %s to %s on the device: %s", &var_256, &var_1296, r9);
+												result = 0xe8000001;
+											}
+											rax = _AFCConnectionClose(r15);
+											if (rax != 0x0) {
+												_pretty_afc_error("transfer_package", "Could not close AFC connection", rax);
+											}
+											if (r12 != 0x0) {
+												CFRelease(r12);
+											}
+										}
+									}
+								} else {
+									// error!
+								}
 							}
 						}
 					} else {
@@ -93,7 +133,7 @@ sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDict
 		}
 	}
 	return result;
-}*/
+}
 
 sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn, SDMMD_AMDeviceRef device, CFURLRef path, CFDictionaryRef options, void* installCallback, void* unknown) {
 	sdmmd_return_t result = 0x0;
