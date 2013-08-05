@@ -371,6 +371,7 @@ static CFURLRef SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(CFStringRef pa
 		CFURLRef base = CFURLCreateWithString(kCFAllocatorDefault, CFSTR("file://localhost/"), NULL);
 		url = CFURLCreateWithFileSystemPathRelativeToBase(kCFAllocatorDefault, path, kCFURLPOSIXPathStyle, S_ISDIR(buf.st_mode), base);
 	}
+	CFShow(url);
 	return url;
 }
 

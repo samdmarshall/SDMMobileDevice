@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		22E668F217AC0E81005FFCBE /* SDMMobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E668F117AC0E7A005FFCBE /* SDMMobileDevice.framework */; };
+		22E66AA217B00FD4005FFCBE /* MobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E66AA117B00FD4005FFCBE /* MobileDevice.framework */; };
 		8DD76F770486A8DE00D96B5E /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.c */; settings = {ATTRIBUTES = (); }; };
 		8DD76F790486A8DE00D96B5E /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */; };
 		8DD76F7C0486A8DE00D96B5E /* Demo.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6859E970290921104C91782 /* Demo.1 */; };
@@ -47,6 +48,7 @@
 		08FB7796FE84155DC02AAC07 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		22E668EC17AC0E7A005FFCBE /* SDMMobileDevice-Framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "SDMMobileDevice-Framework.xcodeproj"; path = "../Framework/SDMMobileDevice-Framework.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		22E66AA117B00FD4005FFCBE /* MobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileDevice.framework; path = /System/Library/PrivateFrameworks/MobileDevice.framework; sourceTree = "<absolute>"; };
 		8DD76F7E0486A8DE00D96B5E /* Demo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Demo; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6859E970290921104C91782 /* Demo.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Demo.1; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -58,6 +60,7 @@
 			files = (
 				22E668F217AC0E81005FFCBE /* SDMMobileDevice.framework in Frameworks */,
 				8DD76F790486A8DE00D96B5E /* CoreFoundation.framework in Frameworks */,
+				22E66AA217B00FD4005FFCBE /* MobileDevice.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +74,7 @@
 				C6859E96029091FE04C91782 /* Documentation */,
 				08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */,
 				19C28FBDFE9D53C911CA2CBB /* Products */,
+				22E66AA117B00FD4005FFCBE /* MobileDevice.framework */,
 			);
 			name = Demo;
 			sourceTree = "<group>";
@@ -203,7 +207,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(CONFIGURATION_BUILD_DIR)",
+					"\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
@@ -221,6 +228,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
+				);
 				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/bin;
 				PRODUCT_NAME = Demo;

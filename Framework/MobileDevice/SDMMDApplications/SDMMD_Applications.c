@@ -23,6 +23,7 @@
 #include "SDMMD_Service.h"
 #include "SDMMD_Functions.h"
 #include "SDMMD_AMDevice.h"
+#include "SDMMD_AFC.h"
 
 #define kAppLookupMasterKey "ReturnAttributes"
 
@@ -57,11 +58,37 @@ sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDict
 	return result;
 }
 
-sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFStringRef path, CFDictionaryRef options, void* transferCallback, void* unknown) {
+void SDMMD_fire_callback_767f4(void (*callback)(CFDictionaryRef dict, void* arg), void* unknown, uint32_t percent, CFStringRef string) {
+	if (callback) {
+		CFMutableDictionaryRef dict = SDMMD_create_dict();
+		CFNumberRef num = CFNumberCreate(kCFAllocatorDefault, 0x3, &percent);
+		if (dict) {
+			CFDictionarySetValue(dict, CFSTR("Status"), string);
+			CFDictionarySetValue(dict, CFSTR("PercentComplete"), num);
+			CFRelease(num);
+		}
+		(*callback)(dict, unknown);
+	}
+}
+
+void SDMMD_preflight_transfer(char *path, struct stat *statRef, char *rStatRef) {
+	uint32_t statResult = stat(path, statRef);
+	if (statResult != 0xff) {
+		if ((*(int16_t *)(statRef + 0x4) & 0xffff & 0xf000) != 0x4000) {
+			rStatRef[0] = 0x1;
+			rStatRef[8] = (statRef + 0x60);
+		} else {
+			// error!
+		}
+	}
+}
+
+/*sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFStringRef path, CFDictionaryRef options, void* transferCallback, void* unknown) {
 	sdmmd_return_t result = 0xe8000007;
 	if (path) {
 		if (conn) {
 			char *cpath = calloc(0x1, 0x401);
+			struct stat pathStat, remoteStat;
 			Boolean status = CFStringGetCString(path, cpath, 0x401, 0x8000100);
 			if (status) {
 				CFURLRef deviceURL = SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(path);
@@ -73,45 +100,41 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 						char *copyPath;
 						result = SDMMD__AMDCFURLGetCStringForFileSystemPath(copy, copyPath);
 						SDMMD_fire_callback_767f4(transferCallback, unknown, 0x0, CFSTR("PreflightingTransfer"));
-						SDMMD_preflight_transfer();
+						//SDMMD_preflight_transfer(&cpath, &pathStat, &remoteStat);
 						SDMMD_fire_callback_767f4(transferCallback, unknown, 0x0, CFSTR("TransferingPackage"));
-						result = SDMMD_AFCConnectionCreate();
+						SDMMD_AFCConnectionRef afcConn = SDMMD_AFCConnectionCreate(conn);//(r12, conn, 0x0, 0x0, &var_72);
 						if (result == 0) {
-							result = SDMMD_check_can_touch();
+							result = SDMMD_check_can_touch(afcConn, &var_72);
 							if (result == 0) {
 								CFURLRef parent = CFURLCreateCopyDeletingLastPathComponent(r12, r13);
-								result = SDMMD_make_path(r15, parent);
+								result = SDMMD_make_path(afcConn, parent);
 								if (result == 0) {
-									result = SDMMD_nuke_path(r15, r13);
-									if (result | 0x8 == 0x8) {
-										result = lstat();
-										if (result != 0xff) {
+									result = SDMMD_nuke_path(afcConn, r13);
+									if ((result | 0x8) == 0x8) {
+										uint32_t statResult = lstat(cpath, &pathStat);
+										if (statResult != 0xff) {
 											f ((var_84 & 0xffff & 0xf000) != 0xa000) {
 												if (rax == 0x8000) {
-													rax = _copy_touch_file(&var_224, var_24, var_32, r15, &var_256, &var_1296);
-													rbx = rax;
+													rbx = SDMMD_copy_touch_file(&remoteStat, transferCallback, unknown, afcConn, &cpath, &copyPath);
 												} else {
 													if (rax == 0x4000) {
-														rax = _copy_directory(&var_224, var_24, var_32, r15, &var_256, &var_1296);
-														rbx = rax;
+														rbx = SDMMD_copy_directory(&remoteStat, transferCallback, unknown, afcConn, &cpath, &copyPath);
 													} else {
-														_mobdevlog(0x3, "transfer_package", @"Don't know how to copy this type of file: %s", &var_256);
+														printf("transfer_package: Don't know how to copy this type of file: %s\n", cpath);
 													}
 												}
 											} else {
-												rax = _copy_symlink(r15, &var_256, &var_1296);
-												rbx = rax;
+												rbx = SDMMD_copy_symlink(afcConn, &cpath, &copyPath);
 											}
 											r14 = 0x0;
 											if (rbx != 0x0) {
-												rax = _AFCErrorString(rbx);
-												r9 = rax;
-												_mobdevlog(0x3, "transfer_package", @"Could not copy %s to %s on the device: %s", &var_256, &var_1296, r9);
+												r9 = SDMMD_AFCErrorString(rbx);
+												printf("transfer_package: Could not copy %s to %s on the device.\n", cpath, &copyPath);
 												result = 0xe8000001;
 											}
-											rax = _AFCConnectionClose(r15);
-											if (rax != 0x0) {
-												_pretty_afc_error("transfer_package", "Could not close AFC connection", rax);
+											result = SDMMD_AFCConnectionClose(afcConn);
+											if (result) {
+												printf("transfer_package: Could not close AFC connection. error: %i\n", result);
 											}
 											if (r12 != 0x0) {
 												CFRelease(r12);
@@ -133,7 +156,7 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 		}
 	}
 	return result;
-}
+}*/
 
 sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn, SDMMD_AMDeviceRef device, CFURLRef path, CFDictionaryRef options, void* installCallback, void* unknown) {
 	sdmmd_return_t result = 0x0;
@@ -149,8 +172,11 @@ sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn
 	}
 	if (hasConnection) {
 		CFStringRef lastComp = CFURLCopyLastPathComponent(path);
+		if (CFStringGetLength(lastComp)==0) {
+			lastComp = CFURLCopyLastPathComponent(CFURLCreateCopyDeletingLastPathComponent(kCFAllocatorDefault, path));
+		}
 		if (lastComp) {
-			CFStringRef format = CFStringCreateWithFormat(kCFAllocatorDefault, 0x0, CFSTR("%s%c%s"), "PublicStaging", 0x2f, SDMCFStringGetString(lastComp));
+			CFStringRef format = CFStringCreateWithFormat(kCFAllocatorDefault, 0x0, CFSTR("%s%c%@"), "PublicStaging", 0x2f, lastComp);
 			if (format) {
 				printf("SDMMD_AMDeviceSecureInstallApplication: Attempting install of %s.\n",SDMCFStringGetString(format));
 				result = SDMMD_perform_command(connection, CFSTR("Install"), 0x0, installCallback, 4, unknown, CFSTR("PackagePath"), format, CFSTR("ClientOptions"), options);

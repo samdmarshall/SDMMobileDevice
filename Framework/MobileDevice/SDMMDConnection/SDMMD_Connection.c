@@ -53,8 +53,9 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 				while (result == 0) {
 					CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
 					if (error) {
+						CFShow(response);
 						result = SDMMD__ConvertServiceError(error);
-						printf("call_and_response: GOT AN ERROR 0x%08x.\n",result);
+						printf("call_and_response: GOT AN ERROR 0x%08x %s.\n",result, SDMMD_AMDErrorString(result));
 					} else {
 						CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
 						if (status) {
@@ -66,6 +67,8 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 										CFDictionaryRef value = CFArrayGetValueAtIndex(responses, i);
 										(callback)(value, paramStart);
 									}
+								} else {
+									(callback)(response, 0);
 								}
 							} else {
 								break;

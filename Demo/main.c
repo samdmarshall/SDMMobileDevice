@@ -11,7 +11,7 @@ int main (int argc, const char * argv[]) {
 	
 	//DemoOne();
 	//DemoTwo();
-	//DemoThree();
+	DemoThree();
 	
 	return 0;
 }
@@ -120,6 +120,86 @@ void DemoTwo() {
 	}
 }
 
+void transfer_callback(CFDictionaryRef dict, int arg) {
+    int percent;
+    CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
+    CFNumberGetValue(CFDictionaryGetValue(dict, CFSTR("PercentComplete")), kCFNumberSInt32Type, &percent);
+    if (CFEqual(status, CFSTR("CopyingFile"))) {
+        CFStringRef path = CFDictionaryGetValue(dict, CFSTR("Path"));
+        if (/*(last_path == NULL || !CFEqual(path, last_path)) &&*/ !CFStringHasSuffix(path, CFSTR(".ipa"))) {
+            printf("[%3d%%] Copying %s to device\n", percent / 2, CFStringGetCStringPtr(path, kCFStringEncodingMacRoman));
+			
+        }
+    }
+}
+
+void install_callback(CFDictionaryRef dict, int arg) {
+    int percent;
+    CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
+    CFNumberGetValue(CFDictionaryGetValue(dict, CFSTR("PercentComplete")), kCFNumberSInt32Type, &percent);
+    printf("[%3d%%] %s\n", (percent / 2) + 50, CFStringGetCStringPtr(status, kCFStringEncodingMacRoman));
+}
+
+
 void DemoThree() {
 	
+	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
+	
+	uint32_t numberOfDevices = CFArrayGetCount(devices);
+	printf("%i device(s) connected!\n",numberOfDevices);
+	
+	
+	if (numberOfDevices) {
+		// return type (uint32_t) corresponds with known return codes (SDMMD_Error.h)
+		sdmmd_return_t result;
+		
+		uint32_t index;
+		// Iterating over connected devices
+		for (index = 0; index < numberOfDevices; index++) {
+			
+			// getting the device object from the array of connected devices
+			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
+			
+			
+			CFStringRef path = CFSTR("/Volumes/Data/Users/sam/git Projects/RemoteClient/build/Debug-iphoneos/RemoteClient.app");
+			CFShow(path);
+			SDMMD_AMConnectionRef afcFd;
+			CFStringRef keys[] = { CFSTR("PackageType") };
+			CFStringRef values[] = { CFSTR("Developer") };
+			CFDictionaryRef options = CFDictionaryCreate(NULL, (const void **)&keys, (const void **)&values, 1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+			SDMMD_AMConnectionRef installFd;
+			bool copyResult = FALSE, installResult = FALSE;
+			copyResult = (SDMMD_AMDeviceConnect(device) == kAMDSuccess ?
+						  (SDMMD_AMDeviceIsPaired(device) ?
+						   (SDMMD_AMDeviceValidatePairing(device) == kAMDSuccess ?
+							(SDMMD_AMDeviceStartSession(device) == kAMDSuccess ?
+							 (SDMMD_AMDeviceStartService(device, CFSTR(AMSVC_AFC), NULL, &afcFd) == kAMDSuccess ?
+							  (SDMMD_AMDeviceStopSession(device) == kAMDSuccess ?
+							   (SDMMD_AMDeviceDisconnect(device) == kAMDSuccess ?
+								(AMDeviceTransferApplication(afcFd->ivars.socket, path, NULL, transfer_callback, NULL) == kAMDSuccess ? TRUE : FALSE)
+								: FALSE)
+							   : FALSE)
+							  : FALSE)
+							 : FALSE)
+							: FALSE)
+						   : FALSE)
+						  : FALSE);
+			//if (copyResult)
+				installResult = (SDMMD_AMDeviceConnect(device) == kAMDSuccess ?
+								 (SDMMD_AMDeviceIsPaired(device) ?
+								  (SDMMD_AMDeviceValidatePairing(device) == kAMDSuccess ?
+								   (SDMMD_AMDeviceStartSession(device) == kAMDSuccess ?
+									(SDMMD_AMDeviceInstallApplication(device, path, options, install_callback, NULL) == kAMDSuccess ? 
+									 (SDMMD_AMDeviceStopSession(device) == kAMDSuccess ?
+									  (SDMMD_AMDeviceDisconnect(device) == kAMDSuccess ?
+									   : FALSE)
+									  : FALSE)
+									 : FALSE)
+									: FALSE)
+								   : FALSE)
+								  : FALSE)
+								 : FALSE);
+			CFRelease(options);			
+		}
+	}	
 }

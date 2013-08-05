@@ -23,6 +23,12 @@
 #include "SDMMD_Functions.h"
 #include <string.h>
 
+sdmmd_return_t SDMMD_check_can_touch(SDMMD_AFCConnectionRef conn, void* unknown) {
+	SDMMD_AFCOperationRef fileInfo = SDMMD_AFCOperationCreateGetFileInfo(unknown);
+	SDMMD_AFCOperationRef reply; 
+	SDMMD_AFCProcessOperation(conn, fileInfo, &reply);
+}
+
 SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(SDMMD_AMConnectionRef conn) {
 	SDMMD_AFCConnectionRef afc = calloc(1, sizeof(struct sdmmd_AFCConnectionClass));
 	afc->handle = conn;
@@ -225,18 +231,18 @@ sdmmd_return_t SDMMD_AFCReceiveOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 	return result;
 }
 
-sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOperationRef op, void* *response) {
+sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOperationRef op, SDMMD_AFCOperationRef *response) {
 	__block sdmmd_return_t result = 0x0;
+	__block SDMMD_AFCOperationRef blockReply;
 	dispatch_sync(conn->operationQueue, ^{
 		conn->semaphore = dispatch_semaphore_create(0x0);
 		result = SDMMD_AFCSendOperation(conn, op);
 		dispatch_semaphore_wait(conn->semaphore, op->timeout);
-		SDMMD_AFCOperationRef response;
-		SDMMD_AFCReceiveOperation(conn, &response);
-		
+		SDMMD_AFCReceiveOperation(conn, &blockReply);
 		dispatch_release(conn->semaphore);
 		conn->operationCount++;
 	});
+	response = &blockReply;
 	return result;
 }
 
