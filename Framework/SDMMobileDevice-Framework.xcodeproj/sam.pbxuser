@@ -195,9 +195,9 @@
 	};
 	225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1026, 4901}}";
-			sepNavSelRange = "{17737, 0}";
-			sepNavVisRange = "{0, 2172}";
+			sepNavIntBoundsRect = "{{0, 0}, {1026, 5096}}";
+			sepNavSelRange = "{2095, 0}";
+			sepNavVisRange = "{4959, 1782}";
 			sepNavWindowFrame = "{{38, 183}, {1135, 669}}";
 		};
 	};
@@ -1864,7 +1864,7 @@
 		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
 		name = "SDMMD_Debugger.c: 30";
 		rLen = 0;
-		rLoc = 2308;
+		rLoc = 2343;
 		rType = 0;
 		vrLen = 1683;
 		vrLoc = 2183;
@@ -1874,7 +1874,7 @@
 		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
 		name = "SDMMD_Debugger.c: 143";
 		rLen = 0;
-		rLoc = 7271;
+		rLoc = 7306;
 		rType = 0;
 		vrLen = 1680;
 		vrLoc = 5462;
@@ -1884,7 +1884,7 @@
 		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
 		name = "SDMMD_Debugger.c: 143";
 		rLen = 0;
-		rLoc = 7271;
+		rLoc = 7306;
 		rType = 0;
 		vrLen = 1680;
 		vrLoc = 5462;
@@ -1894,7 +1894,7 @@
 		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
 		name = "SDMMD_Debugger.c: 143";
 		rLen = 0;
-		rLoc = 7271;
+		rLoc = 7306;
 		rType = 0;
 		vrLen = 1680;
 		vrLoc = 5462;
@@ -1904,7 +1904,7 @@
 		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
 		name = "SDMMD_Debugger.c: 143";
 		rLen = 0;
-		rLoc = 7271;
+		rLoc = 7306;
 		rType = 0;
 		vrLen = 1680;
 		vrLoc = 5462;
@@ -1914,7 +1914,7 @@
 		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
 		name = "SDMMD_Debugger.c: 143";
 		rLen = 0;
-		rLoc = 7271;
+		rLoc = 7306;
 		rType = 0;
 		vrLen = 1680;
 		vrLoc = 5462;
@@ -1964,7 +1964,7 @@
 		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
 		name = "SDMMD_Debugger.c: 172";
 		rLen = 60;
-		rLoc = 14748;
+		rLoc = 14783;
 		rType = 0;
 		vrLen = 1844;
 		vrLoc = 8045;
@@ -2013,7 +2013,7 @@
 		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
 		name = "SDMMD_Debugger.c: 178";
 		rLen = 0;
-		rLoc = 14966;
+		rLoc = 15001;
 		rType = 0;
 		vrLen = 1571;
 		vrLoc = 10289;
@@ -2113,7 +2113,7 @@
 		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
 		name = "SDMMD_Debugger.c: 267";
 		rLen = 60;
-		rLoc = 14748;
+		rLoc = 14783;
 		rType = 0;
 		vrLen = 1690;
 		vrLoc = 8245;
@@ -2123,7 +2123,7 @@
 		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
 		name = "SDMMD_Debugger.c: 340";
 		rLen = 0;
-		rLoc = 17747;
+		rLoc = 17782;
 		rType = 0;
 		vrLen = 1858;
 		vrLoc = 7470;
@@ -2162,7 +2162,7 @@
 		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
 		name = "SDMMD_Debugger.c: 223";
 		rLen = 0;
-		rLoc = 11230;
+		rLoc = 11265;
 		rType = 0;
 		vrLen = 1579;
 		vrLoc = 10640;
@@ -2172,7 +2172,7 @@
 		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
 		name = "SDMMD_Debugger.c: 27";
 		rLen = 0;
-		rLoc = 2070;
+		rLoc = 2105;
 		rType = 0;
 		vrLen = 2170;
 		vrLoc = 1791;
@@ -2182,7 +2182,7 @@
 		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
 		name = "SDMMD_Debugger.c: 27";
 		rLen = 0;
-		rLoc = 2070;
+		rLoc = 2105;
 		rType = 0;
 		vrLen = 2170;
 		vrLoc = 1791;
@@ -2192,7 +2192,7 @@
 		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
 		name = "SDMMD_Debugger.c: 288";
 		rLen = 0;
-		rLoc = 14644;
+		rLoc = 14679;
 		rType = 0;
 		vrLen = 1454;
 		vrLoc = 12449;
@@ -2202,7 +2202,7 @@
 		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
 		name = "SDMMD_Debugger.c: 298";
 		rLen = 0;
-		rLoc = 13652;
+		rLoc = 13687;
 		rType = 0;
 		vrLen = 1318;
 		vrLoc = 12951;
@@ -2212,7 +2212,7 @@
 		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
 		name = "SDMMD_Debugger.c: 308";
 		rLen = 0;
-		rLoc = 14023;
+		rLoc = 14058;
 		rType = 0;
 		vrLen = 1074;
 		vrLoc = 12283;
@@ -2222,7 +2222,7 @@
 		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
 		name = "SDMMD_Debugger.c: 298";
 		rLen = 0;
-		rLoc = 13656;
+		rLoc = 13691;
 		rType = 0;
 		vrLen = 1179;
 		vrLoc = 12466;
@@ -2271,7 +2271,7 @@
 		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
 		name = "SDMMD_Debugger.c: 397";
 		rLen = 0;
-		rLoc = 17737;
+		rLoc = 17772;
 		rType = 0;
 		vrLen = 1191;
 		vrLoc = 16550;
@@ -2311,7 +2311,7 @@
 		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
 		name = "SDMMD_Debugger.c: 400";
 		rLen = 0;
-		rLoc = 17737;
+		rLoc = 17772;
 		rType = 0;
 		vrLen = 2172;
 		vrLoc = 0;
@@ -2321,7 +2321,7 @@
 		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
 		name = "SDMMD_Debugger.c: 400";
 		rLen = 0;
-		rLoc = 17737;
+		rLoc = 17772;
 		rType = 0;
 		vrLen = 2172;
 		vrLoc = 0;
@@ -2335,6 +2335,46 @@
 		rType = 0;
 		vrLen = 1422;
 		vrLoc = 29244;
+	};
+	22E66D2D17B16E3A005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 22AD8E641787465A002ACFB1 /* SDMMD_AMDevice.c */;
+		name = "SDMMD_AMDevice.c: 887";
+		rLen = 47;
+		rLoc = 29278;
+		rType = 0;
+		vrLen = 1422;
+		vrLoc = 29244;
+	};
+	22E66D2E17B16E3A005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
+		name = "SDMMD_Debugger.c: 32";
+		rLen = 0;
+		rLoc = 2095;
+		rType = 0;
+		vrLen = 1782;
+		vrLoc = 4959;
+	};
+	22E66D3017B16EA1005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
+		name = "SDMMD_Debugger.c: 32";
+		rLen = 0;
+		rLoc = 2095;
+		rType = 0;
+		vrLen = 1782;
+		vrLoc = 4959;
+	};
+	22E66D3117B16EA1005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
+		name = "SDMMD_Debugger.c: 32";
+		rLen = 0;
+		rLoc = 2095;
+		rType = 0;
+		vrLen = 1782;
+		vrLoc = 4959;
 	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
 		activeBuildConfigurationName = Debug;
@@ -2660,6 +2700,10 @@
 			22E66D0317B15FC7005FFCBE /* PBXTextBookmark */ = 22E66D0317B15FC7005FFCBE /* PBXTextBookmark */;
 			22E66D0817B168F8005FFCBE /* PBXTextBookmark */ = 22E66D0817B168F8005FFCBE /* PBXTextBookmark */;
 			22E66D0917B168F8005FFCBE /* PBXTextBookmark */ = 22E66D0917B168F8005FFCBE /* PBXTextBookmark */;
+			22E66D2D17B16E3A005FFCBE /* PBXTextBookmark */ = 22E66D2D17B16E3A005FFCBE /* PBXTextBookmark */;
+			22E66D2E17B16E3A005FFCBE /* PBXTextBookmark */ = 22E66D2E17B16E3A005FFCBE /* PBXTextBookmark */;
+			22E66D3017B16EA1005FFCBE /* PBXTextBookmark */ = 22E66D3017B16EA1005FFCBE /* PBXTextBookmark */;
+			22E66D3117B16EA1005FFCBE /* PBXTextBookmark */ = 22E66D3117B16EA1005FFCBE /* PBXTextBookmark */;
 		};
 		sourceControlManager = 2215A83D17500DDC00AD1981 /* Source Control */;
 		userBuildSettings = {

@@ -164,7 +164,7 @@ void DemoThree(const char *appPath) {
 			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
 			
 			
-			CFStringRef path = CFStringCreateWithCharacters(kCFAllocatorDefault, appPath, strlen(appPath));
+			CFStringRef path = CFStringCreateWithBytes(kCFAllocatorDefault, appPath, strlen(appPath), kCFStringEncodingUTF8, false);
 			CFShow(path);
 			SDMMD_AMConnectionRef afcFd;
 			CFStringRef keys[] = { CFSTR("PackageType") };
@@ -223,7 +223,7 @@ void DemoFour(const char *appPath) {
 		for (index = 0; index < numberOfDevices; index++) {
 			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
 			
-			CFStringRef bundleId = CFStringCreateWithCharacters(kCFAllocatorDefault, appPath, strlen(appPath));
+			CFStringRef bundleId = CFStringCreateWithBytes(kCFAllocatorDefault, appPath, strlen(appPath), kCFStringEncodingUTF8, false);
 			
 			SDMMD_AMDebugConnectionRef debug;
 			result = SDMMD_StartDebuggingSessionOnDevice(device, &debug);

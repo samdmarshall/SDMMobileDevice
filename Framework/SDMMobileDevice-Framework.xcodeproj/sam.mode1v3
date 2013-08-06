@@ -328,7 +328,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>SDMMD_AMDevice.c</string>
+								<string>SDMMD_Debugger.c</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -336,11 +336,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>SDMMD_AMDevice.c</string>
+										<string>SDMMD_Debugger.c</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>22E66D0917B168F8005FFCBE</string>
+										<string>22E66D3117B16EA1005FFCBE</string>
 										<key>history</key>
 										<array>
 											<string>22E6686917AC0CA0005FFCBE</string>
@@ -364,8 +364,8 @@
 											<string>22E66C1617B148D5005FFCBE</string>
 											<string>22E66CB917B15A69005FFCBE</string>
 											<string>22E66CBA17B15A69005FFCBE</string>
-											<string>22E66D0817B168F8005FFCBE</string>
-											<string>22E66C6D17B1578D005FFCBE</string>
+											<string>22E66D2D17B16E3A005FFCBE</string>
+											<string>22E66D3017B16EA1005FFCBE</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
