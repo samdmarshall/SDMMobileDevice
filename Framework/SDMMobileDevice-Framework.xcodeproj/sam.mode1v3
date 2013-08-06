@@ -232,8 +232,6 @@
 			<key>Layout</key>
 			<array>
 				<dict>
-					<key>BecomeActive</key>
-					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -289,15 +287,14 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>47</integer>
-									<integer>45</integer>
+									<integer>5</integer>
 									<integer>2</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 660}, {234, 630}}</string>
+							<string>{{0, 0}, {234, 638}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -309,14 +306,14 @@
 					<key>GeometryConfiguration</key>
 					<dict>
 						<key>Frame</key>
-						<string>{{0, 0}, {251, 648}}</string>
+						<string>{{0, 0}, {251, 656}}</string>
 						<key>GroupTreeTableConfiguration</key>
 						<array>
 							<string>MainColumn</string>
 							<real>234</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>2065 -128 1243 689 1440 -180 1920 1080 </string>
+						<string>54 133 1343 697 0 0 1440 878 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -327,12 +324,14 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>SDMMD_Connection.c</string>
+								<string>SDMMD_Functions.h</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -340,11 +339,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>SDMMD_Connection.c</string>
+										<string>SDMMD_Functions.h</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>22E66B8B17B018C2005FFCBE</string>
+										<string>22E66BCC17B13DA0005FFCBE</string>
 										<key>history</key>
 										<array>
 											<string>22E6686917AC0CA0005FFCBE</string>
@@ -355,19 +354,19 @@
 											<string>22E669CF17AFF96E005FFCBE</string>
 											<string>22E669D417AFF96E005FFCBE</string>
 											<string>22E669EA17AFFD09005FFCBE</string>
-											<string>22E669FF17B00164005FFCBE</string>
 											<string>22E66A0717B005F3005FFCBE</string>
 											<string>22E66AD117B0120C005FFCBE</string>
 											<string>22E66AD217B0120C005FFCBE</string>
 											<string>22E66AD317B0120C005FFCBE</string>
 											<string>22E66AD517B0120C005FFCBE</string>
 											<string>22E66AD717B0120C005FFCBE</string>
-											<string>22E66B0D17B0136B005FFCBE</string>
-											<string>22E66B0E17B0136B005FFCBE</string>
 											<string>22E66B0F17B0136B005FFCBE</string>
-											<string>22E66B1A17B01476005FFCBE</string>
-											<string>22E66B6217B01626005FFCBE</string>
-											<string>22E66B6317B01626005FFCBE</string>
+											<string>22E66BA317B033E9005FFCBE</string>
+											<string>22E66BA417B033E9005FFCBE</string>
+											<string>22E66BA517B033E9005FFCBE</string>
+											<string>22E66BB117B13BCB005FFCBE</string>
+											<string>22E66BBB17B13D53005FFCBE</string>
+											<string>22E66BB817B13CBE005FFCBE</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -379,14 +378,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {987, 521}}</string>
+								<string>{{0, 0}, {1087, 529}}</string>
 								<key>RubberWindowFrame</key>
-								<string>2065 -128 1243 689 1440 -180 1920 1080 </string>
+								<string>54 133 1343 697 0 0 1440 878 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>521pt</string>
+							<string>529pt</string>
 						</dict>
 						<dict>
 							<key>ContentConfiguration</key>
@@ -399,9 +398,9 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 526}, {987, 122}}</string>
+								<string>{{0, 534}, {1087, 122}}</string>
 								<key>RubberWindowFrame</key>
-								<string>2065 -128 1243 689 1440 -180 1920 1080 </string>
+								<string>54 133 1343 697 0 0 1440 878 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -410,7 +409,7 @@
 						</dict>
 					</array>
 					<key>Proportion</key>
-					<string>987pt</string>
+					<string>1087pt</string>
 				</dict>
 			</array>
 			<key>Name</key>
@@ -595,7 +594,7 @@
 		<string>/Volumes/Data/Users/sam/git Projects/SDM_MD_Demo/Framework/SDMMobileDevice-Framework.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>2065 -128 1243 689 1440 -180 1920 1080 </string>
+	<string>54 133 1343 697 0 0 1440 878 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
@@ -611,6 +610,8 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -633,8 +634,6 @@
 							<string>447pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>

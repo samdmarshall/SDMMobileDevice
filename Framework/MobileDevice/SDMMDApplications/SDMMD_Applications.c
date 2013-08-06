@@ -83,7 +83,7 @@ void SDMMD_preflight_transfer(char *path, struct stat *statRef, char *rStatRef) 
 	}
 }
 
-/*sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFStringRef path, CFDictionaryRef options, void* transferCallback, void* unknown) {
+sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFStringRef path, CFDictionaryRef options, void* transferCallback, void* unknown) {
 	sdmmd_return_t result = 0xe8000007;
 	if (path) {
 		if (conn) {
@@ -98,7 +98,7 @@ void SDMMD_preflight_transfer(char *path, struct stat *statRef, char *rStatRef) 
 						CFURLRef base = SDMMD__AMDCFURLCreateWithFileSystemPathRelativeToBase(kCFAllocatorDefault, CFSTR("PublicStaging"), 0x0, 0x1);
 						CFURLRef copy = CFURLCreateCopyAppendingPathComponent(kCFAllocatorDefault, base, lastComp, true);
 						char *copyPath;
-						result = SDMMD__AMDCFURLGetCStringForFileSystemPath(copy, copyPath);
+						SDMMD__AMDCFURLGetCStringForFileSystemPath(copy, copyPath);
 						SDMMD_fire_callback_767f4(transferCallback, unknown, 0x0, CFSTR("PreflightingTransfer"));
 						//SDMMD_preflight_transfer(&cpath, &pathStat, &remoteStat);
 						SDMMD_fire_callback_767f4(transferCallback, unknown, 0x0, CFSTR("TransferingPackage"));
@@ -129,7 +129,7 @@ void SDMMD_preflight_transfer(char *path, struct stat *statRef, char *rStatRef) 
 											r14 = 0x0;
 											if (rbx != 0x0) {
 												r9 = SDMMD_AFCErrorString(rbx);
-												printf("transfer_package: Could not copy %s to %s on the device.\n", cpath, &copyPath);
+												printf("transfer_package: Could not copy %s to %s on the device.\n", cpath, copyPath);
 												result = 0xe8000001;
 											}
 											result = SDMMD_AFCConnectionClose(afcConn);
@@ -156,7 +156,7 @@ void SDMMD_preflight_transfer(char *path, struct stat *statRef, char *rStatRef) 
 		}
 	}
 	return result;
-}*/
+}
 
 sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn, SDMMD_AMDeviceRef device, CFURLRef path, CFDictionaryRef options, void* installCallback, void* unknown) {
 	sdmmd_return_t result = 0x0;

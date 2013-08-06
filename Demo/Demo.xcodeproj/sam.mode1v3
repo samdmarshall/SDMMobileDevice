@@ -280,7 +280,7 @@
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 0}, {280, 752}}</string>
+							<string>{{0, 0}, {280, 777}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -292,14 +292,14 @@
 					<key>GeometryConfiguration</key>
 					<dict>
 						<key>Frame</key>
-						<string>{{0, 0}, {297, 770}}</string>
+						<string>{{0, 0}, {297, 795}}</string>
 						<key>GroupTreeTableConfiguration</key>
 						<array>
 							<string>MainColumn</string>
 							<real>280</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>1865 89 1227 811 1440 -180 1920 1080 </string>
+						<string>1865 64 1422 836 1440 -180 1920 1080 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -327,7 +327,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>22E66B8E17B018C2005FFCBE</string>
+										<string>22E66BC617B13D9C005FFCBE</string>
 										<key>history</key>
 										<array>
 											<string>22E6688817AC0D1B005FFCBE</string>
@@ -344,14 +344,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {925, 523}}</string>
+								<string>{{0, 0}, {1120, 548}}</string>
 								<key>RubberWindowFrame</key>
-								<string>1865 89 1227 811 1440 -180 1920 1080 </string>
+								<string>1865 64 1422 836 1440 -180 1920 1080 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>523pt</string>
+							<string>548pt</string>
 						</dict>
 						<dict>
 							<key>BecomeActive</key>
@@ -366,9 +366,9 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 528}, {925, 242}}</string>
+								<string>{{0, 553}, {1120, 242}}</string>
 								<key>RubberWindowFrame</key>
-								<string>1865 89 1227 811 1440 -180 1920 1080 </string>
+								<string>1865 64 1422 836 1440 -180 1920 1080 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -377,7 +377,7 @@
 						</dict>
 					</array>
 					<key>Proportion</key>
-					<string>925pt</string>
+					<string>1120pt</string>
 				</dict>
 			</array>
 			<key>Name</key>
@@ -556,13 +556,12 @@
 		<string>22E669B517AED535005FFCBE</string>
 		<string>22E6691717AC0F9C005FFCBE</string>
 		<string>22E6691817AC0F9C005FFCBE</string>
+		<string>1C78EAAD065D492600B07095</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>228AAD9B14D4734400F46316</string>
-		<string>1C78EAAD065D492600B07095</string>
-		<string>/Volumes/Data/Users/sam/git Projects/SDM_MD_Demo/Demo/Demo.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>1865 89 1227 811 1440 -180 1920 1080 </string>
+	<string>1865 64 1422 836 1440 -180 1920 1080 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
@@ -900,18 +899,18 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {1066, 465}}</string>
+								<string>{{0, 0}, {1555, 820}}</string>
 								<key>RubberWindowFrame</key>
-								<string>1513 -86 1066 506 1440 -180 1920 1080 </string>
+								<string>1603 -124 1555 861 1440 -180 1920 1080 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXDebugCLIModule</string>
 							<key>Proportion</key>
-							<string>465pt</string>
+							<string>820pt</string>
 						</dict>
 					</array>
 					<key>Proportion</key>
-					<string>465pt</string>
+					<string>820pt</string>
 				</dict>
 			</array>
 			<key>Name</key>
@@ -931,11 +930,11 @@
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.consoleV3</string>
 			<key>WindowString</key>
-			<string>1513 -86 1066 506 1440 -180 1920 1080 </string>
+			<string>1603 -124 1555 861 1440 -180 1920 1080 </string>
 			<key>WindowToolGUID</key>
 			<string>1C78EAAD065D492600B07095</string>
 			<key>WindowToolIsVisible</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>Identifier</key>
