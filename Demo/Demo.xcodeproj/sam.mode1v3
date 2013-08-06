@@ -314,6 +314,8 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -331,7 +333,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>22E66D8317B17A04005FFCBE</string>
+										<string>22E66D8617B17AD4005FFCBE</string>
 										<key>history</key>
 										<array>
 											<string>22E6688817AC0D1B005FFCBE</string>
@@ -359,8 +361,6 @@
 							<string>548pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -562,8 +562,8 @@
 		<string>22E6691717AC0F9C005FFCBE</string>
 		<string>22E6691817AC0F9C005FFCBE</string>
 		<string>1C78EAAD065D492600B07095</string>
-		<string>228AAD9B14D4734400F46316</string>
 		<string>1CD10A99069EF8BA00B06720</string>
+		<string>228AAD9B14D4734400F46316</string>
 		<string>/Volumes/Data/Users/sam/git Projects/SDM_MD_Demo/Demo/Demo.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -783,7 +783,7 @@
 			<key>WindowToolGUID</key>
 			<string>1CD10A99069EF8BA00B06720</string>
 			<key>WindowToolIsVisible</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>
