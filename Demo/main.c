@@ -3,8 +3,8 @@
 
 void DemoOne();
 void DemoTwo();
-void DemoThree();
-void DemoFour();
+void DemoThree(const char *path);
+void DemoFour(const char *path);
 
 int main (int argc, const char * argv[]) {
 	// Needed to initialize the library and start the device listener (SDMMD_MCP.h)
@@ -12,8 +12,10 @@ int main (int argc, const char * argv[]) {
 	
 	//DemoOne();
 	//DemoTwo();
-	DemoThree();
-	DemoFour();
+	if (argc == 2) {
+		//DemoThree(argv[1]);
+		//DemoFour(argv[1]);		
+	}
 	return 0;
 }
 
@@ -142,7 +144,7 @@ void install_callback(CFDictionaryRef dict, int arg) {
 }
 
 
-void DemoThree() {
+void DemoThree(const char *appPath) {
 	
 	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
 	
@@ -162,7 +164,7 @@ void DemoThree() {
 			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
 			
 			
-			CFStringRef path = CFSTR("/Volumes/Data/Users/sam/git Projects/RemoteClient/build/Debug-iphoneos/RemoteClient.app");
+			CFStringRef path = CFStringCreateWithCharacters(kCFAllocatorDefault, appPath, strlen(appPath));
 			CFShow(path);
 			SDMMD_AMConnectionRef afcFd;
 			CFStringRef keys[] = { CFSTR("PackageType") };
@@ -205,7 +207,7 @@ void DemoThree() {
 	}	
 }
 
-void DemoFour() {
+void DemoFour(const char *appPath) {
 	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
 	
 	uint32_t numberOfDevices = CFArrayGetCount(devices);
@@ -221,7 +223,7 @@ void DemoFour() {
 		for (index = 0; index < numberOfDevices; index++) {
 			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
 			
-			CFStringRef bundleId = CFSTR("/Volumes/Data/Users/sam/git Projects/RemoteClient/build/Debug-iphoneos/RemoteClient.app");
+			CFStringRef bundleId = CFStringCreateWithCharacters(kCFAllocatorDefault, appPath, strlen(appPath));
 			
 			SDMMD_AMDebugConnectionRef debug;
 			result = SDMMD_StartDebuggingSessionOnDevice(device, &debug);

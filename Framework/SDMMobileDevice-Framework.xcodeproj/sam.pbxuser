@@ -196,8 +196,8 @@
 	225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1026, 4901}}";
-			sepNavSelRange = "{1922, 0}";
-			sepNavVisRange = "{0, 2182}";
+			sepNavSelRange = "{17737, 0}";
+			sepNavVisRange = "{0, 2172}";
 			sepNavWindowFrame = "{{38, 183}, {1135, 669}}";
 		};
 	};
@@ -299,9 +299,9 @@
 	};
 	22AD8E641787465A002ACFB1 /* SDMMD_AMDevice.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1026, 19279}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1026, 19448}}";
 			sepNavSelRange = "{29278, 47}";
-			sepNavVisRange = "{29244, 1428}";
+			sepNavVisRange = "{29244, 1422}";
 			sepNavWindowFrame = "{{84, 141}, {1135, 669}}";
 		};
 	};
@@ -2306,6 +2306,36 @@
 		vrLen = 2182;
 		vrLoc = 0;
 	};
+	22E66D0317B15FC7005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
+		name = "SDMMD_Debugger.c: 400";
+		rLen = 0;
+		rLoc = 17737;
+		rType = 0;
+		vrLen = 2172;
+		vrLoc = 0;
+	};
+	22E66D0817B168F8005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
+		name = "SDMMD_Debugger.c: 400";
+		rLen = 0;
+		rLoc = 17737;
+		rType = 0;
+		vrLen = 2172;
+		vrLoc = 0;
+	};
+	22E66D0917B168F8005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 22AD8E641787465A002ACFB1 /* SDMMD_AMDevice.c */;
+		name = "SDMMD_AMDevice.c: 887";
+		rLen = 47;
+		rLoc = 29278;
+		rType = 0;
+		vrLen = 1422;
+		vrLoc = 29244;
+	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
 		activeBuildConfigurationName = Debug;
 		activeTarget = 2215A83617500DDC00AD1981 /* SDMMobileDevice */;
@@ -2627,9 +2657,13 @@
 			22E66CFC17B15DA2005FFCBE /* PBXTextBookmark */ = 22E66CFC17B15DA2005FFCBE /* PBXTextBookmark */;
 			22E66CFF17B15DA6005FFCBE /* PBXTextBookmark */ = 22E66CFF17B15DA6005FFCBE /* PBXTextBookmark */;
 			22E66D0017B15DA6005FFCBE /* PBXTextBookmark */ = 22E66D0017B15DA6005FFCBE /* PBXTextBookmark */;
+			22E66D0317B15FC7005FFCBE /* PBXTextBookmark */ = 22E66D0317B15FC7005FFCBE /* PBXTextBookmark */;
+			22E66D0817B168F8005FFCBE /* PBXTextBookmark */ = 22E66D0817B168F8005FFCBE /* PBXTextBookmark */;
+			22E66D0917B168F8005FFCBE /* PBXTextBookmark */ = 22E66D0917B168F8005FFCBE /* PBXTextBookmark */;
 		};
 		sourceControlManager = 2215A83D17500DDC00AD1981 /* Source Control */;
 		userBuildSettings = {
+			OBJROOT = "$(SYMROOT)";
 			SYMROOT = ../build;
 		};
 	};
