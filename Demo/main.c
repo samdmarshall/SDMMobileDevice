@@ -4,6 +4,7 @@
 void DemoOne();
 void DemoTwo();
 void DemoThree();
+void DemoFour();
 
 int main (int argc, const char * argv[]) {
 	// Needed to initialize the library and start the device listener (SDMMD_MCP.h)
@@ -11,8 +12,8 @@ int main (int argc, const char * argv[]) {
 	
 	//DemoOne();
 	//DemoTwo();
-	DemoThree();
-	
+	//DemoThree();
+	DemoFour();
 	return 0;
 }
 
@@ -202,4 +203,30 @@ void DemoThree() {
 			CFRelease(options);			
 		}
 	}	
+}
+
+void DemoFour() {
+	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
+	
+	uint32_t numberOfDevices = CFArrayGetCount(devices);
+	printf("%i device(s) connected!\n",numberOfDevices);
+	
+	
+	if (numberOfDevices) {
+		// return type (uint32_t) corresponds with known return codes (SDMMD_Error.h)
+		sdmmd_return_t result;
+		
+		uint32_t index;
+		// Iterating over connected devices
+		for (index = 0; index < numberOfDevices; index++) {
+			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
+			
+			CFStringRef bundleId;
+			
+			SDMMD_AMDebugConnectionRef debug;
+			result = SDMMD_StartDebuggingSessionOnDevice(device, &debug);
+			SDMMD_StartDebugger(debug, bundleId);
+		}
+	}
+	
 }

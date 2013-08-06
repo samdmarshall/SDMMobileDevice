@@ -1424,7 +1424,7 @@ Boolean SDMMD_device_os_is_at_least(SDMMD_AMDeviceRef device, CFStringRef versio
 															if (CFEqual(status, CFSTR("Complete"))) {
 																mounted = true;
 															} else {
-																response = 0xe8000034;
+																result = 0xe8000034;
 															}
 														}
 													}

@@ -27,6 +27,7 @@ sdmmd_return_t SDMMD_check_can_touch(SDMMD_AFCConnectionRef conn, void* unknown)
 	SDMMD_AFCOperationRef fileInfo = SDMMD_AFCOperationCreateGetFileInfo(unknown);
 	SDMMD_AFCOperationRef reply; 
 	SDMMD_AFCProcessOperation(conn, fileInfo, &reply);
+	return kAMDSuccess;
 }
 
 SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(SDMMD_AMConnectionRef conn) {

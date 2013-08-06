@@ -83,7 +83,7 @@ void SDMMD_preflight_transfer(char *path, struct stat *statRef, char *rStatRef) 
 	}
 }
 
-sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFStringRef path, CFDictionaryRef options, void* transferCallback, void* unknown) {
+/*sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFStringRef path, CFDictionaryRef options, void* transferCallback, void* unknown) {
 	sdmmd_return_t result = 0xe8000007;
 	if (path) {
 		if (conn) {
@@ -156,7 +156,7 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 		}
 	}
 	return result;
-}
+}*/
 
 sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn, SDMMD_AMDeviceRef device, CFURLRef path, CFDictionaryRef options, void* installCallback, void* unknown) {
 	sdmmd_return_t result = 0x0;

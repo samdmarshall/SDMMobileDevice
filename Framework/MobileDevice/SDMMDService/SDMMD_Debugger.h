@@ -172,6 +172,8 @@ static struct SDMMD_DebugCommandType KnownDebugCommands[kNumberOfDebugCommands] 
 sdmmd_return_t SDMMD_StartDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDMMD_AMDebugConnectionRef *connection);
 sdmmd_return_t SDMMD_StopDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDMMD_AMDebugConnectionRef *connection);
 
+void SDMMD_StartDebugger(SDMMD_AMDebugConnectionRef connection, CFStringRef bundleId);
+
 CFStringRef SDMMD_EncodeForDebuggingCommand(CFStringRef command);
 
 sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, SDMMD_DebugCommandType commandType, CFStringRef command);

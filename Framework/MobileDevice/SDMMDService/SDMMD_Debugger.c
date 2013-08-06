@@ -136,4 +136,8 @@ sdmmd_debug_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef connectio
 	return (sdmmd_debug_return_t){result, *data};
 }
 
+void SDMMD_StartDebugger(SDMMD_AMDebugConnectionRef connection, CFStringRef bundleId) {
+
+}
+
 #endif

@@ -232,6 +232,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -287,9 +289,6 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>5</integer>
-									<integer>2</integer>
-									<integer>1</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -313,7 +312,7 @@
 							<real>234</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>54 133 1343 697 0 0 1440 878 </string>
+						<string>1686 132 1343 697 1440 -180 1920 1080 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -324,14 +323,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>SDMMD_Functions.h</string>
+								<string>SDMMD_AMDevice.c</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -339,11 +336,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>SDMMD_Functions.h</string>
+										<string>SDMMD_AMDevice.c</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>22E66BCC17B13DA0005FFCBE</string>
+										<string>22E66C6217B14C50005FFCBE</string>
 										<key>history</key>
 										<array>
 											<string>22E6686917AC0CA0005FFCBE</string>
@@ -353,7 +350,6 @@
 											<string>22E669CE17AFF96E005FFCBE</string>
 											<string>22E669CF17AFF96E005FFCBE</string>
 											<string>22E669D417AFF96E005FFCBE</string>
-											<string>22E669EA17AFFD09005FFCBE</string>
 											<string>22E66A0717B005F3005FFCBE</string>
 											<string>22E66AD117B0120C005FFCBE</string>
 											<string>22E66AD217B0120C005FFCBE</string>
@@ -364,9 +360,12 @@
 											<string>22E66BA317B033E9005FFCBE</string>
 											<string>22E66BA417B033E9005FFCBE</string>
 											<string>22E66BA517B033E9005FFCBE</string>
-											<string>22E66BB117B13BCB005FFCBE</string>
-											<string>22E66BBB17B13D53005FFCBE</string>
-											<string>22E66BB817B13CBE005FFCBE</string>
+											<string>22E66BD117B14307005FFCBE</string>
+											<string>22E66BD217B14307005FFCBE</string>
+											<string>22E66C1617B148D5005FFCBE</string>
+											<string>22E66C1717B148D5005FFCBE</string>
+											<string>22E66C4417B14BB2005FFCBE</string>
+											<string>22E66BD817B14316005FFCBE</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -380,7 +379,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {1087, 529}}</string>
 								<key>RubberWindowFrame</key>
-								<string>54 133 1343 697 0 0 1440 878 </string>
+								<string>1686 132 1343 697 1440 -180 1920 1080 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -400,7 +399,7 @@
 								<key>Frame</key>
 								<string>{{0, 534}, {1087, 122}}</string>
 								<key>RubberWindowFrame</key>
-								<string>54 133 1343 697 0 0 1440 878 </string>
+								<string>1686 132 1343 697 1440 -180 1920 1080 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -594,7 +593,7 @@
 		<string>/Volumes/Data/Users/sam/git Projects/SDM_MD_Demo/Framework/SDMMobileDevice-Framework.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>54 133 1343 697 0 0 1440 878 </string>
+	<string>1686 132 1343 697 1440 -180 1920 1080 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
@@ -610,8 +609,6 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -634,6 +631,8 @@
 							<string>447pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
