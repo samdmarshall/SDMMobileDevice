@@ -12,7 +12,7 @@ int main (int argc, const char * argv[]) {
 	
 	//DemoOne();
 	//DemoTwo();
-	//DemoThree();
+	DemoThree();
 	DemoFour();
 	return 0;
 }
@@ -221,7 +221,7 @@ void DemoFour() {
 		for (index = 0; index < numberOfDevices; index++) {
 			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
 			
-			CFStringRef bundleId;
+			CFStringRef bundleId = CFSTR("/Volumes/Data/Users/sam/git Projects/RemoteClient/build/Debug-iphoneos/RemoteClient.app");
 			
 			SDMMD_AMDebugConnectionRef debug;
 			result = SDMMD_StartDebuggingSessionOnDevice(device, &debug);
