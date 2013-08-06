@@ -314,7 +314,7 @@
 							<real>234</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>1686 134 1343 697 1440 -180 1920 1080 </string>
+						<string>1866 -63 1343 697 1440 -180 1920 1080 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -344,7 +344,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>22E66D3B17B17241005FFCBE</string>
+										<string>22E66D8217B17A04005FFCBE</string>
 										<key>history</key>
 										<array>
 											<string>22E6686917AC0CA0005FFCBE</string>
@@ -369,7 +369,7 @@
 											<string>22E66CB917B15A69005FFCBE</string>
 											<string>22E66CBA17B15A69005FFCBE</string>
 											<string>22E66D2D17B16E3A005FFCBE</string>
-											<string>22E66D3A17B17241005FFCBE</string>
+											<string>22E66D8117B17A04005FFCBE</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -383,7 +383,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {1087, 529}}</string>
 								<key>RubberWindowFrame</key>
-								<string>1686 134 1343 697 1440 -180 1920 1080 </string>
+								<string>1866 -63 1343 697 1440 -180 1920 1080 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -403,7 +403,7 @@
 								<key>Frame</key>
 								<string>{{0, 534}, {1087, 122}}</string>
 								<key>RubberWindowFrame</key>
-								<string>1686 134 1343 697 1440 -180 1920 1080 </string>
+								<string>1866 -63 1343 697 1440 -180 1920 1080 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -597,7 +597,7 @@
 		<string>/Volumes/Data/Users/sam/git Projects/SDM_MD_Demo/Framework/SDMMobileDevice-Framework.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>1686 134 1343 697 1440 -180 1920 1080 </string>
+	<string>1866 -63 1343 697 1440 -180 1920 1080 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
