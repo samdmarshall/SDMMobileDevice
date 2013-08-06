@@ -14,7 +14,7 @@ int main (int argc, const char * argv[]) {
 	//DemoTwo();
 	if (argc == 2) {
 		//DemoThree(argv[1]);
-		//DemoFour(argv[1]);		
+		DemoFour(argv[1]);		
 	}
 	return 0;
 }

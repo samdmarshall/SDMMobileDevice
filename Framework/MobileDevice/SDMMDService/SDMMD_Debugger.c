@@ -246,7 +246,7 @@ CFStringRef copy_device_support_path(SDMMD_AMDeviceRef device) {
     }
     if (!found)
     {
-        path = CFStringCreateWithFormat(NULL, NULL, CFSTR("%s/DeviceSupport/%@"),home,version);
+        path = CFStringCreateWithFormat(NULL, NULL, CFSTR("%s/Library/Device Support/%@"),home,version);
         found = path_exists(path);
     }
     if (!found)
