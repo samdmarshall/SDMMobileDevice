@@ -272,6 +272,7 @@
 								<string>2215A85017500E2D00AD1981</string>
 								<string>225ACB6B175FC13400A47071</string>
 								<string>2215A85917500E8700AD1981</string>
+								<string>225AD72F1765FE3C00A47071</string>
 								<string>2215A85117500E3700AD1981</string>
 								<string>2215A91C17510CC400AD1981</string>
 								<string>225ACD721760C82400A47071</string>
@@ -314,7 +315,7 @@
 							<real>234</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>1866 -63 1343 697 1440 -180 1920 1080 </string>
+						<string>1785 21 1343 697 1440 -180 1920 1080 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -344,22 +345,14 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>22E66D8217B17A04005FFCBE</string>
+										<string>22E66DE417B2BFED005FFCBE</string>
 										<key>history</key>
 										<array>
 											<string>22E6686917AC0CA0005FFCBE</string>
 											<string>22E669CB17AFF96E005FFCBE</string>
 											<string>22E669CC17AFF96E005FFCBE</string>
-											<string>22E669CD17AFF96E005FFCBE</string>
-											<string>22E669CE17AFF96E005FFCBE</string>
 											<string>22E669CF17AFF96E005FFCBE</string>
 											<string>22E669D417AFF96E005FFCBE</string>
-											<string>22E66A0717B005F3005FFCBE</string>
-											<string>22E66AD117B0120C005FFCBE</string>
-											<string>22E66AD217B0120C005FFCBE</string>
-											<string>22E66AD317B0120C005FFCBE</string>
-											<string>22E66AD517B0120C005FFCBE</string>
-											<string>22E66AD717B0120C005FFCBE</string>
 											<string>22E66BA317B033E9005FFCBE</string>
 											<string>22E66BA417B033E9005FFCBE</string>
 											<string>22E66BA517B033E9005FFCBE</string>
@@ -367,9 +360,25 @@
 											<string>22E66BD217B14307005FFCBE</string>
 											<string>22E66C1617B148D5005FFCBE</string>
 											<string>22E66CB917B15A69005FFCBE</string>
-											<string>22E66CBA17B15A69005FFCBE</string>
-											<string>22E66D2D17B16E3A005FFCBE</string>
-											<string>22E66D8117B17A04005FFCBE</string>
+											<string>22E66DC917B2B9A2005FFCBE</string>
+											<string>22E66DCA17B2B9A2005FFCBE</string>
+											<string>22E66DCB17B2B9A2005FFCBE</string>
+											<string>22E66DCC17B2B9A2005FFCBE</string>
+											<string>22E66DCD17B2B9A2005FFCBE</string>
+											<string>22E66DCE17B2B9A2005FFCBE</string>
+											<string>22E66DCF17B2B9A2005FFCBE</string>
+											<string>22E66DD017B2B9A2005FFCBE</string>
+											<string>22E66DD117B2B9A2005FFCBE</string>
+											<string>22E66DD217B2B9A2005FFCBE</string>
+											<string>22E66DD317B2B9A2005FFCBE</string>
+											<string>22E66DD417B2B9A2005FFCBE</string>
+											<string>22E66DD517B2B9A2005FFCBE</string>
+											<string>22E66DD617B2B9A2005FFCBE</string>
+											<string>22E66DD717B2B9A2005FFCBE</string>
+											<string>22E66DDD17B2BEEA005FFCBE</string>
+											<string>22E66DDE17B2BEEA005FFCBE</string>
+											<string>22E66DE017B2BFD3005FFCBE</string>
+											<string>22E66DE117B2BFD3005FFCBE</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -383,7 +392,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {1087, 529}}</string>
 								<key>RubberWindowFrame</key>
-								<string>1866 -63 1343 697 1440 -180 1920 1080 </string>
+								<string>1785 21 1343 697 1440 -180 1920 1080 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -403,7 +412,7 @@
 								<key>Frame</key>
 								<string>{{0, 534}, {1087, 122}}</string>
 								<key>RubberWindowFrame</key>
-								<string>1866 -63 1343 697 1440 -180 1920 1080 </string>
+								<string>1785 21 1343 697 1440 -180 1920 1080 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -597,7 +606,7 @@
 		<string>/Volumes/Data/Users/sam/git Projects/SDM_MD_Demo/Framework/SDMMobileDevice-Framework.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>1866 -63 1343 697 1440 -180 1920 1080 </string>
+	<string>1785 21 1343 697 1440 -180 1920 1080 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>

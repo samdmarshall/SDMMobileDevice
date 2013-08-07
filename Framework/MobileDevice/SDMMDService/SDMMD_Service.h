@@ -48,7 +48,7 @@ typedef struct SocketConnection {
 #define AMSVC_MIS_AGENT				"com.apple.misagent"
 #define AMSVC_SPRINGBOARD_SERVICES	"com.apple.springboardservices"
 #define AMSVC_ATC					"com.apple.atc"
-#define AMSVC_PCAPD					"com.apple.pcapd"
+#define AMSVC_PACKETCAPTURE			"com.apple.pcapd"
 #define AMSVC_WEB_INSPECTOR			"com.apple.webinspector"
 #define AMSVC_RASD					"com.apple.rasd"
 

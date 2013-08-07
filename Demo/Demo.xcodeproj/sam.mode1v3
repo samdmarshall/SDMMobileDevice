@@ -269,6 +269,7 @@
 							<array>
 								<string>08FB7794FE84155DC02AAC07</string>
 								<string>08FB7795FE84155DC02AAC07</string>
+								<string>08FB779DFE84155DC02AAC07</string>
 								<string>1C37FBAC04509CD000000102</string>
 								<string>22E668D817AC0E49005FFCBE</string>
 								<string>22E66C4E17B14C10005FFCBE</string>
@@ -278,8 +279,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>8</integer>
-									<integer>7</integer>
+									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
@@ -332,7 +332,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>22E66DBE17B2B854005FFCBE</string>
+										<string>22E66DE517B2BFED005FFCBE</string>
 										<key>history</key>
 										<array>
 											<string>22E6688817AC0D1B005FFCBE</string>
@@ -563,6 +563,7 @@
 		<string>1C78EAAD065D492600B07095</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>228AAD9B14D4734400F46316</string>
+		<string>/Volumes/Data/Users/sam/git Projects/SDM_MD_Demo/Demo/Demo.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>1807 57 1422 836 1440 -180 1920 1080 </string>

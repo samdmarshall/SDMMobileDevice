@@ -26,24 +26,24 @@
 	};
 	2215A8AE175010A300AD1981 /* SDMMD_Service.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {926, 1833}}";
-			sepNavSelRange = "{4464, 24}";
-			sepNavVisRange = "{3534, 1755}";
+			sepNavIntBoundsRect = "{{0, 0}, {1026, 1820}}";
+			sepNavSelRange = "{2880, 0}";
+			sepNavVisRange = "{1906, 1500}";
 		};
 	};
 	2215A8AF175010A300AD1981 /* SDMMD_Service.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {926, 2925}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1026, 2899}}";
 			sepNavSelRange = "{3536, 0}";
-			sepNavVisRange = "{2853, 1207}";
+			sepNavVisRange = "{2826, 1238}";
 			sepNavWindowFrame = "{{61, 162}, {1135, 669}}";
 		};
 	};
 	2215A91D17510CF300AD1981 /* SDMMD_AFCDevice.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {926, 1248}}";
-			sepNavSelRange = "{3248, 8}";
-			sepNavVisRange = "{2222, 1465}";
+			sepNavIntBoundsRect = "{{0, 0}, {1026, 1313}}";
+			sepNavSelRange = "{2751, 0}";
+			sepNavVisRange = "{1540, 1263}";
 		};
 	};
 	2215A91E17510CF300AD1981 /* SDMMD_AFCDevice.c */ = {
@@ -55,30 +55,30 @@
 	};
 	2215A9FB17512A9F00AD1981 /* SDMMD_Keys.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {744, 4615}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1026, 4251}}";
 			sepNavSelRange = "{7538, 9}";
-			sepNavVisRange = "{7124, 1171}";
+			sepNavVisRange = "{0, 2151}";
 		};
 	};
 	2215AA3F1751328100AD1981 /* SDMMD_MRecoveryModeDevice.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {887, 1066}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1026, 1053}}";
 			sepNavSelRange = "{54, 0}";
-			sepNavVisRange = "{0, 1122}";
+			sepNavVisRange = "{2087, 1214}";
 		};
 	};
 	2215AA401751328100AD1981 /* SDMMD_MRecoveryModeDevice.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1208, 570}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1026, 512}}";
 			sepNavSelRange = "{14, 0}";
-			sepNavVisRange = "{0, 1842}";
+			sepNavVisRange = "{0, 1844}";
 		};
 	};
 	2215AB3E17524E4D00AD1981 /* SDMMD_MRUSBDevice.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1208, 585}}";
-			sepNavSelRange = "{2179, 0}";
-			sepNavVisRange = "{793, 1435}";
+			sepNavIntBoundsRect = "{{0, 0}, {1026, 611}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{112, 2086}";
 		};
 	};
 	2215AB3F17524E4D00AD1981 /* SDMMD_MRUSBDevice.c */ = {
@@ -90,9 +90,9 @@
 	};
 	2215AB4917524FEC00AD1981 /* SDMMD_MDFUModeDevice.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1208, 832}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1026, 858}}";
 			sepNavSelRange = "{2604, 0}";
-			sepNavVisRange = "{0, 2153}";
+			sepNavVisRange = "{1712, 939}";
 		};
 	};
 	2215AB4A17524FEC00AD1981 /* SDMMD_MDFUModeDevice.c */ = {
@@ -146,23 +146,23 @@
 	};
 	2215AB8F17525BA900AD1981 /* SDMMD_MRestoreModeDevice.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1208, 754}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1026, 858}}";
 			sepNavSelRange = "{13, 0}";
-			sepNavVisRange = "{0, 1963}";
+			sepNavVisRange = "{1711, 921}";
 		};
 	};
 	2215AB9017525BA900AD1981 /* SDMMD_MRestoreModeDevice.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {744, 514}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1026, 512}}";
 			sepNavSelRange = "{1715, 0}";
 			sepNavVisRange = "{0, 1840}";
 		};
 	};
 	2215AB9617525D9000AD1981 /* SDMMD_MRestorableDevice.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1208, 676}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1026, 741}}";
 			sepNavSelRange = "{13, 0}";
-			sepNavVisRange = "{0, 2112}";
+			sepNavVisRange = "{993, 1417}";
 		};
 	};
 	2215AB9717525D9000AD1981 /* SDMMD_MRestorableDevice.c */ = {
@@ -196,8 +196,8 @@
 	225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1026, 5135}}";
-			sepNavSelRange = "{2052, 0}";
-			sepNavVisRange = "{1539, 1601}";
+			sepNavSelRange = "{2053, 0}";
+			sepNavVisRange = "{1681, 1477}";
 			sepNavWindowFrame = "{{38, 183}, {1135, 669}}";
 		};
 	};
@@ -217,9 +217,9 @@
 	};
 	225ACD751760C86200A47071 /* SDMMD_Applications.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {926, 1118}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1026, 1105}}";
 			sepNavSelRange = "{47, 0}";
-			sepNavVisRange = "{2527, 2143}";
+			sepNavVisRange = "{51, 2336}";
 		};
 	};
 	225ACD761760C86200A47071 /* SDMMD_Applications.c */ = {
@@ -231,16 +231,16 @@
 	};
 	225AD7301765FE7700A47071 /* SDMMD_USBMuxListener.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1208, 1586}}";
-			sepNavSelRange = "{4665, 0}";
-			sepNavVisRange = "{3532, 1133}";
+			sepNavIntBoundsRect = "{{0, 0}, {1026, 1456}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 1992}";
 		};
 	};
 	225AD7311765FE7700A47071 /* SDMMD_USBMuxListener.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {887, 5694}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1026, 5954}}";
 			sepNavSelRange = "{5068, 5}";
-			sepNavVisRange = "{4586, 1017}";
+			sepNavVisRange = "{2594, 1200}";
 			sepNavWindowFrame = "{{61, 162}, {1135, 669}}";
 		};
 	};
@@ -278,9 +278,9 @@
 	};
 	22AD8E5817871506002ACFB1 /* SDMMD_AFC.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {926, 2158}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1026, 2041}}";
 			sepNavSelRange = "{4799, 0}";
-			sepNavVisRange = "{3608, 2486}";
+			sepNavVisRange = "{2690, 799}";
 		};
 	};
 	22AD8E5917871506002ACFB1 /* SDMMD_AFC.c */ = {
@@ -292,16 +292,16 @@
 	};
 	22AD8E631787465A002ACFB1 /* SDMMD_AMDevice.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {926, 1742}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1026, 1924}}";
 			sepNavSelRange = "{601, 0}";
-			sepNavVisRange = "{0, 2061}";
+			sepNavVisRange = "{2399, 1307}";
 		};
 	};
 	22AD8E641787465A002ACFB1 /* SDMMD_AMDevice.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1026, 19448}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1026, 19656}}";
 			sepNavSelRange = "{29278, 47}";
-			sepNavVisRange = "{29244, 1422}";
+			sepNavVisRange = "{31241, 1298}";
 			sepNavWindowFrame = "{{84, 141}, {1135, 669}}";
 		};
 	};
@@ -1114,7 +1114,7 @@
 		fRef = 2215A8AE175010A300AD1981 /* SDMMD_Service.h */;
 		name = "SDMMD_Service.h: 86";
 		rLen = 24;
-		rLoc = 4464;
+		rLoc = 4470;
 		rType = 0;
 		vrLen = 1755;
 		vrLoc = 3534;
@@ -2426,6 +2426,266 @@
 		vrLen = 1601;
 		vrLoc = 1539;
 	};
+	22E66DC917B2B9A2005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 22AD8E631787465A002ACFB1 /* SDMMD_AMDevice.h */;
+		name = "SDMMD_AMDevice.h: 10";
+		rLen = 0;
+		rLoc = 601;
+		rType = 0;
+		vrLen = 1307;
+		vrLoc = 2399;
+	};
+	22E66DCA17B2B9A2005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 22AD8E641787465A002ACFB1 /* SDMMD_AMDevice.c */;
+		name = "SDMMD_AMDevice.c: 887";
+		rLen = 47;
+		rLoc = 29278;
+		rType = 0;
+		vrLen = 1298;
+		vrLoc = 31241;
+	};
+	22E66DCB17B2B9A2005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2215A9FB17512A9F00AD1981 /* SDMMD_Keys.h */;
+		name = "SDMMD_Keys.h: 156";
+		rLen = 9;
+		rLoc = 7538;
+		rType = 0;
+		vrLen = 2151;
+		vrLoc = 0;
+	};
+	22E66DCC17B2B9A2005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2215AA401751328100AD1981 /* SDMMD_MRecoveryModeDevice.c */;
+		name = "SDMMD_MRecoveryModeDevice.c: 2";
+		rLen = 0;
+		rLoc = 14;
+		rType = 0;
+		vrLen = 1844;
+		vrLoc = 0;
+	};
+	22E66DCD17B2B9A2005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2215AA3F1751328100AD1981 /* SDMMD_MRecoveryModeDevice.h */;
+		name = "SDMMD_MRecoveryModeDevice.h: 3";
+		rLen = 0;
+		rLoc = 54;
+		rType = 0;
+		vrLen = 1214;
+		vrLoc = 2087;
+	};
+	22E66DCE17B2B9A2005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2215AB3E17524E4D00AD1981 /* SDMMD_MRUSBDevice.h */;
+		name = "SDMMD_MRUSBDevice.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 2086;
+		vrLoc = 112;
+	};
+	22E66DCF17B2B9A2005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2215AB4917524FEC00AD1981 /* SDMMD_MDFUModeDevice.h */;
+		name = "SDMMD_MDFUModeDevice.h: 56";
+		rLen = 0;
+		rLoc = 2604;
+		rType = 0;
+		vrLen = 939;
+		vrLoc = 1712;
+	};
+	22E66DD017B2B9A2005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2215AB8F17525BA900AD1981 /* SDMMD_MRestoreModeDevice.h */;
+		name = "SDMMD_MRestoreModeDevice.h: 2";
+		rLen = 0;
+		rLoc = 13;
+		rType = 0;
+		vrLen = 921;
+		vrLoc = 1711;
+	};
+	22E66DD117B2B9A2005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2215AB9017525BA900AD1981 /* SDMMD_MRestoreModeDevice.c */;
+		name = "SDMMD_MRestoreModeDevice.c: 18";
+		rLen = 0;
+		rLoc = 1715;
+		rType = 0;
+		vrLen = 1840;
+		vrLoc = 0;
+	};
+	22E66DD217B2B9A2005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2215AB9617525D9000AD1981 /* SDMMD_MRestorableDevice.h */;
+		name = "SDMMD_MRestorableDevice.h: 2";
+		rLen = 0;
+		rLoc = 13;
+		rType = 0;
+		vrLen = 1417;
+		vrLoc = 993;
+	};
+	22E66DD317B2B9A2005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 22AD8E5817871506002ACFB1 /* SDMMD_AFC.h */;
+		name = "SDMMD_AFC.h: 133";
+		rLen = 0;
+		rLoc = 4799;
+		rType = 0;
+		vrLen = 799;
+		vrLoc = 2690;
+	};
+	22E66DD417B2B9A2005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2215A91D17510CF300AD1981 /* SDMMD_AFCDevice.h */;
+		name = "SDMMD_AFCDevice.h: 52";
+		rLen = 0;
+		rLoc = 2751;
+		rType = 0;
+		vrLen = 1263;
+		vrLoc = 1540;
+	};
+	22E66DD517B2B9A2005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 225ACD751760C86200A47071 /* SDMMD_Applications.h */;
+		name = "SDMMD_Applications.h: 3";
+		rLen = 0;
+		rLoc = 47;
+		rType = 0;
+		vrLen = 2336;
+		vrLoc = 51;
+	};
+	22E66DD617B2B9A2005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 225AD7301765FE7700A47071 /* SDMMD_USBMuxListener.h */;
+		name = "SDMMD_USBMuxListener.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1992;
+		vrLoc = 0;
+	};
+	22E66DD717B2B9A2005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 225AD7311765FE7700A47071 /* SDMMD_USBMuxListener.c */;
+		name = "SDMMD_USBMuxListener.c: 118";
+		rLen = 5;
+		rLoc = 5068;
+		rType = 0;
+		vrLen = 1200;
+		vrLoc = 2594;
+	};
+	22E66DD817B2B9A2005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 225ACB44175FBFA300A47071 /* SDMMD_Debugger.h */;
+		name = "SDMMD_Debugger.h: 175";
+		rLen = 87;
+		rLoc = 7191;
+		rType = 0;
+		vrLen = 2342;
+		vrLoc = 5250;
+	};
+	22E66DD917B2B9A2005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
+		name = "SDMMD_Debugger.c: 32";
+		rLen = 0;
+		rLoc = 2052;
+		rType = 0;
+		vrLen = 1995;
+		vrLoc = 2207;
+	};
+	22E66DDA17B2B9A2005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
+		name = "SDMMD_Debugger.c: 32";
+		rLen = 0;
+		rLoc = 2095;
+		rType = 0;
+		vrLen = 2003;
+		vrLoc = 1763;
+	};
+	22E66DDC17B2BEEA005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
+		name = "SDMMD_Debugger.c: 32";
+		rLen = 0;
+		rLoc = 2095;
+		rType = 0;
+		vrLen = 2003;
+		vrLoc = 1763;
+	};
+	22E66DDD17B2BEEA005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 225ACB44175FBFA300A47071 /* SDMMD_Debugger.h */;
+		name = "SDMMD_Debugger.h: 175";
+		rLen = 87;
+		rLoc = 7191;
+		rType = 0;
+		vrLen = 2342;
+		vrLoc = 5250;
+	};
+	22E66DDE17B2BEEA005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2215A8AF175010A300AD1981 /* SDMMD_Service.c */;
+		name = "SDMMD_Service.c: 87";
+		rLen = 0;
+		rLoc = 3536;
+		rType = 0;
+		vrLen = 1238;
+		vrLoc = 2826;
+	};
+	22E66DDF17B2BEEA005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2215A8AE175010A300AD1981 /* SDMMD_Service.h */;
+		name = "SDMMD_Service.h: 55";
+		rLen = 0;
+		rLoc = 2880;
+		rType = 0;
+		vrLen = 2006;
+		vrLoc = 2160;
+	};
+	22E66DE017B2BFD3005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2215A8AE175010A300AD1981 /* SDMMD_Service.h */;
+		name = "SDMMD_Service.h: 55";
+		rLen = 0;
+		rLoc = 2880;
+		rType = 0;
+		vrLen = 1500;
+		vrLoc = 1906;
+	};
+	22E66DE117B2BFD3005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
+		name = "SDMMD_Debugger.c: 32";
+		rLen = 0;
+		rLoc = 2095;
+		rType = 0;
+		vrLen = 2003;
+		vrLoc = 1763;
+	};
+	22E66DE217B2BFD3005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
+		name = "SDMMD_Debugger.c: 32";
+		rLen = 0;
+		rLoc = 2053;
+		rType = 0;
+		vrLen = 2000;
+		vrLoc = 1791;
+	};
+	22E66DE417B2BFED005FFCBE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */;
+		name = "SDMMD_Debugger.c: 32";
+		rLen = 0;
+		rLoc = 2053;
+		rType = 0;
+		vrLen = 1477;
+		vrLoc = 1681;
+	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
 		activeBuildConfigurationName = Debug;
 		activeTarget = 2215A83617500DDC00AD1981 /* SDMMobileDevice */;
@@ -2759,6 +3019,32 @@
 			22E66D7F17B17648005FFCBE /* PBXTextBookmark */ = 22E66D7F17B17648005FFCBE /* PBXTextBookmark */;
 			22E66D8117B17A04005FFCBE /* PBXTextBookmark */ = 22E66D8117B17A04005FFCBE /* PBXTextBookmark */;
 			22E66D8217B17A04005FFCBE /* PBXTextBookmark */ = 22E66D8217B17A04005FFCBE /* PBXTextBookmark */;
+			22E66DC917B2B9A2005FFCBE /* PBXTextBookmark */ = 22E66DC917B2B9A2005FFCBE /* PBXTextBookmark */;
+			22E66DCA17B2B9A2005FFCBE /* PBXTextBookmark */ = 22E66DCA17B2B9A2005FFCBE /* PBXTextBookmark */;
+			22E66DCB17B2B9A2005FFCBE /* PBXTextBookmark */ = 22E66DCB17B2B9A2005FFCBE /* PBXTextBookmark */;
+			22E66DCC17B2B9A2005FFCBE /* PBXTextBookmark */ = 22E66DCC17B2B9A2005FFCBE /* PBXTextBookmark */;
+			22E66DCD17B2B9A2005FFCBE /* PBXTextBookmark */ = 22E66DCD17B2B9A2005FFCBE /* PBXTextBookmark */;
+			22E66DCE17B2B9A2005FFCBE /* PBXTextBookmark */ = 22E66DCE17B2B9A2005FFCBE /* PBXTextBookmark */;
+			22E66DCF17B2B9A2005FFCBE /* PBXTextBookmark */ = 22E66DCF17B2B9A2005FFCBE /* PBXTextBookmark */;
+			22E66DD017B2B9A2005FFCBE /* PBXTextBookmark */ = 22E66DD017B2B9A2005FFCBE /* PBXTextBookmark */;
+			22E66DD117B2B9A2005FFCBE /* PBXTextBookmark */ = 22E66DD117B2B9A2005FFCBE /* PBXTextBookmark */;
+			22E66DD217B2B9A2005FFCBE /* PBXTextBookmark */ = 22E66DD217B2B9A2005FFCBE /* PBXTextBookmark */;
+			22E66DD317B2B9A2005FFCBE /* PBXTextBookmark */ = 22E66DD317B2B9A2005FFCBE /* PBXTextBookmark */;
+			22E66DD417B2B9A2005FFCBE /* PBXTextBookmark */ = 22E66DD417B2B9A2005FFCBE /* PBXTextBookmark */;
+			22E66DD517B2B9A2005FFCBE /* PBXTextBookmark */ = 22E66DD517B2B9A2005FFCBE /* PBXTextBookmark */;
+			22E66DD617B2B9A2005FFCBE /* PBXTextBookmark */ = 22E66DD617B2B9A2005FFCBE /* PBXTextBookmark */;
+			22E66DD717B2B9A2005FFCBE /* PBXTextBookmark */ = 22E66DD717B2B9A2005FFCBE /* PBXTextBookmark */;
+			22E66DD817B2B9A2005FFCBE /* PBXTextBookmark */ = 22E66DD817B2B9A2005FFCBE /* PBXTextBookmark */;
+			22E66DD917B2B9A2005FFCBE /* PBXTextBookmark */ = 22E66DD917B2B9A2005FFCBE /* PBXTextBookmark */;
+			22E66DDA17B2B9A2005FFCBE /* PBXTextBookmark */ = 22E66DDA17B2B9A2005FFCBE /* PBXTextBookmark */;
+			22E66DDC17B2BEEA005FFCBE /* PBXTextBookmark */ = 22E66DDC17B2BEEA005FFCBE /* PBXTextBookmark */;
+			22E66DDD17B2BEEA005FFCBE /* PBXTextBookmark */ = 22E66DDD17B2BEEA005FFCBE /* PBXTextBookmark */;
+			22E66DDE17B2BEEA005FFCBE /* PBXTextBookmark */ = 22E66DDE17B2BEEA005FFCBE /* PBXTextBookmark */;
+			22E66DDF17B2BEEA005FFCBE /* PBXTextBookmark */ = 22E66DDF17B2BEEA005FFCBE /* PBXTextBookmark */;
+			22E66DE017B2BFD3005FFCBE /* PBXTextBookmark */ = 22E66DE017B2BFD3005FFCBE /* PBXTextBookmark */;
+			22E66DE117B2BFD3005FFCBE /* PBXTextBookmark */ = 22E66DE117B2BFD3005FFCBE /* PBXTextBookmark */;
+			22E66DE217B2BFD3005FFCBE /* PBXTextBookmark */ = 22E66DE217B2BFD3005FFCBE /* PBXTextBookmark */;
+			22E66DE417B2BFED005FFCBE /* PBXTextBookmark */ = 22E66DE417B2BFED005FFCBE /* PBXTextBookmark */;
 		};
 		sourceControlManager = 2215A83D17500DDC00AD1981 /* Source Control */;
 		userBuildSettings = {
