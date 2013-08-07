@@ -12,8 +12,6 @@ SDMMobileDevice
 ### What is this?
 SDMMobileDevice is a framework that enables access to communicating with iOS devices. This framework serves as a public and documented way to interact with iOS devices and the services that exist on iOS devices. 
 
-[Technical Abstract](./SDMMobileDeviceAbstract.pdf)
-
 _SDMMobileDevice is a framework that can be used interchangeably with Apple's private framework MobileDevice.framework_
 
 ***
