@@ -85,7 +85,6 @@ void DemoTwo() {
 	uint32_t numberOfDevices = CFArrayGetCount(devices);
 	printf("%i device(s) connected!\n",numberOfDevices);
 	
-	
 	if (numberOfDevices) {
 		// return type (uint32_t) corresponds with known return codes (SDMMD_Error.h)
 		sdmmd_return_t result;
@@ -150,8 +149,7 @@ void DemoThree(const char *appPath) {
 	
 	uint32_t numberOfDevices = CFArrayGetCount(devices);
 	printf("%i device(s) connected!\n",numberOfDevices);
-	
-	
+		
 	if (numberOfDevices) {
 		// return type (uint32_t) corresponds with known return codes (SDMMD_Error.h)
 		sdmmd_return_t result;
@@ -162,7 +160,6 @@ void DemoThree(const char *appPath) {
 			
 			// getting the device object from the array of connected devices
 			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
-			
 			
 			CFStringRef path = CFStringCreateWithBytes(kCFAllocatorDefault, appPath, strlen(appPath), kCFStringEncodingUTF8, false);
 			CFShow(path);

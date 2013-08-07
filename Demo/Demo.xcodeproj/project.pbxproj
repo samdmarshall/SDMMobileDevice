@@ -236,6 +236,7 @@
 				HEADER_SEARCH_PATHS = "";
 				INSTALL_PATH = /usr/local/bin;
 				LIBRARY_SEARCH_PATHS = "";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = Demo;
 			};
 			name = Debug;
@@ -252,6 +253,7 @@
 				);
 				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/bin;
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = Demo;
 			};
 			name = Release;

@@ -269,7 +269,6 @@
 							<array>
 								<string>08FB7794FE84155DC02AAC07</string>
 								<string>08FB7795FE84155DC02AAC07</string>
-								<string>08FB779DFE84155DC02AAC07</string>
 								<string>1C37FBAC04509CD000000102</string>
 								<string>22E668D817AC0E49005FFCBE</string>
 								<string>22E66C4E17B14C10005FFCBE</string>
@@ -279,8 +278,8 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>10</integer>
-									<integer>9</integer>
+									<integer>8</integer>
+									<integer>7</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
@@ -303,7 +302,7 @@
 							<real>280</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>1870 57 1422 836 1440 -180 1920 1080 </string>
+						<string>1807 57 1422 836 1440 -180 1920 1080 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -333,13 +332,13 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>22E66D8617B17AD4005FFCBE</string>
+										<string>22E66DBE17B2B854005FFCBE</string>
 										<key>history</key>
 										<array>
 											<string>22E6688817AC0D1B005FFCBE</string>
 											<string>22E66CDB17B15BDC005FFCBE</string>
 											<string>22E66D1E17B16AB8005FFCBE</string>
-											<string>22E66D3817B1719E005FFCBE</string>
+											<string>22E66DBD17B2B854005FFCBE</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -353,7 +352,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {1120, 548}}</string>
 								<key>RubberWindowFrame</key>
-								<string>1870 57 1422 836 1440 -180 1920 1080 </string>
+								<string>1807 57 1422 836 1440 -180 1920 1080 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -373,7 +372,7 @@
 								<key>Frame</key>
 								<string>{{0, 553}, {1120, 242}}</string>
 								<key>RubberWindowFrame</key>
-								<string>1870 57 1422 836 1440 -180 1920 1080 </string>
+								<string>1807 57 1422 836 1440 -180 1920 1080 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -564,10 +563,9 @@
 		<string>1C78EAAD065D492600B07095</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>228AAD9B14D4734400F46316</string>
-		<string>/Volumes/Data/Users/sam/git Projects/SDM_MD_Demo/Demo/Demo.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>1870 57 1422 836 1440 -180 1920 1080 </string>
+	<string>1807 57 1422 836 1440 -180 1920 1080 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
