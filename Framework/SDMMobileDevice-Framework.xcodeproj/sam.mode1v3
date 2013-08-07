@@ -288,10 +288,6 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>15</integer>
-									<integer>11</integer>
-									<integer>2</integer>
-									<integer>1</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -315,7 +311,7 @@
 							<real>234</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>1785 21 1343 697 1440 -180 1920 1080 </string>
+						<string>18 142 1343 697 0 0 1440 878 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -345,7 +341,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>22E66DE417B2BFED005FFCBE</string>
+										<string>22E66DF217B2C9E7005FFCBE</string>
 										<key>history</key>
 										<array>
 											<string>22E6686917AC0CA0005FFCBE</string>
@@ -378,7 +374,7 @@
 											<string>22E66DDD17B2BEEA005FFCBE</string>
 											<string>22E66DDE17B2BEEA005FFCBE</string>
 											<string>22E66DE017B2BFD3005FFCBE</string>
-											<string>22E66DE117B2BFD3005FFCBE</string>
+											<string>22E66DEB17B2C807005FFCBE</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -392,7 +388,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {1087, 529}}</string>
 								<key>RubberWindowFrame</key>
-								<string>1785 21 1343 697 1440 -180 1920 1080 </string>
+								<string>18 142 1343 697 0 0 1440 878 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -412,7 +408,7 @@
 								<key>Frame</key>
 								<string>{{0, 534}, {1087, 122}}</string>
 								<key>RubberWindowFrame</key>
-								<string>1785 21 1343 697 1440 -180 1920 1080 </string>
+								<string>18 142 1343 697 0 0 1440 878 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -603,10 +599,9 @@
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>228AAD9B14D4734400F46316</string>
-		<string>/Volumes/Data/Users/sam/git Projects/SDM_MD_Demo/Framework/SDMMobileDevice-Framework.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>1785 21 1343 697 1440 -180 1920 1080 </string>
+	<string>18 142 1343 697 0 0 1440 878 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>

@@ -129,7 +129,7 @@ void transfer_callback(CFDictionaryRef dict, int arg) {
     if (CFEqual(status, CFSTR("CopyingFile"))) {
         CFStringRef path = CFDictionaryGetValue(dict, CFSTR("Path"));
         if (/*(last_path == NULL || !CFEqual(path, last_path)) &&*/ !CFStringHasSuffix(path, CFSTR(".ipa"))) {
-            printf("[%3d%%] Copying %s to device\n", percent / 2, CFStringGetCStringPtr(path, kCFStringEncodingMacRoman));
+            printf("[%3d%%] Copying %s to device\n", percent, CFStringGetCStringPtr(path, kCFStringEncodingMacRoman));
 			
         }
     }
@@ -139,7 +139,7 @@ void install_callback(CFDictionaryRef dict, int arg) {
     int percent;
     CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
     CFNumberGetValue(CFDictionaryGetValue(dict, CFSTR("PercentComplete")), kCFNumberSInt32Type, &percent);
-    printf("[%3d%%] %s\n", (percent / 2) + 50, CFStringGetCStringPtr(status, kCFStringEncodingMacRoman));
+    printf("[%3d%%] %s\n", percent, CFStringGetCStringPtr(status, kCFStringEncodingMacRoman));
 }
 
 
