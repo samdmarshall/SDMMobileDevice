@@ -228,7 +228,7 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port
 		address.sa_family = 0x6a01;
 		strlcpy(address.sa_data, mux, 0x68);
 		result = connect(sock, &address, 0x6a);
-		ioctl(sock, 0x8004667e);
+		ioctl(sock, 0x8004667e/*, nope */);
 		*socketConn = sock;
 	}
 	if (*socketConn) {
@@ -276,7 +276,7 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 			strlcpy(address.sa_data, mux, 0x68);
 			code = connect(sock, &address, 0x6a);
 			if (!code) {
-				ioctl(sock, 0x8004667e);
+				ioctl(sock, 0x8004667e/*, nope */);
 				(*listener)->socket = sock;
 				(*listener)->socketSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, (*listener)->socket, 0x0, (*listener)->socketQueue);
 				dispatch_source_set_event_handler((*listener)->socketSource, ^{
