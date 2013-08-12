@@ -7,29 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		22E668F217AC0E81005FFCBE /* SDMMobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E668F117AC0E7A005FFCBE /* SDMMobileDevice.framework */; };
+		22B02B4917B98537007BAC7B /* SDMMobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B02B4817B98537007BAC7B /* SDMMobileDevice.framework */; };
 		22E66AA217B00FD4005FFCBE /* MobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E66AA117B00FD4005FFCBE /* MobileDevice.framework */; };
 		8DD76F770486A8DE00D96B5E /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.c */; settings = {ATTRIBUTES = (); }; };
 		8DD76F790486A8DE00D96B5E /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */; };
 		8DD76F7C0486A8DE00D96B5E /* Demo.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6859E970290921104C91782 /* Demo.1 */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		22E668F017AC0E7A005FFCBE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 22E668EC17AC0E7A005FFCBE /* SDMMobileDevice-Framework.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2215A83717500DDC00AD1981 /* SDMMobileDevice.framework */;
-			remoteInfo = SDMMobileDevice;
-		};
-		22E668F317AC0E8B005FFCBE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 22E668EC17AC0E7A005FFCBE /* SDMMobileDevice-Framework.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 2215A83617500DDC00AD1981 /* SDMMobileDevice */;
-			remoteInfo = SDMMobileDevice;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		8DD76F7B0486A8DE00D96B5E /* CopyFiles */ = {
@@ -47,7 +30,7 @@
 /* Begin PBXFileReference section */
 		08FB7796FE84155DC02AAC07 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
-		22E668EC17AC0E7A005FFCBE /* SDMMobileDevice-Framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "SDMMobileDevice-Framework.xcodeproj"; path = "../Framework/SDMMobileDevice-Framework.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		22B02B4817B98537007BAC7B /* SDMMobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDMMobileDevice.framework; path = ../Framework/build/Debug/SDMMobileDevice.framework; sourceTree = "<group>"; };
 		22E66AA117B00FD4005FFCBE /* MobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileDevice.framework; path = /System/Library/PrivateFrameworks/MobileDevice.framework; sourceTree = "<absolute>"; };
 		8DD76F7E0486A8DE00D96B5E /* Demo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Demo; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6859E970290921104C91782 /* Demo.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Demo.1; sourceTree = "<group>"; };
@@ -58,7 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22E668F217AC0E81005FFCBE /* SDMMobileDevice.framework in Frameworks */,
+				22B02B4917B98537007BAC7B /* SDMMobileDevice.framework in Frameworks */,
 				8DD76F790486A8DE00D96B5E /* CoreFoundation.framework in Frameworks */,
 				22E66AA217B00FD4005FFCBE /* MobileDevice.framework in Frameworks */,
 			);
@@ -90,7 +73,7 @@
 		08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				22E668EC17AC0E7A005FFCBE /* SDMMobileDevice-Framework.xcodeproj */,
+				22B02B4817B98537007BAC7B /* SDMMobileDevice.framework */,
 				09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */,
 			);
 			name = "External Frameworks and Libraries";
@@ -100,14 +83,6 @@
 			isa = PBXGroup;
 			children = (
 				8DD76F7E0486A8DE00D96B5E /* Demo */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		22E668ED17AC0E7A005FFCBE /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				22E668F117AC0E7A005FFCBE /* SDMMobileDevice.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -135,7 +110,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				22E668F417AC0E8B005FFCBE /* PBXTargetDependency */,
 			);
 			name = Demo;
 			productInstallPath = "$(HOME)/bin";
@@ -148,6 +122,8 @@
 /* Begin PBXProject section */
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = 1DEB924B08733DCA0010E9CD /* Build configuration list for PBXProject "Demo" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -160,28 +136,12 @@
 			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* Demo */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 22E668ED17AC0E7A005FFCBE /* Products */;
-					ProjectRef = 22E668EC17AC0E7A005FFCBE /* SDMMobileDevice-Framework.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				8DD76F740486A8DE00D96B5E /* Demo */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		22E668F117AC0E7A005FFCBE /* SDMMobileDevice.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = SDMMobileDevice.framework;
-			remoteRef = 22E668F017AC0E7A005FFCBE /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		22E66BFD17B1473B005FFCBE /* ShellScript */ = {
@@ -210,14 +170,6 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		22E668F417AC0E8B005FFCBE /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = SDMMobileDevice;
-			targetProxy = 22E668F317AC0E8B005FFCBE /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
 		1DEB924808733DCA0010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -226,7 +178,8 @@
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(CONFIGURATION_BUILD_DIR)",
-					"\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
+					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+					"/Volumes/Data/Users/sam/git\\ Projects/SDM_MD_Demo/Framework/build/Debug",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -249,7 +202,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(CONFIGURATION_BUILD_DIR)",
 					"$(inherited)",
-					"\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
+					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+					"/Volumes/Data/Users/sam/git\\ Projects/SDM_MD_Demo/Framework/build/Debug",
 				);
 				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/bin;

@@ -172,8 +172,6 @@ sdmmd_debug_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef connectio
 }
 
 CFURLRef copy_device_app_url(SDMMD_AMDeviceRef device, CFStringRef identifier) {
-    CFDictionaryRef result;
-
 	CFArrayRef values = SDMMD_ApplicationLookupDictionary();
 	CFMutableDictionaryRef optionsDict = SDMMD_create_dict();
 	CFDictionarySetValue(optionsDict, CFSTR("ReturnAttributes"), values);
