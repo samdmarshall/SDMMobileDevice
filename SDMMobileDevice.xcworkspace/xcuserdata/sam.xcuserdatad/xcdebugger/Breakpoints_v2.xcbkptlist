@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Framework/MobileDevice/SDMMDevice/SDMMD_AMDevice.c"
-            timestampString = "398096308.359183"
+            timestampString = "398122194.939552"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1010"
-            endingLineNumber = "1010"
+            startingLineNumber = "1018"
+            endingLineNumber = "1018"
             landmarkName = "SDMMD_AMDeviceIsPaired()"
             landmarkType = "7">
          </BreakpointContent>

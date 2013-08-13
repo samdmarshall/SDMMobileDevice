@@ -10,10 +10,10 @@ int main (int argc, const char * argv[]) {
 	// Needed to initialize the library and start the device listener (SDMMD_MCP.h)
 	SDMMobileDevice;
 	
-	DemoOne();
+	//DemoOne();
 	//DemoTwo();
 	if (argc == 2) {
-		//DemoThree(argv[1]);
+		DemoThree(argv[1]);
 		//DemoFour(argv[1]);
 	}
 	return 0;

@@ -837,21 +837,29 @@ sdmmd_return_t SDMMD_AMDeviceDeactivate(SDMMD_AMDeviceRef device) {
 sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, bool hasTimeout, uint32_t *socketConn, bool isSSL) {
 	sdmmd_return_t result = 0x0;
 	uint32_t sock = 0xffffffff;
-	uint32_t mask = 0x10400;
+	uint32_t mask = 0x1;
 	if (device) {
 		if (socket) {
 			result = 0xe8000084;
 			if (device->ivars.device_active) {
-				if (isSSL && device->ivars.connection_type == 2) {
-					uint32_t dataLen = CFDataGetLength(device->ivars.unknown11);
+				if (device->ivars.connection_type == 2) {
+					uint32_t dataLen = CFDataGetLength(device->ivars.network_address);
 					struct sockaddr *address = calloc(1, dataLen); 
 					if (dataLen == 0x80) {
-						CFDataGetBytes(device->ivars.unknown11, CFRangeMake(0, dataLen), (UInt8*)address);
+						CFDataGetBytes(device->ivars.network_address, CFRangeMake(0, dataLen), (UInt8*)address);
 						sock = socket(0x2, 0x1, 0x0);
 						if (setsockopt(sock, 0xffff, 0x1022, &mask, 0x4)) {
 							
 						}
-						connect(sock, address, 0x10);
+						mask = 0x19;
+						if (setsockopt(sock, 0xffff, 0x1005, &mask, 0x10)) {
+						 
+						}
+						if (setsockopt(sock, 0xffff, 0x1006, &mask, 0x10)) {
+						 
+						}
+						result = connect(sock, address, 0x10);
+						printf("connection status: %i\n",result);
 					} else {
 						printf("_AMDeviceConnectByAddressAndPort: doesn't look like a sockaddr_storage.\n");
 						result = 0xe8000065;
@@ -1229,8 +1237,11 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 				
 			} else if (CFStringCompare(linkType, CFSTR("Network"), 0) == 0 || CFStringCompare(linkType, CFSTR("WiFi"), 0) == 0) {
 				device->ivars.connection_type = 0x2;
-				CFDataRef netAddress = CFDictionaryGetValue(properties, CFSTR("NetworkAddress"));
+				CFDataRef netAddress = CFDataCreateCopy(kCFAllocatorDefault, CFDictionaryGetValue(properties, CFSTR("NetworkAddress")));
 				device->ivars.network_address = netAddress;
+				device->ivars.unknown11 = netAddress;
+				device->ivars.service_name = CFDictionaryGetValue(properties, CFSTR("EscapedFullServiceName"));
+				CFShow(device->ivars.service_name);
 			} else {
 				
 			}
