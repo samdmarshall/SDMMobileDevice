@@ -10,11 +10,11 @@ int main (int argc, const char * argv[]) {
 	// Needed to initialize the library and start the device listener (SDMMD_MCP.h)
 	SDMMobileDevice;
 	
-	//DemoOne();
+	DemoOne();
 	//DemoTwo();
 	if (argc == 2) {
 		//DemoThree(argv[1]);
-		DemoFour(argv[1]);
+		//DemoFour(argv[1]);
 	}
 	return 0;
 }
@@ -27,7 +27,7 @@ void DemoOne() {
 	printf("%i device(s) connected!\n",numberOfDevices);
 	
 	
-	/*if (numberOfDevices) {
+	if (numberOfDevices) {
 		// return type (uint32_t) corresponds with known return codes (SDMMD_Error.h)
 		sdmmd_return_t result;
 
@@ -75,7 +75,7 @@ void DemoOne() {
 				result = SDMMD_AMDeviceDisconnect(device);
 			}
 		}
-	}*/
+	}
 }
 
 void DemoTwo() {

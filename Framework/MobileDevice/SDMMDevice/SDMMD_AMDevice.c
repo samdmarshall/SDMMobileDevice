@@ -1008,6 +1008,7 @@ bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device) {
 	if (device) {
 		SDMMD__mutex_lock(device->ivars.mutex_lock);
 		char *path = calloc(0x1, 0x401);
+		
 		SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 		struct stat buffer;
