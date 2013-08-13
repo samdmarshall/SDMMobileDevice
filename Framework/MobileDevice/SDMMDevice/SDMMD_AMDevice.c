@@ -145,7 +145,7 @@ int SDMMD__ssl_verify_callback(int value, X509_STORE_CTX *store) {
 				var_16 = calloc(1, data1);
 				uint32_t length1 = i2d_X509(cert, &var_16);
 				uint32_t length2 = i2d_X509(decoded, &var_8);
-				var_16 = var_16 - length1 - 6;
+				var_16 = var_16 - length1 - 6; // this is bad, the validation works, i am honestly not sure what apple is trying to do here but it wouldn't work for me.
 				if (length1 == length2) {
 					if (memcmp(var_8, var_16, length1) == 0)
 						result = true;
@@ -1207,7 +1207,7 @@ CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, 
 SDMMD_AMDeviceRef SDMMD_AMDeviceCreateEmpty() {
 	uint32_t extra = sizeof(AMDeviceClassBody);
 	SDMMD_AMDeviceRef device = calloc(0x1, sizeof(struct sdmmd_am_device));
-	device = (SDMMD_AMDeviceRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, _kSDMMD_AMDeviceRefID, extra, NULL);//(SDMMD_AMDeviceRef)malloc(sizeof(SDM_AMDeviceClass));
+	device = (SDMMD_AMDeviceRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, _kSDMMD_AMDeviceRefID, extra, NULL);
 	return device;
 }
 
