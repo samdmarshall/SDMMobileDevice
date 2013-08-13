@@ -349,6 +349,8 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "SDMMobileDevice-Framework" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -483,6 +485,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
 				SDKROOT = macosx;
+				SYMROOT = ../build;
 			};
 			name = Debug;
 		};
@@ -497,6 +500,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
 				SDKROOT = macosx;
+				SYMROOT = ../build;
 			};
 			name = Release;
 		};

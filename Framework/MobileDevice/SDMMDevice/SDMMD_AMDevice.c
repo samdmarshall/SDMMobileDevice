@@ -1208,6 +1208,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 		device = SDMMD_AMDeviceCreateEmpty();
 		if (device) {
 			CFDictionaryRef properties = (CFDictionaryContainsKey(dictionary, CFSTR("Properties")) ? CFDictionaryGetValue(dictionary, CFSTR("Properties")) : dictionary);
+			CFShow(properties);
 
 			CFNumberRef deviceId = CFDictionaryGetValue(properties, CFSTR("DeviceID"));
 			CFNumberGetValue(deviceId, 0x4, &device->ivars.device_id);
@@ -1225,16 +1226,16 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 				CFNumberRef locationId = CFDictionaryGetValue(properties, CFSTR("LocationID"));
 				CFNumberGetValue(locationId, 0x4, &device->ivars.location_id);
 				
-			} else if (CFStringCompare(linkType, CFSTR("WiFi"), 0) == 0) {
+			} else if (CFStringCompare(linkType, CFSTR("Network"), 0) == 0 || CFStringCompare(linkType, CFSTR("WiFi"), 0) == 0) {
 				device->ivars.connection_type = 0x2;
-								
+				CFDataRef netAddress = CFDictionaryGetValue(properties, CFSTR("NetworkAddress"));
+				device->ivars.network_address = netAddress;
 			} else {
 				
 			}
 			
 			device->ivars.device_active = 0x1;
 			device->ivars.unknown8 = 0x0;
-			device->ivars.network_address = NULL;
 			sdmmd_mutex_init(device->ivars.mutex_lock);
 		}
 	}

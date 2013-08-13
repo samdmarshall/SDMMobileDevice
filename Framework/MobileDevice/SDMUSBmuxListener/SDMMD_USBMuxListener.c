@@ -156,7 +156,10 @@ void SDMMD_USBMuxDeviceListCallback(void *context, struct USBMuxPacket *packet) 
 	for (uint32_t i = 0x0; i < CFArrayGetCount(devices); i++) {
 		SDMMD_AMDeviceRef deviceFromList = SDMMD_AMDeviceCreateFromProperties(CFArrayGetValueAtIndex(devices, i));
 		if (deviceFromList && !CFArrayContainsValue(SDMMobileDevice->deviceList, CFRangeMake(0x0, CFArrayGetCount(SDMMobileDevice->deviceList)), deviceFromList)) {
-			((SDMMD_USBMuxListenerRef)context)->attachedCallback(context, packet);
+			struct USBMuxPacket *devicePacket = calloc(1, sizeof(struct USBMuxPacket));
+			memcpy(devicePacket, packet, sizeof(struct USBMuxPacket));
+			devicePacket->payload = CFArrayGetValueAtIndex(devices, i);
+			((SDMMD_USBMuxListenerRef)context)->attachedCallback(context, devicePacket);
 		}
 	}
 	dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->semaphore);
@@ -226,7 +229,7 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port
 	if (!result) {
 		char *mux = "/var/run/usbmuxd";
 		struct sockaddr_un address;
-		address.sun_family = 0x16a;
+		address.sun_family = 0x6A01;
 		strlcpy(address.sun_path, mux, 0x68);
 		result = connect(sock, &address, 0x6a);
 		ioctl(sock, 0x8004667e/*, nope */);
@@ -273,7 +276,7 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 		if (!code) {
 			char *mux = "/var/run/usbmuxd";
 			struct sockaddr_un address;
-			address.sun_family = 0x16a;
+			address.sun_family = 0x6A01;
 			strlcpy(address.sun_path, mux, 0x68);
 			code = connect(sock, &address, 0x6a);
 			if (!code) {
