@@ -35,7 +35,7 @@ struct AMRecoveryModeDeviceClassBody {
 	// 24
 	int32_t current_progress;		// 32
 	int32_t overall_progress;		// 36
-	SDMMD_AMRUSBDeviceRef device;		// 40 what is this?
+	SDMMD_AMRUSBDeviceRef device;	// 40 what is this?
 	int32_t zero0;					// 48
 	int8_t device_is_recovery_mode;	// 56 product Id is equal to 0x1281
 	int32_t d;						// 57

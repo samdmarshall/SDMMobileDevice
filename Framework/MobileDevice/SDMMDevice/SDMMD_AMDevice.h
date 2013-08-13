@@ -50,7 +50,7 @@ struct AMDeviceClassBody {
 	int32_t unknown1;					// 28
 	CFStringRef unique_device_id;		// 32
 	int32_t unknown2;					// 36
-	int32_t connection_type;			// 40 (1 for USB, 2 for WiFi)
+	int32_t connection_type;			// 40 (0 for USB, 1 for WiFi)
 	unsigned char unknown3[4];			// 44
 	SDMMD_lockdown_conn *lockdown_conn; // 48
 	unsigned char unknown4[4];			// 52
@@ -230,7 +230,7 @@ bool SDMMD_AMDeviceIsAttached(SDMMD_AMDeviceRef device);
 /*!
  @function SDMMD_AMDeviceCopyValue
  @discussion
- 	Fetchs data associated with a particular device key in a domain
+ 	Fetchs data associated with a particular device key in a domain, see SDMMD_Keys.h for domain and key pairs
  @param device
  	Device object to fetch key-value from
  @param domain

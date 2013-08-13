@@ -1227,7 +1227,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 			
 			CFStringRef linkType = CFDictionaryGetValue(properties, CFSTR("ConnectionType"));
 			if (CFStringCompare(linkType, CFSTR("USB"), 0) == 0) {
-				device->ivars.connection_type = 0x1;
+				device->ivars.connection_type = 0x0;
 				
 				CFNumberRef productId = CFDictionaryGetValue(properties, CFSTR("ProductID"));
 				CFNumberGetValue(productId, 0x2, &device->ivars.product_id);
@@ -1236,7 +1236,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 				CFNumberGetValue(locationId, 0x4, &device->ivars.location_id);
 				
 			} else if (CFStringCompare(linkType, CFSTR("Network"), 0) == 0 || CFStringCompare(linkType, CFSTR("WiFi"), 0) == 0) {
-				device->ivars.connection_type = 0x2;
+				device->ivars.connection_type = 0x1;
 				CFDataRef netAddress = CFDataCreateCopy(kCFAllocatorDefault, CFDictionaryGetValue(properties, CFSTR("NetworkAddress")));
 				device->ivars.network_address = netAddress;
 				device->ivars.unknown11 = netAddress;
