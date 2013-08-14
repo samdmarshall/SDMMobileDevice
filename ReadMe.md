@@ -71,8 +71,8 @@ This framework will require entitlements to access the following locations:
 
 Q. Why do I get so many warnings when compiling?
 
-	A. The warnings are from the openssl and libcrypto calls that Apple has deprecated starting in 10.7, I am looking to replace these with CommonCrypto or bundling openssl and libcrypto so these errors don't happen.
+A. The warnings are from the openssl and libcrypto calls that Apple has deprecated starting in 10.7, I am looking to replace these with CommonCrypto or bundling openssl and libcrypto so these errors don't happen.
 
 Q. When is the Cocoa version coming?
 
-	A. Soon! I am working to provide a few more core features and keeping the whole thing compatible with MobileDevice and keeping it as a completely C library. The Cocoa wrapper for this will come as soon as I have finished the AFC implementation and have working wireless communication.
+A. Soon! I am working to provide a few more core features and keeping the whole thing compatible with MobileDevice and keeping it as a completely C library. The Cocoa wrapper for this will come as soon as I have finished the AFC implementation and have working wireless communication.
