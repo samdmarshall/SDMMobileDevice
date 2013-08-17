@@ -243,7 +243,7 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port
 	if (!result) {
 		char *mux = "/var/run/usbmuxd";
 		struct sockaddr_un address;
-		address.sun_family = 0x6A01;
+		address.sun_family = 0x6a01;
 		strncpy(address.sun_path, mux, 0x68);
 		result = connect(sock, &address, 0x6a);
 		ioctl(sock, 0x8004667e/*, nope */);

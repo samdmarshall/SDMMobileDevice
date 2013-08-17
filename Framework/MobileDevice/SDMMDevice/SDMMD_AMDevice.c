@@ -1025,7 +1025,7 @@ bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device) {
 		SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 		struct stat buffer;
-		bool statResult = stat(path, &buffer);
+		int statResult = stat(path, &buffer);
 		if (statResult) {
 			uint32_t errorNum = errno;
 			if (errorNum != 2) {

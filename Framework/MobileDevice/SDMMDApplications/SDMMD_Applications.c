@@ -72,7 +72,7 @@ void SDMMD_fire_callback_767f4(void (*callback)(CFDictionaryRef dict, void* arg)
 }
 
 void SDMMD_preflight_transfer(char *path, struct stat *statRef, char *rStatRef) {
-	uint32_t statResult = stat(path, statRef);
+	int statResult = stat(path, statRef);
 	if (statResult != 0xff) {
 		if ((*(int16_t *)(statRef + 0x4) & 0xffff & 0xf000) != 0x4000) {
 			rStatRef[0] = 0x1;
@@ -111,7 +111,7 @@ void SDMMD_preflight_transfer(char *path, struct stat *statRef, char *rStatRef) 
 								if (result == 0) {
 									result = SDMMD_nuke_path(afcConn, r13);
 									if ((result | 0x8) == 0x8) {
-										uint32_t statResult = lstat(cpath, &pathStat);
+										int statResult = lstat(cpath, &pathStat);
 										if (statResult != 0xff) {
 											f ((var_84 & 0xffff & 0xf000) != 0xa000) {
 												if (rax == 0x8000) {
