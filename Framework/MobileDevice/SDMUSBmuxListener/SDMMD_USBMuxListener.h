@@ -54,6 +54,7 @@ struct USBMuxListenerClass {
 	callbackFunction logsCallback;
 	callbackFunction deviceListCallback;
 	callbackFunction listenerListCallback;
+	callbackFunction unknownCallback;
 	CFMutableArrayRef responses;
 } USBMuxListenerClass;
 

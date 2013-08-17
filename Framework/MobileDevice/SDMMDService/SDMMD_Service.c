@@ -86,6 +86,7 @@ sdmmd_return_t SDMMD_DirectServiceSend(SocketConnection handle, CFDataRef data) 
 		} else {
 			result = send(handle.socket.conn, CFDataGetBytePtr(data), msgLen, 0);
 		}
+		printf("send length: %i\n",result);
 		if (result == msgLen) {
 			return (result == msgLen ? kAMDSuccess : kAMDNotConnectedError);
 		}
@@ -128,7 +129,7 @@ sdmmd_return_t SDMMD_DirectServiceReceive(SocketConnection handle, CFDataRef *da
 	uint32_t size = (data && *data ? (uint32_t)CFDataGetLength(*data) : 0);
 	if (size) {
 		if (CheckIfExpectingResponse(handle, 1000)) {
-			unsigned char *buffer = malloc(size);
+			unsigned char *buffer = calloc(1, size);
 			uint32_t remainder = size;
 			size_t recieved;
 			while (remainder) {
@@ -137,11 +138,13 @@ sdmmd_return_t SDMMD_DirectServiceReceive(SocketConnection handle, CFDataRef *da
 				} else {
 					recieved = recv(handle.socket.conn, &buffer[size-remainder], remainder, 0);
 				}
+				printf("recieved: %i\n",recieved);
 				if (!recieved)
 					break;
 				remainder -= recieved;
 			}
 			*data = CFDataCreate(kCFAllocatorDefault, buffer, size);
+			CFShow(*data);
 			free(buffer);
 		}
 		return kAMDSuccess;

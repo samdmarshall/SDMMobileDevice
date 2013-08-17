@@ -249,7 +249,7 @@ static CFStringRef SDMGetCurrentDateString() {
 
 static char* SDMCFStringGetString(CFStringRef str) {
 	char *cstr = calloc(1, CFStringGetLength(str)+1);
-	CFStringGetCString(str, cstr, CFStringGetLength(str), CFStringGetFastestEncoding(str));
+	CFStringGetCString(str, cstr, CFStringGetLength(str)+1, CFStringGetFastestEncoding(str));
 	return cstr;
 }
 

@@ -180,6 +180,7 @@
 					"$(CONFIGURATION_BUILD_DIR)",
 					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 					"/Volumes/Data/Users/sam/git\\ Projects/SDM_MD_Demo/Framework/build/Debug",
+					"/Volumes/Data/Users/sam/git\\ Projects/SDM_MD_Demo/build/Debug",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -204,6 +205,7 @@
 					"$(inherited)",
 					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 					"/Volumes/Data/Users/sam/git\\ Projects/SDM_MD_Demo/Framework/build/Debug",
+					"/Volumes/Data/Users/sam/git\\ Projects/SDM_MD_Demo/build/Debug",
 				);
 				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/bin;

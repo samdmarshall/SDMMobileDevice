@@ -36,7 +36,12 @@
 static Boolean SDMMD_AMDeviceRefEqual(CFTypeRef cf1, CFTypeRef cf2) {
     SDMMD_AMDeviceRef device1 = (SDMMD_AMDeviceRef)cf1;
     SDMMD_AMDeviceRef device2 = (SDMMD_AMDeviceRef)cf2;
-	return (device1->ivars.device_id == device2->ivars.device_id);
+	Boolean result = (device1->ivars.device_id == device2->ivars.device_id);
+	if (!result) {
+		// evaluate for usb vs wifi
+		//return (CFStringCompare(device1->ivars.unique_device_id, device2->ivars.unique_device_id, 0) == 0);
+	}
+	return result;
 }
 
 static CFStringRef SDMMD_AMDeviceRefCopyFormattingDesc(CFTypeRef cf, CFDictionaryRef formatOpts) {
@@ -842,7 +847,7 @@ sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, b
 		if (socket) {
 			result = 0xe8000084;
 			if (device->ivars.device_active) {
-				if (device->ivars.connection_type == 2) {
+				if (device->ivars.connection_type == 1) {
 					uint32_t dataLen = CFDataGetLength(device->ivars.network_address);
 					struct sockaddr *address = calloc(1, dataLen); 
 					if (dataLen == 0x80) {
@@ -897,7 +902,7 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 	uint32_t socket = 0xffffffff;
 	if (device) {
 		result = 0xe8000084;
-		if (device->ivars.device_active) {
+		if (device->ivars.device_active && device->ivars.connection_type == 0) {
 			SDMMD__mutex_lock(device->ivars.mutex_lock);
 			if (device->ivars.lockdown_conn == 0) {
 				uint32_t status = SDMMD__connect_to_port(device, 0x7ef2, 0x1, &socket, 0x0);

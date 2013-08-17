@@ -108,7 +108,7 @@ void SDMMD_USBMuxResponseCallback(void *context, struct USBMuxPacket *packet) {
 	if (packet->payload) {
 		struct USBMuxResponseCode response = SDMMD_USBMuxParseReponseCode(packet->payload);
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0x0), ^{
-			printf(/*"%s:%d */"usbmuxd returned%s: %d - %s.\n", /*"SDMMD_USBMuxResponseCallback", 0x32a,*/ (response.code ? " error" : ""), response.code, (response.string ? CFStringGetCStringPtr(response.string, CFStringGetFastestEncoding(response.string)) : "Unknown Error Description"));
+			printf("usbmuxd returned%s: %d - %s.\n", (response.code ? " error" : ""), response.code, (response.string ? CFStringGetCStringPtr(response.string, CFStringGetFastestEncoding(response.string)) : "Unknown Error Description"));
 		});
 		dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->semaphore);
 	}
@@ -118,6 +118,9 @@ void SDMMD_USBMuxAttachedCallback(void *context, struct USBMuxPacket *packet) {
 	SDMMD_AMDeviceRef newDevice = SDMMD_AMDeviceCreateFromProperties(packet->payload);
 	if (newDevice && !CFArrayContainsValue(SDMMobileDevice->deviceList, CFRangeMake(0x0, CFArrayGetCount(SDMMobileDevice->deviceList)), newDevice)) {
 		CFMutableArrayRef updateWithNew = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, SDMMobileDevice->deviceList);
+		if (newDevice->ivars.connection_type == 0) {
+			// give priority to usb over wifi
+		}
 		CFArrayAppendValue(updateWithNew, newDevice);
 		CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotification"), newDevice, NULL, true);
 		CFRelease(SDMMobileDevice->deviceList);
@@ -135,6 +138,7 @@ void SDMMD_USBMuxDetachedCallback(void *context, struct USBMuxPacket *packet) {
 	uint32_t removeCounter = 0x0;
 	for (uint32_t i = 0x0; i < CFArrayGetCount(SDMMobileDevice->deviceList); i++) {
 		SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(SDMMobileDevice->deviceList, i);
+		// add something for then updating to use wifi if available.
 		if (detachedId == SDMMD_AMDeviceGetConnectionID(device)) {
 			CFArrayRemoveValueAtIndex(updateWithRemove, i-removeCounter);
 			removeCounter++;
@@ -169,6 +173,13 @@ void SDMMD_USBMuxListenerListCallback(void *context, struct USBMuxPacket *packet
 	dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->semaphore);
 }
 
+void SDMMD_USBMuxUnknownCallback(void *context, struct USBMuxPacket *packet) {
+	printf("Unknown response from usbmuxd!\n");
+	if (packet->payload)
+		CFShow(packet->payload);
+	dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->semaphore);
+}
+
 SDMMD_USBMuxListenerRef SDMMD_USBMuxCreate() {
 	SDMMD_USBMuxListenerRef listener = (SDMMD_USBMuxListenerRef)calloc(1, sizeof(struct USBMuxListenerClass));
 	listener->socket = 0x0;
@@ -180,6 +191,7 @@ SDMMD_USBMuxListenerRef SDMMD_USBMuxCreate() {
 	listener->logsCallback = SDMMD_USBMuxLogsCallback;
 	listener->deviceListCallback = SDMMD_USBMuxDeviceListCallback;
 	listener->listenerListCallback = SDMMD_USBMuxListenerListCallback;
+	listener->unknownCallback = SDMMD_USBMuxUnknownCallback;
 	listener->responses = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, NULL);
 	return listener;
 }
@@ -204,6 +216,8 @@ void SDMMD_USBMuxClose(SDMMD_USBMuxListenerRef listener) {
 		listener->deviceListCallback = NULL;
 	if (listener->listenerListCallback)
 		listener->listenerListCallback = NULL;
+	if (listener->unknownCallback)
+		listener->unknownCallback = NULL;
 	CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerStoppedListenerNotification"), NULL, NULL, true);
 	free(listener);
 }
@@ -230,7 +244,7 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port
 		char *mux = "/var/run/usbmuxd";
 		struct sockaddr_un address;
 		address.sun_family = 0x6A01;
-		strlcpy(address.sun_path, mux, 0x68);
+		strncpy(address.sun_path, mux, 0x68);
 		result = connect(sock, &address, 0x6a);
 		ioctl(sock, 0x8004667e/*, nope */);
 		*socketConn = sock;
@@ -277,7 +291,7 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 			char *mux = "/var/run/usbmuxd";
 			struct sockaddr_un address;
 			address.sun_family = 0x6A01;
-			strlcpy(address.sun_path, mux, 0x68);
+			strncpy(address.sun_path, mux, 0x68);
 			code = connect(sock, &address, 0x6a);
 			if (!code) {
 				ioctl(sock, 0x8004667e/*, nope */);
@@ -304,7 +318,9 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 					   			(*listener)->deviceListCallback((*listener), packet);
 					   		} else if (CFDictionaryContainsKey(packet->payload, CFSTR("ListenerList"))) {
 					   			(*listener)->listenerListCallback((*listener), packet);
-					   		}
+					   		} else {
+								(*listener)->unknownCallback((*listener), packet);
+							}
 							CFArrayAppendValue((*listener)->responses, packet);
 					   	}
 					}
@@ -377,7 +393,7 @@ void SDMMD_USBMuxReceive(uint32_t sock, struct USBMuxPacket *packet) {
 	if (result == sizeof(struct USBMuxPacketBody)) {
 		uint32_t payloadSize = packet->body.length - result;
 		if (payloadSize) {
-			char *buffer = malloc(payloadSize);
+			char *buffer = calloc(0x1, payloadSize);
 			uint32_t remainder = payloadSize;
 			while (remainder) {
 				result = recv(sock, &buffer[payloadSize-remainder], sizeof(char), 0x0);

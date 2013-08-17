@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "SDMMD_AFCProcessOperation:SDMMD_AFC.c">
+         <PersistentStrings>
+            <PersistentString
+               value = "(CFDataRef)blockReply-&gt;packet-&gt;data">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "__SDMMD_AFCProcessOperation_block_invoke:SDMMD_AFC.c">
+         <PersistentStrings>
+            <PersistentString
+               value = "(CFDataRef)blockReply-&gt;packet-&gt;data">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
