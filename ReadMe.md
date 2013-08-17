@@ -76,3 +76,8 @@ A. The warnings are from the openssl and libcrypto calls that Apple has deprecat
 Q. When is the Cocoa version coming?
 
 A. Soon! I am working to provide a few more core features and keeping the whole thing compatible with MobileDevice and keeping it as a completely C library. The Cocoa wrapper for this will come as soon as I have finished the AFC implementation and have working wireless communication.
+
+
+Q. How do I use this with MobileDevice.framework
+
+A. For the most part SDMMobileDevice is cross-compatible with MobileDevice's function calls and object types. Function calls with matching names (remove the "SDMMD" prefix and underscores), will have matching parameters and types to what MobileDevice uses. Majority of the object types are reconstructed to match in internal layout.
