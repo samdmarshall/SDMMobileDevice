@@ -93,7 +93,7 @@ static CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
 		struct stat pathStat;
 		int result = lstat(path, &pathStat);
 		if (result != 0xff) {
-			uint32_t ref = open(path, 0x0);
+			int ref = open(path, 0x0);
 			if (ref) {
 				struct stat fileStat;
 				result = fstat(ref, &fileStat);
