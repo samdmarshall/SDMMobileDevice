@@ -49,7 +49,7 @@ void AFCTest() {
 						SDMMD_AFCOperationRef deviceInfo = SDMMD_AFCOperationCreateGetDeviceInfo();
 						SDMMD_AFCOperationRef response;
 						result = SDMMD_AFCProcessOperation(afc, deviceInfo, &response);
-						CFDataRef test = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, response->packet->data, response->packet->header.packetLen-response->packet->header.headerLen, kCFAllocatorDefault);
+						CFDataRef test = SDMMD_GetDataResponseFromOperation(response);
 						CFShow(test);
 						
 					} else {

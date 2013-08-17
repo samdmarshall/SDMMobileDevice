@@ -111,6 +111,8 @@ static inline char*  SDMMD_GetPacketTypeName(uint32_t type) {
 	return SDMMD_gAFCPacketTypeNames[type];
 }
 
+CFDataRef SDMMD_GetDataResponseFromOperation(SDMMD_AFCOperationRef op);
+
 SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(SDMMD_AMConnectionRef conn);
 void SDMMD_AFCConnectionRelease(SDMMD_AFCConnectionRef);
 

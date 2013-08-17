@@ -276,6 +276,10 @@ sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 	return result;
 }
 
+CFDataRef SDMMD_GetDataResponseFromOperation(SDMMD_AFCOperationRef op) {
+	return CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, op->packet->data, op->packet->header.packetLen-op->packet->header.headerLen, kCFAllocatorDefault);
+}
+
 
 /*CFMutableDataRef SDMMD___AFCCreateAFCDataWithDictionary(CFDictionaryRef dict) {
 	CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault, kCFAllocatorDefault);
