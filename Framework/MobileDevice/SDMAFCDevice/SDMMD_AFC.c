@@ -23,10 +23,11 @@
 #include "SDMMD_Functions.h"
 #include <string.h>
 
-sdmmd_return_t SDMMD_check_can_touch(SDMMD_AFCConnectionRef conn, void* unknown) {
+sdmmd_return_t SDMMD_check_can_touch(SDMMD_AFCConnectionRef conn, CFDataRef *unknown) {
 	SDMMD_AFCOperationRef fileInfo = SDMMD_AFCOperationCreateGetFileInfo(unknown);
 	SDMMD_AFCOperationRef reply; 
 	SDMMD_AFCProcessOperation(conn, fileInfo, &reply);
+	*unknown = SDMMD_GetDataResponseFromOperation(reply);
 	return kAMDSuccess;
 }
 

@@ -83,7 +83,7 @@ void SDMMD_preflight_transfer(char *path, struct stat *statRef, char *rStatRef) 
 	}
 }
 
-/*sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFStringRef path, CFDictionaryRef options, void* transferCallback, void* unknown) {
+sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFStringRef path, CFDictionaryRef options, void* transferCallback, void* unknown) {
 	sdmmd_return_t result = 0xe8000007;
 	if (path) {
 		if (conn) {
@@ -103,8 +103,12 @@ void SDMMD_preflight_transfer(char *path, struct stat *statRef, char *rStatRef) 
 						//SDMMD_preflight_transfer(&cpath, &pathStat, &remoteStat);
 						SDMMD_fire_callback_767f4(transferCallback, unknown, 0x0, CFSTR("TransferingPackage"));
 						SDMMD_AFCConnectionRef afcConn = SDMMD_AFCConnectionCreate(conn);//(r12, conn, 0x0, 0x0, &var_72);
-						if (result == 0) {
-							result = SDMMD_check_can_touch(afcConn, &var_72);
+						// loop that iterates through all of file contents
+						
+						
+						/*if (result == 0) {
+ 							CFDataRef touchResponse;
+							result = SDMMD_check_can_touch(afcConn, &touchResponse);
 							if (result == 0) {
 								CFURLRef parent = CFURLCreateCopyDeletingLastPathComponent(r12, r13);
 								result = SDMMD_make_path(afcConn, parent);
@@ -145,7 +149,7 @@ void SDMMD_preflight_transfer(char *path, struct stat *statRef, char *rStatRef) 
 									// error!
 								}
 							}
-						}
+						}*/
 					} else {
 						result = 0xe8000001;
 					}
@@ -156,7 +160,7 @@ void SDMMD_preflight_transfer(char *path, struct stat *statRef, char *rStatRef) 
 		}
 	}
 	return result;
-}*/
+}
 
 sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn, SDMMD_AMDeviceRef device, CFURLRef path, CFDictionaryRef options, void* installCallback, void* unknown) {
 	sdmmd_return_t result = 0x0;
