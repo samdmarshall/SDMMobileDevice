@@ -1228,7 +1228,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 			CFNumberGetValue(deviceId, 0x4, &device->ivars.device_id);
 			
 			CFStringRef serialNumber = CFDictionaryGetValue(properties, CFSTR("SerialNumber"));
-			device->ivars.unique_device_id = serialNumber;
+			device->ivars.unique_device_id = CFRetain(serialNumber);
 			
 			CFStringRef linkType = CFDictionaryGetValue(properties, CFSTR("ConnectionType"));
 			if (CFStringCompare(linkType, CFSTR("USB"), 0) == 0) {
@@ -1245,7 +1245,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 				CFDataRef netAddress = CFDataCreateCopy(kCFAllocatorDefault, CFDictionaryGetValue(properties, CFSTR("NetworkAddress")));
 				device->ivars.network_address = netAddress;
 				device->ivars.unknown11 = netAddress;
-				device->ivars.service_name = CFDictionaryGetValue(properties, CFSTR("EscapedFullServiceName"));
+				device->ivars.service_name = CFRetain(CFDictionaryGetValue(properties, CFSTR("EscapedFullServiceName")));
 				CFShow(device->ivars.service_name);
 			} else {
 				
