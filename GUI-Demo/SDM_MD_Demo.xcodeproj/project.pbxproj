@@ -284,7 +284,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
-					"/Volumes/Data/Users/sam/git\\ Projects/SDM_MD_Demo/build/Debug",
 					"\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/SDMMobileDevice-aqoxszwubwwsiqefsxieeyqokxef/Build/Products/Debug\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -311,7 +310,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
-					"/Volumes/Data/Users/sam/git\\ Projects/SDM_MD_Demo/build/Debug",
 					"\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/SDMMobileDevice-aqoxszwubwwsiqefsxieeyqokxef/Build/Products/Debug\"",
 				);
 				GCC_MODEL_TUNING = G5;
