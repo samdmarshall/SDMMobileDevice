@@ -308,6 +308,7 @@ static char* SDMMD_AFCErrorString(uint32_t error) {
 	return SDMMD_AFCConnectionErrorString[error & 0xff];
 }
 
-#define SDM_MD_CallSuccessful(result_code) ((result_code == kAMDSuccess) || (result_code == MDERR_USBMUX_OK) || (result_code == LD_ERR_OK))
+inline static bool SDM_MD_CallSuccessfulHelper(sdmmd_return_t result_code)  {return ((result_code == kAMDSuccess) || (result_code == MDERR_USBMUX_OK) || (result_code == LD_ERR_OK));}
+#define SDM_MD_CallSuccessful(call) SDM_MD_CallSuccessfulHelper(call)
 
 #endif
