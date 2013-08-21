@@ -40,7 +40,14 @@
 		[self.appList setDoubleAction:@selector(setApplication:)];
 		self.appList.delegate = self;
 		self.appList.dataSource = self;
-		[self addSubview:self.appList];
+        
+        //create enclosing scrollview
+        NSScrollView * tableContainer = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, 0, 300, self.bounds.size.height)];
+        [tableContainer setDocumentView:self.appList];
+        [tableContainer setHasVerticalScroller:YES];
+		[self addSubview:[self.appList enclosingScrollView]];
+        [tableContainer release];
+        
 		[self.appList setFrame:self.bounds];
 		[self setNeedsDisplay:YES];
 		
@@ -161,16 +168,19 @@
 	NSMutableArray *apps = [NSMutableArray new];
 	result = SDMMD_AMDeviceLookupApplications(self.device.device, optionsDict, &response);
 	printf("lookup: 0x%08x\n",result);
-	for (id item in (NSDictionary*)response) {
-		NSDictionary *appInfo = [(NSDictionary*)response objectForKey:item];
-		if (CFDictionaryContainsKey((CFDictionaryRef)appInfo, CFSTR("Container")))
-			[apps addObject:appInfo];
-	}
+    if (result == 0) {
+        for (id item in (NSDictionary*)response) {
+            NSDictionary *appInfo = [(NSDictionary*)response objectForKey:item];
+            if (CFDictionaryContainsKey((CFDictionaryRef)appInfo, CFSTR("Container")))
+                [apps addObject:appInfo];
+        }
+    }
 	result = SDMMD_AMDeviceStopSession(self.device.device);
 	printf("stop session: 0x%08x\n",result);
 	result = SDMMD_AMDeviceDisconnect(self.device.device);
 	
 	self.dataSource = apps;
+    [apps release];
 	[self.appList reloadData];
 }
 
@@ -181,7 +191,7 @@
 #pragma mark -
 #pragma mark NSTableViewDelegate + NSTableViewDataSource
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
-	return [self.dataSource count] + ((self.bounds.size.height - ([dataSource count]*[tableView rowHeight]))/[tableView rowHeight]);
+	return [self.dataSource count] ;//+ ((self.bounds.size.height - ([dataSource count]*[tableView rowHeight]))/[tableView rowHeight]);
 }
 
 - (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
