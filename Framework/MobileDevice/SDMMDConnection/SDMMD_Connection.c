@@ -277,7 +277,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 					} else {
 						printf("SERVICE: %s!\n",cservice);
 						printf("PORT: %i!\n",port);
-						result = SDMMD__connect_to_port(device, port, timeoutConnection, &socket, ((uint32_t)ssl & 0x1) & 0xff);
+                        result = SDMMD__connect_to_port(device, (uint16_t)port, timeoutConnection, &socket);
 						if (result == 0x0) {
 							if (enableSSL) {
 								printf("AMDeviceSecureStartService: SSL requested for service %s with device %s.\n", cservice, (device->ivars.unique_device_id ? SDMCFStringGetString(device->ivars.unique_device_id) : "device with no name"));
@@ -295,7 +295,12 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 												CFTypeRef deviceCertVal = CFDictionaryGetValue(record, CFSTR("DeviceCertificate"));
 												CFTypeRef rootPrivKeyVal = CFDictionaryGetValue(record, CFSTR("RootPrivateKey"));
 												if (deviceCertVal && rootPrivKeyVal) {
-													ssl = SDMMD_lockssl_handshake((device->ivars.lockdown_conn), rootCertVal, deviceCertVal, rootPrivKeyVal, 0x1);
+                                                    SDMMD_lockdown_conn* conn =  SDMMD_lockdown_connection_create(socket);
+                                                    if (conn) {
+                                                        ssl = SDMMD_lockssl_handshake(conn, rootCertVal, deviceCertVal, rootPrivKeyVal, 0x1);
+                                                        free(conn);
+                                                    }
+
 													if (ssl) {
 														result = 0x0;
 													} else {
@@ -419,7 +424,7 @@ sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef 
 					if (result == 0) {
 						socket = SDMMD_AMDServiceConnectionGetSocket(*connection);
 						ssl_enabled = SDMMD_AMDServiceConnectionGetSecureIOContext(*connection);
-						if (ssl_enabled) {
+						if (ssl_enabled == NULL) {
 							result = 0xe800007f;
 						} else {
 							result = 0x0;

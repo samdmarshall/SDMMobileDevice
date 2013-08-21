@@ -3,5 +3,6 @@ build/
 *.xcodeproj/*.mode*
 *.xcodeproj/*.pbxuser
 *.xcodeproj/*.perspectivev*
-
-
+*.xcuserdata
+xcuserdata/
+*/xcuserdata/

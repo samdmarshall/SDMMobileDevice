@@ -27,6 +27,7 @@
 #include <errno.h>
 #include <openssl/bio.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
 #include <sys/types.h>
 #include <sys/select.h>
 #include "CFRuntime.h"
@@ -133,6 +134,7 @@ X509* SDMMD__decode_certificate(CFDataRef cert) {
 }
 
 int SDMMD__ssl_verify_callback(int value, X509_STORE_CTX *store) {
+    return true;
 	bool result = true;
 	X509 *cert, *decoded = NULL;
 	if (value || (X509_STORE_CTX_get_error(store) + 0xffffffffffffffec < 0x2)) {
@@ -550,17 +552,12 @@ bool SDMMD_isDeviceAttached(uint32_t device_id) {
 	CFArrayRef devices = CFArrayCreateCopy(kCFAllocatorDefault, SDMMobileDevice->deviceList);
 	if (devices) {
 		for (uint32_t i = 0; i < CFArrayGetCount(devices); i++) {
-			CFDictionaryRef device = CFArrayGetValueAtIndex(devices, i);
+			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, i);
 			if (device) {
-				CFNumberRef idNumber = CFDictionaryGetValue(device, CFSTR("DeviceID"));
-				if (idNumber) {
-					uint32_t fetched_id = 0;
-					CFNumberGetValue(idNumber, 0x3, &fetched_id);
-					if (fetched_id == device_id) {
-						result = true;
-						break;
-					}
-				}
+                if (device->ivars.device_id == device_id) {
+                    result = true;
+                    break;
+                }
 			}
 		}
 		CFRelease(devices);
@@ -839,7 +836,7 @@ sdmmd_return_t SDMMD_AMDeviceDeactivate(SDMMD_AMDeviceRef device) {
 	return result;
 }
 
-sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, bool hasTimeout, uint32_t *socketConn, bool isSSL) {
+sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint16_t port, bool hasTimeout, uint32_t *socketConn) {
 	sdmmd_return_t result = 0x0;
 	uint32_t sock = 0xffffffff;
 	uint32_t mask = 0x1;
@@ -863,6 +860,16 @@ sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, b
 						if (setsockopt(sock, 0xffff, 0x1006, &mask, 0x10)) {
 						 
 						}
+                        if (address->sa_family == AF_INET) {
+                            ((struct sockaddr_in*)address)->sin_port = htons(port);
+                        }
+                        else if (address->sa_family == AF_INET6) {
+                            //IPv6 not tested
+                            ((struct sockaddr_in6*)address)->sin6_port = htons(port);
+                        }
+                        else {
+                            printf("unknown sockaddr family %d", address->sa_family);
+                        }
 						result = connect(sock, address, 0x10);
 						printf("connection status: %i\n",result);
 					} else {
@@ -902,10 +909,10 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 	uint32_t socket = 0xffffffff;
 	if (device) {
 		result = 0xe8000084;
-		if (device->ivars.device_active && device->ivars.connection_type == 0) {
+		if (device->ivars.device_active /*&& device->ivars.connection_type == 0 */) {
 			SDMMD__mutex_lock(device->ivars.mutex_lock);
 			if (device->ivars.lockdown_conn == 0) {
-				uint32_t status = SDMMD__connect_to_port(device, 0x7ef2, 0x1, &socket, 0x0);
+				uint32_t status = SDMMD__connect_to_port(device,0xf27e /*0x7ef2*/, 0x1, &socket);
 				if (status == 0) {
 					result = 0xe800000b;
 					if (socket != 0xff) {
@@ -1199,7 +1206,7 @@ CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, 
 			key = CFSTR("NULL");
 			
 		SDMMD__mutex_lock(device->ivars.mutex_lock);
-		CFStringRef err;
+		CFStringRef err = NULL;
 		value = SDMMD_copy_lockdown_value(device, domain, key, &err);
 		if (err) {
 			CFShow(err);
@@ -1228,7 +1235,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 			CFNumberGetValue(deviceId, 0x4, &device->ivars.device_id);
 			
 			CFStringRef serialNumber = CFDictionaryGetValue(properties, CFSTR("SerialNumber"));
-			device->ivars.unique_device_id = serialNumber;
+			device->ivars.unique_device_id = CFRetain(serialNumber);
 			
 			CFStringRef linkType = CFDictionaryGetValue(properties, CFSTR("ConnectionType"));
 			if (CFStringCompare(linkType, CFSTR("USB"), 0) == 0) {
@@ -1245,7 +1252,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 				CFDataRef netAddress = CFDataCreateCopy(kCFAllocatorDefault, CFDictionaryGetValue(properties, CFSTR("NetworkAddress")));
 				device->ivars.network_address = netAddress;
 				device->ivars.unknown11 = netAddress;
-				device->ivars.service_name = CFDictionaryGetValue(properties, CFSTR("EscapedFullServiceName"));
+				device->ivars.service_name = CFRetain(CFDictionaryGetValue(properties, CFSTR("EscapedFullServiceName")));
 				CFShow(device->ivars.service_name);
 			} else {
 				

@@ -19,6 +19,8 @@
 		self.device = dev;
 		SDMMD_AMDeviceConnect(self.device);
 		self.name = SDMMD_AMDeviceCopyValue(self.device, NULL, CFSTR(kDeviceName));
+        if (self.name == nil)
+            self.name = (NSString*)self.device->ivars.unique_device_id;
 		SDMMD_AMDeviceDisconnect(self.device);
 		
 	}

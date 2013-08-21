@@ -247,7 +247,7 @@ sdmmd_return_t SDMMD_AFCReceiveOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 	
 	CFMutableDataRef bodyData = CFDataCreateMutable(kCFAllocatorDefault, header->packetLen - sizeof(SDMMD_AFCPacketHeader));
 	char *body = calloc(1, header->packetLen - sizeof(SDMMD_AFCPacketHeader));
-	CFDataAppendBytes(bodyData, zeros, header->packetLen - sizeof(SDMMD_AFCPacketHeader));
+	CFDataAppendBytes(bodyData, body, header->packetLen - sizeof(SDMMD_AFCPacketHeader));
 	free(body);
 	result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(conn->handle), (CFDataRef*)&bodyData);
 	struct sdmmd_AFCPacket *packet = calloc(1, sizeof(struct sdmmd_AFCPacket));
