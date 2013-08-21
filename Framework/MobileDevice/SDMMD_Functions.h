@@ -38,14 +38,14 @@
 #define CFRangeMake(a, b) (CFRange){a, b}
 #endif
 
+// Missing base function: "mobdevlog"
+
 static kern_return_t sdmmd_mutex_init(pthread_mutex_t thread) {
-	kern_return_t result = 0x0;
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_init(&attr);
-	pthread_mutexattr_settype(&attr, 0x2);
+	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 	pthread_mutex_init(&thread, &attr);
-	result = pthread_mutexattr_destroy(&attr);
-	return result;
+	return pthread_mutexattr_destroy(&attr);
 }
 
 static int SDMMD__mutex_lock(pthread_mutex_t mutex) {
@@ -56,26 +56,29 @@ static int SDMMD__mutex_unlock(pthread_mutex_t mutex) {
 	return pthread_mutex_unlock(&mutex);
 }
 
-static const void* SDMMD___AppendValue(const void* append, void* context) {
+static const void* SDMMD___AppendValue(CFTypeRef append, CFMutableDataRef context) {
 	// over-allocation, check hopper again because this seems to be inaccurate with the results of a previous version of MobileDevice
 	if (CFGetTypeID(append) == CFNumberGetTypeID()) {
 		if (CFNumberIsFloatType(append)) {
 			float num = 0;
-			CFNumberGetValue(append, 0xd, &num);
-			append = CFStringCreateWithFormat(kCFAllocatorDefault, 0x0, CFSTR("%g"), num);
+			CFNumberGetValue(append, kCFNumberDoubleType, &num);
+			append = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%g"), num);
 		} else {
 			uint64_t num = 0;
-			CFNumberGetValue(append, 0x4, &num);
-			append = CFStringCreateWithFormat(kCFAllocatorDefault, 0x0, CFSTR("%qi"), num);
+			CFNumberGetValue(append, kCFNumberSInt64Type, &num);
+			append = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%qi"), num);
 		}
 	} else if (CFGetTypeID(append) == CFBooleanGetTypeID()) {
 		append = (CFEqual(append, kCFBooleanTrue) ? CFSTR("1") : CFSTR("0"));
 	}
 	if (CFGetTypeID(append) == CFStringGetTypeID()) {
-		uint32_t length = (uint32_t)CFStringGetLength(append);
-		char *alloc = calloc(1, length*8+1);
-		CFStringGetBytes(append, CFRangeMake(0x0, length), 0x8000100, 0x0, 0x0, (UInt8*)alloc, (length*8), 0x0);
-		CFDataAppendBytes(context, (UInt8*)alloc, (length*8));
+		CFIndex length = CFStringGetLength(append),
+				alloclen = CFStringGetMaximumSizeForEncoding(length, kCFStringEncodingUTF8),
+				usedlen = 0;
+		uint8_t *alloc = calloc(1, alloclen + 1);
+		
+		CFStringGetBytes(append, CFRangeMake(0, length), kCFStringEncodingUTF8, 0, false, alloc, alloclen, &usedlen);
+		CFDataAppendBytes(context, alloc, usedlen);
 		free(alloc);
 	}
 	return NULL;
@@ -93,24 +96,24 @@ static CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
 	if (path) {
 		struct stat pathStat;
 		int result = lstat(path, &pathStat);
-		if (result != 0xff) {
-			int ref = open(path, 0x0);
-			if (ref) {
+		if (result != -1) {
+			int ref = open(path, O_RDONLY);
+			if (ref != -1) {
 				struct stat fileStat;
 				result = fstat(ref, &fileStat);
-				if (result != 0xff) {
+				if (result != -1) {
 					unsigned char *data = calloc(1, fileStat.st_size);
-					result = (uint32_t)read(ref, data, fileStat.st_size);
+					result = read(ref, data, fileStat.st_size);
 					if (result == fileStat.st_size) {
 						CFDataRef fileData = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, data, result, kCFAllocatorNull);
 						if (fileData) {
 							CFTypeRef propList = CFPropertyListCreateWithData(kCFAllocatorDefault, fileData, kCFPropertyListMutableContainersAndLeaves, NULL, NULL);
 							if (propList) {
 								if (CFGetTypeID(propList) == CFDictionaryGetTypeID()) {
-									dict = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0x0, propList);
+									dict = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, propList);
 								} else {
 									printf("_CreateDictFromFileAtPath: Plist from file %s was not dictionary type.\n",path);
-								}	
+								}
 							} else {
 								printf("_CreateDictFromFileAtPath: Could not create plist from file %s.\n",path);
 							}
@@ -133,13 +136,13 @@ static CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
 }
 
 static CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type) {
-	CFMutableDictionaryRef dict = CFDictionaryCreateMutable(NULL, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+	CFMutableDictionaryRef dict = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 	if (dict) {
 		CFDictionarySetValue(dict, CFSTR("Request"), type);
 		CFDictionarySetValue(dict, CFSTR("ProtocolVersion"), CFSTR("2"));
-		char *appName = (char *)getprogname();
+		const char *appName = getprogname();
 		if (appName) {
-			CFStringRef name = CFStringCreateWithCString(kCFAllocatorDefault, appName, 0x8000100);
+			CFStringRef name = CFStringCreateWithCString(kCFAllocatorDefault, appName, kCFStringEncodingUTF8);
 			if (name) {
 				CFDictionarySetValue(dict, CFSTR("Label"), name);
 				CFRelease(name);
@@ -151,7 +154,7 @@ static CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type) {
 }
 
 static CFMutableDictionaryRef SDMMD_create_dict() {
-	return CFDictionaryCreateMutable(NULL, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+	return CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 }
 
 /*static void SDMMD_openSSLLockCallBack(int mode, int n, const char * file, int line) {
@@ -162,77 +165,67 @@ static CFMutableDictionaryRef SDMMD_create_dict() {
 }*/
 
 static unsigned long SDMMD_openSSLThreadIDCallBack() {
-	return (unsigned long)pthread_self();
+	return (unsigned long)((uintptr_t)pthread_self()); // cast a pointer to uintptr_t before converting to integer
 }
 
 static uint32_t SDMMD_lockssl_init() {
-	return SSL_get_ex_new_index(0x0, "peer certificate data", 0x0, 0x0, 0x0);
+	return SSL_get_ex_new_index(0, "peer certificate data", NULL, NULL, NULL);
 }
 
-static char* SDMMD_ssl_strerror(SSL *ssl, uint32_t length) {
-	char *code = "SSL_ERROR_NONE";
-	uint32_t result = SSL_get_error(ssl, length);
-	if (result < 0x8) {
-		switch (result) {
-			case 1: {
-				result = (uint32_t)ERR_peek_error();
-				if (result) {
-					code = "SSL_ERROR_SSL";
-				} else {
-					code = "SSL_ERROR_SSL unknown error";
-				}
-				break;
-			};
-			case 2: {
-				code = "SSL_ERROR_WANT_READ";
-				break;
-			};
-			case 3: {
-				code = "SSL_ERROR_WANT_WRITE";
-				break;
-			};
-			case 4: {
-				code = "SSL_ERROR_WANT_X509_LOOKUP";
-				break;
-			};
-			case 5: {
-				result = (uint32_t)ERR_peek_error();
-				if (result == 0) {
-					if (length == 0) {
-						code = "SSL_ERROR_SYSCALL (Early EOF reached)";	
-					} else {
-						code = "SSL_ERROR_SYSCALL errno";
-					}
-				} else if (result != 0) {
-					code = "SSL_ERROR_SYSCALL internal";
-				} else {
-					code = "SSL_ERROR_SYSCALL (WTFERROR)";
-				}
-				break;
-			};
-			case 6: {
-				code = "SSL_ERROR_ZERO_RETURN";
-				break;
-			};
-			case 7: {
-				code = "SSL_ERROR_WANT_CONNECT";
-				break;
-			};
-			case 8: {
-				code = "SSL_ERROR_WANT_ACCEPT";
-				break;
-			};
-			default: {
-				code = "Unknown SLL error";
-				break;
-			};
-		}
-	} else {
-		ERR_print_errors_fp(stderr);
-		code = "Unknown SLL error type";
+static char *SDMMD_ssl_strerror(SSL *ssl, uint32_t ret) {
+	static char buffer[200] = {0};
+	int result = SSL_get_error(ssl, ret);
+	char *err = NULL;
+	
+	switch (result) {
+		case SSL_ERROR_NONE:
+			break;
+		case SSL_ERROR_SSL:
+			if (ERR_peek_error()) {
+				snprintf(buffer, 200, "SSL_ERROR_SSL (%s)", ERR_error_string(ERR_peek_error(), NULL));
+				err = buffer;
+			} else
+				err = "SSL_ERROR_SSL unknown error";
+			break;
+		case SSL_ERROR_WANT_READ:
+			err = "SSL_ERROR_WANT_READ";
+			break;
+		case SSL_ERROR_WANT_WRITE:
+			err = "SSL_ERROR_WANT_WRITE";
+			break;
+		case SSL_ERROR_WANT_X509_LOOKUP:
+			err = "SSL_ERROR_WANT_X509_LOOKUP";
+			break;
+		case SSL_ERROR_SYSCALL:
+			if (ERR_peek_error() == 0 && ret == 0) {
+				err = "SSL_ERROR_SYSCALL (Early EOF reached)";
+			} else if (ERR_peek_error() == 0 && ret == -1) {
+				snprintf(buffer, 200, "SSL_ERROR_SYSCALL errno (%s)", strerror(errno));
+				err = buffer;
+			} else if (ERR_peek_error() == 0) {
+				err = "SSL_ERROR_SYSCALL (WTFERROR)";
+			} else {
+				snprintf(buffer, 200, "SSL_ERROR_SYSCALL internal (%s)", ERR_error_string(ERR_peek_error(), NULL));
+				err = buffer;
+			}
+			break;
+		case SSL_ERROR_ZERO_RETURN:
+			err = "SSL_ERROR_ZERO_RETURN";
+			break;
+		case SSL_ERROR_WANT_CONNECT:
+			err = "SSL_ERROR_WANT_CONNECT";
+			break;
+		case SSL_ERROR_WANT_ACCEPT:
+			err = "SSL_ERROR_WANT_ACCEPT";
+			break;
+		default:
+			ERR_print_errors_fp(stderr);
+			fputc("\n", stderr);
+			err = "Unknown SSL error type";
+			break;
 	}
 	ERR_clear_error();
-	return code;
+	return err;
 }
 
 static CFStringRef SDMGetCurrentDateString() {
@@ -249,8 +242,9 @@ static CFStringRef SDMGetCurrentDateString() {
 }
 
 static char* SDMCFStringGetString(CFStringRef str) {
-	char *cstr = calloc(1, CFStringGetLength(str)+1);
-	CFStringGetCString(str, cstr, CFStringGetLength(str)+1, CFStringGetFastestEncoding(str));
+	CFIndex alloclen = CFStringGetMaximumSizeForEncoding(CFStringGetLength(str), CFStringGetFastestEncoding(str)) + 1;
+	char *cstr = calloc(1, alloclen);
+	CFStringGetCString(str, cstr, alloclen, CFStringGetFastestEncoding(str));
 	return cstr;
 }
 
@@ -258,65 +252,61 @@ static char* SDMCFURLGetString(CFURLRef url) {
 	return SDMCFStringGetString(CFURLGetString(url));
 }
 
+static CFStringRef SDMMD__GetPairingRecordDirectoryPath() {
+	return CFSTR("/var/db/lockdown");
+}
+
 static void SDMMD__PairingRecordPathForIdentifier(CFStringRef udid, char *path) {
-	if (!path)
-		path = calloc(0x1, 0x1000);
-	char *udidCSTR = calloc(0x1, 0x400);
-	char *recordPath = calloc(0x1, 0x400);
-	CFStringGetCString(CFSTR("/var/db/lockdown"), recordPath, 0x400, 0x8000100);
-	CFStringGetCString(udid, udidCSTR, 0x400, 0x8000100);
-	strcat(path, recordPath);
-	strcat(path, "/");
-	strcat(path, udidCSTR);
-	strcat(path, ".plist");
-	free(udidCSTR);
-	free(recordPath);
+	char buffer1[1024] = {0}, buffer2[1024] = {0};
+	
+	CFStringGetCString(SDMMD__GetPairingRecordDirectoryPath(), buffer1, 1024, kCFStringEncodingUTF8);
+	CFStringGetCString(udid, buffer2, 1024, kCFStringEncodingUTF8);
+	snprintf(path, 1024, "%s%c%s.plist", buffer1, '/', buffer2);
 }
 
 static CFTypeRef SDMMD_CreateUUID() {
-	uuid_t uu;
-	char uuid[16];
-	uuid_generate(uu);
-	uuid_unparse(uu, uuid);
-	return CFStringCreateWithCString(NULL, uuid, 0x8000100);
+	CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
+	CFStringRef str = CFUUIDCreateString(kCFAllocatorDefault, uuid);
+	CFRelease(uuid);
+	return str;
 }
 
-static sdmmd_return_t SDMMD_store_dict(CFDictionaryRef dict, char *path, uint32_t mode) {
-	sdmmd_return_t result = 0x0;
-	char *tmp = calloc(1, strlen(path)+5);
-	strcpy(tmp, path);
-	strcat(tmp, ".tmp");
-	unlink(tmp);
-	uint32_t ref = open(tmp, 0xa01);
-	if (ref) {
+static sdmmd_return_t SDMMD_store_dict(CFDictionaryRef dict, char *path, bool mode) {
+	sdmmd_return_t result = 0;
+	char buf[1025] = {0};
+	
+	// NOTE: Should implement all the error reporting here, including use of "mode"
+	snprintf(buf, 1025, "%s.tmp", path);
+	unlink(buf);
+	int ref = open(buf, O_CREAT | O_EXCL | O_WRONLY);
+	if (ref != -1) {
 		CFDataRef xml = CFPropertyListCreateXMLData(kCFAllocatorDefault, dict);
 		if (xml) {
 			result = (sdmmd_return_t)write(ref, CFDataGetBytePtr(xml), CFDataGetLength(xml));
-			result = rename(tmp, path);
+			result = rename(buf, path);
 		}
 		close(ref);
-		result = chmod(path, 0x1b6);
-	}
+		result = chmod(path, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+	} else
+		result = kAMDUndefinedError;
 	return result;
 }
 
 static CFTypeRef SDMMD_AMDCopySystemBonjourUniqueID() {
-	char *record = calloc(0x1, 0x401);
-	CFTypeRef value;
+	char record[1025] = {0};
+	CFTypeRef value = NULL;
 	SDMMD__PairingRecordPathForIdentifier(CFSTR("SystemConfiguration"), record);
-	CFMutableDictionaryRef dict = SDMMD__CreateDictFromFileContents(record);
-	if (dict == 0) {
-		dict = SDMMD_create_dict();
-	}
+	CFMutableDictionaryRef dict = SDMMD__CreateDictFromFileContents(record) ?: SDMMD_create_dict();
 	if (dict) {
 		value = CFDictionaryGetValue(dict, CFSTR("SystemBUID"));
-		if (value == 0) {
+		if (value == NULL) {
 			value = SDMMD_CreateUUID();
-			CFDictionarySetValue(dict, CFSTR("SystemBUID"), value);
-			SDMMD_store_dict(dict, record, 0x1);
-		}
-		if (value == 0) {
-			printf("SDMMD_AMDCopySystemBonjourUniqueID: Could not generate UUID!\n");
+			if (value) {
+				CFDictionarySetValue(dict, CFSTR("SystemBUID"), value);
+				SDMMD_store_dict(dict, record, true);
+			} else {
+				printf("SDMMD_AMDCopySystemBonjourUniqueID: Could not generate UUID!\n");
+			}
 		}
 	}
 	return value;
@@ -324,12 +314,13 @@ static CFTypeRef SDMMD_AMDCopySystemBonjourUniqueID() {
 
 static sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SDMMD_AMDeviceRef device, CFMutableDictionaryRef *dict) {
 	sdmmd_return_t result = 0xe8000007;
+	char path[1024] = {0};
+	
 	if (device) {
 		if (dict) {
 			result = 0xe8000003;
 			CFTypeRef bonjourId = SDMMD_AMDCopySystemBonjourUniqueID();
 			if (bonjourId) {
-				char *path = calloc(1, sizeof(char)*0x401);
 				SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
 				CFMutableDictionaryRef fileDict = SDMMD__CreateDictFromFileContents(path);
 				result = 0xe8000025;
@@ -338,7 +329,7 @@ static sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SD
 					if (systemId) {
 						if (CFGetTypeID(systemId) == CFStringGetTypeID()) {
 							CFDictionarySetValue(fileDict, CFSTR("SystemBUID"), bonjourId);
-							result = SDMMD_store_dict(fileDict, path, 1);
+							result = SDMMD_store_dict(fileDict, path, true);
 							if (result) {
 								printf("SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier: Could not store pairing record at '%s'.\n",path);
 								result = 0xe800000a;
@@ -364,9 +355,9 @@ static CFArrayRef SDMMD_ApplicationLookupDictionary() {
 }
 
 static CFURLRef SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(CFStringRef path) {
-	char *cpath = calloc(1, 0x401);
+	char cpath[1024] = {0};
 	CFURLRef url = NULL;
-	if (CFStringGetCString(path, cpath, 0x400, 0x8000100)) {
+	if (CFStringGetCString(path, cpath, 1024, kCFStringEncodingUTF8)) {
 		struct stat buf;
 		lstat(cpath, &buf);
 		CFURLRef base = CFURLCreateWithString(kCFAllocatorDefault, CFSTR("file://localhost/"), NULL);
@@ -377,16 +368,17 @@ static CFURLRef SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(CFStringRef pa
 
 static CFURLRef SDMMD__AMDCFURLCreateWithFileSystemPathRelativeToBase(CFAllocatorRef allocator, CFStringRef path, CFURLPathStyle style, Boolean dir) {
 	CFURLRef base = CFURLCreateWithString(allocator, CFSTR("file://localhost/"), NULL);
-	CFURLRef url = CFURLCreateWithFileSystemPathRelativeToBase(allocator, path, style, dir & 0xff, base);
+	CFURLRef url = CFURLCreateWithFileSystemPathRelativeToBase(allocator, path, style, dir, base);
+	CFRelease(base);
 	return url;
 }
 
-static void SDMMD__AMDCFURLGetCStringForFileSystemPath(CFURLRef urlRef, char *cpath) {
-	cpath = calloc(1, 0x401);
-	CFTypeRef url = CFURLCopyFileSystemPath(urlRef, 0x0);
+static Boolean SDMMD__AMDCFURLGetCStringForFileSystemPath(CFURLRef urlRef, char *cpath) {
+	CFTypeRef url = CFURLCopyFileSystemPath(urlRef, kCFURLPOSIXPathStyle);
 	if (url) {
-		CFStringGetCString(url, cpath, 0x401, 0x8000100);
+		return CFStringGetCString(url, cpath, 1025, kCFStringEncodingUTF8);
 	}
+	return false;
 }
 
 #endif
