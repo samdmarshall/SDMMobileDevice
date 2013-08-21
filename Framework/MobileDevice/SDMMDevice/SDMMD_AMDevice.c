@@ -552,17 +552,12 @@ bool SDMMD_isDeviceAttached(uint32_t device_id) {
 	CFArrayRef devices = CFArrayCreateCopy(kCFAllocatorDefault, SDMMobileDevice->deviceList);
 	if (devices) {
 		for (uint32_t i = 0; i < CFArrayGetCount(devices); i++) {
-			CFDictionaryRef device = CFArrayGetValueAtIndex(devices, i);
+			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, i);
 			if (device) {
-				CFNumberRef idNumber = CFDictionaryGetValue(device, CFSTR("DeviceID"));
-				if (idNumber) {
-					uint32_t fetched_id = 0;
-					CFNumberGetValue(idNumber, 0x3, &fetched_id);
-					if (fetched_id == device_id) {
-						result = true;
-						break;
-					}
-				}
+                if (device->ivars.device_id == device_id) {
+                    result = true;
+                    break;
+                }
 			}
 		}
 		CFRelease(devices);
