@@ -546,6 +546,7 @@ sdmmd_return_t SDMMD__CopyEscrowBag(SDMMD_AMDeviceRef device, CFDataRef *bag) {
 }
 
 bool SDMMD_isDeviceAttached(uint32_t device_id) {
+	// this needs to be changed to query against USBMuxd for device dictionaries
 	bool result = false;
 	CFArrayRef devices = CFArrayCreateCopy(kCFAllocatorDefault, SDMMobileDevice->deviceList);
 	if (devices) {
@@ -1036,6 +1037,7 @@ bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device) {
 		} else {
 			result = true;
 		}
+		free(path);
 	} else {
 		printf("SDMMD_AMDeviceIsPaired: No device.\n");
 	}

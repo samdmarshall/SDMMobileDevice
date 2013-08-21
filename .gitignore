@@ -5,3 +5,6 @@ build/
 *.xcodeproj/*.perspectivev*
 
 
+*.xcode*/*.xcuserdata
+*.xcode*/xcuserdata/
+*.xcode*/xcuserdata/

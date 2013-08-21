@@ -57,6 +57,7 @@ static int SDMMD__mutex_unlock(pthread_mutex_t mutex) {
 }
 
 static const void* SDMMD___AppendValue(const void* append, void* context) {
+	// over-allocation, check hopper again because this seems to be inaccurate with the results of a previous version of MobileDevice
 	if (CFGetTypeID(append) == CFNumberGetTypeID()) {
 		if (CFNumberIsFloatType(append)) {
 			float num = 0;

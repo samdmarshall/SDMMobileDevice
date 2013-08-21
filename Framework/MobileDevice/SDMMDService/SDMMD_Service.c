@@ -128,7 +128,7 @@ sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 sdmmd_return_t SDMMD_DirectServiceReceive(SocketConnection handle, CFDataRef *data) {
 	uint32_t size = (data && *data ? (uint32_t)CFDataGetLength(*data) : 0);
 	if (size) {
-		if (CheckIfExpectingResponse(handle, 1000)) {
+		if (handle.isSSL == true || CheckIfExpectingResponse(handle, 1000)) {
 			unsigned char *buffer = calloc(1, size);
 			uint32_t remainder = size;
 			size_t recieved;
