@@ -341,7 +341,6 @@ static sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SD
 					}
 					CFRelease(fileDict);
 				}
-				free(path);
 				CFRelease(bonjourId);
 			}
 		}
