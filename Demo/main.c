@@ -3,15 +3,13 @@
 
 void DemoOne();
 void DemoTwo();
+void AFCTest();
 void DemoThree(const char *path);
 void DemoFour(const char *path);
-void AFCTest();
 
 int main (int argc, const char * argv[]) {
 	// Needed to initialize the library and start the device listener (SDMMD_MCP.h)
 	SDMMobileDevice;
-	
-	AFCTest();
 	
 	//DemoOne();
 	//DemoTwo();
@@ -19,52 +17,9 @@ int main (int argc, const char * argv[]) {
 		//DemoThree(argv[1]);
 		//DemoFour(argv[1]);
 	}
+	
 	return 0;
 }
-
-void AFCTest() {
-	
-	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
-	
-	uint32_t numberOfDevices = CFArrayGetCount(devices);
-	printf("%i device(s) connected!\n",numberOfDevices);
-	
-	if (numberOfDevices) {
-		// return type (uint32_t) corresponds with known return codes (SDMMD_Error.h)
-		sdmmd_return_t result;
-		
-		uint32_t index;
-		// Iterating over connected devices
-		for (index = 0; index < numberOfDevices; index++) {
-			
-			// getting the device object from the array of connected devices
-			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
-			
-			CFStringRef path = CFSTR("/");
-			SDMMD_AMConnectionRef afcFd;
-			if (SDM_MD_CallSuccessful(SDMMD_AMDeviceConnect(device))) {
-				if (SDM_MD_CallSuccessful(SDMMD_AMDeviceStartSession(device))) {
-					if (SDM_MD_CallSuccessful(SDMMD_AMDeviceStartService(device, CFSTR(AMSVC_AFC), NULL, &afcFd))) {
-						SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(afcFd);
-						SDMMD_AFCOperationRef deviceInfo = SDMMD_AFCOperationCreateGetDeviceInfo();
-						SDMMD_AFCOperationRef response;
-						result = SDMMD_AFCProcessOperation(afc, deviceInfo, &response);
-						CFDataRef test = SDMMD_GetDataResponseFromOperation(response);
-						CFShow(test);
-						
-					} else {
-						printf("could not start service\n");
-					}
-					SDMMD_AMDeviceStopSession(device);
-				} else {
-					printf("could not start session\n");
-				}
-				SDMMD_AMDeviceDisconnect(device);
-			}
-		}
-	}
-}
-
 
 void DemoOne() {
 	// fetching the list of connected devices (SDMMD_AMDevice.h)
@@ -74,7 +29,7 @@ void DemoOne() {
 	printf("%i device(s) connected!\n",numberOfDevices);
 	
 	
-	if (numberOfDevices) {
+	/*if (numberOfDevices) {
 		// return type (uint32_t) corresponds with known return codes (SDMMD_Error.h)
 		sdmmd_return_t result;
 
@@ -122,7 +77,7 @@ void DemoOne() {
 				result = SDMMD_AMDeviceDisconnect(device);
 			}
 		}
-	}
+	}*/
 }
 
 void DemoTwo() {
@@ -275,4 +230,47 @@ void DemoFour(const char *appPath) {
 		}
 	}
 	
+}
+
+void AFCTest() {
+	
+	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
+	
+	uint32_t numberOfDevices = CFArrayGetCount(devices);
+	printf("%i device(s) connected!\n",numberOfDevices);
+	
+	if (numberOfDevices) {
+		// return type (uint32_t) corresponds with known return codes (SDMMD_Error.h)
+		sdmmd_return_t result;
+		
+		uint32_t index;
+		// Iterating over connected devices
+		for (index = 0; index < numberOfDevices; index++) {
+			
+			// getting the device object from the array of connected devices
+			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
+			
+			CFStringRef path = CFSTR("/");
+			SDMMD_AMConnectionRef afcFd;
+			if (SDM_MD_CallSuccessful(SDMMD_AMDeviceConnect(device))) {
+				if (SDM_MD_CallSuccessful(SDMMD_AMDeviceStartSession(device))) {
+					if (SDM_MD_CallSuccessful(SDMMD_AMDeviceStartService(device, CFSTR(AMSVC_AFC), NULL, &afcFd))) {
+						SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(afcFd);
+						SDMMD_AFCOperationRef deviceInfo = SDMMD_AFCOperationCreateGetDeviceInfo();
+						SDMMD_AFCOperationRef response;
+						result = SDMMD_AFCProcessOperation(afc, deviceInfo, &response);
+						CFDataRef test = SDMMD_GetDataResponseFromOperation(response);
+						CFShow(test);
+						
+					} else {
+						printf("could not start service\n");
+					}
+					SDMMD_AMDeviceStopSession(device);
+				} else {
+					printf("could not start session\n");
+				}
+				SDMMD_AMDeviceDisconnect(device);
+			}
+		}
+	}
 }

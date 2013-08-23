@@ -477,7 +477,7 @@ sdmmd_return_t SDMMD_copy_daemon_name(SDMMD_AMDeviceRef device, CFStringRef *nam
 					if (result == 0) {
 						result = SDMMD_lockconn_receive_message(device, &response);
 						if (result == 0) {
-							CFShow(response);
+							//CFShow(response);
 							if (response && CFDictionaryGetCount(response)) {
 								CFTypeRef val = CFDictionaryGetValue(response, CFSTR("Error"));
 								if (val == NULL) {
@@ -662,7 +662,7 @@ sdmmd_return_t SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFDictionaryRe
 							CFMutableDictionaryRef recvDict;
 							result = SDMMD_lockconn_receive_message(device, &recvDict);
 							if (result == 0) {
-								CFShow(recvDict);
+								//CFShow(recvDict);
 								CFTypeRef resultStr = CFDictionaryGetValue(recvDict, CFSTR("Error"));
 								if (!resultStr) {
 									CFTypeRef sessionId = CFDictionaryGetValue(recvDict, CFSTR("SessionID"));
@@ -1224,7 +1224,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 		device = SDMMD_AMDeviceCreateEmpty();
 		if (device) {
 			CFDictionaryRef properties = (CFDictionaryContainsKey(dictionary, CFSTR("Properties")) ? CFDictionaryGetValue(dictionary, CFSTR("Properties")) : dictionary);
-			CFShow(properties);
+			//CFShow(properties);
 
 			CFNumberRef deviceId = CFDictionaryGetValue(properties, CFSTR("DeviceID"));
 			CFNumberGetValue(deviceId, 0x4, &device->ivars.device_id);
@@ -1248,7 +1248,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 				device->ivars.network_address = netAddress;
 				device->ivars.unknown11 = netAddress;
 				device->ivars.service_name = CFDictionaryGetValue(properties, CFSTR("EscapedFullServiceName"));
-				CFShow(device->ivars.service_name);
+				//CFShow(device->ivars.service_name);
 			} else {
 				
 			}
