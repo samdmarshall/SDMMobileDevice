@@ -81,3 +81,8 @@ A. Soon! I am working to provide a few more core features and keeping the whole 
 Q. How do I use this with MobileDevice.framework
 
 A. For the most part SDMMobileDevice is cross-compatible with MobileDevice's function calls and object types. Function calls with matching names (remove the "SDMMD" prefix and underscores), will have matching parameters and types to what MobileDevice uses. Majority of the object types are reconstructed to match in internal layout.
+
+
+Q. How can I contribute?
+
+A. See the [wiki](https://github.com/samdmarshall/SDMMobileDevice/wiki) for details on submitting pull requests.
