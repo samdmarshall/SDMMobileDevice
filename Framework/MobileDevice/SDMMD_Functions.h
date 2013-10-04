@@ -223,7 +223,7 @@ static char *SDMMD_ssl_strerror(SSL *ssl, uint32_t ret) {
 			break;
 		default:
 			ERR_print_errors_fp(stderr);
-			fputc("\n", stderr);
+			fputc('\n', stderr);
 			err = "Unknown SSL error type";
 			break;
 	}
