@@ -1513,4 +1513,16 @@ sdmmd_activation_return_t SDMMD_GetActivationStatus(SDMMD_AMDeviceRef device) {
 	return result;
 }
 
+sdmmd_interface_return_t SDMMD_AMDeviceGetInterfaceType(SDMMD_AMDeviceRef device) {
+    sdmmd_interface_return_t result = kAMDInterfaceConnectionTypeInvalid;
+    if (device) {
+        result = kAMDInterfaceConnectionTypeDirect;
+        if (device->ivars.connection_type > 0) {
+            result = kAMDInterfaceConnectionTypeIndirect;
+        }
+    }
+    return result;
+}
+
+
 #endif

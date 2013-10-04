@@ -79,6 +79,15 @@ struct sdmmd_am_device {
 
 CFTypeID SDMMD_AMDeviceGetTypeID(void);
 
+typedef enum _AMDInterfaceConnectionType {
+    kAMDInterfaceConnectionTypeInvalid  = 0xffffffff,
+    kAMDInterfaceConnectionTypeUnknown  = 0x0,
+    kAMDInterfaceConnectionTypeDirect   = 0x1,
+    kAMDInterfaceConnectionTypeIndirect = 0x2
+} AMDInterfaceConnectionType;
+typedef AMDInterfaceConnectionType sdmmd_interface_return_t;
+
+
 /* Classes */
 
 #define SDMMD_AMDeviceRef struct sdmmd_am_device*
@@ -264,6 +273,17 @@ sdmmd_sim_return_t SDMMD_GetSIMStatusCode(SDMMD_AMDeviceRef device);
  	device to check activation status of
  */
 sdmmd_activation_return_t SDMMD_GetActivationStatus(SDMMD_AMDeviceRef device);
+
+/*!
+ @function SDMMD_AMDeviceGetInterfaceType
+ @discussion
+    Get the interface type ie USB / WiFi.
+ @param device
+    The device to query
+ */
+sdmmd_interface_return_t SDMMD_AMDeviceGetInterfaceType(SDMMD_AMDeviceRef device);
+
+
 
 // Everything below here you shouldn't be calling, this is internal for the library
 //=================================================================================

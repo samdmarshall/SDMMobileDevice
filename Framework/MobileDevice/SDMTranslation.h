@@ -90,7 +90,7 @@ typedef amd_error_t AMDError;
 #define AMDCreateDeviceList         SDMMD_AMDCreateDeviceList
 #define GetSIMStatusCode            SDMMD_GetSIMStatusCode
 #define GetActivationStatus         SDMMD_GetActivationStatus
-//#define AMDeviceGetInterfaceType    SDMMD_AMDeviceGetInterfaceType
+#define AMDeviceGetInterfaceType    SDMMD_AMDeviceGetInterfaceType
 //#define AMDeviceMountImage          SDMMD_AMDeviceMountImage
 
 //RecoveryModeDevice
