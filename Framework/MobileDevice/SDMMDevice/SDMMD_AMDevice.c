@@ -19,6 +19,9 @@
 #ifndef _SDM_MD_AMDEVICE_C_
 #define _SDM_MD_AMDEVICE_C_
 
+// Ignore OS X SSL deprecation warnings
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 #include "SDMMD_AMDevice.h"
 #include "SDMMD_Functions.h"
 #include "SDMMD_Service.h"

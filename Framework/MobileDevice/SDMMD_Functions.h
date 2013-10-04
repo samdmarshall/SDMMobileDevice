@@ -19,6 +19,9 @@
 #ifndef _SDM_MD_FUNCTIONS_H_
 #define _SDM_MD_FUNCTIONS_H_
 
+// Ignore OS X SSL deprecation warnings
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 #include <CoreFoundation/CoreFoundation.h>
 #include <openssl/crypto.h>
 #include <pthread.h>

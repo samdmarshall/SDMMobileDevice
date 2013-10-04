@@ -19,6 +19,9 @@
 #ifndef _SDM_MD_SERVICE_C_
 #define _SDM_MD_SERVICE_C_
 
+// Ignore OS X SSL deprecation warnings
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 #include "SDMMD_Service.h"
 #include <sys/socket.h>
 #include <sys/types.h>
