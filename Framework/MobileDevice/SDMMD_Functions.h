@@ -313,17 +313,17 @@ static CFTypeRef SDMMD_AMDCopySystemBonjourUniqueID() {
 }
 
 static sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SDMMD_AMDeviceRef device, CFMutableDictionaryRef *dict) {
-	sdmmd_return_t result = 0xe8000007;
+	sdmmd_return_t result = kAMDInvalidArgumentError;
 	char path[1024] = {0};
 	
 	if (device) {
 		if (dict) {
-			result = 0xe8000003;
+			result = kAMDNoResourcesError;
 			CFTypeRef bonjourId = SDMMD_AMDCopySystemBonjourUniqueID();
 			if (bonjourId) {
 				SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
 				CFMutableDictionaryRef fileDict = SDMMD__CreateDictFromFileContents(path);
-				result = 0xe8000025;
+				result = kAMDMissingPairRecordError;
 				if (fileDict) {
 					CFTypeRef systemId = CFDictionaryGetValue(fileDict, CFSTR("SystemBUID"));
 					if (systemId) {
@@ -332,7 +332,7 @@ static sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SD
 							result = SDMMD_store_dict(fileDict, path, true);
 							if (result) {
 								printf("SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier: Could not store pairing record at '%s'.\n",path);
-								result = 0xe800000a;
+								result = kAMDPermissionError;
 							} else {
 								CFRetain(fileDict);
 								*dict = fileDict;

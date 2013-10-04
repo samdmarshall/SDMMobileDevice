@@ -35,7 +35,7 @@ void SDMMD_browse_callback(CFDictionaryRef dict, void* response) {
 }
 
 sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef *response) {
-	sdmmd_return_t result = 0xe8000007;
+	sdmmd_return_t result = kAMDInvalidArgumentError;
 	if (device) {
 		if (options) {
 			CFDictionaryRef dict = NULL;
@@ -43,7 +43,7 @@ sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDict
 			result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_INSTALLATION_PROXY), 0x0, &conn);
 			if (result == 0) {
 				CFMutableDictionaryRef dict = SDMMD_create_dict();
-				result = 0xe8000003;
+				result = kAMDNoResourcesError;
 				if (dict) {
 					result = SDMMD_perform_command(conn, CFSTR("Browse"), 0x0, SDMMD_browse_callback, 2, dict, CFSTR("ClientOptions"), options);
 					if (!result) {
@@ -84,7 +84,7 @@ void SDMMD_preflight_transfer(char *path, struct stat *statRef, char *rStatRef) 
 }
 
 sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFStringRef path, CFDictionaryRef options, void* transferCallback, void* unknown) {
-	sdmmd_return_t result = 0xe8000007;
+	sdmmd_return_t result = kAMDInvalidArgumentError;
 	if (path) {
 		if (conn) {
 			char *cpath = calloc(0x1, 0x401);
@@ -134,7 +134,7 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 											if (rbx != 0x0) {
 												r9 = SDMMD_AFCErrorString(rbx);
 												printf("transfer_package: Could not copy %s to %s on the device.\n", cpath, copyPath);
-												result = 0xe8000001;
+												result = kAMDUndefinedError;
 											}
 											result = SDMMD_AFCConnectionClose(afcConn);
 											if (result) {
@@ -151,11 +151,11 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 							}
 						}*/
 					} else {
-						result = 0xe8000001;
+						result = kAMDUndefinedError;
 					}
 				}
 			} else {
-				result = 0xe8000001;
+				result = kAMDUndefinedError;
 			}
 		}
 	}
@@ -217,7 +217,7 @@ sdmmd_return_t SDMMD_AMDeviceInstallApplication(SDMMD_AMDeviceRef device, CFStri
 		}
 		CFRelease(conn);
 	} else {
-		result = 0xe8000001;
+		result = kAMDUndefinedError;
 	}
 	return result;
 }
