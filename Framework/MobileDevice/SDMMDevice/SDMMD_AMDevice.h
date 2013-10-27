@@ -250,6 +250,21 @@ bool SDMMD_AMDeviceIsAttached(SDMMD_AMDeviceRef device);
 CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key);
 
 /*!
+ @function SDMMD_AMDeviceSetValue
+ @discussion
+    Sets data associated with a particular device key in a domain, see SDMMD_Keys.h for domain and key pairs
+ @param device
+    Device object to set key-value on
+ @param domain
+    CFStringRef of the domain name associated with a key, this can be NULL.
+ @param key
+    CFStringRef of the key of the value to be set on the device.
+ @param value
+    CFTypeRef of the value to be set on the device.
+ */
+sdmmd_return_t SDMMD_AMDeviceSetValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key, CFTypeRef value);
+
+/*!
  @function SDMMD_AMDCreateDeviceList
  @discussion
  	Returns a CFArrayRef of all attached devices.

@@ -398,6 +398,46 @@ CFTypeRef SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain
 	return value;
 }
 
+
+
+sdmmd_return_t SDMMD_send_set_value(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key, CFTypeRef value) {
+	sdmmd_return_t result = kAMDInvalidArgumentError;
+    if (device) {
+        result = kAMDNotConnectedError;
+		if (device->ivars.lockdown_conn) {
+            result = kAMDInvalidArgumentError;
+            if (key && value) {
+                CFMutableDictionaryRef setVal = SDMMD__CreateMessageDict(CFSTR("SetValue"));
+                result = kAMDNoResourcesError;
+                if (setVal) {
+                    if (domain) {
+                        CFDictionarySetValue(setVal, CFSTR("Domain"), domain);
+                    }
+                    CFDictionarySetValue(setVal, CFSTR("Key"), key);
+                    CFDictionarySetValue(setVal, CFSTR("Value"), value);
+                    result = SDMMD_lockconn_send_message(device, setVal);
+                    CFRelease(setVal);
+                    if (result == kAMDSuccess) {
+                        CFMutableDictionaryRef resultDict = NULL;
+                        result = SDMMD_lockconn_receive_message(device, &resultDict);
+                        if (result == kAMDSuccess) {
+                            CFStringRef error = CFDictionaryGetValue(resultDict, CFSTR("Error"));
+                            if (error) {
+                                result = kAMDInvalidResponseError;
+                                if (CFGetTypeID(error) == CFStringGetTypeID()) {
+                                    result = SDMMD__ConvertLockdowndError(error);
+                                }
+                            }
+                            CFRelease(resultDict);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return result;
+}
+
 sdmmd_return_t SDMMD_lockdown_connection_destory(SDMMD_lockdown_conn *lockdownCon) {
 	sdmmd_return_t result = 0x0;
 	if (lockdownCon) {
@@ -1212,6 +1252,27 @@ CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, 
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 	}
 	return value;
+}
+
+sdmmd_return_t SDMMD_AMDeviceSetValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key, CFTypeRef value) {
+	sdmmd_return_t result = kAMDSuccess;
+    if (device) {
+        if (device->ivars.device_active) {
+            SDMMD__mutex_lock(device->ivars.mutex_lock);
+            if (!SDMMD_send_set_value(device, domain, key, value)) {
+                printf("SDMMD_AMDeviceSetValue: Could not set value\n");
+            } else {
+                result = kAMDSuccess;
+            }
+            SDMMD__mutex_unlock(device->ivars.mutex_lock);
+        } else {
+            result = kAMDDeviceDisconnectedError;
+        }
+    } else {
+        result = kAMDInvalidArgumentError;
+    }
+    
+	return result;
 }
 
 SDMMD_AMDeviceRef SDMMD_AMDeviceCreateEmpty() {
