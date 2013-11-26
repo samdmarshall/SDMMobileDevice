@@ -1082,7 +1082,6 @@ bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device) {
 								CFTypeRef buid = SDMMD_AMDCopySystemBonjourUniqueID();
 								if (buid) {
 									CFDictionarySetValue(record, CFSTR("SystemBUID"), buid);
-									
 									var_56 = rax;
 									    CFDictionarySetValue(r13, *_kAMDSystemBonjourUniqueID, rax);
 									    r12 = 0x0;

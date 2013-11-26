@@ -107,9 +107,9 @@ struct USBMuxResponseCode SDMMD_USBMuxParseReponseCode(CFDictionaryRef dict) {
 void SDMMD_USBMuxResponseCallback(void *context, struct USBMuxPacket *packet) {
 	if (packet->payload) {
 		struct USBMuxResponseCode response = SDMMD_USBMuxParseReponseCode(packet->payload);
-		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0x0), ^{
-			printf("usbmuxd returned%s: %d - %s.\n", (response.code ? " error" : ""), response.code, (response.string ? CFStringGetCStringPtr(response.string, CFStringGetFastestEncoding(response.string)) : "Unknown Error Description"));
-		});
+		//dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0x0), ^{
+		//	printf("usbmuxd returned%s: %d - %s.\n", (response.code ? " error" : ""), response.code, (response.string ? CFStringGetCStringPtr(response.string, CFStringGetFastestEncoding(response.string)) : "Unknown Error Description"));
+		//});
 		dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->semaphore);
 	}
 }

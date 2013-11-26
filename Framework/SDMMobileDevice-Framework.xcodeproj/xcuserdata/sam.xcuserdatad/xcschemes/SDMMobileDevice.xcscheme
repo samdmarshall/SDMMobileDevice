@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
+   LastUpgradeVersion = "0460"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -16,7 +17,7 @@
                BlueprintIdentifier = "2215A83617500DDC00AD1981"
                BuildableName = "SDMMobileDevice.framework"
                BlueprintName = "SDMMobileDevice"
-               ReferencedContainer = "container:SDM_MD_Demo.xcodeproj">
+               ReferencedContainer = "container:SDMMobileDevice-Framework.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

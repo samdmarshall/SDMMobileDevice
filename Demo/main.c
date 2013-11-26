@@ -7,6 +7,8 @@ void AFCTest();
 void DemoThree(const char *path);
 void DemoFour(const char *path);
 
+void infoTest();
+
 int main (int argc, const char * argv[]) {
 	// Needed to initialize the library and start the device listener (SDMMD_MCP.h)
 	SDMMobileDevice;
@@ -17,6 +19,7 @@ int main (int argc, const char * argv[]) {
 		//DemoThree(argv[1]);
 		//DemoFour(argv[1]);
 	}
+	infoTest();
 	
 	return 0;
 }
@@ -29,7 +32,7 @@ void DemoOne() {
 	printf("%i device(s) connected!\n",numberOfDevices);
 	
 	
-	/*if (numberOfDevices) {
+	if (numberOfDevices) {
 		// return type (uint32_t) corresponds with known return codes (SDMMD_Error.h)
 		sdmmd_return_t result;
 
@@ -56,7 +59,7 @@ void DemoOne() {
 				CFShow(deviceOS);
 				
 				// creating a session to talk to more
-				//result = SDMMD_AMDeviceStartSession(device);
+				result = SDMMD_AMDeviceStartSession(device);
 				if (SDM_MD_CallSuccessful(result)) {
 					// get device phone number
 					CFTypeRef devicePhoneNumber = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kPhoneNumber));
@@ -70,14 +73,14 @@ void DemoOne() {
 					if (deviceLanguage)
 						CFShow(deviceLanguage);
 					
-				//result = SDMMD_AMDeviceStopSession(device);
+					result = SDMMD_AMDeviceStopSession(device);
 				}
 				
 				// disconnect when finished
 				result = SDMMD_AMDeviceDisconnect(device);
 			}
 		}
-	}*/
+	}
 }
 
 void DemoTwo() {
@@ -273,4 +276,72 @@ void AFCTest() {
 			}
 		}
 	}
+}
+
+void infoTest() {
+	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
+	uint32_t numberOfDevices = CFArrayGetCount(devices);	
+	if (numberOfDevices) {
+		sdmmd_return_t result;
+		
+		uint32_t index;
+		// Iterating over connected devices
+		for (index = 0; index < numberOfDevices; index++) {
+			
+			// getting the device object from the array of connected devices
+			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
+			
+			// attempting to connect to the device
+			result = SDMMD_AMDeviceConnect(device);
+			if (SDM_MD_CallSuccessful(result)) {
+				result = SDMMD_AMDeviceIsPaired(device);
+				if (result) {
+				 	
+				}
+				// creating a session to talk to more
+				result = SDMMD_AMDeviceStartSession(device);
+				if (SDM_MD_CallSuccessful(result)) {
+					
+					CFTypeRef deviceModelCF = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kProductType));
+					char *deviceModel = SDMCFStringGetString(deviceModelCF);
+					CFRelease(deviceModelCF);
+					
+					CFTypeRef deviceSerialCF = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kSerialNumber));
+					char *deviceSerial = SDMCFStringGetString(deviceSerialCF);
+					CFRelease(deviceSerialCF);
+					
+					CFTypeRef deviceOSCF = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kProductVersion));
+					char *deviceOS = SDMCFStringGetString(deviceOSCF);
+					CFRelease(deviceOSCF);
+					
+					CFTypeRef deviceOSBuildCF = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kBuildVersion));
+					char *deviceOSBuild = SDMCFStringGetString(deviceOSBuildCF);
+					CFRelease(deviceOSBuildCF);
+					
+					CFTypeRef deviceIsCellular = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kTelephonyCapability));
+					if (CFGetTypeID(deviceIsCellular) == CFBooleanGetTypeID()) {
+						Boolean isCellular = CFBooleanGetValue(deviceIsCellular);
+						if (isCellular) {
+							CFTypeRef deviceCarrier = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kCarrierBundleInfoArray));
+							CFShow(deviceCarrier);
+							
+							CFTypeRef deviceIMEI = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kInternationalMobileEquipmentIdentity));
+							CFShow(deviceIMEI);
+							
+						} else {
+							
+						}
+					} else {
+						
+					}
+					result = SDMMD_AMDeviceStopSession(device);
+				}
+				
+				// disconnect when finished
+				result = SDMMD_AMDeviceDisconnect(device);
+			}
+		}
+
+	}
+	CFRelease(devices);
 }
