@@ -79,6 +79,15 @@ struct sdmmd_am_device {
 
 CFTypeID SDMMD_AMDeviceGetTypeID(void);
 
+typedef enum _AMDInterfaceConnectionType {
+    kAMDInterfaceConnectionTypeInvalid  = 0xffffffff,
+    kAMDInterfaceConnectionTypeUnknown  = 0x0,
+    kAMDInterfaceConnectionTypeDirect   = 0x1,
+    kAMDInterfaceConnectionTypeIndirect = 0x2
+} AMDInterfaceConnectionType;
+typedef AMDInterfaceConnectionType sdmmd_interface_return_t;
+
+
 /* Classes */
 
 #define SDMMD_AMDeviceRef struct sdmmd_am_device*
@@ -241,6 +250,21 @@ bool SDMMD_AMDeviceIsAttached(SDMMD_AMDeviceRef device);
 CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key);
 
 /*!
+ @function SDMMD_AMDeviceSetValue
+ @discussion
+    Sets data associated with a particular device key in a domain, see SDMMD_Keys.h for domain and key pairs
+ @param device
+    Device object to set key-value on
+ @param domain
+    CFStringRef of the domain name associated with a key, this can be NULL.
+ @param key
+    CFStringRef of the key of the value to be set on the device.
+ @param value
+    CFTypeRef of the value to be set on the device.
+ */
+sdmmd_return_t SDMMD_AMDeviceSetValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key, CFTypeRef value);
+
+/*!
  @function SDMMD_AMDCreateDeviceList
  @discussion
  	Returns a CFArrayRef of all attached devices.
@@ -264,6 +288,17 @@ sdmmd_sim_return_t SDMMD_GetSIMStatusCode(SDMMD_AMDeviceRef device);
  	device to check activation status of
  */
 sdmmd_activation_return_t SDMMD_GetActivationStatus(SDMMD_AMDeviceRef device);
+
+/*!
+ @function SDMMD_AMDeviceGetInterfaceType
+ @discussion
+    Get the interface type ie USB / WiFi.
+ @param device
+    The device to query
+ */
+sdmmd_interface_return_t SDMMD_AMDeviceGetInterfaceType(SDMMD_AMDeviceRef device);
+
+
 
 // Everything below here you shouldn't be calling, this is internal for the library
 //=================================================================================
