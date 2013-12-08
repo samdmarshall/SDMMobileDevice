@@ -9,14 +9,51 @@
 #import "SDM_MD_DemoAppDelegate.h"
 #import "MDDemoMainSplitView.h"
 #import <SDMMobileDevice/SDMMobileDevice.h>
-#import <Anthem/Anthem.h>
+//#import <Anthem/Anthem.h>
 
 @implementation SDM_MD_DemoAppDelegate
 
 @synthesize window;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-	Anthem *test = [[Anthem alloc] init];
+	
+	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
+	uint32_t numberOfDevices = CFArrayGetCount(devices);
+	if (numberOfDevices) {
+		sdmmd_return_t result;
+		
+		uint32_t index;
+		// Iterating over connected devices
+		for (index = 0; index < numberOfDevices; index++) {
+			
+			// getting the device object from the array of connected devices
+			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
+			
+			// attempting to connect to the device
+			result = SDMMD_AMDeviceConnect(device);
+			if (SDM_MD_CallSuccessful(result)) {
+				result = SDMMD_AMDeviceIsPaired(device);
+				if (result) {
+				 	
+				}
+				// creating a session to talk to more
+				result = SDMMD_AMDeviceStartSession(device);
+				if (SDM_MD_CallSuccessful(result)) {
+					
+					CFTypeRef deviceCarrier = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kCarrierBundleInfoArray));
+					CFShow(deviceCarrier);
+					
+					result = SDMMD_AMDeviceStopSession(device);
+				}
+				
+				// disconnect when finished
+				result = SDMMD_AMDeviceDisconnect(device);
+			}
+		}
+		
+	}
+
+	//Anthem *test = [[Anthem alloc] init];
 	//MDDemoMainSplitView *splitView = [[MDDemoMainSplitView alloc] initWithFrame:[self.window.contentView bounds]];
 	//[self.window.contentView addSubview:splitView];
 	// Insert code here to initialize your application 
