@@ -20,6 +20,9 @@
 #ifndef _SDM_MD_SERVICE_C_
 #define _SDM_MD_SERVICE_C_
 
+// Ignore OS X SSL deprecation warnings
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 #include "SDMMD_Service.h"
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -97,13 +100,13 @@ sdmmd_return_t SDMMD_DirectServiceSend(SocketConnection handle, CFDataRef data) 
 }
 
 sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
-	size_t recieved;
+	size_t received;
 	uint32_t length = 0;
 	if (handle.isSSL == true || CheckIfExpectingResponse(handle, 10000)) {
 		if (handle.isSSL) {
-			recieved = SSL_read(handle.socket.ssl, &length, 0x4);
+			received = SSL_read(handle.socket.ssl, &length, 0x4);
 		} else {
-			recieved = recv(handle.socket.conn, &length, 0x4, 0);
+			received = recv(handle.socket.conn, &length, 0x4, 0);
 		}
 		length = ntohl(length);
 		if (sizeof(length) == 0x4) {
@@ -111,13 +114,13 @@ sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 			uint32_t remainder = length;
 			while (remainder) {
 				if (handle.isSSL) {
-					recieved = SSL_read(handle.socket.ssl, &buffer[length-remainder], remainder);
+					received = SSL_read(handle.socket.ssl, &buffer[length-remainder], remainder);
 				} else {
-					recieved = recv(handle.socket.conn, &buffer[length-remainder], remainder, 0);
+					received = recv(handle.socket.conn, &buffer[length-remainder], remainder, 0);
 				}
-				if (!recieved)
+				if (!received)
 					break;
-				remainder -= recieved;
+				remainder -= received;
 			}
 			*data = CFDataCreate(kCFAllocatorDefault, buffer, length);
 			free(buffer);
@@ -132,17 +135,17 @@ sdmmd_return_t SDMMD_DirectServiceReceive(SocketConnection handle, CFDataRef *da
 		if (handle.isSSL == true || CheckIfExpectingResponse(handle, 1000)) {
 			unsigned char *buffer = calloc(1, size);
 			uint32_t remainder = size;
-			size_t recieved;
+			size_t received;
 			while (remainder) {
 				if (handle.isSSL) {
-					recieved = SSL_read(handle.socket.ssl, &buffer[size-remainder], remainder);
+					received = SSL_read(handle.socket.ssl, &buffer[size-remainder], remainder);
 				} else {
-					recieved = recv(handle.socket.conn, &buffer[size-remainder], remainder, 0);
+					received = recv(handle.socket.conn, &buffer[size-remainder], remainder, 0);
 				}
-				printf("recieved: %i\n",recieved);
-				if (!recieved)
+				printf("recieved: %llu\n",(uint64_t)received);
+				if (!received)
 					break;
-				remainder -= recieved;
+				remainder -= received;
 			}
 			*data = CFDataCreate(kCFAllocatorDefault, buffer, size);
 			CFShow(*data);
