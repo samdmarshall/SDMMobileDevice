@@ -89,11 +89,15 @@ void AttachToDevice(char *udid) {
 					CFRelease(deviceName);
 				}
 				while (SDM_MD_CallSuccessful(result)) {
-					unsigned char syslogRelayBuffer[SysLogBufferSize];
-					CFDataRef syslogData = CFDataCreate(kCFAllocatorDefault, syslogRelayBuffer, SysLogBufferSize);
-					result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(syslog), (CFDataRef*)&syslogData);
-					fwrite(CFDataGetBytePtr(syslogData), sizeof(char), SysLogBufferSize, stdout);
-					CFRelease(syslogData);
+					if (SDMMD_AMDeviceIsValid(device)) {
+						unsigned char syslogRelayBuffer[SysLogBufferSize];
+						CFDataRef syslogData = CFDataCreate(kCFAllocatorDefault, syslogRelayBuffer, SysLogBufferSize);
+						result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(syslog), (CFDataRef*)&syslogData);
+						fwrite(CFDataGetBytePtr(syslogData), sizeof(char), SysLogBufferSize, stdout);
+						CFRelease(syslogData);
+					} else {
+						break;
+					}
 				}
 				printf("\n\nLost Connection with Device\n");
 			}
@@ -101,7 +105,6 @@ void AttachToDevice(char *udid) {
 			printf("Cound not find device with that UDID\n");
 		}
 	}
-	CFRelease(devices);
 }
 
 int main(int argc, const char * argv[]) {
