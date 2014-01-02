@@ -99,7 +99,7 @@ static CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
 	CFMutableDictionaryRef dict = NULL;
 	if (path) {
 		struct stat pathStat;
-		int result = lstat(path, &pathStat);
+		ssize_t result = lstat(path, &pathStat);
 		if (result != -1) {
 			int ref = open(path, O_RDONLY);
 			if (ref != -1) {
@@ -291,8 +291,9 @@ static sdmmd_return_t SDMMD_store_dict(CFDictionaryRef dict, char *path, bool mo
 		}
 		close(ref);
 		result = chmod(path, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-	} else
+	} else {
 		result = kAMDUndefinedError;
+	}
 	return result;
 }
 

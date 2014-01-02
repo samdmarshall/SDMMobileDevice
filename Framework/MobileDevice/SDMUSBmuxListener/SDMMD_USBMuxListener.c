@@ -108,9 +108,11 @@ struct USBMuxResponseCode SDMMD_USBMuxParseReponseCode(CFDictionaryRef dict) {
 void SDMMD_USBMuxResponseCallback(void *context, struct USBMuxPacket *packet) {
 	if (packet->payload) {
 		struct USBMuxResponseCode response = SDMMD_USBMuxParseReponseCode(packet->payload);
-		//dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0x0), ^{
-		//	printf("usbmuxd returned%s: %d - %s.\n", (response.code ? " error" : ""), response.code, (response.string ? CFStringGetCStringPtr(response.string, CFStringGetFastestEncoding(response.string)) : "Unknown Error Description"));
-		//});
+		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0x0), ^{
+			if (response.code) {
+				printf("usbmuxd returned%s: %d - %s.\n", (response.code ? " error" : ""), response.code, (response.string ? CFStringGetCStringPtr(response.string, CFStringGetFastestEncoding(response.string)) : "Unknown Error Description"));
+			}
+		});
 		dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->semaphore);
 	}
 }
@@ -255,7 +257,7 @@ uint32_t SDMMD_ConnectToUSBMux() {
 		strncpy(address.sun_path, mux, 0x68);
         address.sun_len = SUN_LEN(&address);
 
-		result = connect(sock, &address, sizeof(struct sockaddr_un));
+		result = connect(sock, (const struct sockaddr *)&address, sizeof(struct sockaddr_un));
 		ioctl(sock, 0x8004667e/*, nope */); // _USBMuxSetSocketBlockingMode
 	}
 	return sock;
@@ -369,11 +371,11 @@ void SDMMD_USBMuxListenerSend(SDMMD_USBMuxListenerRef listener, struct USBMuxPac
 void SDMMD_USBMuxSend(uint32_t sock, struct USBMuxPacket *packet) {	
 	CFDataRef xmlData = CFPropertyListCreateXMLData(kCFAllocatorDefault, packet->payload);
 	char *buffer = (char *)CFDataGetBytePtr(xmlData);
-	uint32_t result = send(sock, &packet->body, sizeof(struct USBMuxPacketBody), 0x0);
+	ssize_t result = send(sock, &packet->body, sizeof(struct USBMuxPacketBody), 0x0);
 	if (result == sizeof(struct USBMuxPacketBody)) {
 		if (packet->body.length > result) {
-			uint32_t payloadSize = packet->body.length - result;
-			uint32_t remainder = payloadSize;
+			ssize_t payloadSize = packet->body.length - result;
+			ssize_t remainder = payloadSize;
 			while (remainder) {
 				result = send(sock, &buffer[payloadSize-remainder], sizeof(char), 0x0);
 				if (result != sizeof(char))
@@ -390,12 +392,12 @@ void SDMMD_USBMuxListenerReceive(SDMMD_USBMuxListenerRef listener, struct USBMux
 }
 
 void SDMMD_USBMuxReceive(uint32_t sock, struct USBMuxPacket *packet) {
-	uint32_t result = recv(sock, &packet->body, sizeof(struct USBMuxPacketBody), 0x0);
+	ssize_t result = recv(sock, &packet->body, sizeof(struct USBMuxPacketBody), 0x0);
 	if (result == sizeof(struct USBMuxPacketBody)) {
-		uint32_t payloadSize = packet->body.length - result;
+		ssize_t payloadSize = packet->body.length - result;
 		if (payloadSize) {
 			char *buffer = calloc(0x1, payloadSize);
-			uint32_t remainder = payloadSize;
+			ssize_t remainder = payloadSize;
 			while (remainder) {
 				result = recv(sock, &buffer[payloadSize-remainder], sizeof(char), 0x0);
 				if (result != sizeof(char))
@@ -452,7 +454,7 @@ struct USBMuxPacket * SDMMD_USBMuxCreatePacketType(SDMMD_USBMuxPacketMessageType
 	}
 
 	CFDataRef xmlData = CFPropertyListCreateXMLData(kCFAllocatorDefault, packet->payload);
-	packet->body.length = 0x10 + CFDataGetLength(xmlData);
+	packet->body.length = 0x10 + (uint32_t)CFDataGetLength(xmlData);
 	CFRelease(xmlData);
 	return packet;
 }
