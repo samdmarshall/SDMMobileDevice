@@ -193,7 +193,10 @@ void PrintSysLog() {
 								LogArg(COLOR_YEL,"%s",type);
 							}
 							LogArg(COLOR_NRM,": ");
-							LogArg(COLOR_NRM,message);
+#pragma clang push // SDM: we should probably remove this...
+#pragma clang diagnostic ignored "-Wformat-security"
+							LogArg(COLOR_NRM,message); // SDM: PFFFFTTT, we know what we are doing...
+#pragma clang pop
 							fflush(NULL);
 							indexLength = lineRange.location;
 						} else if (count == 0x1) {
