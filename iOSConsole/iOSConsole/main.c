@@ -51,6 +51,7 @@ void AttachToDevice(char *udid) {
 	if (numberOfDevices) {
 		// return type (uint32_t) corresponds with known return codes (SDMMD_Error.h)
 		sdmmd_return_t result;
+		bool foundDevice = false;
 		char *deviceId;
 		uint32_t index;
 		// Iterating over connected devices
@@ -66,32 +67,38 @@ void AttachToDevice(char *udid) {
 				deviceId = (char*)CFStringGetCStringPtr(deviceUDID,kCFStringEncodingMacRoman);
 				CFRelease(deviceUDID);
 				if (strncmp(udid, deviceId, strlen(deviceId)) == 0x0) {
+					foundDevice = true;
 					break;
 				}
 				SDMMD_AMDeviceDisconnect(device);
 			}
 		}
-		SDMMD_AMConnectionRef syslog;
-		SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
-		result = SDMMD_AMDeviceStartSession(device);
-		if (SDM_MD_CallSuccessful(result)) {
-			result = SDMMD_AMDeviceStartService(device, CFSTR(AMSVC_SYSLOG_RELAY), NULL, &syslog);
+		if (foundDevice) {
+			SDMMD_AMConnectionRef syslog;
+			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
+			result = SDMMD_AMDeviceStartSession(device);
 			if (SDM_MD_CallSuccessful(result)) {
-				CFTypeRef deviceName = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kDeviceName));
-				char *name = (char*)CFStringGetCStringPtr(deviceName,kCFStringEncodingMacRoman);
-				if (!name) {
-					name = "device";
+				result = SDMMD_AMDeviceStartService(device, CFSTR(AMSVC_SYSLOG_RELAY), NULL, &syslog);
+				if (SDM_MD_CallSuccessful(result)) {
+					CFTypeRef deviceName = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kDeviceName));
+					char *name = (char*)CFStringGetCStringPtr(deviceName,kCFStringEncodingMacRoman);
+					if (!name) {
+						name = "device";
+					}
+					printf("Connected to %s, loading syslog...\n",name);
+					CFRelease(deviceName);
 				}
-				printf("Connected to %s, loading syslog...\n",name);
-				CFRelease(deviceName);
+				while (SDM_MD_CallSuccessful(result)) {
+					unsigned char syslogRelayBuffer[SysLogBufferSize];
+					CFDataRef syslogData = CFDataCreate(kCFAllocatorDefault, syslogRelayBuffer, SysLogBufferSize);
+					result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(syslog), (CFDataRef*)&syslogData);
+					fwrite(CFDataGetBytePtr(syslogData), sizeof(char), SysLogBufferSize, stdout);
+					CFRelease(syslogData);
+				}
+				printf("\n\nLost Connection with Device\n");
 			}
-			while (SDM_MD_CallSuccessful(result)) {
-				unsigned char syslogRelayBuffer[SysLogBufferSize];
-				CFDataRef syslogData = CFDataCreate(kCFAllocatorDefault, syslogRelayBuffer, SysLogBufferSize);
-				result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(syslog), (CFDataRef*)&syslogData);
-				fwrite(CFDataGetBytePtr(syslogData), sizeof(char), SysLogBufferSize, stdout);
-				CFRelease(syslogData);
-			}
+		} else {
+			printf("Cound not find device with that UDID\n");
 		}
 	}
 	CFRelease(devices);
@@ -125,7 +132,6 @@ int main(int argc, const char * argv[]) {
 	}
 	if (attachDevice) {
 		AttachToDevice((char*)argv[0x2]);
-		printf("\n\nLost Connection with Device\n");
 	}
     return 0;
 }
