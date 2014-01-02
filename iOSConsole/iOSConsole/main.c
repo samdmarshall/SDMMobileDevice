@@ -180,7 +180,7 @@ void PrintSysLog() {
 							LogArg(COLOR_GRN,"%s",process);
 							LogArg(COLOR_NRM," ");
 							LogArg(COLOR_NRM,"[");
-							LogArg(COLOR_YEL,"%i",pid);
+							LogArg(COLOR_BLU,"%i",pid);
 							LogArg(COLOR_NRM,"]");
 							LogArg(COLOR_NRM," ");
 							if (strncmp(type, kDebugType, strlen(kDebugType)) == 0x0) {
@@ -190,7 +190,7 @@ void PrintSysLog() {
 							} else if (strncmp(type, kErrorType, strlen(kErrorType)) == 0x0) {
 								LogArg(COLOR_RED,"%s",type);
 							} else {
-								LogArg(COLOR_BLU,"%s",type);
+								LogArg(COLOR_YEL,"%s",type);
 							}
 							LogArg(COLOR_NRM,": ");
 							LogArg(COLOR_NRM,message);
