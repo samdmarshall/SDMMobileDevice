@@ -190,7 +190,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 				bool closeOnInvalidate = true;
 				bool directSocket = false;
 				bool canConnect = true;
-				CFShow(options);
+				//CFShow(options);
 				if (options) {
 					CFTypeRef closeVal = CFDictionaryGetValue(options, CFSTR("CloseOnInvalidate"));
 					if (closeVal) {
@@ -276,8 +276,8 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 							}
 						}
 					} else {
-						printf("SERVICE: %s!\n",cservice);
-						printf("PORT: %i!\n",port);
+						//printf("SERVICE: %s!\n",cservice);
+						//printf("PORT: %i!\n",port);
 						result = SDMMD__connect_to_port(device, port, timeoutConnection, &socket, ((uint32_t)ssl & 0x1) & 0xff);
 						if (result == 0x0) {
 							if (enableSSL) {
@@ -396,7 +396,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 	if (mutexLock) {
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 	}
-	printf("SDMMD_AMDeviceSecureStartService: Returned %x starting service %s on device at port %d, out fd = %d.\n", result, cservice, port, socket);
+	//printf("SDMMD_AMDeviceSecureStartService: Returned %x starting service %s on device at port %d, out fd = %d.\n", result, cservice, port, socket);
 	free(cservice);
 	return result;
 }
@@ -442,7 +442,7 @@ sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef 
 			}
 		}*/
 	}
-	printf("SDMMD_AMDeviceStartService: returning 0x%x, socket is %d.\n",result, socket);
+	//printf("SDMMD_AMDeviceStartService: returning 0x%x, socket is %d.\n",result, socket);
 	return result;
 }
 

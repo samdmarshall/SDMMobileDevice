@@ -290,7 +290,7 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 		(*listener)->socket = SDMMD_ConnectToUSBMux();
 		(*listener)->socketSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, (*listener)->socket, 0x0, (*listener)->socketQueue);
 		dispatch_source_set_event_handler((*listener)->socketSource, ^{
-            printf("socketSourceEventHandler: fired\n");
+            //printf("socketSourceEventHandler: fired\n");
 			struct USBMuxPacket *packet = (struct USBMuxPacket *)calloc(0x1, sizeof(struct USBMuxPacket));
 			SDMMD_USBMuxReceive((*listener)->socket, packet);
 			if (CFPropertyListIsValid(packet->payload, kCFPropertyListXMLFormat_v1_0)) {

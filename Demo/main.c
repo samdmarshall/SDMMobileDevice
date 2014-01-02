@@ -9,17 +9,60 @@ void DemoFour(const char *path);
 
 void infoTest();
 
+void KeyExplore(char *domain, char *key) {
+	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
+	
+	uint32_t numberOfDevices = CFArrayGetCount(devices);
+	
+	if (numberOfDevices) {
+		// return type (uint32_t) corresponds with known return codes (SDMMD_Error.h)
+		sdmmd_return_t result;
+		
+		uint32_t index;
+		// Iterating over connected devices
+		for (index = 0; index < numberOfDevices; index++) {
+			
+			// getting the device object from the array of connected devices
+			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
+			
+			// attempting to connect to the device
+			result = SDMMD_AMDeviceConnect(device);
+			if (SDM_MD_CallSuccessful(result)) {
+				
+				// creating a session to talk to more
+				result = SDMMD_AMDeviceStartSession(device);
+				if (SDM_MD_CallSuccessful(result)) {
+					// get device phone number
+					CFStringRef domainKey = CFStringCreateWithCString(kCFAllocatorDefault,domain,kCFStringEncodingUTF8);
+					CFStringRef keyValue = CFStringCreateWithCString(kCFAllocatorDefault,key,kCFStringEncodingUTF8);
+					CFTypeRef keyTest = SDMMD_AMDeviceCopyValue(device, domainKey, keyValue);
+					// print language settings
+					if (keyTest)
+						CFShow(keyTest);
+					
+					result = SDMMD_AMDeviceStopSession(device);
+				}
+				
+				// disconnect when finished
+				result = SDMMD_AMDeviceDisconnect(device);
+			}
+		}
+	}
+
+}
+
 int main (int argc, const char * argv[]) {
 	// Needed to initialize the library and start the device listener (SDMMD_MCP.h)
 	SDMMobileDevice;
 	
+	KeyExplore("","BrickState");
 	//DemoOne();
 	//DemoTwo();
 	if (argc == 2) {
 		//DemoThree(argv[1]);
 		//DemoFour(argv[1]);
 	}
-	infoTest();
+	//infoTest();
 	
 	return 0;
 }
@@ -68,7 +111,7 @@ void DemoOne() {
 						CFShow(devicePhoneNumber);
 					
 					// get device language settings
-					CFTypeRef deviceLanguage = SDMMD_AMDeviceCopyValue(device, CFSTR(kInternationalDomain), CFSTR(kLanguage));
+					CFTypeRef deviceLanguage = SDMMD_AMDeviceCopyValue(device, CFSTR("com.apple.MobileDevice"), CFSTR("LogLevel"));
 					// print language settings
 					if (deviceLanguage)
 						CFShow(deviceLanguage);

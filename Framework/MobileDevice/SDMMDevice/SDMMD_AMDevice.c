@@ -893,7 +893,7 @@ sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, b
 			result = kAMDDeviceDisconnectedError;
 			if (device->ivars.device_active) {
 				if (device->ivars.connection_type == 1) {
-					uint32_t dataLen = CFDataGetLength(device->ivars.network_address);
+					uint32_t dataLen = (uint32_t)CFDataGetLength(device->ivars.network_address);
 					struct sockaddr *address = calloc(1, dataLen); 
 					if (dataLen == 0x80) {
 						CFDataGetBytes(device->ivars.network_address, CFRangeMake(0, dataLen), (UInt8*)address);

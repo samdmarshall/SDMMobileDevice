@@ -142,13 +142,13 @@ sdmmd_return_t SDMMD_DirectServiceReceive(SocketConnection handle, CFDataRef *da
 				} else {
 					received = recv(handle.socket.conn, &buffer[size-remainder], remainder, 0);
 				}
-				printf("recieved: %llu\n",(uint64_t)received);
+				//printf("recieved: %llu\n",(uint64_t)received);
 				if (!received)
 					break;
 				remainder -= received;
 			}
 			*data = CFDataCreate(kCFAllocatorDefault, buffer, size);
-			CFShow(*data);
+			//CFShow(*data);
 			free(buffer);
 		}
 		return kAMDSuccess;

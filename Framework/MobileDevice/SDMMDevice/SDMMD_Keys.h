@@ -145,7 +145,7 @@
 
 #define kUserSetLanaguage						"UserSetLanguage"
 #define kUserSetLocale							"UserSetLocale"
-#define kDiagnosticsAllowed						"DiagnosticsAllowed"
+#define kDiagnosticsAllowed						"DiagnosticsAllowed" // ???
 #define kFileSharingEnabled						"FileSharingEnabled"
 
 #pragma mark -
@@ -286,6 +286,10 @@
 #define kSupportsAntiPhishing					"SupportsAntiPhishing"
 #define kVideoCodecs							"VideoCodecs"
 #define kBatteryPollInterval					"BatteryPollInterval"
+#define kFairPlayCertificate					"FairPlayCertificate"
+#define kFairPlayID								"FairPlayID"
+#define kFairPlayDeviceType						"FairPlayDeviceType"
+#define kKeyTypeSupportVersion					"KeyTypeSupportVersion"
 
 #pragma mark -
 #pragma mark Developer Domain Keys
@@ -339,5 +343,14 @@
 #define kPurpleBuddyDomain						"com.apple.purplebuddy"
 
 #define kSetupState								"SetupState"
+
+
+#pragma mark -
+#pragma mark Find My iPhone Domain Keys
+#pragma mark -
+
+#define kfmipDomain								"com.apple.fmip"
+
+#define kIsAssociated							"IsAssociated"
 
 #endif
