@@ -28,7 +28,7 @@
 #pragma mark -
 #pragma mark Logging
 
-#ifndef DEBUG
+#ifdef DEBUG
 	#define DEBUG_LOGGER true
 	#define RELEASE_LOGGER false
 #else
@@ -62,6 +62,7 @@ static char* PrintCodeString[PrintCode_Count] = {
 	"???"
 };
 
+#define LoggerPrintCodeColorDirect(code) (LoggerUseColorCodes ? code : "")
 #define LoggerPrintCodeColor(code) (LoggerUseColorCodes ? PrintColourCode[code] : "")
 #define LoggerPrintCode(code) (PrintCodeString[code])
 
@@ -95,13 +96,28 @@ static char* PrintCodeString[PrintCode_Count] = {
 		printf("\n"); \
 	}
 
+#define DArg(code,...) \
+	if (DEBUG_LOGGER) { \
+		printf("%s",LoggerPrintCodeColorDirect(code)); \
+		printf(__VA_ARGS__); \
+	}
+
+#define RArg(code,...) \
+	if (RELEASE_LOGGER) { \
+		printf("%s",LoggerPrintCodeColorDirect(code)); \
+		printf(__VA_ARGS__); \
+	}
+
+
 
 #ifdef DEBUG
 #define LogPrint(code,...) DPrint(code,__VA_ARGS__)
 #define LogLine(code,...) DLine(code,__VA_ARGS__)
+#define LogArg(code,...) DArg(code,__VA_ARGS__)
 #else
 #define LogPrint(code,...) RPrint(code,__VA_ARGS__)
 #define LogLine(code,...) RLine(code,__VA_ARGS__)
+#define LogArg(code,...) RArg(code,__VA_ARGS__)
 #endif
 
 

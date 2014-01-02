@@ -12,6 +12,10 @@
 #include "SDMMobileDevice.h"
 #include "Core.h"
 
+static char *kDebugType = "<Debug>";
+static char *kNoticeType = "<Notice>";
+static char *kErrorType = "<Error>";
+
 static char *listArg = "--list";
 static char *attachArg = "--attach";
 
@@ -156,9 +160,43 @@ void PrintSysLog() {
 				if (lineRange.location == kCFNotFound) {
 					bufferCounter++;
 				} else {
-					UInt8 *lineBuffer = calloc(0x1, lineRange.location);
-					CFDataGetBytes(logData, CFRangeMake(startingIndex, lineRange.location), lineBuffer);
-					fwrite(lineBuffer, sizeof(char), lineRange.location-startingIndex, stdout);
+					UInt8 *lineBuffer = calloc(0x1, 0x1000); // 4096 is the max line length for syslog
+					CFDataGetBytes(logData, CFRangeMake(startingIndex+0x3, lineRange.location), lineBuffer);
+					// lineBuffer now contains the whole line.
+					dispatch_sync(dispatch_get_main_queue(), ^{
+						char month[0x4], process[0x80], type[0x80], message[0x1000], pidstr[0x80],name[0x100];
+						int day, hour, minute, second, pid, count;
+						bool hasName = (lineBuffer[0x10] == ' ' ? false : true);
+						if (hasName) {
+							count = sscanf((char*)lineBuffer, "%3s %2i %2i:%2i:%2i %s %[^\[][%[^]]] %[^:]: %[^\n]",month,&day,&hour,&minute,&second,name,process,pidstr,type,message);
+						} else {
+							count = sscanf((char*)lineBuffer, "%3s %2i %2i:%2i:%2i  %[^\[][%[^]]] %[^:]: %[^\n]",month,&day,&hour,&minute,&second,process,pidstr,type,message);
+						}
+						pid = atoi(pidstr);
+						if (count == 0x9 + hasName) {
+							LogArg(COLOR_NRM,"%3s %2i %02i:%02i:%02i",month,day,hour,minute,second);
+							LogArg(COLOR_NRM," ");
+							LogArg(COLOR_GRN,"%s",process);
+							LogArg(COLOR_NRM," ");
+							LogArg(COLOR_NRM,"[");
+							LogArg(COLOR_YEL,"%i",pid);
+							LogArg(COLOR_NRM,"]");
+							LogArg(COLOR_NRM," ");
+							if (strncmp(type, kDebugType, strlen(kDebugType)) == 0x0) {
+								LogArg(COLOR_MAG,"%s",type);
+							} else if (strncmp(type, kNoticeType, strlen(kNoticeType)) == 0x0) {
+								LogArg(COLOR_CYN,"%s",type);
+							} else if (strncmp(type, kErrorType, strlen(kErrorType)) == 0x0) {
+								LogArg(COLOR_RED,"%s",type);
+							} else {
+								LogArg(COLOR_BLU,"%s",type);
+							}
+							LogArg(COLOR_NRM,": ");
+							LogArg(COLOR_NRM,message);
+							LogArg(COLOR_NRM,"\n");
+							fflush(NULL);
+						}
+					});
 					CFDataDeleteBytes(syslogBuffer, CFRangeMake(startingIndex, lineRange.location));
 					bufferCounter = 0x1;
 				}
