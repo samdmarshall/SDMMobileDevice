@@ -137,91 +137,82 @@ void AttachToDevice(char *udid) {
 
 void PrintSysLog() {
 	int token;
-	CFURLRef filePath = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, CFSTR("/Users/sam/Desktop/sys.log"),kCFURLPOSIXPathStyle,false);
-	__block CFWriteStreamRef syslogFile = CFWriteStreamCreateWithFile(kCFAllocatorDefault,filePath);
-	Boolean streamStatus = CFWriteStreamOpen(syslogFile);
-	if (streamStatus) {
-		uint32_t status = notify_register_dispatch(updateLogNotifyName, &token, updatelogQueue, ^(int token){
-			__block CFDataRef logData;
-			dispatch_sync(operatingQueue, ^{
-				CFDataRef newlineData = CFDataCreate(kCFAllocatorDefault, (UInt8*)&newlineBytes, 0x3);
-				logData = CFDataCreateCopy(kCFAllocatorDefault, syslogBuffer);
-				CFRange lineRange;
-				Boolean foundRange = false;
-				__block CFIndex startingIndex = 0x0;
-				__block CFIndex indexLength = 0x0;
-				while (!foundRange) {
-					lineRange = CFDataFind(logData, newlineData, CFRangeMake(startingIndex, SysLogBufferSize*bufferCounter), kCFDataSearchBackwards);
-					if (lineRange.location != 0) {
-						foundRange = true;
-					} else {
-						startingIndex += lineRange.length;
-					}
-				}
-				if (lineRange.location == kCFNotFound) {
-					bufferCounter++;
+	uint32_t status = notify_register_dispatch(updateLogNotifyName, &token, updatelogQueue, ^(int token){
+		__block CFDataRef logData;
+		dispatch_sync(operatingQueue, ^{
+			CFDataRef newlineData = CFDataCreate(kCFAllocatorDefault, (UInt8*)&newlineBytes, 0x3);
+			logData = CFDataCreateCopy(kCFAllocatorDefault, syslogBuffer);
+			CFRange lineRange;
+			Boolean foundRange = false;
+			__block CFIndex startingIndex = 0x0;
+			__block CFIndex indexLength = 0x0;
+			while (!foundRange) {
+				lineRange = CFDataFind(logData, newlineData, CFRangeMake(startingIndex, SysLogBufferSize*bufferCounter), kCFDataSearchBackwards);
+				if (lineRange.location != 0) {
+					foundRange = true;
 				} else {
-					UInt8 *lineBuffer = calloc(0x1, 0x1000); // 4096 is the max line length for syslog
-					CFDataGetBytes(logData, CFRangeMake(startingIndex+0x3, lineRange.location), lineBuffer);
-					// lineBuffer now contains the whole line.
-					dispatch_sync(dispatch_get_main_queue(), ^{
-						char month[0x4], process[0x80], type[0x80], message[0x1000], pidstr[0x80],name[0x100];
-						int day, hour, minute, second, pid, count;
-						bool hasName = (lineBuffer[0x10] == ' ' ? false : true);
-						if (hasName) {
-							count = sscanf((char*)lineBuffer, "%3s %2i %2i:%2i:%2i %s %[^\[][%[^]]] %[^:]: %4096[^\0]s",month,&day,&hour,&minute,&second,name,process,pidstr,type,message);
+					startingIndex += lineRange.length;
+				}
+			}
+			if (lineRange.location == kCFNotFound) {
+				bufferCounter++;
+			} else {
+				UInt8 *lineBuffer = calloc(0x1, 0x1000); // 4096 is the max line length for syslog
+				CFDataGetBytes(logData, CFRangeMake(startingIndex+0x3, lineRange.location), lineBuffer);
+				// lineBuffer now contains the whole line.
+				dispatch_sync(dispatch_get_main_queue(), ^{
+					char month[0x4], process[0x80], type[0x80], message[0x1000], pidstr[0x80],name[0x100];
+					int day, hour, minute, second, pid, count;
+					bool hasName = (lineBuffer[0x10] == ' ' ? false : true);
+					if (hasName) {
+						count = sscanf((char*)lineBuffer, "%3s %2i %2i:%2i:%2i %s %[^\[][%[^]]] %[^:]: %4096[^\0]s",month,&day,&hour,&minute,&second,name,process,pidstr,type,message);
+					} else {
+						count = sscanf((char*)lineBuffer, "%3s %2i %2i:%2i:%2i  %[^\[][%[^]]] %[^:]: %4096[^\0]s",month,&day,&hour,&minute,&second,process,pidstr,type,message);
+					}
+					pid = atoi(pidstr);
+					if (count == 0x9 + hasName) {
+						LogArg(COLOR_NRM,"%3s %2i %02i:%02i:%02i",month,day,hour,minute,second);
+						LogArg(COLOR_NRM," ");
+						LogArg(COLOR_GRN,"%s",process);
+						LogArg(COLOR_NRM," ");
+						LogArg(COLOR_NRM,"[");
+						LogArg(COLOR_BLU,"%i",pid);
+						LogArg(COLOR_NRM,"]");
+						LogArg(COLOR_NRM," ");
+						if (strncmp(type, kDebugType, strlen(kDebugType)) == 0x0) {
+							LogArg(COLOR_MAG,"%s",type);
+						} else if (strncmp(type, kNoticeType, strlen(kNoticeType)) == 0x0) {
+							LogArg(COLOR_CYN,"%s",type);
+						} else if (strncmp(type, kErrorType, strlen(kErrorType)) == 0x0) {
+							LogArg(COLOR_RED,"%s",type);
 						} else {
-							count = sscanf((char*)lineBuffer, "%3s %2i %2i:%2i:%2i  %[^\[][%[^]]] %[^:]: %4096[^\0]s",month,&day,&hour,&minute,&second,process,pidstr,type,message);
+							LogArg(COLOR_YEL,"%s",type);
 						}
-						pid = atoi(pidstr);
-						if (count == 0x9 + hasName) {
-							LogArg(COLOR_NRM,"%3s %2i %02i:%02i:%02i",month,day,hour,minute,second);
-							LogArg(COLOR_NRM," ");
-							LogArg(COLOR_GRN,"%s",process);
-							LogArg(COLOR_NRM," ");
-							LogArg(COLOR_NRM,"[");
-							LogArg(COLOR_BLU,"%i",pid);
-							LogArg(COLOR_NRM,"]");
-							LogArg(COLOR_NRM," ");
-							if (strncmp(type, kDebugType, strlen(kDebugType)) == 0x0) {
-								LogArg(COLOR_MAG,"%s",type);
-							} else if (strncmp(type, kNoticeType, strlen(kNoticeType)) == 0x0) {
-								LogArg(COLOR_CYN,"%s",type);
-							} else if (strncmp(type, kErrorType, strlen(kErrorType)) == 0x0) {
-								LogArg(COLOR_RED,"%s",type);
-							} else {
-								LogArg(COLOR_YEL,"%s",type);
-							}
-							LogArg(COLOR_NRM,": ");
+						LogArg(COLOR_NRM,": ");
 #pragma clang push // SDM: we should probably remove this...
 #pragma clang diagnostic ignored "-Wformat-security"
-							LogArg(COLOR_NRM,message); // SDM: PFFFFTTT, we know what we are doing...
+						LogArg(COLOR_NRM,message); // SDM: PFFFFTTT, we know what we are doing...
 #pragma clang pop
-							fflush(NULL);
-							indexLength = lineRange.location;
-						} else if (count == 0x1) {
-							startingIndex = 0x0;
-							indexLength = 0x36;
-						} else if (count == kCFNotFound) {
-							startingIndex = 0x0;
-							indexLength = 0x1;
-						}
-					});
-					CFWriteStreamWrite(syslogFile, lineBuffer, indexLength);
-					CFDataDeleteBytes(syslogBuffer, CFRangeMake(startingIndex, indexLength));
-					bufferCounter = 0x1;
-				}
-			});
-			CFRelease(logData);
+						fflush(NULL);
+						indexLength = lineRange.location;
+					} else if (count == 0x1) {
+						startingIndex = 0x0;
+						indexLength = 0x36;
+					} else if (count == kCFNotFound) {
+						startingIndex = 0x0;
+						indexLength = 0x1;
+					}
+				});
+				CFDataDeleteBytes(syslogBuffer, CFRangeMake(startingIndex, indexLength));
+				bufferCounter = 0x1;
+			}
 		});
-		if (status == KERN_SUCCESS) {
-			CFRunLoopRun();
-			CFWriteStreamClose(syslogFile);
-		} else {
-			printf("Failed to register callback to parse syslog.");
-		}
+		CFRelease(logData);
+	});
+	if (status == KERN_SUCCESS) {
+		CFRunLoopRun();
 	} else {
-		printf("Failed to open syslog file to write to.");
+		printf("Failed to register callback to parse syslog.");
 	}
 }
 
