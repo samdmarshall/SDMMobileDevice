@@ -148,7 +148,8 @@ void PrintSysLog() {
 				logData = CFDataCreateCopy(kCFAllocatorDefault, syslogBuffer);
 				CFRange lineRange;
 				Boolean foundRange = false;
-				CFIndex startingIndex = 0x0;
+				__block CFIndex startingIndex = 0x0;
+				__block CFIndex indexLength = 0x0;
 				while (!foundRange) {
 					lineRange = CFDataFind(logData, newlineData, CFRangeMake(startingIndex, SysLogBufferSize*bufferCounter), kCFDataSearchBackwards);
 					if (lineRange.location != 0) {
@@ -168,9 +169,9 @@ void PrintSysLog() {
 						int day, hour, minute, second, pid, count;
 						bool hasName = (lineBuffer[0x10] == ' ' ? false : true);
 						if (hasName) {
-							count = sscanf((char*)lineBuffer, "%3s %2i %2i:%2i:%2i %s %[^\[][%[^]]] %[^:]: %[^\n]",month,&day,&hour,&minute,&second,name,process,pidstr,type,message);
+							count = sscanf((char*)lineBuffer, "%3s %2i %2i:%2i:%2i %s %[^\[][%[^]]] %[^:]: %4096[^\0]s",month,&day,&hour,&minute,&second,name,process,pidstr,type,message);
 						} else {
-							count = sscanf((char*)lineBuffer, "%3s %2i %2i:%2i:%2i  %[^\[][%[^]]] %[^:]: %[^\n]",month,&day,&hour,&minute,&second,process,pidstr,type,message);
+							count = sscanf((char*)lineBuffer, "%3s %2i %2i:%2i:%2i  %[^\[][%[^]]] %[^:]: %4096[^\0]s",month,&day,&hour,&minute,&second,process,pidstr,type,message);
 						}
 						pid = atoi(pidstr);
 						if (count == 0x9 + hasName) {
@@ -193,11 +194,18 @@ void PrintSysLog() {
 							}
 							LogArg(COLOR_NRM,": ");
 							LogArg(COLOR_NRM,message);
-							LogArg(COLOR_NRM,"\n");
 							fflush(NULL);
+							indexLength = lineRange.location;
+						} else if (count == 0x1) {
+							startingIndex = 0x0;
+							indexLength = 0x36;
+						} else if (count == kCFNotFound) {
+							startingIndex = 0x0;
+							indexLength = 0x1;
 						}
 					});
-					CFDataDeleteBytes(syslogBuffer, CFRangeMake(startingIndex, lineRange.location));
+					CFWriteStreamWrite(syslogFile, lineBuffer, indexLength);
+					CFDataDeleteBytes(syslogBuffer, CFRangeMake(startingIndex, indexLength));
 					bufferCounter = 0x1;
 				}
 			});
