@@ -102,7 +102,7 @@ void AttachToDevice(char *udid) {
 				printf("\n\nLost Connection with Device\n");
 			}
 		} else {
-			printf("Cound not find device with that UDID\n");
+			printf("Could not find device with that UDID\n");
 		}
 	}
 }
