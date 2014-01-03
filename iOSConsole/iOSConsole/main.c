@@ -13,7 +13,7 @@
 #include "Core.h"
 
 static char *kDebugType = "<Debug>";
-static char *kNoticeType = "<Notice>";
+static char *kWarningType = "<Warning>";
 static char *kErrorType = "<Error>";
 
 static char *listArg = "--list";
@@ -182,12 +182,12 @@ void PrintSysLog() {
 							LogArg(COLOR_NRM," ");
 							if (strncmp(type, kDebugType, strlen(kDebugType)) == 0x0) {
 								LogArg(COLOR_MAG,"%s",type);
-							} else if (strncmp(type, kNoticeType, strlen(kNoticeType)) == 0x0) {
-								LogArg(COLOR_CYN,"%s",type);
+							} else if (strncmp(type, kWarningType, strlen(kWarningType)) == 0x0) {
+								LogArg(COLOR_YEL,"%s",type);
 							} else if (strncmp(type, kErrorType, strlen(kErrorType)) == 0x0) {
 								LogArg(COLOR_RED,"%s",type);
 							} else {
-								LogArg(COLOR_YEL,"%s",type);
+								LogArg(COLOR_CYN,"%s",type);
 							}
 							LogArg(COLOR_NRM,": ");
 							LogArg(COLOR_NRM,"%s",message);
