@@ -161,7 +161,7 @@ void PrintSysLog() {
 					char month[0x4], process[0x80], type[0x80], message[0x1000], pidstr[0x80],name[0x100];
 					uint32_t day, hour, minute, second, pid, count;
 					if (lineBuffer[0x10] == '=') {
-						LogArg(COLOR_NRM,"%s",lineBuffer);
+						LogArg(COLOR_NRM,"%s\n",lineBuffer);
 					} else {
 						bool hasName = (lineBuffer[0x10] == ' ' ? false : true);
 						if (hasName) {
