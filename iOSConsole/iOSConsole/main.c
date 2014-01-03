@@ -20,6 +20,7 @@ static char *listArg = "--list";
 static char *attachArg = "--attach";
 
 static char *updateLogNotifyName = "notify.com.samdmarshall.mobile.syslog.updatelog";
+static char *exitNotifyName = "notify.com.samdmarshall.iOSConsole.exit";
 
 #define SysLogHeaderSize 0x80
 #define SysLogBufferSize 0x10
@@ -124,7 +125,8 @@ void AttachToDevice(char *udid) {
 							break;
 						}
 					}
-					printf("\n\nLost Connection with Device\n");
+					dispatch_suspend(operatingQueue);
+					notify_post(exitNotifyName);
 				}
 			} else {
 				printf("Could not find device with that UDID\n");
@@ -154,7 +156,6 @@ void PrintSysLog() {
 					foundAll = true;
 				}
 				if (foundLine) {
-					//printf("line length: %ld\n",length);
 					UInt8 *lineBuffer = calloc(0x1, 0x1000); // 4096 is the max line length for syslog
 					CFDataGetBytes(logData, CFRangeMake(offset, length), lineBuffer);
 					// lineBuffer now contains the whole line.
@@ -196,6 +197,10 @@ void PrintSysLog() {
 				}
 			}
 		});
+	});
+	status = notify_register_dispatch(exitNotifyName, &token, dispatch_get_main_queue(), ^(int token){
+		printf("\n\nLost Connection with Device\n");
+		CFRunLoopStop(CFRunLoopGetMain());
 	});
 	if (status == KERN_SUCCESS) {
 		CFRunLoopRun();
