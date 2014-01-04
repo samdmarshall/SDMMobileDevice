@@ -183,8 +183,8 @@ static struct SDM_MD_Service_Identifiers SDMMDServiceIdentifiers[SDM_MD_Service_
 	{AMSVC_DEBUG_SERVER, "debug"},
 	{AMSVC_DEBUG_SERVER_SECURE, "debugsec"},
 	{AMSVC_DEBUG_SERVER_APPLIST, "debugapp"},
-	{AMSVC_FETCH_SYMBOLS, "sym"},
-	{AMSVC_SIMULATE_LOCATION, "sim"},
+	{AMSVC_FETCH_SYMBOLS, "fetchsym"},
+	{AMSVC_SIMULATE_LOCATION, "simloc"},
 	{AMSVC_RADIOS_TEST_MOBILE, "mradiotest"},
 	{AMSVC_RADIOS_TEST_ROOT, "rradiotest"},
 };

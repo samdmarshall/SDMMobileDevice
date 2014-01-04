@@ -14,12 +14,13 @@
 
 #include "Features.h"
 
-static char *helpArg = "-h,--help";
+static char *helpArg = "-h";
 static char *listArg = "-l,--list";
 static char *deviceArg = "-d,--device";
 static char *attachArg = "-s,--attach";
 static char *queryArg = "-q,--query";
 static char *appsArg = "-a,--apps";
+static char *infoArg = "-i,--info";
 
 enum iOSConsoleOptions {
 	OptionsHelp = 0x0,
@@ -28,6 +29,7 @@ enum iOSConsoleOptions {
 	OptionsAttach,
 	OptionsQuery,
 	OptionsApps,
+	OptionsInfo,
 	OptionsCount
 };
 
@@ -37,7 +39,8 @@ static struct option long_options[OptionsCount] = {
 	{"device", required_argument, 0x0, 'd'},
 	{"attach", required_argument, 0x0, 's'},
 	{"query", required_argument, 0x0, 'q'},
-	{"apps", no_argument, 0x0, 'a'}
+	{"apps", no_argument, 0x0, 'a'},
+	{"info", no_argument, 0x0, 'i'}
 };
 
 static bool optionsEnable[OptionsCount] = {};
@@ -106,9 +109,13 @@ int main(int argc, const char * argv[]) {
 			case 'a': {
 				optionsEnable[OptionsApps] = true;
 				break;
-			}
+			};
+			case 'i': {
+				optionsEnable[OptionsInfo] = true;
+				break;
+			};
 			default: {
-				printf("%s for help",helpArg);
+				printf("--help for help");
 				break;
 			};
 		}
@@ -117,10 +124,11 @@ int main(int argc, const char * argv[]) {
 		if (!help) {
 			printf("%s [service|query] : list available services or queries\n",helpArg);
 			printf("%s : list attached devices\n",listArg);
-			printf("%s [UDID] : specify a device",deviceArg);
+			printf("%s [UDID] : specify a device\n",deviceArg);
 			printf("%s [service] : attach to [service]\n",attachArg);
 			printf("%s <domain>=<key> : query value for <key> in <domain>, specify 'null' for global domain\n",queryArg);
 			printf("%s : display installed apps\n",appsArg);
+			printf("%s : display info of a device\n",infoArg);
 		} else {
 			if (strncmp(help, "service", strlen("service")) == 0x0) {
 				printf(" shorthand : service identifier\n--------------------------------\n");
@@ -129,7 +137,13 @@ int main(int argc, const char * argv[]) {
 				}
 			}
 			if (strncmp(help, "query", strlen("query")) == 0x0) {
-				
+				for (uint32_t i = 0x0; i < SDM_MD_Domain_Count; i++) {
+					printf("Domain: %s\n",SDMMDKnownDomain[i].domain);
+					for (uint32_t j = 0x0; j < SDMMDKnownDomain[i].keyCount; j++) {
+						printf("\t%s\n",SDMMDKnownDomain[i].keys[j]);
+					}
+					printf("\n\n");
+				}
 			}
 		}
 	}
@@ -137,7 +151,9 @@ int main(int argc, const char * argv[]) {
 		ListConnectedDevices();
 	}
 	if (optionsEnable[OptionsDevice]) {
-		if (optionsEnable[OptionsAttach]) {
+		if (optionsEnable[OptionsInfo]) {
+			
+		} else if (optionsEnable[OptionsAttach]) {
 			PerformService(udid, service);
 		} else if (optionsEnable[OptionsQuery]) {
 			PerformQuery(udid, domain, key);
