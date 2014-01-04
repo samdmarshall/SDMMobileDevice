@@ -43,6 +43,7 @@ SDMMD_AMDeviceRef FindDeviceFromUDID(char *udid) {
 		}
 		if (foundDevice) {
 			device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
+			SDMMD_AMDeviceDisconnect(device);
 		}
 	} else {
 		printf("No devices connected.\n");
@@ -53,18 +54,21 @@ SDMMD_AMDeviceRef FindDeviceFromUDID(char *udid) {
 SDMMD_AMConnectionRef AttachToDeviceAndService(SDMMD_AMDeviceRef device, char *service) {
 	SDMMD_AMConnectionRef serviceCon = NULL;
 	if (device) {
-		sdmmd_return_t result = SDMMD_AMDeviceStartSession(device);
+		sdmmd_return_t result = SDMMD_AMDeviceConnect(device);
 		if (SDM_MD_CallSuccessful(result)) {
-			CFStringRef serviceString = CFStringCreateWithCString(kCFAllocatorDefault, service, kCFStringEncodingMacRoman);
-			result = SDMMD_AMDeviceStartService(device, serviceString, NULL, &serviceCon);
+			result = SDMMD_AMDeviceStartSession(device);
 			if (SDM_MD_CallSuccessful(result)) {
-				CFTypeRef deviceName = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kDeviceName));
-				char *name = (char*)CFStringGetCStringPtr(deviceName,kCFStringEncodingMacRoman);
-				if (!name) {
-					name = "unnamed device";
+				CFStringRef serviceString = CFStringCreateWithCString(kCFAllocatorDefault, service, kCFStringEncodingMacRoman);
+				result = SDMMD_AMDeviceStartService(device, serviceString, NULL, &serviceCon);
+				if (SDM_MD_CallSuccessful(result)) {
+					CFTypeRef deviceName = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kDeviceName));
+					char *name = (char*)CFStringGetCStringPtr(deviceName,kCFStringEncodingMacRoman);
+					if (!name) {
+						name = "unnamed device";
+					}
+					printf("Connected to %s on \"%s\" ...\n",name,service);
+					CFRelease(deviceName);
 				}
-				printf("Connected to %s on \"%s\" ...\n",name,service);
-				CFRelease(deviceName);
 			}
 		}
 	} else {

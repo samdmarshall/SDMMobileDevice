@@ -46,8 +46,13 @@ int main(int argc, const char * argv[]) {
 	SDMMobileDevice;
 	
 	char *udid;
+	
 	char *service;
+	
 	char *help = NULL;
+	
+	char *domain = "null";
+	char *key = NULL;
 	
 	bool searchArgs = true;
 	
@@ -90,6 +95,10 @@ int main(int argc, const char * argv[]) {
 			};
 			case 'q': {
 				if (optarg) {
+					CFStringRef argValue = CFStringCreateWithCString(kCFAllocatorDefault, optarg, kCFStringEncodingUTF8);
+					CFArrayRef argsArray = CFStringCreateArrayBySeparatingStrings(kCFAllocatorDefault, argValue, CFSTR("="));
+					domain = (char*)CFStringGetCStringPtr(CFArrayGetValueAtIndex(argsArray, 0x0),kCFStringEncodingMacRoman);
+					key = (char*)CFStringGetCStringPtr(CFArrayGetValueAtIndex(argsArray, 0x1),kCFStringEncodingMacRoman);
 					optionsEnable[OptionsQuery] = true;
 				}
 				break;
@@ -104,7 +113,6 @@ int main(int argc, const char * argv[]) {
 			};
 		}
 	}
-	
 	if (optionsEnable[OptionsHelp]) {
 		if (!help) {
 			printf("%s [service|query] : list available services or queries\n",helpArg);
@@ -132,7 +140,7 @@ int main(int argc, const char * argv[]) {
 		if (optionsEnable[OptionsAttach]) {
 			PerformService(udid, service);
 		} else if (optionsEnable[OptionsQuery]) {
-			
+			PerformQuery(udid, domain, key);
 		} else if (optionsEnable[OptionsApps]) {
 			
 		}

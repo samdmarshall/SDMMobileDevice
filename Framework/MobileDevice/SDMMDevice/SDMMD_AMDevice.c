@@ -778,7 +778,7 @@ sdmmd_return_t SDMMD_send_session_stop(SDMMD_AMDeviceRef device, CFTypeRef sessi
 							if (error && CFGetTypeID(error) == CFStringGetTypeID()) {
 								result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(error);
 							} else {
-								printf("disabling secure connection.\n");
+								//printf("disabling secure connection.\n");
 								SDMMD_lockconn_disable_ssl(device->ivars.lockdown_conn);
 								result = 0x0;
 							}
