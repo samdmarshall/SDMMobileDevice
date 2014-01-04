@@ -22,6 +22,11 @@
 		22310DC618750DCF0092C107 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310DC518750DCF0092C107 /* libssl.dylib */; };
 		22310DC818750DE70092C107 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310DC718750DE70092C107 /* libcrypto.dylib */; };
 		22310DC918750DFA0092C107 /* SDMMD_AFC.c in Sources */ = {isa = PBXBuildFile; fileRef = 22310D7B18750D430092C107 /* SDMMD_AFC.c */; };
+		22B9556B18788CB6004DCBF0 /* syslog.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B9556A18788CB6004DCBF0 /* syslog.c */; };
+		22B95571187895DB004DCBF0 /* query.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B95570187895DB004DCBF0 /* query.c */; };
+		22B9557418789837004DCBF0 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B9557318789837004DCBF0 /* list.c */; };
+		22B9557918789DB7004DCBF0 /* attach.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B9557818789DB7004DCBF0 /* attach.c */; };
+		22B9557D1878A7A2004DCBF0 /* service.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B9557C1878A7A2004DCBF0 /* service.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -97,6 +102,17 @@
 		22310DD81875F22B0092C107 /* Number.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Number.h; sourceTree = "<group>"; };
 		22310DD91875F22B0092C107 /* Pointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pointer.h; sourceTree = "<group>"; };
 		22310DDA1875F22B0092C107 /* Range.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Range.h; sourceTree = "<group>"; };
+		22B9556A18788CB6004DCBF0 /* syslog.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = syslog.c; sourceTree = "<group>"; };
+		22B9556C18788D51004DCBF0 /* Features.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Features.h; sourceTree = "<group>"; };
+		22B9556D18788D59004DCBF0 /* syslog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = syslog.h; sourceTree = "<group>"; };
+		22B9556F187895D3004DCBF0 /* query.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = query.h; sourceTree = "<group>"; };
+		22B95570187895DB004DCBF0 /* query.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = query.c; sourceTree = "<group>"; };
+		22B9557318789837004DCBF0 /* list.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = list.c; sourceTree = "<group>"; };
+		22B9557518789844004DCBF0 /* list.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = list.h; sourceTree = "<group>"; };
+		22B9557718789DB0004DCBF0 /* attach.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = attach.h; sourceTree = "<group>"; };
+		22B9557818789DB7004DCBF0 /* attach.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = attach.c; sourceTree = "<group>"; };
+		22B9557C1878A7A2004DCBF0 /* service.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = service.c; sourceTree = "<group>"; };
+		22B9557E1878A7AB004DCBF0 /* service.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = service.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,7 +161,12 @@
 		22310D6B1874F4B10092C107 /* iOSConsole */ = {
 			isa = PBXGroup;
 			children = (
+				22B9557A1878A780004DCBF0 /* Services */,
+				22B9557618789DA7004DCBF0 /* attach */,
+				22B955721878982E004DCBF0 /* list */,
+				22B9556E187895CA004DCBF0 /* query */,
 				22310DCF1875F22B0092C107 /* Core */,
+				22B9556C18788D51004DCBF0 /* Features.h */,
 				22310D6C1874F4B10092C107 /* main.c */,
 				22310D6E1874F4B10092C107 /* iOSConsole.1 */,
 			);
@@ -283,6 +304,60 @@
 			path = Core;
 			sourceTree = "<group>";
 		};
+		22B9556918788C9F004DCBF0 /* syslog */ = {
+			isa = PBXGroup;
+			children = (
+				22B9556D18788D59004DCBF0 /* syslog.h */,
+				22B9556A18788CB6004DCBF0 /* syslog.c */,
+			);
+			name = syslog;
+			sourceTree = "<group>";
+		};
+		22B9556E187895CA004DCBF0 /* query */ = {
+			isa = PBXGroup;
+			children = (
+				22B9556F187895D3004DCBF0 /* query.h */,
+				22B95570187895DB004DCBF0 /* query.c */,
+			);
+			name = query;
+			sourceTree = "<group>";
+		};
+		22B955721878982E004DCBF0 /* list */ = {
+			isa = PBXGroup;
+			children = (
+				22B9557518789844004DCBF0 /* list.h */,
+				22B9557318789837004DCBF0 /* list.c */,
+			);
+			name = list;
+			sourceTree = "<group>";
+		};
+		22B9557618789DA7004DCBF0 /* attach */ = {
+			isa = PBXGroup;
+			children = (
+				22B9557718789DB0004DCBF0 /* attach.h */,
+				22B9557818789DB7004DCBF0 /* attach.c */,
+			);
+			name = attach;
+			sourceTree = "<group>";
+		};
+		22B9557A1878A780004DCBF0 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				22B9557B1878A795004DCBF0 /* service */,
+				22B9556918788C9F004DCBF0 /* syslog */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
+		22B9557B1878A795004DCBF0 /* service */ = {
+			isa = PBXGroup;
+			children = (
+				22B9557E1878A7AB004DCBF0 /* service.h */,
+				22B9557C1878A7A2004DCBF0 /* service.c */,
+			);
+			name = service;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -340,10 +415,15 @@
 				22310DB218750D9E0092C107 /* SDMMD_Connection.c in Sources */,
 				22310DB318750D9E0092C107 /* SDMMD_Error.c in Sources */,
 				22310DB418750D9E0092C107 /* SDMMD_AMDevice.c in Sources */,
+				22B9557918789DB7004DCBF0 /* attach.c in Sources */,
 				22310DB518750D9E0092C107 /* SDMMD_Notification.c in Sources */,
 				22310DB618750D9E0092C107 /* SDMMD_Service.c in Sources */,
 				22310DB718750D9E0092C107 /* SDMMobileDeviceAPI.c in Sources */,
 				22310DB818750D9E0092C107 /* SDMMD_USBMuxListener.c in Sources */,
+				22B9557D1878A7A2004DCBF0 /* service.c in Sources */,
+				22B95571187895DB004DCBF0 /* query.c in Sources */,
+				22B9557418789837004DCBF0 /* list.c in Sources */,
+				22B9556B18788CB6004DCBF0 /* syslog.c in Sources */,
 				22310D6D1874F4B10092C107 /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
