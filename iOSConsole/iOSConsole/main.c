@@ -62,7 +62,7 @@ int main(int argc, const char * argv[]) {
 	int c;
 	while (searchArgs) {
 		int option_index = 0x0;
-		c = getopt_long (argc, (char * const *)argv, "lh:d:s:q:a",long_options, &option_index);
+		c = getopt_long (argc, (char * const *)argv, "lh:d:ais:q:",long_options, &option_index);
 		if (c == -1) {
 			break;
 		}
@@ -153,12 +153,12 @@ int main(int argc, const char * argv[]) {
 	if (optionsEnable[OptionsDevice]) {
 		if (optionsEnable[OptionsInfo]) {
 			
+		} else if (optionsEnable[OptionsApps]) {
+			
 		} else if (optionsEnable[OptionsAttach]) {
 			PerformService(udid, service);
 		} else if (optionsEnable[OptionsQuery]) {
 			PerformQuery(udid, domain, key);
-		} else if (optionsEnable[OptionsApps]) {
-			
 		}
 	}
 	
