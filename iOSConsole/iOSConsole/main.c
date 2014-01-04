@@ -21,6 +21,7 @@ static char *attachArg = "-s,--attach";
 static char *queryArg = "-q,--query";
 static char *appsArg = "-a,--apps";
 static char *infoArg = "-i,--info";
+static char *runArg = "-r,--run";
 
 enum iOSConsoleOptions {
 	OptionsHelp = 0x0,
@@ -30,6 +31,7 @@ enum iOSConsoleOptions {
 	OptionsQuery,
 	OptionsApps,
 	OptionsInfo,
+	OptionsRun,
 	OptionsCount
 };
 
@@ -40,7 +42,8 @@ static struct option long_options[OptionsCount] = {
 	{"attach", required_argument, 0x0, 's'},
 	{"query", required_argument, 0x0, 'q'},
 	{"apps", no_argument, 0x0, 'a'},
-	{"info", no_argument, 0x0, 'i'}
+	{"info", no_argument, 0x0, 'i'},
+	{"run", required_argument, 0x0, 'r'}
 };
 
 static bool optionsEnable[OptionsCount] = {};
@@ -114,6 +117,10 @@ int main(int argc, const char * argv[]) {
 				optionsEnable[OptionsInfo] = true;
 				break;
 			};
+			case 'r': {
+				optionsEnable[OptionsRun] = true;
+				break;
+			};
 			default: {
 				printf("--help for help");
 				break;
@@ -129,6 +136,7 @@ int main(int argc, const char * argv[]) {
 			printf("%s <domain>=<key> : query value for <key> in <domain>, specify 'null' for global domain\n",queryArg);
 			printf("%s : display installed apps\n",appsArg);
 			printf("%s : display info of a device\n",infoArg);
+			printf("%s [path] : run an application at specified [path]\n",runArg);
 		} else {
 			if (strncmp(help, "service", strlen("service")) == 0x0) {
 				printf(" shorthand : service identifier\n--------------------------------\n");
@@ -159,6 +167,8 @@ int main(int argc, const char * argv[]) {
 			PerformService(udid, service);
 		} else if (optionsEnable[OptionsQuery]) {
 			PerformQuery(udid, domain, key);
+		} else if (optionsEnable[OptionsRun]) {
+			
 		}
 	}
 	
