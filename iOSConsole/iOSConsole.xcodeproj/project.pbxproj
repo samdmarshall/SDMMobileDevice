@@ -29,6 +29,8 @@
 		22B9557D1878A7A2004DCBF0 /* service.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B9557C1878A7A2004DCBF0 /* service.c */; };
 		22B955821878DA5F004DCBF0 /* apps.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B955811878DA5F004DCBF0 /* apps.c */; };
 		22B955851878DCBF004DCBF0 /* CFDictionaryAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B955841878DCBF004DCBF0 /* CFDictionaryAddition.c */; };
+		22B955881878F14F004DCBF0 /* run.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B955871878F14F004DCBF0 /* run.c */; };
+		22B9558A1878F4A7004DCBF0 /* SDMMD_Debugger.c in Sources */ = {isa = PBXBuildFile; fileRef = 22310DA518750D430092C107 /* SDMMD_Debugger.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -119,6 +121,8 @@
 		22B955811878DA5F004DCBF0 /* apps.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = apps.c; sourceTree = "<group>"; };
 		22B955831878DCB1004DCBF0 /* CFDictionaryAddition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CFDictionaryAddition.h; sourceTree = "<group>"; };
 		22B955841878DCBF004DCBF0 /* CFDictionaryAddition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CFDictionaryAddition.c; sourceTree = "<group>"; };
+		22B955871878F14F004DCBF0 /* run.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = run.c; sourceTree = "<group>"; };
+		22B955891878F157004DCBF0 /* run.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = run.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +171,7 @@
 		22310D6B1874F4B10092C107 /* iOSConsole */ = {
 			isa = PBXGroup;
 			children = (
+				22B955861878F145004DCBF0 /* run */,
 				22B9557F1878DA4E004DCBF0 /* apps */,
 				22B9557A1878A780004DCBF0 /* Services */,
 				22B9557618789DA7004DCBF0 /* attach */,
@@ -376,6 +381,15 @@
 			name = apps;
 			sourceTree = "<group>";
 		};
+		22B955861878F145004DCBF0 /* run */ = {
+			isa = PBXGroup;
+			children = (
+				22B955891878F157004DCBF0 /* run.h */,
+				22B955871878F14F004DCBF0 /* run.c */,
+			);
+			name = run;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -427,6 +441,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22B9558A1878F4A7004DCBF0 /* SDMMD_Debugger.c in Sources */,
 				22310DC918750DFA0092C107 /* SDMMD_AFC.c in Sources */,
 				22310DB018750D9E0092C107 /* SDMMD_MCP.c in Sources */,
 				22310DB118750D9E0092C107 /* SDMMD_Applications.c in Sources */,
@@ -440,6 +455,7 @@
 				22310DB618750D9E0092C107 /* SDMMD_Service.c in Sources */,
 				22310DB718750D9E0092C107 /* SDMMobileDeviceAPI.c in Sources */,
 				22310DB818750D9E0092C107 /* SDMMD_USBMuxListener.c in Sources */,
+				22B955881878F14F004DCBF0 /* run.c in Sources */,
 				22B9557D1878A7A2004DCBF0 /* service.c in Sources */,
 				22B95571187895DB004DCBF0 /* query.c in Sources */,
 				22B9557418789837004DCBF0 /* list.c in Sources */,

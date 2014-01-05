@@ -60,6 +60,8 @@ int main(int argc, const char * argv[]) {
 	char *domain = "NULL";
 	char *key = NULL;
 	
+	char *bundle = NULL;
+	
 	bool searchArgs = true;
 	
 	int c;
@@ -118,6 +120,9 @@ int main(int argc, const char * argv[]) {
 				break;
 			};
 			case 'r': {
+				if (optarg) {
+					bundle = optarg;
+				}
 				optionsEnable[OptionsRun] = true;
 				break;
 			};
@@ -168,7 +173,7 @@ int main(int argc, const char * argv[]) {
 		} else if (optionsEnable[OptionsQuery]) {
 			PerformQuery(udid, domain, key);
 		} else if (optionsEnable[OptionsRun]) {
-			
+			RunAppOnDeviceWithIdentifier(udid, bundle);
 		}
 	}
 	

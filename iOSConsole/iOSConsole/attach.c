@@ -39,6 +39,8 @@ SDMMD_AMDeviceRef FindDeviceFromUDID(char *udid) {
 					break;
 				}
 				SDMMD_AMDeviceDisconnect(device);
+			} else {
+				printf("%s\n",SDMMD_AMDErrorString(result));
 			}
 		}
 		if (foundDevice) {
@@ -68,8 +70,14 @@ SDMMD_AMConnectionRef AttachToDeviceAndService(SDMMD_AMDeviceRef device, char *s
 					}
 					printf("Connected to %s on \"%s\" ...\n",name,service);
 					CFRelease(deviceName);
+				} else {
+					printf("%s\n",SDMMD_AMDErrorString(result));
 				}
+			} else {
+				printf("%s\n",SDMMD_AMDErrorString(result));
 			}
+		} else {
+			printf("%s\n",SDMMD_AMDErrorString(result));
 		}
 	} else {
 		printf("Could not find device with that UDID\n");

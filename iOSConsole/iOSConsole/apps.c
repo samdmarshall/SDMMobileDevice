@@ -29,10 +29,16 @@ void LookupAppsOnDevice(char *udid) {
 			result = SDMMD_AMDeviceLookupApplications(device, optionsDict, &response);
 			if (SDM_MD_CallSuccessful(result)) {
 				PrintCFDictionary(response);
+			} else {
+				printf("%s\n",SDMMD_AMDErrorString(result));
 			}
 			SDMMD_AMDeviceStopSession(device);
+		} else {
+			printf("%s\n",SDMMD_AMDErrorString(result));
 		}
 		SDMMD_AMDeviceDisconnect(device);
+	} else {
+		printf("%s\n",SDMMD_AMDErrorString(result));
 	}
 }
 

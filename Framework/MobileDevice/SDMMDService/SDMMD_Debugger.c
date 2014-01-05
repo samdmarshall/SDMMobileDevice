@@ -94,7 +94,7 @@ sdmmd_return_t SDMMD_StopDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDMM
 
 CFStringRef SDMMD_EncodeForDebuggingCommand(CFStringRef command) {
 	unsigned char *commandString = malloc(CFStringGetLength(command));
-	uint32_t length = CFStringGetBytes(command, CFRangeMake(0,CFStringGetLength(command)), kCFStringEncodingUTF8, 0, true, commandString, CFStringGetLength(command), NULL);
+	uint32_t length = (uint32_t)CFStringGetBytes(command, CFRangeMake(0,CFStringGetLength(command)), kCFStringEncodingUTF8, 0, true, commandString, CFStringGetLength(command), NULL);
 	unsigned char *encodedCommand = malloc(sizeof(unsigned char));
 	uint32_t pos = 0;
 	for (uint32_t i = 0; i < length; i++) {
@@ -117,7 +117,7 @@ sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, 
 	}
 	if (encodedCommand) {
 		unsigned char *commandString = calloc(1, CFStringGetLength(encodedCommand)+1);
-		uint32_t length = CFStringGetBytes(encodedCommand, CFRangeMake(0,CFStringGetLength(encodedCommand)), kCFStringEncodingUTF8, 0, true, commandString, CFStringGetLength(encodedCommand), NULL);
+		uint32_t length = (uint32_t)CFStringGetBytes(encodedCommand, CFRangeMake(0,CFStringGetLength(encodedCommand)), kCFStringEncodingUTF8, 0, true, commandString, CFStringGetLength(encodedCommand), NULL);
 		for (uint32_t i = 0; i < length; i++) {
 			commandData[pos++] = commandString[i];
 			commandData = realloc(commandData, sizeof(char)*(pos+1));

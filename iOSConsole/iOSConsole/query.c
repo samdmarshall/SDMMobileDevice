@@ -28,6 +28,8 @@ void PerformQuery(char *udid, char *domain, char *key) {
 				CFTypeRef queryResult = SDMMD_AMDeviceCopyValue(device, domainString, keyString);
 				CFShow(queryResult);
 				result = SDMMD_AMDeviceStopSession(device);
+			} else {
+				printf("%s\n",SDMMD_AMDErrorString(result));
 			}
 			
 			CFRelease(keyString);
@@ -35,6 +37,8 @@ void PerformQuery(char *udid, char *domain, char *key) {
 				CFRelease(domainString);
 			}
 			SDMMD_AMDeviceDisconnect(device);
+		} else {
+			printf("%s\n",SDMMD_AMDErrorString(result));
 		}
 	}
 }

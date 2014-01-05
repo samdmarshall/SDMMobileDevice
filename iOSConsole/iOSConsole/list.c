@@ -40,6 +40,8 @@ void ListConnectedDevices() {
 				CFRelease(deviceName);
 				CFRelease(deviceUDID);
 				SDMMD_AMDeviceDisconnect(device);
+			} else {
+				printf("%s\n",SDMMD_AMDErrorString(result));
 			}
 		}
 	}

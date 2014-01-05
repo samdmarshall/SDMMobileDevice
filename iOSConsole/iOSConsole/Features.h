@@ -15,5 +15,6 @@
 #include "syslog.h"
 #include "query.h"
 #include "apps.h"
+#include "run.h"
 
 #endif
