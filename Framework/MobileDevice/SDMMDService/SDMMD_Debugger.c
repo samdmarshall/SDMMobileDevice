@@ -94,7 +94,7 @@ sdmmd_return_t SDMMD_StopDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDMM
 
 CFStringRef SDMMD_EncodeForDebuggingCommand(CFStringRef command) {
 	unsigned char *commandString = malloc(CFStringGetLength(command));
-	uint32_t length = (uint32_t)CFStringGetBytes(command, CFRangeMake(0,CFStringGetLength(command)), kCFStringEncodingUTF8, 0, true, commandString, CFStringGetLength(command), NULL);
+	CFIndex length = CFStringGetBytes(command, CFRangeMake(0,CFStringGetLength(command)), kCFStringEncodingUTF8, 0, true, commandString, CFStringGetLength(command), NULL);
 	unsigned char *encodedCommand = malloc(sizeof(unsigned char));
 	uint32_t pos = 0;
 	for (uint32_t i = 0; i < length; i++) {
@@ -103,7 +103,7 @@ CFStringRef SDMMD_EncodeForDebuggingCommand(CFStringRef command) {
 		encodedCommand[pos] = kHexEncode[commandString[i] >> 4];
 		encodedCommand[pos+1] = kHexEncode[commandString[i] & 0x0f];
 	}
-	return CFStringCreateWithBytesNoCopy(kCFAllocatorDefault, encodedCommand, length*2, kCFStringEncodingUTF8, true, kCFAllocatorDefault);
+	return CFStringCreateWithBytes(kCFAllocatorDefault, encodedCommand, length*2, kCFStringEncodingUTF8, true);
 }
 
 sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, SDMMD_DebugCommandType commandType, CFStringRef encodedCommand) {
@@ -117,7 +117,7 @@ sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, 
 	}
 	if (encodedCommand) {
 		unsigned char *commandString = calloc(1, CFStringGetLength(encodedCommand)+1);
-		uint32_t length = (uint32_t)CFStringGetBytes(encodedCommand, CFRangeMake(0,CFStringGetLength(encodedCommand)), kCFStringEncodingUTF8, 0, true, commandString, CFStringGetLength(encodedCommand), NULL);
+		CFIndex length = CFStringGetBytes(encodedCommand, CFRangeMake(0,CFStringGetLength(encodedCommand)), kCFStringEncodingUTF8, 0, true, commandString, CFStringGetLength(encodedCommand), NULL);
 		for (uint32_t i = 0; i < length; i++) {
 			commandData[pos++] = commandString[i];
 			commandData = realloc(commandData, sizeof(char)*(pos+1));
@@ -129,7 +129,7 @@ sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, 
 	commandData[pos++] = '#';
 	commandData[pos++] = kHexEncode[(checksum >> 4) & 0xf];
 	commandData[pos++] = kHexEncode[checksum & 0xf];
-	printf("debug send: %s\n",commandData);
+	//printf("debug send: %s\n",commandData);
 	CFDataRef sending = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, (UInt8 *)commandData, pos+3, kCFAllocatorDefault);
 	sdmmd_return_t result = SDMMD_ServiceSend(SDMMD_TranslateConnectionToSocket(connection), sending);
 	if (SDM_MD_CallSuccessful(result)) {
