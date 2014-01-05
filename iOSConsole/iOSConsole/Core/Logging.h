@@ -120,5 +120,11 @@ static char* PrintCodeString[PrintCode_Count] = {
 #define LogArg(code,...) RArg(code,__VA_ARGS__)
 #endif
 
+#define PrintDepth(depth,...) \
+	for (unsigned int i = 0x0; i < depth; i++) { \
+		printf("\t"); \
+	} \
+	printf(__VA_ARGS__);
+
 
 #endif

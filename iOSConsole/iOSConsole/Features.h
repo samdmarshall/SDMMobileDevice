@@ -14,5 +14,6 @@
 #include "attach.h"
 #include "syslog.h"
 #include "query.h"
+#include "apps.h"
 
 #endif

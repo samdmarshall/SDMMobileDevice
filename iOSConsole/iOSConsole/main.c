@@ -57,7 +57,7 @@ int main(int argc, const char * argv[]) {
 	
 	char *help = NULL;
 	
-	char *domain = "null";
+	char *domain = "NULL";
 	char *key = NULL;
 	
 	bool searchArgs = true;
@@ -162,7 +162,7 @@ int main(int argc, const char * argv[]) {
 		if (optionsEnable[OptionsInfo]) {
 			
 		} else if (optionsEnable[OptionsApps]) {
-			
+			LookupAppsOnDevice(udid);
 		} else if (optionsEnable[OptionsAttach]) {
 			PerformService(udid, service);
 		} else if (optionsEnable[OptionsQuery]) {

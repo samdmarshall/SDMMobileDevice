@@ -21,4 +21,8 @@
 #include "Number.h"
 #include "Logging.h"
 
+#ifdef __COREFOUNDATION_COREFOUNDATION__ 
+#include "CFDictionaryAddition.h"
+#endif
+
 #endif
