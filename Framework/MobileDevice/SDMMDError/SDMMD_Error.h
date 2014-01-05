@@ -196,9 +196,9 @@ struct SDMMD_DebugReturnCode {
 #define sdmmd_debug_return_t struct SDMMD_DebugReturnCode
 
 typedef enum SDMMD_NotificationErrorCodes {
-	MDERR_NOTIFICATION_MSG_CONNECTED = 1,
-	MDERR_NOTIFICATION_MSG_DISCONNECTED = 2,
-	MDERR_NOTIFICATION_MSG_UNKNOWN = 3
+	MDERR_NOTIFICATION_MSG_CONNECTED = 0x1,
+	MDERR_NOTIFICATION_MSG_DISCONNECTED = 0x2,
+	MDERR_NOTIFICATION_MSG_UNKNOWN = 0x3
 } SDMMD_NotificationErrorCodes;
 
 #define sdmmd_notification_return_t enum SDMMD_NotificationErrorCodes
@@ -218,22 +218,22 @@ typedef struct SDMMD_SIMStatusCode {
 
 #define sdmmd_sim_return_t struct SDMMD_SIMStatusCode
 
-#define kKnownSIMCodesNum 13
+#define kKnownSIMCodesNum 0xd
 
 static struct SDMMD_SIMStatusCode KnownSIMCodes[kKnownSIMCodesNum] = {
-	{CFSTR("kCTSIMSupportSIMStatusUnavailable"), 0},
-	{CFSTR("kCTSIMSupportSIMStatusReady"), 1},
-	{CFSTR("kCTSIMSupportSIMStatusNotReady"), 2},
-	{CFSTR("kCTSIMSupportSIMStatusPINLocked"), 3},
-	{CFSTR("kCTSIMSupportSIMStatusPUKLocked"), 4},
-	{CFSTR("kCTSIMSupportSIMStatusNetworkLocked"), 5},
-	{CFSTR("kCTSIMSupportSIMStatusCorporateLocked"), 6},
-	{CFSTR("kCTSIMSupportSIMStatusOperatorLocked"), 7},
-	{CFSTR("kCTSIMSupportSIMStatusOperatorSubsetLocked"), 8},
-	{CFSTR("kCTSIMSupportSIMStatusServiceProviderLocked"), 9},
-	{CFSTR("kCTSIMSupportSIMStatusMemoryFailure"), 10},
-	{CFSTR("kCTSIMSupportSIMStatusFixedDialingLocked"), 11},
-	{CFSTR("kCTSIMSupportSIMStatusBlacklisted"), 12}
+	{CFSTR("kCTSIMSupportSIMStatusUnavailable"), 0x0},
+	{CFSTR("kCTSIMSupportSIMStatusReady"), 0x1},
+	{CFSTR("kCTSIMSupportSIMStatusNotReady"), 0x2},
+	{CFSTR("kCTSIMSupportSIMStatusPINLocked"), 0x3},
+	{CFSTR("kCTSIMSupportSIMStatusPUKLocked"), 0x4},
+	{CFSTR("kCTSIMSupportSIMStatusNetworkLocked"), 0x5},
+	{CFSTR("kCTSIMSupportSIMStatusCorporateLocked"), 0x6},
+	{CFSTR("kCTSIMSupportSIMStatusOperatorLocked"), 0x7},
+	{CFSTR("kCTSIMSupportSIMStatusOperatorSubsetLocked"), 0x8},
+	{CFSTR("kCTSIMSupportSIMStatusServiceProviderLocked"), 0x9},
+	{CFSTR("kCTSIMSupportSIMStatusMemoryFailure"), 0xa},
+	{CFSTR("kCTSIMSupportSIMStatusFixedDialingLocked"), 0xb},
+	{CFSTR("kCTSIMSupportSIMStatusBlacklisted"), 0xc}
 };
 
 typedef struct SDMMD_ActivationState {
@@ -243,18 +243,18 @@ typedef struct SDMMD_ActivationState {
 
 #define sdmmd_activation_return_t struct SDMMD_ActivationState
 
-#define kKnownActivationStatesNum 9
+#define kKnownActivationStatesNum 0x9
 
 static struct SDMMD_ActivationState KnownActivationStates[kKnownActivationStatesNum] = {
-	{CFSTR("Unactivated"), 0},
-	{CFSTR("Activated"), 1},
-	{CFSTR("FactoryActivated"), 2},
-	{CFSTR("SoftActivated"), 3},
-	{CFSTR("MismatchedIMEI"), 4},
-	{CFSTR("MismatchedICCID"), 5},
-	{CFSTR("MissingSIM"), 6},
-	{CFSTR("WildcardActivated"), 7},
-	{CFSTR("Expired"), 8},
+	{CFSTR("Unactivated"), 0x0},
+	{CFSTR("Activated"), 0x1},
+	{CFSTR("FactoryActivated"), 0x2},
+	{CFSTR("SoftActivated"), 0x3},
+	{CFSTR("MismatchedIMEI"), 0x4},
+	{CFSTR("MismatchedICCID"), 0x5},
+	{CFSTR("MissingSIM"), 0x6},
+	{CFSTR("WildcardActivated"), 0x7},
+	{CFSTR("Expired"), 0x8},
 };
 
 typedef enum SDMMD_LockdownError {
@@ -301,17 +301,17 @@ sdmmd_dl_return_t SDMMD__ConvertLockdowndError(CFStringRef error);
 
 sdmmd_return_t SDMMD__ConvertServiceError(CFStringRef error);
 
-static char* SDMMD_ServiceConnectionErrorString[157] = { "kAMDSuccess", "kAMDUndefinedError", "kAMDBadHeaderError", "kAMDNoResourcesError", "kAMDReadError", "kAMDWriteError", "kAMDUnknownPacketError", "kAMDInvalidArgumentError", "kAMDNotFoundError", "kAMDIsDirectoryError", "kAMDPermissionError", "kAMDNotConnectedError", "kAMDTimeOutError", "kAMDOverrunError", "kAMDEOFError", "kAMDUnsupportedError", "kAMDFileExistsError", "kAMDBusyError", "kAMDCryptoError", "kAMDInvalidResponseError", "kAMDMissingKeyError", "kAMDMissingValueError", "kAMDGetProhibitedError", "kAMDSetProhibitedError", "kAMDRemoveProhibitedError", "kAMDImmutableValueError", "kAMDPasswordProtectedError", "kAMDMissingHostIDError", "kAMDInvalidHostIDError", "kAMDSessionActiveError", "kAMDSessionInactiveError", "kAMDMissingSessionIDError", "kAMDInvalidSessionIDError", "kAMDMissingServiceError", "kAMDInvalidServiceError", "kAMDInvalidCheckinError", "kAMDCheckinTimeoutError", "kAMDMissingPairRecordError", "kAMDInvalidActivationRecordError", "kAMDMissingActivationRecordError", "kAMDWrongDroidError", "kAMDSUVerificationError", "kAMDSUPatchError", "kAMDSUFirmwareError", "kAMDProvisioningProfileNotValid", "kAMDSendMessageError", "kAMDReceiveMessageError", "kAMDMissingOptionsError", "kAMDMissingImageTypeError", "kAMDDigestFailedError", "kAMDStartServiceError", "kAMDInvalidDiskImageError", "kAMDMissingDigestError", "kAMDMuxError", "kAMDApplicationAlreadyInstalledError", "kAMDApplicationMoveFailedError", "kAMDApplicationSINFCaptureFailedError", "kAMDApplicationSandboxFailedError", "kAMDApplicationVerificationFailedError", "kAMDArchiveDestructionFailedError", "kAMDBundleVerificationFailedError", "kAMDCarrierBundleCopyFailedError", "kAMDCarrierBundleDirectoryCreationFailedError", "kAMDCarrierBundleMissingSupportedSIMsError", "kAMDCommCenterNotificationFailedError", "kAMDContainerCreationFailedError", "kAMDContainerP0wnFailedError", "kAMDContainerRemovalFailedError", "kAMDEmbeddedProfileInstallFailedError", "kAMDErrorError", "kAMDExecutableTwiddleFailedError", "kAMDExistenceCheckFailedError", "kAMDInstallMapUpdateFailedError", "kAMDManifestCaptureFailedError", "kAMDMapGenerationFailedError", "kAMDMissingBundleExecutableError", "kAMDMissingBundleIdentifierError", "kAMDMissingBundlePathError", "kAMDMissingContainerError", "kAMDNotificationFailedError", "kAMDPackageExtractionFailedError", "kAMDPackageInspectionFailedError", "kAMDPackageMoveFailedError", "kAMDPathConversionFailedError", "kAMDRestoreContainerFailedError", "kAMDSeatbeltProfileRemovalFailedError", "kAMDStageCreationFailedError", "kAMDSymlinkFailedError", "kAMDiTunesArtworkCaptureFailedError", "kAMDiTunesMetadataCaptureFailedError", "kAMDAlreadyArchivedError", "kAMDServiceLimitError", "kAMDInvalidPairRecordError", "kAMDServiceProhibitedError", "kAMDCheckinSetupFailedError", "kAMDCheckinConnectionFailedError", "kAMDCheckinReceiveFailedError", "kAMDCheckinResponseFailedError", "kAMDCheckinSendFailedError", "kAMDMuxCreateListenerError", "kAMDMuxGetListenerError", "kAMDMuxConnectError", "kAMDUnknownCommandError", "kAMDAPIInternalError", "kAMDSavePairRecordFailedError", "kAMDCheckinOutOfMemoryError", "kAMDDeviceTooNewError", "kAMDDeviceRefNoGood", "kAMDCannotTranslateError", "kAMDMobileImageMounterMissingImageSignature", "kAMDMobileImageMounterResponseCreationFailed", "kAMDMobileImageMounterMissingImageType", "kAMDMobileImageMounterMissingImagePath", "kAMDMobileImageMounterImageMapLoadFailed", "kAMDMobileImageMounterAlreadyMounted", "kAMDMobileImageMounterImageMoveFailed", "kAMDMobileImageMounterMountPathMissing", "kAMDMobileImageMounterMountPathNotEmpty", "kAMDMobileImageMounterImageMountFailed", "kAMDMobileImageMounterTrustCacheLoadFailed", "kAMDMobileImageMounterDigestFailed", "kAMDMobileImageMounterDigestCreationFailed", "kAMDMobileImageMounterImageVerificationFailed", "kAMDMobileImageMounterImageInfoCreationFailed", "kAMDMobileImageMounterImageMapStoreFailed", "kAMDBonjourSetupError", "kAMDDeviceOSVersionTooLow", "kAMDNoWifiSyncSupportError", "kAMDDeviceFamilyNotSupported", "kAMDEscrowLockedError", "kAMDPairingProhibitedError", "kAMDProhibitedBySupervision", "kAMDDeviceDisconnectedError", "kAMDTooBigError", "kAMDPackagePatchFailedError", "kAMDIncorrectArchitectureError", "kAMDPluginCopyFailedError", "kAMDBreadcrumbFailedError", "kAMDBreadcrumbUnlockError", "kAMDGeoJSONCaptureFailedError", "kAMDNewsstandArtworkCaptureFailedError", "kAMDMissingCommandError", "kAMDNotEntitledError", "kAMDMissingPackagePathError", "kAMDMissingContainerPathError", "kAMDMissingApplicationIdentifierError", "kAMDMissingAttributeValueError", "kAMDLookupFailedError", "kAMDDictCreationFailedError", "kAMDUserDeniedPairingError", "kAMDPairingDialogResponsePendingError", "kAMDInstallProhibitedError", "kAMDUninstallProhibitedError", "kAMDFMiPProtectedError", "kAMDMCProtected", "kAMDMCChallengeRequired", "kAMDMissingBundleVersionError"};
+static char* SDMMD_ServiceConnectionErrorString[0x9d] = { "kAMDSuccess", "kAMDUndefinedError", "kAMDBadHeaderError", "kAMDNoResourcesError", "kAMDReadError", "kAMDWriteError", "kAMDUnknownPacketError", "kAMDInvalidArgumentError", "kAMDNotFoundError", "kAMDIsDirectoryError", "kAMDPermissionError", "kAMDNotConnectedError", "kAMDTimeOutError", "kAMDOverrunError", "kAMDEOFError", "kAMDUnsupportedError", "kAMDFileExistsError", "kAMDBusyError", "kAMDCryptoError", "kAMDInvalidResponseError", "kAMDMissingKeyError", "kAMDMissingValueError", "kAMDGetProhibitedError", "kAMDSetProhibitedError", "kAMDRemoveProhibitedError", "kAMDImmutableValueError", "kAMDPasswordProtectedError", "kAMDMissingHostIDError", "kAMDInvalidHostIDError", "kAMDSessionActiveError", "kAMDSessionInactiveError", "kAMDMissingSessionIDError", "kAMDInvalidSessionIDError", "kAMDMissingServiceError", "kAMDInvalidServiceError", "kAMDInvalidCheckinError", "kAMDCheckinTimeoutError", "kAMDMissingPairRecordError", "kAMDInvalidActivationRecordError", "kAMDMissingActivationRecordError", "kAMDWrongDroidError", "kAMDSUVerificationError", "kAMDSUPatchError", "kAMDSUFirmwareError", "kAMDProvisioningProfileNotValid", "kAMDSendMessageError", "kAMDReceiveMessageError", "kAMDMissingOptionsError", "kAMDMissingImageTypeError", "kAMDDigestFailedError", "kAMDStartServiceError", "kAMDInvalidDiskImageError", "kAMDMissingDigestError", "kAMDMuxError", "kAMDApplicationAlreadyInstalledError", "kAMDApplicationMoveFailedError", "kAMDApplicationSINFCaptureFailedError", "kAMDApplicationSandboxFailedError", "kAMDApplicationVerificationFailedError", "kAMDArchiveDestructionFailedError", "kAMDBundleVerificationFailedError", "kAMDCarrierBundleCopyFailedError", "kAMDCarrierBundleDirectoryCreationFailedError", "kAMDCarrierBundleMissingSupportedSIMsError", "kAMDCommCenterNotificationFailedError", "kAMDContainerCreationFailedError", "kAMDContainerP0wnFailedError", "kAMDContainerRemovalFailedError", "kAMDEmbeddedProfileInstallFailedError", "kAMDErrorError", "kAMDExecutableTwiddleFailedError", "kAMDExistenceCheckFailedError", "kAMDInstallMapUpdateFailedError", "kAMDManifestCaptureFailedError", "kAMDMapGenerationFailedError", "kAMDMissingBundleExecutableError", "kAMDMissingBundleIdentifierError", "kAMDMissingBundlePathError", "kAMDMissingContainerError", "kAMDNotificationFailedError", "kAMDPackageExtractionFailedError", "kAMDPackageInspectionFailedError", "kAMDPackageMoveFailedError", "kAMDPathConversionFailedError", "kAMDRestoreContainerFailedError", "kAMDSeatbeltProfileRemovalFailedError", "kAMDStageCreationFailedError", "kAMDSymlinkFailedError", "kAMDiTunesArtworkCaptureFailedError", "kAMDiTunesMetadataCaptureFailedError", "kAMDAlreadyArchivedError", "kAMDServiceLimitError", "kAMDInvalidPairRecordError", "kAMDServiceProhibitedError", "kAMDCheckinSetupFailedError", "kAMDCheckinConnectionFailedError", "kAMDCheckinReceiveFailedError", "kAMDCheckinResponseFailedError", "kAMDCheckinSendFailedError", "kAMDMuxCreateListenerError", "kAMDMuxGetListenerError", "kAMDMuxConnectError", "kAMDUnknownCommandError", "kAMDAPIInternalError", "kAMDSavePairRecordFailedError", "kAMDCheckinOutOfMemoryError", "kAMDDeviceTooNewError", "kAMDDeviceRefNoGood", "kAMDCannotTranslateError", "kAMDMobileImageMounterMissingImageSignature", "kAMDMobileImageMounterResponseCreationFailed", "kAMDMobileImageMounterMissingImageType", "kAMDMobileImageMounterMissingImagePath", "kAMDMobileImageMounterImageMapLoadFailed", "kAMDMobileImageMounterAlreadyMounted", "kAMDMobileImageMounterImageMoveFailed", "kAMDMobileImageMounterMountPathMissing", "kAMDMobileImageMounterMountPathNotEmpty", "kAMDMobileImageMounterImageMountFailed", "kAMDMobileImageMounterTrustCacheLoadFailed", "kAMDMobileImageMounterDigestFailed", "kAMDMobileImageMounterDigestCreationFailed", "kAMDMobileImageMounterImageVerificationFailed", "kAMDMobileImageMounterImageInfoCreationFailed", "kAMDMobileImageMounterImageMapStoreFailed", "kAMDBonjourSetupError", "kAMDDeviceOSVersionTooLow", "kAMDNoWifiSyncSupportError", "kAMDDeviceFamilyNotSupported", "kAMDEscrowLockedError", "kAMDPairingProhibitedError", "kAMDProhibitedBySupervision", "kAMDDeviceDisconnectedError", "kAMDTooBigError", "kAMDPackagePatchFailedError", "kAMDIncorrectArchitectureError", "kAMDPluginCopyFailedError", "kAMDBreadcrumbFailedError", "kAMDBreadcrumbUnlockError", "kAMDGeoJSONCaptureFailedError", "kAMDNewsstandArtworkCaptureFailedError", "kAMDMissingCommandError", "kAMDNotEntitledError", "kAMDMissingPackagePathError", "kAMDMissingContainerPathError", "kAMDMissingApplicationIdentifierError", "kAMDMissingAttributeValueError", "kAMDLookupFailedError", "kAMDDictCreationFailedError", "kAMDUserDeniedPairingError", "kAMDPairingDialogResponsePendingError", "kAMDInstallProhibitedError", "kAMDUninstallProhibitedError", "kAMDFMiPProtectedError", "kAMDMCProtected", "kAMDMCChallengeRequired", "kAMDMissingBundleVersionError"};
 static char*  SDMMD_AMDErrorString(uint32_t error) {
     uint32_t index = error & 0xff;
-    if (index > 156) return NULL;
+    if (index > 0x9c) return NULL;
 	return SDMMD_ServiceConnectionErrorString[index];
 }
 
-static char* SDMMD_AFCConnectionErrorString[24] = {"kAFCSuccess", "kAFCUndefinedError", "kAFCBadHeaderError", "kAFCNoResourcesError", "kAFCReadError", "kAFCWriteError", "kAFCUnknownPacketError", "kAFCInvalidArgumentError", "kAFCNotFoundError", "kAFCIsDirectoryError", "kAFCPermissionError", "kAFCNotConnectedError", "kAFCTimeOutError", "kAFCOverrunError", "kAFCEOFError", "kAFCUnsupportedError", "kAFCFileExistsError", "kAFCBusyError", "kAFCNoSpaceError", "kAFCWouldBlockError", "kAFCInputOutputError", "kAFCInterruptedError", "kAFCInProgressError", "kAFCInternalError"};
+static char* SDMMD_AFCConnectionErrorString[0x18] = {"kAFCSuccess", "kAFCUndefinedError", "kAFCBadHeaderError", "kAFCNoResourcesError", "kAFCReadError", "kAFCWriteError", "kAFCUnknownPacketError", "kAFCInvalidArgumentError", "kAFCNotFoundError", "kAFCIsDirectoryError", "kAFCPermissionError", "kAFCNotConnectedError", "kAFCTimeOutError", "kAFCOverrunError", "kAFCEOFError", "kAFCUnsupportedError", "kAFCFileExistsError", "kAFCBusyError", "kAFCNoSpaceError", "kAFCWouldBlockError", "kAFCInputOutputError", "kAFCInterruptedError", "kAFCInProgressError", "kAFCInternalError"};
 static char* SDMMD_AFCErrorString(uint32_t error) {
     uint32_t index = error & 0xff;
-    if (index > 24) return NULL;
+    if (index > 0x18) return NULL;
 	return SDMMD_AFCConnectionErrorString[index];
 }
 
