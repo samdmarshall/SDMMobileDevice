@@ -70,12 +70,17 @@ typedef enum SDMMD_USBMuxPacketMessageType {
 	kSDMMD_USBMuxPacketDetachType = 0x5,
 	kSDMMD_USBMuxPacketLogsType = 0x6,
 	kSDMMD_USBMuxPacketListDevicesType = 0x7,
-	kSDMMD_USBMuxPacketListListenersType = 0x8
+	kSDMMD_USBMuxPacketListListenersType = 0x8,
+	kSDMMD_USBMuxPacketReadBUIDType,
+	kSDMMD_USBMuxPacketReadPairRecordType,
+	kSDMMD_USBMuxPacketSavePairRecordType,
+	kSDMMD_USBMuxPacketDeletePairRecordType,
+	kSDMMD_USBMuxPacketMessageCount
 } SDMMD_USBMuxPacketMessageType;
 
-#define kKnownSDMMD_USBMuxPacketMessageType 0x9
+#define kKnownSDMMD_USBMuxPacketMessageType kSDMMD_USBMuxPacketMessageCount
 
-static CFStringRef SDMMD_USBMuxPacketMessage[kKnownSDMMD_USBMuxPacketMessageType] = {
+static CFStringRef SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketMessageCount] = {
 	CFSTR("Invalid"),
 	CFSTR("Connect"),
 	CFSTR("Listen"),
@@ -84,18 +89,22 @@ static CFStringRef SDMMD_USBMuxPacketMessage[kKnownSDMMD_USBMuxPacketMessageType
 	CFSTR("Detached"),
 	CFSTR("Logs"),
 	CFSTR("ListDevices"),
-	CFSTR("ListListeners")
+	CFSTR("ListListeners"),
+	CFSTR("ReadBUID"),
+	CFSTR("ReadPairRecord"),
+	CFSTR("SavePairRecord"),
+	CFSTR("DeletePairRecord")
 };
 
 typedef enum SDMMD_USBMuxResultCodeType {
 	SDMMD_USBMuxResult_OK = 0x0,
-	SDMMD_USBMuxResult_BadCommand = 0x1,
-	SDMMD_USBMuxResult_BadDevice = 0x2,
-	SDMMD_USBMuxResult_ConnectionRefused = 0x3,
-	SDMMD_USBMuxResult_Unknown0 = 0x4,
-	SDMMD_USBMuxResult_Unknown1 = 0x5,
-	SDMMD_USBMuxResult_BadVersion = 0x6,
-	SDMMD_USBMuxResult_Unknown2 = 0x7
+	SDMMD_USBMuxResult_BadCommand = 0x2d,
+	SDMMD_USBMuxResult_BadDevice = 0x6,
+	SDMMD_USBMuxResult_ConnectionRefused = 0x3d,
+	SDMMD_USBMuxResult_Unknown0 = 0xffffffff,
+	SDMMD_USBMuxResult_BadMessage = 0x16,
+	SDMMD_USBMuxResult_BadVersion = 0x49,
+	SDMMD_USBMuxResult_Unknown2 = 0x4b
 } SDMMD_USBMuxResultCodeType;
 
 #pragma mark -

@@ -19,16 +19,16 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
 	SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 	SDMMD_AMDebugConnectionRef connection;
 	sdmmd_return_t result = SDMMD_AMDeviceConnect(device);
-	if (SDM_MD_CallSuccessful(result)) {
+	SDMMD_CondSuccess(result, {
 		result = SDMMD_AMDeviceStartSession(device);
-		if (SDM_MD_CallSuccessful(result)) {
+		SDMMD_CondSuccess(result, {
 			CFDictionaryRef response;
 			CFArrayRef lookupValues = SDMMD_ApplicationLookupDictionary();
 			CFMutableDictionaryRef optionsDict = SDMMD_create_dict();
 			CFDictionarySetValue(optionsDict, CFSTR("ReturnAttributes"), lookupValues);
 			
 			result = SDMMD_AMDeviceLookupApplications(device, optionsDict, &response);
-			if (SDM_MD_CallSuccessful(result)) {
+			SDMMD_CondSuccess(result, {
 				CFStringRef bundleIdentifier = CFStringCreateWithCString(kCFAllocatorDefault, identifier, kCFStringEncodingUTF8);
 				if (CFDictionaryContainsKey(response, bundleIdentifier)) {
 					CFDictionaryRef details = CFDictionaryGetValue(response, bundleIdentifier);
@@ -36,7 +36,7 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
 						SDMMD_AMDeviceStopSession(device);
 						SDMMD_AMDeviceDisconnect(device);
 						sdmmd_return_t result = SDMMD_StartDebuggingSessionOnDevice(device, &connection);
-						if (SDM_MD_CallSuccessful(result)) {
+						SDMMD_CondSuccess(result, {
 							CFStringRef encodedPath = SDMMD_EncodeForDebuggingCommand(CFDictionaryGetValue(details, CFSTR("Path")));
 							CFStringRef containerPath = SDMMD_EncodeForDebuggingCommand(CFDictionaryGetValue(details, CFSTR("Container")));
 							sdmmd_debug_return_t dresult;
@@ -47,20 +47,12 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
 							dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugH], CFSTR("c0"));
 							dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugc], CFSTR(""));
 							CFRunLoopRun();
-						} else {
-							printf("%s\n",SDMMD_AMDErrorString(result));
-						}
+						})
 					}
 				}
-			} else {
-				printf("%s\n",SDMMD_AMDErrorString(result));
-			}
-		} else {
-			printf("%s\n",SDMMD_AMDErrorString(result));
-		}
-	} else {
-		printf("%s\n",SDMMD_AMDErrorString(result));
-	}
+			})
+		})
+	})
 }
 
 #endif

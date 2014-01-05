@@ -18,28 +18,22 @@
 void LookupAppsOnDevice(char *udid) {
 	SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 	sdmmd_return_t result = SDMMD_AMDeviceConnect(device);
-	if (SDM_MD_CallSuccessful(result)) {
+	SDMMD_CondSuccess(result, {
 		result = SDMMD_AMDeviceStartSession(device);
-		if (SDM_MD_CallSuccessful(result)) {
+		SDMMD_CondSuccess(result, {
 			CFDictionaryRef response;
 			CFArrayRef lookupValues = SDMMD_ApplicationLookupDictionary();
 			CFMutableDictionaryRef optionsDict = SDMMD_create_dict();
 			CFDictionarySetValue(optionsDict, CFSTR("ReturnAttributes"), lookupValues);
 			
 			result = SDMMD_AMDeviceLookupApplications(device, optionsDict, &response);
-			if (SDM_MD_CallSuccessful(result)) {
+			SDMMD_CondSuccess(result, {
 				PrintCFDictionary(response);
-			} else {
-				printf("%s\n",SDMMD_AMDErrorString(result));
-			}
+			})
 			SDMMD_AMDeviceStopSession(device);
-		} else {
-			printf("%s\n",SDMMD_AMDErrorString(result));
-		}
+		})
 		SDMMD_AMDeviceDisconnect(device);
-	} else {
-		printf("%s\n",SDMMD_AMDErrorString(result));
-	}
+	})
 }
 
 #endif

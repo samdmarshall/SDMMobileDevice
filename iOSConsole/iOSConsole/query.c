@@ -16,7 +16,7 @@ void PerformQuery(char *udid, char *domain, char *key) {
 	if ((udid && strlen(udid) == 0x28) && key) {
 		SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 		sdmmd_return_t result = SDMMD_AMDeviceConnect(device);
-		if (SDM_MD_CallSuccessful(result)) {
+		SDMMD_CondSuccess(result, {
 			CFStringRef domainString = NULL;
 			if (strncmp(domain, "null", strlen("null")) != 0x0) {
 				domainString = CFStringCreateWithCString(kCFAllocatorDefault, domain, kCFStringEncodingUTF8);
@@ -24,22 +24,18 @@ void PerformQuery(char *udid, char *domain, char *key) {
 			CFStringRef keyString = CFStringCreateWithCString(kCFAllocatorDefault, key, kCFStringEncodingUTF8);
 			
 			result = SDMMD_AMDeviceStartSession(device);
-			if (SDM_MD_CallSuccessful(result)) {
+			SDMMD_CondSuccess(result, {
 				CFTypeRef queryResult = SDMMD_AMDeviceCopyValue(device, domainString, keyString);
 				CFShow(queryResult);
 				result = SDMMD_AMDeviceStopSession(device);
-			} else {
-				printf("%s\n",SDMMD_AMDErrorString(result));
-			}
+			})
 			
 			CFRelease(keyString);
 			if (domainString) {
 				CFRelease(domainString);
 			}
 			SDMMD_AMDeviceDisconnect(device);
-		} else {
-			printf("%s\n",SDMMD_AMDErrorString(result));
-		}
+		})
 	}
 }
 

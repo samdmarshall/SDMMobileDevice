@@ -33,16 +33,14 @@ void ListConnectedDevices() {
 			
 			// attempting to connect to the device
 			result = SDMMD_AMDeviceConnect(device);
-			if (SDM_MD_CallSuccessful(result)) {
+			SDMMD_CondSuccess(result, {
 				CFTypeRef deviceName = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kDeviceName));
 				CFTypeRef deviceUDID = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kUniqueDeviceID));
 				printf("%d) %s : %s\n",index+0x1,CFStringGetCStringPtr(deviceName,kCFStringEncodingMacRoman),CFStringGetCStringPtr(deviceUDID,kCFStringEncodingMacRoman));
 				CFRelease(deviceName);
 				CFRelease(deviceUDID);
 				SDMMD_AMDeviceDisconnect(device);
-			} else {
-				printf("%s\n",SDMMD_AMDErrorString(result));
-			}
+			})
 		}
 	}
 	CFRelease(devices);

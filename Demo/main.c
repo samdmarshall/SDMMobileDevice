@@ -54,8 +54,8 @@ void KeyExplore(char *domain, char *key) {
 int main (int argc, const char * argv[]) {
 	// Needed to initialize the library and start the device listener (SDMMD_MCP.h)
 	SDMMobileDevice;
-	
-	KeyExplore("","BrickState");
+	AFCTest();
+	//KeyExplore("","BrickState");
 	//DemoOne();
 	//DemoTwo();
 	if (argc == 2) {

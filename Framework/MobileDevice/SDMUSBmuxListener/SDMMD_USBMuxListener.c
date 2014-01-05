@@ -57,44 +57,33 @@ struct USBMuxResponseCode SDMMD_USBMuxParseReponseCode(CFDictionaryRef dict) {
 		CFNumberGetValue(resultCode, CFNumberGetType(resultCode), &code);
 		switch (code) {
 			case SDMMD_USBMuxResult_OK: {
-				code = 0x0;
-					resultString = CFSTR("OK");
+				resultString = CFSTR("OK");
 				break;
 			};
 			case SDMMD_USBMuxResult_BadCommand: {
-				code = 0x2d;
-				if (!resultString)
-					resultString = CFSTR("Bad Command");
+				resultString = CFSTR("Bad Command");
 				break;
 			};
 			case SDMMD_USBMuxResult_BadDevice: {
-				code = 0x6;
-				if (!resultString)
-					resultString = CFSTR("Bad Device");
+				resultString = CFSTR("Bad Device");
 				break;
 			};
 			case SDMMD_USBMuxResult_ConnectionRefused: {
-				code = 0x3d;
-				if (!resultString)
-					resultString = CFSTR("Connection Refused by Device");
+				resultString = CFSTR("Connection Refused by Device");
 				break;
 			};
 			case SDMMD_USBMuxResult_Unknown0: {
-				code = 0xffffffff;
 				break;
 			};
-			case SDMMD_USBMuxResult_Unknown1: {
-				code = 0x16;
+			case SDMMD_USBMuxResult_BadMessage: {
+				resultString = CFSTR("Incorrect Message Contents");
 				break;
 			};
 			case SDMMD_USBMuxResult_BadVersion: {
-				code = 0x49;
-				if (!resultString)
-					resultString = CFSTR("Bad Protocol Version");
+				resultString = CFSTR("Bad Protocol Version");
 				break;
 			};
 			case SDMMD_USBMuxResult_Unknown2: {
-				code = 0x4b;
 				break;
 			};
 			default: {
@@ -110,7 +99,7 @@ void SDMMD_USBMuxResponseCallback(void *context, struct USBMuxPacket *packet) {
 		struct USBMuxResponseCode response = SDMMD_USBMuxParseReponseCode(packet->payload);
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0x0), ^{
 			if (response.code) {
-				printf("usbmuxd returned%s: %d - %s.\n", (response.code ? " error" : ""), response.code, (response.string ? CFStringGetCStringPtr(response.string, CFStringGetFastestEncoding(response.string)) : "Unknown Error Description"));
+				printf("usbmuxd returned%s: %d - %s.\n", (response.code ? " error" : ""), response.code, (response.string ? CFStringGetCStringPtr(response.string, kCFStringEncodingUTF8) : "Unknown Error Description"));
 			}
 		});
 		dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->semaphore);

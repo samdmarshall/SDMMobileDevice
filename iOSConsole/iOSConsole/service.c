@@ -28,6 +28,7 @@ void PerformService(char *udid, char *service, ...) {
 				break;
 			};
 			case SDM_MD_Service_AFC2: {
+				// SDM: drop into console mode
 				break;
 			};
 			case SDM_MD_Service_BACKUP: {

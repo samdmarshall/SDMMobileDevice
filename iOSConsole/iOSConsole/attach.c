@@ -30,7 +30,7 @@ SDMMD_AMDeviceRef FindDeviceFromUDID(char *udid) {
 			
 			// attempting to connect to the device
 			result = SDMMD_AMDeviceConnect(device);
-			if (SDM_MD_CallSuccessful(result)) {
+			SDMMD_CondSuccess(result, {
 				CFTypeRef deviceUDID = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kUniqueDeviceID));
 				deviceId = (char*)CFStringGetCStringPtr(deviceUDID,kCFStringEncodingMacRoman);
 				CFRelease(deviceUDID);
@@ -39,9 +39,7 @@ SDMMD_AMDeviceRef FindDeviceFromUDID(char *udid) {
 					break;
 				}
 				SDMMD_AMDeviceDisconnect(device);
-			} else {
-				printf("%s\n",SDMMD_AMDErrorString(result));
-			}
+			})
 		}
 		if (foundDevice) {
 			device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
@@ -57,12 +55,12 @@ SDMMD_AMConnectionRef AttachToDeviceAndService(SDMMD_AMDeviceRef device, char *s
 	SDMMD_AMConnectionRef serviceCon = NULL;
 	if (device) {
 		sdmmd_return_t result = SDMMD_AMDeviceConnect(device);
-		if (SDM_MD_CallSuccessful(result)) {
+		SDMMD_CondSuccess(result, {
 			result = SDMMD_AMDeviceStartSession(device);
-			if (SDM_MD_CallSuccessful(result)) {
+			SDMMD_CondSuccess(result, {
 				CFStringRef serviceString = CFStringCreateWithCString(kCFAllocatorDefault, service, kCFStringEncodingMacRoman);
 				result = SDMMD_AMDeviceStartService(device, serviceString, NULL, &serviceCon);
-				if (SDM_MD_CallSuccessful(result)) {
+				SDMMD_CondSuccess(result, {
 					CFTypeRef deviceName = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kDeviceName));
 					char *name = (char*)CFStringGetCStringPtr(deviceName,kCFStringEncodingMacRoman);
 					if (!name) {
@@ -70,15 +68,9 @@ SDMMD_AMConnectionRef AttachToDeviceAndService(SDMMD_AMDeviceRef device, char *s
 					}
 					printf("Connected to %s on \"%s\" ...\n",name,service);
 					CFRelease(deviceName);
-				} else {
-					printf("%s\n",SDMMD_AMDErrorString(result));
-				}
-			} else {
-				printf("%s\n",SDMMD_AMDErrorString(result));
-			}
-		} else {
-			printf("%s\n",SDMMD_AMDErrorString(result));
-		}
+				})
+			})
+		})
 	} else {
 		printf("Could not find device with that UDID\n");
 	}
