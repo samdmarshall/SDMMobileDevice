@@ -31,6 +31,7 @@
 		22B955851878DCBF004DCBF0 /* CFDictionaryAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B955841878DCBF004DCBF0 /* CFDictionaryAddition.c */; };
 		22B955881878F14F004DCBF0 /* run.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B955871878F14F004DCBF0 /* run.c */; };
 		22B9558A1878F4A7004DCBF0 /* SDMMD_Debugger.c in Sources */ = {isa = PBXBuildFile; fileRef = 22310DA518750D430092C107 /* SDMMD_Debugger.c */; };
+		22B9558C1879DB51004DCBF0 /* libncurses.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B9558B1879DB51004DCBF0 /* libncurses.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -123,6 +124,7 @@
 		22B955841878DCBF004DCBF0 /* CFDictionaryAddition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CFDictionaryAddition.c; sourceTree = "<group>"; };
 		22B955871878F14F004DCBF0 /* run.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = run.c; sourceTree = "<group>"; };
 		22B955891878F157004DCBF0 /* run.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = run.h; sourceTree = "<group>"; };
+		22B9558B1879DB51004DCBF0 /* libncurses.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libncurses.dylib; path = usr/lib/libncurses.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22B9558C1879DB51004DCBF0 /* libncurses.dylib in Frameworks */,
 				22310DC818750DE70092C107 /* libcrypto.dylib in Frameworks */,
 				22310DC618750DCF0092C107 /* libssl.dylib in Frameworks */,
 				22310D6A1874F4B10092C107 /* CoreFoundation.framework in Frameworks */,
@@ -160,6 +163,7 @@
 		22310D681874F4B10092C107 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				22B9558B1879DB51004DCBF0 /* libncurses.dylib */,
 				22310DC718750DE70092C107 /* libcrypto.dylib */,
 				22310DC518750DCF0092C107 /* libssl.dylib */,
 				22310D751874F5420092C107 /* SDMMobileDevice.framework */,

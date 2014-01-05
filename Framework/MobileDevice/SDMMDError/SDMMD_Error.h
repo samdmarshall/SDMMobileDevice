@@ -317,6 +317,7 @@ static char* SDMMD_AFCErrorString(uint32_t error) {
 
 #define SDM_MD_CallSuccessful(result_code) ((result_code == kAMDSuccess) || (result_code == MDERR_USBMUX_OK) || (result_code == LD_ERR_OK))
 
-#define SDMMD_CondSuccess(code, block) if (SDM_MD_CallSuccessful(code)) block else { printf("%s\n",SDMMD_AMDErrorString(result)); }
+#define SDMMD_CondSuccess(code, block) if (SDM_MD_CallSuccessful(code)) { if (1) block } else { printf("%s\n",SDMMD_AMDErrorString(result)); }
+#define SDMMD_CondSuccessElse(code, block, elseBlock) if (SDM_MD_CallSuccessful(code)) { if (1) block } else { printf("%s\n",SDMMD_AMDErrorString(result)); if (1) elseBlock }
 
 #endif

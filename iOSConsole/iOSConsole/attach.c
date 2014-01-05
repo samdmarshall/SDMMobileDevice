@@ -60,7 +60,7 @@ SDMMD_AMConnectionRef AttachToDeviceAndService(SDMMD_AMDeviceRef device, char *s
 			SDMMD_CondSuccess(result, {
 				CFStringRef serviceString = CFStringCreateWithCString(kCFAllocatorDefault, service, kCFStringEncodingMacRoman);
 				result = SDMMD_AMDeviceStartService(device, serviceString, NULL, &serviceCon);
-				SDMMD_CondSuccess(result, {
+				SDMMD_CondSuccessElse(result, {
 					CFTypeRef deviceName = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kDeviceName));
 					char *name = (char*)CFStringGetCStringPtr(deviceName,kCFStringEncodingMacRoman);
 					if (!name) {
@@ -68,6 +68,10 @@ SDMMD_AMConnectionRef AttachToDeviceAndService(SDMMD_AMDeviceRef device, char *s
 					}
 					printf("Connected to %s on \"%s\" ...\n",name,service);
 					CFRelease(deviceName);
+				}, {
+					SDMMD_AMDeviceStopSession(device);
+					SDMMD_AMDeviceDisconnect(device);
+					serviceCon = NULL;
 				})
 			})
 		})

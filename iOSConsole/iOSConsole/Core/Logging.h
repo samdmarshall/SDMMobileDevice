@@ -59,7 +59,7 @@ static char* PrintCodeString[PrintCode_Count] = {
 	"TRY",
 	"ERR",
 	"NTR",
-	"???"
+	//"???"
 };
 
 #define LoggerPrintCodeColorDirect(code) (LoggerUseColorCodes ? code : "")

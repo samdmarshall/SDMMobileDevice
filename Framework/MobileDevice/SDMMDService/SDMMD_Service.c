@@ -56,7 +56,7 @@ int32_t CheckIfExpectingResponse(SocketConnection handle, uint32_t timeout) {
 
 
 sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
-	uint32_t msgLen = (data ? CFDataGetLength(data) : 0);
+	CFIndex msgLen = (data ? CFDataGetLength(data) : 0);
 	if (msgLen) {
 	    msgLen = htonl((uint32_t)msgLen);
 		uint32_t result;
@@ -82,7 +82,7 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 }
 
 sdmmd_return_t SDMMD_DirectServiceSend(SocketConnection handle, CFDataRef data) {
-	uint32_t msgLen = (data ? CFDataGetLength(data) : 0);
+	CFIndex msgLen = (data ? CFDataGetLength(data) : 0);
 	if (msgLen) {
 		uint32_t result;
 		if (handle.isSSL) {
@@ -183,7 +183,7 @@ sdmmd_return_t SDMMD_ServiceSendStream(SocketConnection handle, CFPropertyListRe
 	CFStringRef errStr;
 	CFWriteStreamRef write = CFWriteStreamCreateWithAllocatedBuffers(kCFAllocatorDefault, kCFAllocatorDefault);
 	CFWriteStreamOpen(write);
-	uint32_t length = CFPropertyListWriteToStream(data, write, format, &errStr);
+	CFIndex length = CFPropertyListWriteToStream(data, write, format, &errStr);
 	CFDataRef xmlData = CFWriteStreamCopyProperty(write, kCFStreamPropertyDataWritten);
 	sdmmd_return_t result = kAMDInvalidArgumentError;
 	if (length == CFDataGetLength(xmlData)) {

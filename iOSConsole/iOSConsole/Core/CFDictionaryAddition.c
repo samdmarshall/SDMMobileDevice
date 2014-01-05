@@ -31,6 +31,9 @@ void PrintCFDictionaryInternalFormatting(CFDictionaryRef dictionary, uint32_t de
 			PrintCFDictionaryInternalFormatting(value, depth+0x1);
 			printf("\n");
 		}
+		if (CFStringCompare(valueType, CFCopyTypeIDDescription(CFBooleanGetTypeID()), 0x0) == kCFCompareEqualTo) {
+			printf("%s\n",(CFBooleanGetValue(value) ? "True" : "False"));
+		}
 		if (CFStringCompare(valueType, CFCopyTypeIDDescription(CFStringGetTypeID()), 0x0) == kCFCompareEqualTo) {
 			printf("%s\n",(char*)CFStringGetCStringPtr(value,kCFStringEncodingUTF8));
 		}

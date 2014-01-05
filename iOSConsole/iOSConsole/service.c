@@ -9,9 +9,86 @@
 #ifndef iOSConsole_service_c
 #define iOSConsole_service_c
 
+#include <sys/socket.h>
+#include <sys/un.h>
+
 #include "service.h"
 #include "attach.h"
 #include "syslog.h"
+#include "Core.h"
+
+void ServiceSocketCallback(CFSocketRef s, CFSocketCallBackType callbackType, CFDataRef address, const void *data, void *info) {
+    CFSocketNativeHandle socket = (CFSocketNativeHandle)(*((CFSocketNativeHandle *)data));
+	
+    struct msghdr message;
+    struct iovec iov[1];
+    struct cmsghdr *control_message = NULL;
+    char ctrl_buf[CMSG_SPACE(sizeof(int))];
+    char dummy_data[1];
+	
+    memset(&message, 0, sizeof(struct msghdr));
+    memset(ctrl_buf, 0, CMSG_SPACE(sizeof(int)));
+	
+    dummy_data[0] = ' ';
+    iov[0].iov_base = dummy_data;
+    iov[0].iov_len = sizeof(dummy_data);
+	
+    message.msg_name = NULL;
+    message.msg_namelen = 0;
+    message.msg_iov = iov;
+    message.msg_iovlen = 1;
+    message.msg_controllen = CMSG_SPACE(sizeof(int));
+    message.msg_control = ctrl_buf;
+	
+    control_message = CMSG_FIRSTHDR(&message);
+    control_message->cmsg_level = SOL_SOCKET;
+    control_message->cmsg_type = SCM_RIGHTS;
+    control_message->cmsg_len = CMSG_LEN(sizeof(int));
+	
+    *((int *) CMSG_DATA(control_message)) = PtrCast(info,int);
+	
+    sendmsg(socket, &message, 0);
+    CFSocketInvalidate(s);
+    CFRelease(s);
+}
+
+void CreateLocalSocket(char *udid, struct SDM_MD_Service_Identifiers service) {
+	SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
+	SDMMD_AMConnectionRef serviceCon = AttachToDeviceAndService(device, service.identifier);
+	if (serviceCon) {
+		char *socketPath = calloc(0x1, sizeof(char)*0x400);
+		strlcat(socketPath, "/tmp/sdm_", 0xa);
+		strlcat(&(socketPath[0x9]), service.shorthand, 0xa+strlen(service.shorthand));
+		printf("Creating socket at %s\n",socketPath);
+		
+		SocketConnection serviceSocket = SDMMD_TranslateConnectionToSocket(serviceCon);
+		CFSocketContext context;
+		if (serviceSocket.isSSL) {
+			context = (CFSocketContext){ 0x0, serviceSocket.socket.ssl, NULL, NULL, NULL };
+		} else {
+			context = (CFSocketContext){ 0x0, &serviceSocket.socket.conn, NULL, NULL, NULL };
+		}
+		CFSocketRef serviceSock = CFSocketCreate(NULL, AF_UNIX, 0, 0, kCFSocketAcceptCallBack, &ServiceSocketCallback, &context);
+		
+		int yes = 1;
+		setsockopt(CFSocketGetNative(serviceSock), SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
+		
+		struct sockaddr_un address;
+		memset(&address, 0, sizeof(address));
+		address.sun_family = AF_UNIX;
+		strcpy(address.sun_path, socketPath);
+		address.sun_len = SUN_LEN(&address);
+		CFDataRef address_data = CFDataCreate(NULL, (const UInt8 *)&address, sizeof(address));
+		
+		unlink(socketPath);
+		
+		CFSocketSetAddress(serviceSock, address_data);
+		CFRelease(address_data);
+		CFRunLoopAddSource(CFRunLoopGetMain(), CFSocketCreateRunLoopSource(NULL, serviceSock, 0), kCFRunLoopCommonModes);
+		free(socketPath);
+		CFRunLoopRun();
+	}
+}
 
 void PerformService(char *udid, char *service, ...) {
 	if ((udid && strlen(udid) == 0x28) && (service)) {
@@ -19,11 +96,16 @@ void PerformService(char *udid, char *service, ...) {
 		for (index = 0x0; index < SDM_MD_Service_Count; index++) {
 			char *ident = SDMMDServiceIdentifiers[index].identifier;
 			char *shorthand = SDMMDServiceIdentifiers[index].shorthand;
-			if (strncmp(service, ident, strlen(ident)) == 0x0 || strncmp(service, shorthand, strlen(shorthand)) == 0x0) {
+			if ((strncmp(service, ident, strlen(ident)) == 0x0 && strlen(service) == strlen(ident)) || (strncmp(service, shorthand, strlen(shorthand)) == 0x0 && strlen(service) == strlen(shorthand))) {
 				break;
 			}
 		}
 		switch (index) {
+			//case SDM_MD_Service_SYSLOG_RELAY: {
+			//	Syslog(udid);
+			//	break;
+			//};
+			/*
 			case SDM_MD_Service_AFC: {
 				break;
 			};
@@ -158,7 +240,11 @@ void PerformService(char *udid, char *service, ...) {
 			case SDM_MD_Service_RADIOS_TEST_ROOT: {
 				break;
 			};
+			*/
 			default: {
+				if (index < SDM_MD_Service_Count) {
+					CreateLocalSocket(udid, SDMMDServiceIdentifiers[index]);
+				}
 				break;
 			};
 		}
