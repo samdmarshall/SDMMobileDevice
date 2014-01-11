@@ -45,7 +45,7 @@ enum LoggerPrintCodes {
 	PrintCode_Count
 };
 
-static char* PrintColourCode[PrintCode_Count] = {
+__attribute__ ((unused)) static char* PrintColourCode[PrintCode_Count] = {
 	COLOR_NRM,
 	COLOR_GRN,
 	COLOR_YEL,
@@ -53,7 +53,7 @@ static char* PrintColourCode[PrintCode_Count] = {
 	COLOR_BLU
 };
 
-static char* PrintCodeString[PrintCode_Count] = {
+__attribute__ ((unused)) static char* PrintCodeString[PrintCode_Count] = {
 	"",
 	"OK!",
 	"TRY",

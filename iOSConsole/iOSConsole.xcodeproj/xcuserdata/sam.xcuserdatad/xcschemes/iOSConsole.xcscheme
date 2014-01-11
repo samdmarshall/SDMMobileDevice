@@ -71,7 +71,7 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "afc"
+            argument = "syslog"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

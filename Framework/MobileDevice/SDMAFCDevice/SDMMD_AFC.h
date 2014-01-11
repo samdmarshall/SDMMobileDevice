@@ -52,7 +52,7 @@ typedef struct SDMMD_AFCPacketHeader {
 
 struct sdmmd_AFCPacket {
 	SDMMD_AFCPacketHeader header;
-	void* data;
+	char* data;
 } sdmmd_AFCPacket;
 
 struct sdmmd_AFCOperation {

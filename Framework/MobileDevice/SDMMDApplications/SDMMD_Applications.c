@@ -77,7 +77,7 @@ void SDMMD_preflight_transfer(char *path, struct stat *statRef, char *rStatRef) 
 	if (statResult != 0xff) {
 		if ((*(int16_t *)(statRef + 0x4) & 0xffff & 0xf000) != 0x4000) {
 			rStatRef[0] = 0x1;
-			rStatRef[8] = (statRef + 0x60);
+			rStatRef[8] = (char)(statRef + 0x60);
 		} else {
 			// error!
 		}
@@ -89,7 +89,7 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 	if (path) {
 		if (conn) {
 			char *cpath = calloc(0x1, 0x401);
-			struct stat pathStat, remoteStat;
+			__attribute__ ((unused)) struct stat pathStat, remoteStat;
 			Boolean status = CFStringGetCString(path, cpath, 0x401, 0x8000100);
 			if (status) {
 				CFURLRef deviceURL = SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(path);
@@ -98,12 +98,12 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 					if (lastComp) {
 						CFURLRef base = SDMMD__AMDCFURLCreateWithFileSystemPathRelativeToBase(kCFAllocatorDefault, CFSTR("PublicStaging"), 0x0, 0x1);
 						CFURLRef copy = CFURLCreateCopyAppendingPathComponent(kCFAllocatorDefault, base, lastComp, true);
-						char *copyPath;
+						char *copyPath = NULL;
 						SDMMD__AMDCFURLGetCStringForFileSystemPath(copy, copyPath);
 						SDMMD_fire_callback_767f4(transferCallback, unknown, 0x0, CFSTR("PreflightingTransfer"));
 						//SDMMD_preflight_transfer(&cpath, &pathStat, &remoteStat);
 						SDMMD_fire_callback_767f4(transferCallback, unknown, 0x0, CFSTR("TransferingPackage"));
-						SDMMD_AFCConnectionRef afcConn = SDMMD_AFCConnectionCreate(conn);//(r12, conn, 0x0, 0x0, &var_72);
+						__attribute__ ((unused)) SDMMD_AFCConnectionRef afcConn = SDMMD_AFCConnectionCreate(conn);//(r12, conn, 0x0, 0x0, &var_72);
 						// loop that iterates through all of file contents
 						
 						

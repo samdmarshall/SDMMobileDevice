@@ -299,7 +299,7 @@ void fdvendor_callback(CFSocketRef s, CFSocketCallBackType callbackType, CFDataR
     control_message->cmsg_type = SCM_RIGHTS;
     control_message->cmsg_len = CMSG_LEN(sizeof(int));
 	
-    *((int *) CMSG_DATA(control_message)) = info;
+    *((int *) CMSG_DATA(control_message)) = (int)info;
 	
     sendmsg(socket, &message, 0);
     CFSocketInvalidate(s);
@@ -308,7 +308,7 @@ void fdvendor_callback(CFSocketRef s, CFSocketCallBackType callbackType, CFDataR
 
 void SDMMD_StartDebugger(SDMMD_AMDebugConnectionRef connection, CFStringRef bundleId) {
 	
-	CFSocketContext context = { 0, connection->ivars.socket, NULL, NULL, NULL };
+	CFSocketContext context = { 0, (*(void**)&(connection->ivars.socket)), NULL, NULL, NULL };
 	CFSocketRef fdvendor = CFSocketCreate(NULL, AF_UNIX, 0, 0, kCFSocketAcceptCallBack, &fdvendor_callback, &context);
 	
     int yes = 1;

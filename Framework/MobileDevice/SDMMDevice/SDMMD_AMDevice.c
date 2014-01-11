@@ -64,7 +64,7 @@ static void SDMMD_AMDeviceRefFinalize(CFTypeRef cf) {
 		CFRelease(device->ivars.unique_device_id);
 	if (device->ivars.lockdown_conn) {
 		if (device->ivars.lockdown_conn->connection)
-			close(device->ivars.lockdown_conn->connection);
+			close((uint32_t)device->ivars.lockdown_conn->connection);
 		if (device->ivars.lockdown_conn->ssl)
 			SSL_free(device->ivars.lockdown_conn->ssl);
 	}
@@ -113,7 +113,7 @@ SDMMD_lockdown_conn* SDMMD_lockdown_connection_create(uint32_t socket) {
 BIO* SDMMD__create_bio_from_data(CFDataRef data) {
 	BIO *bio = NULL;
 	if (data) {
-		bio = BIO_new_mem_buf((void*)CFDataGetBytePtr(data),CFDataGetLength(data));
+		bio = BIO_new_mem_buf((void*)CFDataGetBytePtr(data),(uint32_t)CFDataGetLength(data));
 	}
 	return bio;
 }
@@ -145,7 +145,7 @@ int SDMMD__ssl_verify_callback(int value, X509_STORE_CTX *store) {
 		cert = X509_STORE_CTX_get_current_cert(store);
 		if (cert) {
 			SSL *storeSSL = (SSL *)X509_STORE_CTX_get_ex_data(store, SSL_get_ex_data_X509_STORE_CTX_idx());
-			CFDataRef data = SSL_get_ex_data(storeSSL, SDMMobileDevice->peer_certificate_data_index);
+			CFDataRef data = SSL_get_ex_data(storeSSL, (uint32_t)SDMMobileDevice->peer_certificate_data_index);
 			decoded = SDMMD__decode_certificate(data);
 			uint32_t data1 = i2d_X509(cert, NULL);
 			uint32_t data2 = i2d_X509(decoded, NULL);
@@ -231,7 +231,7 @@ SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostC
 						SSL_set_verify(ssl, 0x3, SDMMD__ssl_verify_callback);
 						SSL_set_verify_depth(ssl, 0x0);
 						SSL_set_bio(ssl, bioSocket, bioSocket);
-						SSL_set_ex_data(ssl, SDMMobileDevice->peer_certificate_data_index, (void*)deviceCert);
+						SSL_set_ex_data(ssl, (uint32_t)SDMMobileDevice->peer_certificate_data_index, (void*)deviceCert);
 						result = SSL_do_handshake(ssl);
 						if (result == 1) {
 							SSL_CTX_free(sslCTX);
@@ -298,7 +298,7 @@ sdmmd_return_t SDMMD_lockconn_send_message(SDMMD_AMDeviceRef device, CFDictionar
 			if (useSSL)
 				conn = (SocketConnection){true, {.ssl = device->ivars.lockdown_conn->ssl}};
 			else
-				conn = (SocketConnection){false, {.conn = device->ivars.lockdown_conn->connection}};
+				conn = (SocketConnection){false, {.conn = (uint32_t)device->ivars.lockdown_conn->connection}};
 			
 			//uint32_t length = CFDataGetLength(xml);
 			//CFDataRef size = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, &length, 0x4, kCFAllocatorNull);
@@ -328,10 +328,11 @@ sdmmd_return_t SDMMD_lockconn_receive_message(SDMMD_AMDeviceRef device, CFMutabl
 	if (device->ivars.lockdown_conn) {
 		bool useSSL = (device->ivars.lockdown_conn->ssl ? true : false);
 		SocketConnection conn;
-		if (useSSL)
+		if (useSSL) {
 			conn = (SocketConnection){true, {.ssl = device->ivars.lockdown_conn->ssl}};
-		else
-			conn = (SocketConnection){false , {.conn = device->ivars.lockdown_conn->connection}};	
+	 	} else {
+			conn = (SocketConnection){false , {.conn = (uint32_t)device->ivars.lockdown_conn->connection}};
+		}
 		
 		SDMMD_ServiceReceiveMessage(conn, (CFPropertyListRef*)dict);
 		/*printf("receive result: 0x%08x\n",result);
@@ -426,7 +427,7 @@ sdmmd_return_t SDMMD_send_set_value(SDMMD_AMDeviceRef device, CFStringRef domain
                             if (error) {
                                 result = kAMDInvalidResponseError;
                                 if (CFGetTypeID(error) == CFStringGetTypeID()) {
-                                    result = SDMMD__ConvertLockdowndError(error);
+                                    result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(error);
                                 }
                             }
                             CFRelease(resultDict);
@@ -447,7 +448,7 @@ sdmmd_return_t SDMMD_lockdown_connection_destory(SDMMD_lockdown_conn *lockdownCo
 			lockdownCon->ssl = NULL;
 		}
 		if (lockdownCon->connection != 0xff) {
-			result = close(lockdownCon->connection);
+			result = close((uint32_t)lockdownCon->connection);
 			if (result == 0xff) {
 				printf("SDMMD_lockdown_connection_destory: close(2) on socket %lld failed: %d.\n",lockdownCon->connection, result);
 			}
@@ -595,7 +596,7 @@ bool SDMMD_isDeviceAttached(uint32_t device_id) {
 	CFArrayRef devices = CFArrayCreateCopy(kCFAllocatorDefault, SDMMobileDevice->deviceList);
 	if (devices) {
 		for (uint32_t i = 0; i < CFArrayGetCount(devices); i++) {
-			SDMMD_AMDeviceRef device = CFArrayGetValueAtIndex(devices, i);
+			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, i);
 			if (device) {
 				uint32_t fetched_id = SDMMD_AMDeviceGetConnectionID(device);
 				//CFNumberRef idNumber = CFDictionaryGetValue(device, CFSTR("DeviceID"));

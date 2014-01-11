@@ -19,24 +19,24 @@
 
 void ServiceSocketCallback(CFSocketRef s, CFSocketCallBackType callbackType, CFDataRef address, const void *data, void *info) {
     CFSocketNativeHandle socket = (CFSocketNativeHandle)(*((CFSocketNativeHandle *)data));
-	
+	printf("callback: %lu\n",callbackType);
     struct msghdr message;
-    struct iovec iov[1];
+    struct iovec iov[0x1];
     struct cmsghdr *control_message = NULL;
     char ctrl_buf[CMSG_SPACE(sizeof(int))];
-    char dummy_data[1];
+    char dummy_data[0x1];
 	
-    memset(&message, 0, sizeof(struct msghdr));
-    memset(ctrl_buf, 0, CMSG_SPACE(sizeof(int)));
+    memset(&message, 0x0, sizeof(struct msghdr));
+    memset(ctrl_buf, 0x0, CMSG_SPACE(sizeof(int)));
 	
     dummy_data[0] = ' ';
-    iov[0].iov_base = dummy_data;
-    iov[0].iov_len = sizeof(dummy_data);
+    iov[0x0].iov_base = dummy_data;
+    iov[0x0].iov_len = sizeof(dummy_data);
 	
     message.msg_name = NULL;
-    message.msg_namelen = 0;
+    message.msg_namelen = 0x0;
     message.msg_iov = iov;
-    message.msg_iovlen = 1;
+    message.msg_iovlen = 0x1;
     message.msg_controllen = CMSG_SPACE(sizeof(int));
     message.msg_control = ctrl_buf;
 	
@@ -47,9 +47,9 @@ void ServiceSocketCallback(CFSocketRef s, CFSocketCallBackType callbackType, CFD
 	
     *((int *) CMSG_DATA(control_message)) = PtrCast(info,int);
 	
-    sendmsg(socket, &message, 0);
-    CFSocketInvalidate(s);
-    CFRelease(s);
+    sendmsg(socket, &message, 0x0);
+    //CFSocketInvalidate(s);
+    //CFRelease(s);
 }
 
 void CreateLocalSocket(char *udid, struct SDM_MD_Service_Identifiers service) {
@@ -68,18 +68,18 @@ void CreateLocalSocket(char *udid, struct SDM_MD_Service_Identifiers service) {
 		} else {
 			context = (CFSocketContext){ 0x0, &serviceSocket.socket.conn, NULL, NULL, NULL };
 		}
-		CFSocketRef serviceSock = CFSocketCreate(NULL, AF_UNIX, 0, 0, kCFSocketAcceptCallBack, &ServiceSocketCallback, &context);
+		CFSocketRef serviceSock = CFSocketCreate(NULL, AF_UNIX, 0x0, 0x0, kCFSocketAcceptCallBack, &ServiceSocketCallback, &context);
 		
-		int yes = 1;
+		int yes = 0x1;
 		setsockopt(CFSocketGetNative(serviceSock), SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
 		
 		struct sockaddr_un address;
-		memset(&address, 0, sizeof(address));
+		memset(&address, 0x0, sizeof(address));
 		address.sun_family = AF_UNIX;
 		strcpy(address.sun_path, socketPath);
 		address.sun_len = SUN_LEN(&address);
 		CFDataRef address_data = CFDataCreate(NULL, (const UInt8 *)&address, sizeof(address));
-		
+
 		unlink(socketPath);
 		
 		CFSocketSetAddress(serviceSock, address_data);
@@ -101,10 +101,10 @@ void PerformService(char *udid, char *service, ...) {
 			}
 		}
 		switch (index) {
-			//case SDM_MD_Service_SYSLOG_RELAY: {
-			//	Syslog(udid);
-			//	break;
-			//};
+			case SDM_MD_Service_SYSLOG_RELAY: {
+				Syslog(udid);
+				break;
+			};
 			/*
 			case SDM_MD_Service_AFC: {
 				break;

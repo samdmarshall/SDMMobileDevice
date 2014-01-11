@@ -1,5 +1,10 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <SDMMobileDevice/SDMMobileDevice.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
+#include <sys/un.h>
+#include <errno.h>
 
 void DemoOne();
 void DemoTwo();
@@ -51,10 +56,83 @@ void KeyExplore(char *domain, char *key) {
 
 }
 
+static void
+read_descriptor (int fd)
+{
+	struct msghdr message;
+    struct iovec iov[0x1];
+    struct cmsghdr *control_message = NULL;
+    char ctrl_buf[CMSG_SPACE(sizeof(int))];
+    char dummy_data[0x1];
+	int n;
+	
+    memset(&message, 0x0, sizeof(struct msghdr));
+    memset(ctrl_buf, 0x0, CMSG_SPACE(sizeof(int)));
+	
+    dummy_data[0] = ' ';
+    iov[0x0].iov_base = dummy_data;
+    iov[0x0].iov_len = sizeof(dummy_data);
+	
+    message.msg_name = NULL;
+    message.msg_namelen = 0x0;
+    message.msg_iov = iov;
+    message.msg_iovlen = 0x1;
+    message.msg_controllen = CMSG_SPACE(sizeof(int));
+    message.msg_control = ctrl_buf;
+	
+    control_message = CMSG_FIRSTHDR(&message);
+    control_message->cmsg_level = SOL_SOCKET;
+    control_message->cmsg_type = SCM_RIGHTS;
+    control_message->cmsg_len = CMSG_LEN(sizeof(int));
+	
+	n = recvmsg (fd, &message, 0);
+	printf("%i\n",n);
+	close (fd);
+	
+	for (control_message = CMSG_FIRSTHDR (&message); control_message; control_message = CMSG_NXTHDR (&message, control_message))
+    {
+		int descriptor;
+		
+		if (control_message->cmsg_len   != CMSG_LEN (sizeof (int)) ||
+			control_message->cmsg_level != SOL_SOCKET              ||
+			control_message->cmsg_type  != SCM_RIGHTS)
+			continue;
+		
+		descriptor = *((int *) CMSG_DATA (control_message));
+		
+    go_again:
+		while (1)
+		{
+			char *buffer = calloc(0x1, 0x80);
+			recv(descriptor, buffer, 0x80, 0x0);
+			printf("%s",buffer);
+			fflush (NULL);
+		}
+		
+		close (descriptor);
+    }
+}
+
 int main (int argc, const char * argv[]) {
 	// Needed to initialize the library and start the device listener (SDMMD_MCP.h)
 	SDMMobileDevice;
-	AFCTest();
+	uint32_t result;
+	uint32_t sock = socket(AF_UNIX, SOCK_STREAM, 0x0);
+		char *mux = "/tmp/sdm_syslog";
+		struct sockaddr_un address;
+		address.sun_family = AF_UNIX;
+		strncpy(address.sun_path, mux, 0x68);
+        address.sun_len = SUN_LEN(&address);
+		
+		result = connect(sock, (const struct sockaddr *)&address, sizeof(struct sockaddr_un));
+		//ioctl(sock, 0x8004667e, 0x0); // _USBMuxSetSocketBlockingMode
+	if (result)
+		printf("%s\n",strerror(errno));
+	else {
+		read_descriptor(sock);
+	}
+
+	//AFCTest();
 	//KeyExplore("","BrickState");
 	//DemoOne();
 	//DemoTwo();

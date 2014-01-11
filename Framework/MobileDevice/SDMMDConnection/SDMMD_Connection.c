@@ -40,12 +40,7 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 			i++;
 		}
 		va_end(args);
-		SocketConnection sock;
-		if (conn->ivars.ssl)
-			sock = (SocketConnection){true, {.ssl = conn->ivars.ssl}};
-		else
-			sock = (SocketConnection){false, {.conn = conn->ivars.socket}};
-			
+		SocketConnection sock = SDMMD_TranslateConnectionToSocket(conn);			
 		result = SDMMD_ServiceSendStream(sock, message, kCFPropertyListXMLFormat_v1_0);
 		if (result == 0) {
 			CFDictionaryRef response = NULL;
@@ -63,7 +58,7 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 							if (CFStringCompare(status, CFSTR("Complete"), 0) != 0) {
 								CFArrayRef responses = CFDictionaryGetValue(response, CFSTR("CurrentList"));
 								if (responses) {
-									uint32_t count = CFArrayGetCount(responses);
+									uint64_t count = CFArrayGetCount(responses);
 									for (uint32_t i = 0; i < count; i++) {
 										CFDictionaryRef value = CFArrayGetValueAtIndex(responses, i);
 										(callback)(value, paramStart);

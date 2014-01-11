@@ -41,7 +41,7 @@ int32_t CheckIfExpectingResponse(SocketConnection handle, uint32_t timeout) {
 
 	if (timeout > 0) {
 		to.tv_sec = (time_t) (timeout / 1000);
-		to.tv_usec = (time_t) ((timeout - (to.tv_sec * 1000)) * 1000);
+		to.tv_usec = (__darwin_suseconds_t) ((timeout - (to.tv_sec * 1000)) * 1000);
 		pto = &to;
 	} else {
 		pto = NULL;
@@ -59,7 +59,7 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 	CFIndex msgLen = (data ? CFDataGetLength(data) : 0);
 	if (msgLen) {
 	    msgLen = htonl((uint32_t)msgLen);
-		uint32_t result;
+		uint64_t result;
 		if (handle.isSSL) {
 			result = SSL_write(handle.socket.ssl, &msgLen, sizeof(uint32_t));
 		} else {
@@ -68,7 +68,7 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 		if (result == sizeof(uint32_t)) {
 			msgLen = ntohl(msgLen);
 			if (handle.isSSL) {
-				result = SSL_write(handle.socket.ssl, CFDataGetBytePtr(data), msgLen);
+				result = SSL_write(handle.socket.ssl, CFDataGetBytePtr(data), (uint32_t)msgLen);
 			} else {
 				result = send(handle.socket.conn, CFDataGetBytePtr(data), msgLen, 0);
 			}
@@ -84,13 +84,13 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 sdmmd_return_t SDMMD_DirectServiceSend(SocketConnection handle, CFDataRef data) {
 	CFIndex msgLen = (data ? CFDataGetLength(data) : 0);
 	if (msgLen) {
-		uint32_t result;
+		 uint64_t result;
 		if (handle.isSSL) {
-			result = SSL_write(handle.socket.ssl, CFDataGetBytePtr(data), msgLen);
+			result = SSL_write(handle.socket.ssl, CFDataGetBytePtr(data), (uint32_t)msgLen);
 		} else {
 			result = send(handle.socket.conn, CFDataGetBytePtr(data), msgLen, 0);
 		}
-		printf("send length: %i\n",result);
+		//printf("send length: %i\n",result);
 		if (result == msgLen) {
 			return (result == msgLen ? kAMDSuccess : kAMDNotConnectedError);
 		}

@@ -30,7 +30,7 @@ void FinalizeSDMMobileDeviceManager() {
 }
 
 CFTypeRef SDMMDeviceGetValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key) {
-	CFTypeRef response;
+	CFTypeRef response = NULL;
 	sdmmd_return_t result = 0x0;
 	result = SDMMD_AMDeviceConnect(device);
 	if (result == 0) {
