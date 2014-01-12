@@ -1368,13 +1368,13 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateCopy(SDMMD_AMDeviceRef device) {
 	return copy;
 }
 
-Boolean SDMMD_device_os_is_at_least(SDMMD_AMDeviceRef device, CFStringRef version) {
-	Boolean result = false;
+bool SDMMD_device_os_is_at_least(SDMMD_AMDeviceRef device, CFStringRef version) {
+	bool result = false;
 	if (device) {
 		SDMMD_AMDeviceConnect(device);
 		CFStringRef prodVers = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kProductVersion));
 		if (prodVers) {
-				result = (CFStringCompare(prodVers, version, 0x40) != 0xff ? true : false);
+				result = (CFStringCompare(prodVers, version, kCFCompareNumerically) != kCFCompareLessThan ? true : false);
 		}
 		CFRelease(prodVers);
 	}

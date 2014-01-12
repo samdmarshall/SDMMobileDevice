@@ -29,6 +29,10 @@ static char *exitNotifyName = "notify.com.samdmarshall.iOSConsole.exit";
 #define SysLogBufferSize 0x10
 
 static CFMutableDataRef syslogBuffer;
+
+#define kNewlineBytesiOS6Up 0x3
+#define kNewlineBytesiOS5 0x2
+static uint8_t newlineBytesLength = 0x0;
 static UInt8 newlineBytes[0x3] = {0xa, 0x0, 0x0};
 
 static dispatch_queue_t operatingQueue;
@@ -45,6 +49,7 @@ void AttachToSyslog(char *udid) {
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0x0), ^{
 		SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 		SDMMD_AMConnectionRef syslog = AttachToDeviceAndService(device, AMSVC_SYSLOG_RELAY);
+		newlineBytesLength = (SDMMD_device_os_is_at_least(device, CFSTR("6.0")) ? kNewlineBytesiOS6Up : kNewlineBytesiOS5);
 		if (syslog) {
 			printf("loading syslog...\n");
 			sdmmd_return_t result;
@@ -54,6 +59,9 @@ void AttachToSyslog(char *udid) {
 			unsigned char syslogHeaderBuffer[SysLogHeaderSize*0x3];
 			CFDataRef syslogHeader = CFDataCreate(kCFAllocatorDefault, syslogHeaderBuffer, SysLogHeaderSize*0x3);
 			result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(syslog), (CFDataRef*)&syslogHeader);
+			if (syslogHeader) {
+				CFRelease(syslogHeader);
+			}
 			while (SDM_MD_CallSuccessful(result)) {
 				if (SDMMD_AMDeviceIsValid(device)) {
 					unsigned char syslogRelayBuffer[SysLogBufferSize];
@@ -86,7 +94,7 @@ void PrintSysLog() {
 				foundLine = false;
 				length = CFDataGetLength(syslogBuffer);
 				logData = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, CFDataGetBytePtr(syslogBuffer), length, kCFAllocatorDefault);
-				CFDataRef newlineData = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, newlineBytes, 0x3, kCFAllocatorDefault);
+				CFDataRef newlineData = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, newlineBytes, newlineBytesLength, kCFAllocatorDefault);
 				CFRange line = CFDataFind(logData, newlineData, CFRangeMake(offset, length), 0x0);
 				if (line.location != kCFNotFound) {
 					foundLine = true;
