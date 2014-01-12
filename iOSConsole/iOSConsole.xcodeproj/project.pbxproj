@@ -401,7 +401,8 @@
 				22FFB8CC1880DE140073095D /* Pointer.h */,
 				22FFB8CD1880DE140073095D /* Range.h */,
 			);
-			path = Core;
+			name = Core;
+			path = ../../Core/Core;
 			sourceTree = "<group>";
 		};
 		22FFB8C11880DE140073095D /* CoreFoundation */ = {

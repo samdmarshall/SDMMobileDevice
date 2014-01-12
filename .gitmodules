@@ -1,0 +1,3 @@
+[submodule "Core"]
+	path = Core
+	url = git@github.com:samdmarshall/Core-Lib.git
