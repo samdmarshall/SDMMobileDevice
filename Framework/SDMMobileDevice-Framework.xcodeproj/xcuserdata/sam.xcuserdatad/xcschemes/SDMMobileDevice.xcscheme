@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0460"
+   LastUpgradeVersion = "0510"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "22FD463817BE7A1B0003C5C3"
-               BuildableName = "Anthem.framework"
-               BlueprintName = "Anthem"
-               ReferencedContainer = "container:Anthem.xcodeproj">
+               BlueprintIdentifier = "2215A83617500DDC00AD1981"
+               BuildableName = "SDMMobileDevice.framework"
+               BlueprintName = "SDMMobileDevice"
+               ReferencedContainer = "container:SDMMobileDevice-Framework.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -28,16 +28,6 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       buildConfiguration = "Debug">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "22FD464F17BE7A1B0003C5C3"
-               BuildableName = "AnthemTests.xctest"
-               BlueprintName = "AnthemTests"
-               ReferencedContainer = "container:Anthem.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

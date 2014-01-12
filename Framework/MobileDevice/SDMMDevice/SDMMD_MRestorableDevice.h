@@ -20,6 +20,8 @@
 #ifndef _SDM_MD_MRESTORABLEDEVICE_H_
 #define _SDM_MD_MRESTORABLEDEVICE_H_
 
+#include "Core.h"
+
 struct AMRestorableDeviceClassHeader {
 	unsigned char header[16];
 } ATR_PACK AMRestorableDeviceClassHeader; // 0x10

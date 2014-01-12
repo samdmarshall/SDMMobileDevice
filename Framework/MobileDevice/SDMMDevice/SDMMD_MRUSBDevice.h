@@ -20,6 +20,8 @@
 #ifndef _SDM_MD_MRUSBDEVICE_H_
 #define _SDM_MD_MRUSBDEVICE_H_
 
+#include "Core.h"
+
 struct AMRUSBDeviceClassHeader {
 
 } ATR_PACK AMRUSBDeviceClassHeader;

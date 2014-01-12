@@ -29,7 +29,6 @@
 		22B955821878DA5F004DCBF0 /* apps.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B955811878DA5F004DCBF0 /* apps.c */; };
 		22B955881878F14F004DCBF0 /* run.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B955871878F14F004DCBF0 /* run.c */; };
 		22B9558A1878F4A7004DCBF0 /* SDMMD_Debugger.c in Sources */ = {isa = PBXBuildFile; fileRef = 22310DA518750D430092C107 /* SDMMD_Debugger.c */; };
-		22B9558C1879DB51004DCBF0 /* libncurses.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B9558B1879DB51004DCBF0 /* libncurses.dylib */; };
 		22DEF94018833562008E909F /* CFTypeAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22DEF93F18833562008E909F /* CFTypeAddition.c */; };
 		22FFB8CE1880DE140073095D /* CFDictionaryAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22FFB8C21880DE140073095D /* CFDictionaryAddition.c */; };
 		22FFB8CF1880DE140073095D /* Matrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 22FFB8C61880DE140073095D /* Matrix.c */; };
@@ -139,7 +138,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22B9558C1879DB51004DCBF0 /* libncurses.dylib in Frameworks */,
 				22310DC818750DE70092C107 /* libcrypto.dylib in Frameworks */,
 				22310DC618750DCF0092C107 /* libssl.dylib in Frameworks */,
 				22310D6A1874F4B10092C107 /* CoreFoundation.framework in Frameworks */,
@@ -576,7 +574,7 @@
 		22310D731874F4B10092C107 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/sam/Projects/SDM_MD_Demo/build/Debug,
@@ -588,7 +586,7 @@
 		22310D741874F4B10092C107 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/sam/Projects/SDM_MD_Demo/build/Debug,
