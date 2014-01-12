@@ -188,7 +188,6 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 				bool closeOnInvalidate = true;
 				bool directSocket = false;
 				bool canConnect = true;
-				//CFShow(options);
 				if (options) {
 					CFTypeRef closeVal = CFDictionaryGetValue(options, CFSTR("CloseOnInvalidate"));
 					if (closeVal) {

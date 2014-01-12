@@ -17,7 +17,6 @@
 		22310DB418750D9E0092C107 /* SDMMD_AMDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 22310D9418750D430092C107 /* SDMMD_AMDevice.c */; };
 		22310DB518750D9E0092C107 /* SDMMD_Notification.c in Sources */ = {isa = PBXBuildFile; fileRef = 22310DA218750D430092C107 /* SDMMD_Notification.c */; };
 		22310DB618750D9E0092C107 /* SDMMD_Service.c in Sources */ = {isa = PBXBuildFile; fileRef = 22310DA718750D430092C107 /* SDMMD_Service.c */; };
-		22310DB718750D9E0092C107 /* SDMMobileDeviceAPI.c in Sources */ = {isa = PBXBuildFile; fileRef = 22310DAA18750D430092C107 /* SDMMobileDeviceAPI.c */; };
 		22310DB818750D9E0092C107 /* SDMMD_USBMuxListener.c in Sources */ = {isa = PBXBuildFile; fileRef = 22310DAE18750D430092C107 /* SDMMD_USBMuxListener.c */; };
 		22310DC618750DCF0092C107 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310DC518750DCF0092C107 /* libssl.dylib */; };
 		22310DC818750DE70092C107 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310DC718750DE70092C107 /* libcrypto.dylib */; };
@@ -98,8 +97,6 @@
 		22310DA718750D430092C107 /* SDMMD_Service.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = SDMMD_Service.c; sourceTree = "<group>"; };
 		22310DA818750D430092C107 /* SDMMD_Service.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_Service.h; sourceTree = "<group>"; };
 		22310DA918750D430092C107 /* SDMMobileDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMobileDevice.h; sourceTree = "<group>"; };
-		22310DAA18750D430092C107 /* SDMMobileDeviceAPI.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = SDMMobileDeviceAPI.c; sourceTree = "<group>"; };
-		22310DAB18750D430092C107 /* SDMMobileDeviceAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMobileDeviceAPI.h; sourceTree = "<group>"; };
 		22310DAC18750D430092C107 /* SDMTranslation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMTranslation.h; sourceTree = "<group>"; };
 		22310DAE18750D430092C107 /* SDMMD_USBMuxListener.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = SDMMD_USBMuxListener.c; sourceTree = "<group>"; };
 		22310DAF18750D430092C107 /* SDMMD_USBMuxListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_USBMuxListener.h; sourceTree = "<group>"; };
@@ -214,8 +211,6 @@
 				22310DA118750D430092C107 /* SDMMDNotification */,
 				22310DA418750D430092C107 /* SDMMDService */,
 				22310DA918750D430092C107 /* SDMMobileDevice.h */,
-				22310DAA18750D430092C107 /* SDMMobileDeviceAPI.c */,
-				22310DAB18750D430092C107 /* SDMMobileDeviceAPI.h */,
 				22310DAC18750D430092C107 /* SDMTranslation.h */,
 				22310DAD18750D430092C107 /* SDMUSBmuxListener */,
 			);
@@ -493,7 +488,6 @@
 				22B955821878DA5F004DCBF0 /* apps.c in Sources */,
 				22310DB618750D9E0092C107 /* SDMMD_Service.c in Sources */,
 				22FFB8CF1880DE140073095D /* Matrix.c in Sources */,
-				22310DB718750D9E0092C107 /* SDMMobileDeviceAPI.c in Sources */,
 				22310DB818750D9E0092C107 /* SDMMD_USBMuxListener.c in Sources */,
 				22B955881878F14F004DCBF0 /* run.c in Sources */,
 				22B9557D1878A7A2004DCBF0 /* service.c in Sources */,
