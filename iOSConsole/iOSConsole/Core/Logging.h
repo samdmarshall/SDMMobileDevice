@@ -10,6 +10,7 @@
 #define Core_Logging_h
 
 #include <stdio.h>
+#include "Core.h"
 
 #pragma mark -
 #pragma mark Color Codes
@@ -45,7 +46,7 @@ enum LoggerPrintCodes {
 	PrintCode_Count
 };
 
-__attribute__ ((unused)) static char* PrintColourCode[PrintCode_Count] = {
+ATR_UNUSED static char* PrintColourCode[PrintCode_Count] = {
 	COLOR_NRM,
 	COLOR_GRN,
 	COLOR_YEL,
@@ -53,13 +54,12 @@ __attribute__ ((unused)) static char* PrintColourCode[PrintCode_Count] = {
 	COLOR_BLU
 };
 
-__attribute__ ((unused)) static char* PrintCodeString[PrintCode_Count] = {
+ATR_UNUSED static char* PrintCodeString[PrintCode_Count] = {
 	"",
 	"OK!",
 	"TRY",
 	"ERR",
 	"NTR",
-	//"???"
 };
 
 #define LoggerPrintCodeColorDirect(code) (LoggerUseColorCodes ? code : "")

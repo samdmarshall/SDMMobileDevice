@@ -1,13 +1,13 @@
 //
 //  CFDictionaryAddition.c
-//  iOSConsole
+//  Core
 //
 //  Created by Sam Marshall on 1/4/14.
 //  Copyright (c) 2014 Sam Marshall. All rights reserved.
 //
 
-#ifndef iOSConsole_CFDictionaryAddition_c
-#define iOSConsole_CFDictionaryAddition_c
+#ifndef Core_CFDictionaryAddition_c
+#define Core_CFDictionaryAddition_c
 
 #include "CFDictionaryAddition.h"
 #include "Pointer.h"
