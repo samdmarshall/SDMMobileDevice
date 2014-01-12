@@ -1090,7 +1090,8 @@ bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device) {
 	return result;
 }
 
-/*sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutableDictionaryRef record) {
+/*
+sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutableDictionaryRef record) {
  	sdmmd_return_t result = kAMDInvalidArgumentError;
 	bool mutexIsLocked = false;
 	bool getValue = true;
@@ -1129,9 +1130,9 @@ bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device) {
 								if (buid) {
 									CFDictionarySetValue(record, CFSTR("SystemBUID"), buid);
 									var_56 = rax;
-									    CFDictionarySetValue(r13, *_kAMDSystemBonjourUniqueID, rax);
+									    CFDictionarySetValue(r13, CFSTR("SystemBUID"), rax);
 									    r12 = 0x0;
-									    rax = CFDictionaryCreateMutableCopy(**kCFAllocatorDefault, 0x0, r13);
+									    rax = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0x0, r13);
 									    if (rax != 0x0) {
 									            CFDictionaryRemoveValue(r15, *_kAMDRootPrivateKey);
 									            CFDictionaryRemoveValue(r15, *_kAMDHostPrivateKey);
@@ -1197,7 +1198,8 @@ bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device) {
 	if (mutexIsLocked)
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 	return result;
-}*/
+}
+ */
 
 uint32_t SDMMD_AMDeviceUSBDeviceID(SDMMD_AMDeviceRef device) {
 	uint32_t result = 0x0;

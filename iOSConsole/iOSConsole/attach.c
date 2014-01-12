@@ -31,7 +31,10 @@ SDMMD_AMDeviceRef FindDeviceFromUDID(char *udid) {
 			// attempting to connect to the device
 			result = SDMMD_AMDeviceConnect(device);
 			SDMMD_CondSuccess(result, {
-				CFTypeRef deviceUDID = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kUniqueDeviceID));
+				CFTypeRef deviceUDID = device->ivars.unique_device_id;
+				if (!deviceUDID) {
+					deviceUDID = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kUniqueDeviceID));
+				}
 				if (deviceUDID) {
 					deviceId = (char*)CFStringGetCStringPtr(deviceUDID,kCFStringEncodingMacRoman);
 					if (strncmp(udid, deviceId, strlen(deviceId)) == 0x0) {
