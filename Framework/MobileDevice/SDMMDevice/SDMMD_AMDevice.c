@@ -700,52 +700,61 @@ sdmmd_return_t SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFDictionaryRe
 					if (message) {
 						CFTypeRef hostId = CFDictionaryGetValue(record, CFSTR("HostID"));
 						CFDictionarySetValue(message, CFSTR("HostID"), hostId);
-						//CFTypeRef bonjourId = CFDictionaryGetValue(record, CFSTR("SystemBUID"));
-						//if (bonjourId)
-						//	 CFDictionarySetValue(message, CFSTR("HostID"), bonjourId);
-						result = SDMMD_lockconn_send_message(device, message);
-						CFRelease(message);
-						if (result == 0) {
-							CFMutableDictionaryRef recvDict;
-							result = SDMMD_lockconn_receive_message(device, &recvDict);
+						CFTypeRef bonjourId = CFDictionaryGetValue(record, CFSTR("SystemBUID"));
+						bool isValidHostBUID = false;
+						if (bonjourId) {
+							CFTypeRef systemBUID = SDMMD_AMDCopySystemBonjourUniqueID();
+							isValidHostBUID = (CFStringCompare(bonjourId, systemBUID,  0x0) == kCFCompareEqualTo);
+							 //CFDictionarySetValue(message, CFSTR("HostID"), bonjourId);
+						}
+						if (isValidHostBUID) {
+							result = SDMMD_lockconn_send_message(device, message);
+							CFRelease(message);
 							if (result == 0) {
-								//CFShow(recvDict);
-								CFTypeRef resultStr = CFDictionaryGetValue(recvDict, CFSTR("Error"));
-								if (!resultStr) {
-									CFTypeRef sessionId = CFDictionaryGetValue(recvDict, CFSTR("SessionID"));
-									result = kAMDMissingSessionIDError;
-									if (sessionId) {
-										CFRetain(sessionId);
-										CFTypeID typeId = CFGetTypeID(sessionId);
+								CFMutableDictionaryRef recvDict;
+								result = SDMMD_lockconn_receive_message(device, &recvDict);
+								if (result == 0) {
+									//CFShow(recvDict);
+									CFTypeRef resultStr = CFDictionaryGetValue(recvDict, CFSTR("Error"));
+									if (!resultStr) {
+										CFTypeRef sessionId = CFDictionaryGetValue(recvDict, CFSTR("SessionID"));
 										result = kAMDMissingSessionIDError;
-										if (typeId == CFStringGetTypeID()) {
-											CFTypeRef hostCert = CFDictionaryGetValue(record, CFSTR("HostCertificate"));
-											CFTypeRef hostPriKey = CFDictionaryGetValue(record, CFSTR("HostPrivateKey"));
-											CFTypeRef deviceCert = CFDictionaryGetValue(record, CFSTR("DeviceCertificate"));
-											result = SDMMD_lockconn_enable_ssl(device->ivars.lockdown_conn, hostCert, deviceCert, hostPriKey, 1);
-											if (result != 0) {
-												bool isValid = SDMMD_AMDeviceIsValid(device);
-												result = kAMDDeviceDisconnectedError;
-												if (isValid) {
-													SDMMD_AMDeviceDisconnect(device);
-													SDMMD_AMDeviceConnect(device);
-													result = kAMDInvalidResponseError;
+										if (sessionId) {
+											CFRetain(sessionId);
+											CFTypeID typeId = CFGetTypeID(sessionId);
+											result = kAMDMissingSessionIDError;
+											if (typeId == CFStringGetTypeID()) {
+												CFTypeRef hostCert = CFDictionaryGetValue(record, CFSTR("HostCertificate"));
+												CFTypeRef hostPriKey = CFDictionaryGetValue(record, CFSTR("HostPrivateKey"));
+												CFTypeRef deviceCert = CFDictionaryGetValue(record, CFSTR("DeviceCertificate"));
+												result = SDMMD_lockconn_enable_ssl(device->ivars.lockdown_conn, hostCert, deviceCert, hostPriKey, 1);
+												if (result != 0) {
+													bool isValid = SDMMD_AMDeviceIsValid(device);
+													result = kAMDDeviceDisconnectedError;
+													if (isValid) {
+														SDMMD_AMDeviceDisconnect(device);
+														SDMMD_AMDeviceConnect(device);
+														result = kAMDInvalidResponseError;
+													}
+												} else {
+													CFRetain(sessionId);
+													*session = sessionId;
 												}
-											} else {
-												CFRetain(sessionId);
-												*session = sessionId;
 											}
+											CFRelease(sessionId);
 										}
-										CFRelease(sessionId);
-									}
-								} else {
-									result = kAMDInvalidResponseError;
-									if (CFGetTypeID(resultStr) == CFStringGetTypeID()) {
-										result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(resultStr);
+									} else {
+										result = kAMDInvalidResponseError;
+										if (CFGetTypeID(resultStr) == CFStringGetTypeID()) {
+											result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(resultStr);
+										}
 									}
 								}
+								CFRelease(recvDict);
 							}
-							CFRelease(recvDict);
+						} else {
+							printf("SDMMD_send_session_start: Mismatch between Host SystemBUID and Pairing Record SystemBUID, recreate pairing record to ensure host is trustworthy\n");
+							result = kAMDInvalidHostIDError;
 						}
 					}
 				}
