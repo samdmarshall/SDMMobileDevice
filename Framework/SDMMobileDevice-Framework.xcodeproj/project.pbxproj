@@ -316,10 +316,10 @@
 		22DEF962188350E6008E909F /* CoreFoundation */ = {
 			isa = PBXGroup;
 			children = (
-				22DEF963188350E6008E909F /* CFDictionaryAddition.c */,
 				22DEF964188350E6008E909F /* CFDictionaryAddition.h */,
-				22DEF965188350E6008E909F /* CFTypeAddition.c */,
+				22DEF963188350E6008E909F /* CFDictionaryAddition.c */,
 				22DEF966188350E6008E909F /* CFTypeAddition.h */,
+				22DEF965188350E6008E909F /* CFTypeAddition.c */,
 			);
 			path = CoreFoundation;
 			sourceTree = "<group>";
