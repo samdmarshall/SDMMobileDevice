@@ -36,6 +36,7 @@
 #include "CFRuntime.h"
 #include <CoreFoundation/CFBase.h>
 #include <CoreFoundation/CFString.h>
+#include "Core.h"
 
 static Boolean SDMMD_AMDeviceRefEqual(CFTypeRef cf1, CFTypeRef cf2) {
     SDMMD_AMDeviceRef device1 = (SDMMD_AMDeviceRef)cf1;
@@ -479,7 +480,7 @@ sdmmd_return_t SDMMD_send_validate_pair(SDMMD_AMDeviceRef device, CFStringRef ho
 						if (result == 0x0) {
 							CFMutableDictionaryRef response;
 							result = SDMMD_lockconn_receive_message(device, &response);
-							CFShow(response);
+							PrintCFType(response);
 							if (result == 0x0) {
 								CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
 								if (!error) {
@@ -1251,7 +1252,8 @@ CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, 
 		CFStringRef err;
 		value = SDMMD_copy_lockdown_value(device, domain, key, &err);
 		if (err) {
-			CFShow(err);
+			PrintCFType(err);
+			value = NULL;
 		}
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 	}

@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <signal.h>
 #include <getopt.h>
+#include "Core.h"
 
 #define FDVENDOR_PATH  "/tmp/sdmmd-remote-debugserver"
 #define PREP_CMDS_PATH "/tmp/sdmmd-gdb-prep-cmds"
@@ -224,7 +225,7 @@ CFStringRef copy_device_support_path(SDMMD_AMDeviceRef device) {
     const char* home = getenv("HOME");
     CFStringRef path;
     bool found = false;
-	CFShow(version);
+	PrintCFType(version);
     path = CFStringCreateWithFormat(NULL, NULL, CFSTR("%s/Library/Developer/Xcode/iOS DeviceSupport/%@ (%@)"), home, version, build);
     found = path_exists(path);
 	

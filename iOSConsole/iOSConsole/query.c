@@ -11,31 +11,52 @@
 
 #include "query.h"
 #include "attach.h"
+#include "Core.h"
+#include "SDMMobileDevice.h"
+
+void RunQueryOnDevice(SDMMD_AMDeviceRef device, char *domain, char *key, sdmmd_return_t result) {
+	SDMMD_CondSuccess(result, {
+		CFStringRef domainString = NULL;
+		CFStringRef keyString = NULL;
+		if (strncmp(domain, "null", strlen("null")) != 0x0) {
+			domainString = CFStringCreateWithCString(kCFAllocatorDefault, domain, kCFStringEncodingUTF8);
+		}
+		keyString = CFStringCreateWithCString(kCFAllocatorDefault, key, kCFStringEncodingUTF8);
+		
+		printf("%s: ",key);
+		CFTypeRef queryResult = SDMMD_AMDeviceCopyValue(device, domainString, keyString);
+		if (queryResult) {
+			PrintCFType(queryResult);
+		}
+
+		if (keyString) {
+			CFRelease(keyString);
+		}
+		
+		if (domainString) {
+			CFRelease(domainString);
+		}
+	})
+}
 
 void PerformQuery(char *udid, char *domain, char *key) {
 	if ((udid && strlen(udid) == 0x28) && key) {
 		SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 		sdmmd_return_t result = SDMMD_AMDeviceConnect(device);
-		SDMMD_CondSuccess(result, {
-			CFStringRef domainString = NULL;
-			if (strncmp(domain, "null", strlen("null")) != 0x0) {
-				domainString = CFStringCreateWithCString(kCFAllocatorDefault, domain, kCFStringEncodingUTF8);
-			}
-			CFStringRef keyString = CFStringCreateWithCString(kCFAllocatorDefault, key, kCFStringEncodingUTF8);
-			
+		if (strncmp(domain, kAllDomains, strlen(kAllDomains)) == 0x0 && strncmp(key, kAllKeys, strlen(kAllKeys)) == 0x0) {
 			result = SDMMD_AMDeviceStartSession(device);
-			SDMMD_CondSuccess(result, {
-				CFTypeRef queryResult = SDMMD_AMDeviceCopyValue(device, domainString, keyString);
-				CFShow(queryResult);
-				result = SDMMD_AMDeviceStopSession(device);
-			})
-			
-			CFRelease(keyString);
-			if (domainString) {
-				CFRelease(domainString);
+			for (uint32_t i = 0x0; i < SDM_MD_Domain_Count; i++) {
+				printf("%s\n",SDMMDKnownDomain[i].domain);
+				for (uint32_t j = 0x0; j < SDMMDKnownDomain[i].keyCount; j++) {
+					RunQueryOnDevice(device, SDMMDKnownDomain[i].domain, SDMMDKnownDomain[i].keys[j], result);
+				}
+				printf("\n");
 			}
-			SDMMD_AMDeviceDisconnect(device);
-		})
+		} else {
+			RunQueryOnDevice(device, domain, key,result);
+		}
+		SDMMD_AMDeviceStopSession(device);
+		SDMMD_AMDeviceDisconnect(device);
 	}
 }
 

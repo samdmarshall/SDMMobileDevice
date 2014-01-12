@@ -12,6 +12,8 @@
 	<dict>
 		<key>E03DDEF6-B97D-41E3-B129-83B8A6249CEB</key>
 		<string>ssh://github.com/samdmarshall/SDMMobileDevice.git</string>
+		<key>E3836662-8199-4399-9034-FC52A1A354C7</key>
+		<string>ssh://github.com/samdmarshall/Macro-Utilities.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>SDMMobileDevice.xcworkspace</string>
@@ -19,6 +21,8 @@
 	<dict>
 		<key>E03DDEF6-B97D-41E3-B129-83B8A6249CEB</key>
 		<string>..</string>
+		<key>E3836662-8199-4399-9034-FC52A1A354C7</key>
+		<string>../../Macro Utilities</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>ssh://github.com/samdmarshall/SDMMobileDevice.git</string>
@@ -28,6 +32,14 @@
 	<string>E03DDEF6-B97D-41E3-B129-83B8A6249CEB</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E3836662-8199-4399-9034-FC52A1A354C7</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Macro Utilities</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>

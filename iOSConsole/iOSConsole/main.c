@@ -105,9 +105,19 @@ int main(int argc, const char * argv[]) {
 				if (optarg) {
 					CFStringRef argValue = CFStringCreateWithCString(kCFAllocatorDefault, optarg, kCFStringEncodingUTF8);
 					CFArrayRef argsArray = CFStringCreateArrayBySeparatingStrings(kCFAllocatorDefault, argValue, CFSTR("="));
-					domain = (char*)CFStringGetCStringPtr(CFArrayGetValueAtIndex(argsArray, 0x0),kCFStringEncodingMacRoman);
-					key = (char*)CFStringGetCStringPtr(CFArrayGetValueAtIndex(argsArray, 0x1),kCFStringEncodingMacRoman);
-					optionsEnable[OptionsQuery] = true;
+					CFIndex argsCounter = CFArrayGetCount(argsArray);
+					if (argsCounter == 0x1) {
+						domain = (char*)CFStringGetCStringPtr(CFArrayGetValueAtIndex(argsArray, 0x0),kCFStringEncodingMacRoman);
+						if (strncmp(domain, "all", sizeof(char)*0x3) == 0x0) {
+							domain = kAllDomains;
+							key = kAllKeys;
+							optionsEnable[OptionsQuery] = true;
+						}
+					}
+					if (argsCounter == 0x2) {
+						key = (char*)CFStringGetCStringPtr(CFArrayGetValueAtIndex(argsArray, 0x1),kCFStringEncodingMacRoman);
+						optionsEnable[OptionsQuery] = true;
+					}
 				}
 				break;
 			};

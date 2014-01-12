@@ -23,6 +23,7 @@
 #include "SDMMD_AFC.h"
 #include "SDMMD_Functions.h"
 #include <string.h>
+#include "Core.h"
 
 sdmmd_return_t SDMMD_check_can_touch(SDMMD_AFCConnectionRef conn, CFDataRef *unknown) {
 	SDMMD_AFCOperationRef fileInfo = SDMMD_AFCOperationCreateGetFileInfo((CFStringRef)*unknown);
@@ -220,7 +221,7 @@ sdmmd_return_t SDMMD_AFCConnectionPerformOperation(SDMMD_AFCConnectionRef conn, 
 		SDMMD_AFCOperationRef response;
 		result = SDMMD_AFCReceiveOperation(conn, &response);
 		printf("Response: %08x\n",result);
-		CFShow(response->packet->data);
+		PrintCFType(response->packet->data);
 	});
 	conn->operationCount++;
 	return result;

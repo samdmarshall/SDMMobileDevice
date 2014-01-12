@@ -24,6 +24,7 @@
 #include "SDMMD_Service.h"
 #include "SDMMD_Functions.h"
 #include "SDMMD_AMDevice.h"
+#include "Core.h"
 
 sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef command, uint64_t code, void (*callback)(CFDictionaryRef dict, void* arg), uint32_t argsCount, void* paramStart, ...) {
 	sdmmd_return_t result = 0x0;
@@ -49,7 +50,7 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 				while (result == 0) {
 					CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
 					if (error) {
-						CFShow(response);
+						PrintCFType(response);
 						result = SDMMD__ConvertServiceError(error);
 						printf("call_and_response: GOT AN ERROR 0x%08x %s.\n",result, SDMMD_AMDErrorString(result));
 					} else {

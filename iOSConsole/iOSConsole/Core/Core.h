@@ -34,6 +34,7 @@
 #pragma mark CoreFoundation
 #ifdef __COREFOUNDATION_COREFOUNDATION__ 
 #include "CFDictionaryAddition.h"
+#include "CFTypeAddition.h"
 #endif
 
 

@@ -20,6 +20,9 @@
 #ifndef _SDM_MD_KEYS_H_
 #define _SDM_MD_KEYS_H_
 
+#define kAllDomains "AllDomains"
+#define kAllKeys "AllKeys"
+
 #pragma mark -
 #pragma mark General Domain Keys
 #pragma mark -

@@ -26,6 +26,7 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <sys/un.h>
+#include "Core.h"
 
 typedef struct USBMuxResponseCode {
 	uint32_t code;
@@ -168,7 +169,7 @@ void SDMMD_USBMuxListenerListCallback(void *context, struct USBMuxPacket *packet
 void SDMMD_USBMuxUnknownCallback(void *context, struct USBMuxPacket *packet) {
 	printf("Unknown response from usbmuxd!\n");
 	if (packet->payload)
-		CFShow(packet->payload);
+		PrintCFType(packet->payload);
 	dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->semaphore);
 }
 

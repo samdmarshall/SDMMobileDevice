@@ -45,6 +45,20 @@
 		22D5F318179C81FD00C34745 /* SDMMD_Applications.h in Headers */ = {isa = PBXBuildFile; fileRef = 225ACD751760C86200A47071 /* SDMMD_Applications.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22D5F319179C820200C34745 /* SDMMD_Notification.c in Sources */ = {isa = PBXBuildFile; fileRef = 225AC5BF175B976500A47071 /* SDMMD_Notification.c */; };
 		22D5F31A179C820200C34745 /* SDMMD_Notification.h in Headers */ = {isa = PBXBuildFile; fileRef = 225AC5BE175B976500A47071 /* SDMMD_Notification.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22DEF95218833D28008E909F /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF94218833D28008E909F /* Core.h */; };
+		22DEF95318833D28008E909F /* CFDictionaryAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22DEF94418833D28008E909F /* CFDictionaryAddition.c */; };
+		22DEF95418833D28008E909F /* CFDictionaryAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF94518833D28008E909F /* CFDictionaryAddition.h */; };
+		22DEF95518833D28008E909F /* CFTypeAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22DEF94618833D28008E909F /* CFTypeAddition.c */; };
+		22DEF95618833D28008E909F /* CFTypeAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF94718833D28008E909F /* CFTypeAddition.h */; };
+		22DEF95718833D28008E909F /* GeometryMaths.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF94918833D28008E909F /* GeometryMaths.h */; };
+		22DEF95818833D28008E909F /* Matrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 22DEF94A18833D28008E909F /* Matrix.c */; };
+		22DEF95918833D28008E909F /* Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF94B18833D28008E909F /* Matrix.h */; };
+		22DEF95A18833D28008E909F /* Vector.c in Sources */ = {isa = PBXBuildFile; fileRef = 22DEF94C18833D28008E909F /* Vector.c */; };
+		22DEF95B18833D28008E909F /* Vector.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF94D18833D28008E909F /* Vector.h */; };
+		22DEF95C18833D28008E909F /* Logging.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF94E18833D28008E909F /* Logging.h */; };
+		22DEF95D18833D28008E909F /* Number.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF94F18833D28008E909F /* Number.h */; };
+		22DEF95E18833D28008E909F /* Pointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF95018833D28008E909F /* Pointer.h */; };
+		22DEF95F18833D28008E909F /* Range.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF95118833D28008E909F /* Range.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -99,6 +113,20 @@
 		22AD92461789DC7E002ACFB1 /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
 		22AD924A1789DCA7002ACFB1 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		22AD9A44178F2CBF002ACFB1 /* CFRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFRuntime.h; sourceTree = "<group>"; };
+		22DEF94218833D28008E909F /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Core.h; path = "../../Macro Utilities/Core/Core.h"; sourceTree = "<group>"; };
+		22DEF94418833D28008E909F /* CFDictionaryAddition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CFDictionaryAddition.c; sourceTree = "<group>"; };
+		22DEF94518833D28008E909F /* CFDictionaryAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFDictionaryAddition.h; sourceTree = "<group>"; };
+		22DEF94618833D28008E909F /* CFTypeAddition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CFTypeAddition.c; sourceTree = "<group>"; };
+		22DEF94718833D28008E909F /* CFTypeAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFTypeAddition.h; sourceTree = "<group>"; };
+		22DEF94918833D28008E909F /* GeometryMaths.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryMaths.h; sourceTree = "<group>"; };
+		22DEF94A18833D28008E909F /* Matrix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Matrix.c; sourceTree = "<group>"; };
+		22DEF94B18833D28008E909F /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Matrix.h; sourceTree = "<group>"; };
+		22DEF94C18833D28008E909F /* Vector.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Vector.c; sourceTree = "<group>"; };
+		22DEF94D18833D28008E909F /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector.h; sourceTree = "<group>"; };
+		22DEF94E18833D28008E909F /* Logging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Logging.h; path = "../../Macro Utilities/Core/Logging.h"; sourceTree = "<group>"; };
+		22DEF94F18833D28008E909F /* Number.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Number.h; path = "../../Macro Utilities/Core/Number.h"; sourceTree = "<group>"; };
+		22DEF95018833D28008E909F /* Pointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Pointer.h; path = "../../Macro Utilities/Core/Pointer.h"; sourceTree = "<group>"; };
+		22DEF95118833D28008E909F /* Range.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Range.h; path = "../../Macro Utilities/Core/Range.h"; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
@@ -268,9 +296,49 @@
 			path = SDMUSBmuxListener;
 			sourceTree = "<group>";
 		};
+		22DEF94118833CBF008E909F /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				22DEF94218833D28008E909F /* Core.h */,
+				22DEF94318833D28008E909F /* CoreFoundation */,
+				22DEF94818833D28008E909F /* Geometry */,
+				22DEF94E18833D28008E909F /* Logging.h */,
+				22DEF94F18833D28008E909F /* Number.h */,
+				22DEF95018833D28008E909F /* Pointer.h */,
+				22DEF95118833D28008E909F /* Range.h */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		22DEF94318833D28008E909F /* CoreFoundation */ = {
+			isa = PBXGroup;
+			children = (
+				22DEF94418833D28008E909F /* CFDictionaryAddition.c */,
+				22DEF94518833D28008E909F /* CFDictionaryAddition.h */,
+				22DEF94618833D28008E909F /* CFTypeAddition.c */,
+				22DEF94718833D28008E909F /* CFTypeAddition.h */,
+			);
+			name = CoreFoundation;
+			path = "../../Macro Utilities/Core/CoreFoundation";
+			sourceTree = "<group>";
+		};
+		22DEF94818833D28008E909F /* Geometry */ = {
+			isa = PBXGroup;
+			children = (
+				22DEF94918833D28008E909F /* GeometryMaths.h */,
+				22DEF94A18833D28008E909F /* Matrix.c */,
+				22DEF94B18833D28008E909F /* Matrix.h */,
+				22DEF94C18833D28008E909F /* Vector.c */,
+				22DEF94D18833D28008E909F /* Vector.h */,
+			);
+			name = Geometry;
+			path = "../../Macro Utilities/Core/Geometry";
+			sourceTree = "<group>";
+		};
 		29B97314FDCFA39411CA2CEA /* SDM_MD_Demo */ = {
 			isa = PBXGroup;
 			children = (
+				22DEF94118833CBF008E909F /* Core */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
@@ -306,14 +374,20 @@
 			files = (
 				135697D817FEB9CB00039D19 /* SDMTranslation.h in Headers */,
 				225ACB46175FBFA300A47071 /* SDMMD_Debugger.h in Headers */,
+				22DEF95C18833D28008E909F /* Logging.h in Headers */,
 				225AD7321765FE7700A47071 /* SDMMD_USBMuxListener.h in Headers */,
 				22AD8E651787465A002ACFB1 /* SDMMD_AMDevice.h in Headers */,
 				22AD8E7417875346002ACFB1 /* SDMMD_Error.h in Headers */,
 				22AD8E7917875B1E002ACFB1 /* SDMMD_Functions.h in Headers */,
+				22DEF95D18833D28008E909F /* Number.h in Headers */,
+				22DEF95918833D28008E909F /* Matrix.h in Headers */,
+				22DEF95618833D28008E909F /* CFTypeAddition.h in Headers */,
 				22AD8F251789B3DF002ACFB1 /* SDMMD_MCP.h in Headers */,
+				22DEF95418833D28008E909F /* CFDictionaryAddition.h in Headers */,
 				22AD8FD41789BAB5002ACFB1 /* SDMMobileDevice.h in Headers */,
 				22AD91C21789D715002ACFB1 /* SDMMD_Service.h in Headers */,
 				22AD91C41789D71A002ACFB1 /* SDMMD_Connection.h in Headers */,
+				22DEF95218833D28008E909F /* Core.h in Headers */,
 				22AD9347178A1609002ACFB1 /* SDMMD_MRecoveryModeDevice.h in Headers */,
 				22AD9348178A160B002ACFB1 /* SDMMD_Keys.h in Headers */,
 				22AD9350178A1678002ACFB1 /* SDMMD_MRUSBDevice.h in Headers */,
@@ -322,8 +396,12 @@
 				22AD9369178A17AF002ACFB1 /* SDMMD_MRestoreModeDevice.h in Headers */,
 				22AD9A45178F2CBF002ACFB1 /* CFRuntime.h in Headers */,
 				22D5F314179C81F200C34745 /* SDMMD_AFC.h in Headers */,
+				22DEF95F18833D28008E909F /* Range.h in Headers */,
+				22DEF95E18833D28008E909F /* Pointer.h in Headers */,
 				22D5F318179C81FD00C34745 /* SDMMD_Applications.h in Headers */,
+				22DEF95718833D28008E909F /* GeometryMaths.h in Headers */,
 				22D5F31A179C820200C34745 /* SDMMD_Notification.h in Headers */,
+				22DEF95B18833D28008E909F /* Vector.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,6 +431,8 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "SDMMobileDevice-Framework" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -389,14 +469,18 @@
 			files = (
 				225ACB47175FBFA300A47071 /* SDMMD_Debugger.c in Sources */,
 				225AD7331765FE7700A47071 /* SDMMD_USBMuxListener.c in Sources */,
+				22DEF95318833D28008E909F /* CFDictionaryAddition.c in Sources */,
 				22AD8E661787465A002ACFB1 /* SDMMD_AMDevice.c in Sources */,
 				22AD8E7517875346002ACFB1 /* SDMMD_Error.c in Sources */,
 				22AD8F261789B3DF002ACFB1 /* SDMMD_MCP.c in Sources */,
 				22AD91C31789D715002ACFB1 /* SDMMD_Service.c in Sources */,
+				22DEF95A18833D28008E909F /* Vector.c in Sources */,
 				22AD91C51789D71A002ACFB1 /* SDMMD_Connection.c in Sources */,
 				22AD9349178A1622002ACFB1 /* SDMMD_MRecoveryModeDevice.c in Sources */,
+				22DEF95518833D28008E909F /* CFTypeAddition.c in Sources */,
 				22AD934F178A1675002ACFB1 /* SDMMD_MRUSBDevice.c in Sources */,
 				22AD9356178A16CF002ACFB1 /* SDMMD_MDFUModeDevice.c in Sources */,
+				22DEF95818833D28008E909F /* Matrix.c in Sources */,
 				22AD9359178A1759002ACFB1 /* SDMMD_MRestorableDevice.c in Sources */,
 				22AD936A178A17B0002ACFB1 /* SDMMD_MRestoreModeDevice.c in Sources */,
 				22D5F313179C81F100C34745 /* SDMMD_AFC.c in Sources */,
