@@ -22,16 +22,16 @@
 
 struct AMRUSBDeviceClassHeader {
 
-} __attribute__ ((packed)) AMRUSBDeviceClassHeader;
+} ATR_PACK AMRUSBDeviceClassHeader;
 
 struct AMRUSBDeviceClassBody {
 	
-} __attribute__ ((packed)) AMRUSBDeviceClassBody;
+} ATR_PACK AMRUSBDeviceClassBody;
 
 struct am_rusb_device {
 	struct AMRUSBDeviceClassHeader base;
 	struct AMRUSBDeviceClassBody ivars;
-} __attribute__ ((packed)) am_rusb_device;
+} ATR_PACK am_rusb_device;
 
 typedef struct am_rusb_device SDMMD_AMRUSBDeviceClass;
 

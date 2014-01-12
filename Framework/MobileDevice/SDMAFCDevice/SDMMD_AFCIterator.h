@@ -28,7 +28,7 @@
 
 typedef struct AFCIteratorClassHeader {
 	unsigned char header[16];		// CF Object header
-} __attribute__ ((packed)) AFCIteratorClassHeader; // 0x10
+} ATR_PACK AFCIteratorClassHeader; // 0x10
 
 typedef struct AFCIteratorClassBody {
 	// 16
@@ -36,12 +36,12 @@ typedef struct AFCIteratorClassBody {
 	int32_t count0;					// 32
 	CFMutableDataRef key_buffer; 	// 40
 	CFMutableDataRef value_buffer;	// 48
-} __attribute__ ((packed)) AFCIteratorClassBody; // 0x28
+} ATR_PACK AFCIteratorClassBody; // 0x28
 
 typedef struct afc_iterator {
 	struct AFCIteratorClassHeader base;
 	struct AFCIteratorClassBody ivars;
-} __attribute__ ((packed)) afc_iterator;
+} ATR_PACK afc_iterator;
 
 typedef struct afc_iterator SDMMD_AFCIteratorClass;
 

@@ -30,17 +30,17 @@
 
 typedef struct AFCLockClassHeader {
 	unsigned char header[16];
-} __attribute__ ((packed)) AFCLockClassHeader; // 0x10
+} ATR_PACK AFCLockClassHeader; // 0x10
 
 typedef struct AFCLockClassBody {
 	pthread_mutex_t mutex_lock;	// 16
 	unsigned char padding[44];	// 20
-} __attribute__ ((packed)) AFCLockClassBody; // 0x40
+} ATR_PACK AFCLockClassBody; // 0x40
 
 typedef struct afc_lock {
 	struct AFCLockClassHeader base;
 	struct AFCLockClassBody ivars;
-} __attribute__ ((packed)) afc_lock;
+} ATR_PACK afc_lock;
 
 typedef struct afc_lock SDMMD_AFCLockClass;
 

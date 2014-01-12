@@ -89,7 +89,7 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 	if (path) {
 		if (conn) {
 			char *cpath = calloc(0x1, 0x401);
-			__attribute__ ((unused)) struct stat pathStat, remoteStat;
+			ATR_UNUSED struct stat pathStat, remoteStat;
 			Boolean status = CFStringGetCString(path, cpath, 0x401, 0x8000100);
 			if (status) {
 				CFURLRef deviceURL = SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(path);
@@ -103,7 +103,7 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 						SDMMD_fire_callback_767f4(transferCallback, unknown, 0x0, CFSTR("PreflightingTransfer"));
 						//SDMMD_preflight_transfer(&cpath, &pathStat, &remoteStat);
 						SDMMD_fire_callback_767f4(transferCallback, unknown, 0x0, CFSTR("TransferingPackage"));
-						__attribute__ ((unused)) SDMMD_AFCConnectionRef afcConn = SDMMD_AFCConnectionCreate(conn);//(r12, conn, 0x0, 0x0, &var_72);
+						ATR_UNUSED SDMMD_AFCConnectionRef afcConn = SDMMD_AFCConnectionCreate(conn);//(r12, conn, 0x0, 0x0, &var_72);
 						// loop that iterates through all of file contents
 						
 						

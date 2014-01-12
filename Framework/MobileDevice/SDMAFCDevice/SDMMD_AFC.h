@@ -48,7 +48,7 @@ typedef struct SDMMD_AFCPacketHeader {
 	uint64_t headerLen;
 	uint64_t pid;
 	uint64_t type;
-} __attribute__ ((packed)) SDMMD_AFCPacketHeader;
+} ATR_PACK SDMMD_AFCPacketHeader;
 
 struct sdmmd_AFCPacket {
 	SDMMD_AFCPacketHeader header;

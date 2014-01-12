@@ -33,13 +33,13 @@ struct USBMuxPacketBody {
 	uint32_t reserved;
 	uint32_t type;
 	uint32_t tag;
-} __attribute__ ((packed)) USBMuxPacketBody;
+} ATR_PACK USBMuxPacketBody;
 
 struct USBMuxPacket {
 	dispatch_time_t timeout;
 	struct USBMuxPacketBody body;
 	CFPropertyListRef payload;
-} __attribute__ ((packed)) USBMuxPacket;
+} ATR_PACK USBMuxPacket;
 
 typedef void (*callbackFunction)(void *, struct USBMuxPacket *);
 

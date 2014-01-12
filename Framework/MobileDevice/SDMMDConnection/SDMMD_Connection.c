@@ -107,8 +107,9 @@ SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(uint32_t socket, SSL* ssl
 	handle->ivars.one1 = 0x1;
 	if (dict) {
 		CFTypeRef value = CFDictionaryGetValue(dict, CFSTR("CloseOnInvalidate"));
-		if (value && CFEqual(value, kCFBooleanFalse))
+		if (value && CFEqual(value, kCFBooleanFalse)) {
 			handle->ivars.closeOnInvalid = false;
+		}
 	}
 	return handle;
 }
@@ -125,8 +126,9 @@ sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef se
 					result = kAMDNoResourcesError;
 					if (dict) {
 						CFDictionarySetValue(dict, CFSTR("Service"), service);
-						if (escrowBag)
+						if (escrowBag) {
 							CFDictionarySetValue(dict, CFSTR("EscrowBag"), escrowBag);
+						}
 						result = SDMMD_lockconn_send_message(device, dict);
 						CFRelease(dict);
 						if (result == 0) {
@@ -272,8 +274,6 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 							}
 						}
 					} else {
-						//printf("SERVICE: %s!\n",cservice);
-						//printf("PORT: %i!\n",port);
 						result = SDMMD__connect_to_port(device, port, timeoutConnection, &socket, ((uint32_t)ssl & 0x1) & 0xff);
 						if (result == 0x0) {
 							if (enableSSL) {

@@ -274,7 +274,6 @@ sdmmd_return_t SDMMD_lockconn_enable_ssl(SDMMD_lockdown_conn *lockdown_conn, CFT
 sdmmd_return_t SDMMD_lockconn_disable_ssl(SDMMD_lockdown_conn *lockdown_conn) {
 	sdmmd_return_t result = kAMDSuccess;
 	if (lockdown_conn->ssl) {
-		//result = SSL_shutdown(lockdown_conn->connection);
 		if (result == 0) {
 			result = SSL_shutdown(lockdown_conn->ssl);
 		}
@@ -290,28 +289,16 @@ sdmmd_return_t SDMMD_lockconn_disable_ssl(SDMMD_lockdown_conn *lockdown_conn) {
 sdmmd_return_t SDMMD_lockconn_send_message(SDMMD_AMDeviceRef device, CFDictionaryRef dict) {
 	sdmmd_return_t result = 0x0;
 	if (device->ivars.lockdown_conn) {
-		if (dict) {			
-			//uint32_t xmlLength = CFDataGetLength(xml);
-			//char *xmlPtr = (char*)CFDataGetBytePtr(xml);
-			//uint32_t sentLen = 0;
+		if (dict) {
 			bool useSSL = (device->ivars.lockdown_conn->ssl ? true : false);
 			SocketConnection conn;
-			if (useSSL)
+			if (useSSL) {
 				conn = (SocketConnection){true, {.ssl = device->ivars.lockdown_conn->ssl}};
-			else
-				conn = (SocketConnection){false, {.conn = (uint32_t)device->ivars.lockdown_conn->connection}};
-			
-			//uint32_t length = CFDataGetLength(xml);
-			//CFDataRef size = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, &length, 0x4, kCFAllocatorNull);
-			//CFShowsize);
-			//result = SDMMD_ServiceSend(conn, size);
-			SDMMD_ServiceSendMessage(conn, dict, kCFPropertyListXMLFormat_v1_0);
-			/*if (device->ivars.lockdown_conn->ssl) {
-				sentLen = SSL_write(device->ivars.lockdown_conn->ssl, &xmlLength, 0x4);
-				sentLen = SSL_write(device->ivars.lockdown_conn->ssl, &xmlPtr, xmlLength);
 			} else {
-				SDMMD_ServiceSendMessage(device->ivars.lockdown_conn->connection, xml);
-			}*/
+				conn = (SocketConnection){false, {.conn = (uint32_t)device->ivars.lockdown_conn->connection}};
+			}
+			
+			SDMMD_ServiceSendMessage(conn, dict, kCFPropertyListXMLFormat_v1_0);
 		} else {
 			printf("SDMMD_lockconn_send_message: Could not encode message as XML.\n");
 		}
@@ -336,21 +323,6 @@ sdmmd_return_t SDMMD_lockconn_receive_message(SDMMD_AMDeviceRef device, CFMutabl
 		}
 		
 		SDMMD_ServiceReceiveMessage(conn, (CFPropertyListRef*)dict);
-		/*printf("receive result: 0x%08x\n",result);
-		uint32_t length = 0;
-		CFDataGetBytes(lengthBuff, CFRangeMake(0,CFDataGetLength(lengthBuff)), &length);
-		printf("length: %i\n",length);
-		if (length < 0x40001) {
-			if (device->ivars.lockdown_conn->pointer) {
-				
-			}
-		} else {
-			
-		}
-		char *xml = calloc(0x1, length);
-		CFDataRef xmlBuffer = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, &xml, length, kCFAllocatorDefault);
-		SDMMD_ServiceReceive(conn, &xmlBuffer);
-		CFShow(xmlBuffer);*/
 	} else {
 		result = SDMMD_AMDeviceIsValid(device);
 		if (result == 0x0) {
@@ -1303,7 +1275,6 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 		device = SDMMD_AMDeviceCreateEmpty();
 		if (device) {
 			CFDictionaryRef properties = (CFDictionaryContainsKey(dictionary, CFSTR("Properties")) ? CFDictionaryGetValue(dictionary, CFSTR("Properties")) : dictionary);
-			//CFShow(properties);
 
 			CFNumberRef deviceId = CFDictionaryGetValue(properties, CFSTR("DeviceID"));
 			CFNumberGetValue(deviceId, 0x4, &device->ivars.device_id);
@@ -1327,7 +1298,6 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 				device->ivars.network_address = netAddress;
 				device->ivars.unknown11 = netAddress;
 				device->ivars.service_name = CFDictionaryGetValue(properties, CFSTR("EscapedFullServiceName"));
-				//CFShow(device->ivars.service_name);
 			} else {
 				
 			}

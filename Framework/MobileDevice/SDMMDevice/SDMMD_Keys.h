@@ -20,6 +20,8 @@
 #ifndef _SDM_MD_KEYS_H_
 #define _SDM_MD_KEYS_H_
 
+#include "Core.h"
+
 #define kAllDomains "AllDomains"
 #define kAllKeys "AllKeys"
 
@@ -680,7 +682,7 @@ struct SDM_MD_Domain_Key {
 	uint32_t keyCount;
 };
 
-__attribute__ ((unused)) static struct SDM_MD_Domain_Key SDMMDKnownDomain[SDM_MD_Domain_Count] = {
+ATR_UNUSED static struct SDM_MD_Domain_Key SDMMDKnownDomain[SDM_MD_Domain_Count] = {
 	{kGlobalDomain, SDMMD_Global_DomainKeys, SDM_MD_Global_Domain_Key_Count},
 	{kWirelessLockdownDomain, SDMMD_Wireless_DomainKeys, SDM_MD_Wireless_Domain_Key_Count},
 	{kBatteryDomain, SDMMD_Battery_DomainKeys, SDM_MD_Battery_Domain_Key_Count},

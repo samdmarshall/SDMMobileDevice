@@ -31,7 +31,7 @@
 typedef struct USBMuxResponseCode {
 	uint32_t code;
 	CFStringRef string;
-} __attribute__ ((packed)) USBMuxResponseCode;
+} ATR_PACK USBMuxResponseCode;
 
 static uint32_t transactionId = 0x0; 
 
@@ -431,7 +431,7 @@ struct USBMuxPacket * SDMMD_USBMuxCreatePacketType(SDMMD_USBMuxPacketMessageType
 	}
 	CFDictionarySetValue((CFMutableDictionaryRef)packet->payload, CFSTR("MessageType"), SDMMD_USBMuxPacketMessage[type]);
 	if (type == kSDMMD_USBMuxPacketConnectType) {
-		uint16_t port = 0x7ef2; //htons(0x7ef2);
+		uint16_t port = 0x7ef2;
 		CFNumberRef portNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt16Type, &port);
 		CFDictionarySetValue((CFMutableDictionaryRef)packet->payload, CFSTR("PortNumber"), portNumber);
 		CFRelease(portNumber);

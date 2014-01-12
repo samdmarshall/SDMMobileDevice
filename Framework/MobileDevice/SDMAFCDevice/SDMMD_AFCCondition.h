@@ -28,18 +28,18 @@
 
 typedef struct AFCConditionClassHeader {
 	unsigned char header[16];
-} __attribute__ ((packed)) AFCConditionClassHeader; // 0x10
+} ATR_PACK AFCConditionClassHeader; // 0x10
 
 typedef struct AFCConditionClassBody {
 	pthread_mutex_t mutex_lock;	// 16
 	pthread_cond_t mutex_cond; 	// 80
 	bool signaled; 				// 128
-} __attribute__ ((packed)) AFCConditionClassBody; // 0x78
+} ATR_PACK AFCConditionClassBody; // 0x78
 
 typedef struct afc_condition {
 	struct AFCConditionClassHeader base;
 	struct AFCConditionClassBody ivars;
-} __attribute__ ((packed)) afc_condition;
+} ATR_PACK afc_condition;
 
 typedef struct afc_condition SDMMD_AFCConditionClass;
 

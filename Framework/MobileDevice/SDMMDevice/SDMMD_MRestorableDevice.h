@@ -22,7 +22,7 @@
 
 struct AMRestorableDeviceClassHeader {
 	unsigned char header[16];
-} __attribute__ ((packed)) AMRestorableDeviceClassHeader; // 0x10
+} ATR_PACK AMRestorableDeviceClassHeader; // 0x10
 
 struct AMRestorableDeviceClassBody {
 	// 10
@@ -36,12 +36,12 @@ struct AMRestorableDeviceClassBody {
 	// 80
 	// 88
 	// 96
-} __attribute__ ((packed)) AMRestorableDeviceClassBody; // 0x58
+} ATR_PACK AMRestorableDeviceClassBody; // 0x58
 
 struct am_restorable_device {
 	struct AMRestorableDeviceClassHeader base;
 	struct AMRestorableDeviceClassBody ivars;
-} __attribute__ ((packed)) am_restorable_device;
+} ATR_PACK am_restorable_device;
 
 typedef struct am_restorable_device SDMMD_AMRestorableDeviceClass;
 

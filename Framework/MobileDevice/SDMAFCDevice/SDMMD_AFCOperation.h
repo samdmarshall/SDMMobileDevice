@@ -29,7 +29,7 @@
 
 typedef struct AFCOperationClassHeader {
 	unsigned char header[16];
-} __attribute__ ((packed)) AFCOperationClassHeader; // 0x10
+} ATR_PACK AFCOperationClassHeader; // 0x10
 
 typedef struct AFCOperationClassBody {
 	void *context;							// 16
@@ -46,12 +46,12 @@ typedef struct AFCOperationClassBody {
 	void *result;							// 240
 	SDMMD_AFCLockRef lock0;					// 248
 	SDMMD_AFCConditionRef condition; 		// 256 AFCConditionCreate();
-} __attribute__ ((packed)) AFCOperationClassBody; // 0xf8
+} ATR_PACK AFCOperationClassBody; // 0xf8
 
 typedef struct afc_operation {
 	struct AFCOperationClassHeader base;
 	struct AFCOperationClassBody ivars;
-} __attribute__ ((packed)) afc_operation;
+} ATR_PACK afc_operation;
 
 typedef struct afc_operation SDMMD_AFCOperationClass;
 

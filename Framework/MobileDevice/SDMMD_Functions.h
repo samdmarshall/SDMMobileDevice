@@ -37,6 +37,7 @@
 #include "SDMMD_Error.h"
 #include "SDMMD_AMDevice.h"
 #include "SDMMD_Applications.h"
+#include "Core.h"
 
 #if WIN32
 #define CFRangeMake(a, b) (CFRange){a, b}
@@ -44,7 +45,7 @@
 
 // Missing base function: "mobdevlog"
 
-__attribute__ ((unused)) static kern_return_t sdmmd_mutex_init(pthread_mutex_t thread) {
+ATR_UNUSED static kern_return_t sdmmd_mutex_init(pthread_mutex_t thread) {
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_init(&attr);
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
@@ -52,11 +53,11 @@ __attribute__ ((unused)) static kern_return_t sdmmd_mutex_init(pthread_mutex_t t
 	return pthread_mutexattr_destroy(&attr);
 }
 
-__attribute__ ((unused)) static int SDMMD__mutex_lock(pthread_mutex_t mutex) {
+ATR_UNUSED static int SDMMD__mutex_lock(pthread_mutex_t mutex) {
 	return pthread_mutex_lock(&mutex);
 }
 
-__attribute__ ((unused)) static int SDMMD__mutex_unlock(pthread_mutex_t mutex) {
+ATR_UNUSED static int SDMMD__mutex_unlock(pthread_mutex_t mutex) {
 	return pthread_mutex_unlock(&mutex);
 }
 
@@ -88,7 +89,7 @@ static const void* SDMMD___AppendValue(CFTypeRef append, CFMutableDataRef contex
 	return NULL;
 }
 
-__attribute__ ((unused)) static void SDMMD___ConvertDictEntry(const void* key, const void* value, void* context) {
+ATR_UNUSED static void SDMMD___ConvertDictEntry(const void* key, const void* value, void* context) {
 	if (key && value) {
 		SDMMD___AppendValue(key, context);
 		SDMMD___AppendValue(value, context); 
@@ -139,7 +140,7 @@ static CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
 	return dict;
 }
 
-__attribute__ ((unused)) static CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type) {
+ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type) {
 	CFMutableDictionaryRef dict = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 	if (dict) {
 		CFDictionarySetValue(dict, CFSTR("Request"), type);
@@ -161,22 +162,23 @@ static CFMutableDictionaryRef SDMMD_create_dict() {
 	return CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 }
 
-/*static void SDMMD_openSSLLockCallBack(int mode, int n, const char * file, int line) {
-	if (mode & CRYPTO_LOCK)
-		SDMMD__mutex_lock(SDMMobileDevice->sslLocks[n]);
-	else
-		SDMMD__mutex_unlock(SDMMobileDevice->sslLocks[n]);
-}*/
+ATR_UNUSED static void SDMMD_openSSLLockCallBack(int mode, int n, const char * file, int line) {
+	if (mode & CRYPTO_LOCK) {
+		//SDMMD__mutex_lock(SDMMobileDevice->sslLocks[n]);
+	} else {
+		//SDMMD__mutex_unlock(SDMMobileDevice->sslLocks[n]);
+ 	}
+}
 
-__attribute__ ((unused)) static unsigned long SDMMD_openSSLThreadIDCallBack() {
+ATR_UNUSED static unsigned long SDMMD_openSSLThreadIDCallBack() {
 	return (unsigned long)((uintptr_t)pthread_self()); // cast a pointer to uintptr_t before converting to integer
 }
 
-__attribute__ ((unused)) static uint32_t SDMMD_lockssl_init() {
+ATR_UNUSED static uint32_t SDMMD_lockssl_init() {
 	return SSL_get_ex_new_index(0, "peer certificate data", NULL, NULL, NULL);
 }
 
-__attribute__ ((unused)) static char *SDMMD_ssl_strerror(SSL *ssl, uint32_t ret) {
+ATR_UNUSED static char *SDMMD_ssl_strerror(SSL *ssl, uint32_t ret) {
 	static char buffer[200] = {0};
 	int result = SSL_get_error(ssl, ret);
 	char *err = NULL;
@@ -232,7 +234,7 @@ __attribute__ ((unused)) static char *SDMMD_ssl_strerror(SSL *ssl, uint32_t ret)
 	return err;
 }
 
-__attribute__ ((unused)) static CFStringRef SDMGetCurrentDateString() {
+ATR_UNUSED static CFStringRef SDMGetCurrentDateString() {
 	CFLocaleRef currentLocale = CFLocaleCopyCurrent();
 	CFDateRef date = CFDateCreate(kCFAllocatorDefault, CFAbsoluteTimeGetCurrent());
 	CFDateFormatterRef customDateFormatter = CFDateFormatterCreate(NULL, currentLocale, kCFDateFormatterNoStyle, kCFDateFormatterNoStyle);
@@ -252,7 +254,7 @@ static char* SDMCFStringGetString(CFStringRef str) {
 	return cstr;
 }
 
-__attribute__ ((unused)) static char* SDMCFURLGetString(CFURLRef url) {
+ATR_UNUSED static char* SDMCFURLGetString(CFURLRef url) {
 	return SDMCFStringGetString(CFURLGetString(url));
 }
 
@@ -317,7 +319,7 @@ static CFTypeRef SDMMD_AMDCopySystemBonjourUniqueID() {
 	return value;
 }
 
-__attribute__ ((unused)) static sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SDMMD_AMDeviceRef device, CFMutableDictionaryRef *dict) {
+ATR_UNUSED static sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SDMMD_AMDeviceRef device, CFMutableDictionaryRef *dict) {
 	sdmmd_return_t result = kAMDInvalidArgumentError;
 	char path[1024] = {0};
 	
@@ -353,12 +355,12 @@ __attribute__ ((unused)) static sdmmd_return_t SDMMD__CreatePairingRecordFromRec
 	return result;
 }
 
-__attribute__ ((unused)) static CFArrayRef SDMMD_ApplicationLookupDictionary() {
+ATR_UNUSED static CFArrayRef SDMMD_ApplicationLookupDictionary() {
 	const void* values[6] = {CFSTR(kAppLookupKeyCFBundleIdentifier), CFSTR(kAppLookupKeyApplicationType), CFSTR(kAppLookupKeyCFBundleDisplayName), CFSTR(kAppLookupKeyCFBundleName), CFSTR(kAppLookupKeyContainer), CFSTR(kAppLookupKeyPath)};
 	return CFArrayCreate(kCFAllocatorDefault, values, 6, &kCFTypeArrayCallBacks);
 }
 
-__attribute__ ((unused)) static CFURLRef SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(CFStringRef path) {
+ATR_UNUSED static CFURLRef SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(CFStringRef path) {
 	char cpath[1024] = {0};
 	CFURLRef url = NULL;
 	if (CFStringGetCString(path, cpath, 1024, kCFStringEncodingUTF8)) {
@@ -370,14 +372,14 @@ __attribute__ ((unused)) static CFURLRef SDMMD__AMDCFURLCreateFromFileSystemPath
 	return url;
 }
 
-__attribute__ ((unused)) static CFURLRef SDMMD__AMDCFURLCreateWithFileSystemPathRelativeToBase(CFAllocatorRef allocator, CFStringRef path, CFURLPathStyle style, Boolean dir) {
+ATR_UNUSED static CFURLRef SDMMD__AMDCFURLCreateWithFileSystemPathRelativeToBase(CFAllocatorRef allocator, CFStringRef path, CFURLPathStyle style, Boolean dir) {
 	CFURLRef base = CFURLCreateWithString(allocator, CFSTR("file://localhost/"), NULL);
 	CFURLRef url = CFURLCreateWithFileSystemPathRelativeToBase(allocator, path, style, dir, base);
 	CFRelease(base);
 	return url;
 }
 
-__attribute__ ((unused)) static Boolean SDMMD__AMDCFURLGetCStringForFileSystemPath(CFURLRef urlRef, char *cpath) {
+ATR_UNUSED static Boolean SDMMD__AMDCFURLGetCStringForFileSystemPath(CFURLRef urlRef, char *cpath) {
 	CFTypeRef url = CFURLCopyFileSystemPath(urlRef, kCFURLPOSIXPathStyle);
 	if (url) {
 		return CFStringGetCString(url, cpath, 1025, kCFStringEncodingUTF8);

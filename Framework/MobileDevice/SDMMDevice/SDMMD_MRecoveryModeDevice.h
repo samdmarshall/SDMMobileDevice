@@ -29,7 +29,7 @@
 
 struct AMRecoveryModeDeviceClassHeader {
 	unsigned char header[16];
-} __attribute__ ((packed)) AMRecoveryModeDeviceClassHeader; // size 0x10
+} ATR_PACK AMRecoveryModeDeviceClassHeader; // size 0x10
 
 struct AMRecoveryModeDeviceClassBody {
 	// 16
@@ -53,12 +53,12 @@ struct AMRecoveryModeDeviceClassBody {
 	int32_t security_domain;		// 148
 	int8_t production_mode;			// 152
 	// 160
-} __attribute__ ((packed)) AMRecoveryModeDeviceClassBody; // size 0x98
+} ATR_PACK AMRecoveryModeDeviceClassBody; // size 0x98
 
 struct am_recovery_device {
 	struct AMRecoveryModeDeviceClassHeader base;
 	struct AMRecoveryModeDeviceClassBody ivars;
-} __attribute__ ((packed)) am_recovery_device;
+} ATR_PACK am_recovery_device;
 
 typedef struct am_recovery_device SDMMD_AMRecoveryModeDeviceClass;
 

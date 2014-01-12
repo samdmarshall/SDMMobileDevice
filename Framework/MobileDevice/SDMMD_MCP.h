@@ -27,7 +27,7 @@ struct sdm_mobiledevice {
 	SDMMD_USBMuxListenerRef usbmuxd;
 	CFArrayRef deviceList;
 	uint64_t peer_certificate_data_index;
-} __attribute__ ((packed)) sdm_mobiledevice;
+} ATR_PACK sdm_mobiledevice;
 
 #define SDMMobileDeviceRef struct sdm_mobiledevice*
 

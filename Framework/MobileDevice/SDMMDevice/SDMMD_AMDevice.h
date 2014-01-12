@@ -37,7 +37,7 @@ typedef struct SDMMD_lockdown_conn {
 	SSL *ssl; 						// 8
 	uint64_t *pointer;				// 16
 	uint64_t length;				// 24
-} __attribute__ ((packed)) SDMMD_lockdown_conn;
+} ATR_PACK SDMMD_lockdown_conn;
 
 struct AMDeviceClassHeader {
 	unsigned char header[16];		// AMDeviceClass CF Header 
@@ -70,12 +70,12 @@ struct AMDeviceClassBody {
 	unsigned char unknown10[4];			// 156
 	CFDataRef unknown11;				// 160 
 	unsigned char unknown12[4];			// 164
-} __attribute__ ((packed)) AMDeviceClassBody; // size 0x98
+} ATR_PACK AMDeviceClassBody; // size 0x98
 
 struct sdmmd_am_device {
 	struct AMDeviceClassHeader base;
 	struct AMDeviceClassBody ivars;
-} __attribute__ ((packed)) sdmmd_am_device;
+} ATR_PACK sdmmd_am_device;
 
 
 CFTypeID SDMMD_AMDeviceGetTypeID(void);

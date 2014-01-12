@@ -31,7 +31,7 @@
 
 typedef struct AFCConnectionClassHeader {
 	unsigned char header[16];
-} __attribute__ ((packed)) AFCConnectionClassHeader; // 0x10
+} ATR_PACK AFCConnectionClassHeader; // 0x10
 
 typedef struct AFCConnectionClassBody {
 	int32_t state;							// 16 set to 0x1
@@ -69,12 +69,12 @@ typedef struct AFCConnectionClassBody {
 	int32_t queue;							// 1256
 	CFTypeRef fileDescriptors0;				// 1260
 	CFTypeRef fileDescriptors1;				// 1264
-} __attribute__ ((packed)) AFCConnectionClassBody; // 0x4f0
+} ATR_PACK AFCConnectionClassBody; // 0x4f0
 
 typedef struct afc_connection {
 	struct AFCConnectionClassHeader base;
 	struct AFCConnectionClassBody ivars;
-} __attribute__ ((packed)) afc_connection;
+} ATR_PACK afc_connection;
 
 typedef struct afc_connection SDMMD_AFCConnectionClass;
 
