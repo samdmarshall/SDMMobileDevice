@@ -4,7 +4,8 @@ build/
 *.xcodeproj/*.pbxuser
 *.xcodeproj/*.perspectivev*
 *.xcworkspace/xcuserdata/*
-
+*.xcodeproject/xcuserdata/*
+*/*.xcodeproj/xcuserdata/*
 *.xcode*/*.xcuserdata
 *.xcode*/xcuserdata/
 *.xcode*/xcuserdata/
