@@ -232,7 +232,7 @@ sdmmd_return_t SDMMD_AFCSendOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOper
 	CFDataRef headerData = CFDataCreate(kCFAllocatorDefault, (UInt8*)&op->packet->header, sizeof(SDMMD_AFCPacketHeader));
 	result = SDMMD_DirectServiceSend(SDMMD_TranslateConnectionToSocket(conn->handle), headerData);
 	printf("header sent status: %08x\n",result);
-	CFDataRef bodyData = CFDataCreate(kCFAllocatorDefault, (UInt8*)&op->packet->data, op->packet->header.packetLen - sizeof(SDMMD_AFCPacketHeader));
+	CFDataRef bodyData = CFDataCreate(kCFAllocatorDefault, (UInt8*)&op->packet->data, (uint32_t)op->packet->header.packetLen - sizeof(SDMMD_AFCPacketHeader));
 	result = SDMMD_DirectServiceSend(SDMMD_TranslateConnectionToSocket(conn->handle), bodyData);
 	printf("body sent status: %08x\n",result);
 	return result;
@@ -247,9 +247,9 @@ sdmmd_return_t SDMMD_AFCReceiveOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 	result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(conn->handle), (CFDataRef*)&headerData);
 	SDMMD_AFCPacketHeader *header = (SDMMD_AFCPacketHeader *)CFDataGetBytePtr(headerData);
 	
-	CFMutableDataRef bodyData = CFDataCreateMutable(kCFAllocatorDefault, header->packetLen - sizeof(SDMMD_AFCPacketHeader));
-	char *body = calloc(1, header->packetLen - sizeof(SDMMD_AFCPacketHeader));
-	CFDataAppendBytes(bodyData, (UInt8*)body, header->packetLen - sizeof(SDMMD_AFCPacketHeader));
+	CFMutableDataRef bodyData = CFDataCreateMutable(kCFAllocatorDefault, (uint32_t)header->packetLen - sizeof(SDMMD_AFCPacketHeader));
+	char *body = calloc(1, (uint32_t)header->packetLen - sizeof(SDMMD_AFCPacketHeader));
+	CFDataAppendBytes(bodyData, (UInt8*)body, (uint32_t)header->packetLen - sizeof(SDMMD_AFCPacketHeader));
 	free(body);
 	result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(conn->handle), (CFDataRef*)&bodyData);
 	struct sdmmd_AFCPacket *packet = calloc(1, sizeof(struct sdmmd_AFCPacket));
@@ -280,7 +280,7 @@ sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 }
 
 CFDataRef SDMMD_GetDataResponseFromOperation(SDMMD_AFCOperationRef op) {
-	return CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, (UInt8*)op->packet->data, op->packet->header.packetLen-op->packet->header.headerLen, kCFAllocatorDefault);
+	return CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, (UInt8*)op->packet->data, (uint32_t)op->packet->header.packetLen-(uint32_t)op->packet->header.headerLen, kCFAllocatorDefault);
 }
 
 

@@ -109,8 +109,8 @@ static CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
 				struct stat fileStat;
 				result = fstat(ref, &fileStat);
 				if (result != -1) {
-					unsigned char *data = calloc(1, fileStat.st_size);
-					result = read(ref, data, fileStat.st_size);
+					unsigned char *data = calloc(1, (unsigned long)fileStat.st_size);
+					result = read(ref, data, (size_t)fileStat.st_size);
 					if (result == fileStat.st_size) {
 						CFDataRef fileData = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, data, result, kCFAllocatorNull);
 						if (fileData) {
