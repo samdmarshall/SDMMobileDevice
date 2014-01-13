@@ -37,8 +37,13 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
 						SDMMD_AMDeviceDisconnect(device);
 						sdmmd_return_t result = SDMMD_StartDebuggingSessionOnDevice(device, &connection);
 						SDMMD_CondSuccess(result, {
-							CFStringRef encodedPath = SDMMD_EncodeForDebuggingCommand(CFDictionaryGetValue(details, CFSTR("Path")));
-							CFStringRef containerPath = SDMMD_EncodeForDebuggingCommand(CFDictionaryGetValue(details, CFSTR("Container")));
+							CFStringRef path = CFDictionaryGetValue(details, CFSTR("Path"));
+							CFStringRef encodedPath = SDMMD_EncodeForDebuggingCommand(path);
+							CFStringRef container = CFDictionaryGetValue(details, CFSTR("Container"));
+							if (!container) {
+								container = 
+							}
+							CFStringRef containerPath = SDMMD_EncodeForDebuggingCommand(container);
 							sdmmd_debug_return_t dresult;
 							dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugQSetMaxPacketSize], SDMMD_EncodeForDebuggingCommand(CFSTR("1024")));
 							dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugQSetWorkingDir], containerPath);

@@ -11,6 +11,29 @@
 		220B5B1A188373A10082AF84 /* SDMMD_Types.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF9811883722B008E909F /* SDMMD_Types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		220B5B1F188376130082AF84 /* Attributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF97F18835209008E909F /* Attributes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		220B5BD018837FDC0082AF84 /* SDMMobileDevice.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 220B5BCF18837FDC0082AF84 /* SDMMobileDevice.entitlements */; };
+		220B5C03188390780082AF84 /* Img4Ticket8960Cert.crt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BD4188390440082AF84 /* Img4Ticket8960Cert.crt */; };
+		220B5C04188390780082AF84 /* Img4Ticket8960DevCert.crt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BD5188390440082AF84 /* Img4Ticket8960DevCert.crt */; };
+		220B5C05188390780082AF84 /* Img4Ticket8960UnfusedCert.crt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BD6188390440082AF84 /* Img4Ticket8960UnfusedCert.crt */; };
+		220B5C06188390780082AF84 /* Img4TicketCACert.crt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BD7188390440082AF84 /* Img4TicketCACert.crt */; };
+		220B5C07188390780082AF84 /* Img4TicketDevPrivateKey.pem in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BD8188390440082AF84 /* Img4TicketDevPrivateKey.pem */; };
+		220B5C08188390780082AF84 /* Img4TicketPrivateKey.pem in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BD9188390440082AF84 /* Img4TicketPrivateKey.pem */; };
+		220B5C09188390780082AF84 /* Img4TicketUnfusedPrivateKey.pem in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BDA188390440082AF84 /* Img4TicketUnfusedPrivateKey.pem */; };
+		220B5C0A188390780082AF84 /* MonetAttestationCACert.crt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BDB188390440082AF84 /* MonetAttestationCACert.crt */; };
+		220B5C0B188390780082AF84 /* MonetAttestationDblCert.crt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BDC188390440082AF84 /* MonetAttestationDblCert.crt */; };
+		220B5C0C188390780082AF84 /* MonetAttestationDblCertPrivateKey.pem in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BDD188390440082AF84 /* MonetAttestationDblCertPrivateKey.pem */; };
+		220B5C0D188390780082AF84 /* MonetAttestationENandprogCert.crt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BDE188390440082AF84 /* MonetAttestationENandprogCert.crt */; };
+		220B5C0E188390780082AF84 /* MonetAttestationENandprogCertPrivateKey.pem in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BDF188390440082AF84 /* MonetAttestationENandprogCertPrivateKey.pem */; };
+		220B5C0F188390780082AF84 /* MonetRootCACert.crt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BE0188390440082AF84 /* MonetRootCACert.crt */; };
+		220B5C10188390780082AF84 /* MonetTicketActivationPrivateKey.pem in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BE1188390440082AF84 /* MonetTicketActivationPrivateKey.pem */; };
+		220B5C11188390780082AF84 /* MonetTicketCalibrationPrivateKey.pem in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BE2188390440082AF84 /* MonetTicketCalibrationPrivateKey.pem */; };
+		220B5C12188390780082AF84 /* MonetTicketProvisioningA1PublicKey.pem in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BE3188390440082AF84 /* MonetTicketProvisioningA1PublicKey.pem */; };
+		220B5C13188390780082AF84 /* MonetTicketProvisioningA2PublicKey.pem in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BE4188390440082AF84 /* MonetTicketProvisioningA2PublicKey.pem */; };
+		220B5C14188390780082AF84 /* MonetTicketProvisioningC1PublicKey.pem in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BE5188390440082AF84 /* MonetTicketProvisioningC1PublicKey.pem */; };
+		220B5C15188390780082AF84 /* MonetTicketProvisioningC2PublicKey.pem in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BE6188390440082AF84 /* MonetTicketProvisioningC2PublicKey.pem */; };
+		220B5C16188390780082AF84 /* MonetTicketProvisioningP1PublicKey.pem in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BE7188390440082AF84 /* MonetTicketProvisioningP1PublicKey.pem */; };
+		220B5C17188390780082AF84 /* MonetTicketProvisioningP2PublicKey.pem in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BE8188390440082AF84 /* MonetTicketProvisioningP2PublicKey.pem */; };
+		220B5C18188390780082AF84 /* MonetTicketProvisioningPrivateKey.pem in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BE9188390440082AF84 /* MonetTicketProvisioningPrivateKey.pem */; };
+		220B5C19188390780082AF84 /* MonetTicketRootPrivateKey.pem in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BEA188390440082AF84 /* MonetTicketRootPrivateKey.pem */; };
 		2215A84017500DE700AD1981 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A83F17500DE700AD1981 /* CoreFoundation.framework */; };
 		225ACB46175FBFA300A47071 /* SDMMD_Debugger.h in Headers */ = {isa = PBXBuildFile; fileRef = 225ACB44175FBFA300A47071 /* SDMMD_Debugger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		225ACB47175FBFA300A47071 /* SDMMD_Debugger.c in Sources */ = {isa = PBXBuildFile; fileRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */; };
@@ -60,12 +83,70 @@
 		22DEF97E188350E6008E909F /* Range.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF970188350E6008E909F /* Range.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		220B5C02188390650082AF84 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Certs;
+			dstSubfolderSpec = 7;
+			files = (
+				220B5C03188390780082AF84 /* Img4Ticket8960Cert.crt in CopyFiles */,
+				220B5C04188390780082AF84 /* Img4Ticket8960DevCert.crt in CopyFiles */,
+				220B5C05188390780082AF84 /* Img4Ticket8960UnfusedCert.crt in CopyFiles */,
+				220B5C06188390780082AF84 /* Img4TicketCACert.crt in CopyFiles */,
+				220B5C07188390780082AF84 /* Img4TicketDevPrivateKey.pem in CopyFiles */,
+				220B5C08188390780082AF84 /* Img4TicketPrivateKey.pem in CopyFiles */,
+				220B5C09188390780082AF84 /* Img4TicketUnfusedPrivateKey.pem in CopyFiles */,
+				220B5C0A188390780082AF84 /* MonetAttestationCACert.crt in CopyFiles */,
+				220B5C0B188390780082AF84 /* MonetAttestationDblCert.crt in CopyFiles */,
+				220B5C0C188390780082AF84 /* MonetAttestationDblCertPrivateKey.pem in CopyFiles */,
+				220B5C0D188390780082AF84 /* MonetAttestationENandprogCert.crt in CopyFiles */,
+				220B5C0E188390780082AF84 /* MonetAttestationENandprogCertPrivateKey.pem in CopyFiles */,
+				220B5C0F188390780082AF84 /* MonetRootCACert.crt in CopyFiles */,
+				220B5C10188390780082AF84 /* MonetTicketActivationPrivateKey.pem in CopyFiles */,
+				220B5C11188390780082AF84 /* MonetTicketCalibrationPrivateKey.pem in CopyFiles */,
+				220B5C12188390780082AF84 /* MonetTicketProvisioningA1PublicKey.pem in CopyFiles */,
+				220B5C13188390780082AF84 /* MonetTicketProvisioningA2PublicKey.pem in CopyFiles */,
+				220B5C14188390780082AF84 /* MonetTicketProvisioningC1PublicKey.pem in CopyFiles */,
+				220B5C15188390780082AF84 /* MonetTicketProvisioningC2PublicKey.pem in CopyFiles */,
+				220B5C16188390780082AF84 /* MonetTicketProvisioningP1PublicKey.pem in CopyFiles */,
+				220B5C17188390780082AF84 /* MonetTicketProvisioningP2PublicKey.pem in CopyFiles */,
+				220B5C18188390780082AF84 /* MonetTicketProvisioningPrivateKey.pem in CopyFiles */,
+				220B5C19188390780082AF84 /* MonetTicketRootPrivateKey.pem in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		135697D717FEB9CB00039D19 /* SDMTranslation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMTranslation.h; sourceTree = "<group>"; };
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		220B5BCF18837FDC0082AF84 /* SDMMobileDevice.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = SDMMobileDevice.entitlements; sourceTree = "<group>"; };
+		220B5BD4188390440082AF84 /* Img4Ticket8960Cert.crt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Img4Ticket8960Cert.crt; sourceTree = "<group>"; };
+		220B5BD5188390440082AF84 /* Img4Ticket8960DevCert.crt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Img4Ticket8960DevCert.crt; sourceTree = "<group>"; };
+		220B5BD6188390440082AF84 /* Img4Ticket8960UnfusedCert.crt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Img4Ticket8960UnfusedCert.crt; sourceTree = "<group>"; };
+		220B5BD7188390440082AF84 /* Img4TicketCACert.crt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Img4TicketCACert.crt; sourceTree = "<group>"; };
+		220B5BD8188390440082AF84 /* Img4TicketDevPrivateKey.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Img4TicketDevPrivateKey.pem; sourceTree = "<group>"; };
+		220B5BD9188390440082AF84 /* Img4TicketPrivateKey.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Img4TicketPrivateKey.pem; sourceTree = "<group>"; };
+		220B5BDA188390440082AF84 /* Img4TicketUnfusedPrivateKey.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Img4TicketUnfusedPrivateKey.pem; sourceTree = "<group>"; };
+		220B5BDB188390440082AF84 /* MonetAttestationCACert.crt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MonetAttestationCACert.crt; sourceTree = "<group>"; };
+		220B5BDC188390440082AF84 /* MonetAttestationDblCert.crt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MonetAttestationDblCert.crt; sourceTree = "<group>"; };
+		220B5BDD188390440082AF84 /* MonetAttestationDblCertPrivateKey.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MonetAttestationDblCertPrivateKey.pem; sourceTree = "<group>"; };
+		220B5BDE188390440082AF84 /* MonetAttestationENandprogCert.crt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MonetAttestationENandprogCert.crt; sourceTree = "<group>"; };
+		220B5BDF188390440082AF84 /* MonetAttestationENandprogCertPrivateKey.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MonetAttestationENandprogCertPrivateKey.pem; sourceTree = "<group>"; };
+		220B5BE0188390440082AF84 /* MonetRootCACert.crt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MonetRootCACert.crt; sourceTree = "<group>"; };
+		220B5BE1188390440082AF84 /* MonetTicketActivationPrivateKey.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MonetTicketActivationPrivateKey.pem; sourceTree = "<group>"; };
+		220B5BE2188390440082AF84 /* MonetTicketCalibrationPrivateKey.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MonetTicketCalibrationPrivateKey.pem; sourceTree = "<group>"; };
+		220B5BE3188390440082AF84 /* MonetTicketProvisioningA1PublicKey.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MonetTicketProvisioningA1PublicKey.pem; sourceTree = "<group>"; };
+		220B5BE4188390440082AF84 /* MonetTicketProvisioningA2PublicKey.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MonetTicketProvisioningA2PublicKey.pem; sourceTree = "<group>"; };
+		220B5BE5188390440082AF84 /* MonetTicketProvisioningC1PublicKey.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MonetTicketProvisioningC1PublicKey.pem; sourceTree = "<group>"; };
+		220B5BE6188390440082AF84 /* MonetTicketProvisioningC2PublicKey.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MonetTicketProvisioningC2PublicKey.pem; sourceTree = "<group>"; };
+		220B5BE7188390440082AF84 /* MonetTicketProvisioningP1PublicKey.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MonetTicketProvisioningP1PublicKey.pem; sourceTree = "<group>"; };
+		220B5BE8188390440082AF84 /* MonetTicketProvisioningP2PublicKey.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MonetTicketProvisioningP2PublicKey.pem; sourceTree = "<group>"; };
+		220B5BE9188390440082AF84 /* MonetTicketProvisioningPrivateKey.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MonetTicketProvisioningPrivateKey.pem; sourceTree = "<group>"; };
+		220B5BEA188390440082AF84 /* MonetTicketRootPrivateKey.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MonetTicketRootPrivateKey.pem; sourceTree = "<group>"; };
 		2215A83717500DDC00AD1981 /* SDMMobileDevice.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SDMMobileDevice.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2215A83817500DDC00AD1981 /* SDMMobileDevice-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SDMMobileDevice-Info.plist"; sourceTree = "<group>"; };
 		2215A83F17500DE700AD1981 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -182,6 +263,36 @@
 				2215A83717500DDC00AD1981 /* SDMMobileDevice.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		220B5BD3188390440082AF84 /* Certs */ = {
+			isa = PBXGroup;
+			children = (
+				220B5BD4188390440082AF84 /* Img4Ticket8960Cert.crt */,
+				220B5BD5188390440082AF84 /* Img4Ticket8960DevCert.crt */,
+				220B5BD6188390440082AF84 /* Img4Ticket8960UnfusedCert.crt */,
+				220B5BD7188390440082AF84 /* Img4TicketCACert.crt */,
+				220B5BD8188390440082AF84 /* Img4TicketDevPrivateKey.pem */,
+				220B5BD9188390440082AF84 /* Img4TicketPrivateKey.pem */,
+				220B5BDA188390440082AF84 /* Img4TicketUnfusedPrivateKey.pem */,
+				220B5BDB188390440082AF84 /* MonetAttestationCACert.crt */,
+				220B5BDC188390440082AF84 /* MonetAttestationDblCert.crt */,
+				220B5BDD188390440082AF84 /* MonetAttestationDblCertPrivateKey.pem */,
+				220B5BDE188390440082AF84 /* MonetAttestationENandprogCert.crt */,
+				220B5BDF188390440082AF84 /* MonetAttestationENandprogCertPrivateKey.pem */,
+				220B5BE0188390440082AF84 /* MonetRootCACert.crt */,
+				220B5BE1188390440082AF84 /* MonetTicketActivationPrivateKey.pem */,
+				220B5BE2188390440082AF84 /* MonetTicketCalibrationPrivateKey.pem */,
+				220B5BE3188390440082AF84 /* MonetTicketProvisioningA1PublicKey.pem */,
+				220B5BE4188390440082AF84 /* MonetTicketProvisioningA2PublicKey.pem */,
+				220B5BE5188390440082AF84 /* MonetTicketProvisioningC1PublicKey.pem */,
+				220B5BE6188390440082AF84 /* MonetTicketProvisioningC2PublicKey.pem */,
+				220B5BE7188390440082AF84 /* MonetTicketProvisioningP1PublicKey.pem */,
+				220B5BE8188390440082AF84 /* MonetTicketProvisioningP2PublicKey.pem */,
+				220B5BE9188390440082AF84 /* MonetTicketProvisioningPrivateKey.pem */,
+				220B5BEA188390440082AF84 /* MonetTicketRootPrivateKey.pem */,
+			);
+			path = Certs;
 			sourceTree = "<group>";
 		};
 		2215A85017500E2D00AD1981 /* MobileDevice */ = {
@@ -341,6 +452,7 @@
 		29B97314FDCFA39411CA2CEA /* SDM_MD_Demo */ = {
 			isa = PBXGroup;
 			children = (
+				220B5BD3188390440082AF84 /* Certs */,
 				220B5BCF18837FDC0082AF84 /* SDMMobileDevice.entitlements */,
 				22DEF960188350E6008E909F /* Core */,
 				080E96DDFE201D6D7F000001 /* Classes */,
@@ -420,6 +532,7 @@
 				2215A83317500DDC00AD1981 /* Resources */,
 				2215A83417500DDC00AD1981 /* Sources */,
 				2215A83517500DDC00AD1981 /* Frameworks */,
+				220B5C02188390650082AF84 /* CopyFiles */,
 			);
 			buildRules = (
 			);

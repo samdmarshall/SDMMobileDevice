@@ -23,12 +23,12 @@
 	</array>
 	<key>com.apple.security.temporary-exception.sbpl</key>
 	<array>
-		<string>(allow file-read-data (regex #"SSOClient\.framework"))</string>
-		<string>(allow mach-lookup (global-name #"com.apple.syncservices.SyncServer"))</string>
-		<string>(allow network-outbound (literal "/private/var/run/usbmuxd"))</string>
-		<string>(allow mach-lookup (global-name-regex #"^com\.apple\.DeviceLink\.AppleMobileBackup\..+"))</string>
-		<string>(allow mach-lookup (global-name #"com.apple.storeagent-xpc"))</string>
-		<string>(allow file-read-data (regex #".+\.ipsw$"))</string>
+		<string>(allow mach-lookup (global-name #&quot;com.apple.syncservices.SyncServer&quot;))</string>
+		<string>(allow network-outbound (literal &quot;/private/var/run/usbmuxd&quot;))</string>
+		<string>(allow mach-lookup (global-name-regex #&quot;^com\.apple\.DeviceLink\.AppleMobileBackup\..+&quot;))</string>
+		<string>(allow file-read-data (regex #&quot;.+\.ipsw$&quot;))</string>
+		<string>(allow file-read-data (regex #&quot;.+\.dmg$&quot;))</string>
+		<string>(allow file-read-data (regex #&quot;.+\.app$&quot;))</string>
 		<string>(allow distributed-notification-post)</string>
 	</array>
 </dict>
