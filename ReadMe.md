@@ -60,10 +60,7 @@ If you have trouble locating any of these, please look at the "-Framework" xcode
 
 
 #### Entitlements (where applicable)
-This framework will require entitlements to access the following locations:  
-`/var/run/usbmuxd` (read/write access to this file)  
-`/var/db/lockdown/` (read/write access to this directory)
-
+See this [file](./Framework/SDMMobileDevice.entitlements)
 
 ***
 
