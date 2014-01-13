@@ -20,6 +20,7 @@
 #ifndef _SDM_MD_APPLICATIONS_H_
 #define _SDM_MD_APPLICATIONS_H_
 
+#include "SDMMD_Types.h"
 #include "SDMMD_Error.h"
 #include "SDMMD_AMDevice.h"
 
@@ -72,6 +73,6 @@
 #pragma mark -
 
 sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef *response);
-sdmmd_return_t SDMMD_AMDeviceInstallApplication(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef options, void* installCallback, void* unknown);
+sdmmd_return_t SDMMD_AMDeviceInstallApplication(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef options, CallBack installCallback, void* unknown);
 
 #endif

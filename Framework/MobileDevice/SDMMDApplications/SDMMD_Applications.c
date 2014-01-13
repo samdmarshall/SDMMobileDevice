@@ -59,19 +59,6 @@ sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDict
 	return result;
 }
 
-void SDMMD_fire_callback_767f4(void (*callback)(CFDictionaryRef dict, void* arg), void* unknown, uint32_t percent, CFStringRef string) {
-	if (callback) {
-		CFMutableDictionaryRef dict = SDMMD_create_dict();
-		CFNumberRef num = CFNumberCreate(kCFAllocatorDefault, 0x3, &percent);
-		if (dict) {
-			CFDictionarySetValue(dict, CFSTR("Status"), string);
-			CFDictionarySetValue(dict, CFSTR("PercentComplete"), num);
-			CFRelease(num);
-		}
-		(*callback)(dict, unknown);
-	}
-}
-
 void SDMMD_preflight_transfer(char *path, struct stat *statRef, char *rStatRef) {
 	int statResult = stat(path, statRef);
 	if (statResult != 0xff) {
@@ -84,13 +71,13 @@ void SDMMD_preflight_transfer(char *path, struct stat *statRef, char *rStatRef) 
 	}
 }
 
-sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFStringRef path, CFDictionaryRef options, void* transferCallback, void* unknown) {
+sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFStringRef path, CFDictionaryRef options, CallBack transferCallback, void* unknown) {
 	sdmmd_return_t result = kAMDInvalidArgumentError;
 	if (path) {
 		if (conn) {
 			char *cpath = calloc(0x1, 0x401);
 			ATR_UNUSED struct stat pathStat, remoteStat;
-			Boolean status = CFStringGetCString(path, cpath, 0x401, 0x8000100);
+			Boolean status = CFStringGetCString(path, cpath, 0x401, kCFStringEncodingUTF8);
 			if (status) {
 				CFURLRef deviceURL = SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(path);
 				if (deviceURL) {
@@ -163,7 +150,7 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 	return result;
 }
 
-sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn, SDMMD_AMDeviceRef device, CFURLRef path, CFDictionaryRef options, void* installCallback, void* unknown) {
+sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn, SDMMD_AMDeviceRef device, CFURLRef path, CFDictionaryRef options, CallBack installCallback, void* unknown) {
 	sdmmd_return_t result = 0x0;
 	SDMMD_AMConnectionRef connection = NULL;
 	bool hasConnection = (conn ? true : false);
@@ -203,7 +190,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn
 	return result;
 }
 
-sdmmd_return_t SDMMD_AMDeviceInstallApplication(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef options, void* installCallback, void* unknown) {
+sdmmd_return_t SDMMD_AMDeviceInstallApplication(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef options, CallBack installCallback, void* unknown) {
 	printf("SDMMD_AMDeviceInstallApplication: Entry.\n");
 	sdmmd_return_t result = 0x0;
 	uint32_t socket = 0;

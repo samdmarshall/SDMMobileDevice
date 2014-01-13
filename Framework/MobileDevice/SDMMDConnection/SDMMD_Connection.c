@@ -26,7 +26,7 @@
 #include "SDMMD_AMDevice.h"
 #include "Core.h"
 
-sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef command, uint64_t code, void (*callback)(CFDictionaryRef dict, void* arg), uint32_t argsCount, void* paramStart, ...) {
+sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef command, uint64_t code, CallBack handle, uint32_t argsCount, void* paramStart, ...) {
 	sdmmd_return_t result = 0x0;
 	CFMutableDictionaryRef message = SDMMD_create_dict();
 	if (message) {
@@ -62,10 +62,10 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 									uint64_t count = CFArrayGetCount(responses);
 									for (uint32_t i = 0; i < count; i++) {
 										CFDictionaryRef value = CFArrayGetValueAtIndex(responses, i);
-										(callback)(value, paramStart);
+										handle(value, paramStart);
 									}
 								} else {
-									(callback)(response, 0);
+									handle(response, 0);
 								}
 							} else {
 								break;
@@ -175,7 +175,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 	bool enableSSL = false;
 	char *cservice = calloc(1, sizeof(char)*0xc8);
     if (service) {
-		CFStringGetCString(service, cservice, 0xc8, 0x8000100);
+		CFStringGetCString(service, cservice, 0xc8, kCFStringEncodingUTF8);
     }
 	SSL *ssl = NULL;
 	bool mutexLock = false;
@@ -447,7 +447,7 @@ void SDMMD_AMDServiceConnectionSetDevice(SDMMD_AMConnectionRef *connection, SDMM
 
 void SDMMD_AMDServiceConnectionSetServiceName(SDMMD_AMConnectionRef *connection, CFStringRef service) {
 	if (service)
-		CFStringGetCString(service, (*connection)->ivars.service, 0x80, 0x8000100);
+		CFStringGetCString(service, (*connection)->ivars.service, 0x80, kCFStringEncodingUTF8);
 }
 
 uint32_t SDMMD_AMDServiceConnectionGetSocket(SDMMD_AMConnectionRef connection) {

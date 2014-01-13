@@ -116,6 +116,7 @@ read_descriptor (int fd)
 int main (int argc, const char * argv[]) {
 	// Needed to initialize the library and start the device listener (SDMMD_MCP.h)
 	SDMMobileDevice;
+	/*
 	uint32_t result;
 	uint32_t sock = socket(AF_UNIX, SOCK_STREAM, 0x0);
 		char *mux = "/tmp/sdm_syslog";
@@ -131,11 +132,11 @@ int main (int argc, const char * argv[]) {
 	else {
 		read_descriptor(sock);
 	}
-
+	 */
 	//AFCTest();
 	//KeyExplore("","BrickState");
 	//DemoOne();
-	//DemoTwo();
+	DemoTwo();
 	if (argc == 2) {
 		//DemoThree(argv[1]);
 		//DemoFour(argv[1]);

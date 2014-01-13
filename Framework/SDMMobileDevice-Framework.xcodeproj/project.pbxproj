@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		135697D817FEB9CB00039D19 /* SDMTranslation.h in Headers */ = {isa = PBXBuildFile; fileRef = 135697D717FEB9CB00039D19 /* SDMTranslation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		220B5B1A188373A10082AF84 /* SDMMD_Types.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF9811883722B008E909F /* SDMMD_Types.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		220B5B1F188376130082AF84 /* Attributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF97F18835209008E909F /* Attributes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2215A84017500DE700AD1981 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A83F17500DE700AD1981 /* CoreFoundation.framework */; };
 		225ACB46175FBFA300A47071 /* SDMMD_Debugger.h in Headers */ = {isa = PBXBuildFile; fileRef = 225ACB44175FBFA300A47071 /* SDMMD_Debugger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		225ACB47175FBFA300A47071 /* SDMMD_Debugger.c in Sources */ = {isa = PBXBuildFile; fileRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */; };
@@ -45,20 +47,16 @@
 		22D5F318179C81FD00C34745 /* SDMMD_Applications.h in Headers */ = {isa = PBXBuildFile; fileRef = 225ACD751760C86200A47071 /* SDMMD_Applications.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22D5F319179C820200C34745 /* SDMMD_Notification.c in Sources */ = {isa = PBXBuildFile; fileRef = 225AC5BF175B976500A47071 /* SDMMD_Notification.c */; };
 		22D5F31A179C820200C34745 /* SDMMD_Notification.h in Headers */ = {isa = PBXBuildFile; fileRef = 225AC5BE175B976500A47071 /* SDMMD_Notification.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		22DEF971188350E6008E909F /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF961188350E6008E909F /* Core.h */; };
+		22DEF971188350E6008E909F /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF961188350E6008E909F /* Core.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22DEF972188350E6008E909F /* CFDictionaryAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22DEF963188350E6008E909F /* CFDictionaryAddition.c */; };
-		22DEF973188350E6008E909F /* CFDictionaryAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF964188350E6008E909F /* CFDictionaryAddition.h */; };
+		22DEF973188350E6008E909F /* CFDictionaryAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF964188350E6008E909F /* CFDictionaryAddition.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22DEF974188350E6008E909F /* CFTypeAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22DEF965188350E6008E909F /* CFTypeAddition.c */; };
-		22DEF975188350E6008E909F /* CFTypeAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF966188350E6008E909F /* CFTypeAddition.h */; };
-		22DEF976188350E6008E909F /* GeometryMaths.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF968188350E6008E909F /* GeometryMaths.h */; };
-		22DEF977188350E6008E909F /* Matrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 22DEF969188350E6008E909F /* Matrix.c */; };
-		22DEF978188350E6008E909F /* Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF96A188350E6008E909F /* Matrix.h */; };
-		22DEF979188350E6008E909F /* Vector.c in Sources */ = {isa = PBXBuildFile; fileRef = 22DEF96B188350E6008E909F /* Vector.c */; };
-		22DEF97A188350E6008E909F /* Vector.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF96C188350E6008E909F /* Vector.h */; };
-		22DEF97B188350E6008E909F /* Logging.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF96D188350E6008E909F /* Logging.h */; };
-		22DEF97C188350E6008E909F /* Number.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF96E188350E6008E909F /* Number.h */; };
-		22DEF97D188350E6008E909F /* Pointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF96F188350E6008E909F /* Pointer.h */; };
-		22DEF97E188350E6008E909F /* Range.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF970188350E6008E909F /* Range.h */; };
+		22DEF975188350E6008E909F /* CFTypeAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF966188350E6008E909F /* CFTypeAddition.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22DEF978188350E6008E909F /* Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF96A188350E6008E909F /* Matrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22DEF97B188350E6008E909F /* Logging.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF96D188350E6008E909F /* Logging.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22DEF97C188350E6008E909F /* Number.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF96E188350E6008E909F /* Number.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22DEF97D188350E6008E909F /* Pointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF96F188350E6008E909F /* Pointer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22DEF97E188350E6008E909F /* Range.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF970188350E6008E909F /* Range.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -128,6 +126,7 @@
 		22DEF96F188350E6008E909F /* Pointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pointer.h; sourceTree = "<group>"; };
 		22DEF970188350E6008E909F /* Range.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Range.h; sourceTree = "<group>"; };
 		22DEF97F18835209008E909F /* Attributes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Attributes.h; sourceTree = "<group>"; };
+		22DEF9811883722B008E909F /* SDMMD_Types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_Types.h; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
@@ -189,6 +188,7 @@
 				22AD9A44178F2CBF002ACFB1 /* CFRuntime.h */,
 				22AD8E8317875BAA002ACFB1 /* SDMMobileDevice.h */,
 				135697D717FEB9CB00039D19 /* SDMTranslation.h */,
+				22DEF9811883722B008E909F /* SDMMD_Types.h */,
 				22AD8E7817875B1E002ACFB1 /* SDMMD_Functions.h */,
 				22AD8F231789B3DF002ACFB1 /* SDMMD_MCP.h */,
 				22AD8F241789B3DF002ACFB1 /* SDMMD_MCP.c */,
@@ -375,34 +375,34 @@
 			files = (
 				135697D817FEB9CB00039D19 /* SDMTranslation.h in Headers */,
 				225ACB46175FBFA300A47071 /* SDMMD_Debugger.h in Headers */,
-				22DEF97B188350E6008E909F /* Logging.h in Headers */,
 				225AD7321765FE7700A47071 /* SDMMD_USBMuxListener.h in Headers */,
 				22AD8E651787465A002ACFB1 /* SDMMD_AMDevice.h in Headers */,
 				22AD8E7417875346002ACFB1 /* SDMMD_Error.h in Headers */,
 				22AD8E7917875B1E002ACFB1 /* SDMMD_Functions.h in Headers */,
+				22AD8F251789B3DF002ACFB1 /* SDMMD_MCP.h in Headers */,
+				22AD8FD41789BAB5002ACFB1 /* SDMMobileDevice.h in Headers */,
+				220B5B1A188373A10082AF84 /* SDMMD_Types.h in Headers */,
+				22AD91C21789D715002ACFB1 /* SDMMD_Service.h in Headers */,
+				22AD91C41789D71A002ACFB1 /* SDMMD_Connection.h in Headers */,
+				22AD9347178A1609002ACFB1 /* SDMMD_MRecoveryModeDevice.h in Headers */,
+				22AD9348178A160B002ACFB1 /* SDMMD_Keys.h in Headers */,
+				220B5B1F188376130082AF84 /* Attributes.h in Headers */,
+				22AD9350178A1678002ACFB1 /* SDMMD_MRUSBDevice.h in Headers */,
+				22AD9355178A16CF002ACFB1 /* SDMMD_MDFUModeDevice.h in Headers */,
+				22DEF97B188350E6008E909F /* Logging.h in Headers */,
 				22DEF97C188350E6008E909F /* Number.h in Headers */,
 				22DEF978188350E6008E909F /* Matrix.h in Headers */,
 				22DEF975188350E6008E909F /* CFTypeAddition.h in Headers */,
-				22AD8F251789B3DF002ACFB1 /* SDMMD_MCP.h in Headers */,
 				22DEF973188350E6008E909F /* CFDictionaryAddition.h in Headers */,
-				22AD8FD41789BAB5002ACFB1 /* SDMMobileDevice.h in Headers */,
-				22AD91C21789D715002ACFB1 /* SDMMD_Service.h in Headers */,
-				22AD91C41789D71A002ACFB1 /* SDMMD_Connection.h in Headers */,
 				22DEF971188350E6008E909F /* Core.h in Headers */,
-				22AD9347178A1609002ACFB1 /* SDMMD_MRecoveryModeDevice.h in Headers */,
-				22AD9348178A160B002ACFB1 /* SDMMD_Keys.h in Headers */,
-				22AD9350178A1678002ACFB1 /* SDMMD_MRUSBDevice.h in Headers */,
-				22AD9355178A16CF002ACFB1 /* SDMMD_MDFUModeDevice.h in Headers */,
+				22DEF97E188350E6008E909F /* Range.h in Headers */,
+				22DEF97D188350E6008E909F /* Pointer.h in Headers */,
 				22AD935A178A175E002ACFB1 /* SDMMD_MRestorableDevice.h in Headers */,
 				22AD9369178A17AF002ACFB1 /* SDMMD_MRestoreModeDevice.h in Headers */,
 				22AD9A45178F2CBF002ACFB1 /* CFRuntime.h in Headers */,
 				22D5F314179C81F200C34745 /* SDMMD_AFC.h in Headers */,
-				22DEF97E188350E6008E909F /* Range.h in Headers */,
-				22DEF97D188350E6008E909F /* Pointer.h in Headers */,
 				22D5F318179C81FD00C34745 /* SDMMD_Applications.h in Headers */,
-				22DEF976188350E6008E909F /* GeometryMaths.h in Headers */,
 				22D5F31A179C820200C34745 /* SDMMD_Notification.h in Headers */,
-				22DEF97A188350E6008E909F /* Vector.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -475,13 +475,11 @@
 				22AD8E7517875346002ACFB1 /* SDMMD_Error.c in Sources */,
 				22AD8F261789B3DF002ACFB1 /* SDMMD_MCP.c in Sources */,
 				22AD91C31789D715002ACFB1 /* SDMMD_Service.c in Sources */,
-				22DEF979188350E6008E909F /* Vector.c in Sources */,
 				22AD91C51789D71A002ACFB1 /* SDMMD_Connection.c in Sources */,
 				22AD9349178A1622002ACFB1 /* SDMMD_MRecoveryModeDevice.c in Sources */,
 				22DEF974188350E6008E909F /* CFTypeAddition.c in Sources */,
 				22AD934F178A1675002ACFB1 /* SDMMD_MRUSBDevice.c in Sources */,
 				22AD9356178A16CF002ACFB1 /* SDMMD_MDFUModeDevice.c in Sources */,
-				22DEF977188350E6008E909F /* Matrix.c in Sources */,
 				22AD9359178A1759002ACFB1 /* SDMMD_MRestorableDevice.c in Sources */,
 				22AD936A178A17B0002ACFB1 /* SDMMD_MRestoreModeDevice.c in Sources */,
 				22D5F313179C81F100C34745 /* SDMMD_AFC.c in Sources */,
@@ -557,7 +555,7 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				LD_DYLIB_INSTALL_NAME = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = SDMMobileDevice;

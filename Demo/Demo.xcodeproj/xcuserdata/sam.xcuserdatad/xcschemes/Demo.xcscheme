@@ -14,20 +14,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2215A83617500DDC00AD1981"
-               BuildableName = "SDMMobileDevice.framework"
-               BlueprintName = "SDMMobileDevice"
-               ReferencedContainer = "container:../Framework/SDMMobileDevice-Framework.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "8DD76F740486A8DE00D96B5E"
                BuildableName = "Demo"
                BlueprintName = "Demo"

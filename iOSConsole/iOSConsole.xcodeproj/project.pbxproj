@@ -49,6 +49,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		220B5B1B188374D80082AF84 /* SDMMD_Types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Types.h; sourceTree = "<group>"; };
+		220B5B1C188375040082AF84 /* Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Attributes.h; sourceTree = "<group>"; };
 		22310D661874F4B10092C107 /* iOSConsole */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iOSConsole; sourceTree = BUILT_PRODUCTS_DIR; };
 		22310D691874F4B10092C107 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		22310D6C1874F4B10092C107 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
@@ -197,6 +199,7 @@
 		22310D7818750D430092C107 /* MobileDevice */ = {
 			isa = PBXGroup;
 			children = (
+				220B5B1B188374D80082AF84 /* SDMMD_Types.h */,
 				22310D7918750D430092C107 /* CFRuntime.h */,
 				22310D7A18750D430092C107 /* SDMAFCDevice */,
 				22310D8718750D430092C107 /* SDMMD_Functions.h */,
@@ -386,6 +389,7 @@
 		22FFB8BF1880DE140073095D /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				220B5B1C188375040082AF84 /* Attributes.h */,
 				22FFB8C01880DE140073095D /* Core.h */,
 				22FFB8C11880DE140073095D /* CoreFoundation */,
 				22FFB8C41880DE140073095D /* Geometry */,

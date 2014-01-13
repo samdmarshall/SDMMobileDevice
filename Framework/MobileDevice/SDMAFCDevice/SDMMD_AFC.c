@@ -20,8 +20,8 @@
 #ifndef _SDM_MD_AFC_C_
 #define _SDM_MD_AFC_C_
 
-#include "SDMMD_AFC.h"
 #include "SDMMD_Functions.h"
+#include "SDMMD_AFC.h"
 #include <string.h>
 #include "Core.h"
 

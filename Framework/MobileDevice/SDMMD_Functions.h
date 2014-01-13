@@ -24,6 +24,7 @@
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
 #include <CoreFoundation/CoreFoundation.h>
+#include "SDMMD_Types.h"
 #include <openssl/crypto.h>
 #include <pthread.h>
 #include <openssl/ssl.h>
@@ -33,6 +34,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include "SDMMD_Types.h"
 #include "SDMMD_MCP.h"
 #include "SDMMD_Error.h"
 #include "SDMMD_AMDevice.h"
@@ -385,6 +387,29 @@ ATR_UNUSED static Boolean SDMMD__AMDCFURLGetCStringForFileSystemPath(CFURLRef ur
 		return CFStringGetCString(url, cpath, 1025, kCFStringEncodingUTF8);
 	}
 	return false;
+}
+
+ATR_UNUSED static void SDMMD_fire_callback(CallBack handle, void* unknown, CFStringRef status) {
+	if (handle) {
+		CFMutableDictionaryRef dict = SDMMD_create_dict();
+		if (dict) {
+			CFDictionarySetValue(dict, CFSTR("Status"), status);
+		}
+		handle(dict, unknown);
+	}
+}
+
+ATR_UNUSED static void SDMMD_fire_callback_767f4(CallBack handle, void* unknown, uint32_t percent, CFStringRef string) {
+	if (handle) {
+		CFMutableDictionaryRef dict = SDMMD_create_dict();
+		CFNumberRef num = CFNumberCreate(kCFAllocatorDefault, 0x3, &percent);
+		if (dict) {
+			CFDictionarySetValue(dict, CFSTR("Status"), string);
+			CFDictionarySetValue(dict, CFSTR("PercentComplete"), num);
+			CFRelease(num);
+		}
+		handle(dict, unknown);
+	}
 }
 
 #endif
