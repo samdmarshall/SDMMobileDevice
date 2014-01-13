@@ -584,6 +584,7 @@
 					/Users/sam/Projects/SDM_MD_Demo/build/Debug,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYMROOT = ../build;
 			};
 			name = Debug;
 		};
@@ -597,6 +598,7 @@
 				);
 				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYMROOT = ../build;
 			};
 			name = Release;
 		};

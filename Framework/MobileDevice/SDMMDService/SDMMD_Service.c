@@ -63,6 +63,8 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 		if (handle.isSSL) {
 			if (SSL_state(handle.socket.ssl) == 0x3) {
 				result = SSL_write(handle.socket.ssl, &msgLen, sizeof(uint32_t));
+			} else {
+				return kAMDNotConnectedError;
 			}
 		} else {
 			result = send(handle.socket.conn, &msgLen, sizeof(uint32_t), 0);
