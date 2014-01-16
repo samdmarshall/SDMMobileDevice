@@ -1104,72 +1104,68 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 								if (buid) {
 									CFDictionarySetValue(record, CFSTR("SystemBUID"), buid);
 									var_56 = rax;
-									    CFDictionarySetValue(r13, CFSTR("SystemBUID"), rax);
-									    r12 = 0x0;
+									CFDictionarySetValue(r13, CFSTR("SystemBUID"), rax);
+									r12 = 0x0;
 									    rax = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0x0, r13);
 									    if (rax != 0x0) {
-									            CFDictionaryRemoveValue(r15, CFSTR(kAMDRootPrivateKey));
-									            CFDictionaryRemoveValue(r15, CFSTR(kAMDHostPrivateKey));
-									            rax = _send_pair(var_48, r15, var_8, var_40, &var_64, var_16);
-									            var_76 = rax;
-									            if (rax != 0x0) {
-									                    r8 = rax;
-									                    _mobdevlog(0x3, "AMDeviceExtendedPairWithOptions", @"Could not pair with the device %u: 0x%x", *(int32_t *)(rbx + 0x10), r8);
-									                    r12 = 0x0;
-									                    r14 = var_76;
-									            }
-									            else {
-									                    if (var_64 != 0x0) {
-									                            CFDictionarySetValue(dict, @"EscrowBag", rdx);
-									                    }
-									                    rax = _copy_lockdown_value(rbx, 0x0, @"WiFiAddress", &var_76);
-									                    r12 = rax;
-									                    if ((var_76 == 0x0) && (r12 != 0x0)) {
-									                            rax = CFGetTypeID(r12);
-									                            rbx = rax;
-									                            rax = CFStringGetTypeID();
-									                            if (rbx == rax) {
-									                                    CFDictionarySetValue(dict, @"WiFiMACAddress", r12);
-									                            }
-									                    }
-									                    char *path = calloc(0x1, 0x401);
-									                    SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
-									                    result = SDMMD_store_dict(dict, path, true);
-									                    if (rax != 0x0) {
-									                            printf("AMDeviceExtendedPairWithOptions", @"Could not store pairing record at '%s'.", &var_80);
-									                            r14 = kAMDPermissionError;
-									                    }
-									                    else {
-									                            r14 = 0x0;
-									                    }
-									            }
+											CFDictionaryRemoveValue(record, CFSTR("RootPrivateKey"));
+											CFDictionaryRemoveValue(record, CFSTR("HostPrivateKey"));
+											rax = SDMMD_send_pair(var_48, r15, var_8, var_40, &var_64, var_16);
+											var_76 = rax;
+											if (rax != 0x0) {
+													r8 = rax;
+													printf("AMDeviceExtendedPairWithOptions: Could not pair with the device %u: 0x%x\n", *(int32_t *)(rbx + 0x10), r8);
+													r12 = 0x0;
+													r14 = var_76;
+											} else {
+												if (var_64 != 0x0) {
+													CFDictionarySetValue(dict, CFSTR("EscrowBag"), rdx);
+												}
+												rax = _copy_lockdown_value(rbx, 0x0, CFSTR("WiFiAddress"), &var_76);
+												r12 = rax;
+												if ((var_76 == 0x0) && (r12 != 0x0)) {
+													if (CFGetTypeID(r12) == CFStringGetTypeID()) {
+														CFDictionarySetValue(dict, CFSTR("WiFiMACAddress"), r12);
+													}
+												}
+												char *path = calloc(0x1, 0x401);
+												SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
+												result = SDMMD_store_dict(dict, path, true);
+												if (result) {
+													printf("AMDeviceExtendedPairWithOptions: Could not store pairing record at '%s'.\n", &var_80);
+													result = kAMDPermissionError;
+												} else {
+													result = kAMDSuccess;
+												}
+											}
+										} else {
+											result = kAMDNoResourcesError;
+											r15 = 0x0;
 									    }
-									    else {
-									            r14 = kAMDNoResourcesError;
-									            r15 = 0x0;
-									    }
-									
-									
+									} else {
+										printf("SDMMD_AMDeviceExtendedPairWithOptions: Could not create system BUID.\n");
+									}
 								} else {
-									printf("SDMMD_AMDeviceExtendedPairWithOptions: Could not create system BUID.\n");
+									printf("SDMMD_AMDeviceExtendedPairWithOptions: Could not create pairing material.\n");
 								}
 							} else {
-								printf("SDMMD_AMDeviceExtendedPairWithOptions: Could not create pairing material.\n");
+								result = kAMDInvalidResponseError;
 							}
-						} else {
-							result = kAMDInvalidResponseError;
 						}
 					}
 				}
 			}
 		}
 	}
-	if (var64)
+	if (var64) {
 		CFRelease(var64);
-	if (r13)
+	}
+	if (r13) {
 		CFRelease(r13);
-	if (mutexIsLocked)
+	}
+	if (mutexIsLocked) {
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
+	}
 	return result;
 }
 */

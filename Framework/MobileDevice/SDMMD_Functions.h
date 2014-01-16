@@ -616,11 +616,8 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 	}
 	
 	if (rootEVP) {
-		// loc_8874e
 		EVP_PKEY_free(rootEVP);
 	}
-	
-	// loc_88753
 	if (hostEVP) {
 		EVP_PKEY_free(hostEVP);
 	}
