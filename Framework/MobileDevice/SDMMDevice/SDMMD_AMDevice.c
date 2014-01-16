@@ -1110,7 +1110,7 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 									    if (rax != 0x0) {
 											CFDictionaryRemoveValue(record, CFSTR("RootPrivateKey"));
 											CFDictionaryRemoveValue(record, CFSTR("HostPrivateKey"));
-											rax = SDMMD_send_pair(var_48, r15, var_8, var_40, &var_64, var_16);
+											result = SDMMD_send_pair(var_48, r15, var_8, var_40, &var_64, var_16);
 											var_76 = rax;
 											if (rax != 0x0) {
 													r8 = rax;
@@ -1121,10 +1121,9 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 												if (var_64 != 0x0) {
 													CFDictionarySetValue(dict, CFSTR("EscrowBag"), rdx);
 												}
-												rax = _copy_lockdown_value(rbx, 0x0, CFSTR("WiFiAddress"), &var_76);
-												r12 = rax;
-												if ((var_76 == 0x0) && (r12 != 0x0)) {
-													if (CFGetTypeID(r12) == CFStringGetTypeID()) {
+												CFTypeRef value = SDMMD_copy_lockdown_value(device, NULL, CFSTR("WiFiAddress"), &err);
+												if ((var_76 == 0x0) && value) {
+													if (CFGetTypeID(value) == CFStringGetTypeID()) {
 														CFDictionarySetValue(dict, CFSTR("WiFiMACAddress"), r12);
 													}
 												}
@@ -1140,7 +1139,6 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 											}
 										} else {
 											result = kAMDNoResourcesError;
-											r15 = 0x0;
 									    }
 									} else {
 										printf("SDMMD_AMDeviceExtendedPairWithOptions: Could not create system BUID.\n");
