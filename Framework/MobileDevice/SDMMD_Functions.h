@@ -490,337 +490,152 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 		printf("Could not allocate host key pair\n");
 	}
 	
+	sdmmd_return_t result = 0x0;
+	
 	EVP_PKEY *rootEVP = EVP_PKEY_new();
 	if (!rootEVP) {
 		printf("Could not allocate root EVP key\\n");
+	} else {
+		result = EVP_PKEY_assign(rootEVP, 0x6, PtrCast(rootKeyPair,char*));
 	}
 	
 	EVP_PKEY *hostEVP = EVP_PKEY_new();
 	if (!hostEVP) {
 		printf("Could not allocate host EVP key\\n");
+	} else {
+		result = EVP_PKEY_assign(hostEVP, 0x6, PtrCast(hostKeyPair,char*));
 	}
 	
 	EVP_PKEY *deviceEVP = EVP_PKEY_new();
 	if (!deviceEVP) {
 		printf("Could not allocate device EVP key\\n");
+	} else {
+		result = EVP_PKEY_assign(deviceEVP, 0x6, PtrCast(rsaBIOData,char*));
 	}
-	
-	
-	
-	
 	
 	X509 *rootX509 = X509_new();
 	if (!rootX509) {
 		printf("Could not create root X509\\n");
+	} else {
+		result = X509_set_pubkey(rootX509, rootEVP);
+		result = X509_set_version(rootX509, 0x2);
+		
+		ASN1_INTEGER *rootSerial = X509_get_serialNumber(rootX509);
+		ASN1_INTEGER_set(rootSerial, 0x0);
+		
+		ASN1_TIME* rootAsn1time = ASN1_TIME_new();
+		ASN1_TIME_set(rootAsn1time, 0x0);
+		X509_set_notBefore(rootX509, rootAsn1time);
+		ASN1_TIME_set(rootAsn1time, 0x12cc0300);
+		X509_set_notAfter(rootX509, rootAsn1time);
+		ASN1_TIME_free(rootAsn1time);
+		
+		result = SDMMD__add_ext(rootX509, NID_basic_constraints, "critical,CA:TRUE");
+		result = SDMMD__add_ext(rootX509, NID_subject_key_identifier, "hash");
+		
+		const EVP_MD *rootHash = EVP_sha1();
+		result = X509_sign(rootX509, rootEVP, rootHash);
 	}
 	
 	X509 *hostX509 = X509_new();
 	if (!hostX509) {
 		printf("Could not create host X509\\n");
+	} else {
+		result = X509_set_pubkey(hostX509, hostEVP);
+		result = X509_set_version(hostX509, 0x2);
+		
+		ASN1_INTEGER *hostSerial = X509_get_serialNumber(hostX509);
+		ASN1_INTEGER_set(hostSerial, 0x0);
+		
+		ASN1_TIME* hostAsn1time = ASN1_TIME_new();
+		ASN1_TIME_set(hostAsn1time, 0x0);
+		X509_set_notBefore(hostX509, hostAsn1time);
+		ASN1_TIME_set(hostAsn1time, 0x12cc0300);
+		X509_set_notAfter(hostX509, hostAsn1time);
+		ASN1_TIME_free(hostAsn1time);
+		
+		result = SDMMD__add_ext(hostX509, NID_basic_constraints, "critical,CA:FALSE");
+		result = SDMMD__add_ext(hostX509, NID_subject_key_identifier, "hash");
+		result = SDMMD__add_ext(hostX509, NID_key_usage, "critical,digitalSignature,keyEncipherment");
+		
+		const EVP_MD *hostHash = EVP_sha1();
+		result = X509_sign(hostX509, hostEVP, hostHash);
 	}
 	
 	X509 *deviceX509 = X509_new();
 	if (!deviceX509) {
 		printf("Could not create device X509\\n");
+	} else {
+		result = X509_set_pubkey(deviceX509, deviceEVP);
+		result = X509_set_version(deviceX509, 0x2);
 		
+		ASN1_INTEGER *deviceSerial = X509_get_serialNumber(deviceX509);
+		ASN1_INTEGER_set(deviceSerial, 0x0);
+		
+		ASN1_TIME* deviceAsn1time = ASN1_TIME_new();
+		ASN1_TIME_set(deviceAsn1time, 0x0);
+		X509_set_notBefore(deviceX509, deviceAsn1time);
+		ASN1_TIME_set(deviceAsn1time, 0x12cc0300);
+		X509_set_notAfter(deviceX509, deviceAsn1time);
+		ASN1_TIME_free(deviceAsn1time);
+		
+		result = SDMMD__add_ext(deviceX509, NID_basic_constraints, "critical,CA:FALSE");
+		result = SDMMD__add_ext(deviceX509, NID_subject_key_identifier, "hash");
+		result = SDMMD__add_ext(deviceX509, NID_key_usage, "critical,digitalSignature,keyEncipherment");
+		
+		const EVP_MD *deviceHash = EVP_sha1();
+		result = X509_sign(deviceX509, deviceEVP, deviceHash);
 	}
 	
-	if (pubRSAKey) {
-		    RSA *rootKeyPair = RSA_generate_key(0x800, 0x10001, NULL, NULL);
-		    if (rootKeyPair) {
-				// loc_8832f
-			    RSA *hostKeyPair = RSA_generate_key(0x800, 0x10001, NULL, NULL);
-			    if (hostKeyPair) {
-					// loc_88351
-				    EVP_PKEY *rootEVP = EVP_PKEY_new();
-				    if (rootEVP) {
-						// loc_88362
-					    EVP_PKEY *hostEVP = EVP_PKEY_new();
-					    if (hostEVP) {
-							// loc_88370
-						    EVP_PKEY *deviceEVP = EVP_PKEY_new();
-						    if (deviceEVP) {
-							    int result = EVP_PKEY_assign(rootEVP, 0x6, rootKeyPair);
-							    if (result) {
-							    	// loc_8839d
-								    result = EVP_PKEY_assign(hostEVP, 0x6, hostKeyPair);
-								    if (result) {
-								    	// loc_883b6
-									    result = EVP_PKEY_assign(deviceEVP, 0x6, rsaBIOData);
-									    if (result) {
-									    	// loc_883ce
-										    X509 *rootX509 = X509_new();
-										    if (rootX509) {
-												// loc_883e3
-											    X509 *hostX509 = X509_new();
-											    if (hostX509) {
-													// loc_883f4
-												    X509 *deviceX509 = X509_new();
-												    if (deviceX509) {
-														// loc_88405
-													    result = X509_set_pubkey(rootX509, rootEVP);
-													    if (result) {
-															// loc_88419
-														    result = X509_set_pubkey(hostX509, hostEVP);
-														    if (result) {
-														    	// loc_8842d
-															    result = X509_set_pubkey(deviceX509, deviceEVP);
-															    if (result) {
-																	// loc_88440
-																    result = X509_set_version(rootX509, 0x2);
-																    if (result) {
-																    	// loc_88455
-																	    result = X509_set_version(hostX509, 0x2);
-																	    if (result) {
-																			// loc_8846a
-																		    result = X509_set_version(deviceX509, 0x2);
-																		    if (result) {
-																				// loc_8847f
-																			    ASN1_INTEGER *rootSerial = X509_get_serialNumber(rootX509);
-																			    ASN1_INTEGER_set(rootSerial, 0x0);
-																			    ASN1_INTEGER *hostSerial = X509_get_serialNumber(hostX509);
-																			    ASN1_INTEGER_set(hostSerial, 0x0);
-																			    ASN1_INTEGER *deviceSerial = X509_get_serialNumber(deviceX509);
-																			    ASN1_INTEGER_set(deviceSerial, 0x0);
-																			    X509_gmtime_adj(&(rootX509[0x20]), 0x0);
-																			    X509_gmtime_adj(hostX509, 0x0);
-																			    X509_gmtime_adj(deviceX509, 0x0);
-																			    X509_gmtime_adj(rootX509, 0x12cc0300);
-																			    X509_gmtime_adj(hostX509, 0x12cc0300);
-																			    X509_gmtime_adj(deviceX509, 0x12cc0300);
-																				
-																			    result = SDMMD__add_ext(rootX509, 0x57, "critical,CA:TRUE");
-																			    if (result == 0x0) {
-																			    	// loc_8888d
-																				    result = SDMMD__add_ext(rootX509, 0x52, "hash");
-																				    if (result == 0x0) {
-																						// loc_888b8
-																					    result = SDMMD__add_ext(hostX509, 0x57, "critical,CA:FALSE");
-																					    if (result == 0x0) {
-																							// loc_888eb
-																						    result = SDMMD__add_ext(hostX509, 0x52, "hash");
-																						    if (result == 0x0) {
-																								// loc_8891e
-																							    result = SDMMD__add_ext(hostX509, 0x53, "critical,digitalSignature,keyEncipherment");
-																							    if (result == 0x0) {
-																									// loc_88951
-																								    result = SDMMD__add_ext(deviceX509, 0x57, "critical,CA:FALSE");
-																								    if (result == 0x0) {
-																										// loc_88981
-																									    result = SDMMD__add_ext(deviceX509, 0x52, "hash");
-																									    if (result == 0x0) {
-																											// loc_889b1
-																										    result = SDMMD__add_ext(deviceX509, 0x53, "critical,digitalSignature,keyEncipherment");
-																										    if (result == 0x0) {
-																												// loc_889ee
-																											    const EVP_MD *rootHash = EVP_sha1();
-																											    result = X509_sign(rootX509, rootEVP, rootHash);
-																											    if (result) {
-																													// loc_88a18
-																												    const EVP_MD *hostHash = EVP_sha1();
-																												    result = X509_sign(hostX509, hostEVP, hostHash);
-																												    if (result) {
-																												    	// loc_88a34
-																													    const EVP_MD *deviceHash = EVP_sha1();
-																													    result = X509_sign(deviceX509, deviceEVP, deviceHash);
-																													    if (result) {
-																													    	// loc_88a50
-																														    record = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-																														    if (record) {
-																														    	// loc_88a7d
-																															    CFDataRef rootCert = SDMMD_CreateDataFromX509Certificate(rootX509);
-																															    if (rootCert) {
-																															    	// loc_88a94
-																																    CFDictionarySetValue(record, CFSTR("RootCertificate"), rootCert);
-																																    CFRelease(rootCert);
-																																    CFDataRef hostCert = SDMMD_CreateDataFromX509Certificate(hostX509);
-																																    if (hostCert) {
-																																    	// loc_88ac3
-																																	    CFDictionarySetValue(record, CFSTR("HostCertificate"), hostCert);
-																																	    CFRelease(hostCert);
-																																	    CFDataRef deviceCert = SDMMD_CreateDataFromX509Certificate(deviceX509);
-																																	    if (deviceCert) {
-																																	    	// loc_88af2
-																																		    CFDictionarySetValue(record, CFSTR("DeviceCertificate"), deviceCert);
-																																		    CFRelease(deviceCert);
-																																		    CFDataRef rootPrivKey = SDMMD_CreateDataFromPrivateKey(rootEVP);
-																																		    if (rootPrivKey) {
-																																				// loc_88b21
-																																			    CFDictionarySetValue(record, CFSTR("RootPrivateKey"), rootPrivKey);
-																																			    CFRelease(rootPrivKey);
-																																			    CFDataRef hostPrivKey = SDMMD_CreateDataFromPrivateKey(hostEVP);
-																																			    if (hostPrivKey) {
-																																			    	// loc_88b50
-																																				    CFDictionarySetValue(record, CFSTR("HostPrivateKey"), hostPrivKey);
-																																				    CFRelease(hostPrivKey);
-																																				    CFStringRef hostId = SDMMD_CreateUUID();
-																																				    if (hostId) {
-																																				    	// loc_88b7b
-																																					    CFDictionarySetValue(record, CFSTR("HostID"), hostId);
-																																					    CFRelease(hostId);
-																																						// loc_886c0
-																																					    if (rootEVP) {
-																																							// loc_8874e
-																																							EVP_PKEY_free(rootEVP);
-																																						}
-																																						
-																																						// loc_88753
-																																						if (hostEVP) {
-																																							EVP_PKEY_free(hostEVP);
-																																						}
-																																						if (deviceEVP) {
-																																							EVP_PKEY_free(deviceEVP);
-																																						}
-																																						if (rootX509) {
-																																							X509_free(rootX509);
-																																						}
-																																						if (hostX509) {
-																																							X509_free(hostX509);
-																																						}
-																																						if (deviceX509) {
-																																							X509_free(deviceX509);
-																																						}
-																																				    } else {
-																																						// loc_88c84
-																																						printf("Could not create host ID\\n");
-																																					}
-																																			    } else {
-																																					// loc_88c6c
-																																					printf("Could not encode host private key\\n");
-																																				}
-																																			} else {
-																																				// loc_88c59
-																																				printf("Could not encode root private key\\n");
-																																			}
-																																	    } else {
-																																			// loc_88c41
-																																			printf("Could not encode device cert\\n");
-																																		}
-																																    } else {
-																																    	// loc_88c29
-																																		printf("Could not encode host cert\\n");
-																																    }
-																															    } else {
-																																	// loc_88c16
-																															    	printf("Could not encode root cert\\n");
-																															    }
-																														    } else {
-																																// loc_88bf1
-																																printf("Could not allocate dictionary\\n");
-																															}
-																													    } else {
-																													    	// loc_88bc9
-																															printf("Could not sign device cert\\n");
-																													    }
-																												    } else {
-																														// loc_88bb1
-																														printf("Could not sign host cert\\n");
-																													}
-																												} else {
-																													// loc_88b9e
-																													printf("Could not sign root cert\\n");
-																												}
-																											} else {
-																										    	// loc_889c9
-																												printf("Could not set device key usage\\n");
-																											}
-																										} else {
-																											// loc_88999
-																											printf("Could not set devuce subject key identifier\\n");
-																										}
-																									} else {
-																										// loc_88969
-																										printf("Could not set device basic constraints\\n");
-																									}
-																								} else {
-																									// loc_88936
-																									printf("Could not set host key usage\\n");
-																								}
-																							} else {
-																								// loc_88903
-																								printf("Could not set host key identifier\\n");
-																							}
-																						} else {
-																							// loc_888d0
-																							printf("Could not set host basic constraints\\n");
-																						}
-																					} else {
-																						// loc_888a5
-																						printf("Could not set root key identifier\\n");
-																					}
-																			    } else {
-																					// loc_88548
-																					printf("Could not set root basic constraints\\n");
-																				}
-																			} else {
-																				// loc_88865
-																				printf("Could not set the version for the device cert\\n");
-																			}
-																		} else {
-																			// loc_8884d
-																			printf("Could not set the version for the host cert\\n");
-																		}
-																    } else {
-																		// loc_8883a
-																		printf("Could not set the version for the root cert\\n");
-																	}
-																} else {
-																	// loc_88822
-																	printf("Could not set device cert public key\\n");
-																}
-														    } else {
-																// loc_8880a
-																printf("Could not set host cert public key\\n");
-															}
-														} else {
-															// loc_887f7
-															printf("Could not set root cert public key\\n");
-														}
-													} else {
-														// loc_887cf
-														printf("Could not create device X509\\n");
-													}
-												} else {
-													// loc_887a7
-													printf("Could not create host X509\\n");
-												}
-											} else {
-												// loc_8871f
-												printf("Could not create root X509\\n");
-											}
-									    } else {
-											// loc_886f7
-											printf("Could not assign device key pair\\n");
-										}
-								    } else {
-										// loc_886d2
-										printf("Could not assign host key pair\\n");
-									}
-							    }  else {
-									// loc_8866b
-									printf("Could not assign root key pair\\n");
-								}
-							} else {
-								// loc_88646
-								printf("Could not allocate device EVP key\\n");
-							}
-					    } else {
-							// loc_88619
-							printf("Could not allocate host EVP key\\n");
-						}
-					} else {
-						// loc_885f5
-						printf("Could not allocate root EVP key\\n");
-					}
-				} else {
-					// loc_885bb
-				    printf("Could not allocate host key pair\\n");
-				}
-		    } else {
-				// loc_88586
-				printf("Could not allocate root key pair\\n");
-			}
-		}
+	CFDataRef rootCert = SDMMD_CreateDataFromX509Certificate(rootX509);
+	CFDataRef hostCert = SDMMD_CreateDataFromX509Certificate(hostX509);
+	CFDataRef rootPrivKey = SDMMD_CreateDataFromPrivateKey(rootEVP);
+	CFDataRef hostPrivKey = SDMMD_CreateDataFromPrivateKey(hostEVP);
+	CFStringRef hostId = SDMMD_CreateUUID();
+	
+	record = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+	if (record) {
+		CFDictionarySetValue(record, CFSTR("RootCertificate"), rootCert);
+		CFRelease(rootCert);
+		
+		CFDictionarySetValue(record, CFSTR("HostCertificate"), hostCert);
+		CFRelease(hostCert);
+		
+		CFDictionarySetValue(record, CFSTR("DeviceCertificate"), deviceCert);
+		CFRelease(deviceCert);
+		
+		CFDictionarySetValue(record, CFSTR("RootPrivateKey"), rootPrivKey);
+		CFRelease(rootPrivKey);
+		
+		CFDictionarySetValue(record, CFSTR("HostPrivateKey"), hostPrivKey);
+		CFRelease(hostPrivKey);
+		
+		CFDictionarySetValue(record, CFSTR("HostID"), hostId);
+		CFRelease(hostId);
+	}
+	
+	if (rootEVP) {
+		// loc_8874e
+		EVP_PKEY_free(rootEVP);
+	}
+	
+	// loc_88753
+	if (hostEVP) {
+		EVP_PKEY_free(hostEVP);
+	}
+	if (deviceEVP) {
+		EVP_PKEY_free(deviceEVP);
+	}
+	if (rootX509) {
+		X509_free(rootX509);
+	}
+	if (hostX509) {
+		X509_free(hostX509);
+	}
+	if (deviceX509) {
+		X509_free(deviceX509);
+	}
+	
     return record;
 }
 
