@@ -41,7 +41,8 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
 							CFStringRef encodedPath = SDMMD_EncodeForDebuggingCommand(path);
 							CFStringRef container = CFDictionaryGetValue(details, CFSTR("Container"));
 							if (!container) {
-								container = 
+								//container =
+								return;
 							}
 							CFStringRef containerPath = SDMMD_EncodeForDebuggingCommand(container);
 							sdmmd_debug_return_t dresult;
