@@ -54,7 +54,9 @@ void ListConnectedDevices() {
 			}
 		}
 	}
-	CFRelease(devices);
+	if (devices) {
+		CFRelease(devices);
+	}
 }
 
 #endif
