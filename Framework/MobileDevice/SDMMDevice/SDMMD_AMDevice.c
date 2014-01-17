@@ -429,6 +429,62 @@ sdmmd_return_t SDMMD_lockdown_connection_destory(SDMMD_lockdown_conn *lockdownCo
 	}
 	return result;
 }
+
+sdmmd_return_t SDMMD_send_pair(SDMMD_AMDeviceRef device, CFMutableDictionaryRef pairRecord, CFTypeRef slip, CFTypeRef options, CFDataRef *escrowBag) {
+    sdmmd_return_t result = 0xe8000007;
+	CFMutableDictionaryRef response = NULL;
+    if (device) {
+		if (device->ivars.lockdown_conn) {
+			if (pairRecord) {
+				if (escrowBag) {
+                    CFMutableDictionaryRef pRecord = SDMMD__CreateMessageDict(CFSTR("Pair"));
+                    result = 0xe8000003;
+                    if (pRecord) {
+						CFDictionarySetValue(pRecord, CFSTR("PairRecord"), pairRecord);
+						if (slip) {
+							CFDictionarySetValue(pRecord, CFSTR("PermissionSlip"), slip);
+						}
+						if (options) {
+							CFDictionarySetValue(pRecord, CFSTR("PairingOptions"), options);
+						}
+						result = SDMMD_lockconn_send_message(device, pRecord);
+						if (result == 0x0) {
+							result = SDMMD_lockconn_receive_message(device, &response);
+							if (result == 0x0) {
+								CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
+								if (error) {
+									result = 0xe8000013;
+									if (CFGetTypeID(error) == CFStringGetTypeID()) {
+										result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(error);
+									}
+								} else {
+									*escrowBag = CFDictionaryGetValue(response, CFSTR("EscrowBag"));
+									if (escrowBag) {
+										CFRetain(escrowBag);
+									}
+								}
+							}
+						}
+                    }
+				}
+			}
+		} else {
+			result = 0xe800000b;
+		}
+    }
+    if ((response) && (escrowBag)) {
+		*escrowBag = CFDictionaryGetValue(response, CFSTR("ExtendedResponse"));
+		if (escrowBag) {
+			CFRetain(escrowBag);
+		}
+    }
+    if (response) {
+		CFRelease(response);
+    }
+    return result;
+}
+
+
 sdmmd_return_t SDMMD_send_validate_pair(SDMMD_AMDeviceRef device, CFStringRef hostId) {
 	sdmmd_return_t result = 0;
 	if (device) {
@@ -1064,21 +1120,21 @@ bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device) {
 	return result;
 }
 
-/*
 sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutableDictionaryRef record) {
  	sdmmd_return_t result = kAMDInvalidArgumentError;
 	bool mutexIsLocked = false;
 	bool getValue = true;
 	CFMutableDictionaryRef chapCopy;
+ 	CFDataRef escrowBag = NULL;
 	if (device) {
 		result = kAMDDeviceDisconnectedError;
 		if (device->ivars.device_active) {
-			SDMMD__mutex_unlock(device->ivars.mutex_lock);
+			SDMMD__mutex_lock(device->ivars.mutex_lock);
 			if (record) {
 				CFDictionaryRef chapCert = CFDictionaryGetValue(record, CFSTR("ChaperoneCertificate"));
 				if (chapCert) {
 					if (CFPropertyListIsValid(chapCert, 0x64) || CFPropertyListIsValid(chapCert, 0xc8)) {
-						uint32_t chapKeyCount = CFDictionaryGetCount(chapCert);
+						CFIndex chapKeyCount = CFDictionaryGetCount(chapCert);
 						if (chapKeyCount != 1) {
 							chapCopy = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0x0, chapCert);
 							CFDictionaryRemoveValue(chapCopy, CFSTR("ChaperoneCertificate"));
@@ -1103,70 +1159,55 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 								CFTypeRef buid = SDMMD_AMDCopySystemBonjourUniqueID();
 								if (buid) {
 									CFDictionarySetValue(record, CFSTR("SystemBUID"), buid);
-									var_56 = rax;
-									CFDictionarySetValue(r13, CFSTR("SystemBUID"), rax);
-									r12 = 0x0;
-									    rax = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0x0, r13);
-									    if (rax != 0x0) {
-											CFDictionaryRemoveValue(record, CFSTR("RootPrivateKey"));
-											CFDictionaryRemoveValue(record, CFSTR("HostPrivateKey"));
-											result = SDMMD_send_pair(var_48, r15, var_8, var_40, &var_64, var_16);
-											var_76 = rax;
-											if (rax != 0x0) {
-													r8 = rax;
-													printf("AMDeviceExtendedPairWithOptions: Could not pair with the device %u: 0x%x\n", *(int32_t *)(rbx + 0x10), r8);
-													r12 = 0x0;
-													r14 = var_76;
-											} else {
-												if (var_64 != 0x0) {
-													CFDictionarySetValue(dict, CFSTR("EscrowBag"), rdx);
-												}
-												CFTypeRef value = SDMMD_copy_lockdown_value(device, NULL, CFSTR("WiFiAddress"), &err);
-												if ((var_76 == 0x0) && value) {
-													if (CFGetTypeID(value) == CFStringGetTypeID()) {
-														CFDictionarySetValue(dict, CFSTR("WiFiMACAddress"), r12);
-													}
-												}
-												char *path = calloc(0x1, 0x401);
-												SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
-												result = SDMMD_store_dict(dict, path, true);
-												if (result) {
-													printf("AMDeviceExtendedPairWithOptions: Could not store pairing record at '%s'.\n", &var_80);
-													result = kAMDPermissionError;
-												} else {
-													result = kAMDSuccess;
+									CFMutableDictionaryRef sendPair = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0x0, record);
+									if (sendPair) {
+										CFDictionaryRemoveValue(sendPair, CFSTR("RootPrivateKey"));
+										CFDictionaryRemoveValue(sendPair, CFSTR("HostPrivateKey"));
+										result = SDMMD_send_pair(device, sendPair, chapCopy, NULL, &escrowBag);
+										if (escrowBag) {
+											printf("AMDeviceExtendedPairWithOptions: Could not pair with the device %u: 0x%x\n", device->ivars.device_id, result);
+										} else {
+											if (record) {
+												CFDictionarySetValue(record, CFSTR("EscrowBag"), escrowBag);
+											}
+											CFTypeRef wifiAddress = SDMMD_copy_lockdown_value(device, NULL, CFSTR("WiFiAddress"), &err);
+											if (record && wifiAddress) {
+												if (CFGetTypeID(value) == CFStringGetTypeID()) {
+													CFDictionarySetValue(record, CFSTR("WiFiMACAddress"), wifiAddress);
 												}
 											}
-										} else {
-											result = kAMDNoResourcesError;
-									    }
+											char *path = calloc(0x1, 0x401);
+											SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
+											result = SDMMD_store_dict(record, path, true);
+											if (result) {
+												printf("AMDeviceExtendedPairWithOptions: Could not store pairing record at '%s'.\n", path);
+												result = kAMDPermissionError;
+											} else {
+												result = kAMDSuccess;
+											}
+										}
 									} else {
-										printf("SDMMD_AMDeviceExtendedPairWithOptions: Could not create system BUID.\n");
+										result = kAMDNoResourcesError;
 									}
 								} else {
-									printf("SDMMD_AMDeviceExtendedPairWithOptions: Could not create pairing material.\n");
+									printf("SDMMD_AMDeviceExtendedPairWithOptions: Could not create system BUID.\n");
 								}
 							} else {
-								result = kAMDInvalidResponseError;
+								printf("SDMMD_AMDeviceExtendedPairWithOptions: Could not create pairing material.\n");
 							}
+						} else {
+							result = kAMDInvalidResponseError;
 						}
 					}
 				}
 			}
 		}
 	}
-	if (var64) {
-		CFRelease(var64);
-	}
-	if (r13) {
-		CFRelease(r13);
-	}
 	if (mutexIsLocked) {
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 	}
 	return result;
 }
-*/
 
 uint32_t SDMMD_AMDeviceUSBDeviceID(SDMMD_AMDeviceRef device) {
 	uint32_t result = 0x0;
