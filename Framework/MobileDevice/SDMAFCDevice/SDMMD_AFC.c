@@ -284,6 +284,10 @@ CFDataRef SDMMD_GetDataResponseFromOperation(SDMMD_AFCOperationRef op) {
 }
 
 
+sdmmd_return_t SDMMD_AMDeviceCopyFile(void *thing, void *thing2, void *thing3, SDMMD_AFCConnectionRef conn, char *local, char *remote) {
+	return kAMDSuccess;
+}
+
 /*CFMutableDataRef SDMMD___AFCCreateAFCDataWithDictionary(CFDictionaryRef dict) {
 	CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault, kCFAllocatorDefault);
 	if (data) {

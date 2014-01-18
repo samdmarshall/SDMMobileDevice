@@ -452,7 +452,7 @@ sdmmd_return_t SDMMD_send_unpair(SDMMD_AMDeviceRef device, CFStringRef hostId) {
 						result = SDMMD_lockconn_send_message(device, dict);
 						CFRelease(host);
 						if (result == 0x0) {
-							CFMutableDictionaryRef response;
+							CFMutableDictionaryRef response = NULL;
 							result = SDMMD_lockconn_receive_message(device, &response);
 							PrintCFType(response);
 							if (result == 0x0) {
@@ -881,29 +881,33 @@ sdmmd_return_t SDMMD_send_session_stop(SDMMD_AMDeviceRef device, CFTypeRef sessi
 }
 
 sdmmd_return_t SDMMD_AMDeviceStartSession(SDMMD_AMDeviceRef device) {
-	sdmmd_return_t result = kAMDInvalidArgumentError;
+	sdmmd_return_t result = kAMDSuccess;
 	CFMutableDictionaryRef record = NULL;
 	CFDataRef key = NULL;
-	if (device) {
-		result = kAMDDeviceDisconnectedError;
-		if (device->ivars.device_active) {
-			SDMMD__mutex_lock(device->ivars.mutex_lock);
-			result = SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(device, &record);
-			if (result == 0) {
-				result = SDMMD_send_session_start(device, record, &device->ivars.session);
-				if (result == 0 && device->ivars.session) {
-					Boolean hasKey = CFDictionaryContainsKey(record, CFSTR("EscrowBag"));
-					if (!hasKey)
-						hasKey = CFDictionaryContainsKey(record, CFSTR("WiFiMACAddress"));
-					if (hasKey)
-						SDMMD__CopyEscrowBag(device, &key);
-				} else {
-					char *reason = SDMMD_AMDErrorString(result);
-					printf("SDMMD_AMDeviceStartSession: Could not start session with device %u: %s\n",device->ivars.device_id,reason);
+	if (!device) {
+		return kAMDInvalidArgumentError;
+	}
+	
+	result = kAMDDeviceDisconnectedError;
+	if (device->ivars.device_active) {
+		SDMMD__mutex_lock(device->ivars.mutex_lock);
+		result = SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(device, &record);
+		if (result == 0) {
+			result = SDMMD_send_session_start(device, record, &device->ivars.session);
+			if (result == 0 && device->ivars.session) {
+				Boolean hasKey = CFDictionaryContainsKey(record, CFSTR("EscrowBag"));
+				if (!hasKey) {
+					hasKey = CFDictionaryContainsKey(record, CFSTR("WiFiMACAddress"));
 				}
-			} 
-			SDMMD__mutex_unlock(device->ivars.mutex_lock);
+				if (hasKey) {
+					SDMMD__CopyEscrowBag(device, &key);
+				}
+			} else {
+				char *reason = SDMMD_AMDErrorString(result);
+				printf("SDMMD_AMDeviceStartSession: Could not start session with device %u: %s\n",device->ivars.device_id,reason);
+			}
 		}
+		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 	}
 	return result;
 }
@@ -1357,7 +1361,7 @@ CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, 
 			key = CFSTR("NULL");
 			
 		SDMMD__mutex_lock(device->ivars.mutex_lock);
-		CFStringRef err;
+		CFStringRef err = NULL;
 		value = SDMMD_copy_lockdown_value(device, domain, key, &err);
 		if (err) {
 			PrintCFType(err);
@@ -1478,6 +1482,7 @@ bool SDMMD_device_os_is_at_least(SDMMD_AMDeviceRef device, CFStringRef version) 
 	return result;
 }
 
+
 sdmmd_return_t SDMMD_copy_image(SDMMD_AMDeviceRef device, CFStringRef path) {
 	sdmmd_return_t result = kAMDUndefinedError;
 	if (device) {
@@ -1494,6 +1499,7 @@ sdmmd_return_t SDMMD_copy_image(SDMMD_AMDeviceRef device, CFStringRef path) {
 					result = SDMMD_AFCProcessOperation(copyAFCConn, makeStaging, &response);
 					SDMMD_CondSuccess(result, {
 						// SDM copy file AFC
+						result = SDMMD_AMDeviceCopyFile(NULL, NULL, NULL, copyAFCConn, SDMCFStringGetString(path),"PublicStaging/staging.dimage");
 					})
 				})
 			})
@@ -1591,7 +1597,7 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 									Boolean fsRep = CFStringGetFileSystemRepresentation(path, &fspath, 0x400);
 									if (fsRep) {
 										struct stat fileStat;
-										result = fstat(fspath, &fileStat);
+										fstat(fspath, &fileStat);
 										CFNumberRef size = CFNumberCreate(kCFAllocatorDefault, 0xb, &fileStat.st_size);
 										CFMutableDictionaryRef streamDict = SDMMD_create_dict();
 										CFDictionarySetValue(streamDict, CFSTR("Command"), CFSTR("ReceiveBytes"));

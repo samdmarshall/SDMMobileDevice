@@ -13,7 +13,7 @@ void DemoThree(const char *path);
 void DemoFour(const char *path);
 
 void infoTest();
-
+/*
 void KeyExplore(char *domain, char *key) {
 	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
 	
@@ -112,6 +112,7 @@ read_descriptor (int fd)
 		close (descriptor);
     }
 }
+*/
 
 int main (int argc, const char * argv[]) {
 	// Needed to initialize the library and start the device listener (SDMMD_MCP.h)
@@ -150,8 +151,8 @@ void DemoOne() {
 	// fetching the list of connected devices (SDMMD_AMDevice.h)
 	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
 	
-	uint32_t numberOfDevices = CFArrayGetCount(devices);
-	printf("%i device(s) connected!\n",numberOfDevices);
+	CFIndex numberOfDevices = CFArrayGetCount(devices);
+	printf("%ld device(s) connected!\n",numberOfDevices);
 	
 	
 	if (numberOfDevices) {
@@ -216,6 +217,7 @@ void DemoOne() {
 		}
 	}
 }
+
 /*
 void DemoOne() {
 	// fetching the list of connected devices (SDMMD_AMDevice.h)
@@ -281,8 +283,8 @@ void DemoTwo() {
 	// fetching the list of connected devices (SDMMD_AMDevice.h)
 	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
 	
-	uint32_t numberOfDevices = CFArrayGetCount(devices);
-	printf("%i device(s) connected!\n",numberOfDevices);
+	CFIndex numberOfDevices = CFArrayGetCount(devices);
+	printf("%ld device(s) connected!\n",numberOfDevices);
 	
 	if (numberOfDevices) {
 		// return type (uint32_t) corresponds with known return codes (SDMMD_Error.h)
@@ -346,12 +348,12 @@ void DemoThree(const char *appPath) {
 	
 	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
 	
-	uint32_t numberOfDevices = CFArrayGetCount(devices);
-	printf("%i device(s) connected!\n",numberOfDevices);
+	CFIndex numberOfDevices = CFArrayGetCount(devices);
+	printf("%ld device(s) connected!\n",numberOfDevices);
 		
 	if (numberOfDevices) {
 		// return type (uint32_t) corresponds with known return codes (SDMMD_Error.h)
-		sdmmd_return_t result;
+		//sdmmd_return_t result;
 		
 		uint32_t index;
 		// Iterating over connected devices
@@ -388,7 +390,7 @@ void DemoThree(const char *appPath) {
 								 (SDMMD_AMDeviceIsPaired(device) ?
 								  (SDMMD_AMDeviceValidatePairing(device) == kAMDSuccess ?
 								   (SDMMD_AMDeviceStartSession(device) == kAMDSuccess ?
-									(SDMMD_AMDeviceInstallApplication(device, path, options, install_callback, NULL) == kAMDSuccess ? 
+									(SDMMD_AMDeviceInstallApplication(device, path, options, SDMMD_Default_install_callback, NULL) == kAMDSuccess ?
 									 (SDMMD_AMDeviceStopSession(device) == kAMDSuccess ?
 									  (SDMMD_AMDeviceDisconnect(device) == kAMDSuccess ?
 									   : FALSE)
@@ -406,8 +408,8 @@ void DemoThree(const char *appPath) {
 void DemoFour(const char *appPath) {
 	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
 	
-	uint32_t numberOfDevices = CFArrayGetCount(devices);
-	printf("%i device(s) connected!\n",numberOfDevices);
+	CFIndex numberOfDevices = CFArrayGetCount(devices);
+	printf("%ld device(s) connected!\n",numberOfDevices);
 	
 	
 	if (numberOfDevices) {
