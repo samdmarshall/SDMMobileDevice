@@ -1140,6 +1140,7 @@ sdmmd_return_t SDMMD_AMDeviceValidatePairing(SDMMD_AMDeviceRef device) {
 			} else {
 				result = kAMDMissingPairRecordError;
 			}
+			free(recordPath);
 		} else {
 			result = kAMDDeviceDisconnectedError;
 		}
@@ -1161,6 +1162,7 @@ sdmmd_return_t SDMMD_AMDeviceUnpair(SDMMD_AMDeviceRef device) {
 				if (host) {
 					SDMMD__mutex_lock(device->ivars.mutex_lock);
 					// SDM: remove pair record file
+					remove(recordPath);
 					result = SDMMD_send_unpair(device, host);
 					if (result) {
 						printf("SDMMD_AMDeviceUnpair: Could not unpair device %u: %s\n",device->ivars.device_id, SDMMD_AMDErrorString(result));
@@ -1173,6 +1175,7 @@ sdmmd_return_t SDMMD_AMDeviceUnpair(SDMMD_AMDeviceRef device) {
 			} else {
 				result = kAMDMissingPairRecordError;
 			}
+			free(recordPath);
 		} else {
 			result = kAMDDeviceDisconnectedError;
 		}
