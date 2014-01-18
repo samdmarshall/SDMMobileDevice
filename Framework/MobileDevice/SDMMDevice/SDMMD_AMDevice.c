@@ -437,6 +437,53 @@ sdmmd_return_t SDMMD_lockdown_connection_destory(SDMMD_lockdown_conn *lockdownCo
 	return result;
 }
 
+sdmmd_return_t SDMMD_send_unpair(SDMMD_AMDeviceRef device, CFStringRef hostId) {
+	sdmmd_return_t result = 0xe8000007;
+	if (device) {
+		if (device->ivars.lockdown_conn) {
+			if (hostId) {
+				CFMutableDictionaryRef dict = SDMMD__CreateMessageDict(CFSTR("Unpair"));
+				if (dict) {
+					const void *keys[1] = { CFSTR("HostID") };
+					const void *values[1] = { hostId };
+					CFDictionaryRef host = CFDictionaryCreate(kCFAllocatorDefault, keys, values, 0x1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+					if (host) {
+						CFDictionarySetValue(dict, CFSTR("PairRecord"), host);
+						result = SDMMD_lockconn_send_message(device, dict);
+						CFRelease(host);
+						if (result == 0x0) {
+							CFMutableDictionaryRef response;
+							result = SDMMD_lockconn_receive_message(device, &response);
+							PrintCFType(response);
+							if (result == 0x0) {
+								CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
+								if (!error) {
+									result = 0x0;
+								} else {
+									if (CFGetTypeID(error) == CFStringGetTypeID())
+										result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(error);
+									else
+										result = kAMDInvalidResponseError;
+								}
+							}
+						}
+					}
+					CFRelease(dict);
+				} else {
+					result = kAMDNoResourcesError;
+				}
+			} else {
+				result = kAMDInvalidArgumentError;
+			}
+		} else {
+			result = kAMDNotConnectedError;
+		}
+	} else {
+		result = kAMDInvalidArgumentError;
+	}
+	return result;
+}
+
 sdmmd_return_t SDMMD_send_pair(SDMMD_AMDeviceRef device, CFMutableDictionaryRef pairRecord, CFTypeRef slip, CFTypeRef options, CFDataRef *escrowBag) {
     sdmmd_return_t result = 0xe8000007;
 	CFMutableDictionaryRef response = NULL;
@@ -495,7 +542,7 @@ sdmmd_return_t SDMMD_send_pair(SDMMD_AMDeviceRef device, CFMutableDictionaryRef 
 
 
 sdmmd_return_t SDMMD_send_validate_pair(SDMMD_AMDeviceRef device, CFStringRef hostId) {
-	sdmmd_return_t result = 0;
+	sdmmd_return_t result = 0xe8000007;
 	if (device) {
 		if (device->ivars.lockdown_conn) {
 			if (hostId) {
@@ -1102,6 +1149,39 @@ sdmmd_return_t SDMMD_AMDeviceValidatePairing(SDMMD_AMDeviceRef device) {
 	return result;
 }
 
+sdmmd_return_t SDMMD_AMDeviceUnpair(SDMMD_AMDeviceRef device) {
+	sdmmd_return_t result = kAMDSuccess;
+	if (device) {
+		if (device->ivars.device_active) {
+			char *recordPath = calloc(0x1, 0x401);
+			SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, recordPath);
+			CFMutableDictionaryRef dict = SDMMD__CreateDictFromFileContents(recordPath);
+			if (dict) {
+				CFStringRef host = CFDictionaryGetValue(dict, CFSTR("HostID"));
+				if (host) {
+					SDMMD__mutex_lock(device->ivars.mutex_lock);
+					// SDM: remove pair record file
+					result = SDMMD_send_unpair(device, host);
+					if (result) {
+						printf("SDMMD_AMDeviceUnpair: Could not unpair device %u: %s\n",device->ivars.device_id, SDMMD_AMDErrorString(result));
+					}
+					SDMMD__mutex_unlock(device->ivars.mutex_lock);
+				} else {
+					result = kAMDInvalidPairRecordError;
+				}
+				CFRelease(dict);
+			} else {
+				result = kAMDMissingPairRecordError;
+			}
+		} else {
+			result = kAMDDeviceDisconnectedError;
+		}
+	} else {
+		result = kAMDInvalidArgumentError;
+	}
+	return result;
+}
+
 bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device) {
 	bool result = false;
 	if (device) {
@@ -1127,6 +1207,10 @@ bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device) {
 		printf("SDMMD_AMDeviceIsPaired: No device.\n");
 	}
 	return result;
+}
+
+sdmmd_return_t SDMMD_AMDevicePair(SDMMD_AMDeviceRef device) {
+	return SDMMD_AMDevicePairWithOptions(device, NULL);
 }
 
 sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutableDictionaryRef record) {
