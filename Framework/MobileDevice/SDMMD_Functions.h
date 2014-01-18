@@ -154,7 +154,7 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef ty
 		if (appName) {
 			CFStringRef name = CFStringCreateWithCString(kCFAllocatorDefault, appName, kCFStringEncodingUTF8);
 			if (name) {
-				CFDictionarySetValue(dict, CFSTR("Label"), name);
+				CFDictionarySetValue(dict, CFSTR("Label"), CFSTR("usbmuxd"));
 				CFRelease(name);
 			}
 		}
@@ -417,9 +417,9 @@ ATR_UNUSED static void SDMMD_fire_callback_767f4(CallBack handle, void* unknown,
 
 ATR_UNUSED static int SDMMD__add_ext(X509 *cert, int flag, char *name) {
 	int result = 0x0;
-	X509V3_CTX *ctx = NULL;
-    X509V3_set_ctx(ctx, cert, cert, 0x0, 0x0, 0x0);
-    X509_EXTENSION *ex = X509V3_EXT_conf_nid(0x0, ctx, flag, name);
+	X509V3_CTX ctx;
+    X509V3_set_ctx(&ctx, cert, cert, 0x0, 0x0, 0x0);
+    X509_EXTENSION *ex = X509V3_EXT_conf_nid(0x0, &ctx, flag, name);
     if (ex) {
 		result = X509_add_ext(cert, ex, 0xffffffff);
 		X509_EXTENSION_free(ex);
@@ -428,8 +428,8 @@ ATR_UNUSED static int SDMMD__add_ext(X509 *cert, int flag, char *name) {
 }
 
 ATR_UNUSED static CFDataRef SDMMD__create_data_from_bp(BIO* bio) {
-	UInt8 *buffer = NULL;
-    long length = BIO_get_mem_data(bio, buffer);
+	UInt8 buffer[0x1000];
+    long length = BIO_get_mem_data(bio, &buffer);
     CFDataRef data = CFDataCreate(kCFAllocatorDefault, buffer, length);
     return data;
 }
@@ -497,21 +497,30 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 	if (!rootEVP) {
 		printf("Could not allocate root EVP key\\n");
 	} else {
-		result = EVP_PKEY_assign(rootEVP, 0x6, PtrCast(rootKeyPair,char*));
+		result = EVP_PKEY_assign(rootEVP, EVP_CTRL_RAND_KEY, PtrCast(rootKeyPair,char*));
+		if (!result) {
+			printf("Could not assign root key pair\n");
+		}
 	}
 	
 	EVP_PKEY *hostEVP = EVP_PKEY_new();
 	if (!hostEVP) {
 		printf("Could not allocate host EVP key\\n");
 	} else {
-		result = EVP_PKEY_assign(hostEVP, 0x6, PtrCast(hostKeyPair,char*));
+		result = EVP_PKEY_assign(hostEVP, EVP_CTRL_RAND_KEY, PtrCast(hostKeyPair,char*));
+		if (!result) {
+			printf("Could not assign host key pair\n");
+		}
 	}
 	
 	EVP_PKEY *deviceEVP = EVP_PKEY_new();
 	if (!deviceEVP) {
 		printf("Could not allocate device EVP key\\n");
 	} else {
-		result = EVP_PKEY_assign(deviceEVP, 0x6, PtrCast(rsaBIOData,char*));
+		result = EVP_PKEY_assign(deviceEVP, EVP_CTRL_RAND_KEY, PtrCast(rsaBIOData,char*));
+		if (!result) {
+			printf("Could not assign device key pair\n");
+		}
 	}
 	
 	X509 *rootX509 = X509_new();
@@ -560,7 +569,7 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 		result = SDMMD__add_ext(hostX509, NID_key_usage, "critical,digitalSignature,keyEncipherment");
 		
 		const EVP_MD *hostHash = EVP_sha1();
-		result = X509_sign(hostX509, hostEVP, hostHash);
+		result = X509_sign(hostX509, rootEVP, hostHash);
 	}
 	
 	X509 *deviceX509 = X509_new();
@@ -585,7 +594,7 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 		result = SDMMD__add_ext(deviceX509, NID_key_usage, "critical,digitalSignature,keyEncipherment");
 		
 		const EVP_MD *deviceHash = EVP_sha1();
-		result = X509_sign(deviceX509, deviceEVP, deviceHash);
+		result = X509_sign(deviceX509, rootEVP, deviceHash);
 	}
 	
 	CFDataRef rootCert = SDMMD_CreateDataFromX509Certificate(rootX509);
