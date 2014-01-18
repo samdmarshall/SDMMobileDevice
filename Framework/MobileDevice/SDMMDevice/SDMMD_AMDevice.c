@@ -1210,7 +1210,11 @@ bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device) {
 }
 
 sdmmd_return_t SDMMD_AMDevicePair(SDMMD_AMDeviceRef device) {
-	return SDMMD_AMDevicePairWithOptions(device, NULL);
+	sdmmd_return_t result = kAMDSuccess;
+	if (!SDMMD_AMDeviceIsPaired(device)) {
+		result = SDMMD_AMDevicePairWithOptions(device, NULL);
+	}
+	return result;
 }
 
 sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutableDictionaryRef record) {

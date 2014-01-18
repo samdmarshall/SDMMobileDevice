@@ -154,7 +154,7 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef ty
 		if (appName) {
 			CFStringRef name = CFStringCreateWithCString(kCFAllocatorDefault, appName, kCFStringEncodingUTF8);
 			if (name) {
-				CFDictionarySetValue(dict, CFSTR("Label"), CFSTR("usbmuxd"));
+				CFDictionarySetValue(dict, CFSTR("Label"), name);
 				CFRelease(name);
 			}
 		}
