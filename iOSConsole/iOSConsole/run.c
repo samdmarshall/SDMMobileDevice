@@ -41,18 +41,21 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
 							CFStringRef encodedPath = SDMMD_EncodeForDebuggingCommand(path);
 							CFStringRef container = CFDictionaryGetValue(details, CFSTR("Container"));
 							if (!container) {
-								//container =
-								return;
+								CFURLRef pathURL = CFURLCreateWithString(kCFAllocatorDefault, path, NULL);
+								CFURLRef containerURL = CFURLCreateCopyDeletingLastPathComponent(kCFAllocatorDefault, pathURL);
+								container = CFURLGetString(containerURL);
 							}
-							CFStringRef containerPath = SDMMD_EncodeForDebuggingCommand(container);
-							sdmmd_debug_return_t dresult;
-							dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugQSetMaxPacketSize], SDMMD_EncodeForDebuggingCommand(CFSTR("1024")));
-							dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugQSetWorkingDir], containerPath);
-							CFStringRef commandFormat = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%d,0,%s"), (uint32_t)CFStringGetLength(encodedPath), CFStringGetCStringPtr(encodedPath, kCFStringEncodingUTF8));
-							dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugA], commandFormat);
-							dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugH], CFSTR("c0"));
-							dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugc], CFSTR(""));
-							CFRunLoopRun();
+							if (container) {
+								CFStringRef containerPath = SDMMD_EncodeForDebuggingCommand(container);
+								sdmmd_debug_return_t dresult;
+								dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugQSetMaxPacketSize], SDMMD_EncodeForDebuggingCommand(CFSTR("1024")));
+								dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugQSetWorkingDir], containerPath);
+								CFStringRef commandFormat = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%d,0,%s"), (uint32_t)CFStringGetLength(encodedPath), CFStringGetCStringPtr(encodedPath, kCFStringEncodingUTF8));
+								dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugA], commandFormat);
+								dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugH], CFSTR("c0"));
+								dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugc], CFSTR(""));
+								CFRunLoopRun();
+							}
 						})
 					}
 				}

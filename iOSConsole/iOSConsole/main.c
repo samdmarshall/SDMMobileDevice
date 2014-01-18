@@ -151,7 +151,7 @@ int main(int argc, const char * argv[]) {
 			printf("%s <domain>=<key> : query value for <key> in <domain>, specify 'null' for global domain\n",queryArg);
 			printf("%s : display installed apps\n",appsArg);
 			printf("%s : display info of a device\n",infoArg);
-			printf("%s [path] : run an application at specified [path]\n",runArg);
+			printf("%s [bundle id] : run an application with specified [bundle id]\n",runArg);
 		} else {
 			if (strncmp(help, "service", strlen("service")) == 0x0) {
 				printf(" shorthand : service identifier\n--------------------------------\n");

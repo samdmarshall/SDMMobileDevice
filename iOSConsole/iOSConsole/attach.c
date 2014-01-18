@@ -18,38 +18,24 @@ SDMMD_AMDeviceRef FindDeviceFromUDID(char *udid) {
 	SDMMD_AMDeviceRef device = NULL;
 	if (numberOfDevices) {
 		// return type (uint32_t) corresponds with known return codes (SDMMD_Error.h)
-		sdmmd_return_t result;
 		bool foundDevice = false;
 		char *deviceId;
 		uint32_t index;
 		// Iterating over connected devices
 		for (index = 0; index < numberOfDevices; index++) {
-			
-			// getting the device object from the array of connected devices
 			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
-			
-			// attempting to connect to the device
-			result = SDMMD_AMDeviceConnect(device);
-			SDMMD_CondSuccess(result, {
-				CFTypeRef deviceUDID = device->ivars.unique_device_id;
-				if (!deviceUDID) {
-					deviceUDID = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kUniqueDeviceID));
+			CFTypeRef deviceUDID = device->ivars.unique_device_id;
+			if (deviceUDID) {
+				deviceId = (char*)CFStringGetCStringPtr(deviceUDID,kCFStringEncodingMacRoman);
+				if (strncmp(udid, deviceId, strlen(deviceId)) == 0x0) {
+					foundDevice = true;
+					break;
 				}
-				if (deviceUDID) {
-					deviceId = (char*)CFStringGetCStringPtr(deviceUDID,kCFStringEncodingMacRoman);
-					if (strncmp(udid, deviceId, strlen(deviceId)) == 0x0) {
-						foundDevice = true;
-						break;
-					}
-
-					CFRelease(deviceUDID);
-				}
-				SDMMD_AMDeviceDisconnect(device);
-			})
+				CFRelease(deviceUDID);
+			}
 		}
 		if (foundDevice) {
 			device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
-			SDMMD_AMDeviceDisconnect(device);
 		}
 	} else {
 		printf("No devices connected.\n");

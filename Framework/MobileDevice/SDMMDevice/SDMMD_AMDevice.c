@@ -1038,47 +1038,50 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 	sdmmd_return_t result = kAMDSuccess;
 	uint32_t socket = 0xffffffff;
 	if (device) {
-		result = kAMDDeviceDisconnectedError;
-		if (device->ivars.device_active && device->ivars.connection_type == 0) {
-			SDMMD__mutex_lock(device->ivars.mutex_lock);
-			if (device->ivars.lockdown_conn == 0) {
-				uint32_t status = SDMMD__connect_to_port(device, 0x7ef2, 0x1, &socket, 0x0);
-				if (status == 0) {
-					result = kAMDNotConnectedError;
-					if (socket != 0xff) {
-						device->ivars.lockdown_conn = SDMMD_lockdown_connection_create(socket);
-						result = kAMDNoResourcesError;
-						if (device->ivars.lockdown_conn->connection) {
-							CFStringRef daemon = NULL;
-							status = SDMMD_copy_daemon_name(device, &daemon);
-							if (daemon) {
-								result = kAMDInvalidResponseError;
-								if (CFStringCompare(daemon, CFSTR(AMSVC_LOCKDOWN), 0x0) != 0x0) {
-									char *dname = SDMCFStringGetString(daemon);
-									printf("SDMMD_AMDeviceConnect: This is not the droid you're looking for (is actually %s). move along,  move along.\n",dname);
-									free(dname);
-									SDMMD_AMDeviceDisconnect(device);
-									result = kAMDWrongDroidError;
+		result = SDMMD_AMDevicePair(device);
+		SDMMD_CondSuccess(result, {
+			result = kAMDDeviceDisconnectedError;
+			if (device->ivars.device_active && device->ivars.connection_type == 0) {
+				SDMMD__mutex_lock(device->ivars.mutex_lock);
+				if (device->ivars.lockdown_conn == 0) {
+					uint32_t status = SDMMD__connect_to_port(device, 0x7ef2, 0x1, &socket, 0x0);
+					if (status == 0) {
+						result = kAMDNotConnectedError;
+						if (socket != 0xff) {
+							device->ivars.lockdown_conn = SDMMD_lockdown_connection_create(socket);
+							result = kAMDNoResourcesError;
+							if (device->ivars.lockdown_conn->connection) {
+								CFStringRef daemon = NULL;
+								status = SDMMD_copy_daemon_name(device, &daemon);
+								if (daemon) {
+									result = kAMDInvalidResponseError;
+									if (CFStringCompare(daemon, CFSTR(AMSVC_LOCKDOWN), 0x0) != 0x0) {
+										char *dname = SDMCFStringGetString(daemon);
+										printf("SDMMD_AMDeviceConnect: This is not the droid you're looking for (is actually %s). move along,  move along.\n",dname);
+										free(dname);
+										SDMMD_AMDeviceDisconnect(device);
+										result = kAMDWrongDroidError;
+									} else {
+										result = kAMDSuccess;
+									}
 								} else {
-									result = kAMDSuccess;
+									result = kAMDNoResourcesError;
 								}
-							} else {
-								result = kAMDNoResourcesError;
 							}
 						}
+					} else {
+						printf("SDMMD_AMDeviceConnect: Could not connect to lockdown port (%d) on device %d - %s: 0x%x\n",0xf27e, device->ivars.device_id,"device with no name",result);
 					}
 				} else {
-					printf("SDMMD_AMDeviceConnect: Could not connect to lockdown port (%d) on device %d - %s: 0x%x\n",0xf27e, device->ivars.device_id,"device with no name",result);
+					bool valid = SDMMD_AMDeviceIsValid(device);
+					if (!valid) {
+						SDMMD_AMDeviceDisconnect(device);
+						result = kAMDDeviceDisconnectedError;
+					}
 				}
-			} else {
-				bool valid = SDMMD_AMDeviceIsValid(device);
-				if (!valid) {
-					SDMMD_AMDeviceDisconnect(device);
-					result = kAMDDeviceDisconnectedError;
-				}
+				SDMMD__mutex_unlock(device->ivars.mutex_lock);
 			}
-			SDMMD__mutex_unlock(device->ivars.mutex_lock);
-		}
+		})
 	} else {
 		result = kAMDInvalidArgumentError;
 	}
@@ -1406,7 +1409,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 		device = SDMMD_AMDeviceCreateEmpty();
 		if (device) {
 			CFDictionaryRef properties = (CFDictionaryContainsKey(dictionary, CFSTR("Properties")) ? CFDictionaryGetValue(dictionary, CFSTR("Properties")) : dictionary);
-
+			
 			CFNumberRef deviceId = CFDictionaryGetValue(properties, CFSTR("DeviceID"));
 			CFNumberGetValue(deviceId, 0x4, &device->ivars.device_id);
 			
