@@ -20,7 +20,39 @@
 #define _SDM_MD_TYPES_H_
 
 #include <CoreFoundation/CoreFoundation.h>
+#include "Core.h"
 
 typedef void (*CallBack)(CFDictionaryRef dict, void* arg);
+
+ATR_UNUSED static void SDMMD_Default_mount_callback(CFDictionaryRef dict, int arg) {
+	CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
+	if (CFEqual(status, CFSTR("LookingUpImage"))) {
+		printf("[  0%%] Looking up developer disk image\n");
+	} else if (CFEqual(status, CFSTR("CopyingImage"))) {
+		printf("[ 30%%] Copying DeveloperDiskImage.dmg to device\n");
+    } else if (CFEqual(status, CFSTR("MountingImage"))) {
+		printf("[ 90%%] Mounting developer disk image\n");
+	}
+}
+
+ATR_UNUSED static void SDMMD_Default_transfer_callback(CFDictionaryRef dict, int arg) {
+    int percent;
+    CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
+    CFNumberGetValue(CFDictionaryGetValue(dict, CFSTR("PercentComplete")), kCFNumberSInt32Type, &percent);
+    if (CFEqual(status, CFSTR("CopyingFile"))) {
+        CFStringRef path = CFDictionaryGetValue(dict, CFSTR("Path"));
+        if (!CFStringHasSuffix(path, CFSTR(".ipa"))) {
+            printf("[%3d%%] Copying %s to device\n", percent, CFStringGetCStringPtr(path, kCFStringEncodingMacRoman));
+			
+        }
+    }
+}
+
+ATR_UNUSED static void SDMMD_Default_install_callback(CFDictionaryRef dict, int arg) {
+    int percent;
+    CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
+    CFNumberGetValue(CFDictionaryGetValue(dict, CFSTR("PercentComplete")), kCFNumberSInt32Type, &percent);
+    printf("[%3d%%] %s\n", percent, CFStringGetCStringPtr(status, kCFStringEncodingMacRoman));
+}
 
 #endif

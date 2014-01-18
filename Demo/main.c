@@ -164,9 +164,17 @@ void DemoOne() {
 			
 			// getting the device object from the array of connected devices
 			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
-			SDMMD_AMDeviceConnect(device);
-			result = SDMMD_AMDevicePairWithOptions(device, NULL);
-			printf("result: %08x\n",result);
+			//SDMMD_AMDeviceConnect(device);
+			
+			CFDataRef sig_data = SDMMD__CreateDataFromFileContents("/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/DeviceSupport/7.1 (11D5127c)/DeveloperDiskImage.dmg.signature");
+			
+			CFTypeRef keys[] = { CFSTR("ImageSignature"), CFSTR("ImageType") };
+			CFTypeRef values[] = { sig_data, CFSTR("Developer") };
+			CFDictionaryRef options = CFDictionaryCreate(NULL, (const void **)&keys, (const void **)&values, 2, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+
+			
+			result = SDMMD_AMDeviceMountImage(device, CFSTR("/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/DeviceSupport/7.1 (11D5127c)/DeveloperDiskImage.dmg"), options, SDMMD_Default_mount_callback, NULL);
+			printf("%08x\n",result);
 			/*
 			// attempting to connect to the device
 			result = SDMMD_AMDeviceConnect(device);

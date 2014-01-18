@@ -29,6 +29,7 @@
 #include "SDMMD_MDFUModeDevice.h"
 #include "SDMMD_MRestoreModeDevice.h"
 #include "SDMMD_MRestorableDevice.h"
+#include "SDMMD_Types.h"
 
 // Please do not access ivars of the AMDevice objects if you can avoid it, they are subject to change.
 
@@ -273,6 +274,8 @@ sdmmd_return_t SDMMD_AMDeviceSetValue(SDMMD_AMDeviceRef device, CFStringRef doma
  	Returns a CFArrayRef of all attached devices.
  */
 CFArrayRef SDMMD_AMDCreateDeviceList();
+
+sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef dict, CallBack handle, void* unknown);
 
 /*!
  @function SDMMD_GetSIMStatusCode

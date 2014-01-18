@@ -525,7 +525,7 @@ sdmmd_return_t SDMMD_send_pair(SDMMD_AMDeviceRef device, CFMutableDictionaryRef 
 				}
 			}
 		} else {
-			result = 0xe800000b;
+			result = kAMDNotConnectedError;
 		}
     }
     if ((response) && (CFDictionaryContainsValue(response, CFSTR("ExtendedResponse")))) {
@@ -865,7 +865,6 @@ sdmmd_return_t SDMMD_send_session_stop(SDMMD_AMDeviceRef device, CFTypeRef sessi
 							if (error && CFGetTypeID(error) == CFStringGetTypeID()) {
 								result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(error);
 							} else {
-								//printf("disabling secure connection.\n");
 								SDMMD_lockconn_disable_ssl(device->ivars.lockdown_conn);
 								result = kAMDSuccess;
 							}
@@ -1482,7 +1481,7 @@ bool SDMMD_device_os_is_at_least(SDMMD_AMDeviceRef device, CFStringRef version) 
 sdmmd_return_t SDMMD_copy_image(SDMMD_AMDeviceRef device, CFStringRef path) {
 	sdmmd_return_t result = kAMDUndefinedError;
 	if (device) {
-		result = SDMMD_AMDeviceConnect(device);
+		result = kAMDSuccess;//SDMMD_AMDeviceConnect(device);
 		SDMMD_CondSuccessElse(result, {
 			result = SDMMD_AMDeviceStartSession(device);
 			SDMMD_CondSuccess(result, {
@@ -1523,7 +1522,6 @@ sdmmd_return_t SDMMD__hangup_with_image_mounter_service(SDMMD_AMConnectionRef co
 	return result;
 }
 
-/*
 sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef dict, CallBack handle, void* unknown) {
 	sdmmd_return_t result = kAMDMissingOptionsError;
 	if (dict) {
@@ -1534,9 +1532,9 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 			char *cpath = calloc(1, 0x401);
 			Boolean pathCopy = CFStringGetCString(path, cpath, 0x400, kCFStringEncodingUTF8);
 			if (pathCopy) {
-				char thing;
-				result = SDMMD_AMDeviceDigestFile(cpath, 0x0, &thing);
-				if (result == 0) {
+				unsigned char *sumdigest = calloc(0x1, 0x20);
+				result = SDMMD_AMDeviceDigestFile(cpath, 0x0, PtrCast(&sumdigest, unsigned char**));
+				if (result) {
 					SDMMD_AMDeviceRef deviceCopy = SDMMD_AMDeviceCreateCopy(device);
 					result = kAMDUndefinedError;
 					if (deviceCopy) {
@@ -1549,6 +1547,7 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 								if (commandDict) {
 									CFDictionarySetValue(commandDict, CFSTR("Command"), CFSTR("LookupImage"));
 									CFDictionarySetValue(commandDict, CFSTR("ImageType"), imageType);
+									CFShow(commandDict);
 									result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(connection), commandDict, kCFPropertyListXMLFormat_v1_0);
 									if (result == 0) {
 										CFDictionaryRef response;
@@ -1557,14 +1556,16 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 											if (response) {
 												CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
 												if (error) {
+													CFShow(response);
 													// convert error
+													result = SDMMD__ConvertServiceError(error);
 												} else {
 													CFTypeRef image = CFDictionaryGetValue(response, CFSTR("ImagePresent"));
 													if (image) {
 														if (CFEqual(image, kCFBooleanTrue)) {
 															digest = CFDictionaryGetValue(response, CFSTR("ImageDigest"));
 														} else {
-															response = kAMDMissingDigestError;
+															result = kAMDMissingDigestError;
 														}
 													}
 												}
@@ -1581,13 +1582,13 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 							}
 							bool supported = SDMMD_device_os_is_at_least(device, CFSTR("7.0"));
 							bool mounted = false;
-							if (supported) {
+							if (supported && result == kAMDSuccess) {
 								SDMMD_fire_callback(handle, unknown, CFSTR("CopyingImage"));
 								result = SDMMD_copy_image(device, path);
 								if (result) {
 									SDMMD_fire_callback(handle, unknown, CFSTR("StreamingImage"));
 									char fspath;
-									CFTypeRef fsRep = CFStringGetFileSystemRepresentation(path, &fspath, 0x400);
+									Boolean fsRep = CFStringGetFileSystemRepresentation(path, &fspath, 0x400);
 									if (fsRep) {
 										struct stat fileStat;
 										result = fstat(fspath, &fileStat);
@@ -1610,6 +1611,8 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 														if (status) {
 															if (CFStringCompare(status, CFSTR("ReceiveBytesAck"), 0) == 0) {
 																// block code
+																CFShow(response);
+																/*
 																uint32_t (^block)(uint32_t, uint32_t, CFTypeRef) = ^(uint32_t size, uint32_t code, CFTypeRef thing){return code;};
 																result = SDMMD_read_file(fspath, 0x10000, block);
 																if (result == 0) {
@@ -1629,6 +1632,7 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 																		}
 																	}
 																}
+																*/
 															}
 														} else {
 															result = kAMDUndefinedError;
@@ -1699,7 +1703,6 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 	}
 	return result;
 }
-*/
 
 sdmmd_sim_return_t SDMMD_GetSIMStatusCode(SDMMD_AMDeviceRef device) {
 	sdmmd_sim_return_t result = KnownSIMCodes[0];

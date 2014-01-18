@@ -101,8 +101,8 @@ ATR_UNUSED static void SDMMD___ConvertDictEntry(const void* key, const void* val
 	}
 }
 
-static CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
-	CFMutableDictionaryRef dict = NULL;
+ATR_UNUSED static CFDataRef SDMMD__CreateDataFromFileContents(char *path) {
+	CFDataRef dataBuffer = NULL;
 	if (path) {
 		struct stat pathStat;
 		ssize_t result = lstat(path, &pathStat);
@@ -115,31 +115,39 @@ static CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
 					unsigned char *data = calloc(1, (unsigned long)fileStat.st_size);
 					result = read(ref, data, (size_t)fileStat.st_size);
 					if (result == fileStat.st_size) {
-						CFDataRef fileData = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, data, result, kCFAllocatorNull);
-						if (fileData) {
-							CFTypeRef propList = CFPropertyListCreateWithData(kCFAllocatorDefault, fileData, kCFPropertyListMutableContainersAndLeaves, NULL, NULL);
-							if (propList) {
-								if (CFGetTypeID(propList) == CFDictionaryGetTypeID()) {
-									dict = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, propList);
-								} else {
-									printf("_CreateDictFromFileAtPath: Plist from file %s was not dictionary type.\n",path);
-								}
-							} else {
-								printf("_CreateDictFromFileAtPath: Could not create plist from file %s.\n",path);
-							}
-							CFRelease(fileData);
-						}
+						dataBuffer = CFDataCreate(kCFAllocatorDefault, data, result);
 					} else {
-						printf("_CreateDictFromFileAtPath: Could not read contents at file %s.\n",path);
+						printf("SDMMD__CreateDataFromFileContents: Could not read contents at file %s.\n",path);
 					}
 				} else {
-					printf("_CreateDictFromFileAtPath: Could not fstat.\n");
+					printf("SDMMD__CreateDataFromFileContents: Could not fstat.\n");
 				}
 			} else {
-				printf("_CreateDictFromFileAtPath: Could not open file %s\n",path);
+				printf("SDMMD__CreateDataFromFileContents: Could not open file %s\n",path);
 			}
 		} else {
-			printf("_CreateDictFromFileAtPath: Could not lstat.\n");
+			printf("SDMMD__CreateDataFromFileContents: Could not lstat.\n");
+		}
+	}
+	return dataBuffer;
+}
+
+static CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
+	CFMutableDictionaryRef dict = NULL;
+	if (path) {
+		CFDataRef fileData = SDMMD__CreateDataFromFileContents(path);
+		if (fileData) {
+			CFTypeRef propList = CFPropertyListCreateWithData(kCFAllocatorDefault, fileData, kCFPropertyListMutableContainersAndLeaves, NULL, NULL);
+			if (propList) {
+				if (CFGetTypeID(propList) == CFDictionaryGetTypeID()) {
+					dict = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, propList);
+				} else {
+					printf("_CreateDictFromFileAtPath: Plist from file %s was not dictionary type.\n",path);
+				}
+			} else {
+				printf("_CreateDictFromFileAtPath: Could not create plist from file %s.\n",path);
+			}
+			CFRelease(fileData);
 		}
 	}
 	return dict;
@@ -644,6 +652,32 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 	}
 	
     return record;
+}
+
+ATR_UNUSED static sdmmd_return_t SDMMD_AMDeviceDigestFile(char *path, int value, unsigned char **digest) {
+	SHA_CTX ctx;
+	SHA1_Init(&ctx);
+	struct stat pathStat;
+	ssize_t result = lstat(path, &pathStat);
+	if (result != -1) {
+		int ref = open(path, O_RDONLY);
+		if (ref != -1) {
+			struct stat fileStat;
+			result = fstat(ref, &fileStat);
+			if (result != -1) {
+				unsigned char *data = calloc(1, (unsigned long)fileStat.st_size);
+				result = read(ref, data, (size_t)fileStat.st_size);
+				if (result == fileStat.st_size) {
+					for (size_t i = 0; i < fileStat.st_size; i++) {
+						SHA1_Update(&ctx, &(data[i]), sizeof(char));
+					}
+
+				}
+			}
+		}
+	}
+	SHA1_Final(*digest, &ctx);
+	return (sdmmd_return_t)result;
 }
 
 #endif
