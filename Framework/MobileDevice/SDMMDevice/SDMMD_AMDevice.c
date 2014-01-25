@@ -46,7 +46,7 @@ static Boolean SDMMD_AMDeviceRefEqual(CFTypeRef cf1, CFTypeRef cf2) {
 	Boolean result = (device1->ivars.device_id == device2->ivars.device_id);
 	if (!result) {
 		// evaluate for usb vs wifi
-		//return (CFStringCompare(device1->ivars.unique_device_id, device2->ivars.unique_device_id, 0) == 0);
+		result = (CFStringCompare(device1->ivars.unique_device_id, device2->ivars.unique_device_id, 0x0) == 0x0);
 	}
 	return result;
 }
@@ -680,6 +680,10 @@ bool SDMMD_isDeviceAttached(uint32_t device_id) {
 				uint32_t fetched_id = SDMMD_AMDeviceGetConnectionID(device);
 				result = (fetched_id == device_id ? true : false);
 				if (result) {
+					result = SDM_MD_CallSuccessful(SDMMD_AMDeviceConnect(device));
+				}
+				if (result) {
+					SDMMD_AMDeviceDisconnect(device);
 					break;
 				}
 			}
