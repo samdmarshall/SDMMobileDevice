@@ -16,5 +16,6 @@
 #include "query.h"
 #include "apps.h"
 #include "run.h"
+#include "power.h"
 
 #endif

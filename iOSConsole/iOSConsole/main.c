@@ -22,6 +22,7 @@ static char *queryArg = "-q,--query";
 static char *appsArg = "-a,--apps";
 static char *infoArg = "-i,--info";
 static char *runArg = "-r,--run";
+static char *powerArg = "-p,--diag";
 
 enum iOSConsoleOptions {
 	OptionsHelp = 0x0,
@@ -32,6 +33,7 @@ enum iOSConsoleOptions {
 	OptionsApps,
 	OptionsInfo,
 	OptionsRun,
+	OptionsDiag,
 	OptionsCount
 };
 
@@ -43,7 +45,8 @@ static struct option long_options[OptionsCount] = {
 	{"query", required_argument, 0x0, 'q'},
 	{"apps", no_argument, 0x0, 'a'},
 	{"info", no_argument, 0x0, 'i'},
-	{"run", required_argument, 0x0, 'r'}
+	{"run", required_argument, 0x0, 'r'},
+	{"diag", required_argument, 0x0, 'p'}
 };
 
 static bool optionsEnable[OptionsCount] = {};
@@ -62,12 +65,14 @@ int main(int argc, const char * argv[]) {
 	
 	char *bundle = NULL;
 	
+	char *diagArg = NULL;
+	
 	bool searchArgs = true;
 	
 	int c;
 	while (searchArgs) {
 		int option_index = 0x0;
-		c = getopt_long (argc, (char * const *)argv, "lh:d:ais:q:",long_options, &option_index);
+		c = getopt_long (argc, (char * const *)argv, "lh:d:ais:q:p:",long_options, &option_index);
 		if (c == -1) {
 			break;
 		}
@@ -106,7 +111,7 @@ int main(int argc, const char * argv[]) {
 					CFStringRef argValue = CFStringCreateWithCString(kCFAllocatorDefault, optarg, kCFStringEncodingUTF8);
 					CFArrayRef argsArray = CFStringCreateArrayBySeparatingStrings(kCFAllocatorDefault, argValue, CFSTR("="));
 					CFIndex argsCounter = CFArrayGetCount(argsArray);
-					if (argsCounter == 0x1) {
+					if (argsCounter >= 0x1) {
 						domain = (char*)CFStringGetCStringPtr(CFArrayGetValueAtIndex(argsArray, 0x0),kCFStringEncodingMacRoman);
 						if (strncmp(domain, "all", sizeof(char)*0x3) == 0x0) {
 							domain = kAllDomains;
@@ -136,6 +141,13 @@ int main(int argc, const char * argv[]) {
 				optionsEnable[OptionsRun] = true;
 				break;
 			};
+			case 'p': {
+				if (optarg) {
+					diagArg = optarg;
+				}
+				optionsEnable[OptionsDiag] = true;
+				break;
+			};
 			default: {
 				printf("--help for help");
 				break;
@@ -152,6 +164,7 @@ int main(int argc, const char * argv[]) {
 			printf("%s : display installed apps\n",appsArg);
 			printf("%s : display info of a device\n",infoArg);
 			printf("%s [bundle id] : run an application with specified [bundle id]\n",runArg);
+			printf("%s [sleep|reboot|shutdown] : perform diag power operations on a device\n",powerArg);
 		} else {
 			if (strncmp(help, "service", strlen("service")) == 0x0) {
 				printf(" shorthand : service identifier\n--------------------------------\n");
@@ -184,6 +197,14 @@ int main(int argc, const char * argv[]) {
 			PerformQuery(udid, domain, key);
 		} else if (optionsEnable[OptionsRun]) {
 			RunAppOnDeviceWithIdentifier(udid, bundle);
+		} else if (optionsEnable[OptionsDiag]) {
+			if (strncmp(diagArg, "sleep", strlen("sleep")) == 0x0) {
+				SendSleepToDevice(udid);
+			} else if (strncmp(diagArg, "reboot", strlen("reboot")) == 0x0) {
+				SendRebootToDevice(udid);
+			} else if (strncmp(diagArg, "shutdown", strlen("shutdown")) == 0x0) {
+				SendShutdownToDevice(udid);
+			}
 		}
 	}
 	

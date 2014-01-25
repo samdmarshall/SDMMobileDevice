@@ -21,6 +21,7 @@
 		22310DC618750DCF0092C107 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310DC518750DCF0092C107 /* libssl.dylib */; };
 		22310DC818750DE70092C107 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310DC718750DE70092C107 /* libcrypto.dylib */; };
 		22310DC918750DFA0092C107 /* SDMMD_AFC.c in Sources */ = {isa = PBXBuildFile; fileRef = 22310D7B18750D430092C107 /* SDMMD_AFC.c */; };
+		22648F96189440F700133948 /* power.c in Sources */ = {isa = PBXBuildFile; fileRef = 22648F95189440F700133948 /* power.c */; };
 		22B9556B18788CB6004DCBF0 /* syslog.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B9556A18788CB6004DCBF0 /* syslog.c */; };
 		22B95571187895DB004DCBF0 /* query.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B95570187895DB004DCBF0 /* query.c */; };
 		22B9557418789837004DCBF0 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B9557318789837004DCBF0 /* list.c */; };
@@ -103,6 +104,8 @@
 		22310DAF18750D430092C107 /* SDMMD_USBMuxListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_USBMuxListener.h; sourceTree = "<group>"; };
 		22310DC518750DCF0092C107 /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
 		22310DC718750DE70092C107 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
+		22648F94189440EF00133948 /* power.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = power.h; sourceTree = "<group>"; };
+		22648F95189440F700133948 /* power.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = power.c; sourceTree = "<group>"; };
 		22B9556A18788CB6004DCBF0 /* syslog.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = syslog.c; sourceTree = "<group>"; };
 		22B9556C18788D51004DCBF0 /* Features.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Features.h; sourceTree = "<group>"; };
 		22B9556D18788D59004DCBF0 /* syslog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = syslog.h; sourceTree = "<group>"; };
@@ -183,6 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				22FFB8BF1880DE140073095D /* Core */,
+				22648F93189440D800133948 /* power */,
 				22B955861878F145004DCBF0 /* run */,
 				22B9557F1878DA4E004DCBF0 /* apps */,
 				22B9557A1878A780004DCBF0 /* Services */,
@@ -312,6 +316,15 @@
 				22310DAF18750D430092C107 /* SDMMD_USBMuxListener.h */,
 			);
 			path = SDMUSBmuxListener;
+			sourceTree = "<group>";
+		};
+		22648F93189440D800133948 /* power */ = {
+			isa = PBXGroup;
+			children = (
+				22648F94189440EF00133948 /* power.h */,
+				22648F95189440F700133948 /* power.c */,
+			);
+			name = power;
 			sourceTree = "<group>";
 		};
 		22B9556918788C9F004DCBF0 /* syslog */ = {
@@ -483,6 +496,7 @@
 				22310DB018750D9E0092C107 /* SDMMD_MCP.c in Sources */,
 				22310DB118750D9E0092C107 /* SDMMD_Applications.c in Sources */,
 				22310DB218750D9E0092C107 /* SDMMD_Connection.c in Sources */,
+				22648F96189440F700133948 /* power.c in Sources */,
 				22310DB318750D9E0092C107 /* SDMMD_Error.c in Sources */,
 				22310DB418750D9E0092C107 /* SDMMD_AMDevice.c in Sources */,
 				22B9557918789DB7004DCBF0 /* attach.c in Sources */,
@@ -579,7 +593,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SYMROOT = ../build;
@@ -590,7 +604,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = "$(TARGET_NAME)";

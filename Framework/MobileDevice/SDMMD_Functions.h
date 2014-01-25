@@ -153,10 +153,21 @@ static CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
 	return dict;
 }
 
-ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type) {
-	CFMutableDictionaryRef dict = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+static CFMutableDictionaryRef SDMMD_create_dict() {
+	return CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+}
+
+ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreateRequestDict(CFStringRef type) {
+	CFMutableDictionaryRef dict = SDMMD_create_dict();
 	if (dict) {
 		CFDictionarySetValue(dict, CFSTR("Request"), type);
+	}
+	return dict;
+}
+
+ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type) {
+	CFMutableDictionaryRef dict = SDMMD__CreateRequestDict(type);
+	if (dict) {
 		CFDictionarySetValue(dict, CFSTR("ProtocolVersion"), CFSTR("2"));
 		const char *appName = getprogname();
 		if (appName) {
@@ -169,10 +180,6 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef ty
 	}
 	return dict;
 	
-}
-
-static CFMutableDictionaryRef SDMMD_create_dict() {
-	return CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 }
 
 ATR_UNUSED static void SDMMD_openSSLLockCallBack(int mode, int n, const char * file, int line) {

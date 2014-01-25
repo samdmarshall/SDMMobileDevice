@@ -45,9 +45,34 @@ void Syslog(char *udid) {
 	PrintSysLog();
 }
 
+void EnableExtendedLogging(SDMMD_AMDeviceRef device) {
+	sdmmd_return_t result = SDMMD_AMDeviceConnect(device);
+	SDMMD_CondSuccess(result, {
+		result = SDMMD_AMDeviceStartSession(device);
+		SDMMD_CondSuccess(result, {
+			CFTypeRef value = SDMMD_AMDeviceCopyValue(device, CFSTR(AMSVC_MOBILE_DEBUG), CFSTR(kEnableLockdownExtendedLogging));
+			if (CFGetTypeID(value) == CFBooleanGetTypeID()) {
+				if (!CFBooleanGetValue(value)) {
+					result = SDMMD_AMDeviceSetValue(device, CFSTR(AMSVC_MOBILE_DEBUG), CFSTR(kEnableLockdownExtendedLogging), kCFBooleanTrue);
+					SDMMD_CondSuccess(result, {
+						printf("Enabling extended logging...\n");
+					})
+				} else {
+					printf("Extended logging already enabled.\n");
+				}
+			} else {
+				PrintCFType(value);
+			}
+		})
+		SDMMD_AMDeviceStopSession(device);
+		SDMMD_AMDeviceDisconnect(device);
+	})
+}
+
 void AttachToSyslog(char *udid) {
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0x0), ^{
 		SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
+		EnableExtendedLogging(device);
 		SDMMD_AMConnectionRef syslog = AttachToDeviceAndService(device, AMSVC_SYSLOG_RELAY);
 		newlineBytesLength = (SDMMD_device_os_is_at_least(device, CFSTR("6.0")) ? kNewlineBytesiOS6Up : kNewlineBytesiOS5);
 		if (syslog) {

@@ -23,7 +23,7 @@ void RunQueryOnDevice(SDMMD_AMDeviceRef device, char *domain, char *key, sdmmd_r
 		}
 		keyString = CFStringCreateWithCString(kCFAllocatorDefault, key, kCFStringEncodingUTF8);
 		
-		printf("%s: ",key);
+		printf("[%s][%s]: ",domain,key);
 		CFTypeRef queryResult = SDMMD_AMDeviceCopyValue(device, domainString, keyString);
 		if (queryResult) {
 			PrintCFType(queryResult);

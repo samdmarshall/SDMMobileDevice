@@ -64,6 +64,7 @@ typedef struct SocketConnection {
 #define AMSVC_INTEGRITY_RELAY		"com.apple.mobile.integrity_relay"
 #define AMSVC_DIAG_RELAY			"com.apple.mobile.diagnostics_relay"
 
+#define AMSVC_MOBILE_DEBUG			"com.apple.mobile.debug"
 #define AMSVC_SYSTEM_PROFILER		"com.apple.mobile.system_profiler"
 #define AMSVC_INSTALLATION_PROXY	"com.apple.mobile.installation_proxy"
 #define AMSVC_FACTORY_PROXY			"com.apple.mobile.factory_proxy"
@@ -118,6 +119,7 @@ enum SDM_MD_Service_Enum {
 	SDM_MD_Service_FILE_RELAY,
 	SDM_MD_Service_INTEGRITY_RELAY,
 	SDM_MD_Service_DIAG_RELAY,
+	SDM_MD_Service_MOBILE_DEBUG,
 	SDM_MD_Service_SYSTEM_PROFILER,
 	SDM_MD_Service_INSTALLATION_PROXY,
 	SDM_MD_Service_FACTORY_PROXY,
@@ -166,6 +168,7 @@ ATR_UNUSED static struct SDM_MD_Service_Identifiers SDMMDServiceIdentifiers[SDM_
 	{AMSVC_FILE_RELAY, "file"},
 	{AMSVC_INTEGRITY_RELAY, "integ"},
 	{AMSVC_DIAG_RELAY, "diag"},
+	{AMSVC_MOBILE_DEBUG, "mobdebug"},
 	{AMSVC_SYSTEM_PROFILER, "sysprof"},
 	{AMSVC_INSTALLATION_PROXY, "install"},
 	{AMSVC_FACTORY_PROXY, "factory"},
