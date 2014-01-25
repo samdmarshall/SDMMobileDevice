@@ -40,6 +40,11 @@
 #include "SDMMD_Functions.h"
 #include "SDMMD_AFC.h"
 
+#include <IOKit/IOKitLib.h>
+#include <IOKit/usb/IOUSBLib.h>
+#include <IOKit/IOCFPlugIn.h>
+#include <mach/mach_port.h>
+
 static Boolean SDMMD_AMDeviceRefEqual(CFTypeRef cf1, CFTypeRef cf2) {
     SDMMD_AMDeviceRef device1 = (SDMMD_AMDeviceRef)cf1;
     SDMMD_AMDeviceRef device2 = (SDMMD_AMDeviceRef)cf2;
@@ -669,6 +674,39 @@ sdmmd_return_t SDMMD__CopyEscrowBag(SDMMD_AMDeviceRef device, CFDataRef *bag) {
 	return result;
 }
 
+bool SDMMD_isDeviceAttachedUSB(uint32_t location_id) {
+	bool foundDevice = false;
+	io_iterator_t iterator;
+	mach_port_t masterPort;
+	kern_return_t kr = IOMasterPort(MACH_PORT_NULL, &masterPort);
+	if (kr == kIOReturnSuccess && masterPort) {
+		CFMutableDictionaryRef matchingDict = IOServiceMatching(kIOUSBDeviceClassName);
+		IOServiceGetMatchingServices(kIOMasterPortDefault, matchingDict, &iterator);
+		io_service_t usbDevice;
+		while ((usbDevice = IOIteratorNext(iterator))) {
+			CFTypeRef supportsIPhoneOS = IORegistryEntrySearchCFProperty(usbDevice, kIOServicePlane, CFSTR("SupportsIPhoneOS"), kCFAllocatorDefault, kIORegistryIterateRecursively);
+			if (supportsIPhoneOS) {
+				CFTypeRef locationId = IORegistryEntrySearchCFProperty(usbDevice, kIOServicePlane, CFSTR("locationID"), kCFAllocatorDefault, kIORegistryIterateRecursively);
+				if (locationId) {
+					uint32_t loc_id;
+					CFNumberGetValue(locationId, kCFNumberSInt32Type, &loc_id);
+					foundDevice = (loc_id == location_id);
+					CFRelease(locationId);
+				}
+				CFRelease(supportsIPhoneOS);
+			}
+			IOObjectRelease(usbDevice);
+			if (foundDevice) {
+				break;
+			}
+		}
+	} else {
+		printf("Error: Couldn't create a master I/O Kit port(%08x)\n", kr);
+	}
+	mach_port_deallocate(mach_task_self(), masterPort);
+	return foundDevice;
+}
+
 bool SDMMD_isDeviceAttached(uint32_t device_id) {
 	// this needs to be changed to query against USBMuxd for device dictionaries
 	bool result = false;
@@ -680,10 +718,9 @@ bool SDMMD_isDeviceAttached(uint32_t device_id) {
 				uint32_t fetched_id = SDMMD_AMDeviceGetConnectionID(device);
 				result = (fetched_id == device_id ? true : false);
 				if (result) {
-					result = SDM_MD_CallSuccessful(SDMMD_AMDeviceConnect(device));
+					result = SDMMD_isDeviceAttachedUSB(device->ivars.location_id);
 				}
 				if (result) {
-					SDMMD_AMDeviceDisconnect(device);
 					break;
 				}
 			}
@@ -1119,10 +1156,11 @@ bool SDMMD_AMDeviceIsValid(SDMMD_AMDeviceRef device) {
 	bool result = false;
 	if (device && device->ivars.device_active != 0) {
 		bool attached = SDMMD_isDeviceAttached(device->ivars.device_id);
-		if (!attached)
+		if (!attached) {
 			device->ivars.device_active = 0;
-		else
+		} else {
 			result = true;
+		}
 	}
 	return result;
 }

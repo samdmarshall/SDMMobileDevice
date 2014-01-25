@@ -112,12 +112,14 @@ void SDMMD_USBMuxAttachedCallback(void *context, struct USBMuxPacket *packet) {
 	if (newDevice && !CFArrayContainsValue(SDMMobileDevice->deviceList, CFRangeMake(0x0, CFArrayGetCount(SDMMobileDevice->deviceList)), newDevice)) {
 		CFMutableArrayRef updateWithNew = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, SDMMobileDevice->deviceList);
 		// give priority to usb over wifi
-		if (newDevice->ivars.connection_type == 0) {
+		if (newDevice->ivars.connection_type == 0x0) {
 			CFArrayAppendValue(updateWithNew, newDevice);
 			CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotification"), newDevice, NULL, true);
 			CFRelease(SDMMobileDevice->deviceList);
 			SDMMobileDevice->deviceList = CFArrayCreateCopy(kCFAllocatorDefault, updateWithNew);
 			CFRelease(updateWithNew);
+		} else if (newDevice->ivars.connection_type == 0x1) {
+			// wifi
 		}
 	}
 	CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotificationFinished"), newDevice, NULL, true);
@@ -149,6 +151,7 @@ void SDMMD_USBMuxLogsCallback(void *context, struct USBMuxPacket *packet) {
 }
 
 void SDMMD_USBMuxDeviceListCallback(void *context, struct USBMuxPacket *packet) {
+	// SDM: used to prune bad records from being retained
 	CFMutableArrayRef newList = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
 	for (uint32_t i = 0x0; i < CFArrayGetCount(SDMMobileDevice->deviceList); i++) {
 		SDMMD_AMDeviceRef deviceFromList = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(SDMMobileDevice->deviceList, i);
@@ -336,7 +339,7 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 				if (response.code == 0x0){
 					(*listener)->isActive = true;
                 } else {
-                    printf("SDMMD_USBMuxStartListener: non zero response code. trying again. code:%i string:%s\n", response.code, response.string ? CFStringGetCStringPtr(response.string, kCFStringEncodingUTF8):"");
+                    printf("SDMMD_USBMuxStartListener: non-zero response code. trying again. code:%i string:%s\n", response.code, response.string ? CFStringGetCStringPtr(response.string, kCFStringEncodingUTF8):"");
                 }
 			} else {
                 printf("SDMMD_USBMuxStartListener: no response payload. trying again.\n");
