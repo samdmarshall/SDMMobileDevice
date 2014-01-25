@@ -43,19 +43,23 @@ void PerformQuery(char *udid, char *domain, char *key) {
 	if ((udid && strlen(udid) == 0x28) && key) {
 		SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 		sdmmd_return_t result = SDMMD_AMDeviceConnect(device);
-		if (strncmp(domain, kAllDomains, strlen(kAllDomains)) == 0x0 && strncmp(key, kAllKeys, strlen(kAllKeys)) == 0x0) {
+		SDMMD_CondSuccess(result, {
 			result = SDMMD_AMDeviceStartSession(device);
-			for (uint32_t i = 0x0; i < SDM_MD_Domain_Count; i++) {
-				printf("%s\n",SDMMDKnownDomain[i].domain);
-				for (uint32_t j = 0x0; j < SDMMDKnownDomain[i].keyCount; j++) {
-					RunQueryOnDevice(device, SDMMDKnownDomain[i].domain, SDMMDKnownDomain[i].keys[j], result);
+			SDMMD_CondSuccess(result, {
+				if (strncmp(domain, kAllDomains, strlen(kAllDomains)) == 0x0 && strncmp(key, kAllKeys, strlen(kAllKeys)) == 0x0) {
+					for (uint32_t i = 0x0; i < SDM_MD_Domain_Count; i++) {
+						printf("%s\n",SDMMDKnownDomain[i].domain);
+						for (uint32_t j = 0x0; j < SDMMDKnownDomain[i].keyCount; j++) {
+							RunQueryOnDevice(device, SDMMDKnownDomain[i].domain, SDMMDKnownDomain[i].keys[j], result);
+						}
+						printf("\n");
+					}
+				} else {
+					RunQueryOnDevice(device, domain, key,result);
 				}
-				printf("\n");
-			}
-		} else {
-			RunQueryOnDevice(device, domain, key,result);
-		}
-		SDMMD_AMDeviceStopSession(device);
+				SDMMD_AMDeviceStopSession(device);
+			})
+		})
 		SDMMD_AMDeviceDisconnect(device);
 	}
 }
