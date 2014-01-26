@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:usbmuxd/sdm_usbmuxd.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:iOSConsole/iOSConsole.xcodeproj">
    </FileRef>
    <FileRef
