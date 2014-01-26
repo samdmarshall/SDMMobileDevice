@@ -242,6 +242,7 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				22648F9818947C4300133948 /* IOKit.framework */,
 				22AD924A1789DCA7002ACFB1 /* libcrypto.dylib */,
 				22AD92461789DC7E002ACFB1 /* libssl.dylib */,
 				2215A83F17500DE700AD1981 /* CoreFoundation.framework */,
@@ -462,7 +463,6 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				2215A83817500DDC00AD1981 /* SDMMobileDevice-Info.plist */,
 			);
 			name = SDM_MD_Demo;
 			sourceTree = "<group>";
@@ -470,6 +470,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2215A83817500DDC00AD1981 /* SDMMobileDevice-Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 			);
 			name = Resources;
@@ -478,7 +479,6 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				22648F9818947C4300133948 /* IOKit.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);

@@ -16,7 +16,7 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <Security/Security.h>
-#import <ServiceManagement/ServiceManagement.h>
+#include <ServiceManagement/ServiceManagement.h>
 
 static char *sdm_usbmuxd_path = "/var/run/sdm_usbmuxd";
 
@@ -58,7 +58,7 @@ bool acquireTaskForPortRight() {
 	OSStatus status = AuthorizationCreate(NULL, kAuthorizationEmptyEnvironment, kAuthorizationFlagDefaults, &authorization);
 	if (status != 0x0) {
 		printf("Error creating authorization reference\n");
-		return 0xffffffff;
+		return false;
 	}
 	AuthorizationItem systemRight = { kAuthorizationRightExecute, 0x0, 0x0, 0x0 };
 	AuthorizationItem taskRight = { kSMRightBlessPrivilegedHelper, 0x0, 0x0, 0x0 };
@@ -81,10 +81,10 @@ void StartMux() {
 		if (MuxAgent) {
 			MuxAgent->socket = SDM_USBMux_SocketCreate();
 			MuxAgent->socketSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, MuxAgent->socket, 0x0, MuxAgent->socketQueue);
-			dispatch_source_set_event_handler((*MuxAgent)->socketSource, ^{
+			dispatch_source_set_event_handler(MuxAgent->socketSource, ^{
 				
 			});
-			dispatch_source_set_cancel_handler((*MuxAgent)->socketSource, ^{
+			dispatch_source_set_cancel_handler(MuxAgent->socketSource, ^{
 				printf("socketSourceEventCancelHandler: source canceled\n");
 			});
 			dispatch_resume(MuxAgent->socketSource);
