@@ -72,37 +72,39 @@ void EnableExtendedLogging(SDMMD_AMDeviceRef device) {
 void AttachToSyslog(char *udid) {
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0x0), ^{
 		SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
-		EnableExtendedLogging(device);
-		SDMMD_AMConnectionRef syslog = AttachToDeviceAndService(device, AMSVC_SYSLOG_RELAY);
-		newlineBytesLength = (SDMMD_device_os_is_at_least(device, CFSTR("6.0")) ? kNewlineBytesiOS6Up : kNewlineBytesiOS5);
-		if (syslog) {
-			printf("loading syslog...\n");
-			sdmmd_return_t result;
-			
-			syslogBuffer = CFDataCreateMutable(kCFAllocatorDefault, 0x0);
-			// header to syslog
-			unsigned char syslogHeaderBuffer[SysLogHeaderSize*0x3];
-			CFDataRef syslogHeader = CFDataCreate(kCFAllocatorDefault, syslogHeaderBuffer, SysLogHeaderSize*0x3);
-			result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(syslog), (CFDataRef*)&syslogHeader);
-			if (syslogHeader) {
-				CFRelease(syslogHeader);
-			}
-			while (SDM_MD_CallSuccessful(result)) {
-				if (SDMMD_AMDeviceIsValid(device)) {
-					unsigned char syslogRelayBuffer[SysLogBufferSize];
-					CFDataRef syslogData = CFDataCreate(kCFAllocatorDefault, syslogRelayBuffer, SysLogBufferSize);
-					result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(syslog), (CFDataRef*)&syslogData);
-					dispatch_sync(operatingQueue, ^{
-						CFDataAppendBytes(syslogBuffer, CFDataGetBytePtr(syslogData), SysLogBufferSize);
-						notify_post(updateLogNotifyName);
-					});
-					CFRelease(syslogData);
-				} else {
-					break;
+		if (device) {
+			EnableExtendedLogging(device);
+			SDMMD_AMConnectionRef syslog = AttachToDeviceAndService(device, AMSVC_SYSLOG_RELAY);
+			newlineBytesLength = (SDMMD_device_os_is_at_least(device, CFSTR("6.0")) ? kNewlineBytesiOS6Up : kNewlineBytesiOS5);
+			if (syslog) {
+				printf("loading syslog...\n");
+				sdmmd_return_t result;
+				
+				syslogBuffer = CFDataCreateMutable(kCFAllocatorDefault, 0x0);
+				// header to syslog
+				unsigned char syslogHeaderBuffer[SysLogHeaderSize*0x3];
+				CFDataRef syslogHeader = CFDataCreate(kCFAllocatorDefault, syslogHeaderBuffer, SysLogHeaderSize*0x3);
+				result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(syslog), (CFDataRef*)&syslogHeader);
+				if (syslogHeader) {
+					CFRelease(syslogHeader);
 				}
+				while (SDM_MD_CallSuccessful(result)) {
+					if (SDMMD_AMDeviceIsValid(device)) {
+						unsigned char syslogRelayBuffer[SysLogBufferSize];
+						CFDataRef syslogData = CFDataCreate(kCFAllocatorDefault, syslogRelayBuffer, SysLogBufferSize);
+						result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(syslog), (CFDataRef*)&syslogData);
+						dispatch_sync(operatingQueue, ^{
+							CFDataAppendBytes(syslogBuffer, CFDataGetBytePtr(syslogData), SysLogBufferSize);
+							notify_post(updateLogNotifyName);
+						});
+						CFRelease(syslogData);
+					} else {
+						break;
+					}
+				}
+				dispatch_suspend(operatingQueue);
+				notify_post(exitNotifyName);
 			}
-			dispatch_suspend(operatingQueue);
-			notify_post(exitNotifyName);
 		}
 	});
 }
