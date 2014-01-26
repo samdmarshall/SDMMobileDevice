@@ -44,10 +44,11 @@ SDMMobileDevice is an OS X framework and can be used in two ways:
 
 #### Bundled Framework
 You are already almost done!
-
-1. Add the SDMMobileDevice-Framework.xcodeproj file into your existing Xcode project or workspace. 
-2. Add it as a dependency and link against it.
-3. Add `#include <SDMMobileDevice/SDMMobileDevice.h>` to your source code
+ 
+1. Add SDMMobileDevice.framework as a linked library
+2. Add a new build phase that copies "SDMMobileDevice.framework" to the "Frameworks" directory of your app.
+3. Add "@loader_path/../Frameworks" to "Runtime Search Paths"
+4. Add `#include <SDMMobileDevice/SDMMobileDevice.h>` to your source code
 
 #### Source Code
 If you wish you use this as source code, it will require the following libraries:

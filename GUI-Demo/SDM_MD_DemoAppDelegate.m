@@ -9,7 +9,6 @@
 #import "SDM_MD_DemoAppDelegate.h"
 #import "MDDemoMainSplitView.h"
 #import <SDMMobileDevice/SDMMobileDevice.h>
-//#import <Anthem/Anthem.h>
 
 @implementation SDM_MD_DemoAppDelegate
 

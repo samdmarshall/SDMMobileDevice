@@ -1077,7 +1077,7 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 	uint32_t socket = 0xffffffff;
 	if (device) {
 		result = SDMMD_AMDevicePair(device);
-		SDMMD_CondSuccess(result, {
+		SDMMD_CondSuccessElse(result, {
 			result = kAMDDeviceDisconnectedError;
 			if (device->ivars.device_active && device->ivars.connection_type == 0) {
 				SDMMD__mutex_lock(device->ivars.mutex_lock);
@@ -1118,6 +1118,10 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 					}
 				}
 				SDMMD__mutex_unlock(device->ivars.mutex_lock);
+			}
+		}, {
+			if (result == kAMDPairingProhibitedError) {
+				printf("SDMMD_AMDeviceConnect: Could not pair with device, please accept trust prompt on device.\n");
 			}
 		})
 	} else {
