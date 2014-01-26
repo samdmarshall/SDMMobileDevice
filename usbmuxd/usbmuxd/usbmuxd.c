@@ -16,8 +16,9 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <Security/Security.h>
+#import <ServiceManagement/ServiceManagement.h>
 
-static char *sdm_usbmuxd_path = "/tmp/sdm_usbmuxd";
+static char *sdm_usbmuxd_path = "/var/run/sdm_usbmuxd";
 
 USBMuxAgentRef MuxAgent;
 
@@ -52,7 +53,7 @@ uint32_t SDM_USBMux_SocketCreate() {
 	return sock;
 }
 
-int acquireTaskForPortRight() {
+bool acquireTaskForPortRight() {
 	AuthorizationRef authorization;
 	OSStatus status = AuthorizationCreate(NULL, kAuthorizationEmptyEnvironment, kAuthorizationFlagDefaults, &authorization);
 	if (status != 0x0) {
@@ -60,22 +61,21 @@ int acquireTaskForPortRight() {
 		return 0xffffffff;
 	}
 	AuthorizationItem systemRight = { kAuthorizationRightExecute, 0x0, 0x0, 0x0 };
-	AuthorizationItem taskRight = { "system.privilege.taskport", 0x0, 0x0, 0x0 };
+	AuthorizationItem taskRight = { kSMRightBlessPrivilegedHelper, 0x0, 0x0, 0x0 };
 	AuthorizationItem items[] = { systemRight, taskRight };
 	AuthorizationRights rights = { 0x2, items };
 	AuthorizationFlags flags = kAuthorizationFlagInteractionAllowed | kAuthorizationFlagExtendRights | kAuthorizationFlagPreAuthorize;
 	
 	status = AuthorizationCopyRights(authorization, &rights, NULL, flags, NULL);
 	if (status != 0x0) {
-		printf("Error authorizing current process with right to call task_for_pid()\n");
-		return 0xffffffff;
+		return false;
 	}
-	return 0x0;
+	return true;
 }
 
 void StartMux() {
-	int status = acquireTaskForPortRight();
-	if (status == 0x0) {
+	bool status = acquireTaskForPortRight();
+	if (status) {
 		setuid(0x0);
 		MuxAgent = USBMuxAgentCreate();
 		if (MuxAgent) {
