@@ -40,7 +40,7 @@ void ListConnectedDevices() {
 					if (!deviceUDID) {
 						deviceUDID = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kUniqueDeviceID));
 					}
-					printf("%d) %s : %s\n",index+0x1,CFStringGetCStringPtr(deviceName,kCFStringEncodingMacRoman),CFStringGetCStringPtr(deviceUDID,kCFStringEncodingMacRoman));
+					printf("%d) %s : %s\n",index+0x1,CFStringGetCStringPtr(deviceUDID,kCFStringEncodingMacRoman),CFStringGetCStringPtr(deviceName,kCFStringEncodingMacRoman));
 					if (deviceName) {
 						CFRelease(deviceName);
 					}
