@@ -688,9 +688,27 @@ enum SDM_MD_iTunesStore_Domain_Key {
 	SDM_MD_iTunesStore_Domain_Key_Count
 };
 
-static char *SDMMD_iTunesStore_DomainKeys[SDM_MD_iTunesStore_Domain_Key_Count] =  {kAppleID,kAccountAvailableServiceTypes,kAccountKind,kAccountServiceTypes,kAccountSocialEnabled,kAccountStoreFront,kAccountURLBagType,kCreditDisplayString,kDSPersonID,kTempStoreFront};
+static char *SDMMD_iTunesStore_DomainKeys[SDM_MD_iTunesStore_Domain_Key_Count] = {kAppleID,kAccountAvailableServiceTypes,kAccountKind,kAccountServiceTypes,kAccountSocialEnabled,kAccountStoreFront,kAccountURLBagType,kCreditDisplayString,kDSPersonID,kTempStoreFront};
+
+#pragma mark -
+#pragma mark iTunesBackup Domain
+#pragma mark -
+
+#define kiTunesBackUpDomain						"com.apple.iTunes.backup"
+
+#define kLastBackupComputerName					"LastBackupComputerName"
+#define kLastBackupComputerType					"LastBackupComputerType"
+
+enum SDM_MD_iTunesBackup_Domain_Key {
+	SDM_MD_iTunesBackup_Domain_Key_LastBackupComputerName = 0x0,
+	SDM_MD_iTunesBackup_Domain_Key_LastBackupComputerType,
+	SDM_MD_iTunesBackup_Domain_Key_Count
+};
+
+static char *SDMMD_iTunesBackup_DomainKeys[SDM_MD_iTunesBackup_Domain_Key_Count] = {kLastBackupComputerName,kLastBackupComputerType};
 
 
+#pragma mark -
 
 enum SDM_MD_Domain_Values {
 	SDM_MD_Domain_Global = 0x0,
@@ -711,6 +729,7 @@ enum SDM_MD_Domain_Values {
 	SDM_MD_Domain_Purple,
 	SDM_MD_Domain_FMIP,
 	SDM_MD_Domain_iTunesStore,
+	SDM_MD_Domain_iTunesBackup,
 	SDM_MD_Domain_Count
 };
 
@@ -738,7 +757,8 @@ ATR_UNUSED static struct SDM_MD_Domain_Key SDMMDKnownDomain[SDM_MD_Domain_Count]
 	{kAccessibilityDomain, SDMMD_Accessibility_DomainKeys, SDM_MD_Accessibility_Domain_Key_Count},
 	{kPurpleBuddyDomain, SDMMD_Purple_DomainKeys, SDM_MD_Purple_Domain_Key_Count},
 	{kfmipDomain, SDMMD_FMIP_DomainKeys, SDM_MD_FMIP_Domain_Key_Count},
-	{kiTunesStoreDomain, SDMMD_iTunesStore_DomainKeys, SDM_MD_iTunesStore_Domain_Key_Count}
+	{kiTunesStoreDomain, SDMMD_iTunesStore_DomainKeys, SDM_MD_iTunesStore_Domain_Key_Count},
+	{kiTunesBackUpDomain, SDMMD_iTunesBackup_DomainKeys, SDM_MD_iTunesBackup_Domain_Key_Count}
 };
 
 
