@@ -56,6 +56,7 @@ If you wish you use this as source code, it will require the following libraries
 * CoreFoundation.framework
 * libcrypto.dylib
 * libssl.dylib
+* IOKit.framework
 
 If you have trouble locating any of these, please look at the "-Framework" xcode project file to get the paths for these libraries.
 
