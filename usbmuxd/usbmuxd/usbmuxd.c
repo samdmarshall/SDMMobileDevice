@@ -15,8 +15,6 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/un.h>
-#include <Security/Security.h>
-#include <ServiceManagement/ServiceManagement.h>
 
 static char *sdm_usbmuxd_path = "/var/run/sdm_usbmuxd";
 
@@ -53,46 +51,87 @@ uint32_t SDM_USBMux_SocketCreate() {
 	return sock;
 }
 
-bool acquireTaskForPortRight() {
-	AuthorizationRef authorization;
-	OSStatus status = AuthorizationCreate(NULL, kAuthorizationEmptyEnvironment, kAuthorizationFlagDefaults, &authorization);
-	if (status != 0x0) {
-		printf("Error creating authorization reference\n");
-		return false;
+void USBMuxSend(uint32_t sock, struct USBMuxPacket *packet) {
+	CFDataRef xmlData = CFPropertyListCreateXMLData(kCFAllocatorDefault, packet->payload);
+	char *buffer = (char *)CFDataGetBytePtr(xmlData);
+	ssize_t result = send(sock, &packet->body, sizeof(struct USBMuxPacketBody), 0x0);
+	if (result == sizeof(struct USBMuxPacketBody)) {
+		if (packet->body.length > result) {
+			ssize_t payloadSize = packet->body.length - result;
+			ssize_t remainder = payloadSize;
+			while (remainder) {
+				result = send(sock, &buffer[payloadSize-remainder], sizeof(char), 0x0);
+				if (result != sizeof(char))
+					break;
+				remainder -= result;
+			}
+		}
 	}
-	AuthorizationItem systemRight = { kAuthorizationRightExecute, 0x0, 0x0, 0x0 };
-	AuthorizationItem taskRight = { kSMRightBlessPrivilegedHelper, 0x0, 0x0, 0x0 };
-	AuthorizationItem items[] = { systemRight, taskRight };
-	AuthorizationRights rights = { 0x2, items };
-	AuthorizationFlags flags = kAuthorizationFlagInteractionAllowed | kAuthorizationFlagExtendRights | kAuthorizationFlagPreAuthorize;
-	
-	status = AuthorizationCopyRights(authorization, &rights, NULL, flags, NULL);
-	if (status != 0x0) {
-		return false;
+	CFRelease(xmlData);
+}
+
+void USBMuxReceive(uint32_t sock, struct USBMuxPacket *packet) {
+	ssize_t result = recv(sock, &packet->body, sizeof(struct USBMuxPacketBody), 0x0);
+	if (result == sizeof(struct USBMuxPacketBody)) {
+		ssize_t payloadSize = packet->body.length - result;
+		if (payloadSize) {
+			char *buffer = calloc(0x1, payloadSize);
+			ssize_t remainder = payloadSize;
+			while (remainder) {
+				result = recv(sock, &buffer[payloadSize-remainder], sizeof(char), 0x0);
+				if (result != sizeof(char))
+					break;
+				remainder -= result;
+			}
+			CFDataRef xmlData = CFDataCreate(kCFAllocatorDefault, (UInt8 *)buffer, payloadSize);
+			packet->payload = CFPropertyListCreateFromXMLData(kCFAllocatorDefault, xmlData, kCFPropertyListImmutable, NULL);
+			free(buffer);
+			CFRelease(xmlData);
+		}
 	}
-	return true;
 }
 
 void StartMux() {
-	bool status = acquireTaskForPortRight();
-	if (status) {
-		setuid(0x0);
-		MuxAgent = USBMuxAgentCreate();
-		if (MuxAgent) {
-			MuxAgent->socket = SDM_USBMux_SocketCreate();
-			MuxAgent->socketSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, MuxAgent->socket, 0x0, MuxAgent->socketQueue);
-			dispatch_source_set_event_handler(MuxAgent->socketSource, ^{
-				
-			});
-			dispatch_source_set_cancel_handler(MuxAgent->socketSource, ^{
-				printf("socketSourceEventCancelHandler: source canceled\n");
-			});
-			dispatch_resume(MuxAgent->socketSource);
-			
-			//sub_d8b5();
-			
-			CFRunLoopRun();
-		}
+	MuxAgent = USBMuxAgentCreate();
+	if (MuxAgent) {
+		MuxAgent->socket = SDM_USBMux_SocketCreate();
+		MuxAgent->socketSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, MuxAgent->socket, 0x0, MuxAgent->socketQueue);
+		dispatch_source_set_event_handler(MuxAgent->socketSource, ^{
+			struct USBMuxPacket *packet = (struct USBMuxPacket *)calloc(0x1, sizeof(struct USBMuxPacket));
+			USBMuxReceive(MuxAgent->socket, packet);
+			if (CFPropertyListIsValid(packet->payload, kCFPropertyListXMLFormat_v1_0)) {
+				if (CFDictionaryContainsKey(packet->payload, CFSTR("MessageType"))) {
+					CFStringRef type = CFDictionaryGetValue(packet->payload, CFSTR("MessageType"));
+					if (CFStringCompare(type, USBMuxPacketMessage[kUSBMuxPacketResultType], 0x0) == 0x0) {
+						
+					} else if (CFStringCompare(type, USBMuxPacketMessage[kUSBMuxPacketAttachType], 0x0) == 0x0) {
+
+					} else if (CFStringCompare(type, USBMuxPacketMessage[kUSBMuxPacketDetachType], 0x0) == 0x0) {
+					}
+				} else {
+					if (CFDictionaryContainsKey(packet->payload, CFSTR("Logs"))) {
+						
+					} else if (CFDictionaryContainsKey(packet->payload, CFSTR("DeviceList"))) {
+						
+					} else if (CFDictionaryContainsKey(packet->payload, CFSTR("ListenerList"))) {
+						
+					} else {
+						
+					}
+					
+				}
+			} else {
+                printf("socketSourceEventHandler: failed to decodeCFPropertyList from packet payload\n");
+            }
+		});
+		dispatch_source_set_cancel_handler(MuxAgent->socketSource, ^{
+			printf("socketSourceEventCancelHandler: source canceled\n");
+		});
+		dispatch_resume(MuxAgent->socketSource);
+		
+		//sub_d8b5();
+		
+		CFRunLoopRun();
 	}
 }
 
