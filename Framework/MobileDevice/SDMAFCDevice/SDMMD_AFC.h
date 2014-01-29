@@ -35,7 +35,7 @@
 
 struct sdmmd_AFCConnectionClass {
 	SDMMD_AMConnectionRef handle;
-	dispatch_queue_t operationQueue;
+	__unsafe_unretained dispatch_queue_t operationQueue;
 	dispatch_semaphore_t semaphore;
 	uint64_t operationCount;
 } sdmmd_AFCConnectionClass;

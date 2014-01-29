@@ -46,7 +46,7 @@ typedef void (*callbackFunction)(void *, struct USBMuxPacket *);
 struct USBMuxListenerClass {
 	uint32_t socket;
 	bool isActive;
-	dispatch_queue_t socketQueue;
+	__unsafe_unretained dispatch_queue_t socketQueue;
 	dispatch_source_t socketSource;
 	dispatch_semaphore_t semaphore;
 	callbackFunction responseCallback;
