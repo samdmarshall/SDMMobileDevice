@@ -48,7 +48,7 @@ struct USBMuxListenerClass {
 	bool isActive;
 	__unsafe_unretained dispatch_queue_t socketQueue;
 	__unsafe_unretained dispatch_source_t socketSource;
-	dispatch_semaphore_t semaphore;
+	__unsafe_unretained dispatch_semaphore_t semaphore;
 	callbackFunction responseCallback;
 	callbackFunction attachedCallback;
 	callbackFunction detachedCallback;
