@@ -675,7 +675,6 @@ static char *SDMMD_FMIP_DomainKeys[SDM_MD_FMIP_Domain_Key_Count] = {kIsAssociate
 
 enum SDM_MD_iTunesStore_Domain_Key {
 	SDM_MD_iTunesStore_Domain_Key_AppleID = 0x0,
-	SDM_MD_iTunesStore_Domain_Key_Account,
 	SDM_MD_iTunesStore_Domain_Key_AccountAvailableServiceTypes,
 	SDM_MD_iTunesStore_Domain_Key_AccountKind,
 	SDM_MD_iTunesStore_Domain_Key_AccountServiceTypes,
