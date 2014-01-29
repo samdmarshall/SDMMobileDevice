@@ -49,7 +49,7 @@ void ServiceSocketCallback(CFSocketRef s, CFSocketCallBackType callbackType, CFD
 	
     sendmsg(socket, &message, 0x0);
     //CFSocketInvalidate(s);
-    //CFRelease(s);
+    //CFSafeRelease(s);
 }
 
 void CreateLocalSocket(char *udid, struct SDM_MD_Service_Identifiers service) {
@@ -83,9 +83,9 @@ void CreateLocalSocket(char *udid, struct SDM_MD_Service_Identifiers service) {
 		unlink(socketPath);
 		
 		CFSocketSetAddress(serviceSock, address_data);
-		CFRelease(address_data);
+		CFSafeRelease(address_data);
 		CFRunLoopAddSource(CFRunLoopGetMain(), CFSocketCreateRunLoopSource(NULL, serviceSock, 0), kCFRunLoopCommonModes);
-		free(socketPath);
+		Safe(free,socketPath);
 		CFRunLoopRun();
 	}
 }

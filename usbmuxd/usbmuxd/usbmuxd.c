@@ -46,7 +46,7 @@ uint32_t SDM_USBMux_SocketCreate() {
 			perror("listen");
 			exit(1);
 		}
-
+		
 	}
 	return sock;
 }
@@ -67,7 +67,7 @@ void USBMuxSend(uint32_t sock, struct USBMuxPacket *packet) {
 			}
 		}
 	}
-	CFRelease(xmlData);
+	CFSafeRelease(xmlData);
 }
 
 void USBMuxReceive(uint32_t sock, struct USBMuxPacket *packet) {
@@ -85,8 +85,8 @@ void USBMuxReceive(uint32_t sock, struct USBMuxPacket *packet) {
 			}
 			CFDataRef xmlData = CFDataCreate(kCFAllocatorDefault, (UInt8 *)buffer, payloadSize);
 			packet->payload = CFPropertyListCreateFromXMLData(kCFAllocatorDefault, xmlData, kCFPropertyListImmutable, NULL);
-			free(buffer);
-			CFRelease(xmlData);
+			Safe(free,buffer);
+			CFSafeRelease(xmlData);
 		}
 	}
 }
@@ -107,6 +107,7 @@ void StartMux() {
 					} else if (CFStringCompare(type, USBMuxPacketMessage[kUSBMuxPacketAttachType], 0x0) == 0x0) {
 
 					} else if (CFStringCompare(type, USBMuxPacketMessage[kUSBMuxPacketDetachType], 0x0) == 0x0) {
+						
 					}
 				} else {
 					if (CFDictionaryContainsKey(packet->payload, CFSTR("Logs"))) {
@@ -118,7 +119,6 @@ void StartMux() {
 					} else {
 						
 					}
-					
 				}
 			} else {
                 printf("socketSourceEventHandler: failed to decodeCFPropertyList from packet payload\n");

@@ -369,7 +369,7 @@ sdmmd_return_t SDMMD_AFCSendStatusExtended(SDMMD_AFCConnectionRef afcConn, void*
 				result = SDMMD_AFCSendData(afcConn, CFDataGetBytePtr(afcData), length);
 			}
 		}
-		CFRelease(afcData);
+		CFSafeRelease(afcData);
 	} else {
 		result = afcConn->ivars.statusPtr;	
 	}
@@ -379,9 +379,8 @@ sdmmd_return_t SDMMD_AFCSendStatusExtended(SDMMD_AFCConnectionRef afcConn, void*
 sdmmd_return_t SDMMD_AFCSendStatus(SDMMD_AFCConnectionRef afcConn, void*b, void*c) {
 	CFTypeRef arg = SDMMD_AFCCopyAndClearLastErrorInfo();
 	sdmmd_return_t result = SDMMD_AFCSendStatusExtended(afcConn, b, c, arg);
-	if (arg) {
-		CFRelease(arg);
-	}
+	CFSafeRelease(arg);
+ 
 	return result;
 }
 

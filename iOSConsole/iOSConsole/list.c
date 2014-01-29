@@ -41,22 +41,16 @@ void ListConnectedDevices() {
 						deviceUDID = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kUniqueDeviceID));
 					}
 					printf("%d) %s : %s\n",index+0x1,CFStringGetCStringPtr(deviceUDID,kCFStringEncodingMacRoman),CFStringGetCStringPtr(deviceName,kCFStringEncodingMacRoman));
-					if (deviceName) {
-						CFRelease(deviceName);
-					}
 					
-					if (deviceUDID) {
-						CFRelease(deviceUDID);
-					}
+					CFSafeRelease(deviceName);
+					CFSafeRelease(deviceUDID);
 					
 					SDMMD_AMDeviceDisconnect(device);
 				})
 			}
 		}
 	}
-	if (devices) {
-		CFRelease(devices);
-	}
+	CFSafeRelease(devices);
 }
 
 #endif

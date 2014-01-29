@@ -31,7 +31,7 @@ SDMMD_AMDeviceRef FindDeviceFromUDID(char *udid) {
 					foundDevice = true;
 					break;
 				}
-				CFRelease(deviceUDID);
+				CFSafeRelease(deviceUDID);
 			}
 		}
 		if (foundDevice) {
@@ -59,7 +59,7 @@ SDMMD_AMConnectionRef AttachToDeviceAndService(SDMMD_AMDeviceRef device, char *s
 						name = "unnamed device";
 					}
 					printf("Connected to %s on \"%s\" ...\n",name,service);
-					CFRelease(deviceName);
+					CFSafeRelease(deviceName);
 				}, {
 					SDMMD_AMDeviceStopSession(device);
 					SDMMD_AMDeviceDisconnect(device);

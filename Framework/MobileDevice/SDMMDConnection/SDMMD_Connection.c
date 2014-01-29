@@ -94,7 +94,7 @@ SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, SSL *ssl) 
 	CFDictionaryRef dict = CFDictionaryCreate(kCFAllocatorDefault, (const void**)&closeInvalid, (const void**)&kCFBooleanFalse, 0x1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 	if (dict) {
 		handle = SDMMD_AMDServiceConnectionCreate(socket, ssl, dict);
-		CFRelease(dict);
+		CFSafeRelease(dict);
 	}
 	return handle;
 }
@@ -130,7 +130,7 @@ sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef se
 							CFDictionarySetValue(dict, CFSTR("EscrowBag"), escrowBag);
 						}
 						result = SDMMD_lockconn_send_message(device, dict);
-						CFRelease(dict);
+						CFSafeRelease(dict);
 						if (result == 0) {
 							CFMutableDictionaryRef response;
 							result = SDMMD_lockconn_receive_message(device, &response);
@@ -208,12 +208,9 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 								printf("AMDeviceSecureStartService: Could not get escrow keybag for device %s!\n", (device->ivars.unique_device_id ? SDMCFStringGetString(device->ivars.unique_device_id) : "device with no name"));
 								mutexLock = true;
 								ssl = NULL;
-								if (escrowBag) {
-									CFRelease(escrowBag);
-								}
-								if (ssl) {
-									SSL_free(ssl);
-								}
+								CFSafeRelease(escrowBag);
+								Safe(SSL_free,ssl);
+								
 								canConnect = false;
 							}
 						}
@@ -228,12 +225,12 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 					CFTypeRef curAppSocket = CFPreferencesCopyAppValue(CFSTR("DirectSocket"), kCFPreferencesCurrentApplication);
 					if (curAppSocket) {
 						appSocket = CFEqual(curAppSocket, kCFBooleanTrue);
-						CFRelease(curAppSocket);
+						CFSafeRelease(curAppSocket);
 						if (appSocket == 0) {
 							curAppSocket = CFPreferencesCopyAppValue(CFSTR("DirectSocket"), CFSTR("com.apple.usbmuxd"));
 							if (curAppSocket) {
 								appSocket = CFEqual(curAppSocket, kCFBooleanTrue);
-								CFRelease(curAppSocket);
+								CFSafeRelease(curAppSocket);
 							}
 						}
 					}
@@ -242,12 +239,8 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 					if (result) {
 						if (result != kAMDPasswordProtectedError) {
 							ssl = NULL;
-							if (escrowBag) {
-								CFRelease(escrowBag);
-							}
-							if (ssl) {
-								SSL_free(ssl);
-							}
+							CFSafeRelease(escrowBag);
+							Safe(SSL_free,ssl);
 						} else {
 							if (escrowBag) {
 								printf("AMDeviceSecureStartService: Escrow bag mismatch for device %s!", (device->ivars.unique_device_id ? SDMCFStringGetString(device->ivars.unique_device_id) : "device with no name"));
@@ -261,15 +254,11 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 									if (result) {
 										printf("_DestroyEscrowBag: Failed to store escrow bag to %s.\n", path);
 									}
-									CFRelease(fileDict);
+									CFSafeRelease(fileDict);
 								}
-								free(path);
-								if (escrowBag) {
-									CFRelease(escrowBag);
-								}
-								if (ssl) {
-									SSL_free(ssl);
-								}
+								Safe(free,path);
+								CFSafeRelease(escrowBag);
+								Safe(SSL_free,ssl);
 							}
 						}
 					} else {
@@ -302,9 +291,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 											}
 										}
 									}
-									if (record) {
-										CFRelease(record);
-									}
+									CFSafeRelease(record);
 									if (result == 0x0) {
 										CFMutableDictionaryRef connDict = SDMMD_create_dict();
 										result = kAMDNoResourcesError;
@@ -320,7 +307,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 												ssl = NULL;
 												result = 0x0;
 											}
-											CFRelease(connDict);
+											CFSafeRelease(connDict);
 										}
 									}
 								} else {
@@ -339,48 +326,32 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 										*connection = conn;
 										result = 0x0;
 									}
-									CFRelease(connDict);
+									CFSafeRelease(connDict);
 								}
 							}
 						} else {
 							printf("SDMMD_AMDeviceSecureStartService: Could not connect to \"%s\" service on port %d, device %d - %s.", cservice, port, device->ivars.device_id, SDMCFStringGetString(device->ivars.unique_device_id));
 							ssl = NULL;
 						}
-						if (escrowBag) {
-							CFRelease(escrowBag);
-						}
-						if (ssl) {
-							SSL_free(ssl);
-						}
+						CFSafeRelease(escrowBag);
+						Safe(SSL_free,ssl);
 					}
 				}
 			} else {
 				result = kAMDInvalidArgumentError;
-				if (escrowBag) {
-					CFRelease(escrowBag);
-				}
-				if (ssl) {
-					SSL_free(ssl);
-				}
+				CFSafeRelease(escrowBag);
+				Safe(SSL_free,ssl);
 			}
 		} else {
-			if (escrowBag) {
-				CFRelease(escrowBag);
-			}
-			if (ssl) {
-				SSL_free(ssl);
-			}
+			CFSafeRelease(escrowBag);
+			Safe(SSL_free,ssl);
 		}
 	} else {
 		ssl = NULL;
 		mutexLock = false;
 		result = kAMDInvalidArgumentError;
-		if (escrowBag) {
-			CFRelease(escrowBag);
-		}
-		if (ssl) {
-			SSL_free(ssl);
-		}
+		CFSafeRelease(escrowBag);
+		Safe(SSL_free,ssl);
 	}
 	//loc_6eb42;
 	/*if (socket != 0xff) {
@@ -392,7 +363,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 	}
 	//printf("SDMMD_AMDeviceSecureStartService: Returned %x starting service %s on device at port %d, out fd = %d.\n", result, cservice, port, socket);
-	free(cservice);
+	Safe(free,cservice);
 	return result;
 }
 
@@ -411,7 +382,7 @@ sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef 
 				if (optionsCopy) {
 					CFDictionarySetValue(optionsCopy, CFSTR("CloseOnInvalidate"), kCFBooleanFalse);
 					result = SDMMD_AMDeviceSecureStartService(device, service, optionsCopy, connection);
-					CFRelease(optionsCopy);
+					CFSafeRelease(optionsCopy);
 					if (result == 0) {
 						socket = SDMMD_AMDServiceConnectionGetSocket(*connection);
 						ssl_enabled = SDMMD_AMDServiceConnectionGetSecureIOContext(*connection);
@@ -446,8 +417,9 @@ void SDMMD_AMDServiceConnectionSetDevice(SDMMD_AMConnectionRef *connection, SDMM
 }
 
 void SDMMD_AMDServiceConnectionSetServiceName(SDMMD_AMConnectionRef *connection, CFStringRef service) {
-	if (service)
+	if (service) {
 		CFStringGetCString(service, (*connection)->ivars.service, 0x80, kCFStringEncodingUTF8);
+	}
 }
 
 uint32_t SDMMD_AMDServiceConnectionGetSocket(SDMMD_AMConnectionRef connection) {

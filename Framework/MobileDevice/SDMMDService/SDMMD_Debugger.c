@@ -136,7 +136,7 @@ sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, 
 	if (SDM_MD_CallSuccessful(result)) {
 		result = SDMMD_DebuggingReceive(connection, &data).result;
 	}
-	CFRelease(sending);
+	CFSafeRelease(sending);
 	return (sdmmd_debug_return_t){result, data};
 }
 
@@ -160,7 +160,7 @@ sdmmd_debug_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef connectio
 				}
 				position++;
 				response = realloc(response, sizeof(char)*(position+1));
-				CFRelease(responseData);
+				CFSafeRelease(responseData);
 			}
 			uint32_t checksum = GenerateChecksumForData(response, position-3);
 			if (kHexDecode(response[position-2]) == ((checksum >> 4) & 0xf) && kHexDecode(response[position-1]) == (checksum & 0xf)) {
@@ -187,7 +187,7 @@ CFURLRef copy_device_app_url(SDMMD_AMDeviceRef device, CFStringRef identifier) {
     assert(app_path != NULL);
 	
     CFURLRef url = CFURLCreateWithFileSystemPath(NULL, app_path, kCFURLPOSIXPathStyle, true);
-    CFRelease(response);
+    CFSafeRelease(response);
     return url;
 }
 
@@ -199,9 +199,9 @@ CFStringRef copy_disk_app_identifier(CFURLRef disk_app_url) {
     CFStringRef bundle_identifier = CFRetain(CFDictionaryGetValue(plist, CFSTR("CFBundleIdentifier")));
     CFReadStreamClose(plist_stream);
 	
-    CFRelease(plist_url);
-    CFRelease(plist_stream);
-    CFRelease(plist);
+    CFSafeRelease(plist_url);
+    CFSafeRelease(plist_stream);
+    CFSafeRelease(plist);
 	
     return bundle_identifier;
 }
@@ -210,7 +210,7 @@ Boolean path_exists(CFTypeRef path) {
     if (CFGetTypeID(path) == CFStringGetTypeID()) {
         CFURLRef url = CFURLCreateWithFileSystemPath(NULL, path, kCFURLPOSIXPathStyle, true);
         Boolean result = CFURLResourceIsReachable(url, NULL);
-        CFRelease(url);
+        CFSafeRelease(url);
         return result;
     } else if (CFGetTypeID(path) == CFURLGetTypeID()) {
         return CFURLResourceIsReachable(path, NULL);
@@ -229,38 +229,32 @@ CFStringRef copy_device_support_path(SDMMD_AMDeviceRef device) {
     path = CFStringCreateWithFormat(NULL, NULL, CFSTR("%s/Library/Developer/Xcode/iOS DeviceSupport/%@ (%@)"), home, version, build);
     found = path_exists(path);
 	
-    if (!found)
-    {
+    if (!found) {
         path = CFStringCreateWithFormat(NULL, NULL, CFSTR("/Developer/Platforms/iPhoneOS.platform/DeviceSupport/%@ (%@)"), version, build);
         found = path_exists(path);
     }
-    if (!found)
-    {
+    if (!found) {
         path = CFStringCreateWithFormat(NULL, NULL, CFSTR("%s/Library/Developer/Xcode/iOS DeviceSupport/%@"), home, version);
         found = path_exists(path);
     }
-	if (!found)
-    {
+	if (!found) {
         path = CFStringCreateWithFormat(NULL, NULL, CFSTR("/Developer/Platforms/iPhoneOS.platform/DeviceSupport/%@"), version);
         found = path_exists(path);
     }
-    if (!found)
-    {
+    if (!found) {
         path = CFStringCreateWithFormat(NULL, NULL, CFSTR("%s/Library/Device Support/%@"),home,version);
         found = path_exists(path);
     }
-    if (!found)
-    {
+    if (!found) {
         path = CFStringCreateWithFormat(NULL, NULL, CFSTR("/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/DeviceSupport/%@"), version);
         found = path_exists(path);
     }
 	
-    CFRelease(version);
-    CFRelease(build);
+    CFSafeRelease(version);
+    CFSafeRelease(build);
 	
-    if (!found)
-    {
-        CFRelease(path);
+    if (!found) {
+        CFSafeRelease(path);
         printf("[ !! ] Unable to locate DeviceSupport directory.\n");
         exit(1);
     }
@@ -304,7 +298,7 @@ void fdvendor_callback(CFSocketRef s, CFSocketCallBackType callbackType, CFDataR
 	
     sendmsg(socket, &message, 0);
     CFSocketInvalidate(s);
-    CFRelease(s);
+    CFSafeRelease(s);
 }
 
 void SDMMD_StartDebugger(SDMMD_AMDebugConnectionRef connection, CFStringRef bundleId) {
@@ -325,7 +319,7 @@ void SDMMD_StartDebugger(SDMMD_AMDebugConnectionRef connection, CFStringRef bund
     unlink(FDVENDOR_PATH);
 	
     CFSocketSetAddress(fdvendor, address_data);
-    CFRelease(address_data);
+    CFSafeRelease(address_data);
     CFRunLoopAddSource(CFRunLoopGetMain(), CFSocketCreateRunLoopSource(NULL, fdvendor, 0), kCFRunLoopCommonModes);
 	
 	CFStringRef path = bundleId;
@@ -372,18 +366,18 @@ void SDMMD_StartDebugger(SDMMD_AMDebugConnectionRef connection, CFStringRef bund
     fwrite(CFDataGetBytePtr(cmds_data), CFDataGetLength(cmds_data), 1, out);
     fclose(out);
 
-    CFRelease(cmds);
-    if (ds_path != NULL) CFRelease(ds_path);
-    CFRelease(bundle_identifier);
-    CFRelease(device_app_url);
-    CFRelease(device_app_path);
-    CFRelease(disk_app_path);
-    CFRelease(device_container_url);
-    CFRelease(device_container_path);
-    CFRelease(dcp_noprivate);
-    CFRelease(disk_container_url);
-    CFRelease(disk_container_path);
-    CFRelease(cmds_data);
+    CFSafeRelease(cmds);
+    CFSafeRelease(ds_path);
+    CFSafeRelease(bundle_identifier);
+    CFSafeRelease(device_app_url);
+    CFSafeRelease(device_app_path);
+    CFSafeRelease(disk_app_path);
+    CFSafeRelease(device_container_url);
+    CFSafeRelease(device_container_path);
+    CFSafeRelease(dcp_noprivate);
+    CFSafeRelease(disk_container_url);
+    CFSafeRelease(disk_container_path);
+    CFSafeRelease(cmds_data);
 
     signal(SIGHUP, gdb_ready_handler);
 

@@ -128,9 +128,7 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 											if (result) {
 												printf("transfer_package: Could not close AFC connection. error: %i\n", result);
 											}
-											if (r12 != 0x0) {
-												CFRelease(r12);
-											}
+											CFSafeRelease(r12);
 										}
 									}
 								} else {
@@ -175,17 +173,16 @@ sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn
 				if (result) {
 					printf("SDMMD_AMDeviceSecureInstallApplication: Old style of install failed for (%s).\n",SDMCFStringGetString(format));
 				}
-				CFRelease(format);
+				CFSafeRelease(format);
 			} else {
 				printf("SDMMD_AMDeviceSecureInstallApplication: Unable to create CFString!\n");
 			}
-			CFRelease(lastComp);
+			CFSafeRelease(lastComp);
 		} else {
 			printf("SDMMD_AMDeviceSecureInstallApplication: Could not copy last path component from url %s.\n",SDMCFStringGetString(lastComp));
 		}
 	}
-	if (connection)
-		CFRelease(connection);
+	CFSafeRelease(connection);
 	printf("SDMMD_AMDeviceSecureInstallApplication: Installation of package %s returned 0x%x.\n",SDMCFURLGetString(path),result);
 	return result;
 }
@@ -199,11 +196,11 @@ sdmmd_return_t SDMMD_AMDeviceInstallApplication(SDMMD_AMDeviceRef device, CFStri
 		CFURLRef url = SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(path);
 		if (url) {
 			result = SDMMD_AMDeviceSecureInstallApplication(conn, device, url, options, installCallback, unknown);
-			CFRelease(url);
+			CFSafeRelease(url);
 		} else {
 			printf("AMDeviceInstallApplication: SDMMD_AMDCFURLCreateFromFileSystemPathWithSmarts failed on %s.\n",SDMCFURLGetString(url));
 		}
-		CFRelease(conn);
+		CFSafeRelease(conn);
 	} else {
 		result = kAMDUndefinedError;
 	}

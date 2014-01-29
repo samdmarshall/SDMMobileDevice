@@ -85,9 +85,8 @@ void AttachToSyslog(char *udid) {
 				unsigned char syslogHeaderBuffer[SysLogHeaderSize*0x3];
 				CFDataRef syslogHeader = CFDataCreate(kCFAllocatorDefault, syslogHeaderBuffer, SysLogHeaderSize*0x3);
 				result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(syslog), (CFDataRef*)&syslogHeader);
-				if (syslogHeader) {
-					CFRelease(syslogHeader);
-				}
+				CFSafeRelease(syslogHeader);
+				
 				while (SDM_MD_CallSuccessful(result)) {
 					if (SDMMD_AMDeviceIsValid(device)) {
 						unsigned char syslogRelayBuffer[SysLogBufferSize];
@@ -97,7 +96,7 @@ void AttachToSyslog(char *udid) {
 							CFDataAppendBytes(syslogBuffer, CFDataGetBytePtr(syslogData), SysLogBufferSize);
 							notify_post(updateLogNotifyName);
 						});
-						CFRelease(syslogData);
+						CFSafeRelease(syslogData);
 					} else {
 						break;
 					}
@@ -168,6 +167,7 @@ void PrintSysLog() {
 						}
 					}
 					CFDataDeleteBytes(syslogBuffer, CFRangeMake(offset, length));
+					Safe(free, lineBuffer);
 				}
 			}
 		});

@@ -89,7 +89,7 @@ static const void* SDMMD___AppendValue(CFTypeRef append, CFMutableDataRef contex
 		
 		CFStringGetBytes(append, CFRangeMake(0, length), kCFStringEncodingUTF8, 0, false, alloc, alloclen, &usedlen);
 		CFDataAppendBytes(context, alloc, usedlen);
-		free(alloc);
+		Safe(free,alloc);
 	}
 	return NULL;
 }
@@ -119,6 +119,7 @@ ATR_UNUSED static CFDataRef SDMMD__CreateDataFromFileContents(char *path) {
 					} else {
 						printf("SDMMD__CreateDataFromFileContents: Could not read contents at file %s.\n",path);
 					}
+					Safe(free,data);
 				} else {
 					printf("SDMMD__CreateDataFromFileContents: Could not fstat.\n");
 				}
@@ -147,7 +148,7 @@ static CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
 			} else {
 				printf("_CreateDictFromFileAtPath: Could not create plist from file %s.\n",path);
 			}
-			CFRelease(fileData);
+			CFSafeRelease(fileData);
 		}
 	}
 	return dict;
@@ -174,7 +175,7 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef ty
 			CFStringRef name = CFStringCreateWithCString(kCFAllocatorDefault, appName, kCFStringEncodingUTF8);
 			if (name) {
 				CFDictionarySetValue(dict, CFSTR("Label"), name);
-				CFRelease(name);
+				CFSafeRelease(name);
 			}
 		}
 	}
@@ -204,25 +205,31 @@ ATR_UNUSED static char *SDMMD_ssl_strerror(SSL *ssl, uint32_t ret) {
 	char *err = NULL;
 	
 	switch (result) {
-		case SSL_ERROR_NONE:
+		case SSL_ERROR_NONE: {
 			break;
-		case SSL_ERROR_SSL:
+		}
+		case SSL_ERROR_SSL: {
 			if (ERR_peek_error()) {
 				snprintf(buffer, 200, "SSL_ERROR_SSL (%s)", ERR_error_string(ERR_peek_error(), NULL));
 				err = buffer;
-			} else
+			} else {
 				err = "SSL_ERROR_SSL unknown error";
+			}
 			break;
-		case SSL_ERROR_WANT_READ:
+		}
+		case SSL_ERROR_WANT_READ: {
 			err = "SSL_ERROR_WANT_READ";
 			break;
-		case SSL_ERROR_WANT_WRITE:
+		}
+		case SSL_ERROR_WANT_WRITE: {
 			err = "SSL_ERROR_WANT_WRITE";
 			break;
-		case SSL_ERROR_WANT_X509_LOOKUP:
+		}
+		case SSL_ERROR_WANT_X509_LOOKUP: {
 			err = "SSL_ERROR_WANT_X509_LOOKUP";
 			break;
-		case SSL_ERROR_SYSCALL:
+		}
+		case SSL_ERROR_SYSCALL: {
 			if (ERR_peek_error() == 0 && ret == 0) {
 				err = "SSL_ERROR_SYSCALL (Early EOF reached)";
 			} else if (ERR_peek_error() == 0 && ret == -1) {
@@ -235,20 +242,25 @@ ATR_UNUSED static char *SDMMD_ssl_strerror(SSL *ssl, uint32_t ret) {
 				err = buffer;
 			}
 			break;
-		case SSL_ERROR_ZERO_RETURN:
+		}
+		case SSL_ERROR_ZERO_RETURN: {
 			err = "SSL_ERROR_ZERO_RETURN";
 			break;
-		case SSL_ERROR_WANT_CONNECT:
+		}
+		case SSL_ERROR_WANT_CONNECT: {
 			err = "SSL_ERROR_WANT_CONNECT";
 			break;
-		case SSL_ERROR_WANT_ACCEPT:
+		}
+		case SSL_ERROR_WANT_ACCEPT: {
 			err = "SSL_ERROR_WANT_ACCEPT";
 			break;
-		default:
+		}
+		default: {
 			ERR_print_errors_fp(stderr);
 			fputc('\n', stderr);
 			err = "Unknown SSL error type";
 			break;
+		}
 	}
 	ERR_clear_error();
 	return err;
@@ -261,9 +273,9 @@ ATR_UNUSED static CFStringRef SDMGetCurrentDateString() {
 	CFStringRef customDateFormat = CFSTR("yyyy-MM-dd*HH:mm:ss");
 	CFDateFormatterSetFormat(customDateFormatter, customDateFormat);
 	CFStringRef customFormattedDateString = CFDateFormatterCreateStringWithDate(NULL, customDateFormatter, date);
-	CFRelease(currentLocale);
-	CFRelease(date);
-	CFRelease(customDateFormatter);
+	CFSafeRelease(currentLocale);
+	CFSafeRelease(date);
+	CFSafeRelease(customDateFormatter);
 	return customFormattedDateString;
 }
 
@@ -293,7 +305,7 @@ static void SDMMD__PairingRecordPathForIdentifier(CFStringRef udid, char *path) 
 static CFTypeRef SDMMD_CreateUUID() {
 	CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
 	CFStringRef str = CFUUIDCreateString(kCFAllocatorDefault, uuid);
-	CFRelease(uuid);
+	CFSafeRelease(uuid);
 	return str;
 }
 
@@ -366,9 +378,9 @@ ATR_UNUSED static sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForId
 							}
 						}
 					}
-					CFRelease(fileDict);
+					CFSafeRelease(fileDict);
 				}
-				CFRelease(bonjourId);
+				CFSafeRelease(bonjourId);
 			}
 		}
 	}
@@ -395,7 +407,7 @@ ATR_UNUSED static CFURLRef SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(CFS
 ATR_UNUSED static CFURLRef SDMMD__AMDCFURLCreateWithFileSystemPathRelativeToBase(CFAllocatorRef allocator, CFStringRef path, CFURLPathStyle style, Boolean dir) {
 	CFURLRef base = CFURLCreateWithString(allocator, CFSTR("file://localhost/"), NULL);
 	CFURLRef url = CFURLCreateWithFileSystemPathRelativeToBase(allocator, path, style, dir, base);
-	CFRelease(base);
+	CFSafeRelease(base);
 	return url;
 }
 
@@ -424,7 +436,7 @@ ATR_UNUSED static void SDMMD_fire_callback_767f4(CallBack handle, void* unknown,
 		if (dict) {
 			CFDictionarySetValue(dict, CFSTR("Status"), string);
 			CFDictionarySetValue(dict, CFSTR("PercentComplete"), num);
-			CFRelease(num);
+			CFSafeRelease(num);
 		}
 		handle(dict, unknown);
 	}
@@ -621,42 +633,30 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 	record = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 	if (record) {
 		CFDictionarySetValue(record, CFSTR("RootCertificate"), rootCert);
-		CFRelease(rootCert);
+		CFSafeRelease(rootCert);
 		
 		CFDictionarySetValue(record, CFSTR("HostCertificate"), hostCert);
-		CFRelease(hostCert);
+		CFSafeRelease(hostCert);
 		
 		CFDictionarySetValue(record, CFSTR("DeviceCertificate"), deviceCert);
-		CFRelease(deviceCert);
+		CFSafeRelease(deviceCert);
 		
 		CFDictionarySetValue(record, CFSTR("RootPrivateKey"), rootPrivKey);
-		CFRelease(rootPrivKey);
+		CFSafeRelease(rootPrivKey);
 		
 		CFDictionarySetValue(record, CFSTR("HostPrivateKey"), hostPrivKey);
-		CFRelease(hostPrivKey);
+		CFSafeRelease(hostPrivKey);
 		
 		CFDictionarySetValue(record, CFSTR("HostID"), hostId);
-		CFRelease(hostId);
+		CFSafeRelease(hostId);
 	}
 	
-	if (rootEVP) {
-		EVP_PKEY_free(rootEVP);
-	}
-	if (hostEVP) {
-		EVP_PKEY_free(hostEVP);
-	}
-	if (deviceEVP) {
-		EVP_PKEY_free(deviceEVP);
-	}
-	if (rootX509) {
-		X509_free(rootX509);
-	}
-	if (hostX509) {
-		X509_free(hostX509);
-	}
-	if (deviceX509) {
-		X509_free(deviceX509);
-	}
+	Safe(EVP_PKEY_free,rootEVP);
+	Safe(EVP_PKEY_free,hostEVP);
+	Safe(EVP_PKEY_free,deviceEVP);
+	Safe(X509_free,rootX509);
+	Safe(X509_free,hostX509);
+	Safe(X509_free,deviceX509);
 	
     return record;
 }
@@ -680,6 +680,7 @@ ATR_UNUSED static sdmmd_return_t SDMMD_AMDeviceDigestFile(char *path, int value,
 					}
 
 				}
+				Safe(free, data);
 			}
 		}
 	}

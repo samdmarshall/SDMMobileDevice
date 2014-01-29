@@ -54,9 +54,9 @@ static bool optionsEnable[OptionsCount] = {};
 int main(int argc, const char * argv[]) {
 	SDMMobileDevice;
 	
-	char *udid;
+	char *udid = NULL;
 	
-	char *service;
+	char *service = NULL;
 	
 	char *help = NULL;
 	
@@ -198,12 +198,14 @@ int main(int argc, const char * argv[]) {
 		} else if (optionsEnable[OptionsRun]) {
 			RunAppOnDeviceWithIdentifier(udid, bundle);
 		} else if (optionsEnable[OptionsDiag]) {
-			if (strncmp(diagArg, "sleep", strlen("sleep")) == 0x0) {
-				SendSleepToDevice(udid);
-			} else if (strncmp(diagArg, "reboot", strlen("reboot")) == 0x0) {
-				SendRebootToDevice(udid);
-			} else if (strncmp(diagArg, "shutdown", strlen("shutdown")) == 0x0) {
-				SendShutdownToDevice(udid);
+			if (diagArg) {
+				if (strncmp(diagArg, "sleep", strlen("sleep")) == 0x0) {
+					SendSleepToDevice(udid);
+				} else if (strncmp(diagArg, "reboot", strlen("reboot")) == 0x0) {
+					SendRebootToDevice(udid);
+				} else if (strncmp(diagArg, "shutdown", strlen("shutdown")) == 0x0) {
+					SendShutdownToDevice(udid);
+				}
 			}
 		}
 	}

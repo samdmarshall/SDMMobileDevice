@@ -162,8 +162,7 @@ sdmmd_return_t SDMMD_ServiceSendMessage(SocketConnection handle, CFPropertyListR
 	CFErrorRef error;
 	CFDataRef xmlData = CFPropertyListCreateData(kCFAllocatorDefault, data, format, 0, &error);
 	sdmmd_return_t result = ((data) ? SDMMD_ServiceSend(handle, xmlData) : kAMDInvalidArgumentError);
-	if (xmlData)
-		CFRelease(xmlData);
+	CFSafeRelease(xmlData);
 	return result;
 }
 
@@ -191,11 +190,9 @@ sdmmd_return_t SDMMD_ServiceSendStream(SocketConnection handle, CFPropertyListRe
 	if (length == CFDataGetLength(xmlData)) {
 		result = ((data) ? SDMMD_ServiceSend(handle, xmlData) : kAMDInvalidArgumentError);
 	}
-	if (xmlData)
-		CFRelease(xmlData);
+	CFSafeRelease(xmlData);
 	CFWriteStreamClose(write);
-	if (write)
-		CFRelease(write);
+	CFSafeRelease(write);
 	return result;
 }
 
@@ -207,8 +204,7 @@ sdmmd_return_t SDMMD_ServiceReceiveStream(SocketConnection handle, CFPropertyLis
 			CFReadStreamOpen(read);
 			*data = CFPropertyListCreateWithStream(kCFAllocatorDefault, read, CFDataGetLength(dataBuffer), 0x2, 0, NULL);
 			CFReadStreamClose(read);
-			if (read)
-				CFRelease(read);
+			CFSafeRelease(read);
 		}
 		return kAMDSuccess;
 	} else {

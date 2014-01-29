@@ -115,9 +115,9 @@ void SDMMD_USBMuxAttachedCallback(void *context, struct USBMuxPacket *packet) {
 		if (newDevice->ivars.connection_type == 0x0) {
 			CFArrayAppendValue(updateWithNew, newDevice);
 			CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotification"), newDevice, NULL, true);
-			CFRelease(SDMMobileDevice->deviceList);
+			CFSafeRelease(SDMMobileDevice->deviceList);
 			SDMMobileDevice->deviceList = CFArrayCreateCopy(kCFAllocatorDefault, updateWithNew);
-			CFRelease(updateWithNew);
+			CFSafeRelease(updateWithNew);
 		} else if (newDevice->ivars.connection_type == 0x1) {
 			// wifi
 		}
@@ -140,9 +140,9 @@ void SDMMD_USBMuxDetachedCallback(void *context, struct USBMuxPacket *packet) {
 			CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotification"), device, NULL, true);
 		}
 	}
-	CFRelease(SDMMobileDevice->deviceList);
+	CFSafeRelease(SDMMobileDevice->deviceList);
 	SDMMobileDevice->deviceList = CFArrayCreateCopy(kCFAllocatorDefault, updateWithRemove);
-	CFRelease(updateWithRemove);
+	CFSafeRelease(updateWithRemove);
 	CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotificationFinished"), NULL, NULL, true);
 }
 
@@ -159,9 +159,9 @@ void SDMMD_USBMuxDeviceListCallback(void *context, struct USBMuxPacket *packet) 
 			CFArrayAppendValue(newList, deviceFromList);
 		}
 	}
-	CFRelease(SDMMobileDevice->deviceList);
+	CFSafeRelease(SDMMobileDevice->deviceList);
 	SDMMobileDevice->deviceList = CFArrayCreateCopy(kCFAllocatorDefault, newList);
-	CFRelease(newList);
+	CFSafeRelease(newList);
 
 	CFArrayRef devices = CFDictionaryGetValue(packet->payload, CFSTR("DeviceList"));
 	for (uint32_t i = 0x0; i < CFArrayGetCount(devices); i++) {
@@ -205,28 +205,18 @@ SDMMD_USBMuxListenerRef SDMMD_USBMuxCreate() {
 
 void SDMMD_USBMuxClose(SDMMD_USBMuxListenerRef listener) {
 	listener->isActive = false;
-	if (listener->responses)
-		CFRelease(listener->responses);
-	if (listener->socket)
-		close(listener->socket);
-	if (listener->socketQueue)
-		dispatch_release(listener->socketQueue);
-	if (listener->responseCallback)
-		listener->responseCallback = NULL;
-	if (listener->attachedCallback)
-		listener->attachedCallback = NULL;
-	if (listener->detachedCallback)
-		listener->detachedCallback = NULL;
-	if (listener->logsCallback)
-		listener->logsCallback = NULL;
-	if (listener->deviceListCallback)
-		listener->deviceListCallback = NULL;
-	if (listener->listenerListCallback)
-		listener->listenerListCallback = NULL;
-	if (listener->unknownCallback)
-		listener->unknownCallback = NULL;
+	CFSafeRelease(listener->responses);
+	Safe(close,listener->socket);
+	Safe(dispatch_release,listener->socketQueue);
+	listener->responseCallback = NULL;
+	listener->attachedCallback = NULL;
+	listener->detachedCallback = NULL;
+	listener->logsCallback = NULL;
+	listener->deviceListCallback = NULL;
+	listener->listenerListCallback = NULL;
+	listener->unknownCallback = NULL;
 	CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerStoppedListenerNotification"), NULL, NULL, true);
-	free(listener);
+	Safe(free,listener);
 }
 
 
@@ -274,17 +264,17 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port
 		CFMutableDictionaryRef dict = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 		CFNumberRef deviceNum = CFNumberCreate(kCFAllocatorDefault, 0x3, &device->ivars.device_id);
 		CFDictionarySetValue(dict, CFSTR("DeviceID"), deviceNum);
-		CFRelease(deviceNum);
+		CFSafeRelease(deviceNum);
 		struct USBMuxPacket *connect = SDMMD_USBMuxCreatePacketType(kSDMMD_USBMuxPacketConnectType, dict);
 		if (port != 0x7ef2) {
 			uint16_t newPort = htons(port);
 			CFNumberRef portNumber = CFNumberCreate(kCFAllocatorDefault, 0x2, &newPort);
 			CFDictionarySetValue((CFMutableDictionaryRef)connect->payload, CFSTR("PortNumber"), portNumber);
-			CFRelease(portNumber);
+			CFSafeRelease(portNumber);
 		}
 		SDMMD_USBMuxSend(*socketConn, connect);
 		SDMMD_USBMuxReceive(*socketConn, connect);
-		CFRelease(dict);
+		CFSafeRelease(dict);
 	} else {
 		result = kAMDMuxConnectError;
 	}
@@ -365,9 +355,9 @@ void SDMMD_USBMuxListenerSend(SDMMD_USBMuxListenerRef listener, struct USBMuxPac
 			removeCounter++;
 		}
 	}
-	CFRelease(listener->responses);
+	CFSafeRelease(listener->responses);
 	listener->responses = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, updateWithRemove);
-	CFRelease(updateWithRemove);
+	CFSafeRelease(updateWithRemove);
 	*packet = *responsePacket;
 	dispatch_release(listener->semaphore);
 }
@@ -382,13 +372,14 @@ void SDMMD_USBMuxSend(uint32_t sock, struct USBMuxPacket *packet) {
 			ssize_t remainder = payloadSize;
 			while (remainder) {
 				result = send(sock, &buffer[payloadSize-remainder], sizeof(char), 0x0);
-				if (result != sizeof(char))
+				if (result != sizeof(char)) {
 					break;
+				}
 				remainder -= result;
 			}
 		}
 	}
-	CFRelease(xmlData);
+	CFSafeRelease(xmlData);
 }
 
 void SDMMD_USBMuxListenerReceive(SDMMD_USBMuxListenerRef listener, struct USBMuxPacket *packet) {
@@ -404,14 +395,15 @@ void SDMMD_USBMuxReceive(uint32_t sock, struct USBMuxPacket *packet) {
 			ssize_t remainder = payloadSize;
 			while (remainder) {
 				result = recv(sock, &buffer[payloadSize-remainder], sizeof(char), 0x0);
-				if (result != sizeof(char))
+				if (result != sizeof(char)) {
 					break;
+				}
 				remainder -= result;
 			}
 			CFDataRef xmlData = CFDataCreate(kCFAllocatorDefault, (UInt8 *)buffer, payloadSize);
 			packet->payload = CFPropertyListCreateFromXMLData(kCFAllocatorDefault, xmlData, kCFPropertyListImmutable, NULL);
-			free(buffer);
-			CFRelease(xmlData);
+			Safe(free,buffer);
+			CFSafeRelease(xmlData);
 		}
 	}
 }
@@ -432,7 +424,7 @@ struct USBMuxPacket * SDMMD_USBMuxCreatePacketType(SDMMD_USBMuxPacketMessageType
     uint32_t version = 3;
     CFNumberRef versionNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &version);
 	CFDictionarySetValue((CFMutableDictionaryRef)packet->payload, CFSTR("kLibUSBMuxVersion"), versionNumber);
-    if (versionNumber) CFRelease(versionNumber);
+    CFSafeRelease(versionNumber);
     
 	if (dict) {
 		CFIndex count = CFDictionaryGetCount(dict);
@@ -448,25 +440,24 @@ struct USBMuxPacket * SDMMD_USBMuxCreatePacketType(SDMMD_USBMuxPacketMessageType
 		uint16_t port = 0x7ef2;
 		CFNumberRef portNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt16Type, &port);
 		CFDictionarySetValue((CFMutableDictionaryRef)packet->payload, CFSTR("PortNumber"), portNumber);
-		CFRelease(portNumber);
+		CFSafeRelease(portNumber);
 	}
 	if (type == kSDMMD_USBMuxPacketListenType) {
 		uint32_t connection = 0x0;
 		CFNumberRef connectionType = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &connection);
 		CFDictionarySetValue((CFMutableDictionaryRef)packet->payload, CFSTR("ConnType"), connectionType);
-		CFRelease(connectionType);
+		CFSafeRelease(connectionType);
 	}
 
 	CFDataRef xmlData = CFPropertyListCreateXMLData(kCFAllocatorDefault, packet->payload);
 	packet->body.length = 0x10 + (uint32_t)CFDataGetLength(xmlData);
-	CFRelease(xmlData);
+	CFSafeRelease(xmlData);
 	return packet;
 }
 
 void USBMuxPacketRelease(struct USBMuxPacket *packet) {
-	if (CFPropertyListIsValid(packet->payload, kCFPropertyListXMLFormat_v1_0))
-		CFRelease(packet->payload);
-	free(packet);
+	CFSafeRelease(packet->payload);
+	Safe(free,packet);
 }
 
 #endif
