@@ -655,6 +655,43 @@ enum SDM_MD_FMIP_Domain_Key {
 static char *SDMMD_FMIP_DomainKeys[SDM_MD_FMIP_Domain_Key_Count] = {kIsAssociated};
 
 
+#pragma mark -
+#pragma mark iTunesStore
+#pragma mark -
+
+#define kiTunesStoreDomain						"com.apple.itunesstored"
+
+#define kAppleID								"AppleID"
+#define kAccountAvailableServiceTypes			"AccountAvailableServiceTypes"
+#define kAccountKind							"AccountKind"
+#define kAccountServiceTypes					"AccountServiceTypes"
+#define kAccountSocialEnabled					"AccountSocialEnabled"
+#define kAccountStoreFront						"AccountStoreFront"
+#define kAccountURLBagType						"AccountURLBagType"
+#define kCreditDisplayString					"CreditDisplayString"
+#define kDSPersonID								"DSPersonID"
+#define kTempStoreFront							"TempStorefront"
+
+
+enum SDM_MD_iTunesStore_Domain_Key {
+	SDM_MD_iTunesStore_Domain_Key_AppleID = 0x0,
+	SDM_MD_iTunesStore_Domain_Key_Account,
+	SDM_MD_iTunesStore_Domain_Key_AccountAvailableServiceTypes,
+	SDM_MD_iTunesStore_Domain_Key_AccountKind,
+	SDM_MD_iTunesStore_Domain_Key_AccountServiceTypes,
+	SDM_MD_iTunesStore_Domain_Key_AccountSocialEnabled,
+	SDM_MD_iTunesStore_Domain_Key_AccountStoreFront,
+	SDM_MD_iTunesStore_Domain_Key_AccountURLBagType,
+	SDM_MD_iTunesStore_Domain_Key_CreditDisplayString,
+	SDM_MD_iTunesStore_Domain_Key_DSPersonID,
+	SDM_MD_iTunesStore_Domain_Key_TempStoreFront,
+	SDM_MD_iTunesStore_Domain_Key_Count
+};
+
+static char *SDMMD_iTunesStore_DomainKeys[SDM_MD_iTunesStore_Domain_Key_Count] =  {kAppleID,kAccountAvailableServiceTypes,kAccountKind,kAccountServiceTypes,kAccountSocialEnabled,kAccountStoreFront,kAccountURLBagType,kCreditDisplayString,kDSPersonID,kTempStoreFront};
+
+
+
 enum SDM_MD_Domain_Values {
 	SDM_MD_Domain_Global = 0x0,
 	SDM_MD_Domain_Wireless,
@@ -673,6 +710,7 @@ enum SDM_MD_Domain_Values {
 	SDM_MD_Domain_Accessibility,
 	SDM_MD_Domain_Purple,
 	SDM_MD_Domain_FMIP,
+	SDM_MD_Domain_iTunesStore,
 	SDM_MD_Domain_Count
 };
 
@@ -699,7 +737,8 @@ ATR_UNUSED static struct SDM_MD_Domain_Key SDMMDKnownDomain[SDM_MD_Domain_Count]
 	{kDebugDomain, SDMMD_Debug_DomainKeys, SDM_MD_Debug_Domain_Key_Count},
 	{kAccessibilityDomain, SDMMD_Accessibility_DomainKeys, SDM_MD_Accessibility_Domain_Key_Count},
 	{kPurpleBuddyDomain, SDMMD_Purple_DomainKeys, SDM_MD_Purple_Domain_Key_Count},
-	{kfmipDomain, SDMMD_FMIP_DomainKeys, SDM_MD_FMIP_Domain_Key_Count}
+	{kfmipDomain, SDMMD_FMIP_DomainKeys, SDM_MD_FMIP_Domain_Key_Count},
+	{kiTunesStoreDomain, SDMMD_iTunesStore_DomainKeys, SDM_MD_iTunesStore_Domain_Key_Count}
 };
 
 
