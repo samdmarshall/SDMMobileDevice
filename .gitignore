@@ -1,6 +1,6 @@
 build/
 .DS_Store
-SDMMobileDevice.xcworkspace/xcuserdata/*
+*.xcworkspace/xcuserdata/*
 *.xcodeproj/*.mode*
 *.xcodeproj/*.pbxuser
 *.xcodeproj/*.perspectivev*
