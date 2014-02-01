@@ -1431,7 +1431,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 			CFDictionaryRef properties = (CFDictionaryContainsKey(dictionary, CFSTR("Properties")) ? CFDictionaryGetValue(dictionary, CFSTR("Properties")) : dictionary);
 			
 			CFNumberRef deviceId = CFDictionaryGetValue(properties, CFSTR("DeviceID"));
-			CFNumberGetValue(deviceId, 0x4, &device->ivars.device_id);
+			CFNumberGetValue(deviceId, kCFNumberSInt32Type/*0x4*/, &device->ivars.device_id);
 			
 			CFStringRef serialNumber = CFDictionaryGetValue(properties, CFSTR("SerialNumber"));
 			device->ivars.unique_device_id = serialNumber;
@@ -1441,10 +1441,10 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 				device->ivars.connection_type = 0x0;
 				
 				CFNumberRef productId = CFDictionaryGetValue(properties, CFSTR("ProductID"));
-				CFNumberGetValue(productId, kCFNumberSInt16Type, &device->ivars.product_id);
+				CFNumberGetValue(productId, kCFNumberSInt16Type/*0x2*/, &device->ivars.product_id);
 				
 				CFNumberRef locationId = CFDictionaryGetValue(properties, CFSTR("LocationID"));
-				CFNumberGetValue(locationId, kCFNumberSInt32Type, &device->ivars.location_id);
+				CFNumberGetValue(locationId, kCFNumberSInt32Type/*0x4*/, &device->ivars.location_id);
 				
 			} else if (CFStringCompare(linkType, CFSTR("Network"), 0) == 0 || CFStringCompare(linkType, CFSTR("WiFi"), 0) == 0) {
 				device->ivars.connection_type = 0x1;

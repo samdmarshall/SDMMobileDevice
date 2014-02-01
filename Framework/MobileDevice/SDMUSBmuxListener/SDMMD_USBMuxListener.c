@@ -290,7 +290,6 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 			struct USBMuxPacket *packet = (struct USBMuxPacket *)calloc(0x1, sizeof(struct USBMuxPacket));
 			SDMMD_USBMuxReceive((*listener)->socket, packet);
 			if (CFPropertyListIsValid(packet->payload, kCFPropertyListXMLFormat_v1_0)) {
-				PrintCFType(packet->payload);
 				if (CFDictionaryContainsKey(packet->payload, CFSTR("MessageType"))) {
 					CFStringRef type = CFDictionaryGetValue(packet->payload, CFSTR("MessageType"));
 					if (CFStringCompare(type, SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketResultType], 0x0) == 0x0) {

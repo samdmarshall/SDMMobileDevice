@@ -92,7 +92,7 @@ typedef AMDInterfaceConnectionType sdmmd_interface_return_t;
 
 /* Classes */
 
-#define SDMMD_AMDeviceRef struct sdmmd_am_device*
+typedef struct sdmmd_am_device* SDMMD_AMDeviceRef;
 
 #pragma mark -
 void SDMMD_AMDeviceRefClassInitialize();
