@@ -282,7 +282,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 												if (deviceCertVal && rootPrivKeyVal) {
 													ssl = SDMMD_lockssl_handshake((device->ivars.lockdown_conn), rootCertVal, deviceCertVal, rootPrivKeyVal, 0x1);
 													if (ssl) {
-														result = 0x0;
+														result = kAMDSuccess;
 													} else {
 														printf("_TurnOnSSLOverSocket: Could not perform SSL handshake.\n");
 														result = kAMDNoWifiSyncSupportError;

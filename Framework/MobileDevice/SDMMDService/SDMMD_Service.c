@@ -112,7 +112,7 @@ sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 			received = recv(handle.socket.conn, &length, 0x4, 0);
 		}
 		length = ntohl(length);
-		if (sizeof(length) == 0x4) {
+		if (sizeof(length) == 0x4 && received != 0x0) {
 			unsigned char *buffer = calloc(0x1, length);
 			uint32_t remainder = length;
 			while (remainder) {
