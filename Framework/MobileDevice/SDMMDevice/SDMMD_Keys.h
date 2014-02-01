@@ -32,6 +32,12 @@
 // these keys require no domain, pass NULL as the domain
 #define kGlobalDomain							"NULL"
 
+/*
+ kCTPostponementInfoUniqueID
+ kCTPostponementInfoPRIVersion
+ kCTPostponementInfoPRLName
+ kCTPostponementStatus
+*/
 
 #define kActivationPublicKey 					"ActivationPublicKey"
 #define kActivationState						"ActivationState"
@@ -40,22 +46,30 @@
 #define kActivityURL							"ActivityURL"
 #define kAirplaneMode							"AirplaneMode"
 #define kApNonce								"ApNonce"
+#define kBasebandActivationTicketVersion		"BasebandActivationTicketVersion"
 #define kBasebandBoardSerialNumber				"BasebandBoardSerialNumber"
 #define kBasebandBootloaderVersion				"BasebandBootloaderVersion"
+#define kBasebandCertId							"BasebandCertId"
+#define kBasebandChipID							"BasebandChipID"
 #define kBasebandGoldCertId						"BasebandGoldCertId"
 #define kBasebandKeyHashInformation				"BasebandKeyHashInformation"
+#define kBasebandMasterKeyHash					"BasebandMasterKeyHash"
 #define kBasebandNonce							"BasebandNonce"
+#define kBasebandRegionSKU						"BasebandRegionSKU"
 #define kBasebandSerialNumber 					"BasebandSerialNumber"
 #define kBasebandStatus 						"BasebandStatus"
 #define kBasebandVersion 						"BasebandVersion"
 #define kBoardId								"BoardId"
 #define kBluetoothAddress 						"BluetoothAddress"
 #define kBrickState								"BrickState"
+#define kBuildExpireTime						"BuildExpireTime"
 #define kBuildVersion 							"BuildVersion"
 #define kCarrierBuild							"CarrierBuild"
 #define kCarrierBundleInfo						"CarrierBundleInfo"
 #define kCarrierBundleInfoArray					"CarrierBundleInfoArray"
+#define kCertID									"CertID"
 #define kChipID									"ChipID"
+#define kChipSerialNo							"ChipSerialNo"
 #define kCompassCalibration						"CompassCalibration"
 #define kCPUArchitecture 						"CPUArchitecture"
 #define kDeviceCertificate 						"DeviceCertificate"
@@ -70,6 +84,7 @@
 #define kFirmwarePreflightInfo					"FirmwarePreflightInfo"
 #define kFirmwareVersion 						"FirmwareVersion"
 #define kFirstTime								"FirstTime"
+#define kFusingStatus							"FusingStatus"
 #define kHardwareModel 							"HardwareModel"
 #define kHardwarePlatform 						"HardwarePlatform"
 #define kHostAttached 							"HostAttached"
@@ -88,6 +103,7 @@
 #define kPartitionType 							"PartitionType"
 #define kPasswordProtected 						"PasswordProtected"
 #define kPhoneNumber 							"PhoneNumber"
+#define kPkHash									"PkHash"
 #define kProductionSOC 							"ProductionSOC"
 #define kProductType 							"ProductType"
 #define kProductVersion 						"ProductVersion"
@@ -318,6 +334,8 @@ static char *SDMMD_International_DomainKeys[SDM_MD_International_Domain_Key_Coun
 #define kDevToolsAvailable						"DevToolsAvailable"
 #define kDiagData								"DiagData"
 #define kSysCfgData								"SysCfgData"
+#define kCarrierBuild							"CarrierBuild"
+#define kUIBuild								"UIBuild"
 
 enum SDM_MD_Internal_Domain_Key {
 	SDM_MD_Internal_Domain_Key_kIsInternal = 0x0,
@@ -628,9 +646,34 @@ static char *SDMMD_Accessibility_DomainKeys[SDM_MD_Accessibility_Domain_Key_Coun
 #pragma mark Purple Buddy Domain Keys
 #pragma mark -
 
-#define kPurpleBuddyDomain						"com.apple.purplebuddy"
+#define kPurpleBuddyDomain								"com.apple.purplebuddy"
 
-#define kSetupState								"SetupState"
+#define kSetupState										"SetupState"
+#define kSetupVersion									"SetupVersion"
+#define kWebKitAcceleratedDrawingEnabled				"WebKitAcceleratedDrawingEnabled"
+#define kWebKitLocalStorageDatabasePathPreferenceKey	"WebKitLocalStorageDatabasePathPreferenceKey"
+#define kWebKitShrinksStandaloneImagesToFit				"WebKitShrinksStandaloneImagesToFit"
+#define kLocationServicesPresented						"LocationServicesPresented"
+#define kSSDeviceType_N42AP								"SSDeviceType_N42AP"
+#define kGuessedCountry									"GuessedCountry"
+#define kLocale											"Locale"
+#define kAppleIDPB3Presented							"AppleIDPB3Presented"
+#define kSetupFinishedAllSteps							"SetupFinishedAllSteps"
+#define kKeychainSyncPresented							"KeychainSyncPresented"
+#define kPBTCPresented									"PBTCPresented"
+#define kLanguage										"Language"
+#define kAppleIDForceUpgrade							"AppleIDForceUpgrade"
+#define kAssistantPresented								"AssistantPresented"
+#define kAppleIDPB5Presented							"AppleIDPB5Presented"
+#define kWebDatabaseDirectory							"WebDatabaseDirectory"
+#define kWebKitOfflineWebApplicationCacheEnabled		"WebKitOfflineWebApplicationCacheEnabled"
+#define kWiFiPresented									"WiFiPresented"
+#define kRestoreChoice									"RestoreChoice"
+#define kWebKitDiskImageCacheSavedCacheDirectory		"WebKitDiskImageCacheSavedCacheDirectory"
+#define kSetupDone										"SetupDone"
+#define kPBDiagnosticsPresented							"PBDiagnosticsPresented"
+#define kAppleIDPB2Presented							"AppleIDPB2Presented"
+
 
 enum SDM_MD_Purple_Domain_Key {
 	SDM_MD_Purple_Domain_Key_kSetupState = 0x0,
@@ -705,6 +748,18 @@ enum SDM_MD_iTunesBackup_Domain_Key {
 };
 
 static char *SDMMD_iTunesBackup_DomainKeys[SDM_MD_iTunesBackup_Domain_Key_Count] = {kLastBackupComputerName,kLastBackupComputerType};
+
+
+#pragma mark -
+#pragma mark SMF Domain
+#pragma mark -
+
+#define kSMFDomain								"com.apple.smf"
+
+#define kIDLastSeenAtBoot						"IDLastSeenAtBoot"
+#define kIDLastSeenAtBootBuild					"IDLastSeenAtBootBuild"
+#define kIDCreatedWithBuild						"IDCreatedWithBuild"
+#define kStoredIdentity							"StoredIdentity"
 
 
 #pragma mark -
