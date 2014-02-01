@@ -236,6 +236,7 @@ SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostC
 								printf("lockssl_handshake: SSL handshake controlled failure %d: %s.\n", err, reason);
 							}
 							SSL_free(ssl);
+							ssl = NULL;
 						}
 					} else {
 						printf("_create_ssl: Could not create SSL thing.\n");

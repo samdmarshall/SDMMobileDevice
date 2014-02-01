@@ -108,12 +108,12 @@
 			printf("debug start: 0x%08x\n",result);
 			
 			CFShow(CFDictionaryGetValue(app, CFSTR("Path")));
-			CFStringRef encodedPath = SDMMD_EncodeForDebuggingCommand(CFDictionaryGetValue(app, CFSTR("Path")));
-			CFStringRef containerPath = SDMMD_EncodeForDebuggingCommand(CFDictionaryGetValue(app, CFSTR("Container")));
+			CFStringRef encodedPath = SDMMD_CreateEncodeForDebuggingCommand(CFDictionaryGetValue(app, CFSTR("Path")));
+			CFStringRef containerPath = SDMMD_CreateEncodeForDebuggingCommand(CFDictionaryGetValue(app, CFSTR("Container")));
 			CFShow(encodedPath);
 			CFShow(containerPath);
 			sdmmd_debug_return_t dresult;
-			dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugQSetMaxPacketSize], SDMMD_EncodeForDebuggingCommand(CFSTR("1024")));
+			dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugQSetMaxPacketSize], SDMMD_CreateEncodeForDebuggingCommand(CFSTR("1024")));
 			CFShow(dresult.data);
 			dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugQSetWorkingDir], containerPath);
 			CFShow(dresult.data);

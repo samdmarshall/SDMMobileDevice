@@ -93,7 +93,7 @@ sdmmd_return_t SDMMD_StopDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDMM
 	return result;
 }
 
-CFStringRef SDMMD_EncodeForDebuggingCommand(CFStringRef command) {
+CFStringRef SDMMD_CreateEncodeForDebuggingCommand(CFStringRef command) {
 	unsigned char *commandString = malloc(CFStringGetLength(command));
 	CFIndex length = CFStringGetBytes(command, CFRangeMake(0,CFStringGetLength(command)), kCFStringEncodingUTF8, 0, true, commandString, CFStringGetLength(command), NULL);
 	unsigned char *encodedCommand = malloc(sizeof(unsigned char));
@@ -104,7 +104,10 @@ CFStringRef SDMMD_EncodeForDebuggingCommand(CFStringRef command) {
 		encodedCommand[pos] = kHexEncode[commandString[i] >> 4];
 		encodedCommand[pos+1] = kHexEncode[commandString[i] & 0x0f];
 	}
-	return CFStringCreateWithBytes(kCFAllocatorDefault, encodedCommand, length*2, kCFStringEncodingUTF8, true);
+	Safe(free, commandString);
+	CFStringRef resultString = CFStringCreateWithBytes(kCFAllocatorDefault, encodedCommand, length*2, kCFStringEncodingUTF8, true);
+	Safe(free, encodedCommand);
+	return resultString;
 }
 
 sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, SDMMD_DebugCommandType commandType, CFStringRef encodedCommand) {
@@ -168,11 +171,13 @@ sdmmd_debug_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef connectio
 			} else {
 				result = kAMDInvalidResponseError;
 			}
+			Safe(free, response);
 		}
 	}
 	return (sdmmd_debug_return_t){result, *data};
 }
 
+/*
 CFURLRef copy_device_app_url(SDMMD_AMDeviceRef device, CFStringRef identifier) {
 	CFArrayRef values = SDMMD_ApplicationLookupDictionary();
 	CFMutableDictionaryRef optionsDict = SDMMD_create_dict();
@@ -301,6 +306,7 @@ void fdvendor_callback(CFSocketRef s, CFSocketCallBackType callbackType, CFDataR
     CFSafeRelease(s);
 }
 
+
 void SDMMD_StartDebugger(SDMMD_AMDebugConnectionRef connection, CFStringRef bundleId) {
 	
 	CFSocketContext context = { 0, (*(void**)&(connection->ivars.socket)), NULL, NULL, NULL };
@@ -390,5 +396,6 @@ void SDMMD_StartDebugger(SDMMD_AMDebugConnectionRef connection, CFStringRef bund
     }
 	CFRunLoopRun();
 }
+*/
 
 #endif

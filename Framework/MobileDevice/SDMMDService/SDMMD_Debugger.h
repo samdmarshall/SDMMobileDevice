@@ -175,7 +175,7 @@ sdmmd_return_t SDMMD_StopDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDMM
 
 void SDMMD_StartDebugger(SDMMD_AMDebugConnectionRef connection, CFStringRef bundleId);
 
-CFStringRef SDMMD_EncodeForDebuggingCommand(CFStringRef command);
+CFStringRef SDMMD_CreateEncodeForDebuggingCommand(CFStringRef command);
 
 sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, SDMMD_DebugCommandType commandType, CFStringRef command);
 sdmmd_debug_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef connection, CFDataRef *data);
