@@ -31,6 +31,7 @@
 #include <errno.h>
 #include <openssl/bio.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
 #include <sys/types.h>
 #include <sys/select.h>
 #include "CFRuntime.h"
@@ -997,27 +998,27 @@ sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, b
 	sdmmd_return_t result = kAMDSuccess;
 	uint32_t sock = 0xffffffff;
 	uint32_t mask = 0x1;
+	struct timeval timeout = { 25, 0 };
 	if (device) {
 		if (socket) {
 			result = kAMDDeviceDisconnectedError;
 			if (device->ivars.device_active) {
 				if (device->ivars.connection_type == 1) {
 					uint32_t dataLen = (uint32_t)CFDataGetLength(device->ivars.network_address);
-					struct sockaddr *address = calloc(1, dataLen); 
+					struct sockaddr_storage address = {0};
 					if (dataLen == 0x80) {
-						CFDataGetBytes(device->ivars.network_address, CFRangeMake(0, dataLen), (UInt8*)address);
-						sock = socket(0x2, 0x1, 0x0);
-						if (setsockopt(sock, 0xffff, 0x1022, &mask, 0x4)) {
+						CFDataGetBytes(device->ivars.network_address, CFRangeMake(0, dataLen), (UInt8*)&address);
+						sock = socket(AF_INET, SOCK_STREAM, 0);
+						if (setsockopt(sock, SOL_SOCKET, SO_NOSIGPIPE, &mask, sizeof(mask))) {
 							
 						}
-						mask = 0x19;
-						if (setsockopt(sock, 0xffff, 0x1005, &mask, 0x10)) {
+						if (setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout))) {
 						 
 						}
-						if (setsockopt(sock, 0xffff, 0x1006, &mask, 0x10)) {
+						if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout))) {
 						 
 						}
-						result = connect(sock, address, 0x10);
+						result = connect(sock, (const struct sockaddr *)&address, sizeof(struct sockaddr_in));
 						printf("connection status: %i\n",result);
 					} else {
 						printf("_AMDeviceConnectByAddressAndPort: doesn't look like a sockaddr_storage.\n");

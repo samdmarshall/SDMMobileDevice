@@ -228,19 +228,18 @@ void SDMMD_USBMuxClose(SDMMD_USBMuxListenerRef listener) {
 
 uint32_t SDMMD_ConnectToUSBMux() {
 	sdmmd_return_t result = 0x0;
-	uint32_t sock = socket(AF_UNIX, SOCK_STREAM, 0x0);
+	uint32_t sock = socket(AF_UNIX, SOCK_STREAM, 0);
 	uint32_t mask = 0x00010400;
-	if (setsockopt(sock, 0xffff, 0x1001, &mask, 0x4)) {
+	if (setsockopt(sock, SOL_SOCKET, SO_SNDBUF, &mask, sizeof(mask))) {
 		result = 0x1;
 		printf("SDMMD_USBMuxConnectByPort: setsockopt SO_SNDBUF failed: %d - %s\\n", errno, strerror(errno));
 	}
-	mask = 0x00010400;
-	if (setsockopt(sock, 0xffff, 0x1002, &mask, 0x4)) {
+	if (setsockopt(sock, SOL_SOCKET, SO_RCVBUF, &mask, sizeof(mask))) {
 		result = 0x2;
 		printf("SDMMD_USBMuxConnectByPort: setsockopt SO_RCVBUF failed: %d - %s\\n", errno, strerror(errno));
 	}
 	mask = 0x1;
-	if (setsockopt(sock, 0xffff, 0x1022, &mask, 0x4)) {
+	if (setsockopt(sock, SOL_SOCKET, SO_NOSIGPIPE, &mask, sizeof(mask))) {
 		result = 0x3;
 		printf("SDMMD_USBMuxConnectByPort: setsockopt SO_NOSIGPIPE failed: %d - %s\\n", errno, strerror(errno));
 	}
@@ -248,11 +247,11 @@ uint32_t SDMMD_ConnectToUSBMux() {
 		char *mux = "/var/run/usbmuxd";
 		struct sockaddr_un address;
 		address.sun_family = AF_UNIX;
-		strncpy(address.sun_path, mux, 0x68);
+		strncpy(address.sun_path, mux, sizeof(address.sun_path));
         address.sun_len = SUN_LEN(&address);
 
 		result = connect(sock, (const struct sockaddr *)&address, sizeof(struct sockaddr_un));
-		ioctl(sock, 0x8004667e/*, nope */); // _USBMuxSetSocketBlockingMode
+		ioctl(sock, FIONBIO, 1);///*, nope */); // _USBMuxSetSocketBlockingMode
 	}
 	return sock;
 }
