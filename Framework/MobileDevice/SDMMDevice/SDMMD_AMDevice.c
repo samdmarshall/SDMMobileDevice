@@ -120,7 +120,7 @@ X509* SDMMD__decode_certificate(CFDataRef cert) {
 			if (result == NULL) {
 				printf("_decode_certificate: PEM_read_bio_X509 failed.\n");
 			}
-			BIO_free(newBIO);
+			Safe(BIO_free,newBIO);
 		}
 		
 	}
@@ -147,12 +147,14 @@ int SDMMD__ssl_verify_callback(int value, X509_STORE_CTX *store) {
 				uint32_t length2 = i2d_X509(decoded, &var_8);
 				var_16 = var_16 - length1 - 6; // this is bad, the validation works, i am honestly not sure what apple is trying to do here but it wouldn't work for me.
 				if (length1 == length2) {
-					if (memcmp(var_8, var_16, length1) == 0)
+					if (memcmp(var_8, var_16, length1) == 0) {
 						result = true;
-					else 
+					} else {
 						result = false;
-				} else
+					}
+				} else {
 					result = false;
+				}
 			}
 			
 		} else {
@@ -187,30 +189,29 @@ SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostC
 		BIO *dataBIO = SDMMD__create_bio_from_data(hostPrivKey);
 		if (dataBIO == 0) {
 			printf("_create_ssl_context: Could not decode host private key.\n");
-			if (cert) {
-				X509_free(cert);
-				result = 0x0;
-			}
+			Safe(X509_free,cert);
+			result = 0x0;
 		} else {
 			PEM_read_bio_RSAPrivateKey(dataBIO, &rsa, 0x0, 0x0);
-			BIO_free(dataBIO);
+			Safe(BIO_free,dataBIO);
 			if (rsa) {
 				if (hostCert) {
 					sslCTX = SSL_CTX_new(SSLv3_method());
 					if (sslCTX) {
 						result = SSL_CTX_use_certificate(sslCTX, cert);
-						if (result == 0)
+						if (result == 0) {
 							printf("_create_ssl_context: Could not set certificate.\n");
+						}
 						result = SSL_CTX_use_RSAPrivateKey(sslCTX, rsa);
-						if (result == 0)
+						if (result == 0) {
 							printf("_create_ssl_context: Could not set private key.\n");
+						}
 					} else {
 						printf("_create_ssl_context: Could not create SSLv3 context.\n");
 					}
 				}
-				RSA_free(rsa);
-				if (cert)
-					X509_free(cert);
+				Safe(RSA_free,rsa);
+				Safe(X509_free,cert);
 				if (sslCTX) {
 					ssl = SSL_new(sslCTX);
 					if (ssl) {
@@ -235,8 +236,8 @@ SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostC
 								char *reason = SDMMD_ssl_strerror(ssl, 0x0);
 								printf("lockssl_handshake: SSL handshake controlled failure %d: %s.\n", err, reason);
 							}
-							SSL_free(ssl);
-							ssl = NULL;
+							Safe(SSL_free,ssl);
+							ssl = 0x0;
 						}
 					} else {
 						printf("_create_ssl: Could not create SSL thing.\n");
@@ -244,10 +245,8 @@ SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostC
 				}
 			} else {
 				printf("_create_ssl_context: Could not decode private key.\n");
-				if (cert) {
-					X509_free(cert);
-					result = 0x0;
-				}
+				Safe(X509_free,cert);
+				result = 0x0;
 			}
 		}
 	} else {
@@ -331,10 +330,12 @@ CFTypeRef SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain
 			CFMutableDictionaryRef getVal = SDMMD__CreateMessageDict(CFSTR("GetValue"));
 			if (getVal) {
 				CFMutableDictionaryRef response;
-				if (domain == NULL)
+				if (domain == NULL) {
 					domain = CFSTR("NULL");
-				if (key == NULL)
+				}
+				if (key == NULL) {
 					key = CFSTR("NULL");
+				}
 				
 				if (CFStringCompare(domain, CFSTR("NULL"), 0) != 0) {
 					CFDictionarySetValue(getVal, CFSTR("Domain"), domain);
@@ -350,10 +351,11 @@ CFTypeRef SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain
 					if (result == 0x0) {
 						*err = CFDictionaryGetValue(response, CFSTR("Error"));
 						if (*err) {
-							if (CFGetTypeID(*err) == CFStringGetTypeID())
+							if (CFGetTypeID(*err) == CFStringGetTypeID()) {
 								result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(*err);
-							else
+							} else {
 								result = kAMDInvalidResponseError;
+							}
 						} else {
 							value = CFDictionaryGetValue(response, CFSTR("Value"));
 						}
@@ -414,10 +416,8 @@ sdmmd_return_t SDMMD_send_set_value(SDMMD_AMDeviceRef device, CFStringRef domain
 sdmmd_return_t SDMMD_lockdown_connection_destory(SDMMD_lockdown_conn *lockdownCon) {
 	sdmmd_return_t result = 0x0;
 	if (lockdownCon) {
-		if (lockdownCon->ssl != 0x0) {
-			SSL_free(lockdownCon->ssl);
-			lockdownCon->ssl = NULL;
-		}
+		Safe(SSL_free,lockdownCon->ssl);
+		lockdownCon->ssl = NULL;
 		if (lockdownCon->connection != 0xff) {
 			result = close((uint32_t)lockdownCon->connection);
 			if (result == 0xff) {
@@ -425,11 +425,10 @@ sdmmd_return_t SDMMD_lockdown_connection_destory(SDMMD_lockdown_conn *lockdownCo
 			}
 			lockdownCon->connection = 0x0;
 		}
-		if (lockdownCon->pointer) {
-			free(lockdownCon->pointer);
-		}
+		Safe(free,lockdownCon->pointer);
 		result = 0x0;
-		free(lockdownCon);
+		Safe(free,lockdownCon);
+		lockdownCon = NULL;
 	}
 	return result;
 }
@@ -1442,10 +1441,10 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 				device->ivars.connection_type = 0x0;
 				
 				CFNumberRef productId = CFDictionaryGetValue(properties, CFSTR("ProductID"));
-				CFNumberGetValue(productId, 0x2, &device->ivars.product_id);
+				CFNumberGetValue(productId, kCFNumberSInt16Type, &device->ivars.product_id);
 				
 				CFNumberRef locationId = CFDictionaryGetValue(properties, CFSTR("LocationID"));
-				CFNumberGetValue(locationId, 0x4, &device->ivars.location_id);
+				CFNumberGetValue(locationId, kCFNumberSInt32Type, &device->ivars.location_id);
 				
 			} else if (CFStringCompare(linkType, CFSTR("Network"), 0) == 0 || CFStringCompare(linkType, CFSTR("WiFi"), 0) == 0) {
 				device->ivars.connection_type = 0x1;

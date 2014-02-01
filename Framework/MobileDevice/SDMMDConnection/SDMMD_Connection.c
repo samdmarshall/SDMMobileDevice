@@ -134,7 +134,7 @@ sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef se
 						if (result == 0) {
 							CFMutableDictionaryRef response;
 							result = SDMMD_lockconn_receive_message(device, &response);
-							if (result == 0) {
+							if (result == 0 && response) {
 								result = kAMDInvalidResponseError;
 								CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
 								if (error) {
