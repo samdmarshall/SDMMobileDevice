@@ -132,7 +132,7 @@ sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef se
 						result = SDMMD_lockconn_send_message(device, dict);
 						CFSafeRelease(dict);
 						if (result == 0) {
-							CFMutableDictionaryRef response;
+							CFMutableDictionaryRef response = NULL;
 							result = SDMMD_lockconn_receive_message(device, &response);
 							if (result == 0 && response) {
 								result = kAMDInvalidResponseError;
