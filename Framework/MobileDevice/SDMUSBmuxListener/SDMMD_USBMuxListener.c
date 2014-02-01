@@ -117,10 +117,10 @@ void SDMMD_USBMuxAttachedCallback(void *context, struct USBMuxPacket *packet) {
 			CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotification"), newDevice, NULL, true);
 			CFSafeRelease(SDMMobileDevice->deviceList);
 			SDMMobileDevice->deviceList = CFArrayCreateCopy(kCFAllocatorDefault, updateWithNew);
-			CFSafeRelease(updateWithNew);
 		} else if (newDevice->ivars.connection_type == 0x1) {
 			// wifi
 		}
+		CFSafeRelease(updateWithNew);
 	}
 	CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotificationFinished"), newDevice, NULL, true);
 }

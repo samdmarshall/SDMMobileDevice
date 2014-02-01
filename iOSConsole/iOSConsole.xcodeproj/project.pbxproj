@@ -31,6 +31,8 @@
 		22B955821878DA5F004DCBF0 /* apps.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B955811878DA5F004DCBF0 /* apps.c */; };
 		22B955881878F14F004DCBF0 /* run.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B955871878F14F004DCBF0 /* run.c */; };
 		22B9558A1878F4A7004DCBF0 /* SDMMD_Debugger.c in Sources */ = {isa = PBXBuildFile; fileRef = 22310DA518750D430092C107 /* SDMMD_Debugger.c */; };
+		22C892B3189D75C7008B1D2D /* Buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 22C892B1189D75C7008B1D2D /* Buffer.c */; };
+		22C892B6189D75CC008B1D2D /* CFDataAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22C892B4189D75CC008B1D2D /* CFDataAddition.c */; };
 		22DEF94018833562008E909F /* CFTypeAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22DEF93F18833562008E909F /* CFTypeAddition.c */; };
 		22FFB8CE1880DE140073095D /* CFDictionaryAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22FFB8C21880DE140073095D /* CFDictionaryAddition.c */; };
 		22FFB8CF1880DE140073095D /* Matrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 22FFB8C61880DE140073095D /* Matrix.c */; };
@@ -124,6 +126,10 @@
 		22B955871878F14F004DCBF0 /* run.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = run.c; sourceTree = "<group>"; };
 		22B955891878F157004DCBF0 /* run.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = run.h; sourceTree = "<group>"; };
 		22B9558B1879DB51004DCBF0 /* libncurses.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libncurses.dylib; path = usr/lib/libncurses.dylib; sourceTree = SDKROOT; };
+		22C892B1189D75C7008B1D2D /* Buffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Buffer.c; sourceTree = "<group>"; };
+		22C892B2189D75C7008B1D2D /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
+		22C892B4189D75CC008B1D2D /* CFDataAddition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CFDataAddition.c; sourceTree = "<group>"; };
+		22C892B5189D75CC008B1D2D /* CFDataAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFDataAddition.h; sourceTree = "<group>"; };
 		22DEF93E18833556008E909F /* CFTypeAddition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CFTypeAddition.h; sourceTree = "<group>"; };
 		22DEF93F18833562008E909F /* CFTypeAddition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CFTypeAddition.c; sourceTree = "<group>"; };
 		22FFB8C01880DE140073095D /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
@@ -406,6 +412,8 @@
 		22FFB8BF1880DE140073095D /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				22C892B1189D75C7008B1D2D /* Buffer.c */,
+				22C892B2189D75C7008B1D2D /* Buffer.h */,
 				220B5B1C188375040082AF84 /* Attributes.h */,
 				22FFB8C01880DE140073095D /* Core.h */,
 				22FFB8C11880DE140073095D /* CoreFoundation */,
@@ -422,6 +430,8 @@
 		22FFB8C11880DE140073095D /* CoreFoundation */ = {
 			isa = PBXGroup;
 			children = (
+				22C892B4189D75CC008B1D2D /* CFDataAddition.c */,
+				22C892B5189D75CC008B1D2D /* CFDataAddition.h */,
 				22FFB8C31880DE140073095D /* CFDictionaryAddition.h */,
 				22FFB8C21880DE140073095D /* CFDictionaryAddition.c */,
 				22DEF93E18833556008E909F /* CFTypeAddition.h */,
@@ -501,9 +511,11 @@
 				22310DB118750D9E0092C107 /* SDMMD_Applications.c in Sources */,
 				22310DB218750D9E0092C107 /* SDMMD_Connection.c in Sources */,
 				22648F96189440F700133948 /* power.c in Sources */,
+				22C892B6189D75CC008B1D2D /* CFDataAddition.c in Sources */,
 				22310DB318750D9E0092C107 /* SDMMD_Error.c in Sources */,
 				22310DB418750D9E0092C107 /* SDMMD_AMDevice.c in Sources */,
 				22B9557918789DB7004DCBF0 /* attach.c in Sources */,
+				22C892B3189D75C7008B1D2D /* Buffer.c in Sources */,
 				22310DB518750D9E0092C107 /* SDMMD_Notification.c in Sources */,
 				22B955821878DA5F004DCBF0 /* apps.c in Sources */,
 				22310DB618750D9E0092C107 /* SDMMD_Service.c in Sources */,
