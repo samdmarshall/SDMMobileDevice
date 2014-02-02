@@ -15,6 +15,7 @@
 #include "service.h"
 #include "attach.h"
 #include "syslog.h"
+#include "springboard.h"
 #include "Core.h"
 
 void ServiceSocketCallback(CFSocketRef s, CFSocketCallBackType callbackType, CFDataRef address, const void *data, void *info) {
@@ -142,9 +143,12 @@ void PerformService(char *udid, char *service, ...) {
 			case SDM_MD_Service_MIS_AGENT: {
 				break;
 			};
+			*/
 			case SDM_MD_Service_SPRINGBOARD_SERVICES: {
+				SpringboardQuery(udid);
 				break;
 			};
+			/*
 			case SDM_MD_Service_ATC: {
 				break;
 			};
