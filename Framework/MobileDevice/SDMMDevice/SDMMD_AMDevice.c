@@ -202,8 +202,8 @@ SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostC
 						printf("_create_ssl_context: Could not create SSLv3 context.\n");
 					}
 				}
-				Safe(RSA_free,rsa);
-				Safe(X509_free,cert);
+				//Safe(RSA_free,rsa);
+				//Safe(X509_free,cert);
 				if (sslCTX) {
 					ssl = SSL_new(sslCTX);
 					if (ssl) {
@@ -808,10 +808,12 @@ sdmmd_return_t SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFDictionaryRe
 			}
 			if (isValidHostBUID && result == kAMDSuccess) { // SDM: this is a check against the host BUID and the BUID of the pairing record. this is a security measure.
 				result = SDMMD_lockconn_send_message(device, message);
+				PrintCFType(message);
 				CFSafeRelease(message);
 				if (result == 0) {
 					CFMutableDictionaryRef recvDict = NULL;
 					result = SDMMD_lockconn_receive_message(device, &recvDict);
+					PrintCFType(recvDict);
 					if (result == 0) {
 						//CFShow(recvDict);
 						CFTypeRef resultStr = CFDictionaryGetValue(recvDict, CFSTR("Error"));
@@ -840,7 +842,7 @@ sdmmd_return_t SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFDictionaryRe
 										*session = sessionId;
 									}
 								}
-								CFSafeRelease(sessionId);
+								//CFSafeRelease(sessionId);
 							}
 						} else {
 							result = kAMDInvalidResponseError;
