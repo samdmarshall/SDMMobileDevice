@@ -341,7 +341,7 @@ static CFTypeRef SDMMD_AMDCopySystemBonjourUniqueID() {
 	char record[1025] = {0};
 	CFTypeRef value = NULL;
 	SDMMD__PairingRecordPathForIdentifier(CFSTR("SystemConfiguration"), record);
-	CFMutableDictionaryRef dict = (SDMMD__CreateDictFromFileContents(record) ? NULL : SDMMD_create_dict());
+	CFMutableDictionaryRef dict = (SDMMD__CreateDictFromFileContents(record) ?: SDMMD_create_dict());
 	if (dict) {
 		value = CFDictionaryGetValue(dict, CFSTR("SystemBUID"));
 		if (value == NULL) {
@@ -354,7 +354,6 @@ static CFTypeRef SDMMD_AMDCopySystemBonjourUniqueID() {
 			}
 		}
 	}
-	CFSafeRelease(dict);
 	return value;
 }
 

@@ -306,7 +306,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 												*connection = conn;
 												socket = 0xffffffff;
 												ssl = NULL;
-												result = 0x0;
+												result = kAMDSuccess;
 											}
 											CFSafeRelease(connDict);
 										}
@@ -325,7 +325,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 										SDMMD_AMDServiceConnectionSetDevice(&conn, device);
 										SDMMD_AMDServiceConnectionSetServiceName(&conn, service);
 										*connection = conn;
-										result = 0x0;
+										result = kAMDSuccess;
 									}
 									CFSafeRelease(connDict);
 								}
@@ -376,10 +376,11 @@ sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef 
 		if (service) {
 			if (device->ivars.device_active) {
 				CFMutableDictionaryRef optionsCopy;
-				if (options)
+				if (options) {
 				 	optionsCopy = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0x0, options);
-				else
+				} else {
 					optionsCopy = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+				}
 				if (optionsCopy) {
 					CFDictionarySetValue(optionsCopy, CFSTR("CloseOnInvalidate"), kCFBooleanFalse);
 					result = SDMMD_AMDeviceSecureStartService(device, service, optionsCopy, connection);
