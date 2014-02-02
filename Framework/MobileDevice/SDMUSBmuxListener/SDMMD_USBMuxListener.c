@@ -182,8 +182,9 @@ void SDMMD_USBMuxListenerListCallback(void *context, struct USBMuxPacket *packet
 
 void SDMMD_USBMuxUnknownCallback(void *context, struct USBMuxPacket *packet) {
 	printf("Unknown response from usbmuxd!\n");
-	if (packet->payload)
+	if (packet->payload) {
 		PrintCFType(packet->payload);
+	}
 	dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->semaphore);
 }
 

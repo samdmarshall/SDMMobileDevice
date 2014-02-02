@@ -50,7 +50,7 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
 								CFURLRef containerURL = CFURLCreateCopyDeletingLastPathComponent(kCFAllocatorDefault, pathURL);
 								container = CFURLGetString(containerURL);
 								CFSafeRelease(pathURL);
-								CFSafeRelease(containerURL);
+								//CFSafeRelease(containerURL);
 							}
 							if (container) {
 								CFStringRef containerPath = SDMMD_CreateEncodeForDebuggingCommand(container);

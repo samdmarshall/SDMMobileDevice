@@ -445,7 +445,7 @@ sdmmd_return_t SDMMD_send_unpair(SDMMD_AMDeviceRef device, CFStringRef hostId) {
 						if (result == 0x0) {
 							CFMutableDictionaryRef response = NULL;
 							result = SDMMD_lockconn_receive_message(device, &response);
-							PrintCFType(response);
+							//PrintCFType(response);
 							if (result == 0x0) {
 								CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
 								if (!error) {
@@ -549,7 +549,7 @@ sdmmd_return_t SDMMD_send_validate_pair(SDMMD_AMDeviceRef device, CFStringRef ho
 						if (result == 0x0) {
 							CFMutableDictionaryRef response = NULL;
 							result = SDMMD_lockconn_receive_message(device, &response);
-							PrintCFType(response);
+							//PrintCFType(response);
 							if (result == 0x0) {
 								CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
 								if (!error) {
@@ -808,12 +808,12 @@ sdmmd_return_t SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFDictionaryRe
 			}
 			if (isValidHostBUID && result == kAMDSuccess) { // SDM: this is a check against the host BUID and the BUID of the pairing record. this is a security measure.
 				result = SDMMD_lockconn_send_message(device, message);
-				PrintCFType(message);
+				//PrintCFType(message);
 				CFSafeRelease(message);
 				if (result == 0) {
 					CFMutableDictionaryRef recvDict = NULL;
 					result = SDMMD_lockconn_receive_message(device, &recvDict);
-					PrintCFType(recvDict);
+					//PrintCFType(recvDict);
 					if (result == 0) {
 						//CFShow(recvDict);
 						CFTypeRef resultStr = CFDictionaryGetValue(recvDict, CFSTR("Error"));

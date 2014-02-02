@@ -74,7 +74,7 @@ void AttachToSyslog(char *udid) {
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0x0), ^{
 		SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 		if (device) {
-			EnableExtendedLogging(device);
+			//EnableExtendedLogging(device);
 			SDMMD_AMConnectionRef syslog = AttachToDeviceAndService(device, AMSVC_SYSLOG_RELAY);
 			newlineBytesLength = (SDMMD_device_os_is_at_least(device, CFSTR("6.0")) ? kNewlineBytesiOS6Up : kNewlineBytesiOS5);
 			if (syslog) {

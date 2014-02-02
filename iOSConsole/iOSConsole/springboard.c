@@ -104,15 +104,61 @@ bool PageContainsBundleID(CFArrayRef page, CFStringRef bundleID, CFDictionaryRef
 	return foundBundleID;
 }
 
-CFPropertyListRef FormatHomescreen(CFArrayRef dock, CFArrayRef pages) {
-	CFPropertyListRef newFormat = CFPropertyListCreateXMLData(kCFAllocatorDefault, NULL);
+/*
+ 
+ {
+ displayIdentifier: com.apple.MobileStore
+ displayName: iTunes Store
+ iconModDate: 2014-01-15 07:27:09 +0000
+ bundleVersion: 1.0
+ bundleIdentifier: com.apple.MobileStore
+ }
+ {
+ displayIdentifier: com.apple.AppStore
+ displayName: App Store
+ iconModDate: 2014-01-15 07:23:09 +0000
+ bundleVersion: 2.0
+ bundleIdentifier: com.apple.AppStore
+ }
+ 
+*/
+
+CFPropertyListRef FormatHomescreen(CFPropertyListRef format) {
 	
-	return newFormat;
+	
+	CFMutableArrayRef newformat = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, format);
+	
+	
+	
+	CFMutableArrayRef newpage = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
+	
+	CFMutableDictionaryRef appstore = SDMMD_create_dict();
+	CFDictionarySetValue(appstore, CFSTR("displayIdentifier"), CFSTR("com.apple.AppStore"));
+	CFDictionarySetValue(appstore, CFSTR("displayName"), CFSTR("App Store"));
+	CFDictionarySetValue(appstore, CFSTR("iconModDate"), CFDateCreate(kCFAllocatorDefault, CFAbsoluteTimeGetCurrent()) );
+	CFDictionarySetValue(appstore, CFSTR("bundleVersion"), CFSTR("2.0") );
+	CFDictionarySetValue(appstore, CFSTR("bundleIdentifier"), CFSTR("com.apple.AppStore"));
+	CFArrayAppendValue(newpage, appstore);
+	
+	CFMutableDictionaryRef itunesstore = SDMMD_create_dict();
+	CFDictionarySetValue(itunesstore, CFSTR("displayIdentifier"), CFSTR("com.apple.MobileStore"));
+	CFDictionarySetValue(itunesstore, CFSTR("displayName"), CFSTR("iTunes Store"));
+	CFDictionarySetValue(itunesstore, CFSTR("iconModDate"), CFDateCreate(kCFAllocatorDefault, CFAbsoluteTimeGetCurrent()) );
+	CFDictionarySetValue(itunesstore, CFSTR("bundleVersion"), CFSTR("1.0") );
+	CFDictionarySetValue(itunesstore, CFSTR("bundleIdentifier"), CFSTR("com.apple.MobileStore"));
+	CFArrayAppendValue(newpage, itunesstore);
+	
+	CFArrayAppendValue(newformat, newpage);
+	
+	return newformat;
 }
 
 void SpringboardQuery(char *udid) {
 	SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 	if (device) {
+		
+		CFPropertyListRef newformat = NULL;
+		
 		SDMMD_AMConnectionRef springboard = AttachToDeviceAndService(device, AMSVC_SPRINGBOARD_SERVICES);
 		CFMutableDictionaryRef request = SDMMD_create_dict();
 		CFDictionarySetValue(request, CFSTR(kCommand), CFSTR(kCommandGetIconState));
@@ -123,9 +169,25 @@ void SpringboardQuery(char *udid) {
 			CFPropertyListRef response = NULL;
 			result = SDMMD_ServiceReceiveMessage(socket, &response);
 			if (result == kAMDSuccess && response) {
+				newformat = FormatHomescreen(response);
+				PrintCFType(newformat);
+				
+			}
+		}
+		
+		
+		CFMutableDictionaryRef setrequest = SDMMD_create_dict();
+		CFDictionarySetValue(setrequest, CFSTR(kCommand), CFSTR(kCommandSetIconState));
+		CFDictionarySetValue(setrequest, CFSTR("iconState"), newformat);
+		result = SDMMD_ServiceSendMessage(socket, setrequest, kCFPropertyListBinaryFormat_v1_0);
+		if (result == kAMDSuccess) {
+			CFPropertyListRef response = NULL;
+			result = SDMMD_ServiceReceiveMessage(socket, &response);
+			if (result == kAMDSuccess && response) {
 				PrintCFType(response);
 			}
 		}
+
 	}
 }
 

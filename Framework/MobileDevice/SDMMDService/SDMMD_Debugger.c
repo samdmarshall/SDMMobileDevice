@@ -140,7 +140,7 @@ sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, 
 		result = SDMMD_DebuggingReceive(connection, &data).result;
 	}
 	Safe(free, commandData);
-	CFSafeRelease(sending);
+	//CFSafeRelease(sending);
 	return (sdmmd_debug_return_t){result, data};
 }
 
