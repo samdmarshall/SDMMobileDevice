@@ -251,7 +251,7 @@ uint32_t SDMMD_ConnectToUSBMux() {
 		strncpy(address.sun_path, mux, 0x68);
         address.sun_len = SUN_LEN(&address);
 
-		result = connect(sock, (const struct sockaddr *)&address, sizeof(struct sockaddr_un));
+		connect(sock, (const struct sockaddr *)&address, sizeof(struct sockaddr_un));
 		ioctl(sock, 0x8004667e/*, nope */); // _USBMuxSetSocketBlockingMode
 	}
 	return sock;

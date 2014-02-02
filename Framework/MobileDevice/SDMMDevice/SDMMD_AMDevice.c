@@ -129,7 +129,7 @@ X509* SDMMD__decode_certificate(CFDataRef cert) {
 
 int SDMMD__ssl_verify_callback(int value, X509_STORE_CTX *store) {
 	bool result = true;
-	X509 *cert, *decoded = NULL;
+	X509 *cert = NULL, *decoded = NULL;
 	if (value || (X509_STORE_CTX_get_error(store) + 0xffffffffffffffec < 0x2)) {
 		unsigned char* var_8 = NULL;
 		unsigned char* var_16 = NULL;
@@ -141,11 +141,8 @@ int SDMMD__ssl_verify_callback(int value, X509_STORE_CTX *store) {
 			uint32_t data1 = i2d_X509(cert, NULL);
 			uint32_t data2 = i2d_X509(decoded, NULL);
 			if (data1 == data2) {
-				var_8 = calloc(1, data2);
-				var_16 = calloc(1, data1);
 				uint32_t length1 = i2d_X509(cert, &var_16);
 				uint32_t length2 = i2d_X509(decoded, &var_8);
-				var_16 = var_16 - length1 - 6; // this is bad, the validation works, i am honestly not sure what apple is trying to do here but it wouldn't work for me.
 				if (length1 == length2) {
 					if (memcmp(var_8, var_16, length1) == 0) {
 						result = true;
@@ -161,12 +158,8 @@ int SDMMD__ssl_verify_callback(int value, X509_STORE_CTX *store) {
 			printf("_ssl_verify_callback: Error verifying cert: unable to compare.\n");
 			result = false;
 		}
-		//if (cert)
-		//	X509_free(cert);
-		//if (var_8)
-		//	CRYPTO_free(var_8);
-		//if (var_16)
-		//	CRYPTO_free(var_16);
+		Safe(free,var_8);
+		Safe(free,var_16);
 	} else {
 		printf("_ssl_verify_callback: Error verifying cert: (%d %s).\n", value, X509_verify_cert_error_string(X509_STORE_CTX_get_error(store)));
 	}
@@ -190,7 +183,6 @@ SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostC
 		if (dataBIO == 0) {
 			printf("_create_ssl_context: Could not decode host private key.\n");
 			Safe(X509_free,cert);
-			result = 0x0;
 		} else {
 			PEM_read_bio_RSAPrivateKey(dataBIO, &rsa, 0x0, 0x0);
 			Safe(BIO_free,dataBIO);
@@ -246,7 +238,6 @@ SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostC
 			} else {
 				printf("_create_ssl_context: Could not decode private key.\n");
 				Safe(X509_free,cert);
-				result = 0x0;
 			}
 		}
 	} else {
@@ -358,6 +349,7 @@ CFTypeRef SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain
 							}
 						} else {
 							value = CFDictionaryGetValue(response, CFSTR("Value"));
+							result = kAMDSuccess;
 						}
 					}
 				}
@@ -369,6 +361,9 @@ CFTypeRef SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain
 		}
 	} else {
 		result = kAMDInvalidArgumentError;
+	}
+	if (result != kAMDSuccess) {
+		value = NULL;
 	}
 	return value;
 }
@@ -645,7 +640,6 @@ sdmmd_return_t SDMMD__CopyEscrowBag(SDMMD_AMDeviceRef device, CFDataRef *bag) {
 					CFDictionarySetValue(dict, CFSTR("WiFiMACAddress"), wifiValue);
 				}
 			}
-			CFSafeRelease(wifiValue);
 			bagValue = CFDictionaryGetValue(dict, CFSTR("EscrowBag"));
 			if (bagValue) {
 				if (CFGetTypeID(bagValue) == CFDataGetTypeID()) {
@@ -659,7 +653,8 @@ sdmmd_return_t SDMMD__CopyEscrowBag(SDMMD_AMDeviceRef device, CFDataRef *bag) {
 					}
 					Safe(free,path);
 				}
-			}	
+			}
+			CFSafeRelease(wifiValue);
 		}
 	}
 	return result;
@@ -758,9 +753,8 @@ sdmmd_return_t SDMMD_send_deactivation(SDMMD_AMDeviceRef device) {
 	if (device) {
 		result = kAMDNotConnectedError;
 		if (device->ivars.device_active) {
-			result = kAMDInvalidArgumentError;
+			//result = kAMDInvalidArgumentError;
 			CFMutableDictionaryRef messageDict = SDMMD__CreateMessageDict(CFSTR("Deactivate"));
-			result = kAMDNoResourcesError;
 			if (messageDict) {
 				result = SDMMD_lockconn_send_message(device, messageDict);
 				if (result == 0) {
@@ -775,6 +769,8 @@ sdmmd_return_t SDMMD_send_deactivation(SDMMD_AMDeviceRef device) {
 						}
 					}
 				}
+			} else {
+				result = kAMDNoResourcesError;
 			}
 			CFSafeRelease(messageDict);
 		}
@@ -804,10 +800,13 @@ sdmmd_return_t SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFDictionaryRe
 						CFTypeRef systemBUID = SDMMD_AMDCopySystemBonjourUniqueID();
 						isValidHostBUID = (CFStringCompare(bonjourId, systemBUID,  0x0) == kCFCompareEqualTo);
 						//CFDictionarySetValue(message, CFSTR("HostID"), bonjourId);
+						result = kAMDSuccess;
+						CFSafeRelease(systemBUID);
 					}
+
 				}
 			}
-			if (isValidHostBUID) { // SDM: this is a check against the host BUID and the BUID of the pairing record. this is a security measure.
+			if (isValidHostBUID && result == kAMDSuccess) { // SDM: this is a check against the host BUID and the BUID of the pairing record. this is a security measure.
 				result = SDMMD_lockconn_send_message(device, message);
 				CFSafeRelease(message);
 				if (result == 0) {
@@ -926,6 +925,8 @@ sdmmd_return_t SDMMD_AMDeviceStartSession(SDMMD_AMDeviceRef device) {
 		}
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 	}
+	CFSafeRelease(record);
+	CFSafeRelease(key);
 	return result;
 }
 
@@ -1323,9 +1324,11 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 							} else {
 								printf("SDMMD_AMDeviceExtendedPairWithOptions: Could not create pairing material.\n");
 							}
+							CFSafeRelease(record);
 						} else {
 							result = kAMDInvalidResponseError;
 						}
+						CFSafeRelease(value);
 					}
 				}
 			}
@@ -1378,10 +1381,12 @@ uint32_t SDMMD_AMDeviceGetConnectionID(SDMMD_AMDeviceRef device) {
 CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key) {
 	CFTypeRef value = NULL;
 	if (device->ivars.device_active) {
-		if (domain == NULL)
+		if (domain == NULL) {
 			domain = CFSTR("NULL");
-		if (key == NULL)
+		}
+		if (key == NULL) {
 			key = CFSTR("NULL");
+		}
 			
 		SDMMD__mutex_lock(device->ivars.mutex_lock);
 		CFStringRef err = NULL;
@@ -1418,8 +1423,8 @@ sdmmd_return_t SDMMD_AMDeviceSetValue(SDMMD_AMDeviceRef device, CFStringRef doma
 
 SDMMD_AMDeviceRef SDMMD_AMDeviceCreateEmpty() {
 	uint32_t extra = sizeof(AMDeviceClassBody);
-	SDMMD_AMDeviceRef device = calloc(0x1, sizeof(struct sdmmd_am_device));
-	device = (SDMMD_AMDeviceRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, _kSDMMD_AMDeviceRefID, extra, NULL);
+	//SDMMD_AMDeviceRef device = calloc(0x1, sizeof(struct sdmmd_am_device));
+	SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, _kSDMMD_AMDeviceRefID, extra, NULL);
 	return device;
 }
 
@@ -1483,7 +1488,8 @@ CFArrayRef SDMMD_AMDCreateDeviceList() {
 	struct USBMuxPacket *devicesPacket = SDMMD_USBMuxCreatePacketType(kSDMMD_USBMuxPacketListDevicesType, NULL);
 	SDMMD_USBMuxListenerSend(SDMMobileDevice->usbmuxd, devicesPacket);
 	USBMuxPacketRelease(devicesPacket);
-	return SDMMobileDevice->deviceList;
+	CFArrayRef deviceArray = CFArrayCreateCopy(kCFAllocatorDefault, SDMMobileDevice->deviceList);
+	return deviceArray;
 }
 
 SDMMD_AMDeviceRef SDMMD_AMDeviceCreateCopy(SDMMD_AMDeviceRef device) {
@@ -1551,10 +1557,11 @@ sdmmd_return_t SDMMD__hangup_with_image_mounter_service(SDMMD_AMConnectionRef co
 	return result;
 }
 
+#if 0
 sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef dict, CallBack handle, void* unknown) {
 	sdmmd_return_t result = kAMDMissingOptionsError;
 	if (dict) {
-		CFTypeRef digest;
+		CFTypeRef digest = NULL;
 		CFTypeRef imageType = CFDictionaryGetValue(dict, CFSTR("ImageType"));
 		if (imageType) {
 			CFTypeRef signature = CFDictionaryGetValue(dict, CFSTR("ImageSignature"));
@@ -1609,129 +1616,136 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 							} else {
 								result = kAMDInvalidArgumentError;
 							}
-							bool supported = SDMMD_device_os_is_at_least(device, CFSTR("7.0"));
-							bool mounted = false;
-							if (supported && result == kAMDSuccess) {
-								SDMMD_fire_callback(handle, unknown, CFSTR("CopyingImage"));
-								result = SDMMD_copy_image(device, path);
-								if (result) {
-									SDMMD_fire_callback(handle, unknown, CFSTR("StreamingImage"));
-									char fspath;
-									Boolean fsRep = CFStringGetFileSystemRepresentation(path, &fspath, 0x400);
-									if (fsRep) {
-										struct stat fileStat;
-										fstat(fspath, &fileStat);
-										CFNumberRef size = CFNumberCreate(kCFAllocatorDefault, 0xb, &fileStat.st_size);
-										CFMutableDictionaryRef streamDict = SDMMD_create_dict();
-										CFDictionarySetValue(streamDict, CFSTR("Command"), CFSTR("ReceiveBytes"));
-										CFDictionarySetValue(streamDict, CFSTR("ImageType"), imageType);
-										CFDictionarySetValue(streamDict, CFSTR("ImageSize"), size);
-										result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(connection), streamDict, kCFPropertyListXMLFormat_v1_0);
-										if (result == 0) {
-											CFDictionaryRef response;
-											result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&response);
+							if (digest) {
+								bool supported = SDMMD_device_os_is_at_least(device, CFSTR("7.0"));
+								bool mounted = false;
+								if (supported && result == kAMDSuccess) {
+									SDMMD_fire_callback(handle, unknown, CFSTR("CopyingImage"));
+									result = SDMMD_copy_image(device, path);
+									if (result) {
+										SDMMD_fire_callback(handle, unknown, CFSTR("StreamingImage"));
+										char fspath;
+										Boolean fsRep = CFStringGetFileSystemRepresentation(path, &fspath, 0x400);
+										if (fsRep) {
+											struct stat fileStat;
+											fstat(fspath, &fileStat);
+											CFNumberRef size = CFNumberCreate(kCFAllocatorDefault, 0xb, &fileStat.st_size);
+											CFMutableDictionaryRef streamDict = SDMMD_create_dict();
+											CFDictionarySetValue(streamDict, CFSTR("Command"), CFSTR("ReceiveBytes"));
+											CFDictionarySetValue(streamDict, CFSTR("ImageType"), imageType);
+											CFDictionarySetValue(streamDict, CFSTR("ImageSize"), size);
+											result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(connection), streamDict, kCFPropertyListXMLFormat_v1_0);
 											if (result == 0) {
-												if (response) {
-													CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
-													if (error) {
-														// convert error
-													} else {
-														CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
-														if (status) {
-															if (CFStringCompare(status, CFSTR("ReceiveBytesAck"), 0) == 0) {
-																// block code
-																CFShow(response);
-																/*
-																uint32_t (^block)(uint32_t, uint32_t, CFTypeRef) = ^(uint32_t size, uint32_t code, CFTypeRef thing){return code;};
-																result = SDMMD_read_file(fspath, 0x10000, block);
-																if (result == 0) {
-																	CFDictionaryRef getStatus;
-																	result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&getStatus);
-																	if (result == 0) {
-																		CFTypeRef error = CFDictionaryGetValue(getStatus, CFSTR("Error"));
-																		if (error) {
-																			// convert error
-																		} else {
-																			CFTypeRef streamStatus = CFDictionaryGetValue(getStatus, CFSTR("Status"));
-																			if (streamStatus) {
-																				if (CFStringCompare(streamStatus, CFSTR("Complete"), 0x0) == 0) {
-																					result = 0x0;
-																				}
-																			}
-																		}
-																	}
-																}
-																*/
-															}
+												CFDictionaryRef response;
+												result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&response);
+												if (result == 0) {
+													if (response) {
+														CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
+														if (error) {
+															// convert error
 														} else {
-															result = kAMDUndefinedError;
-														}
-													}
-												} else {
-													result = kAMDReadError;
-												}
-											}
-										}
-									} else {
-										result = kAMDNoResourcesError;
-									}
-								}
-								if (!mounted) {
-									SDMMD_fire_callback(handle, unknown, CFSTR("MountingImage"));
-									CFMutableDictionaryRef mountDict = SDMMD_create_dict();
-									if (mountDict) {
-										CFDictionarySetValue(mountDict, CFSTR("Command"), CFSTR("MountImage"));
-										CFDictionarySetValue(mountDict, CFSTR("ImageType"), imageType);
-										CFDictionarySetValue(mountDict, CFSTR("ImagePath"), CFSTR("/var/mobile/Media/PublicStaging/staging.dimage"));
-										CFDictionarySetValue(mountDict, CFSTR("ImageSignature"), signature);
-										result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(connection), mountDict, kCFPropertyListXMLFormat_v1_0);
-										if (result == 0) {
-											CFDictionaryRef response;
-											result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&response);
-											if (result == 0) {
-												if (response) {
-													CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
-													if (error) {
-														// convert error
-													} else {
-														CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
-														if (status) {
-															if (CFEqual(status, CFSTR("Complete"))) {
-																mounted = true;
+															CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
+															if (status) {
+																if (CFStringCompare(status, CFSTR("ReceiveBytesAck"), 0) == 0) {
+																	// block code
+																	CFShow(response);
+																	/*
+																	 uint32_t (^block)(uint32_t, uint32_t, CFTypeRef) = ^(uint32_t size, uint32_t code, CFTypeRef thing){return code;};
+																	 result = SDMMD_read_file(fspath, 0x10000, block);
+																	 if (result == 0) {
+																	 CFDictionaryRef getStatus;
+																	 result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&getStatus);
+																	 if (result == 0) {
+																	 CFTypeRef error = CFDictionaryGetValue(getStatus, CFSTR("Error"));
+																	 if (error) {
+																	 // convert error
+																	 } else {
+																	 CFTypeRef streamStatus = CFDictionaryGetValue(getStatus, CFSTR("Status"));
+																	 if (streamStatus) {
+																	 if (CFStringCompare(streamStatus, CFSTR("Complete"), 0x0) == 0) {
+																	 result = 0x0;
+																	 }
+																	 }
+																	 }
+																	 }
+																	 }
+																	 */
+																}
 															} else {
-																result = kAMDMissingDigestError;
+																result = kAMDUndefinedError;
 															}
 														}
+													} else {
+														result = kAMDReadError;
+													}
+												}
+											}
+											CFSafeRelease(size);
+										} else {
+											result = kAMDNoResourcesError;
+										}
+									}
+									if (!mounted) {
+										SDMMD_fire_callback(handle, unknown, CFSTR("MountingImage"));
+										CFMutableDictionaryRef mountDict = SDMMD_create_dict();
+										if (mountDict) {
+											CFDictionarySetValue(mountDict, CFSTR("Command"), CFSTR("MountImage"));
+											CFDictionarySetValue(mountDict, CFSTR("ImageType"), imageType);
+											CFDictionarySetValue(mountDict, CFSTR("ImagePath"), CFSTR("/var/mobile/Media/PublicStaging/staging.dimage"));
+											CFDictionarySetValue(mountDict, CFSTR("ImageSignature"), signature);
+											result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(connection), mountDict, kCFPropertyListXMLFormat_v1_0);
+											if (result == 0) {
+												CFDictionaryRef response;
+												result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&response);
+												if (result == 0) {
+													if (response) {
+														CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
+														if (error) {
+															// convert error
+														} else {
+															CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
+															if (status) {
+																if (CFEqual(status, CFSTR("Complete"))) {
+																	mounted = true;
+																} else {
+																	result = kAMDMissingDigestError;
+																}
+															}
+														}
+													} else {
+														result = kAMDReadError;
 													}
 												} else {
 													result = kAMDReadError;
 												}
-											} else {
-												result = kAMDReadError;
 											}
 										}
 									}
 								}
-							}
-							if (mounted) {
-								result = SDMMD__hangup_with_image_mounter_service(connection);
-								// insert error code
+								if (mounted) {
+									result = SDMMD__hangup_with_image_mounter_service(connection);
+									// insert error code
+								}
 							}
 						}
 					}
+					CFSafeRelease(deviceCopy);
 				} else {
 					printf("SDMMD_AMDeviceMountImage: Could not digest %s\n",cpath);
 					result = kAMDDigestFailedError;
 				}
+				Safe(free, sumdigest);
 			} else {
 				result = kAMDInvalidArgumentError;
 			}
+			Safe(free, cpath);
 		} else {
 			result = kAMDMissingImageTypeError;
 		}
 	}
 	return result;
 }
+#endif
 
 sdmmd_sim_return_t SDMMD_GetSIMStatusCode(SDMMD_AMDeviceRef device) {
 	sdmmd_sim_return_t result = KnownSIMCodes[0];
@@ -1744,7 +1758,7 @@ sdmmd_sim_return_t SDMMD_GetSIMStatusCode(SDMMD_AMDeviceRef device) {
 			}
 		}
 	}
-	CFSafeRelease(deviceSIMStatus);
+	//CFSafeRelease(deviceSIMStatus);
 	return result;
 }
 
@@ -1759,7 +1773,7 @@ sdmmd_activation_return_t SDMMD_GetActivationStatus(SDMMD_AMDeviceRef device) {
 			}
 		}
 	}
-	CFSafeRelease(deviceActivationState);
+	//CFSafeRelease(deviceActivationState);
 	return result;
 }
 

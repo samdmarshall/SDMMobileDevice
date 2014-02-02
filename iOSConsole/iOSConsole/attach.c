@@ -40,6 +40,7 @@ SDMMD_AMDeviceRef FindDeviceFromUDID(char *udid) {
 	} else {
 		printf("No devices connected.\n");
 	}
+	CFSafeRelease(devices);
 	return device;
 }
 
@@ -65,6 +66,7 @@ SDMMD_AMConnectionRef AttachToDeviceAndService(SDMMD_AMDeviceRef device, char *s
 					SDMMD_AMDeviceDisconnect(device);
 					serviceCon = NULL;
 				})
+				CFSafeRelease(serviceString);
 			})
 		})
 	} else {

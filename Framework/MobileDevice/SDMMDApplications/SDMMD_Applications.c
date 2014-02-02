@@ -136,13 +136,18 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 								}
 							}
 						}*/
+						CFSafeRelease(base);
+						CFSafeRelease(copy);
 					} else {
 						result = kAMDUndefinedError;
 					}
+					CFSafeRelease(lastComp);
 				}
+				CFSafeRelease(deviceURL);
 			} else {
 				result = kAMDUndefinedError;
 			}
+			Safe(free, cpath);
 		}
 	}
 	return result;
@@ -163,6 +168,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn
 	if (hasConnection) {
 		CFStringRef lastComp = CFURLCopyLastPathComponent(path);
 		if (CFStringGetLength(lastComp)==0) {
+			CFSafeRelease(lastComp);
 			lastComp = CFURLCopyLastPathComponent(CFURLCreateCopyDeletingLastPathComponent(kCFAllocatorDefault, path));
 		}
 		if (lastComp) {
@@ -173,14 +179,14 @@ sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn
 				if (result) {
 					printf("SDMMD_AMDeviceSecureInstallApplication: Old style of install failed for (%s).\n",SDMCFStringGetString(format));
 				}
-				CFSafeRelease(format);
 			} else {
 				printf("SDMMD_AMDeviceSecureInstallApplication: Unable to create CFString!\n");
 			}
-			CFSafeRelease(lastComp);
+			CFSafeRelease(format);
 		} else {
 			printf("SDMMD_AMDeviceSecureInstallApplication: Could not copy last path component from url %s.\n",SDMCFStringGetString(lastComp));
 		}
+		CFSafeRelease(lastComp);
 	}
 	CFSafeRelease(connection);
 	printf("SDMMD_AMDeviceSecureInstallApplication: Installation of package %s returned 0x%x.\n",SDMCFURLGetString(path),result);

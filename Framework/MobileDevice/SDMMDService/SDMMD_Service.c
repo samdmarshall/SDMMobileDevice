@@ -112,7 +112,7 @@ sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 			received = recv(handle.socket.conn, &length, 0x4, 0);
 		}
 		length = ntohl(length);
-		if (sizeof(length) == 0x4) {
+		if (sizeof(length) == 0x4 && received == 0x4) {
 			unsigned char *buffer = calloc(0x1, length);
 			uint32_t remainder = length;
 			while (remainder) {
@@ -198,7 +198,8 @@ sdmmd_return_t SDMMD_ServiceSendStream(SocketConnection handle, CFPropertyListRe
 
 sdmmd_return_t SDMMD_ServiceReceiveStream(SocketConnection handle, CFPropertyListRef *data) {
 	CFDataRef dataBuffer = NULL;
-	if (SDM_MD_CallSuccessful(SDMMD_ServiceReceive(handle, &dataBuffer))) {
+	sdmmd_return_t result = SDMMD_ServiceReceive(handle, &dataBuffer);
+	if (SDM_MD_CallSuccessful(result)) {
 		if (dataBuffer && CFDataGetLength(dataBuffer)) {
 			CFReadStreamRef read = CFReadStreamCreateWithBytesNoCopy(kCFAllocatorDefault, CFDataGetBytePtr(dataBuffer), CFDataGetLength(dataBuffer), kCFAllocatorNull);
 			CFReadStreamOpen(read);
@@ -206,10 +207,12 @@ sdmmd_return_t SDMMD_ServiceReceiveStream(SocketConnection handle, CFPropertyLis
 			CFReadStreamClose(read);
 			CFSafeRelease(read);
 		}
-		return kAMDSuccess;
+		result = kAMDSuccess;
 	} else {
-		return kAMDNotConnectedError;
+		result = kAMDNotConnectedError;
 	}
+	CFSafeRelease(dataBuffer);
+	return result;
 }
 
 SocketConnection SDMMD_TranslateConnectionToSocket(SDMMD_AMConnectionRef connection) {

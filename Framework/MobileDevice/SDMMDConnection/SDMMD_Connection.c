@@ -234,6 +234,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 							}
 						}
 					}
+					
 					result = SDMMD_send_service_start(device, service, escrowBag, &port, &enableSSL);
 					mutexLock = true;
 					if (result) {
@@ -254,8 +255,8 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 									if (result) {
 										printf("_DestroyEscrowBag: Failed to store escrow bag to %s.\n", path);
 									}
-									CFSafeRelease(fileDict);
 								}
+								CFSafeRelease(fileDict);
 								Safe(free,path);
 								CFSafeRelease(escrowBag);
 								Safe(SSL_free,ssl);
@@ -282,7 +283,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 												if (deviceCertVal && rootPrivKeyVal) {
 													ssl = SDMMD_lockssl_handshake((device->ivars.lockdown_conn), rootCertVal, deviceCertVal, rootPrivKeyVal, 0x1);
 													if (ssl) {
-														result = 0x0;
+														result = kAMDSuccess;
 													} else {
 														printf("_TurnOnSSLOverSocket: Could not perform SSL handshake.\n");
 														result = kAMDNoWifiSyncSupportError;
@@ -369,7 +370,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 
 sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef service, CFDictionaryRef options, SDMMD_AMConnectionRef *connection) {
 	sdmmd_return_t result = kAMDInvalidArgumentError;
-	uint32_t socket = 0xffffffff;
+	//uint32_t socket = 0xffffffff;
 	if (device && connection) {
 		SSL *ssl_enabled = NULL;
 		if (service) {
@@ -384,12 +385,12 @@ sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef 
 					result = SDMMD_AMDeviceSecureStartService(device, service, optionsCopy, connection);
 					CFSafeRelease(optionsCopy);
 					if (result == 0) {
-						socket = SDMMD_AMDServiceConnectionGetSocket(*connection);
+						//socket = SDMMD_AMDServiceConnectionGetSocket(*connection);
 						ssl_enabled = SDMMD_AMDServiceConnectionGetSecureIOContext(*connection);
 						if (ssl_enabled) {
 							result = kAMDNoWifiSyncSupportError;
 						} else {
-							result = 0x0;
+							result = kAMDSuccess;
 						}
 					}
 				} else {
@@ -443,11 +444,13 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartSessionedService(SDMMD_AMDeviceRef devic
 			if (result == 0) {
 				result = SDMMD_AMDeviceSecureStartService(device, service, NULL, connection);
 				if (result) {
-					printf("SDMMD_AMDeviceSecureStartSessionedService: Could not start service %s for device %i.\n", SDMCFStringGetString(service), device->ivars.device_id);
+					char *serviceString = SDMCFStringGetString(service);
+					printf("SDMMD_AMDeviceSecureStartSessionedService: Could not start service %s for device %i.\n", serviceString, device->ivars.device_id);
+					Safe(free, serviceString);
 				}
-				result = SDMMD_AMDeviceStopSession(device);
+				SDMMD_AMDeviceStopSession(device);
 			}
-			result = SDMMD_AMDeviceDisconnect(device);
+			SDMMD_AMDeviceDisconnect(device);
 		}
 	}
 	return result;

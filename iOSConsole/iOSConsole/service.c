@@ -84,7 +84,9 @@ void CreateLocalSocket(char *udid, struct SDM_MD_Service_Identifiers service) {
 		
 		CFSocketSetAddress(serviceSock, address_data);
 		CFSafeRelease(address_data);
-		CFRunLoopAddSource(CFRunLoopGetMain(), CFSocketCreateRunLoopSource(NULL, serviceSock, 0), kCFRunLoopCommonModes);
+		CFRunLoopSourceRef socketSource = CFSocketCreateRunLoopSource(NULL, serviceSock, 0);
+		CFRunLoopAddSource(CFRunLoopGetMain(), socketSource, kCFRunLoopCommonModes);
+		CFSafeRelease(socketSource);
 		Safe(free,socketPath);
 		CFRunLoopRun();
 	}

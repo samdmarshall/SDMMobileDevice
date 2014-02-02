@@ -148,8 +148,9 @@ static CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
 			} else {
 				printf("_CreateDictFromFileAtPath: Could not create plist from file %s.\n",path);
 			}
-			CFSafeRelease(fileData);
+			CFSafeRelease(propList);
 		}
+		CFSafeRelease(fileData);
 	}
 	return dict;
 }
@@ -316,15 +317,20 @@ static sdmmd_return_t SDMMD_store_dict(CFDictionaryRef dict, char *path, bool mo
 	// NOTE: Should implement all the error reporting here, including use of "mode"
 	snprintf(buf, 1025, "%s.tmp", path);
 	unlink(buf);
-	int ref = open(buf, O_CREAT | O_EXCL | O_WRONLY);
+	mode_t fileMode = (S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+	int ref = open(buf, O_CREAT | O_EXCL | O_WRONLY, fileMode);
 	if (ref != -1) {
 		CFDataRef xml = CFPropertyListCreateXMLData(kCFAllocatorDefault, dict);
 		if (xml) {
-			result = (sdmmd_return_t)write(ref, CFDataGetBytePtr(xml), CFDataGetLength(xml));
-			result = rename(buf, path);
+			CFIndex length = CFDataGetLength(xml);
+			result = (sdmmd_return_t)write(ref, CFDataGetBytePtr(xml), length);
+			if (result == length) {
+				rename(buf, path);
+			}
 		}
 		close(ref);
-		result = chmod(path, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+		result = chmod(path, fileMode);
+		CFSafeRelease(xml);
 	} else {
 		result = kAMDUndefinedError;
 	}
@@ -335,7 +341,7 @@ static CFTypeRef SDMMD_AMDCopySystemBonjourUniqueID() {
 	char record[1025] = {0};
 	CFTypeRef value = NULL;
 	SDMMD__PairingRecordPathForIdentifier(CFSTR("SystemConfiguration"), record);
-	CFMutableDictionaryRef dict = SDMMD__CreateDictFromFileContents(record) ?: SDMMD_create_dict();
+	CFMutableDictionaryRef dict = (SDMMD__CreateDictFromFileContents(record) ? NULL : SDMMD_create_dict());
 	if (dict) {
 		value = CFDictionaryGetValue(dict, CFSTR("SystemBUID"));
 		if (value == NULL) {
@@ -348,6 +354,7 @@ static CFTypeRef SDMMD_AMDCopySystemBonjourUniqueID() {
 			}
 		}
 	}
+	CFSafeRelease(dict);
 	return value;
 }
 
@@ -554,8 +561,8 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 	if (!rootX509) {
 		printf("Could not create root X509\\n");
 	} else {
-		result = X509_set_pubkey(rootX509, rootEVP);
-		result = X509_set_version(rootX509, 0x2);
+		X509_set_pubkey(rootX509, rootEVP);
+		X509_set_version(rootX509, 0x2);
 		
 		ASN1_INTEGER *rootSerial = X509_get_serialNumber(rootX509);
 		ASN1_INTEGER_set(rootSerial, 0x0);
@@ -567,19 +574,19 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 		X509_set_notAfter(rootX509, rootAsn1time);
 		ASN1_TIME_free(rootAsn1time);
 		
-		result = SDMMD__add_ext(rootX509, NID_basic_constraints, "critical,CA:TRUE");
-		result = SDMMD__add_ext(rootX509, NID_subject_key_identifier, "hash");
+		SDMMD__add_ext(rootX509, NID_basic_constraints, "critical,CA:TRUE");
+		SDMMD__add_ext(rootX509, NID_subject_key_identifier, "hash");
 		
 		const EVP_MD *rootHash = EVP_sha1();
-		result = X509_sign(rootX509, rootEVP, rootHash);
+		X509_sign(rootX509, rootEVP, rootHash);
 	}
 	
 	X509 *hostX509 = X509_new();
 	if (!hostX509) {
 		printf("Could not create host X509\\n");
 	} else {
-		result = X509_set_pubkey(hostX509, hostEVP);
-		result = X509_set_version(hostX509, 0x2);
+		X509_set_pubkey(hostX509, hostEVP);
+		X509_set_version(hostX509, 0x2);
 		
 		ASN1_INTEGER *hostSerial = X509_get_serialNumber(hostX509);
 		ASN1_INTEGER_set(hostSerial, 0x0);
@@ -591,20 +598,20 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 		X509_set_notAfter(hostX509, hostAsn1time);
 		ASN1_TIME_free(hostAsn1time);
 		
-		result = SDMMD__add_ext(hostX509, NID_basic_constraints, "critical,CA:FALSE");
-		result = SDMMD__add_ext(hostX509, NID_subject_key_identifier, "hash");
-		result = SDMMD__add_ext(hostX509, NID_key_usage, "critical,digitalSignature,keyEncipherment");
+		SDMMD__add_ext(hostX509, NID_basic_constraints, "critical,CA:FALSE");
+		SDMMD__add_ext(hostX509, NID_subject_key_identifier, "hash");
+		SDMMD__add_ext(hostX509, NID_key_usage, "critical,digitalSignature,keyEncipherment");
 		
 		const EVP_MD *hostHash = EVP_sha1();
-		result = X509_sign(hostX509, rootEVP, hostHash);
+		X509_sign(hostX509, rootEVP, hostHash);
 	}
 	
 	X509 *deviceX509 = X509_new();
 	if (!deviceX509) {
 		printf("Could not create device X509\\n");
 	} else {
-		result = X509_set_pubkey(deviceX509, deviceEVP);
-		result = X509_set_version(deviceX509, 0x2);
+		X509_set_pubkey(deviceX509, deviceEVP);
+		X509_set_version(deviceX509, 0x2);
 		
 		ASN1_INTEGER *deviceSerial = X509_get_serialNumber(deviceX509);
 		ASN1_INTEGER_set(deviceSerial, 0x0);
@@ -616,12 +623,12 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 		X509_set_notAfter(deviceX509, deviceAsn1time);
 		ASN1_TIME_free(deviceAsn1time);
 		
-		result = SDMMD__add_ext(deviceX509, NID_basic_constraints, "critical,CA:FALSE");
-		result = SDMMD__add_ext(deviceX509, NID_subject_key_identifier, "hash");
-		result = SDMMD__add_ext(deviceX509, NID_key_usage, "critical,digitalSignature,keyEncipherment");
+		SDMMD__add_ext(deviceX509, NID_basic_constraints, "critical,CA:FALSE");
+		SDMMD__add_ext(deviceX509, NID_subject_key_identifier, "hash");
+		SDMMD__add_ext(deviceX509, NID_key_usage, "critical,digitalSignature,keyEncipherment");
 		
 		const EVP_MD *deviceHash = EVP_sha1();
-		result = X509_sign(deviceX509, rootEVP, deviceHash);
+		X509_sign(deviceX509, rootEVP, deviceHash);
 	}
 	
 	CFDataRef rootCert = SDMMD_CreateDataFromX509Certificate(rootX509);

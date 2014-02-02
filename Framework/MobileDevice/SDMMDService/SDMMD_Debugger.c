@@ -126,7 +126,7 @@ sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, 
 			commandData[pos++] = commandString[i];
 			commandData = realloc(commandData, sizeof(char)*(pos+1));
 		}
-		free(commandString);
+		Safe(free,commandString);
 	}
 	uint32_t checksum = GenerateChecksumForData(&commandData[1], pos-1);
 	commandData = realloc(commandData, sizeof(char)*(pos+3));
@@ -139,6 +139,7 @@ sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, 
 	if (SDM_MD_CallSuccessful(result)) {
 		result = SDMMD_DebuggingReceive(connection, &data).result;
 	}
+	Safe(free, commandData);
 	CFSafeRelease(sending);
 	return (sdmmd_debug_return_t){result, data};
 }
