@@ -502,6 +502,7 @@ static char *SDMMD_SoftBehavior_DomainKeys[SDM_MD_SoftBehavior_Domain_Key_Count]
 #define kHomeScreenIconRows						"HomeScreenIconRows"
 #define kHomeScreenIconColumns					"HomeScreenIconColumns"
 #define kHomeScreenIconDockMaxCount				"HomeScreenIconDockMaxCount"
+#define kHomeScreenMaxPages						"HomeScreenMaxPages"
 #define kIconFolderRows							"IconFolderRows"
 #define kIconFolderColumns						"IconFolderColumns"
 #define kIconFolderMaxPages						"IconFolderMaxPages"

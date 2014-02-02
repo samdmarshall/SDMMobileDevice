@@ -248,6 +248,10 @@ struct SpringboardDeviceInfo* CreateSpringboardInfoFromDevice(SDMMD_AMDeviceRef 
 	CFNumberGetValue(screenColumn, kCFNumberSInt32Type, &(info->screenColumn));
 	CFSafeRelease(screenColumn);
 	
+	CFNumberRef screenMaxPage = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesDomain), CFSTR(kHomeScreenMaxPages));
+	CFNumberGetValue(screenMaxPage, kCFNumberSInt32Type, &(info->screenMaxPage));
+	CFSafeRelease(screenMaxPage);
+	
 	CFNumberRef folderRow = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesDomain), CFSTR(kIconFolderRows));
 	CFNumberGetValue(folderRow, kCFNumberSInt32Type, &(info->folderRow));
 	CFSafeRelease(folderRow);
@@ -256,9 +260,9 @@ struct SpringboardDeviceInfo* CreateSpringboardInfoFromDevice(SDMMD_AMDeviceRef 
 	CFNumberGetValue(folderColumn, kCFNumberSInt32Type, &(info->folderColumn));
 	CFSafeRelease(folderColumn);
 	
-	CFNumberRef maxPage = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesDomain), CFSTR(kIconFolderMaxPages));
-	CFNumberGetValue(maxPage, kCFNumberSInt32Type, &(info->maxPage));
-	CFSafeRelease(maxPage);
+	CFNumberRef folderMaxPage = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesDomain), CFSTR(kIconFolderMaxPages));
+	CFNumberGetValue(folderMaxPage, kCFNumberSInt32Type, &(info->folderMaxPage));
+	CFSafeRelease(folderMaxPage);
 
 	return info;
 }

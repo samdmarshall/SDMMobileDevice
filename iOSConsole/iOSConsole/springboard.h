@@ -22,9 +22,10 @@ struct SpringboardDeviceInfo {
 	uint32_t dockCount;
 	uint32_t screenRow;
 	uint32_t screenColumn;
+	uint32_t screenMaxPage;
 	uint32_t folderRow;
 	uint32_t folderColumn;
-	uint32_t maxPage;
+	uint32_t folderMaxPage;
 };
 
 void SpringboardQuery(char *udid);

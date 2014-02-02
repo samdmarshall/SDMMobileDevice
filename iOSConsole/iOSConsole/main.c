@@ -123,8 +123,6 @@ int main(int argc, const char * argv[]) {
 						key = (char*)CFStringGetCStringPtr(CFArrayGetValueAtIndex(argsArray, 0x1),kCFStringEncodingMacRoman);
 						optionsEnable[OptionsQuery] = true;
 					}
-					CFSafeRelease(argValue);
-					CFSafeRelease(argsArray);
 				}
 				break;
 			};
