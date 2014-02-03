@@ -22,8 +22,10 @@ bool PageContainsBundleID(CFArrayRef page, CFStringRef bundleID, CFDictionaryRef
 bool HomescreenHasApp(CFPropertyListRef homescreen, CFStringRef bundleID, CFDictionaryRef *appInfo);
 CFMutableDictionaryRef CreateEmptyFolder(CFStringRef name);
 CFMutableDictionaryRef CreateEmptyFolder(CFStringRef name);
-CFMutableArrayRef AppendFolder(CFPropertyListRef homescreen, CFMutableArrayRef screen, CFDictionaryRef item);
-CFMutableArrayRef AppendItem(CFPropertyListRef homescreen, CFMutableArrayRef screen, CFDictionaryRef item);
+CFMutableArrayRef AppendApp(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFMutableArrayRef screen, CFDictionaryRef item);
+CFMutableArrayRef AppendFolder(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFMutableArrayRef screen, CFDictionaryRef item);
+CFMutableArrayRef AppendItem(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFMutableArrayRef screen, CFDictionaryRef item);
+CFArrayRef CreateSpringboardDock(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFArrayRef springboardItems);
 CFArrayRef CreateSpringboardScreen(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFArrayRef springboardItems);
 CFDictionaryRef CreateSpringboardItem(CFStringRef type, CFTypeRef value);
 CFDictionaryRef CreateSpringboardApp(CFStringRef bundleID);
@@ -141,7 +143,7 @@ CFMutableDictionaryRef CreateEmptyFolder(CFStringRef name) {
 	return folder;
 }
 
-CFMutableArrayRef AppendApp(CFPropertyListRef homescreen, CFMutableArrayRef screen, CFDictionaryRef item) {
+CFMutableArrayRef AppendApp(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFMutableArrayRef screen, CFDictionaryRef item) {
 	CFDictionaryRef appInfo = NULL;
 	CFStringRef appID = CFDictionaryGetValue(item, CFSTR("Contents"));
 	bool appInstalled = HomescreenHasApp(homescreen, appID, &appInfo);
@@ -152,22 +154,30 @@ CFMutableArrayRef AppendApp(CFPropertyListRef homescreen, CFMutableArrayRef scre
 	return screen;
 }
 
-CFMutableArrayRef AppendFolder(CFPropertyListRef homescreen, CFMutableArrayRef screen, CFDictionaryRef item) {
+CFMutableArrayRef AppendFolder(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFMutableArrayRef screen, CFDictionaryRef item) {
 	CFDictionaryRef folderContents = CFDictionaryGetValue(item, CFSTR("Contents"));
 	CFStringRef folderName = CFDictionaryGetValue(folderContents, CFSTR("Name"));
 	CFMutableDictionaryRef folder = CreateEmptyFolder(folderName);
 	CFMutableArrayRef addApps = (CFMutableArrayRef)CFDictionaryGetValue(folder, CFSTR(kIconLists));
 	CFArrayRef folderApps = CFDictionaryGetValue(folderContents, CFSTR("Contents"));
 	CFIndex appCount = CFArrayGetCount(folderApps);
-	for (CFIndex index = 0x0; index < appCount; index++) {
-		CFDictionaryRef item = CFArrayGetValueAtIndex(folderApps, index);
-		addApps = AppendItem(homescreen, addApps, item);
+	CFIndex folderAppCount = (info->folderColumn*info->folderRow);
+	CFIndex appPages = ceil(appCount/folderAppCount);
+	CFIndex pageCount = (appPages < info->folderMaxPage ? appPages : info->folderMaxPage);
+	for (CFIndex index = 0x0; index < pageCount; index++) {
+		CFMutableArrayRef folderPage = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
+		CFIndex contentsCount = (appPages-index > 1 ? folderAppCount : (appCount%folderAppCount));
+		for (CFIndex folderIndex = 0x0; index < contentsCount; folderIndex++) {
+			CFDictionaryRef item = CFArrayGetValueAtIndex(folderApps, (index*folderAppCount)+folderIndex);
+			folderPage = AppendItem(info, homescreen, folderPage, item);
+		}
+		addApps = AppendItem(info, homescreen, addApps, item);
 	}
 	CFArrayAppendValue(screen, folder);
 	return screen;
 }
 
-CFMutableArrayRef AppendItem(CFPropertyListRef homescreen, CFMutableArrayRef screen, CFDictionaryRef item) {
+CFMutableArrayRef AppendItem(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFMutableArrayRef screen, CFDictionaryRef item) {
 	uint8_t type = ResolveSpringboardItemType(item);
 	switch (type) {
 		case SpringboardIconTypeInvalid: {
@@ -175,11 +185,11 @@ CFMutableArrayRef AppendItem(CFPropertyListRef homescreen, CFMutableArrayRef scr
 			break;
 		};
 		case SpringboardIconTypeApp: {
-			screen = AppendApp(homescreen, screen, item);
+			screen = AppendApp(info, homescreen, screen, item);
 			break;
 		};
 		case SpringboardIconTypeFolder: {
-			screen = AppendFolder(homescreen, screen, item);
+			screen = AppendFolder(info, homescreen, screen, item);
 			break;
 		};
 		default: {
@@ -189,12 +199,25 @@ CFMutableArrayRef AppendItem(CFPropertyListRef homescreen, CFMutableArrayRef scr
 	return screen;
 }
 
+CFArrayRef CreateSpringboardDock(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFArrayRef springboardItems) {
+	CFMutableArrayRef screen = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
+	CFIndex itemCount = CFArrayGetCount(springboardItems);
+	CFIndex dockCount = (itemCount < info->dockCount ? itemCount : info->dockCount);
+	for (CFIndex index = 0x0; index < dockCount; index++) {
+		CFDictionaryRef item = CFArrayGetValueAtIndex(springboardItems, index);
+		screen = AppendItem(info, homescreen, screen, item);
+	}
+	return screen;
+}
+
 CFArrayRef CreateSpringboardScreen(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFArrayRef springboardItems) {
 	CFMutableArrayRef screen = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
 	CFIndex itemCount = CFArrayGetCount(springboardItems);
-	for (CFIndex index = 0x0; index < itemCount; index++) {
+	CFIndex screenTotal = (info->screenColumn*info->screenRow);
+	CFIndex screenCount = (itemCount < screenTotal ? itemCount : screenTotal);
+	for (CFIndex index = 0x0; index < screenCount; index++) {
 		CFDictionaryRef item = CFArrayGetValueAtIndex(springboardItems, index);
-		screen = AppendItem(homescreen, screen, item);
+		screen = AppendItem(info, homescreen, screen, item);
 	}
 	return screen;
 }
@@ -220,14 +243,19 @@ CFDictionaryRef CreateSpringboardFolder(CFStringRef name, CFArrayRef contents) {
 CFPropertyListRef FormatHomescreen(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFArrayRef dock, CFArrayRef pages) {
 	CFMutableArrayRef newFormat = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
 	
-	CFArrayRef newDock = CreateSpringboardScreen(info, homescreen, dock);
+	CFArrayRef newDock = CreateSpringboardDock(info, homescreen, dock);
 	CFArrayAppendValue(newFormat, newDock);
 	
 	CFIndex pageCount = CFArrayGetCount(pages);
 	for (CFIndex index = 0x0; index < pageCount; index++) {
 		CFArrayRef page = CFArrayGetValueAtIndex(pages, index);
 		CFArrayRef screen = CreateSpringboardScreen(info, homescreen, page);
-		CFArrayAppendValue(newFormat, screen);
+		CFIndex currentPageCount = CFArrayGetCount(newFormat) - 0x1;
+		if (currentPageCount < info->screenMaxPage) {
+			CFArrayAppendValue(newFormat, screen);
+		} else {
+			break;
+		}
 	}
 	
 	return newFormat;
