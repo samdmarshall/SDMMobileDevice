@@ -21,7 +21,6 @@ enum SpringboardIconType ResolveSpringboardItemType(CFDictionaryRef item);
 bool PageContainsBundleID(CFArrayRef page, CFStringRef bundleID, CFDictionaryRef *appInfo);
 bool HomescreenHasApp(CFPropertyListRef homescreen, CFStringRef bundleID, CFDictionaryRef *appInfo);
 CFMutableDictionaryRef CreateEmptyFolder(CFStringRef name);
-CFMutableDictionaryRef CreateEmptyFolder(CFStringRef name);
 CFMutableArrayRef AppendApp(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFMutableArrayRef screen, CFDictionaryRef item);
 CFMutableArrayRef AppendFolder(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFMutableArrayRef screen, CFDictionaryRef item);
 CFMutableArrayRef AppendItem(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFMutableArrayRef screen, CFDictionaryRef item);
