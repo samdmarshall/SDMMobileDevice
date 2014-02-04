@@ -114,7 +114,9 @@ void SDMMD_USBMuxAttachedCallback(void *context, struct USBMuxPacket *packet) {
 		// give priority to usb over wifi
 		if (newDevice->ivars.connection_type == 0x0) {
 			CFArrayAppendValue(updateWithNew, newDevice);
-			CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotification"), newDevice, NULL, true);
+			dispatch_async(dispatch_get_main_queue(), ^{
+				CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotification"), newDevice, NULL, true);
+			});
 			CFSafeRelease(SDMMobileDevice->deviceList);
 			SDMMobileDevice->deviceList = CFArrayCreateCopy(kCFAllocatorDefault, updateWithNew);
 		} else if (newDevice->ivars.connection_type == 0x1) {
@@ -122,7 +124,9 @@ void SDMMD_USBMuxAttachedCallback(void *context, struct USBMuxPacket *packet) {
 		}
 		CFSafeRelease(updateWithNew);
 	}
-	CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotificationFinished"), newDevice, NULL, true);
+	dispatch_async(dispatch_get_main_queue(), ^{
+		CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotificationFinished"), newDevice, NULL, true);
+	});
 }
 
 void SDMMD_USBMuxDetachedCallback(void *context, struct USBMuxPacket *packet) {
@@ -137,13 +141,17 @@ void SDMMD_USBMuxDetachedCallback(void *context, struct USBMuxPacket *packet) {
 		if (detachedId == SDMMD_AMDeviceGetConnectionID(device)) {
 			CFArrayRemoveValueAtIndex(updateWithRemove, i-removeCounter);
 			removeCounter++;
-			CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotification"), device, NULL, true);
+			dispatch_async(dispatch_get_main_queue(), ^{
+				CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotification"), device, NULL, true);
+			});
 		}
 	}
 	CFSafeRelease(SDMMobileDevice->deviceList);
 	SDMMobileDevice->deviceList = CFArrayCreateCopy(kCFAllocatorDefault, updateWithRemove);
 	CFSafeRelease(updateWithRemove);
-	CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotificationFinished"), NULL, NULL, true);
+	dispatch_async(dispatch_get_main_queue(), ^{
+		CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotificationFinished"), NULL, NULL, true);
+	});
 }
 
 void SDMMD_USBMuxLogsCallback(void *context, struct USBMuxPacket *packet) {
