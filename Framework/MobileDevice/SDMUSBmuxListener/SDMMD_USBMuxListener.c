@@ -224,7 +224,9 @@ void SDMMD_USBMuxClose(SDMMD_USBMuxListenerRef listener) {
 	listener->deviceListCallback = NULL;
 	listener->listenerListCallback = NULL;
 	listener->unknownCallback = NULL;
-	CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerStoppedListenerNotification"), NULL, NULL, true);
+	dispatch_async(dispatch_get_main_queue(), ^{
+		CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerStoppedListenerNotification"), NULL, NULL, true);
+	});
 	Safe(free,listener);
 }
 
