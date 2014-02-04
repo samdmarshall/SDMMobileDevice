@@ -315,6 +315,7 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 				}
 			} else {
                 printf("socketSourceEventHandler: failed to decodeCFPropertyList from packet payload\n");
+				// SDM: add a check and catch in here for restarting the listener.
             }
 		});
         dispatch_source_set_cancel_handler((*listener)->socketSource, ^{
