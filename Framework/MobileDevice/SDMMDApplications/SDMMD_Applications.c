@@ -169,27 +169,35 @@ sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn
 		CFStringRef lastComp = CFURLCopyLastPathComponent(path);
 		if (CFStringGetLength(lastComp)==0) {
 			CFSafeRelease(lastComp);
-			lastComp = CFURLCopyLastPathComponent(CFURLCreateCopyDeletingLastPathComponent(kCFAllocatorDefault, path));
+			CFURLRef pathURL = CFURLCreateCopyDeletingLastPathComponent(kCFAllocatorDefault, path);
+			lastComp = CFURLCopyLastPathComponent(pathURL);
+			CFSafeRelease(pathURL);
 		}
 		if (lastComp) {
 			CFStringRef format = CFStringCreateWithFormat(kCFAllocatorDefault, 0x0, CFSTR("%s%c%@"), "PublicStaging", 0x2f, lastComp);
 			if (format) {
-				printf("SDMMD_AMDeviceSecureInstallApplication: Attempting install of %s.\n",SDMCFStringGetString(format));
+				char *appName = SDMCFStringGetString(format);
+				printf("SDMMD_AMDeviceSecureInstallApplication: Attempting install of %s.\n",appName);
 				result = SDMMD_perform_command(connection, CFSTR("Install"), 0x0, installCallback, 4, unknown, CFSTR("PackagePath"), format, CFSTR("ClientOptions"), options);
 				if (result) {
-					printf("SDMMD_AMDeviceSecureInstallApplication: Old style of install failed for (%s).\n",SDMCFStringGetString(format));
+					printf("SDMMD_AMDeviceSecureInstallApplication: Old style of install failed for (%s).\n",appName);
 				}
+				Safe(free, appName);
 			} else {
 				printf("SDMMD_AMDeviceSecureInstallApplication: Unable to create CFString!\n");
 			}
 			CFSafeRelease(format);
 		} else {
-			printf("SDMMD_AMDeviceSecureInstallApplication: Could not copy last path component from url %s.\n",SDMCFStringGetString(lastComp));
+			char *lastCompString = SDMCFStringGetString(lastComp);
+			printf("SDMMD_AMDeviceSecureInstallApplication: Could not copy last path component from url %s.\n",lastCompString);
+			Safe(free, lastCompString);
 		}
 		CFSafeRelease(lastComp);
 	}
 	CFSafeRelease(connection);
-	printf("SDMMD_AMDeviceSecureInstallApplication: Installation of package %s returned 0x%x.\n",SDMCFURLGetString(path),result);
+	char *pathString = SDMCFURLGetString(path);
+	printf("SDMMD_AMDeviceSecureInstallApplication: Installation of package %s returned 0x%x.\n",pathString,result);
+	Safe(free, pathString);
 	return result;
 }
 
@@ -200,12 +208,14 @@ sdmmd_return_t SDMMD_AMDeviceInstallApplication(SDMMD_AMDeviceRef device, CFStri
 	SDMMD_AMConnectionRef conn = SDMMD__CreateTemporaryServConn(socket, 0x0);
 	if (conn) {
 		CFURLRef url = SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(path);
+		char *urlString = SDMCFURLGetString(url);
 		if (url) {
 			result = SDMMD_AMDeviceSecureInstallApplication(conn, device, url, options, installCallback, unknown);
-			CFSafeRelease(url);
 		} else {
-			printf("AMDeviceInstallApplication: SDMMD_AMDCFURLCreateFromFileSystemPathWithSmarts failed on %s.\n",SDMCFURLGetString(url));
+			printf("AMDeviceInstallApplication: SDMMD_AMDCFURLCreateFromFileSystemPathWithSmarts failed on %s.\n",urlString);
 		}
+		Safe(free, urlString);
+		CFSafeRelease(url);
 		CFSafeRelease(conn);
 	} else {
 		result = kAMDUndefinedError;

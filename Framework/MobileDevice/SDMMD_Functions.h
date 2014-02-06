@@ -341,7 +341,10 @@ static CFTypeRef SDMMD_AMDCopySystemBonjourUniqueID() {
 	char record[1025] = {0};
 	CFTypeRef value = NULL;
 	SDMMD__PairingRecordPathForIdentifier(CFSTR("SystemConfiguration"), record);
-	CFMutableDictionaryRef dict = (SDMMD__CreateDictFromFileContents(record) ?: SDMMD_create_dict());
+	CFMutableDictionaryRef dict = SDMMD__CreateDictFromFileContents(record);
+	if (!dict) {
+		dict = SDMMD_create_dict();
+	}
 	if (dict) {
 		value = CFDictionaryGetValue(dict, CFSTR("SystemBUID"));
 		if (value == NULL) {
@@ -406,6 +409,7 @@ ATR_UNUSED static CFURLRef SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(CFS
 		lstat(cpath, &buf);
 		CFURLRef base = CFURLCreateWithString(kCFAllocatorDefault, CFSTR("file://localhost/"), NULL);
 		url = CFURLCreateWithFileSystemPathRelativeToBase(kCFAllocatorDefault, path, kCFURLPOSIXPathStyle, S_ISDIR(buf.st_mode), base);
+		CFSafeRelease(base);
 	}
 	return url;
 }

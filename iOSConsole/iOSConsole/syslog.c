@@ -113,11 +113,11 @@ void PrintSysLog() {
 	int token;
 	uint32_t status[0x2] = {0x0};
 	status[0x0] = notify_register_dispatch(updateLogNotifyName, &token, updatelogQueue, ^(int token){
-		__block CFDataRef logData;
-		__block Boolean foundLine = false;
-		__block Boolean foundAll = false;
-		__block CFIndex offset = 0x0, length = 0x0;
 		dispatch_sync(operatingQueue, ^{
+			CFDataRef logData;
+			Boolean foundLine = false;
+			Boolean foundAll = false;
+			CFIndex offset = 0x0, length = 0x0;
 			while (!foundAll) {
 				foundLine = false;
 				length = CFDataGetLength(syslogBuffer);

@@ -1530,7 +1530,9 @@ sdmmd_return_t SDMMD_copy_image(SDMMD_AMDeviceRef device, CFStringRef path) {
 					result = SDMMD_AFCProcessOperation(copyAFCConn, makeStaging, &response);
 					SDMMD_CondSuccess(result, {
 						// SDM copy file AFC
-						result = SDMMD_AMDeviceCopyFile(NULL, NULL, NULL, copyAFCConn, SDMCFStringGetString(path),"PublicStaging/staging.dimage");
+						char *pathString = SDMCFStringGetString(path);
+						result = SDMMD_AMDeviceCopyFile(NULL, NULL, NULL, copyAFCConn, pathString,"PublicStaging/staging.dimage");
+						Safe(free, pathString);
 					})
 				})
 			})

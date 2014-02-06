@@ -60,7 +60,7 @@ int main(int argc, const char * argv[]) {
 	
 	char *help = NULL;
 	
-	char *domain = "NULL";
+	char *domain = NULL;
 	char *key = NULL;
 	
 	char *bundle = NULL;
@@ -91,14 +91,14 @@ int main(int argc, const char * argv[]) {
 				break;
 			};
 			case 'd': {
-				if (optarg) {
+				if (optarg && !optionsEnable[OptionsDevice]) {
 					optionsEnable[OptionsDevice] = true;
 					udid = optarg;
 				}
 				break;
 			}
 			case 's': {
-				if (optarg) {
+				if (optarg && !optionsEnable[OptionsAttach]) {
 					service = optarg;
 					optionsEnable[OptionsAttach] = true;
 				} else {
@@ -107,22 +107,27 @@ int main(int argc, const char * argv[]) {
 				break;
 			};
 			case 'q': {
-				if (optarg) {
+				if (optarg && !optionsEnable[OptionsQuery]) {
 					CFStringRef argValue = CFStringCreateWithCString(kCFAllocatorDefault, optarg, kCFStringEncodingUTF8);
 					CFArrayRef argsArray = CFStringCreateArrayBySeparatingStrings(kCFAllocatorDefault, argValue, CFSTR("="));
 					CFIndex argsCounter = CFArrayGetCount(argsArray);
 					if (argsCounter >= 0x1) {
-						domain = (char*)CFStringGetCStringPtr(CFArrayGetValueAtIndex(argsArray, 0x0),kCFStringEncodingMacRoman);
+						domain = (char*)SDMCFStringGetString(CFArrayGetValueAtIndex(argsArray, 0x0));
 						if (strncmp(domain, "all", sizeof(char)*0x3) == 0x0) {
-							domain = kAllDomains;
-							key = kAllKeys;
-							optionsEnable[OptionsQuery] = true;
+							Safe(free, domain);
+							domain = calloc(0x1, sizeof(char)*(strlen(kAllDomains)+0x1));
+							memcpy(domain, kAllDomains, strlen(kAllDomains));
 						}
-					}
-					if (argsCounter == 0x2) {
-						key = (char*)CFStringGetCStringPtr(CFArrayGetValueAtIndex(argsArray, 0x1),kCFStringEncodingMacRoman);
 						optionsEnable[OptionsQuery] = true;
 					}
+					if (argsCounter == 0x2) {
+						key = (char*)SDMCFStringGetString(CFArrayGetValueAtIndex(argsArray, 0x1));
+					} else {
+						key = calloc(0x1, sizeof(char)*(strlen(kAllKeys)+0x1));
+						memcpy(key, kAllKeys, strlen(kAllKeys));
+					}
+					CFSafeRelease(argsArray);
+					CFSafeRelease(argValue);
 				}
 				break;
 			};
@@ -135,17 +140,17 @@ int main(int argc, const char * argv[]) {
 				break;
 			};
 			case 'r': {
-				if (optarg) {
+				if (optarg && !optionsEnable[OptionsRun]) {
 					bundle = optarg;
+					optionsEnable[OptionsRun] = true;
 				}
-				optionsEnable[OptionsRun] = true;
 				break;
 			};
 			case 'p': {
-				if (optarg) {
+				if (optarg && !optionsEnable[OptionsDiag]) {
 					diagArg = optarg;
+					optionsEnable[OptionsDiag] = true;
 				}
-				optionsEnable[OptionsDiag] = true;
 				break;
 			};
 			default: {
@@ -209,6 +214,8 @@ int main(int argc, const char * argv[]) {
 			}
 		}
 	}
+	Safe(free, domain);
+	Safe(free, key);
 	
     return 0;
 }
