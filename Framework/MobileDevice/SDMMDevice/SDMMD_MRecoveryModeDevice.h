@@ -44,6 +44,7 @@ struct AMRecoveryModeDeviceClassBody {
 	// 64
 	// 72
 	int8_t firmware_info_loaded;	// 80
+	int8_t bootstrap_only;			// 84
 	int32_t chip_id;				// 88
 	int32_t board_id;				// 92
 	int32_t security_epoch;			// 96

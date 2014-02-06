@@ -176,6 +176,7 @@
 		2215AB9017525BA900AD1981 /* SDMMD_MRestoreModeDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_MRestoreModeDevice.c; sourceTree = "<group>"; };
 		2215AB9617525D9000AD1981 /* SDMMD_MRestorableDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_MRestorableDevice.h; sourceTree = "<group>"; };
 		2215AB9717525D9000AD1981 /* SDMMD_MRestorableDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_MRestorableDevice.c; sourceTree = "<group>"; };
+		222C290518A32C5B005B3A26 /* SDMMD_AMAuthInstall.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SDMMD_AMAuthInstall.h; path = SDMMDAuthInstall/SDMMD_AMAuthInstall.h; sourceTree = "<group>"; };
 		225AC5BE175B976500A47071 /* SDMMD_Notification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Notification.h; sourceTree = "<group>"; };
 		225AC5BF175B976500A47071 /* SDMMD_Notification.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_Notification.c; sourceTree = "<group>"; };
 		225ACB44175FBFA300A47071 /* SDMMD_Debugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Debugger.h; sourceTree = "<group>"; };
@@ -325,6 +326,7 @@
 				225ACD721760C82400A47071 /* SDMMDApplications */,
 				2215A9B7175124D300AD1981 /* SDMMDError */,
 				225AC5BB175B971800A47071 /* SDMMDNotification */,
+				222C290418A32C23005B3A26 /* AMAuthInstall */,
 			);
 			path = MobileDevice;
 			sourceTree = "<group>";
@@ -384,6 +386,14 @@
 				22AD8E7317875346002ACFB1 /* SDMMD_Error.c */,
 			);
 			path = SDMMDError;
+			sourceTree = "<group>";
+		};
+		222C290418A32C23005B3A26 /* AMAuthInstall */ = {
+			isa = PBXGroup;
+			children = (
+				222C290518A32C5B005B3A26 /* SDMMD_AMAuthInstall.h */,
+			);
+			name = AMAuthInstall;
 			sourceTree = "<group>";
 		};
 		225AC5BB175B971800A47071 /* SDMMDNotification */ = {
