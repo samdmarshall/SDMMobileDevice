@@ -339,7 +339,7 @@ CFTypeRef SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain
 				CFSafeRelease(getVal);
 				if (result == 0x0) {
 					result = SDMMD_lockconn_receive_message(device, &response);
-					if (result == 0x0) {
+					if (result == 0x0 && response) {
 						*err = CFDictionaryGetValue(response, CFSTR("Error"));
 						if (*err) {
 							if (CFGetTypeID(*err) == CFStringGetTypeID()) {
