@@ -123,6 +123,7 @@ ATR_UNUSED static CFDataRef SDMMD__CreateDataFromFileContents(char *path) {
 				} else {
 					printf("SDMMD__CreateDataFromFileContents: Could not fstat.\n");
 				}
+				close(ref);
 			} else {
 				printf("SDMMD__CreateDataFromFileContents: Could not open file %s\n",path);
 			}
@@ -346,7 +347,7 @@ static CFTypeRef SDMMD_AMDCopySystemBonjourUniqueID() {
 		dict = SDMMD_create_dict();
 	}
 	if (dict) {
-		value = CFDictionaryGetValue(dict, CFSTR("SystemBUID"));
+		value = CFStringCreateCopy(kCFAllocatorDefault, CFDictionaryGetValue(dict, CFSTR("SystemBUID")));
 		if (value == NULL) {
 			value = SDMMD_CreateUUID();
 			if (value) {
@@ -356,6 +357,7 @@ static CFTypeRef SDMMD_AMDCopySystemBonjourUniqueID() {
 				printf("SDMMD_AMDCopySystemBonjourUniqueID: Could not generate UUID!\n");
 			}
 		}
+		CFSafeRelease(dict);
 	}
 	return value;
 }
