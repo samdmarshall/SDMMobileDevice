@@ -696,19 +696,21 @@ bool SDMMD_isDeviceAttachedUSB(uint32_t location_id) {
 bool SDMMD_isDeviceAttached(uint32_t device_id) {
 	// this needs to be changed to query against USBMuxd for device dictionaries
 	bool result = false;
-	CFArrayRef devices = CFArrayCreateCopy(kCFAllocatorDefault, SDMMobileDevice->deviceList);
-	if (devices) {
-		for (uint32_t i = 0; i < CFArrayGetCount(devices); i++) {
-			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, i);
-			if (device) {
-				uint32_t fetched_id = SDMMD_AMDeviceGetConnectionID(device);
-				result = (fetched_id == device_id ? SDMMD_isDeviceAttachedUSB(device->ivars.location_id) : false);
-				if (result) {
-					break;
+	if (SDMMobileDevice->deviceList) {
+		CFArrayRef devices = CFArrayCreateCopy(kCFAllocatorDefault, SDMMobileDevice->deviceList);
+		if (devices) {
+			for (uint32_t i = 0; i < CFArrayGetCount(devices); i++) {
+				SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, i);
+				if (device) {
+					uint32_t fetched_id = SDMMD_AMDeviceGetConnectionID(device);
+					result = (fetched_id == device_id ? SDMMD_isDeviceAttachedUSB(device->ivars.location_id) : false);
+					if (result) {
+						break;
+					}
 				}
 			}
+			CFSafeRelease(devices);
 		}
-		CFSafeRelease(devices);
 	}
 	return result;
 }
