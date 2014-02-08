@@ -135,7 +135,7 @@ void SDMMD_USBMuxDetachedCallback(void *context, struct USBMuxPacket *packet) {
 	CFNumberGetValue(deviceId, kCFNumberSInt64Type, &detachedId);
 	CFMutableArrayRef updateWithRemove = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, SDMMobileDevice->deviceList);
 	uint32_t removeCounter = 0x0;
-	SDMMD_AMDeviceRef detachedDevice;
+	SDMMD_AMDeviceRef detachedDevice = NULL;
 	for (uint32_t i = 0x0; i < CFArrayGetCount(SDMMobileDevice->deviceList); i++) {
 		detachedDevice = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(SDMMobileDevice->deviceList, i);
 		// add something for then updating to use wifi if available.
