@@ -7,6 +7,7 @@ SDMMobileDevice
 * [What can this project do for me?](#what-can-this-project-do-for-me)
 * [How do I use this?](#how-do-i-use-this)
 * [FAQ](#faq)
+* [Help](#help)
 
 
 ***
@@ -85,3 +86,12 @@ A. For the most part SDMMobileDevice is cross-compatible with MobileDevice's fun
 Q. How can I contribute?
 
 A. See the [wiki](https://github.com/samdmarshall/SDMMobileDevice/wiki) for details on submitting pull requests.
+
+### Help
+I have created a IRC room on freenode to serve as general discussion and research.
+
+Server: irc.freenode.net
+
+Room: #sdmmobiledevice
+
+Quicklink: [webchat](http://webchat.freenode.net/?channels=sdmmobiledevice)
