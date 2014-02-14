@@ -47,7 +47,7 @@ struct am_connection {
 } ATR_PACK am_connection;
 
 /* Classes */
-#define SDMMD_AMConnectionRef struct am_connection*
+typedef struct am_connection* SDMMD_AMConnectionRef;
 
 #pragma mark -
 #pragma mark FUNCTIONS

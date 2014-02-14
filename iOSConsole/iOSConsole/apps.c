@@ -23,9 +23,16 @@ void LookupAppsOnDevice(char *udid) {
 			result = SDMMD_AMDeviceStartSession(device);
 			SDMMD_CondSuccess(result, {
 				CFDictionaryRef response;
+				
+				//CFMutableArrayRef lookupValues = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
+				//CFArrayAppendValue(lookupValues, CFSTR(kAppLookupKeyCFBundleIdentifier));
+				//CFArrayAppendValue(lookupValues, CFSTR("SequenceNumber"));
 				CFArrayRef lookupValues = SDMMD_ApplicationLookupDictionary();
 				CFMutableDictionaryRef optionsDict = SDMMD_create_dict();
 				CFDictionarySetValue(optionsDict, CFSTR("ReturnAttributes"), lookupValues);
+				
+				//CFDictionarySetValue(optionsDict, CFSTR("com.apple.mobile_installation.metadata"), kCFBooleanTrue);
+				//CFDictionarySetValue(optionsDict, CFSTR("BundleIDs"), kCFBooleanTrue);
 				
 				result = SDMMD_AMDeviceLookupApplications(device, optionsDict, &response);
 				SDMMD_CondSuccess(result, {

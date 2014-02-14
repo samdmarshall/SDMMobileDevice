@@ -297,7 +297,7 @@ struct SpringboardDeviceInfo* CreateSpringboardInfoFromDevice(SDMMD_AMDeviceRef 
 void SpringboardQuery(char *udid) {
 	SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 	if (device) {
-		struct SpringboardDeviceInfo *info = CreateSpringboardInfoFromDevice(device);
+		//struct SpringboardDeviceInfo *info = CreateSpringboardInfoFromDevice(device);
 		
 		SDMMD_AMConnectionRef springboard = AttachToDeviceAndService(device, AMSVC_SPRINGBOARD_SERVICES);
 		CFMutableDictionaryRef request = SDMMD_create_dict();

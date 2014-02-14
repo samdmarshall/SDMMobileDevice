@@ -90,19 +90,30 @@ typedef enum DebuggerCommands {
 	kDebugvAttachName = 57,
 	kDebugqProcessInfo = 58,
 	kDebugQSetWorkingDir = 59,
-	kDebugQSetMaxPacketSize = 60
+	kDebugQSetMaxPacketSize = 60,
+	kDebugCommandCount
 } DebuggerCommands;
 
-#define SDMMD_AMDebugConnectionRef SDMMD_AMConnectionRef
+
+struct DebuggerCommand {
+	DebuggerCommands commandCode; // enum DebuggerCommands
+	
+};
+
+struct SDMMD_AMDebugConnection {
+	SDMMD_AMDeviceRef device;
+	SDMMD_AMConnectionRef connection;
+	bool ackEnabled;
+} ATR_PACK SDMMD_AMDebugConnection;
+
+typedef struct SDMMD_AMDebugConnection* SDMMD_AMDebugConnectionRef;
 
 typedef struct SDMMD_DebugCommandType {
 	char *code;
 	CFStringRef description;
 } SDMMD_DebugCommandType;
 
-#define kNumberOfDebugCommands 61
-
-static struct SDMMD_DebugCommandType KnownDebugCommands[kNumberOfDebugCommands] = {
+static struct SDMMD_DebugCommandType KnownDebugCommands[kDebugCommandCount] = {
 	{"+", CFSTR("ACK")},
 	{"-", CFSTR("!ACK")},
 	{"\x03", CFSTR("^C")},
@@ -170,10 +181,16 @@ static struct SDMMD_DebugCommandType KnownDebugCommands[kNumberOfDebugCommands] 
 #pragma mark FUNCTIONS
 #pragma mark -
 
-sdmmd_return_t SDMMD_StartDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDMMD_AMDebugConnectionRef *connection);
-sdmmd_return_t SDMMD_StopDebuggingSessionOnDevice(SDMMD_AMDeviceRef device, SDMMD_AMDebugConnectionRef *connection);
+SDMMD_AMDebugConnectionRef SDMMD_AMDebugConnectionCreateForDevice(SDMMD_AMDeviceRef device);
+void SDMMD_AMDebugConnectionClose(SDMMD_AMDebugConnectionRef dconn);
 
-void SDMMD_StartDebugger(SDMMD_AMDebugConnectionRef connection, CFStringRef bundleId);
+sdmmd_return_t SDMMD_AMDebugConnectionStart(SDMMD_AMDebugConnectionRef dconn);
+sdmmd_return_t SDMMD_AMDebugConnectionStop(SDMMD_AMDebugConnectionRef dconn);
+
+
+
+
+
 
 CFStringRef SDMMD_CreateEncodeForDebuggingCommand(CFStringRef command);
 

@@ -30,10 +30,41 @@
 
 void SDMMD_browse_callback(CFDictionaryRef dict, void* response) {
 	if (dict) {
-		CFTypeRef bundleId = CFDictionaryGetValue(dict, CFSTR(kAppLookupKeyCFBundleIdentifier));
-		CFDictionarySetValue(response, bundleId, dict);
+		if (CFDictionaryContainsKey(dict, CFSTR(kAppLookupKeyCFBundleIdentifier))) {
+			CFTypeRef bundleId = CFDictionaryGetValue(dict, CFSTR(kAppLookupKeyCFBundleIdentifier));
+			CFDictionarySetValue(response, bundleId, dict);
+		}
 	}
 }
+
+void SDMMD_lookup_callback(CFDictionaryRef dict, void* response) {
+	response = (void*)dict;
+}
+
+sdmmd_return_t SDMMD_AMDeviceLookupAppInfo(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef *response) {
+	sdmmd_return_t result = kAMDInvalidArgumentError;
+	if (device) {
+		if (options) {
+			CFDictionaryRef dict = NULL;
+			SDMMD_AMConnectionRef conn = SDMMD_AMDServiceConnectionCreate(0, NULL, dict);
+			result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_INSTALLATION_PROXY), 0x0, &conn);
+			if (result == 0) {
+				CFMutableDictionaryRef dict = SDMMD_create_dict();
+				result = kAMDNoResourcesError;
+				if (dict) {
+					result = SDMMD_perform_command(conn, CFSTR("Lookup"), 0x0, SDMMD_lookup_callback, 0x2, dict, CFSTR("ClientOptions"), options);
+					if (!result) {
+						*response = dict;
+					}
+				}
+			} else {
+				printf("SDMMD_AMDeviceLookupApplications: Was unable to start the install service on the device: %i\n",device->ivars.device_id);
+			}
+		}
+	}
+	return result;
+}
+
 
 sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef *response) {
 	sdmmd_return_t result = kAMDInvalidArgumentError;
