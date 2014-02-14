@@ -424,8 +424,8 @@ void DemoFour(const char *appPath) {
 			CFStringRef bundleId = CFStringCreateWithBytes(kCFAllocatorDefault, appPath, strlen(appPath), kCFStringEncodingUTF8, false);
 			
 			SDMMD_AMDebugConnectionRef debug;
-			result = SDMMD_StartDebuggingSessionOnDevice(device, &debug);
-			SDMMD_StartDebugger(debug, bundleId);
+			//result = SDMMD_StartDebuggingSessionOnDevice(device, &debug);
+			//SDMMD_StartDebugger(debug, bundleId);
 		}
 	}
 	

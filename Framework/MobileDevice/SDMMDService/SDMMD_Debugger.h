@@ -192,7 +192,7 @@ sdmmd_return_t SDMMD_AMDebugConnectionStop(SDMMD_AMDebugConnectionRef dconn);
 
 
 
-CFStringRef SDMMD_CreateEncodeForDebuggingCommand(CFStringRef command);
+CFStringRef SDMMD_EncodeDebuggingString(CFStringRef command);
 
 sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, SDMMD_DebugCommandType commandType, CFStringRef command);
 sdmmd_debug_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef connection, CFDataRef *data);

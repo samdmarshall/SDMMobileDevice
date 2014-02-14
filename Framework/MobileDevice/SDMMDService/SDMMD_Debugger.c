@@ -81,26 +81,24 @@ uint32_t GenerateChecksumForData(char *strPtr, uint32_t length) {
 	return checksum;
 }
 
-CFStringRef SDMMD_CreateEncodeForDebuggingCommand(CFStringRef command) {
-	unsigned char *commandString = malloc(CFStringGetLength(command));
-	CFIndex length = CFStringGetBytes(command, CFRangeMake(0,CFStringGetLength(command)), kCFStringEncodingUTF8, 0, true, commandString, CFStringGetLength(command), NULL);
-	unsigned char *encodedCommand = malloc(sizeof(unsigned char));
-	uint32_t pos = 0;
-	for (uint32_t i = 0; i < length; i++) {
-		pos = (i*(sizeof(char)*2));
-		encodedCommand = realloc(encodedCommand, pos+(sizeof(unsigned char)*2));
-		encodedCommand[pos] = kHexEncode[commandString[i] >> 4];
-		encodedCommand[pos+1] = kHexEncode[commandString[i] & 0x0f];
+CFStringRef SDMMD_EncodeDebuggingString(CFStringRef command) {
+	char *commandString = SDMCFStringGetString(command);
+	CFIndex encodedLength = ((0x2*strlen(commandString))+0x3);
+	char *encoded = calloc(0x1, S(char)*encodedLength);
+	for (CFIndex position = 0x0, index = 0x0; index < strlen(commandString); index++) {
+		position = (index*(S(char)*0x2));
+		encoded[position] = kHexEncode[commandString[index] >> 4];
+		encoded[position++] = kHexEncode[commandString[index] & 0x0f];
 	}
-	Safe(free, commandString);
-	CFStringRef resultString = CFStringCreateWithBytes(kCFAllocatorDefault, encodedCommand, length*2, kCFStringEncodingUTF8, true);
-	Safe(free, encodedCommand);
-	return resultString;
+	Safe(free,commandString);
+	CFStringRef encodedString = CFStringCreateWithBytes(kCFAllocatorDefault, PtrCast(encoded, UInt8*), encodedLength, kCFStringEncodingUTF8, true);
+	Safe(free,encoded);
+	return encodedString;
 }
 
+//CFStringRef SDMMD_Format
+
 sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, SDMMD_DebugCommandType commandType, CFStringRef encodedCommand) {
-	
-	
 	CFDataRef data = NULL;
 	char *commandData = calloc(1, sizeof(char));
 	uint32_t pos = 0;

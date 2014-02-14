@@ -39,11 +39,11 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
 					if (details) {
 						SDMMD_AMDeviceStopSession(device);
 						SDMMD_AMDeviceDisconnect(device);
-						sdmmd_return_t result = SDMMD_StartDebuggingSessionOnDevice(device, &connection);
+						//sdmmd_return_t result = SDMMD_StartDebuggingSessionOnDevice(device, &connection);
 						SDMMD_CondSuccess(result, {
 							bool launchSuccess = false;
 							CFStringRef path = CFDictionaryGetValue(details, CFSTR("Path"));
-							CFStringRef encodedPath = SDMMD_CreateEncodeForDebuggingCommand(path);
+							CFStringRef encodedPath = SDMMD_EncodeDebuggingString(path);
 							CFStringRef container = CFDictionaryGetValue(details, CFSTR("Container"));
 							if (!container) {
 								CFURLRef pathURL = CFURLCreateWithString(kCFAllocatorDefault, path, NULL);
@@ -53,9 +53,9 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
 								//CFSafeRelease(containerURL);
 							}
 							if (container) {
-								CFStringRef containerPath = SDMMD_CreateEncodeForDebuggingCommand(container);
+								CFStringRef containerPath = SDMMD_EncodeDebuggingString(container);
 								sdmmd_debug_return_t dresult;
-								CFStringRef maxPacket = SDMMD_CreateEncodeForDebuggingCommand(CFSTR("1024"));
+								CFStringRef maxPacket = SDMMD_EncodeDebuggingString(CFSTR("1024"));
 								dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugQSetMaxPacketSize], maxPacket);
 								CFSafeRelease(maxPacket);
 								dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugQSetWorkingDir], containerPath);
