@@ -17,21 +17,16 @@
  */
 
 #import "SDMMobileDevice.h"
+#import "SDMTypeTranslation.h"
 
 #ifndef _SDM_Translation_h
 #define _SDM_Translation_h
 
 //Error
-#define amd_error_t sdmmd_return_t
-typedef amd_error_t AMDError;
-
 #define AMDErrorString SDMMD_AMDErrorString
 #define AFCErrorString SDMMD_AFCErrorString
 
 //MCP
-#define AMDConnectionRef        SDMMD_AMConnectionRef
-#define AMDServiceConnectionRef SDMMD_AMConnectionRef
-
 #define AMDeviceNotificationSubscribe   SDMMD_AMDeviceNotificationSubscribe
 #define AMDeviceNotificationUnsubscribe SDMMD_AMDeviceNotificationUnsubscribe
 
@@ -57,7 +52,6 @@ typedef amd_error_t AMDError;
 
 //Device
 #define AMDeviceGetTypeID   SDMMD_AMDeviceGetTypeID;
-#define AMDeviceRef         SDMMD_AMDeviceRef
 
 #define AMDeviceRetain CFRetain
 #define AMDeviceRelease CFRelease
@@ -94,27 +88,19 @@ typedef amd_error_t AMDError;
 //#define AMDeviceMountImage          SDMMD_AMDeviceMountImage
 
 //RecoveryModeDevice
-#define AMRecoveryModeDeviceRef SDMMD_AMRecoveryModeDeviceRef
-
 #define AMRecoveryModeDeviceCreate      SDMMD_AMRecoveryModeDeviceCreate
 #define AMRestoreGetResolvedBoardConfig SDMMD_AMRestoreGetResolvedBoardConfig
 
 //USBDevice
-#define AMRUSBDeviceRef SDMMD_AMRUSBDeviceRef
 
 //DFUDevice
-#define AMDFUModeDeviceRef      SDMMD_AMDFUModeDeviceRef
 #define AMDFUModeDeviceCreate   SDMMD_AMDFUModeDeviceCreate
 
 //Restore Mode Device
-#define AMRestoreModeDeviceRef  SDMMD_AMRestoreModeDeviceRef
 
 //Restoreable Device
-#define AMRestorableDeviceRef   SDMMD_AMRestorableDeviceRef
 
 //AFC
-#define AFCConnectionRef                    SDMMD_AFCConnectionRef
-#define AFCOperationRef                     SDMMD_AFCOperationRef
 #define AFCConnectionCreate                 SDMMD_AFCConnectionCreate
 #define AFCConnectionRelease                SDMMD_AFCConnectionRelease
 #define AFCOperationCreateReadDirectory     SDMMD_AFCOperationCreateReadDirectory

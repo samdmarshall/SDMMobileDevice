@@ -86,6 +86,7 @@
 		22DEF97C188350E6008E909F /* Number.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF96E188350E6008E909F /* Number.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22DEF97D188350E6008E909F /* Pointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF96F188350E6008E909F /* Pointer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22DEF97E188350E6008E909F /* Range.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF970188350E6008E909F /* Range.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3F38D21C18AECF7C00DE5FA9 /* SDMTypeTranslation.h in Headers */ = {isa = PBXBuildFile; fileRef = 3F38D21B18AECE1200DE5FA9 /* SDMTypeTranslation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -223,6 +224,7 @@
 		22DEF9811883722B008E909F /* SDMMD_Types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_Types.h; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		3F38D21B18AECE1200DE5FA9 /* SDMTypeTranslation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMTypeTranslation.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -314,6 +316,7 @@
 				22AD9A44178F2CBF002ACFB1 /* CFRuntime.h */,
 				22AD8E8317875BAA002ACFB1 /* SDMMobileDevice.h */,
 				135697D717FEB9CB00039D19 /* SDMTranslation.h */,
+				3F38D21B18AECE1200DE5FA9 /* SDMTypeTranslation.h */,
 				22DEF9811883722B008E909F /* SDMMD_Types.h */,
 				22AD8E7817875B1E002ACFB1 /* SDMMD_Functions.h */,
 				22AD8F231789B3DF002ACFB1 /* SDMMD_MCP.h */,
@@ -515,6 +518,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				135697D817FEB9CB00039D19 /* SDMTranslation.h in Headers */,
+				3F38D21C18AECF7C00DE5FA9 /* SDMTypeTranslation.h in Headers */,
 				225ACB46175FBFA300A47071 /* SDMMD_Debugger.h in Headers */,
 				225AD7321765FE7700A47071 /* SDMMD_USBMuxListener.h in Headers */,
 				22AD8E651787465A002ACFB1 /* SDMMD_AMDevice.h in Headers */,
