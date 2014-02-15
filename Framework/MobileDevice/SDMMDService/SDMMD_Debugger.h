@@ -194,6 +194,9 @@ void SDMMD_AMDebugConnectionClose(SDMMD_AMDebugConnectionRef dconn);
 sdmmd_return_t SDMMD_AMDebugConnectionStart(SDMMD_AMDebugConnectionRef dconn);
 sdmmd_return_t SDMMD_AMDebugConnectionStop(SDMMD_AMDebugConnectionRef dconn);
 
+DebuggerCommandRef SDMMD_CreateDebuggingCommand(DebuggerCommandType commandCode, CFStringRef command, CFArrayRef arguments);
+void SDMMD_DebuggingCommandRelease(DebuggerCommandRef command);
+
 BufferRef SDMMD_EncodeDebuggingString(CFStringRef command);
 
 sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCommandRef command, CFDataRef *response);
