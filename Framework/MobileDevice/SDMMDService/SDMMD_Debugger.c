@@ -223,14 +223,21 @@ bool SDMMD_ValidateChecksumForBuffer(BufferRef buffer) {
 
 sdmmd_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef dconn, CFDataRef *response) {
 	sdmmd_return_t result = kAMDSuccess;
-	bool shouldReceive = true;
+	bool shouldReceive = true, skipPrefix = false;
+	char *commandPrefix = "$";
+	BufferRef responseBuffer = CreateBufferRef();
 	SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
 	if (dconn->ackEnabled) {
-		shouldReceive = SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, KnownDebugCommands[kDebugACK]->code);
+		char ack[0x1];
+		memcpy(ack, (KnownDebugCommands[kDebugACK]->code), S(char));
+		shouldReceive = SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, ack);
+		if (strncmp(ack, commandPrefix, S(char)) == 0x0) {
+			shouldReceive = true;
+			skipPrefix = true;
+			memcpy(responseBuffer->data, commandPrefix, 0x1);
+		}
 	}
-	BufferRef responseBuffer = CreateBufferRef();
-	if (shouldReceive) {
-		char *commandPrefix = "$";
+	if (shouldReceive && !skipPrefix) {
 		shouldReceive = SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, commandPrefix);
 		if (shouldReceive) {
 			memcpy(responseBuffer->data, commandPrefix, 0x1);
