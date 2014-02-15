@@ -34,6 +34,7 @@
 		22C892B3189D75C7008B1D2D /* Buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 22C892B1189D75C7008B1D2D /* Buffer.c */; };
 		22C892B6189D75CC008B1D2D /* CFDataAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22C892B4189D75CC008B1D2D /* CFDataAddition.c */; };
 		22DEF94018833562008E909F /* CFTypeAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22DEF93F18833562008E909F /* CFTypeAddition.c */; };
+		22FE3F10189E84B2005C2DB2 /* springboard.c in Sources */ = {isa = PBXBuildFile; fileRef = 22FE3F0F189E84B2005C2DB2 /* springboard.c */; };
 		22FFB8CE1880DE140073095D /* CFDictionaryAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22FFB8C21880DE140073095D /* CFDictionaryAddition.c */; };
 		22FFB8CF1880DE140073095D /* Matrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 22FFB8C61880DE140073095D /* Matrix.c */; };
 		22FFB8D01880DE140073095D /* Vector.c in Sources */ = {isa = PBXBuildFile; fileRef = 22FFB8C81880DE140073095D /* Vector.c */; };
@@ -132,6 +133,8 @@
 		22C892B5189D75CC008B1D2D /* CFDataAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFDataAddition.h; sourceTree = "<group>"; };
 		22DEF93E18833556008E909F /* CFTypeAddition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CFTypeAddition.h; sourceTree = "<group>"; };
 		22DEF93F18833562008E909F /* CFTypeAddition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CFTypeAddition.c; sourceTree = "<group>"; };
+		22FE3F0E189E84A4005C2DB2 /* springboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = springboard.h; sourceTree = "<group>"; };
+		22FE3F0F189E84B2005C2DB2 /* springboard.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = springboard.c; sourceTree = "<group>"; };
 		22FFB8C01880DE140073095D /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
 		22FFB8C21880DE140073095D /* CFDictionaryAddition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CFDictionaryAddition.c; sourceTree = "<group>"; };
 		22FFB8C31880DE140073095D /* CFDictionaryAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFDictionaryAddition.h; sourceTree = "<group>"; };
@@ -376,6 +379,7 @@
 		22B9557A1878A780004DCBF0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				22FE3F0D189E8491005C2DB2 /* springboard */,
 				22B9557B1878A795004DCBF0 /* service */,
 				22B9556918788C9F004DCBF0 /* syslog */,
 			);
@@ -407,6 +411,15 @@
 				22B955871878F14F004DCBF0 /* run.c */,
 			);
 			name = run;
+			sourceTree = "<group>";
+		};
+		22FE3F0D189E8491005C2DB2 /* springboard */ = {
+			isa = PBXGroup;
+			children = (
+				22FE3F0E189E84A4005C2DB2 /* springboard.h */,
+				22FE3F0F189E84B2005C2DB2 /* springboard.c */,
+			);
+			name = springboard;
 			sourceTree = "<group>";
 		};
 		22FFB8BF1880DE140073095D /* Core */ = {
@@ -506,6 +519,7 @@
 				22B9558A1878F4A7004DCBF0 /* SDMMD_Debugger.c in Sources */,
 				22310DC918750DFA0092C107 /* SDMMD_AFC.c in Sources */,
 				22DEF94018833562008E909F /* CFTypeAddition.c in Sources */,
+				22FE3F10189E84B2005C2DB2 /* springboard.c in Sources */,
 				22FFB8CE1880DE140073095D /* CFDictionaryAddition.c in Sources */,
 				22310DB018750D9E0092C107 /* SDMMD_MCP.c in Sources */,
 				22310DB118750D9E0092C107 /* SDMMD_Applications.c in Sources */,

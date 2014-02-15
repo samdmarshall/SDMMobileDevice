@@ -28,6 +28,7 @@ void RunQueryOnDevice(SDMMD_AMDeviceRef device, char *domain, char *key, sdmmd_r
 		if (queryResult) {
 			PrintCFType(queryResult);
 		}
+		CFSafeRelease(queryResult);
 
 		CFSafeRelease(keyString);
 		CFSafeRelease(domainString);

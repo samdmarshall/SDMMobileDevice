@@ -29,7 +29,7 @@ struct sdm_mobiledevice {
 	uint64_t peer_certificate_data_index;
 } ATR_PACK sdm_mobiledevice;
 
-#define SDMMobileDeviceRef struct sdm_mobiledevice*
+typedef struct sdm_mobiledevice* SDMMobileDeviceRef;
 
 SDMMobileDeviceRef InitializeSDMMobileDevice();
 void SDMMD_AMDeviceNotificationSubscribe();

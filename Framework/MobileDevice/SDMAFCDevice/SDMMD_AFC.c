@@ -36,8 +36,14 @@ sdmmd_return_t SDMMD_check_can_touch(SDMMD_AFCConnectionRef conn, CFDataRef *unk
 SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(SDMMD_AMConnectionRef conn) {
 	SDMMD_AFCConnectionRef afc = calloc(1, sizeof(struct sdmmd_AFCConnectionClass));
 	afc->handle = conn;
-	CFStringRef name = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%s.%s.%s"), "com.samdmarshall.sdmmobiledevice.afc", SDMCFStringGetString((conn->ivars.device)->ivars.unique_device_id), SDMCFStringGetString(SDMGetCurrentDateString()));
-	afc->operationQueue = dispatch_queue_create(SDMCFStringGetString(name), NULL);
+	char *udidString = SDMCFStringGetString((conn->ivars.device)->ivars.unique_device_id);
+	char *dateString = SDMCFStringGetString(SDMGetCurrentDateString());
+	CFStringRef name = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%s.%s.%s"), "com.samdmarshall.sdmmobiledevice.afc", udidString, dateString);
+	Safe(free, udidString);
+	Safe(free, dateString);
+	char *queueName = SDMCFStringGetString(name);
+	afc->operationQueue = dispatch_queue_create(queueName, NULL);
+	Safe(free, queueName);
 	afc->operationCount = 0;
 	return afc;
 }

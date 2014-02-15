@@ -216,6 +216,38 @@ ATR_UNUSED static struct SDM_MD_Service_Identifiers SDMMDServiceIdentifiers[SDM_
 #define kDisplayName							"displayName"
 #define kIconLists								"iconLists"
 
+/*
+ Results (Array) [
+ 	[0] Dock (Array) [
+ 		[0] App (Dictionary) {
+			displayIdentifier (String)
+ 			displayName (String)
+ 			iconModDate (String)
+ 			bundleVersion (String)
+			bundleIdentifier (String)
+		}
+ 	]
+ 	[1] Page 1 (Array)
+ 		[0] Page 1 (Array) [
+ 			(see page format above)
+		]
+ 		...
+		[n] Folder (Dictionary) {
+			displayName (String)
+ 			iconLists (Array) [
+ 				[0] Page 1 (Array) [
+ 					(see page format above)
+ 				]
+ 			]
+ 			listType (String)
+		}
+ 	[2] Page 2 (Array) [
+ 		(see page format above)
+ 	]
+ 	[3] ...
+ ]
+*/
+
 #pragma mark -
 #pragma mark Service Command Functions
 #pragma mark -

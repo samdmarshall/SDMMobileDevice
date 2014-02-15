@@ -114,7 +114,9 @@ void SDMMD_USBMuxAttachedCallback(void *context, struct USBMuxPacket *packet) {
 		// give priority to usb over wifi
 		if (newDevice->ivars.connection_type == 0x0) {
 			CFArrayAppendValue(updateWithNew, newDevice);
-			CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotification"), newDevice, NULL, true);
+			dispatch_async(dispatch_get_main_queue(), ^{
+				CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotification"), newDevice, NULL, true);
+			});
 			CFSafeRelease(SDMMobileDevice->deviceList);
 			SDMMobileDevice->deviceList = CFArrayCreateCopy(kCFAllocatorDefault, updateWithNew);
 		} else if (newDevice->ivars.connection_type == 0x1) {
@@ -122,7 +124,9 @@ void SDMMD_USBMuxAttachedCallback(void *context, struct USBMuxPacket *packet) {
 		}
 		CFSafeRelease(updateWithNew);
 	}
-	CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotificationFinished"), newDevice, NULL, true);
+	dispatch_async(dispatch_get_main_queue(), ^{
+		CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotificationFinished"), newDevice, NULL, true);
+	});
 }
 
 void SDMMD_USBMuxDetachedCallback(void *context, struct USBMuxPacket *packet) {
@@ -131,19 +135,25 @@ void SDMMD_USBMuxDetachedCallback(void *context, struct USBMuxPacket *packet) {
 	CFNumberGetValue(deviceId, kCFNumberSInt64Type, &detachedId);
 	CFMutableArrayRef updateWithRemove = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, SDMMobileDevice->deviceList);
 	uint32_t removeCounter = 0x0;
+	SDMMD_AMDeviceRef detachedDevice = NULL;
 	for (uint32_t i = 0x0; i < CFArrayGetCount(SDMMobileDevice->deviceList); i++) {
-		SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(SDMMobileDevice->deviceList, i);
+		detachedDevice = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(SDMMobileDevice->deviceList, i);
+		CFRetain(detachedDevice);
 		// add something for then updating to use wifi if available.
-		if (detachedId == SDMMD_AMDeviceGetConnectionID(device)) {
+		if (detachedId == SDMMD_AMDeviceGetConnectionID(detachedDevice)) {
 			CFArrayRemoveValueAtIndex(updateWithRemove, i-removeCounter);
 			removeCounter++;
-			CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotification"), device, NULL, true);
+			dispatch_async(dispatch_get_main_queue(), ^{
+				CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotification"), detachedDevice, NULL, true);
+			});
 		}
 	}
 	CFSafeRelease(SDMMobileDevice->deviceList);
 	SDMMobileDevice->deviceList = CFArrayCreateCopy(kCFAllocatorDefault, updateWithRemove);
 	CFSafeRelease(updateWithRemove);
-	CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotificationFinished"), NULL, NULL, true);
+	dispatch_async(dispatch_get_main_queue(), ^{
+		CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotificationFinished"), detachedDevice, NULL, true);
+	});
 }
 
 void SDMMD_USBMuxLogsCallback(void *context, struct USBMuxPacket *packet) {
@@ -182,8 +192,9 @@ void SDMMD_USBMuxListenerListCallback(void *context, struct USBMuxPacket *packet
 
 void SDMMD_USBMuxUnknownCallback(void *context, struct USBMuxPacket *packet) {
 	printf("Unknown response from usbmuxd!\n");
-	if (packet->payload)
+	if (packet->payload) {
 		PrintCFType(packet->payload);
+	}
 	dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->semaphore);
 }
 
@@ -215,7 +226,9 @@ void SDMMD_USBMuxClose(SDMMD_USBMuxListenerRef listener) {
 	listener->deviceListCallback = NULL;
 	listener->listenerListCallback = NULL;
 	listener->unknownCallback = NULL;
-	CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerStoppedListenerNotification"), NULL, NULL, true);
+	dispatch_async(dispatch_get_main_queue(), ^{
+		CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerStoppedListenerNotification"), NULL, NULL, true);
+	});
 	Safe(free,listener);
 }
 
@@ -313,6 +326,7 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 				}
 			} else {
                 printf("socketSourceEventHandler: failed to decodeCFPropertyList from packet payload\n");
+				// SDM: add a check and catch in here for restarting the listener.
             }
 		});
         dispatch_source_set_cancel_handler((*listener)->socketSource, ^{

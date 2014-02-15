@@ -87,7 +87,7 @@
 		[appPath setStringValue:CFDictionaryGetValue(app, @"Container")];
 		[appName setStringValue:CFDictionaryGetValue(app, @"CFBundleDisplayName")];
 
-		sdmmd_return_t result = SDMMD_StartDebuggingSessionOnDevice(self.device.device, &debugConn);
+		sdmmd_return_t result = 0x0;//SDMMD_StartDebuggingSessionOnDevice(self.device.device, &debugConn);
 		printf("debug start: 0x%08x\n",result);
 		if (result) {
 			NSLog(@"Could not connect to developer tools!");
@@ -104,16 +104,16 @@
 		if (row != -1) {
 			app = (CFDictionaryRef)[self.dataSource objectAtIndex:row];
 			
-			sdmmd_return_t result = SDMMD_StartDebuggingSessionOnDevice(self.device.device, &debugConn);
+			sdmmd_return_t result = 0x0;//SDMMD_StartDebuggingSessionOnDevice(self.device.device, &debugConn);
 			printf("debug start: 0x%08x\n",result);
 			
 			CFShow(CFDictionaryGetValue(app, CFSTR("Path")));
-			CFStringRef encodedPath = SDMMD_CreateEncodeForDebuggingCommand(CFDictionaryGetValue(app, CFSTR("Path")));
-			CFStringRef containerPath = SDMMD_CreateEncodeForDebuggingCommand(CFDictionaryGetValue(app, CFSTR("Container")));
+			CFStringRef encodedPath = SDMMD_EncodeDebuggingString(CFDictionaryGetValue(app, CFSTR("Path")));
+			CFStringRef containerPath = SDMMD_EncodeDebuggingString(CFDictionaryGetValue(app, CFSTR("Container")));
 			CFShow(encodedPath);
 			CFShow(containerPath);
 			sdmmd_debug_return_t dresult;
-			dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugQSetMaxPacketSize], SDMMD_CreateEncodeForDebuggingCommand(CFSTR("1024")));
+			dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugQSetMaxPacketSize], SDMMD_EncodeDebuggingString(CFSTR("1024")));
 			CFShow(dresult.data);
 			dresult = SDMMD_DebuggingSend(self.debugConn, KnownDebugCommands[kDebugQSetWorkingDir], containerPath);
 			CFShow(dresult.data);

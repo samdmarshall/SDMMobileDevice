@@ -97,6 +97,8 @@ typedef struct sdmmd_am_device* SDMMD_AMDeviceRef;
 #pragma mark -
 void SDMMD_AMDeviceRefClassInitialize();
 
+CFTypeID SDMMD_AMDeviceRefGetTypeID();
+
 /*!
  @function SDMMD_AMDeviceCreateEmpty
  @discussion

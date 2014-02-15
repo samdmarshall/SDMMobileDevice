@@ -330,7 +330,7 @@ void transfer_callback(CFDictionaryRef dict, int arg) {
     if (CFEqual(status, CFSTR("CopyingFile"))) {
         CFStringRef path = CFDictionaryGetValue(dict, CFSTR("Path"));
         if (/*(last_path == NULL || !CFEqual(path, last_path)) &&*/ !CFStringHasSuffix(path, CFSTR(".ipa"))) {
-            printf("[%3d%%] Copying %s to device\n", percent, CFStringGetCStringPtr(path, kCFStringEncodingMacRoman));
+            printf("[%3d%%] Copying %s to device\n", percent, CFStringGetCStringPtr(path, kCFStringEncodingUTF8));
 			
         }
     }
@@ -340,7 +340,7 @@ void install_callback(CFDictionaryRef dict, int arg) {
     int percent;
     CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
     CFNumberGetValue(CFDictionaryGetValue(dict, CFSTR("PercentComplete")), kCFNumberSInt32Type, &percent);
-    printf("[%3d%%] %s\n", percent, CFStringGetCStringPtr(status, kCFStringEncodingMacRoman));
+    printf("[%3d%%] %s\n", percent, CFStringGetCStringPtr(status, kCFStringEncodingUTF8));
 }
 
 
@@ -424,8 +424,8 @@ void DemoFour(const char *appPath) {
 			CFStringRef bundleId = CFStringCreateWithBytes(kCFAllocatorDefault, appPath, strlen(appPath), kCFStringEncodingUTF8, false);
 			
 			SDMMD_AMDebugConnectionRef debug;
-			result = SDMMD_StartDebuggingSessionOnDevice(device, &debug);
-			SDMMD_StartDebugger(debug, bundleId);
+			//result = SDMMD_StartDebuggingSessionOnDevice(device, &debug);
+			//SDMMD_StartDebugger(debug, bundleId);
 		}
 	}
 	

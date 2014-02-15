@@ -63,6 +63,7 @@ void EnableExtendedLogging(SDMMD_AMDeviceRef device) {
 			} else {
 				PrintCFType(value);
 			}
+			CFSafeRelease(value);
 		})
 		SDMMD_AMDeviceStopSession(device);
 		SDMMD_AMDeviceDisconnect(device);
@@ -73,7 +74,7 @@ void AttachToSyslog(char *udid) {
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0x0), ^{
 		SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 		if (device) {
-			EnableExtendedLogging(device);
+			//EnableExtendedLogging(device);
 			SDMMD_AMConnectionRef syslog = AttachToDeviceAndService(device, AMSVC_SYSLOG_RELAY);
 			newlineBytesLength = (SDMMD_device_os_is_at_least(device, CFSTR("6.0")) ? kNewlineBytesiOS6Up : kNewlineBytesiOS5);
 			if (syslog) {
@@ -110,17 +111,18 @@ void AttachToSyslog(char *udid) {
 
 void PrintSysLog() {
 	int token;
-	uint32_t status = notify_register_dispatch(updateLogNotifyName, &token, updatelogQueue, ^(int token){
-		__block CFDataRef logData;
-		__block Boolean foundLine = false;
-		__block Boolean foundAll = false;
-		__block CFIndex offset = 0x0, length = 0x0;
+	uint32_t status[0x2] = {0x0};
+	status[0x0] = notify_register_dispatch(updateLogNotifyName, &token, updatelogQueue, ^(int token){
 		dispatch_sync(operatingQueue, ^{
+			CFDataRef logData;
+			Boolean foundLine = false;
+			Boolean foundAll = false;
+			CFIndex offset = 0x0, length = 0x0;
 			while (!foundAll) {
 				foundLine = false;
 				length = CFDataGetLength(syslogBuffer);
 				logData = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, CFDataGetBytePtr(syslogBuffer), length, kCFAllocatorDefault);
-				CFDataRef newlineData = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, newlineBytes, newlineBytesLength, kCFAllocatorDefault);
+				CFDataRef newlineData = CFDataCreate(kCFAllocatorDefault, newlineBytes, newlineBytesLength);
 				CFRange line = CFDataFind(logData, newlineData, CFRangeMake(offset, length), 0x0);
 				if (line.location != kCFNotFound) {
 					foundLine = true;
@@ -169,14 +171,15 @@ void PrintSysLog() {
 					CFDataDeleteBytes(syslogBuffer, CFRangeMake(offset, length));
 					Safe(free, lineBuffer);
 				}
+				CFSafeRelease(newlineData);
 			}
 		});
 	});
-	status = notify_register_dispatch(exitNotifyName, &token, dispatch_get_main_queue(), ^(int token){
+	status[0x1] = notify_register_dispatch(exitNotifyName, &token, dispatch_get_main_queue(), ^(int token){
 		printf("\n\nLost Connection with Device\n");
 		CFRunLoopStop(CFRunLoopGetMain());
 	});
-	if (status == KERN_SUCCESS) {
+	if (status[0x0] == KERN_SUCCESS && status[0x1] == KERN_SUCCESS) {
 		CFRunLoopRun();
 	} else {
 		printf("Failed to register callback to parse syslog.");

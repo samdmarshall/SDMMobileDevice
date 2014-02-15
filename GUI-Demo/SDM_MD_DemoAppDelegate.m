@@ -66,8 +66,8 @@
 		//SDMMD_AMDebugConnectionRef debugConn = NULL;
 		//uint32_t result = SDMMD_StartDebuggingSessionOnDevice(device, &debugConn);
 		//printf("debug start: 0x%08x\n",result);
-		CFStringRef encodedPath = SDMMD_CreateEncodeForDebuggingCommand(CFSTR(""));
-		CFStringRef containerPath = SDMMD_CreateEncodeForDebuggingCommand(CFSTR(""));
+		CFStringRef encodedPath = SDMMD_EncodeDebuggingString(CFSTR(""));
+		CFStringRef containerPath = SDMMD_EncodeDebuggingString(CFSTR(""));
 		sdmmd_debug_return_t dresult;
 		CFStringRef commandformat = (CFStringRef)[NSString stringWithFormat:@"%d,0,%@",(uint32_t)CFStringGetLength(encodedPath),encodedPath];
 		dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugA], commandformat);
@@ -115,12 +115,12 @@
 				//result = SDMMD_StartDebuggingSessionOnDevice(device, &debugConn);
 				//printf("debug start: 0x%08x\n",result);
 				//CFShow(CFDictionaryGetValue(app, CFSTR("Path")));
-				//CFStringRef encodedPath = SDMMD_CreateEncodeForDebuggingCommand(CFDictionaryGetValue(app, CFSTR("Path")));
-				//CFStringRef containerPath = SDMMD_CreateEncodeForDebuggingCommand(CFDictionaryGetValue(app, CFSTR("Container")));
+				//CFStringRef encodedPath = SDMMD_EncodeDebuggingString(CFDictionaryGetValue(app, CFSTR("Path")));
+				//CFStringRef containerPath = SDMMD_EncodeDebuggingString(CFDictionaryGetValue(app, CFSTR("Container")));
 				//CFShow(encodedPath);
 				//CFShow(containerPath);
 				//sdmmd_debug_return_t dresult;
-				dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugQSetMaxPacketSize], SDMMD_CreateEncodeForDebuggingCommand(CFSTR("1024")));
+				dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugQSetMaxPacketSize], SDMMD_EncodeDebuggingString(CFSTR("1024")));
 				CFShow(dresult.data);
 				dresult = SDMMD_DebuggingSend(debugConn, KnownDebugCommands[kDebugQSetWorkingDir], containerPath);
 				CFShow(dresult.data);

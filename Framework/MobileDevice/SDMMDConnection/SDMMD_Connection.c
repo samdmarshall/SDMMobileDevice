@@ -132,7 +132,7 @@ sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef se
 						result = SDMMD_lockconn_send_message(device, dict);
 						CFSafeRelease(dict);
 						if (result == 0) {
-							CFMutableDictionaryRef response;
+							CFMutableDictionaryRef response = NULL;
 							result = SDMMD_lockconn_receive_message(device, &response);
 							if (result == 0 && response) {
 								result = kAMDInvalidResponseError;
@@ -205,7 +205,9 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 						if (CFEqual(bag, kCFBooleanTrue)) {
 							result = SDMMD__CopyEscrowBag(device, &escrowBag);
 							if (result) {
-								printf("AMDeviceSecureStartService: Could not get escrow keybag for device %s!\n", (device->ivars.unique_device_id ? SDMCFStringGetString(device->ivars.unique_device_id) : "device with no name"));
+								char *udidString = SDMCFStringGetString(device->ivars.unique_device_id);
+								printf("AMDeviceSecureStartService: Could not get escrow keybag for device %s!\n", (device->ivars.unique_device_id ? udidString : "device with no name"));
+								Safe(free, udidString);
 								mutexLock = true;
 								ssl = NULL;
 								CFSafeRelease(escrowBag);
@@ -234,6 +236,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 							}
 						}
 					}
+					
 					result = SDMMD_send_service_start(device, service, escrowBag, &port, &enableSSL);
 					mutexLock = true;
 					if (result) {
@@ -243,7 +246,9 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 							Safe(SSL_free,ssl);
 						} else {
 							if (escrowBag) {
-								printf("AMDeviceSecureStartService: Escrow bag mismatch for device %s!", (device->ivars.unique_device_id ? SDMCFStringGetString(device->ivars.unique_device_id) : "device with no name"));
+								char *udidString = SDMCFStringGetString(device->ivars.unique_device_id);
+								printf("AMDeviceSecureStartService: Escrow bag mismatch for device %s!", (device->ivars.unique_device_id ? udidString : "device with no name"));
+								Safe(free, udidString);
 								char *path = calloc(1, sizeof(char)*0x400);
 								SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
 								CFMutableDictionaryRef fileDict = SDMMD__CreateDictFromFileContents(path);
@@ -254,8 +259,8 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 									if (result) {
 										printf("_DestroyEscrowBag: Failed to store escrow bag to %s.\n", path);
 									}
-									CFSafeRelease(fileDict);
 								}
+								CFSafeRelease(fileDict);
 								Safe(free,path);
 								CFSafeRelease(escrowBag);
 								Safe(SSL_free,ssl);
@@ -265,7 +270,9 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 						result = SDMMD__connect_to_port(device, port, timeoutConnection, &socket, ((uint32_t)ssl & 0x1) & 0xff);
 						if (result == 0x0) {
 							if (enableSSL) {
-								printf("AMDeviceSecureStartService: SSL requested for service %s with device %s.\n", cservice, (device->ivars.unique_device_id ? SDMCFStringGetString(device->ivars.unique_device_id) : "device with no name"));
+								char *udidString = SDMCFStringGetString(device->ivars.unique_device_id);
+								printf("AMDeviceSecureStartService: SSL requested for service %s with device %s.\n", cservice, (device->ivars.unique_device_id ? udidString : "device with no name"));
+								Safe(free, udidString);
 								CFMutableDictionaryRef record = NULL;
 								if (socket != 0xff) {
 									result = kAMDInvalidArgumentError;
@@ -282,7 +289,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 												if (deviceCertVal && rootPrivKeyVal) {
 													ssl = SDMMD_lockssl_handshake((device->ivars.lockdown_conn), rootCertVal, deviceCertVal, rootPrivKeyVal, 0x1);
 													if (ssl) {
-														result = 0x0;
+														result = kAMDSuccess;
 													} else {
 														printf("_TurnOnSSLOverSocket: Could not perform SSL handshake.\n");
 														result = kAMDNoWifiSyncSupportError;
@@ -305,7 +312,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 												*connection = conn;
 												socket = 0xffffffff;
 												ssl = NULL;
-												result = 0x0;
+												result = kAMDSuccess;
 											}
 											CFSafeRelease(connDict);
 										}
@@ -324,14 +331,16 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 										SDMMD_AMDServiceConnectionSetDevice(&conn, device);
 										SDMMD_AMDServiceConnectionSetServiceName(&conn, service);
 										*connection = conn;
-										result = 0x0;
+										result = kAMDSuccess;
 									}
 									CFSafeRelease(connDict);
 								}
 							}
 						} else {
-							printf("SDMMD_AMDeviceSecureStartService: Could not connect to \"%s\" service on port %d, device %d - %s.", cservice, port, device->ivars.device_id, SDMCFStringGetString(device->ivars.unique_device_id));
-							ssl = NULL;
+							char *udidString = SDMCFStringGetString(device->ivars.unique_device_id);
+							printf("SDMMD_AMDeviceSecureStartService: Could not connect to \"%s\" service on port %d, device %d - %s.", cservice, port, device->ivars.device_id, udidString);
+							Safe(free,udidString);
+							//ssl = NULL;
 						}
 						CFSafeRelease(escrowBag);
 						Safe(SSL_free,ssl);
@@ -369,27 +378,28 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 
 sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef service, CFDictionaryRef options, SDMMD_AMConnectionRef *connection) {
 	sdmmd_return_t result = kAMDInvalidArgumentError;
-	uint32_t socket = 0xffffffff;
+	//uint32_t socket = 0xffffffff;
 	if (device && connection) {
 		SSL *ssl_enabled = NULL;
 		if (service) {
 			if (device->ivars.device_active) {
 				CFMutableDictionaryRef optionsCopy;
-				if (options)
+				if (options) {
 				 	optionsCopy = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0x0, options);
-				else
+				} else {
 					optionsCopy = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+				}
 				if (optionsCopy) {
 					CFDictionarySetValue(optionsCopy, CFSTR("CloseOnInvalidate"), kCFBooleanFalse);
 					result = SDMMD_AMDeviceSecureStartService(device, service, optionsCopy, connection);
 					CFSafeRelease(optionsCopy);
 					if (result == 0) {
-						socket = SDMMD_AMDServiceConnectionGetSocket(*connection);
+						//socket = SDMMD_AMDServiceConnectionGetSocket(*connection);
 						ssl_enabled = SDMMD_AMDServiceConnectionGetSecureIOContext(*connection);
 						if (ssl_enabled) {
 							result = kAMDNoWifiSyncSupportError;
 						} else {
-							result = 0x0;
+							result = kAMDSuccess;
 						}
 					}
 				} else {
@@ -443,11 +453,13 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartSessionedService(SDMMD_AMDeviceRef devic
 			if (result == 0) {
 				result = SDMMD_AMDeviceSecureStartService(device, service, NULL, connection);
 				if (result) {
-					printf("SDMMD_AMDeviceSecureStartSessionedService: Could not start service %s for device %i.\n", SDMCFStringGetString(service), device->ivars.device_id);
+					char *serviceString = SDMCFStringGetString(service);
+					printf("SDMMD_AMDeviceSecureStartSessionedService: Could not start service %s for device %i.\n", serviceString, device->ivars.device_id);
+					Safe(free, serviceString);
 				}
-				result = SDMMD_AMDeviceStopSession(device);
+				SDMMD_AMDeviceStopSession(device);
 			}
-			result = SDMMD_AMDeviceDisconnect(device);
+			SDMMD_AMDeviceDisconnect(device);
 		}
 	}
 	return result;
