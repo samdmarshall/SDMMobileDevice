@@ -13,3 +13,5 @@ build/
 *.xcode*/xcuserdata/
 *.xcode*/xcuserdata/
 *.xccheckout
+xcuserdata
+SDMMobileDevice.xcworkspace/xcuserdata/
