@@ -189,6 +189,7 @@
 		225AD7301765FE7700A47071 /* SDMMD_USBMuxListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_USBMuxListener.h; sourceTree = "<group>"; };
 		225AD7311765FE7700A47071 /* SDMMD_USBMuxListener.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_USBMuxListener.c; sourceTree = "<group>"; };
 		22648F9818947C4300133948 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		2278490F18AFE5A100D1D6FB /* Array.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Array.h; sourceTree = "<group>"; };
 		22AD8E5817871506002ACFB1 /* SDMMD_AFC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AFC.h; sourceTree = "<group>"; };
 		22AD8E5917871506002ACFB1 /* SDMMD_AFC.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AFC.c; sourceTree = "<group>"; };
 		22AD8E631787465A002ACFB1 /* SDMMD_AMDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AMDevice.h; sourceTree = "<group>"; };
@@ -438,8 +439,8 @@
 		22DEF960188350E6008E909F /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				22C892AD189D75A8008B1D2D /* Buffer.c */,
 				22C892AE189D75A8008B1D2D /* Buffer.h */,
+				22C892AD189D75A8008B1D2D /* Buffer.c */,
 				22DEF961188350E6008E909F /* Core.h */,
 				22DEF962188350E6008E909F /* CoreFoundation */,
 				22DEF967188350E6008E909F /* Geometry */,
@@ -448,6 +449,7 @@
 				22DEF96F188350E6008E909F /* Pointer.h */,
 				22DEF970188350E6008E909F /* Range.h */,
 				22DEF97F18835209008E909F /* Attributes.h */,
+				2278490F18AFE5A100D1D6FB /* Array.h */,
 			);
 			name = Core;
 			path = ../Core/Core;
