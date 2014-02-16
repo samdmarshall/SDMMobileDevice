@@ -44,33 +44,38 @@ struct AMDeviceClassHeader {
 	unsigned char header[16];		// AMDeviceClass CF Header 
 } __attribute ((packed)) AMDeviceClassHeader; // size 0x10
 
+typedef enum {
+	kAMDeviceConnectionTypeUSB = 0,
+	kAMDeviceConnectionTypeWiFi = 1,
+} AMDeviceConnectionType;
+
 struct AMDeviceClassBody {
-	int32_t device_id;					// 16
-	int32_t location_id;				// 20
-	uint16_t product_id;				// 24
-	int16_t padding0;					// 26
-	int32_t unknown1;					// 28
-	CFStringRef unique_device_id;		// 32
-	int32_t unknown2;					// 36
-	int32_t connection_type;			// 40 (0 for USB, 1 for WiFi)
-	unsigned char unknown3[4];			// 44
-	SDMMD_lockdown_conn *lockdown_conn; // 48
-	unsigned char unknown4[4];			// 52
-	CFStringRef session;				// 56 needs to be not zero in AMDeviceSecureStartService  -- connection
-	int32_t padding1;					// 60
-	pthread_mutex_t mutex_lock;			// 64
-	unsigned char unknown5[60];			// 68
-	CFStringRef service_name;			// 128 bonjour service name
-	unsigned int unknown6;				// 132
-	int32_t interface_index;			// 136
-	int8_t device_active;				// 140
-	unsigned char unknown7[3];			// 141
-	int32_t unknown8;					// 144
-	unsigned char unknown9[4];			// 148
-	CFDataRef network_address;			// 152 stores a sockaddr_storage
-	unsigned char unknown10[4];			// 156
-	CFDataRef unknown11;				// 160 
-	unsigned char unknown12[4];			// 164
+	int32_t device_id;							// 16
+	int32_t location_id;						// 20
+	uint16_t product_id;						// 24
+	int16_t padding0;							// 26
+	int32_t unknown1;							// 28
+	CFStringRef unique_device_id;				// 32
+	int32_t unknown2;							// 36
+	AMDeviceConnectionType connection_type;		// 40 (0 for USB, 1 for WiFi)
+	unsigned char unknown3[4];					// 44
+	SDMMD_lockdown_conn *lockdown_conn;			// 48
+	unsigned char unknown4[4];					// 52
+	CFStringRef session;						// 56 needs to be not zero in AMDeviceSecureStartService  -- connection
+	int32_t padding1;							// 60
+	pthread_mutex_t mutex_lock;					// 64
+	unsigned char unknown5[60];					// 68
+	CFStringRef service_name;					// 128 bonjour service name
+	unsigned int unknown6;						// 132
+	int32_t interface_index;					// 136
+	int8_t device_active;						// 140
+	unsigned char unknown7[3];					// 141
+	int32_t unknown8;							// 144
+	unsigned char unknown9[4];					// 148
+	CFDataRef network_address;					// 152 stores a sockaddr_storage
+	unsigned char unknown10[4];					// 156
+	CFDataRef unknown11;						// 160
+	unsigned char unknown12[4];					// 164
 } ATR_PACK AMDeviceClassBody; // size 0x98
 
 struct sdmmd_am_device {
@@ -82,7 +87,7 @@ struct sdmmd_am_device {
 CFTypeID SDMMD_AMDeviceGetTypeID(void);
 
 typedef enum _AMDInterfaceConnectionType {
-    kAMDInterfaceConnectionTypeInvalid  = 0xffffffff,
+    kAMDInterfaceConnectionTypeInvalid  = -1,
     kAMDInterfaceConnectionTypeUnknown  = 0x0,
     kAMDInterfaceConnectionTypeDirect   = 0x1,
     kAMDInterfaceConnectionTypeIndirect = 0x2

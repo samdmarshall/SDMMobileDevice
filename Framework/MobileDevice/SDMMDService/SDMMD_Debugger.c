@@ -210,7 +210,7 @@ sdmmd_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef dconn, CFDataRe
 	SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
 	if (dconn->ackEnabled) {
 		char ack[0x1];
-		memcpy(ack, (KnownDebugCommands[kDebugACK]->code), S(char));
+		memcpy(ack, (KnownDebugCommands[kDebugACK].code), S(char));
 		shouldReceive = SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, ack);
 		if (strncmp(ack, commandPrefix, S(char)) == 0x0) {
 			shouldReceive = true;

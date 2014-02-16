@@ -47,7 +47,7 @@ int32_t CheckIfExpectingResponse(SocketConnection handle, uint32_t timeout) {
 		pto = NULL;
 	}
 	if (!handle.isSSL) {
-		returnValue = select(handle.socket.conn + 1, &fds, 0x0, 0x0, pto);
+		returnValue = select(handle.socket.conn + 1, &fds, NULL, NULL, pto);
 	} else {
 		returnValue = 0;
 	}
@@ -61,7 +61,7 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 	    msgLen = htonl((uint32_t)msgLen);
 		uint64_t result;
 		if (handle.isSSL) {
-			if (SSL_state(handle.socket.ssl) == 0x3) {
+			if (SSL_is_init_finished(handle.socket.ssl)) {
 				result = SSL_write(handle.socket.ssl, &msgLen, sizeof(uint32_t));
 			} else {
 				return kAMDNotConnectedError;
@@ -88,7 +88,8 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 sdmmd_return_t SDMMD_DirectServiceSend(SocketConnection handle, CFDataRef data) {
 	CFIndex msgLen = (data ? CFDataGetLength(data) : 0);
 	if (msgLen) {
-		 uint64_t result;
+		uint64_t result = 0;
+		
 		if (handle.isSSL) {
 			result = SSL_write(handle.socket.ssl, CFDataGetBytePtr(data), (uint32_t)msgLen);
 		} else {
@@ -105,6 +106,7 @@ sdmmd_return_t SDMMD_DirectServiceSend(SocketConnection handle, CFDataRef data) 
 sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 	size_t received;
 	uint32_t length = 0;
+
 	if (handle.isSSL == true || CheckIfExpectingResponse(handle, 10000)) {
 		if (handle.isSSL) {
 			received = SSL_read(handle.socket.ssl, &length, 0x4);
@@ -134,6 +136,7 @@ sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 
 sdmmd_return_t SDMMD_DirectServiceReceive(SocketConnection handle, CFDataRef *data) {
 	uint32_t size = (data && *data ? (uint32_t)CFDataGetLength(*data) : 0);
+
 	if (size) {
 		if (handle.isSSL == true || CheckIfExpectingResponse(handle, 1000)) {
 			unsigned char *buffer = calloc(1, size);
@@ -162,12 +165,14 @@ sdmmd_return_t SDMMD_ServiceSendMessage(SocketConnection handle, CFPropertyListR
 	CFErrorRef error;
 	CFDataRef xmlData = CFPropertyListCreateData(kCFAllocatorDefault, data, format, 0, &error);
 	sdmmd_return_t result = ((data) ? SDMMD_ServiceSend(handle, xmlData) : kAMDInvalidArgumentError);
+
 	CFSafeRelease(xmlData);
 	return result;
 }
 
 sdmmd_return_t SDMMD_ServiceReceiveMessage(SocketConnection handle, CFPropertyListRef *data) {
 	CFDataRef dataBuffer = NULL;
+
 	if (SDM_MD_CallSuccessful(SDMMD_ServiceReceive(handle, &dataBuffer))) {
 		if (dataBuffer && CFDataGetLength(dataBuffer)) {
 			*data = CFPropertyListCreateWithData(0, dataBuffer, kCFPropertyListImmutable, NULL, NULL);
@@ -183,10 +188,13 @@ sdmmd_return_t SDMMD_ServiceReceiveMessage(SocketConnection handle, CFPropertyLi
 sdmmd_return_t SDMMD_ServiceSendStream(SocketConnection handle, CFPropertyListRef data, CFPropertyListFormat format) {
 	CFStringRef errStr;
 	CFWriteStreamRef write = CFWriteStreamCreateWithAllocatedBuffers(kCFAllocatorDefault, kCFAllocatorDefault);
+
 	CFWriteStreamOpen(write);
+
 	CFIndex length = CFPropertyListWriteToStream(data, write, format, &errStr);
 	CFDataRef xmlData = CFWriteStreamCopyProperty(write, kCFStreamPropertyDataWritten);
 	sdmmd_return_t result = kAMDInvalidArgumentError;
+
 	if (length == CFDataGetLength(xmlData)) {
 		result = ((data) ? SDMMD_ServiceSend(handle, xmlData) : kAMDInvalidArgumentError);
 	}
@@ -199,11 +207,13 @@ sdmmd_return_t SDMMD_ServiceSendStream(SocketConnection handle, CFPropertyListRe
 sdmmd_return_t SDMMD_ServiceReceiveStream(SocketConnection handle, CFPropertyListRef *data) {
 	CFDataRef dataBuffer = NULL;
 	sdmmd_return_t result = SDMMD_ServiceReceive(handle, &dataBuffer);
+
 	if (SDM_MD_CallSuccessful(result)) {
 		if (dataBuffer && CFDataGetLength(dataBuffer)) {
 			CFReadStreamRef read = CFReadStreamCreateWithBytesNoCopy(kCFAllocatorDefault, CFDataGetBytePtr(dataBuffer), CFDataGetLength(dataBuffer), kCFAllocatorNull);
+
 			CFReadStreamOpen(read);
-			*data = CFPropertyListCreateWithStream(kCFAllocatorDefault, read, CFDataGetLength(dataBuffer), 0x2, 0, NULL);
+			*data = CFPropertyListCreateWithStream(kCFAllocatorDefault, read, CFDataGetLength(dataBuffer), kCFPropertyListMutableContainersAndLeaves, NULL, NULL);
 			CFReadStreamClose(read);
 			CFSafeRelease(read);
 		}
