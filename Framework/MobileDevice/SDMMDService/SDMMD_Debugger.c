@@ -141,6 +141,30 @@ void SDMMD_DebuggingCommandRelease(DebuggerCommandRef command) {
 	Safe(free,command);
 }
 
+
+void SDMMD_DebuggingLogData(CFDataRef data, CFStringRef prefix) {
+    // FIXME: select proper encoding.
+    CFStringRef payload = CFStringCreateWithBytes(kCFAllocatorDefault,
+                                                  CFDataGetBytePtr(data),
+                                                  CFDataGetLength(data),
+                                                  kCFStringEncodingUTF8,
+                                                  false);
+    CFShow(CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("<%4ld> %@: %@"),
+                                    CFStringGetLength(payload), prefix, payload));
+    CFSafeRelease(payload);
+}
+
+void SDMMD_DebuggingLogSend(CFDataRef data) {
+#if LOG_REMOTE
+    SDMMD_DebuggingLogData(data, CFSTR("send packet"));
+#endif
+}
+void SDMMD_DebuggingLogRecv(CFDataRef data) {
+#if LOG_REMOTE
+    SDMMD_DebuggingLogData(data, CFSTR("read packet"));
+#endif
+}
+
 sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCommandRef command, CFDataRef *response) {
 	sdmmd_return_t result = kAMDSuccess;
 	SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
