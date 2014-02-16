@@ -176,8 +176,8 @@ void SDMMD_DebuggingLogRecv(CFDataRef data) {
 bool SDMMD_DebuggingSendAck(SDMMD_AMDebugConnectionRef dconn) {
 	sdmmd_return_t result = kAMDSuccess;
 	SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
-    UInt8 payload = (UInt8) KnownDebugCommands[kDebugACK].code;
-    CFDataRef ack = CFDataCreate(kCFAllocatorDefault, &payload, 1);
+    UInt8 * payload = (UInt8*)KnownDebugCommands[kDebugACK].code;
+    CFDataRef ack = CFDataCreate(kCFAllocatorDefault, payload, 1);
     assert(ack);
     SDMMD_DebuggingLogSend(ack);
     result = SDMMD_ServiceSend(debuggingSocket, ack);
