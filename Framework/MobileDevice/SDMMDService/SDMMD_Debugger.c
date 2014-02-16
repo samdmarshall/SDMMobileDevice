@@ -165,6 +165,43 @@ void SDMMD_DebuggingLogRecv(CFDataRef data) {
 #endif
 }
 
+
+/*!
+ * Send an acknowledge packet to the debugserver indicating that the received
+ * data was understood.
+ *
+ * @param dconn the debug connection reference.
+ * @returns whether or not the send was successful.
+ */
+bool SDMMD_DebuggingSendAck(SDMMD_AMDebugConnectionRef dconn) {
+	sdmmd_return_t result = kAMDSuccess;
+	SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
+    UInt8 payload = (UInt8) KnownDebugCommands[kDebugACK].code;
+    CFDataRef ack = CFDataCreate(kCFAllocatorDefault, &payload, 1);
+    assert(ack);
+    SDMMD_DebuggingLogSend(ack);
+    result = SDMMD_ServiceSend(debuggingSocket, ack);
+    CFSafeRelease(ack);
+    return SDM_MD_CallSuccessful(result);
+}
+
+/*!
+ * Read an acknowledge packet from the debugserver. Use this method if ack mode
+ * is on. Every successful transmitted packet to the server will result in an
+ * ack packet.
+ *
+ * @param dconn the debug connection reference.
+ * @param data pointer. This can be used to inspect the result.
+ * @returns whether or not the receive was successful.
+ */
+bool SDMMD_DebuggingRecvAck(SDMMD_AMDebugConnectionRef dconn, CFMutableDataRef data) {
+    sdmmd_return_t result = kAMDSuccess;
+    SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
+    result = SDMMD_DirectServiceReceiveN(debuggingSocket, data, 1);
+    SDMMD_DebuggingLogRecv(data);
+    return SDM_MD_CallSuccessful(result);
+}
+
 sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCommandRef command, CFDataRef *response) {
 	sdmmd_return_t result = kAMDSuccess;
 	SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
