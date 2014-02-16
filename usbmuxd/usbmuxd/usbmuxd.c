@@ -22,7 +22,7 @@ USBMuxAgentRef MuxAgent;
 
 USBMuxAgentRef USBMuxAgentCreate() {
 	USBMuxAgentRef agent = (USBMuxAgentRef)calloc(1, sizeof(struct USBMuxAgentClass));
-	agent->socket = 0x0;
+	agent->socket = -1;
 	agent->isActive = false;
 	agent->socketQueue = dispatch_queue_create("com.samdmarshall.sdm_usbmux.socketQueue", NULL);
 	return agent;
