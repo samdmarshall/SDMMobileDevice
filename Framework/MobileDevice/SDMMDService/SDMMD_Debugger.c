@@ -93,6 +93,19 @@ uint32_t GenerateChecksumForData(char *strPtr, uint32_t length) {
 	return checksum;
 }
 
+CFStringRef SDMMD_CreateDoubleByteString(char * str, size_t len) {
+    CFMutableStringRef ret = CFStringCreateMutable(NULL, 0);
+    for(CFIndex index = 0; index < len; index++) {
+        CFStringRef doublebyte = CFStringCreateWithFormat(kCFAllocatorDefault, NULL,
+                                                          CFSTR("%c%c"),
+                                                          kHexEncodeFirstByte(str[index]),
+                                                          kHexEncodeSecondByte(str[index]));
+        CFStringAppend(ret, doublebyte);
+        CFSafeRelease(doublebyte);
+    }
+    return ret;
+}
+
 BufferRef SDMMD_EncodeDebuggingString(CFStringRef command) {
 	char *commandString = SDMCFStringGetString(command);
 	CFIndex encodedLength = ((0x2*strlen(commandString))+kChecksumHashLength+0x1);
@@ -141,6 +154,67 @@ void SDMMD_DebuggingCommandRelease(DebuggerCommandRef command) {
 	Safe(free,command);
 }
 
+
+void SDMMD_DebuggingLogData(CFDataRef data, CFStringRef prefix) {
+    // FIXME: select proper encoding.
+    CFStringRef payload = CFStringCreateWithBytes(kCFAllocatorDefault,
+                                                  CFDataGetBytePtr(data),
+                                                  CFDataGetLength(data),
+                                                  kCFStringEncodingUTF8,
+                                                  false);
+    CFShow(CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("<%4ld> %@: %@"),
+                                    CFStringGetLength(payload), prefix, payload));
+    CFSafeRelease(payload);
+}
+
+void SDMMD_DebuggingLogSend(CFDataRef data) {
+#if LOG_REMOTE
+    SDMMD_DebuggingLogData(data, CFSTR("send packet"));
+#endif
+}
+void SDMMD_DebuggingLogRecv(CFDataRef data) {
+#if LOG_REMOTE
+    SDMMD_DebuggingLogData(data, CFSTR("read packet"));
+#endif
+}
+
+
+/*!
+ * Send an acknowledge packet to the debugserver indicating that the received
+ * data was understood.
+ *
+ * @param dconn the debug connection reference.
+ * @returns whether or not the send was successful.
+ */
+bool SDMMD_DebuggingSendAck(SDMMD_AMDebugConnectionRef dconn) {
+	sdmmd_return_t result = kAMDSuccess;
+	SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
+    UInt8 * payload = (UInt8*)KnownDebugCommands[kDebugACK].code;
+    CFDataRef ack = CFDataCreate(kCFAllocatorDefault, payload, 1);
+    assert(ack);
+    SDMMD_DebuggingLogSend(ack);
+    result = SDMMD_ServiceSend(debuggingSocket, ack);
+    CFSafeRelease(ack);
+    return SDM_MD_CallSuccessful(result);
+}
+
+/*!
+ * Read an acknowledge packet from the debugserver. Use this method if ack mode
+ * is on. Every successful transmitted packet to the server will result in an
+ * ack packet.
+ *
+ * @param dconn the debug connection reference.
+ * @param data pointer. This can be used to inspect the result.
+ * @returns whether or not the receive was successful.
+ */
+bool SDMMD_DebuggingRecvAck(SDMMD_AMDebugConnectionRef dconn, CFMutableDataRef data) {
+    sdmmd_return_t result = kAMDSuccess;
+    SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
+    result = SDMMD_DirectServiceReceiveN(debuggingSocket, data, 1, 0);
+    SDMMD_DebuggingLogRecv(data);
+    return SDM_MD_CallSuccessful(result);
+}
+
 sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCommandRef command, CFDataRef *response) {
 	sdmmd_return_t result = kAMDSuccess;
 	SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
@@ -166,13 +240,24 @@ sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCom
 	}
 	SDMMD_FormatDebuggingCommand(buffer, entireCommand, dconn->ackEnabled);
 	CFSafeRelease(entireCommand);
-	CFDataRef sending = CFDataCreate(kCFAllocatorDefault, PtrCast(buffer->data, UInt8*), (CFIndex)(buffer->length));
+	CFDataRef sending = CFDataCreate(kCFAllocatorDefault, PtrCast(buffer->data, UInt8*), (CFIndex)(buffer->length)-1);
+    SDMMD_DebuggingLogSend(sending);
 	result = SDMMD_ServiceSend(debuggingSocket, sending);
 	if (SDM_MD_CallSuccessful(result)) {
-		result = SDMMD_DebuggingReceive(dconn, response);
-		if (SDM_MD_CallSuccessful(result) && command->commandCode == kDebugQStartNoAckMode) {
-			dconn->ackEnabled = false;
-		}
+        /* if the send was successful, and ack is enabled, read an ack packet */
+        if(dconn->ackEnabled) {
+            CFMutableDataRef ack = CFDataCreateMutable(kCFAllocatorDefault, 0x1);
+            if(SDMMD_DebuggingRecvAck(dconn, ack)) {
+                if (SDM_MD_CallSuccessful(result) && command->commandCode == kDebugQStartNoAckMode) {
+                    dconn->ackEnabled = false;
+                }
+            } else {
+                // FIXME: handle case where we do not get an ack.
+                //        connection down? Malformed command?
+                //        inspect ack.
+            }
+            CFSafeRelease(ack);
+        }
 	}
 	BufferRefRelease(buffer);
 	CFSafeRelease(sending);
@@ -182,18 +267,9 @@ sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCom
 bool SDMMD_DebuggingReceiveInternalCheck(SocketConnection connection, char *receivedChar) {
 	bool didReceiveChar = false;
 	CFMutableDataRef receivedData = CFDataCreateMutable(kCFAllocatorDefault, 0x1);
-	sdmmd_return_t result = SDMMD_DirectServiceReceive(connection, PtrCast(&receivedData, CFDataRef*));
-	char *buffer = calloc(0x1, S(char));
-	memcpy(buffer, CFDataGetBytePtr(receivedData), 0x1);
-	if (SDM_MD_CallSuccessful(result) && receivedChar[0] != 0x0) {
-		didReceiveChar = ((memcmp(buffer, receivedChar, S(char)) == 0x0) ? true : false);
-	} else {
-		didReceiveChar = false;
-	}
-	if (!didReceiveChar) {
-		memcpy(receivedChar, buffer, S(char));
-	}
-	Safe(free, buffer);
+	sdmmd_return_t result = SDMMD_DirectServiceReceiveN(connection, receivedData, 1, 1000);
+    didReceiveChar = SDM_MD_CallSuccessful(result) && *CFDataGetBytePtr(receivedData) == *receivedChar;
+    CFSafeRelease(receivedData);
 	return didReceiveChar;
 }
 
@@ -204,46 +280,44 @@ bool SDMMD_ValidateChecksumForBuffer(BufferRef buffer) {
 
 sdmmd_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef dconn, CFDataRef *response) {
 	sdmmd_return_t result = kAMDSuccess;
-	bool shouldReceive = true, skipPrefix = false;
 	char *commandPrefix = "$";
-	BufferRef responseBuffer = CreateBufferRef();
+
 	SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
-	if (dconn->ackEnabled) {
-		char ack[0x1];
-		memcpy(ack, (KnownDebugCommands[kDebugACK].code), S(char));
-		shouldReceive = SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, ack);
-		if (strncmp(ack, commandPrefix, S(char)) == 0x0) {
-			shouldReceive = true;
-			skipPrefix = true;
-			memcpy(responseBuffer->data, commandPrefix, 0x1);
-		}
-	}
-	if (shouldReceive && !skipPrefix) {
-		shouldReceive = SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, commandPrefix);
-		if (shouldReceive) {
-			memcpy(responseBuffer->data, commandPrefix, 0x1);
-		}
-	}
-	if (shouldReceive) {
-		uint32_t checksumLength = kChecksumHashLength;
-		bool receivingChecksumResponse = false;
-		while ((checksumLength > 0)) {
-			uint64_t oldSize = IncrementBufferRefBySize(responseBuffer, 0x1);
-			char *data = "#";
-			receivingChecksumResponse = SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, data);
-			if (receivingChecksumResponse) {
-				checksumLength--;
-			}
-			memcpy(&(responseBuffer->data[oldSize]), data, 0x1);
-		}
-		bool validResponse = SDMMD_ValidateChecksumForBuffer(responseBuffer);
-		if (validResponse) {
-			*response = CFDataCreate(kCFAllocatorDefault, PtrCast(&(responseBuffer->data[0x1]), UInt8*), (CFIndex)(responseBuffer->length-kChecksumHashLength-0x1));
-		} else {
-			result = kAMDInvalidResponseError;
-		}
-		BufferRefRelease(responseBuffer);
-	}
+    CFMutableDataRef packet = CFDataCreateMutable(kCFAllocatorDefault, 0x0);
+    /* read one byte */
+    SDMMD_DirectServiceReceiveN(debuggingSocket, packet, 1, 0);
+    assert(CFDataGetLength(packet) == 1);
+    /* for now we only allow to read '$'. Other's may be '-',... */
+    /* FIXME: handle '-', ... */
+    assert(*CFDataGetBytePtr(packet) == *commandPrefix);
+    /* if it's a command prefix with $, read until # and the following checksum */
+    while(*(CFDataGetBytePtr(packet)+CFDataGetLength(packet)-1) != '#') {
+        SDMMD_DirectServiceReceiveN(debuggingSocket, packet, 1, 0);
+    }
+    /* read the two hash bytes */
+    SDMMD_DirectServiceReceiveN(debuggingSocket, packet, 2, 0); // ChecksumHashLength is 3 - cannot use.
+    SDMMD_DebuggingLogRecv(packet);
+    
+    
+    BufferRef responseBuffer = CreateBufferRef();
+    IncrementBufferRefBySize(responseBuffer, CFDataGetLength(packet)-1);
+    memcpy(responseBuffer->data, CFDataGetBytePtr(packet), CFDataGetLength(packet));
+    bool validResponse = SDMMD_ValidateChecksumForBuffer(responseBuffer);
+    BufferRefRelease(responseBuffer);
+
+    if(validResponse) {
+        CFIndex payloadLength = CFDataGetLength(packet)-kChecksumHashLength-0x1;
+        
+        UInt8 * payload = calloc(sizeof(UInt8), payloadLength);
+        CFDataGetBytes(packet, CFRangeMake(0x1, payloadLength), payload);
+        
+        *response = CFDataCreate(kCFAllocatorDefault, payload, payloadLength);
+
+        free(payload);
+        SDMMD_DebuggingSendAck(dconn);
+    } else {
+        result = kAMDInvalidResponseError;
+    }
 	return result;
 }
 

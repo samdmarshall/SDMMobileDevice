@@ -260,7 +260,7 @@ uint32_t SDMMD_ConnectToUSBMux() {
 		char *mux = "/var/run/usbmuxd";
 		struct sockaddr_un address;
 		address.sun_family = AF_UNIX;
-		strncpy(address.sun_path, mux, sizeof(address.sun_path));
+		strncpy(address.sun_path, mux, 0x68);
         address.sun_len = SUN_LEN(&address);
 
 		result = connect(sock, (const struct sockaddr *)&address, sizeof(struct sockaddr_un));
