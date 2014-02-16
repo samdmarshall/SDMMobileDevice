@@ -15,32 +15,6 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include "SDMMobileDevice.h"
 
-#define kHexDecode(byte) ((byte >= '0' && byte <= '9') ? (byte - '0') : ( (byte >= 'a' && byte <= 'f') ? (10 + byte - 'a') : ((byte >= 'A' && byte <= 'F') ? (10 + byte - 'A') : byte)))
-
-/*! Special handling for result data.
- *
- * For now this method only decode $O packets. These are used for return
- * STDIO / STDERR data from the debugserver to the client.
- */
-void HandleResult(sdmmd_debug_return_t dresult) {
-    if(dresult.result == kAMDSuccess) {
-        if(dresult.data != NULL) {
-            CFIndex len = CFDataGetLength(dresult.data);
-            const UInt8 * bytes = CFDataGetBytePtr(dresult.data);
-            /* If it starts with O and is of odd length, lets assume
-             * it's O + (two byte) hex encoded message. Nice sideffect
-             * is that 'OK' is ignored as well.
-             */
-            if(bytes[0] == 'O' && len/2 > 0 && len%2 == 1) {
-                char * msg = (char*)calloc(sizeof(char), len/2);
-                for(CFIndex i=0; i < len/2; i++) {
-                    msg[i] = (kHexDecode(bytes[2*i+1])<<4) + kHexDecode(bytes[2*i+2]);
-                }
-                printf("%s", msg);
-            }
-        }
-    }
-}
 
 void RunAppOnDeviceWithIdentifier(char *udid, char* identifier, int argc, char ** argv) {
 	SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);

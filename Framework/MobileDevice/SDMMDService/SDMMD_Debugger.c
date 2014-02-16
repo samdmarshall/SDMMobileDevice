@@ -93,17 +93,21 @@ uint32_t GenerateChecksumForData(char *strPtr, uint32_t length) {
 	return checksum;
 }
 
-CFStringRef SDMMD_CreateDoubleByteString(char * str, size_t len) {
-    CFMutableStringRef ret = CFStringCreateMutable(NULL, 0);
-    for(CFIndex index = 0; index < len; index++) {
-        CFStringRef doublebyte = CFStringCreateWithFormat(kCFAllocatorDefault, NULL,
-                                                          CFSTR("%c%c"),
-                                                          kHexEncodeFirstByte(str[index]),
-                                                          kHexEncodeSecondByte(str[index]));
-        CFStringAppend(ret, doublebyte);
-        CFSafeRelease(doublebyte);
+char * SDMMD_CreateDoubleByteString(const char * str, size_t len) {
+    char * encoded = calloc(sizeof(char), len*2+1);
+    for(CFIndex i = 0; i < len; i++) {
+        encoded[2*i] = kHexEncodeFirstByte(str[i]);
+        encoded[2*i+1] = kHexEncodeSecondByte(str[i]);
     }
-    return ret;
+    return encoded;
+}
+
+char * SDMMD_DecodeDoubleByteString(const UInt8 * bytes, size_t len) {
+    char * decoded = calloc(sizeof(char), len/2+1);
+    for(CFIndex i = 0; i < len/2; i++) {
+        decoded[i] = (kHexDecode(bytes[2*i+1])<<4) + kHexDecode(bytes[2*i+2]);
+    }
+    return decoded;
 }
 
 BufferRef SDMMD_EncodeDebuggingString(CFStringRef command) {

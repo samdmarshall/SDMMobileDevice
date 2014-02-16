@@ -197,7 +197,23 @@ sdmmd_return_t SDMMD_AMDebugConnectionStop(SDMMD_AMDebugConnectionRef dconn);
 DebuggerCommandRef SDMMD_CreateDebuggingCommand(DebuggerCommandType commandCode, CFStringRef command, CFArrayRef arguments);
 void SDMMD_DebuggingCommandRelease(DebuggerCommandRef command);
 
-CFStringRef SDMMD_CreateDoubleByteString(char * str, size_t len);
+/*!
+ * Encodeds a c string into a doublebyte string. You are responsible for
+ * freeing the returned string!
+ * @param str the input string.
+ * @param len the number of chars in the input.
+ * @returns a c string containing the string encoded.
+ */
+char * SDMMD_CreateDoubleByteString(const char * str, size_t len);
+/*!
+ * Decodes a doublebyte string, and returns a new string. You are responsible
+ * for freeing the returned string!
+ * @param bytes the array of bytes.
+ * @param len the number of bytes in bytes.
+ * @returns a c string containing the decoded message.
+ */
+char * SDMMD_DecodeDoubleByteString(const UInt8 * bytes, size_t len);
+
 BufferRef SDMMD_EncodeDebuggingString(CFStringRef command);
 
 sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCommandRef command, CFDataRef *response);
