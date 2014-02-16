@@ -254,7 +254,15 @@ ATR_UNUSED static struct SDM_MD_Service_Identifiers SDMMDServiceIdentifiers[SDM_
 
 sdmmd_return_t SDMMD_DirectServiceSend(SocketConnection handle, CFDataRef data);
 sdmmd_return_t SDMMD_DirectServiceReceive(SocketConnection handle, CFDataRef *data);
-sdmmd_return_t SDMMD_DirectServiceReceiveN(SocketConnection handle, CFMutableDataRef mdata, uint32_t size);
+/*!
+ * Receives `size` bytes from the the handle, and appends them to `mdata`.
+ * @param handle the handle to read from.
+ * @param mdata the mutable data reference to append the read data to.
+ * @param size the number of bytes to read.
+ * @param timeout timeout in microseconds to wait for the response. 0 indicates
+ *        blocking.
+ */
+sdmmd_return_t SDMMD_DirectServiceReceiveN(SocketConnection handle, CFMutableDataRef mdata, uint32_t size, uint32_t timeout);
 
 sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data);
 sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data);

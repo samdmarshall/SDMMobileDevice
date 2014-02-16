@@ -134,8 +134,8 @@ sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 	return kAMDSuccess;
 }
 
-sdmmd_return_t SDMMD_DirectServiceReceiveN(SocketConnection handle, CFMutableDataRef mdata, uint32_t size) {
-    if(handle.isSSL || CheckIfExpectingResponse(handle, 1000)) {
+sdmmd_return_t SDMMD_DirectServiceReceiveN(SocketConnection handle, CFMutableDataRef mdata, uint32_t size, uint32_t timeout) {
+    if(handle.isSSL || timeout == 0 || CheckIfExpectingResponse(handle, timeout)) {
         UInt8 * buffer = calloc(sizeof(UInt8), size);
         uint32_t remainder = size;
         size_t received = 0;

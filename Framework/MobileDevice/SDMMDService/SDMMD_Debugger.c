@@ -197,7 +197,7 @@ bool SDMMD_DebuggingSendAck(SDMMD_AMDebugConnectionRef dconn) {
 bool SDMMD_DebuggingRecvAck(SDMMD_AMDebugConnectionRef dconn, CFMutableDataRef data) {
     sdmmd_return_t result = kAMDSuccess;
     SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
-    result = SDMMD_DirectServiceReceiveN(debuggingSocket, data, 1);
+    result = SDMMD_DirectServiceReceiveN(debuggingSocket, data, 1, 0);
     SDMMD_DebuggingLogRecv(data);
     return SDM_MD_CallSuccessful(result);
 }
@@ -254,7 +254,7 @@ sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCom
 bool SDMMD_DebuggingReceiveInternalCheck(SocketConnection connection, char *receivedChar) {
 	bool didReceiveChar = false;
 	CFMutableDataRef receivedData = CFDataCreateMutable(kCFAllocatorDefault, 0x1);
-	sdmmd_return_t result = SDMMD_DirectServiceReceiveN(connection, receivedData, 1);
+	sdmmd_return_t result = SDMMD_DirectServiceReceiveN(connection, receivedData, 1, 1000);
     didReceiveChar = SDM_MD_CallSuccessful(result) && *CFDataGetBytePtr(receivedData) == *receivedChar;
     CFSafeRelease(receivedData);
 	return didReceiveChar;
@@ -273,17 +273,17 @@ sdmmd_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef dconn, CFDataRe
 	SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
     CFMutableDataRef packet = CFDataCreateMutable(kCFAllocatorDefault, 0x0);
     /* read one byte */
-    SDMMD_DirectServiceReceiveN(debuggingSocket, packet, 1);
+    SDMMD_DirectServiceReceiveN(debuggingSocket, packet, 1, 0);
     assert(CFDataGetLength(packet) == 1);
     /* for now we only allow to read '$'. Other's may be '-',... */
     /* FIXME: handle '-', ... */
     assert(*CFDataGetBytePtr(packet) == *commandPrefix);
     /* if it's a command prefix with $, read until # and the following checksum */
     while(*(CFDataGetBytePtr(packet)+CFDataGetLength(packet)-1) != '#') {
-        SDMMD_DirectServiceReceiveN(debuggingSocket, packet, 1);
+        SDMMD_DirectServiceReceiveN(debuggingSocket, packet, 1, 0);
     }
     /* read the two hash bytes */
-    SDMMD_DirectServiceReceiveN(debuggingSocket, packet, 2); // ChecksumHashLength is 3 - cannot use.
+    SDMMD_DirectServiceReceiveN(debuggingSocket, packet, 2, 0); // ChecksumHashLength is 3 - cannot use.
     SDMMD_DebuggingLogRecv(packet);
     
     
