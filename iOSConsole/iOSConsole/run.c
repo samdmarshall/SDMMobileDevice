@@ -138,7 +138,24 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier, int argc, char *
 								result = SDMMD_DebuggingSend(dconn, cont, &contResponse);
 								CFSafeRelease(contResponse);
 								result = SDMMD_DebuggingReceive(dconn, &response);
-								HandleResult((sdmmd_debug_return_t){.result = result, .data = response});
+								/*! Special handling for result data.
+								 *
+								 * For now this method only decode $O packets. These are used for return
+								 * STDIO / STDERR data from the debugserver to the client.
+								 */
+								if(result == kAMDSuccess && response != NULL) {
+									const UInt8 * bytes = CFDataGetBytePtr(response);
+									size_t len = CFDataGetLength(response);
+									/* If it starts with O and is of odd length, lets assume
+									 * it's O + (two byte) hex encoded message. Nice sideffect
+									 * is that 'OK' is ignored as well.
+									 */
+									if(len > 1 && bytes[0] == 'O' && len/2 > 0 && len%2 == 1) {
+										char * msg = SDMMD_DecodeDoubleByteString(bytes, len);
+										printf("%s", msg);
+										free(msg);
+									}
+								}
 								/* W Packet signals Exited. */
 								if (response && *CFDataGetBytePtr(response) == 'W') {
 									break;
