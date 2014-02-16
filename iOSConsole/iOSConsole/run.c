@@ -145,7 +145,23 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
 
 						}
 						if (launchSuccess) {
-							CFRunLoopRun();
+							CFMutableArrayRef contArgs = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
+							CFArrayAppendValue(contArgs, CFSTR("13"));
+							DebuggerCommandRef cont = SDMMD_CreateDebuggingCommand(kDebugC, NULL, contArgs);
+							CFSafeRelease(contArgs);
+							while(true) {
+								usleep(500);
+								CFDataRef contResponse = NULL;
+								CFDataRef response = NULL;
+								result = SDMMD_DebuggingSend(dconn, cont, &contResponse);
+								CFSafeRelease(contResponse);
+								result = SDMMD_DebuggingReceive(dconn, &response);
+								HandleResult((sdmmd_debug_return_t){.result = result, .data = response});
+								/* W Packet signals Exited. */
+								if (response && *CFDataGetBytePtr(response) == 'W') {
+									break;
+								}
+							}
 						}
 					}
 				}
