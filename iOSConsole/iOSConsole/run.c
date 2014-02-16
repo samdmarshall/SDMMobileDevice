@@ -42,7 +42,7 @@ void HandleResult(sdmmd_debug_return_t dresult) {
     }
 }
 
-void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
+void RunAppOnDeviceWithIdentifier(char *udid, char* identifier, int argc, char ** argv) {
 	SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 	if (device) {
 		sdmmd_return_t result = SDMMD_AMDeviceConnect(device);
