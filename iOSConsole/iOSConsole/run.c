@@ -105,10 +105,18 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier, int argc, char *
 //							CFSafeRelease(response);
 
 							// setting launch args
-							CFStringRef commandFormat = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("A%d,0,"), (uint32_t)CFStringGetLength(path)*0x2);
+							CFMutableStringRef commandFormat = CFStringCreateMutable(kCFAllocatorDefault, 0);
+							CFStringRef encodedPath = SDMMD_CreateDoubleByteString(CFStringGetCStringPtr(path, kCFStringEncodingUTF8), CFStringGetLength(path));
+							CFStringAppendFormat(commandFormat, NULL, CFSTR("A%d,0,%@"), (uint32_t)CFStringGetLength(path)*0x2, encodedPath);
 
+							/* accumulate any additional arguments in commandFormat */
+							for(int i = 0; i < argc; i++) {
+								CFStringRef encodedArg = SDMMD_CreateDoubleByteString(argv[i], strlen(argv[i]));
+								CFStringAppendFormat(commandFormat, NULL, CFSTR(",%d,%d,%@"),
+													 (uint32_t)CFStringGetLength(encodedArg), i+1, encodedArg);
+								CFSafeRelease(encodedArg);
+							}
 							CFMutableArrayRef setLaunchArgsArgs = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
-							CFArrayAppendValue(setLaunchArgsArgs, path);
 							DebuggerCommandRef setLaunchArgs = SDMMD_CreateDebuggingCommand(kDebugCUSTOMCOMMAND, commandFormat, setLaunchArgsArgs);
 							CFSafeRelease(setLaunchArgsArgs);
 							CFSafeRelease(commandFormat);
