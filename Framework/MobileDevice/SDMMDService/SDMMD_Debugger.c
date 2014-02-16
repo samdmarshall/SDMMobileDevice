@@ -227,7 +227,8 @@ sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCom
 	}
 	SDMMD_FormatDebuggingCommand(buffer, entireCommand, dconn->ackEnabled);
 	CFSafeRelease(entireCommand);
-	CFDataRef sending = CFDataCreate(kCFAllocatorDefault, PtrCast(buffer->data, UInt8*), (CFIndex)(buffer->length));
+	CFDataRef sending = CFDataCreate(kCFAllocatorDefault, PtrCast(buffer->data, UInt8*), (CFIndex)(buffer->length)-1);
+    SDMMD_DebuggingLogSend(sending);
 	result = SDMMD_ServiceSend(debuggingSocket, sending);
 	if (SDM_MD_CallSuccessful(result)) {
 		result = SDMMD_DebuggingReceive(dconn, response);
