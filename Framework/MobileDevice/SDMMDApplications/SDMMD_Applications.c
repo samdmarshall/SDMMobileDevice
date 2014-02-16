@@ -235,7 +235,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn
 sdmmd_return_t SDMMD_AMDeviceInstallApplication(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef options, CallBack installCallback, void* unknown) {
 	printf("SDMMD_AMDeviceInstallApplication: Entry.\n");
 	sdmmd_return_t result = 0x0;
-	uint32_t socket = 0;
+	uint32_t socket = -1;
 	SDMMD_AMConnectionRef conn = SDMMD__CreateTemporaryServConn(socket, 0x0);
 	if (conn) {
 		CFURLRef url = SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(path);

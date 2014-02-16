@@ -444,7 +444,7 @@ ATR_UNUSED static void SDMMD_fire_callback(CallBack handle, void* unknown, CFStr
 ATR_UNUSED static void SDMMD_fire_callback_767f4(CallBack handle, void* unknown, uint32_t percent, CFStringRef string) {
 	if (handle) {
 		CFMutableDictionaryRef dict = SDMMD_create_dict();
-		CFNumberRef num = CFNumberCreate(kCFAllocatorDefault, 0x3, &percent);
+		CFNumberRef num = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &percent);
 		if (dict) {
 			CFDictionarySetValue(dict, CFSTR("Status"), string);
 			CFDictionarySetValue(dict, CFSTR("PercentComplete"), num);
@@ -460,14 +460,14 @@ ATR_UNUSED static int SDMMD__add_ext(X509 *cert, int flag, char *name) {
     X509V3_set_ctx(&ctx, cert, cert, 0x0, 0x0, 0x0);
     X509_EXTENSION *ex = X509V3_EXT_conf_nid(0x0, &ctx, flag, name);
     if (ex) {
-		result = X509_add_ext(cert, ex, 0xffffffff);
+		result = X509_add_ext(cert, ex, -1);
 		X509_EXTENSION_free(ex);
     }
     return result;
 }
 
 ATR_UNUSED static CFDataRef SDMMD__create_data_from_bp(BIO* bio) {
-	UInt8 buffer[0x1000];
+	UInt8 buffer[4096];
     long length = BIO_get_mem_data(bio, &buffer);
     CFDataRef data = CFDataCreate(kCFAllocatorDefault, buffer, length);
     return data;
@@ -520,12 +520,12 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 		printf("Could not decode device public key\\n");
 	}
 	
-	RSA *rootKeyPair = RSA_generate_key(0x800, 0x10001, NULL, NULL);
+	RSA *rootKeyPair = RSA_generate_key(2048, 65537, NULL, NULL);
 	if (!rootKeyPair) {
 		printf("Could not allocate root key pair\n");
 	}
 	
-	RSA *hostKeyPair = RSA_generate_key(0x800, 0x10001, NULL, NULL);
+	RSA *hostKeyPair = RSA_generate_key(2048, 65537, NULL, NULL);
 	if (!hostKeyPair) {
 		printf("Could not allocate host key pair\n");
 	}
