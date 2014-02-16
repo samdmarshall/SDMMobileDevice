@@ -254,18 +254,9 @@ sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCom
 bool SDMMD_DebuggingReceiveInternalCheck(SocketConnection connection, char *receivedChar) {
 	bool didReceiveChar = false;
 	CFMutableDataRef receivedData = CFDataCreateMutable(kCFAllocatorDefault, 0x1);
-	sdmmd_return_t result = SDMMD_DirectServiceReceive(connection, PtrCast(&receivedData, CFDataRef*));
-	char *buffer = calloc(0x1, S(char));
-	memcpy(buffer, CFDataGetBytePtr(receivedData), 0x1);
-	if (SDM_MD_CallSuccessful(result) && receivedChar[0] != 0x0) {
-		didReceiveChar = ((memcmp(buffer, receivedChar, S(char)) == 0x0) ? true : false);
-	} else {
-		didReceiveChar = false;
-	}
-	if (!didReceiveChar) {
-		memcpy(receivedChar, buffer, S(char));
-	}
-	Safe(free, buffer);
+	sdmmd_return_t result = SDMMD_DirectServiceReceiveN(connection, receivedData, 1);
+    didReceiveChar = SDM_MD_CallSuccessful(result) && *CFDataGetBytePtr(receivedData) == *receivedChar;
+    CFSafeRelease(receivedData);
 	return didReceiveChar;
 }
 
