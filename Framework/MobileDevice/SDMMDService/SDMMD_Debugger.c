@@ -231,10 +231,20 @@ sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCom
     SDMMD_DebuggingLogSend(sending);
 	result = SDMMD_ServiceSend(debuggingSocket, sending);
 	if (SDM_MD_CallSuccessful(result)) {
-		result = SDMMD_DebuggingReceive(dconn, response);
-		if (SDM_MD_CallSuccessful(result) && command->commandCode == kDebugQStartNoAckMode) {
-			dconn->ackEnabled = false;
-		}
+        /* if the send was successful, and ack is enabled, read an ack packet */
+        if(dconn->ackEnabled) {
+            CFMutableDataRef ack = CFDataCreateMutable(kCFAllocatorDefault, 0x1);
+            if(SDMMD_DebuggingRecvAck(dconn, ack)) {
+                if (SDM_MD_CallSuccessful(result) && command->commandCode == kDebugQStartNoAckMode) {
+                    dconn->ackEnabled = false;
+                }
+            } else {
+                // FIXME: handle case where we do not get an ack.
+                //        connection down? Malformed command?
+                //        inspect ack.
+            }
+            CFSafeRelease(ack);
+        }
 	}
 	BufferRefRelease(buffer);
 	CFSafeRelease(sending);
