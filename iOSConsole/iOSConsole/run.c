@@ -147,41 +147,6 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
 						if (launchSuccess) {
 							CFRunLoopRun();
 						}
-						/*
-						sdmmd_return_t result = SDMMD_StartDebuggingSessionOnDevice(device, &connection);
-						SDMMD_CondSuccess(result, {
-							bool launchSuccess = false;
-							CFStringRef path = CFDictionaryGetValue(details, CFSTR("Path"));
-							CFStringRef encodedPath = SDMMD_EncodeDebuggingString(path);
-							CFStringRef container = CFDictionaryGetValue(details, CFSTR("Container"));
-							if (!container) {
-								CFURLRef pathURL = CFURLCreateWithString(kCFAllocatorDefault, path, NULL);
-								CFURLRef containerURL = CFURLCreateCopyDeletingLastPathComponent(kCFAllocatorDefault, pathURL);
-								container = CFURLGetString(containerURL);
-								CFSafeRelease(pathURL);
-								//CFSafeRelease(containerURL);
-							}
-							if (container) {
-								CFStringRef containerPath = SDMMD_EncodeDebuggingString(container);
-								sdmmd_debug_return_t dresult;
-								CFStringRef maxPacket = SDMMD_EncodeDebuggingString(CFSTR("1024"));
-								dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugQSetMaxPacketSize], maxPacket);
-								CFSafeRelease(maxPacket);
-								dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugQSetWorkingDir], containerPath);
-								CFSafeRelease(containerPath);
-								CFStringRef commandFormat = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%d,0,%s"), (uint32_t)CFStringGetLength(encodedPath), CFStringGetCStringPtr(encodedPath, kCFStringEncodingUTF8));
-								dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugA], commandFormat);
-								CFSafeRelease(commandFormat);
-								dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugH], CFSTR("c0"));
-								dresult = SDMMD_DebuggingSend(connection, KnownDebugCommands[kDebugc], CFSTR(""));
-								launchSuccess = true;
-							}
-							CFSafeRelease(encodedPath);
-							if (launchSuccess) {
-								CFRunLoopRun();
-							}
-						})
-						*/
 					}
 				}
 			}
