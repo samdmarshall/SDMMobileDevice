@@ -191,7 +191,6 @@ bool SDMMD_DebuggingSendAck(SDMMD_AMDebugConnectionRef dconn) {
 	SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
     UInt8 * payload = (UInt8*)KnownDebugCommands[kDebugACK].code;
     CFDataRef ack = CFDataCreate(kCFAllocatorDefault, payload, 1);
-    assert(ack);
     SDMMD_DebuggingLogSend(ack);
     result = SDMMD_ServiceSend(debuggingSocket, ack);
     CFSafeRelease(ack);
@@ -286,10 +285,9 @@ sdmmd_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef dconn, CFDataRe
     CFMutableDataRef packet = CFDataCreateMutable(kCFAllocatorDefault, 0x0);
     /* read one byte */
     SDMMD_DirectServiceReceiveN(debuggingSocket, packet, 1, 0);
-    assert(CFDataGetLength(packet) == 1);
     /* for now we only allow to read '$'. Other's may be '-',... */
     /* FIXME: handle '-', ... */
-    assert(*CFDataGetBytePtr(packet) == *commandPrefix);
+    
     /* if it's a command prefix with $, read until # and the following checksum */
     while(*(CFDataGetBytePtr(packet)+CFDataGetLength(packet)-1) != '#') {
         SDMMD_DirectServiceReceiveN(debuggingSocket, packet, 1, 0);
