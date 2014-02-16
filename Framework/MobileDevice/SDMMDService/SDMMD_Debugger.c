@@ -271,7 +271,7 @@ sdmmd_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef dconn, CFDataRe
 	char *commandPrefix = "$";
 
 	SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
-    CFMutableDataRef packet = CFDataCreateMutable(kCFAllocatorDefault, 0xff);
+    CFMutableDataRef packet = CFDataCreateMutable(kCFAllocatorDefault, 0x0);
     /* read one byte */
     SDMMD_DirectServiceReceiveN(debuggingSocket, packet, 1);
     assert(CFDataGetLength(packet) == 1);
