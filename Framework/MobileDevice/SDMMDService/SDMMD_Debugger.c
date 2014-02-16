@@ -162,8 +162,10 @@ void SDMMD_DebuggingLogData(CFDataRef data, CFStringRef prefix) {
                                                   CFDataGetLength(data),
                                                   kCFStringEncodingUTF8,
                                                   false);
-    CFShow(CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("<%4ld> %@: %@"),
-                                    CFStringGetLength(payload), prefix, payload));
+    CFStringRef msg = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("<%4ld> %@: %@"),
+                                               CFStringGetLength(payload), prefix, payload);
+    CFShow(msg);
+    CFSafeRelease(msg);
     CFSafeRelease(payload);
 }
 
