@@ -254,6 +254,7 @@ ATR_UNUSED static struct SDM_MD_Service_Identifiers SDMMDServiceIdentifiers[SDM_
 
 sdmmd_return_t SDMMD_DirectServiceSend(SocketConnection handle, CFDataRef data);
 sdmmd_return_t SDMMD_DirectServiceReceive(SocketConnection handle, CFDataRef *data);
+sdmmd_return_t SDMMD_DirectServiceReceiveN(SocketConnection handle, CFMutableDataRef mdata, uint32_t size);
 
 sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data);
 sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data);
