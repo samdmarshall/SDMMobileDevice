@@ -93,6 +93,19 @@ uint32_t GenerateChecksumForData(char *strPtr, uint32_t length) {
 	return checksum;
 }
 
+CFStringRef SDMMD_CreateDoubleByteString(char * str, size_t len) {
+    CFMutableStringRef ret = CFStringCreateMutable(NULL, 0);
+    for(CFIndex index = 0; index < len; index++) {
+        CFStringRef doublebyte = CFStringCreateWithFormat(kCFAllocatorDefault, NULL,
+                                                          CFSTR("%c%c"),
+                                                          kHexEncodeFirstByte(str[index]),
+                                                          kHexEncodeSecondByte(str[index]));
+        CFStringAppend(ret, doublebyte);
+        CFSafeRelease(doublebyte);
+    }
+    return ret;
+}
+
 BufferRef SDMMD_EncodeDebuggingString(CFStringRef command) {
 	char *commandString = SDMCFStringGetString(command);
 	CFIndex encodedLength = ((0x2*strlen(commandString))+kChecksumHashLength+0x1);
