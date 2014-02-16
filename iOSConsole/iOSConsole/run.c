@@ -42,7 +42,7 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
 						sdmmd_return_t result = SDMMD_AMDebugConnectionStart(dconn);
 						bool launchSuccess = false;
 						if (SDM_MD_CallSuccessful(result)) {
-							
+							CFDataRef response;
 							// setting max packet size
 							CFMutableArrayRef maxPacketArgs = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
 							CFArrayAppendValue(maxPacketArgs, CFSTR("1024"));
@@ -53,6 +53,8 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
 							result = SDMMD_DebuggingSend(dconn, maxPacket, &maxPacketResponse);
 							CFSafeRelease(maxPacketResponse);
 							SDMMD_DebuggingCommandRelease(maxPacket);
+							result = SDMMD_DebuggingReceive(dconn, &response);
+//							CFSafeRelease(response);
 							
 							// setting the working directory
 							CFStringRef path = CFDictionaryGetValue(details, CFSTR("Path"));
@@ -72,7 +74,9 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
 							result = SDMMD_DebuggingSend(dconn, containerPath, &containerPathResponse);
 							CFSafeRelease(containerPathResponse);
 							SDMMD_DebuggingCommandRelease(containerPath);
-							
+							result = SDMMD_DebuggingReceive(dconn, &response);
+//							CFSafeRelease(response);
+
 							// setting launch args
 							CFStringRef commandFormat = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("A%d,0,"), (uint32_t)CFStringGetLength(path)*0x2);
 
@@ -86,7 +90,7 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
 							result = SDMMD_DebuggingSend(dconn, setLaunchArgs, &setLaunchArgsResponse);
 							CFSafeRelease(setLaunchArgsResponse);
 							SDMMD_DebuggingCommandRelease(setLaunchArgs);
-							
+							result = SDMMD_DebuggingReceive(dconn, &response);
 							// setting thread to attach
 							CFMutableArrayRef setThreadArgs = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
 							CFArrayAppendValue(setThreadArgs, CFSTR(""));
@@ -97,7 +101,8 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
 							result = SDMMD_DebuggingSend(dconn, setThread, &setThreadResponse);
 							CFSafeRelease(setThreadResponse);
 							SDMMD_DebuggingCommandRelease(setThread);
-							
+							result = SDMMD_DebuggingReceive(dconn, &response);
+
 							// setting continue with execution
 							CFMutableArrayRef contArgs = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
 							CFArrayAppendValue(contArgs, CFSTR(""));
