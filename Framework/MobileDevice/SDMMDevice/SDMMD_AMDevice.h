@@ -44,10 +44,11 @@ struct AMDeviceClassHeader {
 	unsigned char header[16];		// AMDeviceClass CF Header 
 } __attribute ((packed)) AMDeviceClassHeader; // size 0x10
 
-typedef enum {
+enum {
 	kAMDeviceConnectionTypeUSB = 0,
 	kAMDeviceConnectionTypeWiFi = 1,
-} AMDeviceConnectionType;
+};
+typedef int32_t AMDeviceConnectionType;
 
 struct AMDeviceClassBody {
 	int32_t device_id;							// 16
