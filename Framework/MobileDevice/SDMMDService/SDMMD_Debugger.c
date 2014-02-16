@@ -278,44 +278,43 @@ sdmmd_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef dconn, CFDataRe
 	sdmmd_return_t result = kAMDSuccess;
 	bool shouldReceive = true, skipPrefix = false;
 	char *commandPrefix = "$";
-	BufferRef responseBuffer = CreateBufferRef();
+
 	SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
-	if (dconn->ackEnabled) {
-		char ack[0x1];
-		memcpy(ack, (KnownDebugCommands[kDebugACK].code), S(char));
-		shouldReceive = SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, ack);
-		if (strncmp(ack, commandPrefix, S(char)) == 0x0) {
-			shouldReceive = true;
-			skipPrefix = true;
-			memcpy(responseBuffer->data, commandPrefix, 0x1);
-		}
-	}
-	if (shouldReceive && !skipPrefix) {
-		shouldReceive = SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, commandPrefix);
-		if (shouldReceive) {
-			memcpy(responseBuffer->data, commandPrefix, 0x1);
-		}
-	}
-	if (shouldReceive) {
-		uint32_t checksumLength = kChecksumHashLength;
-		bool receivingChecksumResponse = false;
-		while ((checksumLength > 0)) {
-			uint64_t oldSize = IncrementBufferRefBySize(responseBuffer, 0x1);
-			char *data = "#";
-			receivingChecksumResponse = SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, data);
-			if (receivingChecksumResponse) {
-				checksumLength--;
-			}
-			memcpy(&(responseBuffer->data[oldSize]), data, 0x1);
-		}
-		bool validResponse = SDMMD_ValidateChecksumForBuffer(responseBuffer);
-		if (validResponse) {
-			*response = CFDataCreate(kCFAllocatorDefault, PtrCast(&(responseBuffer->data[0x1]), UInt8*), (CFIndex)(responseBuffer->length-kChecksumHashLength-0x1));
-		} else {
-			result = kAMDInvalidResponseError;
-		}
-		BufferRefRelease(responseBuffer);
-	}
+    CFMutableDataRef packet = CFDataCreateMutable(kCFAllocatorDefault, 0xff);
+    /* read one byte */
+    SDMMD_DirectServiceReceiveN(debuggingSocket, packet, 1);
+    assert(CFDataGetLength(packet) == 1);
+    /* for now we only allow to read '$'. Other's may be '-',... */
+    /* FIXME: handle '-', ... */
+    assert(*CFDataGetBytePtr(packet) == *commandPrefix);
+    /* if it's a command prefix with $, read until # and the following checksum */
+    while(*(CFDataGetBytePtr(packet)+CFDataGetLength(packet)-1) != '#') {
+        SDMMD_DirectServiceReceiveN(debuggingSocket, packet, 1);
+    }
+    /* read the two hash bytes */
+    SDMMD_DirectServiceReceiveN(debuggingSocket, packet, 2); // ChecksumHashLength is 3 - cannot use.
+    SDMMD_DebuggingLogRecv(packet);
+    
+    
+    BufferRef responseBuffer = CreateBufferRef();
+    IncrementBufferRefBySize(responseBuffer, CFDataGetLength(packet)-1);
+    memcpy(responseBuffer->data, CFDataGetBytePtr(packet), CFDataGetLength(packet));
+    bool validResponse = SDMMD_ValidateChecksumForBuffer(responseBuffer);
+    BufferRefRelease(responseBuffer);
+
+    if(validResponse) {
+        CFIndex payloadLength = CFDataGetLength(packet)-kChecksumHashLength-0x1;
+        
+        UInt8 * payload = calloc(sizeof(UInt8), payloadLength);
+        CFDataGetBytes(packet, CFRangeMake(0x1, payloadLength), payload);
+        
+        *response = CFDataCreate(kCFAllocatorDefault, payload, payloadLength);
+
+        free(payload);
+        SDMMD_DebuggingSendAck(dconn);
+    } else {
+        result = kAMDInvalidResponseError;
+    }
 	return result;
 }
 
