@@ -267,7 +267,6 @@ bool SDMMD_ValidateChecksumForBuffer(BufferRef buffer) {
 
 sdmmd_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef dconn, CFDataRef *response) {
 	sdmmd_return_t result = kAMDSuccess;
-	bool shouldReceive = true, skipPrefix = false;
 	char *commandPrefix = "$";
 
 	SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
