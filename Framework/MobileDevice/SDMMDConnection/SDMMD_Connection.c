@@ -29,9 +29,11 @@
 sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef command, uint64_t code, CallBack handle, uint32_t argsCount, void* paramStart, ...) {
 	sdmmd_return_t result = 0x0;
 	CFMutableDictionaryRef message = SDMMD_create_dict();
+	
 	if (message) {
-		CFDictionarySetValue(message, CFSTR("Command"), command);
 		va_list args;
+
+		CFDictionarySetValue(message, CFSTR("Command"), command);
 		va_start(args, paramStart);
 		CFTypeRef key, value;
 		for (uint32_t i = 0; i < argsCount; i++) {
@@ -41,7 +43,8 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 			i++;
 		}
 		va_end(args);
-		SocketConnection sock = SDMMD_TranslateConnectionToSocket(conn);			
+
+		SocketConnection sock = SDMMD_TranslateConnectionToSocket(conn);
 		result = SDMMD_ServiceSendStream(sock, message, kCFPropertyListXMLFormat_v1_0);
 		if (result == 0) {
 			CFDictionaryRef response = NULL;
@@ -49,6 +52,7 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 			if (result == 0 && response) {
 				while (result == 0) {
 					CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
+					
 					if (error) {
 						PrintCFType(response);
 						result = SDMMD__ConvertServiceError(error);
@@ -145,7 +149,7 @@ sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef se
 									CFTypeRef portNumber = CFDictionaryGetValue(response, CFSTR("Port"));
 									if (portNumber) {
 										if (CFGetTypeID(portNumber) == CFNumberGetTypeID()) {
-											CFNumberGetValue(portNumber, 0x9, port);
+											CFNumberGetValue(portNumber, kCFNumberIntType, port);
 										}
 									}
 									CFTypeRef sslService = CFDictionaryGetValue(response, CFSTR("EnableServiceSSL"));
@@ -169,13 +173,13 @@ sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef se
 
 sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStringRef service, CFDictionaryRef options, SDMMD_AMConnectionRef *connection) {
     uint32_t port = 0x0;
-    uint32_t socket = 0xffffffff;
+    uint32_t socket = -1;
     CFDataRef escrowBag = NULL;
 	sdmmd_return_t result = 0x0;
 	bool enableSSL = false;
-	char *cservice = calloc(1, sizeof(char)*0xc8);
+	char *cservice = calloc(200, sizeof(char));
     if (service) {
-		CFStringGetCString(service, cservice, 0xc8, kCFStringEncodingUTF8);
+		CFStringGetCString(service, cservice, 200, kCFStringEncodingUTF8);
     }
 	SSL *ssl = NULL;
 	bool mutexLock = false;
@@ -193,12 +197,12 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 					if (closeVal) {
 						Boolean closeValResult = CFEqual(closeVal, kCFBooleanTrue);
 						if (closeValResult == 0x0) {
-							closeOnInvalidate = (CFEqual(closeVal, kCFBooleanFalse) == 0x0 ? 0xff : 0x0);
+							closeOnInvalidate = CFEqual(closeVal, kCFBooleanFalse);
 						}
 					}
 					CFTypeRef timeoutVal = CFDictionaryGetValue(options, CFSTR("TimeoutConnection"));
 					if (timeoutVal) {
-						timeoutConnection = (CFEqual(timeoutVal, kCFBooleanTrue) != 0x0 ? 0xff : 0x0) & 0xff;
+						timeoutConnection = CFEqual(timeoutVal, kCFBooleanTrue);
 					}
 					CFTypeRef bag = CFDictionaryGetValue(options, CFSTR("UnlockEscrowBag"));
 					if (bag) {
@@ -219,7 +223,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 					}
 					CFTypeRef socketVal = CFDictionaryGetValue(options, CFSTR("DirectSocket"));
 					if (socketVal) {
-						directSocket = (CFEqual(socketVal, kCFBooleanTrue) != 0x0 ? 0xff : 0x0);
+						directSocket = CFEqual(socketVal, kCFBooleanTrue);
 					}
 				}
 				if (canConnect) {
@@ -249,7 +253,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 								char *udidString = SDMCFStringGetString(device->ivars.unique_device_id);
 								printf("AMDeviceSecureStartService: Escrow bag mismatch for device %s!", (device->ivars.unique_device_id ? udidString : "device with no name"));
 								Safe(free, udidString);
-								char *path = calloc(1, sizeof(char)*0x400);
+								char *path = calloc(1024, sizeof(char));
 								SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
 								CFMutableDictionaryRef fileDict = SDMMD__CreateDictFromFileContents(path);
 								ssl = NULL;
@@ -267,14 +271,14 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 							}
 						}
 					} else {
-						result = SDMMD__connect_to_port(device, port, timeoutConnection, &socket, ((uint32_t)ssl & 0x1) & 0xff);
+						result = SDMMD__connect_to_port(device, port, timeoutConnection, &socket, ssl ? true : false);
 						if (result == 0x0) {
 							if (enableSSL) {
 								char *udidString = SDMCFStringGetString(device->ivars.unique_device_id);
 								printf("AMDeviceSecureStartService: SSL requested for service %s with device %s.\n", cservice, (device->ivars.unique_device_id ? udidString : "device with no name"));
 								Safe(free, udidString);
 								CFMutableDictionaryRef record = NULL;
-								if (socket != 0xff) {
+								if (socket != -1) {
 									result = kAMDInvalidArgumentError;
 									if (device->ivars.device_active) {
 										result = SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(device, &record);
@@ -310,7 +314,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 												SDMMD_AMDServiceConnectionSetDevice(&conn, device);
 												SDMMD_AMDServiceConnectionSetServiceName(&conn, service);
 												*connection = conn;
-												socket = 0xffffffff;
+												socket = -1;
 												ssl = NULL;
 												result = kAMDSuccess;
 											}
@@ -378,7 +382,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 
 sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef service, CFDictionaryRef options, SDMMD_AMConnectionRef *connection) {
 	sdmmd_return_t result = kAMDInvalidArgumentError;
-	//uint32_t socket = 0xffffffff;
+	//uint32_t socket = -1;
 	if (device && connection) {
 		SSL *ssl_enabled = NULL;
 		if (service) {
@@ -428,7 +432,7 @@ void SDMMD_AMDServiceConnectionSetDevice(SDMMD_AMConnectionRef *connection, SDMM
 
 void SDMMD_AMDServiceConnectionSetServiceName(SDMMD_AMConnectionRef *connection, CFStringRef service) {
 	if (service) {
-		CFStringGetCString(service, (*connection)->ivars.service, 0x80, kCFStringEncodingUTF8);
+		CFStringGetCString(service, (*connection)->ivars.service, 128, kCFStringEncodingUTF8);
 	}
 }
 

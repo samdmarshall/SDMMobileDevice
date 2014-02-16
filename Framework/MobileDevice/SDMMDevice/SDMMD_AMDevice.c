@@ -130,7 +130,10 @@ X509* SDMMD__decode_certificate(CFDataRef cert) {
 int SDMMD__ssl_verify_callback(int value, X509_STORE_CTX *store) {
 	bool result = true;
 	X509 *cert = NULL, *decoded = NULL;
-	if (value || (X509_STORE_CTX_get_error(store) + 0xffffffffffffffec < 0x2)) {
+//	if (value || (X509_STORE_CTX_get_error(store) + 0xffffffffffffffec < 0x2)) {
+	if (value ||
+		X509_STORE_CTX_get_error(store) == X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT_LOCALLY ||
+		X509_STORE_CTX_get_error(store) == X509_V_ERR_UNABLE_TO_VERIFY_LEAF_SIGNATURE) {
 		unsigned char* var_8 = NULL;
 		unsigned char* var_16 = NULL;
 		cert = X509_STORE_CTX_get_current_cert(store);
@@ -212,7 +215,7 @@ SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostC
 						} else {
 							SSL_set_accept_state(ssl);
 						}
-						SSL_set_verify(ssl, 0x3, SDMMD__ssl_verify_callback);
+						SSL_set_verify(ssl, SSL_VERIFY_PEER | SSL_VERIFY_FAIL_IF_NO_PEER_CERT, SDMMD__ssl_verify_callback);
 						SSL_set_verify_depth(ssl, 0x0);
 						SSL_set_bio(ssl, bioSocket, bioSocket);
 						SSL_set_ex_data(ssl, (uint32_t)SDMMobileDevice->peer_certificate_data_index, (void*)deviceCert);
@@ -258,8 +261,8 @@ sdmmd_return_t SDMMD_lockconn_disable_ssl(SDMMD_lockdown_conn *lockdown_conn) {
 		if (result == 0) {
 			result = SSL_shutdown(lockdown_conn->ssl);
 		}
-		if (result == 0xff) {
-			printf("lockconn_disable_ssl: Could not shutdown SSL connection %d.\n", 0xffffffff);
+		if (result == -1) {
+			printf("lockconn_disable_ssl: Could not shutdown SSL connection %d.\n", -1);
 		}
 		SSL_free(lockdown_conn->ssl);
 		lockdown_conn->ssl = NULL;
