@@ -159,9 +159,6 @@ int main(int argc, const char * argv[]) {
 			};
 		}
 	}
-    /* adjust argc, argv */
-    argc -= optind;
-    argv += optind;
     
 	if (optionsEnable[OptionsHelp]) {
 		if (!help) {
@@ -205,7 +202,7 @@ int main(int argc, const char * argv[]) {
 		} else if (optionsEnable[OptionsQuery]) {
 			PerformQuery(udid, domain, key);
 		} else if (optionsEnable[OptionsRun]) {
-			RunAppOnDeviceWithIdentifier(udid, bundle, argc, argv);
+			RunAppOnDeviceWithIdentifier(udid, bundle);
 		} else if (optionsEnable[OptionsDiag]) {
 			if (diagArg) {
 				if (strncmp(diagArg, "sleep", strlen("sleep")) == 0x0) {

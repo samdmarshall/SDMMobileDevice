@@ -16,7 +16,7 @@
 #include "SDMMobileDevice.h"
 
 
-void RunAppOnDeviceWithIdentifier(char *udid, char* identifier, int argc, char ** argv) {
+void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
 	SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 	if (device) {
 		sdmmd_return_t result = SDMMD_AMDeviceConnect(device);
@@ -55,7 +55,7 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier, int argc, char *
 							CFSafeRelease(maxPacketResponse);
 							SDMMD_DebuggingCommandRelease(maxPacket);
 							result = SDMMD_DebuggingReceive(dconn, &response);
-//							CFSafeRelease(response);
+							CFSafeRelease(response);
 							
 							// setting the working directory
 							CFStringRef path = CFDictionaryGetValue(details, CFSTR("Path"));
@@ -76,21 +76,13 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier, int argc, char *
 							CFSafeRelease(containerPathResponse);
 							SDMMD_DebuggingCommandRelease(containerPath);
 							result = SDMMD_DebuggingReceive(dconn, &response);
-//							CFSafeRelease(response);
+							CFSafeRelease(response);
 
 							// setting launch args
-							CFMutableStringRef commandFormat = CFStringCreateMutable(kCFAllocatorDefault, 0);
-							CFStringRef encodedPath = SDMMD_CreateDoubleByteString(CFStringGetCStringPtr(path, kCFStringEncodingUTF8), CFStringGetLength(path));
-							CFStringAppendFormat(commandFormat, NULL, CFSTR("A%d,0,%@"), (uint32_t)CFStringGetLength(path)*0x2, encodedPath);
-
-							/* accumulate any additional arguments in commandFormat */
-							for(int i = 0; i < argc; i++) {
-								CFStringRef encodedArg = SDMMD_CreateDoubleByteString(argv[i], strlen(argv[i]));
-								CFStringAppendFormat(commandFormat, NULL, CFSTR(",%d,%d,%@"),
-													 (uint32_t)CFStringGetLength(encodedArg), i+1, encodedArg);
-								CFSafeRelease(encodedArg);
-							}
+							CFStringRef commandFormat = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("A%d,0,"), (uint32_t)CFStringGetLength(path)*0x2);
+							
 							CFMutableArrayRef setLaunchArgsArgs = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
+							CFArrayAppendValue(setLaunchArgsArgs, path);
 							DebuggerCommandRef setLaunchArgs = SDMMD_CreateDebuggingCommand(kDebugCUSTOMCOMMAND, commandFormat, setLaunchArgsArgs);
 							CFSafeRelease(setLaunchArgsArgs);
 							CFSafeRelease(commandFormat);
@@ -99,7 +91,7 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier, int argc, char *
 							result = SDMMD_DebuggingSend(dconn, setLaunchArgs, &setLaunchArgsResponse);
 							CFSafeRelease(setLaunchArgsResponse);
 							SDMMD_DebuggingCommandRelease(setLaunchArgs);
-							result = SDMMD_DebuggingReceive(dconn, &response);
+
 							// setting thread to attach
 							CFMutableArrayRef setThreadArgs = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
 							CFArrayAppendValue(setThreadArgs, CFSTR(""));
@@ -127,6 +119,8 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier, int argc, char *
 
 						}
 						if (launchSuccess) {
+							CFRunLoopRun();
+							/*
 							CFMutableArrayRef contArgs = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
 							CFArrayAppendValue(contArgs, CFSTR("13"));
 							DebuggerCommandRef cont = SDMMD_CreateDebuggingCommand(kDebugC, NULL, contArgs);
@@ -138,29 +132,28 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier, int argc, char *
 								result = SDMMD_DebuggingSend(dconn, cont, &contResponse);
 								CFSafeRelease(contResponse);
 								result = SDMMD_DebuggingReceive(dconn, &response);
-								/*! Special handling for result data.
-								 *
-								 * For now this method only decode $O packets. These are used for return
-								 * STDIO / STDERR data from the debugserver to the client.
-								 */
+								// Special handling for result data.
+								//
+								// For now this method only decode $O packets. These are used for return
+								// STDIO / STDERR data from the debugserver to the client.
 								if(result == kAMDSuccess && response != NULL) {
 									const UInt8 * bytes = CFDataGetBytePtr(response);
 									size_t len = CFDataGetLength(response);
-									/* If it starts with O and is of odd length, lets assume
-									 * it's O + (two byte) hex encoded message. Nice sideffect
-									 * is that 'OK' is ignored as well.
-									 */
+									// If it starts with O and is of odd length, lets assume
+									// it's O + (two byte) hex encoded message. Nice sideffect
+									// is that 'OK' is ignored as well.
 									if(len > 1 && bytes[0] == 'O' && len/2 > 0 && len%2 == 1) {
 										char * msg = SDMMD_DecodeDoubleByteString(bytes, len);
 										printf("%s", msg);
 										free(msg);
 									}
 								}
-								/* W Packet signals Exited. */
+								// W Packet signals Exited.
 								if (response && *CFDataGetBytePtr(response) == 'W') {
 									break;
 								}
 							}
+							*/
 						}
 					}
 				}

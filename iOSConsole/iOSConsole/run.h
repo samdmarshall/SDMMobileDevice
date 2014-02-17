@@ -9,6 +9,6 @@
 #ifndef iOSConsole_run_h
 #define iOSConsole_run_h
 
-void RunAppOnDeviceWithIdentifier(char *udid, char* identifier, int argc, char ** argv);
+void RunAppOnDeviceWithIdentifier(char *udid, char* identifier);
 
 #endif
