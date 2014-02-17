@@ -159,6 +159,10 @@ int main(int argc, const char * argv[]) {
 			};
 		}
 	}
+    /* adjust argc, argv */
+    argc -= optind;
+    argv += optind;
+    
 	if (optionsEnable[OptionsHelp]) {
 		if (!help) {
 			printf("%s [service|query] : list available services or queries\n",helpArg);
@@ -201,7 +205,7 @@ int main(int argc, const char * argv[]) {
 		} else if (optionsEnable[OptionsQuery]) {
 			PerformQuery(udid, domain, key);
 		} else if (optionsEnable[OptionsRun]) {
-			RunAppOnDeviceWithIdentifier(udid, bundle);
+			RunAppOnDeviceWithIdentifier(udid, bundle, argc, argv);
 		} else if (optionsEnable[OptionsDiag]) {
 			if (diagArg) {
 				if (strncmp(diagArg, "sleep", strlen("sleep")) == 0x0) {
