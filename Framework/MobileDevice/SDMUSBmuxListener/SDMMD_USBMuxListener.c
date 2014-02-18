@@ -283,8 +283,8 @@ uint32_t SDMMD_ConnectToUSBMux() {
 	}
 	
 	if (!result) {
-		// Set socket to nonblocking IO mode
-		uint32_t nonblock = 1;
+		// Set socket to blocking IO mode
+		uint32_t nonblock = 0;
 		if (ioctl(sock, FIONBIO, &nonblock)) {
 			result = 0x5;
 			int err = errno;
