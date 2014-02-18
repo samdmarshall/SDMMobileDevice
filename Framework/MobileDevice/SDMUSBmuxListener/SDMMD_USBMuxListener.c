@@ -240,7 +240,7 @@ void SDMMD_USBMuxClose(SDMMD_USBMuxListenerRef listener) {
  */
 
 uint32_t SDMMD_ConnectToUSBMux() {
-	sdmmd_return_t result = 0x0;
+	sdmmd_return_t result = kAMDSuccess;
 	uint32_t sock = socket(AF_UNIX, SOCK_STREAM, 0);
 	uint32_t bufSize = 0x00010400;
 	if (setsockopt(sock, SOL_SOCKET, SO_SNDBUF, &bufSize, sizeof(bufSize))) {
@@ -270,7 +270,7 @@ uint32_t SDMMD_ConnectToUSBMux() {
 }
 
 sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port, uint32_t *socketConn) {
-	sdmmd_return_t result = 0x0;
+	sdmmd_return_t result = kAMDSuccess;
 	*socketConn = SDMMD_ConnectToUSBMux();
 	if (*socketConn) {
 		CFMutableDictionaryRef dict = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);

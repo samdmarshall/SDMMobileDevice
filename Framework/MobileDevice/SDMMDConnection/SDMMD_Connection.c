@@ -27,7 +27,7 @@
 #include "Core.h"
 
 sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef command, uint64_t code, CallBack handle, uint32_t argsCount, void* paramStart, ...) {
-	sdmmd_return_t result = 0x0;
+	sdmmd_return_t result = kAMDSuccess;
 	CFMutableDictionaryRef message = SDMMD_create_dict();
 	
 	if (message) {
@@ -175,7 +175,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
     uint32_t port = 0x0;
     uint32_t socket = -1;
     CFDataRef escrowBag = NULL;
-	sdmmd_return_t result = 0x0;
+	sdmmd_return_t result = kAMDSuccess;
 	bool enableSSL = false;
 	char *cservice = calloc(200, sizeof(char));
     if (service) {
@@ -196,7 +196,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 					CFTypeRef closeVal = CFDictionaryGetValue(options, CFSTR("CloseOnInvalidate"));
 					if (closeVal) {
 						Boolean closeValResult = CFEqual(closeVal, kCFBooleanTrue);
-						if (closeValResult == 0x0) {
+						if (closeValResult == false) {
 							closeOnInvalidate = CFEqual(closeVal, kCFBooleanFalse);
 						}
 					}
@@ -272,7 +272,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 						}
 					} else {
 						result = SDMMD__connect_to_port(device, port, timeoutConnection, &socket, ssl ? true : false);
-						if (result == 0x0) {
+						if (result == kAMDSuccess) {
 							if (enableSSL) {
 								char *udidString = SDMCFStringGetString(device->ivars.unique_device_id);
 								printf("AMDeviceSecureStartService: SSL requested for service %s with device %s.\n", cservice, (device->ivars.unique_device_id ? udidString : "device with no name"));
@@ -282,7 +282,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 									result = kAMDInvalidArgumentError;
 									if (device->ivars.device_active) {
 										result = SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(device, &record);
-										if (result == 0x0) {
+										if (result == kAMDSuccess) {
 											CFTypeRef rootCertVal = CFDictionaryGetValue(record, CFSTR("RootCertificate"));
 											result = kAMDMissingPairRecordError;
 											if (rootCertVal == 0x0) {
@@ -303,7 +303,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 										}
 									}
 									CFSafeRelease(record);
-									if (result == 0x0) {
+									if (result == kAMDSuccess) {
 										CFMutableDictionaryRef connDict = SDMMD_create_dict();
 										result = kAMDNoResourcesError;
 										if (connDict) {
@@ -449,7 +449,7 @@ sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connec
 }
 
 sdmmd_return_t SDMMD_AMDeviceSecureStartSessionedService(SDMMD_AMDeviceRef device, CFStringRef service, SDMMD_AMConnectionRef *connection) {
-	sdmmd_return_t result = 0x0;
+	sdmmd_return_t result = kAMDSuccess;
 	if (device) {
 		result = SDMMD_AMDeviceConnect(device);
 		if (result == 0) {
