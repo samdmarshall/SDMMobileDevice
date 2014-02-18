@@ -60,36 +60,36 @@ struct USBMuxResponseCode SDMMD_USBMuxParseReponseCode(CFDictionaryRef dict) {
 			case SDMMD_USBMuxResult_OK: {
 				resultString = CFSTR("OK");
 				break;
-			};
+			}
 			case SDMMD_USBMuxResult_BadCommand: {
 				resultString = CFSTR("Bad Command");
 				break;
-			};
+			}
 			case SDMMD_USBMuxResult_BadDevice: {
 				resultString = CFSTR("Bad Device");
 				break;
-			};
+			}
 			case SDMMD_USBMuxResult_ConnectionRefused: {
 				resultString = CFSTR("Connection Refused by Device");
 				break;
-			};
+			}
 			case SDMMD_USBMuxResult_Unknown0: {
 				break;
-			};
+			}
 			case SDMMD_USBMuxResult_BadMessage: {
 				resultString = CFSTR("Incorrect Message Contents");
 				break;
-			};
+			}
 			case SDMMD_USBMuxResult_BadVersion: {
 				resultString = CFSTR("Bad Protocol Version");
 				break;
-			};
+			}
 			case SDMMD_USBMuxResult_Unknown2: {
 				break;
-			};
+			}
 			default: {
 				break;
-			};
+			}
 		}
 	}	
 	return (struct USBMuxResponseCode){code, resultString};
@@ -112,14 +112,14 @@ void SDMMD_USBMuxAttachedCallback(void *context, struct USBMuxPacket *packet) {
 	if (newDevice && !CFArrayContainsValue(SDMMobileDevice->deviceList, CFRangeMake(0x0, CFArrayGetCount(SDMMobileDevice->deviceList)), newDevice)) {
 		CFMutableArrayRef updateWithNew = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, SDMMobileDevice->deviceList);
 		// give priority to usb over wifi
-		if (newDevice->ivars.connection_type == 0x0) {
+		if (newDevice->ivars.connection_type == kAMDeviceConnectionTypeUSB) {
 			CFArrayAppendValue(updateWithNew, newDevice);
 			dispatch_async(dispatch_get_main_queue(), ^{
 				CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotification"), newDevice, NULL, true);
 			});
 			CFSafeRelease(SDMMobileDevice->deviceList);
 			SDMMobileDevice->deviceList = CFArrayCreateCopy(kCFAllocatorDefault, updateWithNew);
-		} else if (newDevice->ivars.connection_type == 0x1) {
+		} else if (newDevice->ivars.connection_type == kAMDeviceConnectionTypeWiFi) {
 			// wifi
 		}
 		CFSafeRelease(updateWithNew);
@@ -200,7 +200,7 @@ void SDMMD_USBMuxUnknownCallback(void *context, struct USBMuxPacket *packet) {
 
 SDMMD_USBMuxListenerRef SDMMD_USBMuxCreate() {
 	SDMMD_USBMuxListenerRef listener = (SDMMD_USBMuxListenerRef)calloc(1, sizeof(struct USBMuxListenerClass));
-	listener->socket = 0x0;
+	listener->socket = -1;
 	listener->isActive = false;
 	listener->socketQueue = dispatch_queue_create("com.samdmarshall.sdmmobiledevice.socketQueue", NULL);
 	listener->responseCallback = SDMMD_USBMuxResponseCallback;
@@ -241,27 +241,21 @@ void SDMMD_USBMuxClose(SDMMD_USBMuxListenerRef listener) {
 
 uint32_t SDMMD_ConnectToUSBMux() {
 	sdmmd_return_t result = 0x0;
-	uint32_t sock = socket(AF_UNIX, SOCK_STREAM, 0x0);
-	uint32_t bufferSize;
-    uint32_t enable = true;
-    
-    bufferSize = 0x00010400;
-	if (setsockopt(sock, SOL_SOCKET, SO_SNDBUF, &bufferSize, sizeof(bufferSize))) {
+	uint32_t sock = socket(AF_UNIX, SOCK_STREAM, 0);
+	uint32_t bufSize = 0x00010400;
+	if (setsockopt(sock, SOL_SOCKET, SO_SNDBUF, &bufSize, sizeof(bufSize))) {
 		result = 0x1;
 		printf("SDMMD_USBMuxConnectByPort: setsockopt SO_SNDBUF failed: %d - %s\\n", errno, strerror(errno));
 	}
-    
-	bufferSize = 0x00010400;
-	if (setsockopt(sock, SOL_SOCKET, SO_RCVBUF, &bufferSize, sizeof(bufferSize))) {
+	if (setsockopt(sock, SOL_SOCKET, SO_RCVBUF, &bufSize, sizeof(bufSize))) {
 		result = 0x2;
 		printf("SDMMD_USBMuxConnectByPort: setsockopt SO_RCVBUF failed: %d - %s\\n", errno, strerror(errno));
 	}
-    
-	if (setsockopt(sock, SOL_SOCKET, SO_NOSIGPIPE, &enable, sizeof(enable))) {
+	uint32_t noPipe = 1;
+	if (setsockopt(sock, SOL_SOCKET, SO_NOSIGPIPE, &noPipe, sizeof(noPipe))) {
 		result = 0x3;
 		printf("SDMMD_USBMuxConnectByPort: setsockopt SO_NOSIGPIPE failed: %d - %s\\n", errno, strerror(errno));
 	}
-    
 	if (!result) {
 		char *mux = "/var/run/usbmuxd";
 		struct sockaddr_un address;
@@ -269,9 +263,8 @@ uint32_t SDMMD_ConnectToUSBMux() {
 		strncpy(address.sun_path, mux, sizeof(address.sun_path));
         address.sun_len = SUN_LEN(&address);
 
-		connect(sock, (const struct sockaddr *)&address, sizeof(struct sockaddr_un));
-		ioctl(sock, FIONBIO, NULL); // _USBMuxSetSocketBlockingMode
-        
+		result = connect(sock, (const struct sockaddr *)&address, sizeof(struct sockaddr_un));
+		ioctl(sock, FIONBIO, 1);///*, nope */); // _USBMuxSetSocketBlockingMode
 	}
 	return sock;
 }
@@ -285,7 +278,7 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port
 		CFDictionarySetValue(dict, CFSTR("DeviceID"), deviceNum);
 		CFSafeRelease(deviceNum);
 		struct USBMuxPacket *connect = SDMMD_USBMuxCreatePacketType(kSDMMD_USBMuxPacketConnectType, dict);
-		if (port != 0x7ef2) {   // Magic number from MobileDevice.framework
+		if (port != 0x7ef2) {
 			uint16_t newPort = htons(port);
 			CFNumberRef portNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt16Type, &newPort);
 			CFDictionarySetValue((CFMutableDictionaryRef)connect->payload, CFSTR("PortNumber"), portNumber);
@@ -311,12 +304,12 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 			if (CFPropertyListIsValid(packet->payload, kCFPropertyListXMLFormat_v1_0)) {
 				if (CFDictionaryContainsKey(packet->payload, CFSTR("MessageType"))) {
 					CFStringRef type = CFDictionaryGetValue(packet->payload, CFSTR("MessageType"));
-					if (CFStringCompare(type, SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketResultType], 0x0) == kCFCompareEqualTo) {
+					if (CFStringCompare(type, SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketResultType], 0x0) == 0x0) {
 						(*listener)->responseCallback((*listener), packet);
 						CFArrayAppendValue((*listener)->responses, packet);
-					} else if (CFStringCompare(type, SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketAttachType], 0x0) == kCFCompareEqualTo) {
+					} else if (CFStringCompare(type, SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketAttachType], 0x0) == 0x0) {
 						(*listener)->attachedCallback((*listener), packet);
-					} else if (CFStringCompare(type, SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketDetachType], 0x0) == kCFCompareEqualTo) {
+					} else if (CFStringCompare(type, SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketDetachType], 0x0) == 0x0) {
 						(*listener)->detachedCallback((*listener), packet);
 					}
 				} else {
@@ -431,9 +424,9 @@ void SDMMD_USBMuxReceive(uint32_t sock, struct USBMuxPacket *packet) {
 struct USBMuxPacket * SDMMD_USBMuxCreatePacketType(SDMMD_USBMuxPacketMessageType type, CFDictionaryRef dict) {
 	struct USBMuxPacket *packet = (struct USBMuxPacket *)calloc(1, sizeof(struct USBMuxPacket));
 	if (type == kSDMMD_USBMuxPacketListenType || type == kSDMMD_USBMuxPacketConnectType) {
-		packet->timeout = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 30);
+		packet->timeout = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*0x1e);
 	} else {
-		packet->timeout = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 5);
+		packet->timeout = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*0x5);
 	}
 	packet->body = (struct USBMuxPacketBody){0x10, 0x1, 0x8, transactionId};
 	transactionId++;

@@ -63,11 +63,15 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "342881d85f5d5651b7465122e05a13faf99b97a2"
+            argument = "0aa98b616236d72668820ffd3cb80d32201e2ef6"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "--apps"
+            argument = "--run"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "com.sophiestication.MagicalWeather"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

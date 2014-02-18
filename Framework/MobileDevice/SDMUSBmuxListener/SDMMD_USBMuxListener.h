@@ -101,7 +101,7 @@ typedef enum SDMMD_USBMuxResultCodeType {
 	SDMMD_USBMuxResult_BadCommand = 0x2d,
 	SDMMD_USBMuxResult_BadDevice = 0x6,
 	SDMMD_USBMuxResult_ConnectionRefused = 0x3d,
-	SDMMD_USBMuxResult_Unknown0 = 0xffffffff,
+	SDMMD_USBMuxResult_Unknown0 = -1,
 	SDMMD_USBMuxResult_BadMessage = 0x16,
 	SDMMD_USBMuxResult_BadVersion = 0x49,
 	SDMMD_USBMuxResult_Unknown2 = 0x4b

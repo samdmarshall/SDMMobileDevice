@@ -29,7 +29,7 @@
 #pragma mark TYPES
 #pragma mark -
 
-typedef enum DebuggerCommands {
+typedef enum DebuggerCommandType {
 	kDebugACK = 0,
 	kDebugNACK = 1,
 	kDebugConC = 2,
@@ -91,14 +91,19 @@ typedef enum DebuggerCommands {
 	kDebugqProcessInfo = 58,
 	kDebugQSetWorkingDir = 59,
 	kDebugQSetMaxPacketSize = 60,
+	
+	kDebugCUSTOMCOMMAND,
 	kDebugCommandCount
-} DebuggerCommands;
+} DebuggerCommandType;
 
 
 struct DebuggerCommand {
-	DebuggerCommands commandCode; // enum DebuggerCommands
-	
+	DebuggerCommandType commandCode; // enum DebuggerCommandType
+	CFStringRef command; // only use if custom command
+	CFArrayRef arguments; // command arguments as CFStringRef <- these are encoded
 };
+
+typedef struct DebuggerCommand* DebuggerCommandRef;
 
 struct SDMMD_AMDebugConnection {
 	SDMMD_AMDeviceRef device;
@@ -174,7 +179,9 @@ static struct SDMMD_DebugCommandType KnownDebugCommands[kDebugCommandCount] = {
 	{"vAttachName:", CFSTR("Attach to process by name")},
 	{"qProcessInfo", CFSTR("Get process info")},
 	{"QSetWorkingDir:", CFSTR("Setting working directory, only do so when we have no process")},
-	{"QSetMaxPacketSize:", CFSTR("Setting max packet size")}
+	{"QSetMaxPacketSize:", CFSTR("Setting max packet size")},
+	
+	{"", CFSTR("")}
 };
 
 #pragma mark -
@@ -187,14 +194,18 @@ void SDMMD_AMDebugConnectionClose(SDMMD_AMDebugConnectionRef dconn);
 sdmmd_return_t SDMMD_AMDebugConnectionStart(SDMMD_AMDebugConnectionRef dconn);
 sdmmd_return_t SDMMD_AMDebugConnectionStop(SDMMD_AMDebugConnectionRef dconn);
 
+DebuggerCommandRef SDMMD_CreateDebuggingCommand(DebuggerCommandType commandCode, CFStringRef command, CFArrayRef arguments);
+void SDMMD_DebuggingCommandRelease(DebuggerCommandRef command);
+
+BufferRef SDMMD_EncodeDebuggingString(CFStringRef command);
+
+sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCommandRef command, CFDataRef *response);
+sdmmd_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef dconn, CFDataRef *response);
 
 
 
 
-
-CFStringRef SDMMD_EncodeDebuggingString(CFStringRef command);
-
-sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, SDMMD_DebugCommandType commandType, CFStringRef command);
-sdmmd_debug_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef connection, CFDataRef *data);
+//sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, SDMMD_DebugCommandType commandType, CFStringRef command);
+//sdmmd_debug_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef connection, CFDataRef *data);
 
 #endif

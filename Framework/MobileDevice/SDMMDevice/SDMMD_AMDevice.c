@@ -31,6 +31,7 @@
 #include <errno.h>
 #include <openssl/bio.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
 #include <sys/types.h>
 #include <sys/select.h>
 #include "CFRuntime.h"
@@ -130,7 +131,10 @@ X509* SDMMD__decode_certificate(CFDataRef cert) {
 int SDMMD__ssl_verify_callback(int value, X509_STORE_CTX *store) {
 	bool result = true;
 	X509 *cert = NULL, *decoded = NULL;
-	if (value || (X509_STORE_CTX_get_error(store) + 0xffffffffffffffec < 0x2)) {
+//	if (value || (X509_STORE_CTX_get_error(store) + 0xffffffffffffffec < 0x2)) {
+	if (value ||
+		X509_STORE_CTX_get_error(store) == X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT_LOCALLY ||
+		X509_STORE_CTX_get_error(store) == X509_V_ERR_UNABLE_TO_VERIFY_LEAF_SIGNATURE) {
 		unsigned char* var_8 = NULL;
 		unsigned char* var_16 = NULL;
 		cert = X509_STORE_CTX_get_current_cert(store);
@@ -212,7 +216,7 @@ SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostC
 						} else {
 							SSL_set_accept_state(ssl);
 						}
-						SSL_set_verify(ssl, 0x3, SDMMD__ssl_verify_callback);
+						SSL_set_verify(ssl, SSL_VERIFY_PEER | SSL_VERIFY_FAIL_IF_NO_PEER_CERT, SDMMD__ssl_verify_callback);
 						SSL_set_verify_depth(ssl, 0x0);
 						SSL_set_bio(ssl, bioSocket, bioSocket);
 						SSL_set_ex_data(ssl, (uint32_t)SDMMobileDevice->peer_certificate_data_index, (void*)deviceCert);
@@ -258,8 +262,8 @@ sdmmd_return_t SDMMD_lockconn_disable_ssl(SDMMD_lockdown_conn *lockdown_conn) {
 		if (result == 0) {
 			result = SSL_shutdown(lockdown_conn->ssl);
 		}
-		if (result == 0xff) {
-			printf("lockconn_disable_ssl: Could not shutdown SSL connection %d.\n", 0xffffffff);
+		if (result == -1) {
+			printf("lockconn_disable_ssl: Could not shutdown SSL connection %d.\n", -1);
 		}
 		SSL_free(lockdown_conn->ssl);
 		lockdown_conn->ssl = NULL;
@@ -1002,27 +1006,27 @@ sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, b
 	sdmmd_return_t result = kAMDSuccess;
 	uint32_t sock = 0xffffffff;
 	uint32_t mask = 0x1;
+	struct timeval timeout = { 25, 0 };
 	if (device) {
 		if (socket) {
 			result = kAMDDeviceDisconnectedError;
 			if (device->ivars.device_active) {
 				if (device->ivars.connection_type == 1) {
 					uint32_t dataLen = (uint32_t)CFDataGetLength(device->ivars.network_address);
-					struct sockaddr *address = calloc(1, dataLen); 
+					struct sockaddr_storage address = {0};
 					if (dataLen == 0x80) {
-						CFDataGetBytes(device->ivars.network_address, CFRangeMake(0, dataLen), (UInt8*)address);
-						sock = socket(0x2, 0x1, 0x0);
-						if (setsockopt(sock, 0xffff, 0x1022, &mask, 0x4)) {
+						CFDataGetBytes(device->ivars.network_address, CFRangeMake(0, dataLen), (UInt8*)&address);
+						sock = socket(AF_INET, SOCK_STREAM, 0);
+						if (setsockopt(sock, SOL_SOCKET, SO_NOSIGPIPE, &mask, sizeof(mask))) {
 							
 						}
-						mask = 0x19;
-						if (setsockopt(sock, 0xffff, 0x1005, &mask, 0x10)) {
+						if (setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout))) {
 						 
 						}
-						if (setsockopt(sock, 0xffff, 0x1006, &mask, 0x10)) {
+						if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout))) {
 						 
 						}
-						result = connect(sock, address, 0x10);
+						result = connect(sock, (const struct sockaddr *)&address, sizeof(struct sockaddr_in));
 						printf("connection status: %i\n",result);
 					} else {
 						printf("_AMDeviceConnectByAddressAndPort: doesn't look like a sockaddr_storage.\n");
