@@ -241,57 +241,57 @@ void SDMMD_USBMuxClose(SDMMD_USBMuxListenerRef listener) {
 
 uint32_t SDMMD_ConnectToUSBMux() {
 	sdmmd_return_t result = kAMDSuccess;
-    
-    // Initialize socket
+	
+	// Initialize socket
 	uint32_t sock = socket(AF_UNIX, SOCK_STREAM, 0);
-    
-    // Set send/receive buffer sizes
+	
+	// Set send/receive buffer sizes
 	uint32_t bufSize = 0x00010400;
 	if (setsockopt(sock, SOL_SOCKET, SO_SNDBUF, &bufSize, sizeof(bufSize))) {
 		result = 0x1;
-        int err = errno;
+		int err = errno;
 		printf("%s: setsockopt SO_SNDBUF failed: %d - %s\n", __FUNCTION__, err, strerror(err));
 	}
 	if (setsockopt(sock, SOL_SOCKET, SO_RCVBUF, &bufSize, sizeof(bufSize))) {
 		result = 0x2;
-        int err = errno;
+		int err = errno;
 		printf("%s: setsockopt SO_RCVBUF failed: %d - %s\n", __FUNCTION__, err, strerror(err));
 	}
-    
-    // Disable SIGPIPE on socket i/o error
+	
+	// Disable SIGPIPE on socket i/o error
 	uint32_t noPipe = 1;
 	if (setsockopt(sock, SOL_SOCKET, SO_NOSIGPIPE, &noPipe, sizeof(noPipe))) {
 		result = 0x3;
-        int err = errno;
+		int err = errno;
 		printf("%s: setsockopt SO_NOSIGPIPE failed: %d - %s\n", __FUNCTION__, err, strerror(err));
 	}
-    
+	
 	if (!result) {
-        // Create address structure to point to usbmuxd socket
+		// Create address structure to point to usbmuxd socket
 		char *mux = "/var/run/usbmuxd";
 		struct sockaddr_un address;
 		address.sun_family = AF_UNIX;
 		strncpy(address.sun_path, mux, sizeof(address.sun_path));
-        address.sun_len = SUN_LEN(&address);
-        
-        // Connect socket
+		address.sun_len = SUN_LEN(&address);
+		
+		// Connect socket
 		if (connect(sock, (const struct sockaddr *)&address, sizeof(struct sockaddr_un))) {
-            result = 0x4;
-            int err = errno;
-            printf("%s: connect socket failed: %d - %s\n", __FUNCTION__, err, strerror(err));
-        }
+			result = 0x4;
+			int err = errno;
+			printf("%s: connect socket failed: %d - %s\n", __FUNCTION__, err, strerror(err));
+		}
 	}
-    
-    if (!result) {
-        // Set socket to nonblocking IO mode
-        uint32_t nonblock = 1;
+	
+	if (!result) {
+		// Set socket to nonblocking IO mode
+		uint32_t nonblock = 1;
 		if (ioctl(sock, FIONBIO, &nonblock)) {
-            result = 0x5;
-            int err = errno;
-            printf("%s: ioctl FIONBIO failed: %d - %s\n", __FUNCTION__, err, strerror(err));
-        }
-    }
-    
+			result = 0x5;
+			int err = errno;
+			printf("%s: ioctl FIONBIO failed: %d - %s\n", __FUNCTION__, err, strerror(err));
+		}
+	}
+	
 	return sock;
 }
 
