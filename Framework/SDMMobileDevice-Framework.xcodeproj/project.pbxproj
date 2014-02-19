@@ -87,6 +87,7 @@
 		22DEF97D188350E6008E909F /* Pointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF96F188350E6008E909F /* Pointer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22DEF97E188350E6008E909F /* Range.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF970188350E6008E909F /* Range.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3F38D21C18AECF7C00DE5FA9 /* SDMTypeTranslation.h in Headers */ = {isa = PBXBuildFile; fileRef = 3F38D21B18AECE1200DE5FA9 /* SDMTypeTranslation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3F38D22218B3B82800DE5FA9 /* Array.h in Headers */ = {isa = PBXBuildFile; fileRef = 2278490F18AFE5A100D1D6FB /* Array.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -534,6 +535,7 @@
 				22AD9347178A1609002ACFB1 /* SDMMD_MRecoveryModeDevice.h in Headers */,
 				22AD9348178A160B002ACFB1 /* SDMMD_Keys.h in Headers */,
 				220B5B1F188376130082AF84 /* Attributes.h in Headers */,
+				3F38D22218B3B82800DE5FA9 /* Array.h in Headers */,
 				22AD9350178A1678002ACFB1 /* SDMMD_MRUSBDevice.h in Headers */,
 				22AD9355178A16CF002ACFB1 /* SDMMD_MDFUModeDevice.h in Headers */,
 				22DEF97B188350E6008E909F /* Logging.h in Headers */,

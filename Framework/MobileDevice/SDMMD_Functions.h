@@ -530,7 +530,7 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 		printf("Could not allocate host key pair\n");
 	}
 	
-	sdmmd_return_t result = 0x0;
+	sdmmd_return_t result = kAMDSuccess;
 	
 	EVP_PKEY *rootEVP = EVP_PKEY_new();
 	if (!rootEVP) {

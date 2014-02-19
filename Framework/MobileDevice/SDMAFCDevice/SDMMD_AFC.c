@@ -219,7 +219,7 @@ sdmmd_return_t SDMMD_AFCSendOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOper
 sdmmd_return_t SDMMD_AFCReceiveOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOperationRef *op);
 
 sdmmd_return_t SDMMD_AFCConnectionPerformOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOperationRef op) {
-	__block sdmmd_return_t result = 0x0;
+	__block sdmmd_return_t result = kAMDSuccess;
 	dispatch_sync(conn->operationQueue, ^{
 		printf("Packet: %s\n",SDMMD_gAFCPacketTypeNames[op->packet->header.type]);
 		op->packet->header.pid = conn->operationCount;
@@ -234,7 +234,7 @@ sdmmd_return_t SDMMD_AFCConnectionPerformOperation(SDMMD_AFCConnectionRef conn, 
 }
 
 sdmmd_return_t SDMMD_AFCSendOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOperationRef op) {
-	sdmmd_return_t result = 0x0;
+	sdmmd_return_t result = kAMDSuccess;
 	CFDataRef headerData = CFDataCreate(kCFAllocatorDefault, (UInt8*)&op->packet->header, sizeof(SDMMD_AFCPacketHeader));
 	result = SDMMD_DirectServiceSend(SDMMD_TranslateConnectionToSocket(conn->handle), headerData);
 	printf("header sent status: %08x\n",result);
@@ -245,7 +245,7 @@ sdmmd_return_t SDMMD_AFCSendOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOper
 }
 
 sdmmd_return_t SDMMD_AFCReceiveOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOperationRef *op) {
-	sdmmd_return_t result = 0x0;
+	sdmmd_return_t result = kAMDSuccess;
 	CFMutableDataRef headerData = CFDataCreateMutable(kCFAllocatorDefault, sizeof(SDMMD_AFCPacketHeader));
 	SDMMD_AFCPacketHeader *zeros = calloc(1, sizeof(SDMMD_AFCPacketHeader));
 	CFDataAppendBytes(headerData, (UInt8*)zeros, sizeof(SDMMD_AFCPacketHeader));
@@ -270,7 +270,7 @@ sdmmd_return_t SDMMD_AFCReceiveOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 }
 
 sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOperationRef op, SDMMD_AFCOperationRef *response) {
-	__block sdmmd_return_t result = 0x0;
+	__block sdmmd_return_t result = kAMDSuccess;
 	__block SDMMD_AFCOperationRef blockReply;
 	dispatch_sync(conn->operationQueue, ^{
 		conn->semaphore = dispatch_semaphore_create(0x0);
@@ -310,7 +310,7 @@ void SDMMD_AFCLog(uint32_t level, const char *format, ...) {
 }
 
 sdmmd_return_t SDMMD_AFCSetErrorInfoWithArgs(uint32_t level, uint32_t mask, uint32_t code, char *file, uint32_t line, char *call) {
-	sdmmd_return_t result = 0x0;
+	sdmmd_return_t result = kAMDSuccess;
 	CFTypeRef err;
 	SDMMD_AFCErrorInfoCreateWithArgs(err, mask, code, file, line, call);
 	if (err) {
@@ -320,7 +320,7 @@ sdmmd_return_t SDMMD_AFCSetErrorInfoWithArgs(uint32_t level, uint32_t mask, uint
 }
 
 sdmmd_return_t SDMMD__AFCSetErrorResult(uint32_t level, uint32_t code, uint32_t line, char *call) {
-	sdmmd_return_t result = 0x0;
+	sdmmd_return_t result = kAMDSuccess;
 	SDMMD_AFCLog(0x5, "Setting error result %d, %d, %s, %d\n", 0xffffffff, code, __FILE__, line);
 	result = SDMMD_AFCSetErrorInfoWithArgs(level, 0xffffffff, code, __FILE__, line, call);
 	return result;
@@ -347,7 +347,7 @@ char* SDMMD_AFCPacketTypeName(uint32_t packetType) {
 }
 
 sdmmd_return_t SDMMD_AFCSendStatusExtended(SDMMD_AFCConnectionRef afcConn, void*b, uint32_t packetType, CFDictionaryRef ref) {
-	sdmmd_return_t result = 0x0;
+	sdmmd_return_t result = kAMDSuccess;
 	SDMMD_AFCLog(0x5, "Writing status packet %d info %p\\n",packetType,ref);
 	if (afcConn && packetType >= 0x15) {
 		SDMMD_AFCLog(0x5, "Oh no!");
@@ -391,7 +391,7 @@ sdmmd_return_t SDMMD_AFCSendStatus(SDMMD_AFCConnectionRef afcConn, void*b, void*
 }
 
 sdmmd_return_t SDMMD_AFCSendDataPacket(SDMMD_AFCConnectionRef afcConn, void*b, uint32_t *dataBytePtr, uint32_t dataLength) {
-	sdmmd_return_t result = 0x0;
+	sdmmd_return_t result = kAMDSuccess;
 	SDMMD_AFCLog(0x5, "Writing data packet with data length %u\n",dataLength);
 	if (afcConn->ivars.e != 0x0) {
 		result = afcConn->ivars.statusPtr;
@@ -413,7 +413,7 @@ sdmmd_return_t SDMMD_AFCSendDataPacket(SDMMD_AFCConnectionRef afcConn, void*b, u
 }
 
 sdmmd_return_t SDMMD_AFCSendHeader(SDMMD_AFCConnectionRef afcConn, void*b) {
-	sdmmd_return_t result = 0x0;
+	sdmmd_return_t result = kAMDSuccess;
 	if (afcConn->ivars.e != 0x0) {
 		result = afcConn->ivars.statusPtr;
 	} else {
@@ -457,7 +457,7 @@ sdmmd_return_t SDMMD_AFCReadPacket(SDMMD_AFCConnectionRef afcConn, CFTypeRef* b,
 }
 
 sdmmd_return_t SDMMD_AFCReadPacketBody(CFTypeRef a,void*b, CFDataRef* c, uint32_t *readLength) {
-	sdmmd_return_t result = 0x0;
+	sdmmd_return_t result = kAMDSuccess;
 	if ((a+0x44) == 0x0) {
 		uint32_t dataLength = (b+0x8);
 		CFDataRef data = NULL;
