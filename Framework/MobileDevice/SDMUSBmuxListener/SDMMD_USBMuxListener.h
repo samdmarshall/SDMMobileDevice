@@ -107,6 +107,12 @@ typedef enum SDMMD_USBMuxResultCodeType {
 	SDMMD_USBMuxResult_Unknown2 = 0x4b
 } SDMMD_USBMuxResultCodeType;
 
+extern const CFStringRef kSDMMD_USBMuxListenerDeviceAttachedNotification;
+extern const CFStringRef kSDMMD_USBMuxListenerDeviceAttachedNotificationFinished;
+extern const CFStringRef kSDMMD_USBMuxListenerDeviceDetachedNotification;
+extern const CFStringRef kSDMMD_USBMuxListenerDeviceDetachedNotificationFinished;
+extern const CFStringRef kSDMMD_USBMuxListenerStoppedListenerNotification;
+
 #pragma mark -
 #pragma mark Functions
 #pragma mark -
