@@ -15,3 +15,5 @@ build/
 *.xccheckout
 xcuserdata
 SDMMobileDevice.xcworkspace/xcuserdata/
+SDMMobileDevice.podspec
+podspec
