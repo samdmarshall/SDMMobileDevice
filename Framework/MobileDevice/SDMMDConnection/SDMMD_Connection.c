@@ -20,6 +20,7 @@
 #ifndef _SDM_MD_CONNECTION_C_
 #define _SDM_MD_CONNECTION_C_
 
+#include <sys/socket.h>
 #include "SDMMD_Connection.h"
 #include "SDMMD_Service.h"
 #include "SDMMD_Functions.h"
@@ -108,7 +109,7 @@ SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(uint32_t socket, SSL* ssl
 	handle->ivars.socket = socket;
 	handle->ivars.ssl = ssl;
 	handle->ivars.closeOnInvalid = true;
-	handle->ivars.one1 = 0x1;
+	handle->ivars.isValid = true;
 	if (dict) {
 		CFTypeRef value = CFDictionaryGetValue(dict, CFSTR("CloseOnInvalidate"));
 		if (value && CFEqual(value, kCFBooleanFalse)) {
@@ -445,7 +446,21 @@ SSL* SDMMD_AMDServiceConnectionGetSecureIOContext(SDMMD_AMConnectionRef connecti
 }
 
 sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connection) {
-	return 0x0;
+	sdmmd_return_t result = kAMDSuccess;
+	if (connection && connection->ivars.isValid) {
+		connection->ivars.isValid = false;
+		if (connection->ivars.closeOnInvalid && connection->ivars.socket != -1) {
+			if (shutdown(connection->ivars.socket, SHUT_RDWR) == -1) {
+				int err = errno;
+				if (err != ENOTCONN) {
+					printf("%s: serv_conn %p; failure shutdown %d: %d", __FUNCTION__, connection, connection->ivars.socket, err);
+				}
+			}
+		}
+		connection->ivars.socket = -1;
+		connection->ivars.ssl = NULL;	// _AMDServiceConnectionInvalidate leaks the SSL context?
+	}
+	return result;
 }
 
 sdmmd_return_t SDMMD_AMDeviceSecureStartSessionedService(SDMMD_AMDeviceRef device, CFStringRef service, SDMMD_AMConnectionRef *connection) {

@@ -35,7 +35,7 @@ struct AMConnectionClassBody {
 	SSL *ssl;					// 24
 	unsigned char unknown1[4];	// 28
 	int8_t closeOnInvalid;		// 32
-	int8_t one1;				// 33
+	int8_t isValid;				// 33
 	unsigned char unknown2[2];	// 34
 	SDMMD_AMDeviceRef device;	// 36
 	char service[128];			// 40
