@@ -1039,6 +1039,16 @@ sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, b
 						result = kAMDMuxConnectError;
 					}
 				}
+				/*if (setsockopt(sock, 0xffff, 0x1022, &mask, 0x4)) {
+					
+				}
+				mask = 0x19;
+				if (setsockopt(sock, 0xffff, 0x1005, &mask, 0x10)) {
+					
+				}
+				if (setsockopt(sock, 0xffff, 0x1006, &mask, 0x10)) {
+					
+				}*/
 				*socketConn = sock;
 			}
 			/*if (sock != 0xff) {
