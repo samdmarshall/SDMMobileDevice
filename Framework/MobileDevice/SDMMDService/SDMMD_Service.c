@@ -60,6 +60,7 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 	if (msgLen) {
 	    msgLen = htonl((uint32_t)msgLen);
 		uint64_t result;
+		// Send 32-bit data length header
 		if (handle.isSSL) {
 			if (SSL_is_init_finished(handle.socket.ssl)) {
 				result = SSL_write(handle.socket.ssl, &msgLen, sizeof(uint32_t));
@@ -69,6 +70,7 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 		} else {
 			result = send(handle.socket.conn, &msgLen, sizeof(uint32_t), 0);
 		}
+		// Send data body
 		if (result == sizeof(uint32_t)) {
 			msgLen = ntohl(msgLen);
 			if (handle.isSSL) {
@@ -76,31 +78,32 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 			} else {
 				result = send(handle.socket.conn, CFDataGetBytePtr(data), msgLen, 0);
 			}
-			if (result == msgLen) {
-				return (result == msgLen ? kAMDSuccess : kAMDInvalidResponseError);
-			}
+			return (result == msgLen ? kAMDSuccess : kAMDInvalidResponseError);
 		}
-		return kAMDNotConnectedError;
+		else {
+			return kAMDNotConnectedError;
+		}
 	}
-	return kAMDSuccess;
+	else {
+		return kAMDInvalidArgumentError;
+	}
 }
 
 sdmmd_return_t SDMMD_DirectServiceSend(SocketConnection handle, CFDataRef data) {
 	CFIndex msgLen = (data ? CFDataGetLength(data) : 0);
 	if (msgLen) {
 		uint64_t result = 0;
-		
+		// Send data body
 		if (handle.isSSL) {
 			result = SSL_write(handle.socket.ssl, CFDataGetBytePtr(data), (uint32_t)msgLen);
 		} else {
 			result = send(handle.socket.conn, CFDataGetBytePtr(data), msgLen, 0);
 		}
-		if (result == msgLen) {
-			return (result == msgLen ? kAMDSuccess : kAMDNotConnectedError);
-		}
-		return kAMDNotConnectedError;
+		return (result == msgLen ? kAMDSuccess : kAMDNotConnectedError);
 	}
-	return kAMDSuccess;
+	else {
+		return kAMDInvalidArgumentError;
+	}
 }
 
 sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
@@ -108,13 +111,15 @@ sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 	uint32_t length = 0;
 
 	if (handle.isSSL == true || CheckIfExpectingResponse(handle, 10000)) {
+		// Receive data length header
 		if (handle.isSSL) {
 			received = SSL_read(handle.socket.ssl, &length, 0x4);
 		} else {
 			received = recv(handle.socket.conn, &length, 0x4, 0);
 		}
 		length = ntohl(length);
-		if (sizeof(length) == 0x4 && received == 0x4) {
+		if (received == 0x4) {
+			// Receive data body
 			unsigned char *buffer = calloc(0x1, length);
 			uint32_t remainder = length;
 			while (remainder) {
@@ -164,7 +169,7 @@ sdmmd_return_t SDMMD_DirectServiceReceive(SocketConnection handle, CFDataRef *da
 sdmmd_return_t SDMMD_ServiceSendMessage(SocketConnection handle, CFPropertyListRef data, CFPropertyListFormat format) {
 	CFErrorRef error;
 	CFDataRef xmlData = CFPropertyListCreateData(kCFAllocatorDefault, data, format, 0, &error);
-	sdmmd_return_t result = ((data) ? SDMMD_ServiceSend(handle, xmlData) : kAMDInvalidArgumentError);
+	sdmmd_return_t result = ((xmlData) ? SDMMD_ServiceSend(handle, xmlData) : kAMDInvalidArgumentError);
 
 	CFSafeRelease(xmlData);
 	return result;
@@ -172,16 +177,17 @@ sdmmd_return_t SDMMD_ServiceSendMessage(SocketConnection handle, CFPropertyListR
 
 sdmmd_return_t SDMMD_ServiceReceiveMessage(SocketConnection handle, CFPropertyListRef *data) {
 	CFDataRef dataBuffer = NULL;
-
-	if (SDM_MD_CallSuccessful(SDMMD_ServiceReceive(handle, &dataBuffer))) {
+	sdmmd_return_t result;
+	
+	if ((result = SDM_MD_CallSuccessful(SDMMD_ServiceReceive(handle, &dataBuffer)))) {
 		if (dataBuffer && CFDataGetLength(dataBuffer)) {
 			*data = CFPropertyListCreateWithData(0, dataBuffer, kCFPropertyListImmutable, NULL, NULL);
 		} else {
 			*data = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 		}
-		return kAMDSuccess;
+		return *data ? kAMDSuccess : kAMDUndefinedError;
 	} else {
-		return kAMDNotConnectedError;
+		return result;
 	}
 }
 
@@ -196,7 +202,7 @@ sdmmd_return_t SDMMD_ServiceSendStream(SocketConnection handle, CFPropertyListRe
 	sdmmd_return_t result = kAMDInvalidArgumentError;
 
 	if (length == CFDataGetLength(xmlData)) {
-		result = ((data) ? SDMMD_ServiceSend(handle, xmlData) : kAMDInvalidArgumentError);
+		result = ((xmlData) ? SDMMD_ServiceSend(handle, xmlData) : kAMDInvalidArgumentError);
 	}
 	CFSafeRelease(xmlData);
 	CFWriteStreamClose(write);
