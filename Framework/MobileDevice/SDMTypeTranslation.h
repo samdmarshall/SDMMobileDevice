@@ -19,7 +19,7 @@ typedef amd_error_t AMDError;
 
 #pragma mark - MCP
 
-typedef SDMMD_AMConnectionRef AMDConnectionRef;
+typedef SDMMD_AMConnectionRef AMConnectionRef;
 typedef SDMMD_AMConnectionRef AMDServiceConnectionRef;
 
 #pragma mark - Device
