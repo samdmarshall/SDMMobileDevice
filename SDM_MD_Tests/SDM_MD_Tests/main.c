@@ -19,7 +19,10 @@ int main(int argc, const char * argv[]) {
 	dispatch_semaphore_t sema = dispatch_semaphore_create(0);
 	
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-		StartListener(sema);
+		kern_return_t result = StartListener(sema);
+		if (result != KERN_SUCCESS) {
+			exit(-1);
+		}
 	});
 	dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
 	dispatch_release(sema);

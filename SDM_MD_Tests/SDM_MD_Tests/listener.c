@@ -44,7 +44,9 @@ void callback(struct AMDeviceNotificationCallbackInformation *CallbackInfo) {
 	
 }
 
-void StartListener(dispatch_semaphore_t sema) {
+kern_return_t StartListener(dispatch_semaphore_t sema) {
+	
+	__block kern_return_t result = KERN_SUCCESS;
 	
 	SDMMobileDevice;
 	
@@ -60,15 +62,21 @@ void StartListener(dispatch_semaphore_t sema) {
 	got_apple_device = dispatch_semaphore_create(0);
 	
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-		void *subscribe;
-		kern_return_t sub_response = AMDeviceNotificationSubscribe(callback, 0,0,0, &subscribe);
-		CFRunLoopRun();
+		struct am_device_notification *subscribe;
+		kern_return_t sub_response = AMDeviceNotificationSubscribe((am_device_notification_callback)callback, 0,0,0, &subscribe);
+		if (sub_response == KERN_SUCCESS) {
+			CFRunLoopRun();
+		}
+		else {
+			result = KERN_FAILURE;
+		}
 	});
 	
 	dispatch_semaphore_wait(got_apple_device, DISPATCH_TIME_FOREVER);
 	dispatch_release(got_apple_device);
 	dispatch_semaphore_signal(sema);
-
+	
+	return result;
 }
 
 #endif

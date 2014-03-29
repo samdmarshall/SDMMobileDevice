@@ -15,6 +15,6 @@
 SDMMD_AMDeviceRef sdm_test_device;
 struct am_device *apple_test_device;
 
-void StartListener(dispatch_semaphore_t sema);
+kern_return_t StartListener(dispatch_semaphore_t sema);
 
 #endif
