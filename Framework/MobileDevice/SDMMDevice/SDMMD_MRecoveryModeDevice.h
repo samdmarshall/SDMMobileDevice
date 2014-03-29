@@ -56,12 +56,12 @@ struct AMRecoveryModeDeviceClassBody {
 	// 160
 } ATR_PACK AMRecoveryModeDeviceClassBody; // size 0x98
 
-struct am_recovery_device {
+struct sdm_am_recovery_device {
 	struct AMRecoveryModeDeviceClassHeader base;
 	struct AMRecoveryModeDeviceClassBody ivars;
-} ATR_PACK am_recovery_device;
+} ATR_PACK sdm_am_recovery_device;
 
-typedef struct am_recovery_device SDMMD_AMRecoveryModeDeviceClass;
+typedef struct sdm_am_recovery_device SDMMD_AMRecoveryModeDeviceClass;
 
 #define SDMMD_AMRecoveryModeDeviceRef SDMMD_AMRecoveryModeDeviceClass*
 
