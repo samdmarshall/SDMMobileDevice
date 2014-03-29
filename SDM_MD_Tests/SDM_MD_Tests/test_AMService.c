@@ -18,6 +18,7 @@ void Test_AMService(struct am_device *apple, SDMMD_AMDeviceRef sdm) {
 	double test_fail = 0;
 	double test_total = 0;
 	
+	// AMDeviceStartService Tests
 	SDM_MD_TestResponse service = SDM_MD_Test_AMDeviceStartService(apple, sdm, kResponse);
 	TestCount(service)
 	SDM_MD_TestResponse service_sdm = SDM_MD_Test_AMDeviceStartService((struct am_device *)sdm, sdm, kSDMMD);
