@@ -34,4 +34,13 @@ if (DEBUG_TEST) { \
 assert(value == SDM_MD_TestResponse_Success); \
 }
 
+
+#define TestCount(value) if (value == SDM_MD_TestResponse_Success) { \
+test_pass++; \
+} \
+else { \
+test_fail++; \
+} \
+test_total++;
+
 #endif

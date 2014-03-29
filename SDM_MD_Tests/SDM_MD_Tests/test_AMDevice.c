@@ -13,8 +13,18 @@
 #include "test_AMDevice.h"
 
 void Test_AMDevice(struct am_device *apple, SDMMD_AMDeviceRef sdm) {
+	LogTestName;
+	uint32_t test_pass = 0;
+	uint32_t test_fail = 0;
+	uint32_t test_total = 0;
+	
 	SDM_MD_TestResponse connect = SDM_MD_Test_AMDeviceConnect(apple, sdm);
+	TestCount(connect)
+	
 	SDM_MD_TestResponse disconnect = SDM_MD_Test_AMDeviceDisconnect(apple, sdm);
+	TestCount(disconnect)
+	
+	printf("Passing: %i/%i %i%%\n",test_pass,test_total,(int)(floor(test_pass/test_total)*100.f));	
 }
 
 SDM_MD_TestResponse SDM_MD_Test_AMDeviceConnect(struct am_device *apple, SDMMD_AMDeviceRef sdm) {
