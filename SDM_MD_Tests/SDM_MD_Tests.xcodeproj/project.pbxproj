@@ -1,0 +1,322 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		22B3D80318E74EE40007F104 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B3D80218E74EE40007F104 /* CoreFoundation.framework */; };
+		22B3D80618E74EE40007F104 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D80518E74EE40007F104 /* main.c */; };
+		22B3D80F18E74F1E0007F104 /* SDMMobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B3D80E18E74F1E0007F104 /* SDMMobileDevice.framework */; };
+		22B3D81118E74F2E0007F104 /* MobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B3D81018E74F2E0007F104 /* MobileDevice.framework */; };
+		22B3D81318E74FBF0007F104 /* test_AMDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D81218E74FBF0007F104 /* test_AMDevice.c */; };
+		22B3D81A18E75BCC0007F104 /* listener.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D81918E75BCC0007F104 /* listener.c */; };
+		22B3D82218E76A2C0007F104 /* test_AMService.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D82118E76A2C0007F104 /* test_AMService.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		22B3D7FD18E74EE40007F104 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		22B3D7FF18E74EE40007F104 /* SDM_MD_Tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SDM_MD_Tests; sourceTree = BUILT_PRODUCTS_DIR; };
+		22B3D80218E74EE40007F104 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		22B3D80518E74EE40007F104 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		22B3D80E18E74F1E0007F104 /* SDMMobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDMMobileDevice.framework; path = ../build/Release/SDMMobileDevice.framework; sourceTree = "<group>"; };
+		22B3D81018E74F2E0007F104 /* MobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileDevice.framework; path = ../../../../../System/Library/PrivateFrameworks/MobileDevice.framework; sourceTree = "<group>"; };
+		22B3D81218E74FBF0007F104 /* test_AMDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_AMDevice.c; sourceTree = "<group>"; };
+		22B3D81418E74FD50007F104 /* tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tests.h; sourceTree = "<group>"; };
+		22B3D81518E74FE30007F104 /* test_AMDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_AMDevice.h; sourceTree = "<group>"; };
+		22B3D81618E751380007F104 /* test_Type.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_Type.h; sourceTree = "<group>"; };
+		22B3D81718E75A690007F104 /* MobileDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileDevice.h; sourceTree = "<group>"; };
+		22B3D81818E75BBF0007F104 /* listener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = listener.h; sourceTree = "<group>"; };
+		22B3D81918E75BCC0007F104 /* listener.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = listener.c; sourceTree = "<group>"; };
+		22B3D82018E76A230007F104 /* test_AMService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_AMService.h; sourceTree = "<group>"; };
+		22B3D82118E76A2C0007F104 /* test_AMService.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_AMService.c; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		22B3D7FC18E74EE40007F104 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22B3D81118E74F2E0007F104 /* MobileDevice.framework in Frameworks */,
+				22B3D80F18E74F1E0007F104 /* SDMMobileDevice.framework in Frameworks */,
+				22B3D80318E74EE40007F104 /* CoreFoundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		22B3D7F618E74EE40007F104 = {
+			isa = PBXGroup;
+			children = (
+				22B3D80418E74EE40007F104 /* SDM_MD_Tests */,
+				22B3D80118E74EE40007F104 /* Frameworks */,
+				22B3D80018E74EE40007F104 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		22B3D80018E74EE40007F104 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				22B3D7FF18E74EE40007F104 /* SDM_MD_Tests */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		22B3D80118E74EE40007F104 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				22B3D81718E75A690007F104 /* MobileDevice.h */,
+				22B3D81018E74F2E0007F104 /* MobileDevice.framework */,
+				22B3D80E18E74F1E0007F104 /* SDMMobileDevice.framework */,
+				22B3D80218E74EE40007F104 /* CoreFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		22B3D80418E74EE40007F104 /* SDM_MD_Tests */ = {
+			isa = PBXGroup;
+			children = (
+				22B3D81818E75BBF0007F104 /* listener.h */,
+				22B3D81918E75BCC0007F104 /* listener.c */,
+				22B3D80518E74EE40007F104 /* main.c */,
+				22B3D81B18E769A90007F104 /* Tests */,
+			);
+			path = SDM_MD_Tests;
+			sourceTree = "<group>";
+		};
+		22B3D81B18E769A90007F104 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				22B3D81418E74FD50007F104 /* tests.h */,
+				22B3D81618E751380007F104 /* test_Type.h */,
+				22B3D81C18E769BB0007F104 /* AMDevice */,
+				22B3D81D18E769C60007F104 /* AMService */,
+				22B3D81E18E769D80007F104 /* AMConnection */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
+		22B3D81C18E769BB0007F104 /* AMDevice */ = {
+			isa = PBXGroup;
+			children = (
+				22B3D81518E74FE30007F104 /* test_AMDevice.h */,
+				22B3D81218E74FBF0007F104 /* test_AMDevice.c */,
+			);
+			name = AMDevice;
+			sourceTree = "<group>";
+		};
+		22B3D81D18E769C60007F104 /* AMService */ = {
+			isa = PBXGroup;
+			children = (
+				22B3D82018E76A230007F104 /* test_AMService.h */,
+				22B3D82118E76A2C0007F104 /* test_AMService.c */,
+			);
+			name = AMService;
+			sourceTree = "<group>";
+		};
+		22B3D81E18E769D80007F104 /* AMConnection */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = AMConnection;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		22B3D7FE18E74EE40007F104 /* SDM_MD_Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 22B3D80B18E74EE40007F104 /* Build configuration list for PBXNativeTarget "SDM_MD_Tests" */;
+			buildPhases = (
+				22B3D7FB18E74EE40007F104 /* Sources */,
+				22B3D7FC18E74EE40007F104 /* Frameworks */,
+				22B3D7FD18E74EE40007F104 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SDM_MD_Tests;
+			productName = SDM_MD_Tests;
+			productReference = 22B3D7FF18E74EE40007F104 /* SDM_MD_Tests */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		22B3D7F718E74EE40007F104 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = "Sam Marshall";
+			};
+			buildConfigurationList = 22B3D7FA18E74EE40007F104 /* Build configuration list for PBXProject "SDM_MD_Tests" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 22B3D7F618E74EE40007F104;
+			productRefGroup = 22B3D80018E74EE40007F104 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				22B3D7FE18E74EE40007F104 /* SDM_MD_Tests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		22B3D7FB18E74EE40007F104 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22B3D80618E74EE40007F104 /* main.c in Sources */,
+				22B3D81318E74FBF0007F104 /* test_AMDevice.c in Sources */,
+				22B3D81A18E75BCC0007F104 /* listener.c in Sources */,
+				22B3D82218E76A2C0007F104 /* test_AMService.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		22B3D80918E74EE40007F104 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		22B3D80A18E74EE40007F104 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		22B3D80C18E74EE40007F104 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/sam/Projects/SDMMobileDevice/build/Release,
+					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYMROOT = ../build;
+			};
+			name = Debug;
+		};
+		22B3D80D18E74EE40007F104 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/sam/Projects/SDMMobileDevice/build/Release,
+					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYMROOT = ../build;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		22B3D7FA18E74EE40007F104 /* Build configuration list for PBXProject "SDM_MD_Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				22B3D80918E74EE40007F104 /* Debug */,
+				22B3D80A18E74EE40007F104 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		22B3D80B18E74EE40007F104 /* Build configuration list for PBXNativeTarget "SDM_MD_Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				22B3D80C18E74EE40007F104 /* Debug */,
+				22B3D80D18E74EE40007F104 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 22B3D7F718E74EE40007F104 /* Project object */;
+}

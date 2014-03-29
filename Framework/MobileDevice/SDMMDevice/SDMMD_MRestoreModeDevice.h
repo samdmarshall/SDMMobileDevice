@@ -47,12 +47,12 @@ struct AMRestoreModeDeviceClassBody {
 	// 136
 } ATR_PACK AMRestoreModeDeviceClassBody; // 0x88
 
-struct am_restore_device {
+struct sdm_am_restore_device {
 	struct AMRestoreModeDeviceClassHeader base;
 	struct AMRestoreModeDeviceClassBody ivars;
-} ATR_PACK am_restore_device;
+} ATR_PACK sdm_am_restore_device;
 
-typedef struct am_restore_device SDMMD_AMRestoreModeDeviceClass;
+typedef struct sdm_am_restore_device SDMMD_AMRestoreModeDeviceClass;
 
 #define SDMMD_AMRestoreModeDeviceRef SDMMD_AMRestoreModeDeviceClass*
 
