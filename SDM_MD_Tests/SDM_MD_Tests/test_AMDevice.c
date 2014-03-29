@@ -30,7 +30,7 @@ void Test_AMDevice(struct am_device *apple, SDMMD_AMDeviceRef sdm) {
 	SDM_MD_TestResponse stop_session = SDM_MD_Test_AMDeviceStopSession(apple, sdm);
 	TestCount(stop_session);
 	
-	printf("Passing: %i/%i %i%%\n",test_pass,test_total,(int)(floor(test_pass/test_total)*100.f));
+	printf("Passing: %i/%i %i%%\n\n",test_pass,test_total,(int)(floor(test_pass/test_total)*100.f));
 }
 
 SDM_MD_TestResponse SDM_MD_Test_AMDeviceConnect(struct am_device *apple, SDMMD_AMDeviceRef sdm) {

@@ -9,7 +9,6 @@
 #ifndef SDM_MD_Tests_test_AMDevice_h
 #define SDM_MD_Tests_test_AMDevice_h
 
-#include <SDMMobileDevice/SDMMobileDevice.h>
 #include "test_Type.h"
 
 void Test_AMDevice(struct am_device *apple, SDMMD_AMDeviceRef sdm);

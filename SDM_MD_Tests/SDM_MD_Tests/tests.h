@@ -10,5 +10,6 @@
 #define SDM_MD_Tests_tests_h
 
 #include "test_AMDevice.h"
+#include "test_AMService.h"
 
 #endif

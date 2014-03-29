@@ -21,7 +21,7 @@ int main(int argc, const char * argv[]) {
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 		kern_return_t result = StartListener(sema);
 		if (result != KERN_SUCCESS) {
-			exit(-1);
+			exit(0);
 		}
 	});
 	dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
@@ -29,6 +29,8 @@ int main(int argc, const char * argv[]) {
 
 	
 	Test_AMDevice(apple_test_device, sdm_test_device);
+	
+	Test_AMService(apple_test_device, sdm_test_device);
 	
     return 0;
 }

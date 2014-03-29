@@ -10,6 +10,7 @@
 #define SDM_MD_Tests_test_Type_h
 
 #include "MobileDevice.h"
+#include <SDMMobileDevice/SDMMobileDevice.h>
 
 enum SDM_MD_TestResponse {
     SDM_MD_TestResponse_Invalid = -1,
@@ -19,7 +20,7 @@ enum SDM_MD_TestResponse {
 
 typedef enum SDM_MD_TestResponse SDM_MD_TestResponse;
 
-#define LogTestName printf("%s\n",__FUNCTION__)
+#define LogTestName printf("%s:\n",__FUNCTION__)
 
 #ifndef DEBUG
 #define DEBUG_TEST 0
@@ -29,7 +30,7 @@ typedef enum SDM_MD_TestResponse SDM_MD_TestResponse;
 
 #define TEST_RESPONSE_STRING(value)  ((value == -1) ? "Invalid" : ((value == 0) ? "Success" : ((value == 1) ? "Failure" : "Error" )))
 
-#define TEST_ASSET(value) printf("%s %s\n",__FUNCTION__,TEST_RESPONSE_STRING(value)); \
+#define TEST_ASSET(value) printf("\t%s: %s\n",__FUNCTION__,TEST_RESPONSE_STRING(value)); \
 if (DEBUG_TEST) { \
 assert(value == SDM_MD_TestResponse_Success); \
 }
