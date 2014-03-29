@@ -14,26 +14,47 @@
 
 void Test_AMDevice(struct am_device *apple, SDMMD_AMDeviceRef sdm) {
 	LogTestName;
-	uint32_t test_pass = 0;
-	uint32_t test_fail = 0;
-	uint32_t test_total = 0;
+	double test_pass = 0;
+	double test_fail = 0;
+	double test_total = 0;
 	
-	SDM_MD_TestResponse connect = SDM_MD_Test_AMDeviceConnect(apple, sdm);
+	// AMDeviceConnect Tests
+	SDM_MD_TestResponse connect = SDM_MD_Test_AMDeviceConnect(apple, sdm, kResponse);
 	TestCount(connect)
+	SDM_MD_TestResponse connect_sdm = SDM_MD_Test_AMDeviceConnect((struct am_device *)sdm, sdm, kSDMMD);
+	TestCount(connect_sdm)
+	SDM_MD_TestResponse connect_apple = SDM_MD_Test_AMDeviceConnect(apple, (SDMMD_AMDeviceRef)apple, kAMD);
+	TestCount(connect_apple)
 	
-	SDM_MD_TestResponse disconnect = SDM_MD_Test_AMDeviceDisconnect(apple, sdm);
+	// AMDeviceDisconnect Tests
+	SDM_MD_TestResponse disconnect = SDM_MD_Test_AMDeviceDisconnect(apple, sdm, kResponse);
 	TestCount(disconnect)
+	SDM_MD_TestResponse disconnect_sdm = SDM_MD_Test_AMDeviceDisconnect((struct am_device *)sdm, sdm, kSDMMD);
+	TestCount(disconnect_sdm)
+	SDM_MD_TestResponse disconnect_apple = SDM_MD_Test_AMDeviceDisconnect(apple, (SDMMD_AMDeviceRef)apple, kAMD);
+	TestCount(disconnect_apple)
 	
-	SDM_MD_TestResponse start_session = SDM_MD_Test_AMDeviceStartSession(apple, sdm);
-	TestCount(start_session);
+	// AMDeviceStartSession Tests
+	SDM_MD_TestResponse start_session = SDM_MD_Test_AMDeviceStartSession(apple, sdm, kResponse);
+	TestCount(start_session)
+	SDM_MD_TestResponse start_session_sdm = SDM_MD_Test_AMDeviceStartSession((struct am_device *)sdm, sdm, kSDMMD);
+	TestCount(start_session_sdm)
+	SDM_MD_TestResponse start_session_apple = SDM_MD_Test_AMDeviceStartSession(apple, (SDMMD_AMDeviceRef)apple, kAMD);
+	TestCount(start_session_apple)
 	
-	SDM_MD_TestResponse stop_session = SDM_MD_Test_AMDeviceStopSession(apple, sdm);
-	TestCount(stop_session);
+	// AMDeviceStopSession Tests
+	SDM_MD_TestResponse stop_session = SDM_MD_Test_AMDeviceStopSession(apple, sdm, kResponse);
+	TestCount(stop_session)
+	SDM_MD_TestResponse stop_session_sdm = SDM_MD_Test_AMDeviceStopSession((struct am_device *)sdm, sdm, kSDMMD);
+	TestCount(stop_session_sdm)
+	SDM_MD_TestResponse stop_session_apple = SDM_MD_Test_AMDeviceStopSession(apple, (SDMMD_AMDeviceRef)apple, kAMD);
+	TestCount(stop_session_apple)
 	
-	printf("Passing: %i/%i %i%%\n\n",test_pass,test_total,(int)(floor(test_pass/test_total)*100.f));
+	double percent = floor((double)(test_pass/test_total)*100.f);
+	printf("Passing: %0.f/%0.f %2.f%%\n\n",test_pass,test_total,percent);
 }
 
-SDM_MD_TestResponse SDM_MD_Test_AMDeviceConnect(struct am_device *apple, SDMMD_AMDeviceRef sdm) {
+SDM_MD_TestResponse SDM_MD_Test_AMDeviceConnect(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type) {
 	SDM_MD_TestResponse response = SDM_MD_TestResponse_Invalid;
 	
 	kern_return_t apple_return = AMDeviceConnect(apple);
@@ -50,12 +71,12 @@ SDM_MD_TestResponse SDM_MD_Test_AMDeviceConnect(struct am_device *apple, SDMMD_A
 	
 	response = ((apple_return == sdm_return) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
 	
-	TEST_ASSET(response)
+	TEST_ASSET(type,response)
 	
 	return response;
 }
 
-SDM_MD_TestResponse SDM_MD_Test_AMDeviceDisconnect(struct am_device *apple, SDMMD_AMDeviceRef sdm) {
+SDM_MD_TestResponse SDM_MD_Test_AMDeviceDisconnect(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type) {
 	SDM_MD_TestResponse response = SDM_MD_TestResponse_Invalid;
 	
 	AMDeviceConnect(apple);
@@ -72,13 +93,13 @@ SDM_MD_TestResponse SDM_MD_Test_AMDeviceDisconnect(struct am_device *apple, SDMM
 	
 	response = ((apple_return == sdm_return) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
 	
-	TEST_ASSET(response)
+	TEST_ASSET(type,response)
 	
 	return response;
 }
 
 
-SDM_MD_TestResponse SDM_MD_Test_AMDeviceStartSession(struct am_device *apple, SDMMD_AMDeviceRef sdm) {
+SDM_MD_TestResponse SDM_MD_Test_AMDeviceStartSession(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type) {
 	SDM_MD_TestResponse response = SDM_MD_TestResponse_Invalid;
 	
 	AMDeviceConnect(apple);
@@ -99,12 +120,12 @@ SDM_MD_TestResponse SDM_MD_Test_AMDeviceStartSession(struct am_device *apple, SD
 	
 	response = ((apple_return == sdm_return) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
 	
-	TEST_ASSET(response)
+	TEST_ASSET(type,response)
 	
 	return response;
 }
 
-SDM_MD_TestResponse SDM_MD_Test_AMDeviceStopSession(struct am_device *apple, SDMMD_AMDeviceRef sdm) {
+SDM_MD_TestResponse SDM_MD_Test_AMDeviceStopSession(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type) {
 	SDM_MD_TestResponse response = SDM_MD_TestResponse_Invalid;
 	
 	AMDeviceConnect(apple);
@@ -125,7 +146,7 @@ SDM_MD_TestResponse SDM_MD_Test_AMDeviceStopSession(struct am_device *apple, SDM
 	
 	response = ((apple_return == sdm_return) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
 	
-	TEST_ASSET(response)
+	TEST_ASSET(type,response)
 	
 	return response;
 }

@@ -20,6 +20,10 @@ enum SDM_MD_TestResponse {
 
 typedef enum SDM_MD_TestResponse SDM_MD_TestResponse;
 
+#define kResponse "Response"
+#define kSDMMD "SDMMobileDevice"
+#define kAMD "AppleMobileDevice"
+
 #define LogTestName printf("%s:\n",__FUNCTION__)
 
 #ifndef DEBUG
@@ -30,9 +34,9 @@ typedef enum SDM_MD_TestResponse SDM_MD_TestResponse;
 
 #define TEST_RESPONSE_STRING(value)  ((value == -1) ? "Invalid" : ((value == 0) ? "Success" : ((value == 1) ? "Failure" : "Error" )))
 
-#define TEST_ASSET(value) printf("\t%s: %s\n",__FUNCTION__,TEST_RESPONSE_STRING(value)); \
+#define TEST_ASSET(type,value) printf("\t[%s | %s]: %s\n",__FUNCTION__,type,TEST_RESPONSE_STRING(value)); \
 if (DEBUG_TEST) { \
-assert(value == SDM_MD_TestResponse_Success); \
+/*assert(value == SDM_MD_TestResponse_Success);*/ \
 }
 
 
@@ -43,5 +47,7 @@ else { \
 test_fail++; \
 } \
 test_total++;
+
+#define StartTestNanme(name) printf("\t[%s] ",name)
 
 #endif
