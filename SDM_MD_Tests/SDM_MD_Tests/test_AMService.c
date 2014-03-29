@@ -38,7 +38,7 @@ SDM_MD_TestResponse SDM_MD_Test_AMDeviceStartService(struct am_device *apple, SD
 	service_conn_t test_apple_conn;
 	kern_return_t apple_return = AMDeviceStartService(apple, CFSTR(AMSVC_PURPLE_TEST), &test_apple_conn, NULL);
 	if (apple_return != kAMDSuccess) {
-		printf("AMDeviceStartService: %08x %s\n",apple_return,SDMMD_AMDErrorString(apple_return));
+		printf("\t\tAMDeviceStartService: %08x %s\n",apple_return,SDMMD_AMDErrorString(apple_return));
 	}
 	AMDeviceStopSession(apple);
 	AMDeviceDisconnect(apple);
@@ -48,7 +48,7 @@ SDM_MD_TestResponse SDM_MD_Test_AMDeviceStartService(struct am_device *apple, SD
 	SDMMD_AMConnectionRef test_sdm_conn;
 	kern_return_t sdm_return = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_PURPLE_TEST), NULL, &test_sdm_conn);
 	if (sdm_return != kAMDSuccess) {
-		printf("SDMMD_AMDeviceStartService: %08x %s\n",sdm_return,SDMMD_AMDErrorString(sdm_return));
+		printf("\t\tSDMMD_AMDeviceStartService: %08x %s\n",sdm_return,SDMMD_AMDErrorString(sdm_return));
 	}
 	SDMMD_AMDeviceStopSession(sdm);
 	SDMMD_AMDeviceDisconnect(sdm);
