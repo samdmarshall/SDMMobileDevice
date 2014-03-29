@@ -11,12 +11,6 @@
       location = "group:iOSConsole/iOSConsole.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Demo/Demo.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:GUI-Demo/SDM_MD_Demo.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:Framework/SDMMobileDevice-Framework.xcodeproj">
    </FileRef>
 </Workspace>

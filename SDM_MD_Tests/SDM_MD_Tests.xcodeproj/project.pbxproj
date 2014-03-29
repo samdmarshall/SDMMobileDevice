@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		22B3D80318E74EE40007F104 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B3D80218E74EE40007F104 /* CoreFoundation.framework */; };
 		22B3D80618E74EE40007F104 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D80518E74EE40007F104 /* main.c */; };
-		22B3D80818E74EE40007F104 /* SDM_MD_Tests.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 22B3D80718E74EE40007F104 /* SDM_MD_Tests.1 */; };
 		22B3D80F18E74F1E0007F104 /* SDMMobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B3D80E18E74F1E0007F104 /* SDMMobileDevice.framework */; };
 		22B3D81118E74F2E0007F104 /* MobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B3D81018E74F2E0007F104 /* MobileDevice.framework */; };
 		22B3D81318E74FBF0007F104 /* test_AMDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D81218E74FBF0007F104 /* test_AMDevice.c */; };
@@ -24,7 +23,6 @@
 			dstPath = /usr/share/man/man1/;
 			dstSubfolderSpec = 0;
 			files = (
-				22B3D80818E74EE40007F104 /* SDM_MD_Tests.1 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -34,7 +32,6 @@
 		22B3D7FF18E74EE40007F104 /* SDM_MD_Tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SDM_MD_Tests; sourceTree = BUILT_PRODUCTS_DIR; };
 		22B3D80218E74EE40007F104 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		22B3D80518E74EE40007F104 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
-		22B3D80718E74EE40007F104 /* SDM_MD_Tests.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = SDM_MD_Tests.1; sourceTree = "<group>"; };
 		22B3D80E18E74F1E0007F104 /* SDMMobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDMMobileDevice.framework; path = ../build/Release/SDMMobileDevice.framework; sourceTree = "<group>"; };
 		22B3D81018E74F2E0007F104 /* MobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileDevice.framework; path = ../../../../../System/Library/PrivateFrameworks/MobileDevice.framework; sourceTree = "<group>"; };
 		22B3D81218E74FBF0007F104 /* test_AMDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_AMDevice.c; sourceTree = "<group>"; };
@@ -96,7 +93,6 @@
 				22B3D81818E75BBF0007F104 /* listener.h */,
 				22B3D81918E75BCC0007F104 /* listener.c */,
 				22B3D80518E74EE40007F104 /* main.c */,
-				22B3D80718E74EE40007F104 /* SDM_MD_Tests.1 */,
 				22B3D81B18E769A90007F104 /* Tests */,
 			);
 			path = SDM_MD_Tests;
