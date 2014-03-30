@@ -26,6 +26,7 @@ void Test_AMDevice(struct am_device *apple, SDMMD_AMDeviceRef sdm) {
 	SDM_MD_TestResponse connect_apple = SDM_MD_Test_AMDeviceConnect(apple, (SDMMD_AMDeviceRef)apple, kAMD);
 	TestCount(connect_apple)
 	
+	printf("\n");
 	// AMDeviceDisconnect Tests
 	SDM_MD_TestResponse disconnect = SDM_MD_Test_AMDeviceDisconnect(apple, sdm, kResponse);
 	TestCount(disconnect)
@@ -34,6 +35,7 @@ void Test_AMDevice(struct am_device *apple, SDMMD_AMDeviceRef sdm) {
 	SDM_MD_TestResponse disconnect_apple = SDM_MD_Test_AMDeviceDisconnect(apple, (SDMMD_AMDeviceRef)apple, kAMD);
 	TestCount(disconnect_apple)
 	
+	printf("\n");
 	// AMDeviceStartSession Tests
 	SDM_MD_TestResponse start_session = SDM_MD_Test_AMDeviceStartSession(apple, sdm, kResponse);
 	TestCount(start_session)
@@ -42,6 +44,7 @@ void Test_AMDevice(struct am_device *apple, SDMMD_AMDeviceRef sdm) {
 	SDM_MD_TestResponse start_session_apple = SDM_MD_Test_AMDeviceStartSession(apple, (SDMMD_AMDeviceRef)apple, kAMD);
 	TestCount(start_session_apple)
 	
+	printf("\n");
 	// AMDeviceStopSession Tests
 	SDM_MD_TestResponse stop_session = SDM_MD_Test_AMDeviceStopSession(apple, sdm, kResponse);
 	TestCount(stop_session)

@@ -76,42 +76,6 @@ struct AMDeviceClassBody {
 	unsigned char unknown12[4];					// 164
 } ATR_PACK AMDeviceClassBody; // size 0x98
 
-/* 32bit
-struct AMDeviceClassBody {
-	// 8
-	// 12
-	// 16
-	// 20
-	// 24
-	// 28
-	// 32
-	// 36
-	// 40
-	// 44
-	// 48
-	// 52
-	// 56
-	// 68
-} ATR_PACK AMDeviceClassBody; // size 0x60
-*/
-
-#if 0
-struct AMDeviceClassBody {
-	int32_t device_id;							// 16
-	int32_t location_id;						// 20
-	uint16_t product_id;						// 24
-												// 26
-												// 28
-	CFStringRef unique_device_id;				// 32
-	AMDeviceConnectionType connection_type;		// 40
-	char mutx[4];								// 56 "MUTX" string
-	pthread_mutex_t mutex_lock;					// 64
-	
-	int8_t device_active;						// 140
-	
-} ATR_PACK AMDeviceClassBody;
-#endif
-
 struct sdmmd_am_device {
 	struct AMDeviceClassHeader base;
 	struct AMDeviceClassBody ivars;
