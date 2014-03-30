@@ -55,6 +55,7 @@ typedef SDMMD_AFCOperationRef AFCOperationRef;
 // arg_imp should be formated as (arg1, arg2, arg3, etc)
 #define AMD_INLINE(return_type, call, arg_def, arg_imp) static inline return_type call arg_def  { return SDMMD_##call arg_imp ; }
 
+/*
 AMD_INLINE(bool, AMDeviceIsValid, (AMDeviceRef device), (device))
 AMD_INLINE(AMDError, AMDeviceConnect, (AMDeviceRef device), (device))
 AMD_INLINE(AMDError, AMDeviceDisconnect, (AMDeviceRef device), (device))
@@ -65,5 +66,6 @@ AMD_INLINE(AMDError, AMDeviceValidatePairing, (AMDeviceRef device), (device))
 AMD_INLINE(AMDError, AMDevicePair, (AMDeviceRef device), (device))
 AMD_INLINE(AMDError, AMDevicePairWithOptions, (AMDeviceRef device, CFMutableDictionaryRef record), (device, record))
 AMD_INLINE(AMDError, AMDeviceUnpair, (AMDeviceRef device), (device))
-
+*/
+ 
 #endif
