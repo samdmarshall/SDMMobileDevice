@@ -164,12 +164,14 @@ void Test_Functionality_AMDevice(struct am_device *apple, SDMMD_AMDeviceRef sdm)
 	CFTypeRef sdm_unsession_copy_value = NULL;
 	FunctionalityTestMacro(copy_value,test_sdm_AMDeviceCopyValue,sdm, &sdm_unsession_copy_value)
 	TestCount(copy_value)
+	CFSafeRelease(sdm_unsession_copy_value);
 	
 	printf("\n");
 	// AMDeviceCopyValue Tests (w/ Session)
 	CFTypeRef sdm_session_copy_value = NULL;
 	FunctionalityTestMacro(session_copy_value,test_sdm_Sessioned_AMDeviceCopyValue,sdm, &sdm_session_copy_value)
 	TestCount(session_copy_value)
+	CFSafeRelease(sdm_session_copy_value);
 	
 	double percent = floor((double)(test_pass/test_total)*100.f);
 	printf("Passing: %0.f/%0.f %2.f%%\n\n",test_pass,test_total,percent);

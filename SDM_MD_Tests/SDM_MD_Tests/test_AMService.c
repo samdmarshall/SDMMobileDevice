@@ -71,6 +71,7 @@ void Test_Functionality_AMService(struct am_device *apple, SDMMD_AMDeviceRef sdm
 	CFTypeRef lookup_response = NULL;
 	FunctionalityTestMacro(lookup_apps,test_sdm_AMDeviceLookupApplications,sdm,&lookup_response)
 	TestCount(lookup_apps)
+	CFSafeRelease(lookup_response);
 	
 	double percent = floor((double)(test_pass/test_total)*100.f);
 	printf("Passing: %0.f/%0.f %2.f%%\n\n",test_pass,test_total,percent);
