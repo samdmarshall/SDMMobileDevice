@@ -12,7 +12,10 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include "test_AMDevice.h"
 
-void Test_AMDevice(struct am_device *apple, SDMMD_AMDeviceRef sdm) {
+#include "test_apple_AMDevice.h"
+#include "test_sdm_AMDevice.h"
+
+void Test_Compatibility_AMDevice(struct am_device *apple, SDMMD_AMDeviceRef sdm) {
 	LogTestName;
 	double test_pass = 0;
 	double test_fail = 0;
@@ -111,56 +114,91 @@ void Test_AMDevice(struct am_device *apple, SDMMD_AMDeviceRef sdm) {
 	printf("Passing: %0.f/%0.f %2.f%%\n\n",test_pass,test_total,percent);
 }
 
+void Test_Functionality_AMDevice(struct am_device *apple, SDMMD_AMDeviceRef sdm) {
+	LogTestName;
+	double test_pass = 0;
+	double test_fail = 0;
+	double test_total = 0;
+	
+	// AMDeviceUSBDeviceID Tests
+	FunctionalityTestMacro(usb_id,test_sdm_AMDeviceUSBDeviceID,sdm)
+	TestCount(usb_id)
+	
+	printf("\n");
+	// AMDeviceUSBProductID Tests
+	FunctionalityTestMacro(product_id,test_sdm_AMDeviceUSBProductID,sdm)
+	TestCount(product_id)
+	
+	printf("\n");
+	// AMDeviceUSBLocationID Tests
+	FunctionalityTestMacro(location_id,test_sdm_AMDeviceUSBLocationID,sdm)
+	TestCount(location_id)
+	
+	printf("\n");
+	// AMDeviceConnect Tests
+	FunctionalityTestMacro(connect,test_sdm_AMDeviceConnect,sdm)
+	TestCount(connect)
+	
+	printf("\n");
+	// AMDeviceDisconnect Tests
+	FunctionalityTestMacro(disconnect,test_sdm_AMDeviceDisconnect,sdm)
+	TestCount(disconnect)
+	
+	printf("\n");
+	// AMDeviceStartSession Tests
+	FunctionalityTestMacro(start_session,test_sdm_AMDeviceStartSession,sdm)
+	TestCount(start_session)
+	
+	printf("\n");
+	// AMDeviceStopSession Tests
+	FunctionalityTestMacro(stop_session,test_sdm_AMDeviceStopSession,sdm)
+	TestCount(stop_session)
+	
+	printf("\n");
+	// AMDeviceValidatePairing Tests
+	FunctionalityTestMacro(validate_pair,test_sdm_AMDeviceValidatePairing,sdm)
+	TestCount(validate_pair)
+	
+	printf("\n");
+	// AMDeviceCopyValue Tests
+	CFTypeRef sdm_unsession_copy_value = NULL;
+	FunctionalityTestMacro(copy_value,test_sdm_AMDeviceCopyValue,sdm, &sdm_unsession_copy_value)
+	TestCount(copy_value)
+	
+	printf("\n");
+	// AMDeviceCopyValue Tests (w/ Session)
+	CFTypeRef sdm_session_copy_value = NULL;
+	FunctionalityTestMacro(session_copy_value,test_sdm_Sessioned_AMDeviceCopyValue,sdm, &sdm_session_copy_value)
+	TestCount(session_copy_value)
+	
+	double percent = floor((double)(test_pass/test_total)*100.f);
+	printf("Passing: %0.f/%0.f %2.f%%\n\n",test_pass,test_total,percent);
+}
+
 SDM_MD_TestResponse SDM_MD_Test_AMDeviceConnect(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type) {
 	SDM_MD_TestResponse response = SDM_MD_TestResponse_Invalid;
 	
-	kern_return_t apple_return = AMDeviceConnect(apple);
-	if (apple_return != kAMDSuccess) {
-		printf("\t\tAMDeviceConnect: %08x %s\n",apple_return,SDMMD_AMDErrorString(apple_return));
-	}
-	else {
-		AMDeviceDisconnect(apple);
-	}
+	kern_return_t apple_return = test_apple_AMDeviceConnect(apple);
 	
-	kern_return_t sdm_return = SDMMD_AMDeviceConnect(sdm);
-	if (sdm_return != kAMDSuccess) {
-		printf("\t\tSDMMD_AMDeviceConnect: %08x %s\n",sdm_return,SDMMD_AMDErrorString(sdm_return));
-	}
-	else {
-		SDMMD_AMDeviceDisconnect(sdm);
-	}
+	kern_return_t sdm_return = test_sdm_AMDeviceConnect(sdm);
 	
 	response = ((SDM_MD_CallSuccessful(apple_return) && SDM_MD_CallSuccessful(sdm_return)) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
 	
-	TEST_ASSET(type,response)
+	CTEST_ASSERT(type,response)
 	
 	return response;
 }
 
 SDM_MD_TestResponse SDM_MD_Test_AMDeviceDisconnect(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type) {
 	SDM_MD_TestResponse response = SDM_MD_TestResponse_Invalid;
-	kern_return_t result = kAMDSuccess;
-	kern_return_t apple_return = kAMDUndefinedError, sdm_return = kAMDUndefinedError;
 	
-	result = AMDeviceConnect(apple);
-	if (SDM_MD_CallSuccessful(result)) {
-		apple_return = AMDeviceDisconnect(apple);
-		if (apple_return != kAMDSuccess) {
-			printf("\t\tAMDeviceDisconnect: %08x %s\n",apple_return,SDMMD_AMDErrorString(apple_return));
-		}
-	}
+	kern_return_t apple_return = test_apple_AMDeviceDisconnect(apple);
 	
-	result = SDMMD_AMDeviceConnect(sdm);
-	if (SDM_MD_CallSuccessful(result)) {
-		sdm_return = SDMMD_AMDeviceDisconnect(sdm);
-		if (sdm_return != kAMDSuccess) {
-			printf("\t\tSDMMD_AMDeviceDisconnect: %08x %s\n",sdm_return,SDMMD_AMDErrorString(sdm_return));
-		}
-	}
+	kern_return_t sdm_return = test_sdm_AMDeviceDisconnect(sdm);
 	
 	response = ((SDM_MD_CallSuccessful(apple_return) && SDM_MD_CallSuccessful(sdm_return)) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
 	
-	TEST_ASSET(type,response)
+	CTEST_ASSERT(type,response)
 	
 	return response;
 }
@@ -168,72 +206,28 @@ SDM_MD_TestResponse SDM_MD_Test_AMDeviceDisconnect(struct am_device *apple, SDMM
 
 SDM_MD_TestResponse SDM_MD_Test_AMDeviceStartSession(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type) {
 	SDM_MD_TestResponse response = SDM_MD_TestResponse_Invalid;
-	kern_return_t result = kAMDSuccess;
-	kern_return_t apple_return = kAMDUndefinedError, sdm_return = kAMDUndefinedError;
 	
-	result = AMDeviceConnect(apple);
-	if (SDM_MD_CallSuccessful(result)) {
-		apple_return = AMDeviceStartSession(apple);
-		if (apple_return != kAMDSuccess) {
-			printf("\t\tAMDeviceStartSession: %08x %s\n",apple_return,SDMMD_AMDErrorString(apple_return));
-		}
-		else {
-			AMDeviceStopSession(apple);
-		}
-		AMDeviceDisconnect(apple);
-	}
+	kern_return_t apple_return = test_apple_AMDeviceStartSession(apple);
 	
-	result = SDMMD_AMDeviceConnect(sdm);
-	if (SDM_MD_CallSuccessful(result)) {
-		sdm_return = SDMMD_AMDeviceStartSession(sdm);
-		if (sdm_return != kAMDSuccess) {
-			printf("\t\tSDMMD_AMDeviceStartSession: %08x %s\n",sdm_return,SDMMD_AMDErrorString(sdm_return));
-		}
-		else {
-			SDMMD_AMDeviceStopSession(sdm);
-		}
-		SDMMD_AMDeviceDisconnect(sdm);
-	}
+	kern_return_t sdm_return = test_sdm_AMDeviceStartSession(sdm);
 	
 	response = ((SDM_MD_CallSuccessful(apple_return) && SDM_MD_CallSuccessful(sdm_return)) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
 	
-	TEST_ASSET(type,response)
+	CTEST_ASSERT(type,response)
 	
 	return response;
 }
 
 SDM_MD_TestResponse SDM_MD_Test_AMDeviceStopSession(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type) {
 	SDM_MD_TestResponse response = SDM_MD_TestResponse_Invalid;
-	kern_return_t result = kAMDSuccess;
-	kern_return_t apple_return = kAMDUndefinedError, sdm_return = kAMDUndefinedError;
 	
-	result = AMDeviceConnect(apple);
-	if (SDM_MD_CallSuccessful(result)) {
-		result = AMDeviceStartSession(apple);
-		if (SDM_MD_CallSuccessful(result)) {
-			apple_return = AMDeviceStopSession(apple);
-			if (apple_return != kAMDSuccess) {
-				printf("\t\tAMDeviceStopSession: %08x %s\n",apple_return,SDMMD_AMDErrorString(apple_return));
-			}
-		}
-		AMDeviceDisconnect(apple);
-	}
+	kern_return_t apple_return = test_apple_AMDeviceStopSession(apple);
 	
-	result = SDMMD_AMDeviceConnect(sdm);
-	if (SDM_MD_CallSuccessful(result)) {
-		result = SDMMD_AMDeviceStartSession(sdm);
-		if (SDM_MD_CallSuccessful(result)) {
-			sdm_return = SDMMD_AMDeviceStopSession(sdm);
-			if (sdm_return != kAMDSuccess) {
-				printf("\t\tSDMMD_AMDeviceStopSession: %08x %s\n",sdm_return,SDMMD_AMDErrorString(sdm_return));
-			}
-		}
-		SDMMD_AMDeviceDisconnect(sdm);
-	}
+	kern_return_t sdm_return = test_sdm_AMDeviceStopSession(sdm);
 	
 	response = ((SDM_MD_CallSuccessful(apple_return) && SDM_MD_CallSuccessful(sdm_return)) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
 	
-	TEST_ASSET(type,response)
+	CTEST_ASSERT(type,response)
 	
 	return response;
 }
@@ -253,7 +247,7 @@ SDM_MD_TestResponse SDM_MD_Test_AMDeviceUSBDeviceID(struct am_device *apple, SDM
 	
 	response = ((apple_return == sdm_return) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
 	
-	TEST_ASSET(type,response)
+	CTEST_ASSERT(type,response)
 	
 	return response;
 }
@@ -273,7 +267,7 @@ SDM_MD_TestResponse SDM_MD_Test_AMDeviceUSBProductID(struct am_device *apple, SD
 	
 	response = ((apple_return == sdm_return) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
 	
-	TEST_ASSET(type,response)
+	CTEST_ASSERT(type,response)
 	
 	return response;
 }
@@ -293,109 +287,53 @@ SDM_MD_TestResponse SDM_MD_Test_AMDeviceUSBLocationID(struct am_device *apple, S
 	
 	response = ((apple_return == sdm_return) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
 	
-	TEST_ASSET(type,response)
+	CTEST_ASSERT(type,response)
 	
 	return response;
 }
 
 SDM_MD_TestResponse SDM_MD_Test_AMDeviceValidatePairing(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type) {
 	SDM_MD_TestResponse response = SDM_MD_TestResponse_Invalid;
-	kern_return_t result = kAMDSuccess;
-	kern_return_t apple_return = kAMDUndefinedError, sdm_return = kAMDUndefinedError;
+
+	kern_return_t apple_return = test_apple_AMDeviceValidatePairing(apple);
 	
-	result = AMDeviceConnect(apple);
-	if (SDM_MD_CallSuccessful(result)) {
-		apple_return = AMDeviceValidatePairing(apple);
-		if (apple_return != kAMDSuccess) {
-			printf("\t\tAMDeviceValidatePairing: %i\n",apple_return);
-		}
-		AMDeviceDisconnect(apple);
-	}
-	
-	result = SDMMD_AMDeviceConnect(sdm);
-	if (SDM_MD_CallSuccessful(result)) {
-		sdm_return = SDMMD_AMDeviceValidatePairing(sdm);
-		if (sdm_return != kAMDSuccess) {
-			printf("\t\tSDMMD_AMDeviceValidatePairing: %i\n",sdm_return);
-		}
-		SDMMD_AMDeviceDisconnect(sdm);
-	}
-	
+	kern_return_t sdm_return = test_sdm_AMDeviceValidatePairing(sdm);
+
 	response = ((SDM_MD_CallSuccessful(apple_return) && SDM_MD_CallSuccessful(sdm_return)) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
 	
-	TEST_ASSET(type,response)
+	CTEST_ASSERT(type,response)
 	
 	return response;
 }
 
 SDM_MD_TestResponse SDM_MD_Test_AMDeviceCopyValue(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type) {
 	SDM_MD_TestResponse response = SDM_MD_TestResponse_Invalid;
-	kern_return_t result = kAMDSuccess;
-	CFTypeRef apple_return = NULL, sdm_return = NULL;
 	
-	result = AMDeviceConnect(apple);
-	if (SDM_MD_CallSuccessful(result)) {
-		apple_return = AMDeviceCopyValue(apple, NULL, CFSTR(kUniqueDeviceID));
-		if (apple_return == NULL || CFStringCompare(apple_return, CFSTR("GetProhibited"), 0) == kCFCompareEqualTo) {
-			printf("\t\tAMDeviceCopyValue: GetProhibited\n");
-		}
-		AMDeviceDisconnect(apple);
-	}
+	CFTypeRef apple_value = NULL;
+	kern_return_t apple_return = test_apple_AMDeviceCopyValue(apple, &apple_value);
 	
-	result = SDMMD_AMDeviceConnect(sdm);
-	if (SDM_MD_CallSuccessful(result)) {
-		sdm_return = SDMMD_AMDeviceCopyValue(sdm, NULL, CFSTR(kUniqueDeviceID));
-		if (sdm_return == NULL || CFStringCompare(apple_return, CFSTR("GetProhibited"), 0) == kCFCompareEqualTo) {
-			printf("\t\tSDMMD_AMDeviceCopyValue: GetProhibited\n");
-		}
-		SDMMD_AMDeviceDisconnect(sdm);
-	}
+	CFTypeRef sdm_value = NULL;
+	kern_return_t sdm_return = test_sdm_AMDeviceCopyValue(sdm, &sdm_value);
 	
-	response = (((apple_return != NULL && sdm_return != NULL) && (CFStringCompare(apple_return, sdm_return, 0) == kCFCompareEqualTo)) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
+	response = (((SDM_MD_CallSuccessful(apple_return) && SDM_MD_CallSuccessful(sdm_return)) && (apple_value != NULL && sdm_value != NULL) && (CFStringCompare(apple_value, sdm_value, 0) == kCFCompareEqualTo)) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
 	
-	TEST_ASSET(type,response)
+	CTEST_ASSERT(type,response)
 	
 	return response;
 }
 
 SDM_MD_TestResponse SDM_MD_Test_Sessioned_AMDeviceCopyValue(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type) {
 	SDM_MD_TestResponse response = SDM_MD_TestResponse_Invalid;
-	kern_return_t result = kAMDSuccess;
-	CFTypeRef apple_return = NULL, sdm_return = NULL;
 	
-	result = AMDeviceConnect(apple);
-	if (SDM_MD_CallSuccessful(result)) {
-		result = AMDeviceStartSession(apple);
-		if (SDM_MD_CallSuccessful(result)) {
-			apple_return = AMDeviceCopyValue(apple, CFSTR(kiTunesDomain), CFSTR(kMinMacOSVersion));
-			if (apple_return == NULL || CFStringCompare(apple_return, CFSTR("GetProhibited"), 0) == kCFCompareEqualTo) {
-				printf("\t\tAMDeviceCopyValue (w/ Session): GetProhibited\n");
-			}
-			else {
-				AMDeviceStopSession(apple);
-			}
-		}
-		AMDeviceDisconnect(apple);
-	}
+	CFTypeRef apple_value = NULL;
+	kern_return_t apple_return = test_apple_Sessioned_AMDeviceCopyValue(apple, &apple_value);
 	
-	result = SDMMD_AMDeviceConnect(sdm);
-	if (SDM_MD_CallSuccessful(result)) {
-		result = SDMMD_AMDeviceStartSession(sdm);
-		if (SDM_MD_CallSuccessful(result)) {
-			sdm_return = SDMMD_AMDeviceCopyValue(sdm, CFSTR(kiTunesDomain), CFSTR(kMinMacOSVersion));
-			if (sdm_return == NULL || CFStringCompare(apple_return, CFSTR("GetProhibited"), 0) == kCFCompareEqualTo) {
-				printf("\t\tSDMMD_AMDeviceCopyValue (w/ Session): GetProhibited\n");
-			}
-			else {
-				SDMMD_AMDeviceStopSession(sdm);
-			}
-		}
-		SDMMD_AMDeviceDisconnect(sdm);
-	}
+	CFTypeRef sdm_value = NULL;
+	kern_return_t sdm_return = test_sdm_Sessioned_AMDeviceCopyValue(sdm, &sdm_value);
 	
-	response = (((apple_return != NULL && sdm_return != NULL) && (CFStringCompare(apple_return, sdm_return, 0) == kCFCompareEqualTo)) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
+	response = (((SDM_MD_CallSuccessful(apple_return) && SDM_MD_CallSuccessful(sdm_return)) && (apple_value != NULL && sdm_value != NULL) && (CFStringCompare(apple_value, sdm_value, 0) == kCFCompareEqualTo)) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
 	
-	TEST_ASSET(type,response)
+	CTEST_ASSERT(type,response)
 	
 	return response;
 }

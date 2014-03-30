@@ -11,7 +11,8 @@
 
 #include "test_Type.h"
 
-void Test_AMDevice(struct am_device *apple, SDMMD_AMDeviceRef sdm);
+void Test_Compatibility_AMDevice(struct am_device *apple, SDMMD_AMDeviceRef sdm);
+void Test_Functionality_AMDevice(struct am_device *apple, SDMMD_AMDeviceRef sdm);
 
 SDM_MD_TestResponse SDM_MD_Test_AMDeviceConnect(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type);
 SDM_MD_TestResponse SDM_MD_Test_AMDeviceDisconnect(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type);

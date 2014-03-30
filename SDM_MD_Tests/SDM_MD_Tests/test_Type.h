@@ -34,7 +34,12 @@ typedef enum SDM_MD_TestResponse SDM_MD_TestResponse;
 
 #define TEST_RESPONSE_STRING(value)  ((value == -1) ? "Invalid" : ((value == 0) ? "Success" : ((value == 1) ? "Failure" : "Error" )))
 
-#define TEST_ASSET(type,value) printf("\t[%s | %s]: %s\n",__FUNCTION__,type,TEST_RESPONSE_STRING(value)); \
+#define FTEST_ASSERT(name,value) printf("\t[%s]: %s\n",name,TEST_RESPONSE_STRING(value));
+
+#define FunctionalityTestMacro(var, name, ...) SDM_MD_TestResponse var = (SDM_MD_CallSuccessful(name(__VA_ARGS__)) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure); \
+FTEST_ASSERT(#name,var)
+
+#define CTEST_ASSERT(type,value) printf("\t[%s | %s]: %s\n",__FUNCTION__,type,TEST_RESPONSE_STRING(value)); \
 if (DEBUG_TEST) { \
 /*assert(value == SDM_MD_TestResponse_Success);*/ \
 }

@@ -15,6 +15,10 @@
 		22B3D81A18E75BCC0007F104 /* listener.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D81918E75BCC0007F104 /* listener.c */; };
 		22B3D82218E76A2C0007F104 /* test_AMService.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D82118E76A2C0007F104 /* test_AMService.c */; };
 		22B3D82518E872F10007F104 /* tests.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D82418E872F10007F104 /* tests.c */; };
+		22B3D82818E888490007F104 /* test_apple_AMDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D82718E888490007F104 /* test_apple_AMDevice.c */; };
+		22B3D82B18E8885E0007F104 /* test_sdm_AMDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D82A18E8885E0007F104 /* test_sdm_AMDevice.c */; };
+		22B3D82E18E8957D0007F104 /* test_apple_AMService.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D82D18E8957D0007F104 /* test_apple_AMService.c */; };
+		22B3D83118E895900007F104 /* test_sdm_AMService.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D83018E895900007F104 /* test_sdm_AMService.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -45,6 +49,14 @@
 		22B3D82018E76A230007F104 /* test_AMService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_AMService.h; sourceTree = "<group>"; };
 		22B3D82118E76A2C0007F104 /* test_AMService.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_AMService.c; sourceTree = "<group>"; };
 		22B3D82418E872F10007F104 /* tests.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tests.c; sourceTree = "<group>"; };
+		22B3D82618E8883E0007F104 /* test_apple_AMDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_apple_AMDevice.h; sourceTree = "<group>"; };
+		22B3D82718E888490007F104 /* test_apple_AMDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_apple_AMDevice.c; sourceTree = "<group>"; };
+		22B3D82918E888540007F104 /* test_sdm_AMDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_sdm_AMDevice.h; sourceTree = "<group>"; };
+		22B3D82A18E8885E0007F104 /* test_sdm_AMDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_sdm_AMDevice.c; sourceTree = "<group>"; };
+		22B3D82C18E895730007F104 /* test_apple_AMService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_apple_AMService.h; sourceTree = "<group>"; };
+		22B3D82D18E8957D0007F104 /* test_apple_AMService.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_apple_AMService.c; sourceTree = "<group>"; };
+		22B3D82F18E895860007F104 /* test_sdm_AMService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_sdm_AMService.h; sourceTree = "<group>"; };
+		22B3D83018E895900007F104 /* test_sdm_AMService.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_sdm_AMService.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +131,10 @@
 			children = (
 				22B3D81518E74FE30007F104 /* test_AMDevice.h */,
 				22B3D81218E74FBF0007F104 /* test_AMDevice.c */,
+				22B3D82618E8883E0007F104 /* test_apple_AMDevice.h */,
+				22B3D82718E888490007F104 /* test_apple_AMDevice.c */,
+				22B3D82918E888540007F104 /* test_sdm_AMDevice.h */,
+				22B3D82A18E8885E0007F104 /* test_sdm_AMDevice.c */,
 			);
 			name = AMDevice;
 			sourceTree = "<group>";
@@ -128,6 +144,10 @@
 			children = (
 				22B3D82018E76A230007F104 /* test_AMService.h */,
 				22B3D82118E76A2C0007F104 /* test_AMService.c */,
+				22B3D82C18E895730007F104 /* test_apple_AMService.h */,
+				22B3D82D18E8957D0007F104 /* test_apple_AMService.c */,
+				22B3D82F18E895860007F104 /* test_sdm_AMService.h */,
+				22B3D83018E895900007F104 /* test_sdm_AMService.c */,
 			);
 			name = AMService;
 			sourceTree = "<group>";
@@ -197,10 +217,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22B3D82818E888490007F104 /* test_apple_AMDevice.c in Sources */,
+				22B3D83118E895900007F104 /* test_sdm_AMService.c in Sources */,
 				22B3D82518E872F10007F104 /* tests.c in Sources */,
 				22B3D80618E74EE40007F104 /* main.c in Sources */,
+				22B3D82B18E8885E0007F104 /* test_sdm_AMDevice.c in Sources */,
 				22B3D81318E74FBF0007F104 /* test_AMDevice.c in Sources */,
 				22B3D81A18E75BCC0007F104 /* listener.c in Sources */,
+				22B3D82E18E8957D0007F104 /* test_apple_AMService.c in Sources */,
 				22B3D82218E76A2C0007F104 /* test_AMService.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

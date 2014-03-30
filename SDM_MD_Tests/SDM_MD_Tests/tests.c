@@ -12,9 +12,20 @@
 #include "tests.h"
 
 void RunCompatibilityTests(struct am_device *apple_test_device, SDMMD_AMDeviceRef sdm_test_device) {
-	Test_AMDevice(apple_test_device, sdm_test_device);
+	printf("Compatibility Tests:\n====================\n\n");
 	
-	Test_AMService(apple_test_device, sdm_test_device);
+	Test_Compatibility_AMDevice(apple_test_device, sdm_test_device);
+	
+	Test_Compatibility_AMService(apple_test_device, sdm_test_device);
+}
+
+void RunFunctionalityTests(struct am_device *apple_test_device, SDMMD_AMDeviceRef sdm_test_device) {
+	printf("Functionality Tests:\n====================\n\n");
+	
+	Test_Functionality_AMDevice(apple_test_device, sdm_test_device);
+	
+	Test_Functionality_AMService(apple_test_device, sdm_test_device);
+
 }
 
 #endif

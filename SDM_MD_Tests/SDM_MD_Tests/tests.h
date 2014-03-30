@@ -13,5 +13,6 @@
 #include "test_AMService.h"
 
 void RunCompatibilityTests(struct am_device *apple_test_device, SDMMD_AMDeviceRef sdm_test_device);
+void RunFunctionalityTests(struct am_device *apple_test_device, SDMMD_AMDeviceRef sdm_test_device);
 
 #endif
