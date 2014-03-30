@@ -27,10 +27,7 @@ int main(int argc, const char * argv[]) {
 	dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
 	dispatch_release(sema);
 
-	
-	Test_AMDevice(apple_test_device, sdm_test_device);
-	
-	Test_AMService(apple_test_device, sdm_test_device);
+	Run_CompatibilityTests(apple_test_device, sdm_test_device);
 	
     return 0;
 }
