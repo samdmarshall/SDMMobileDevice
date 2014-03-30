@@ -117,18 +117,18 @@ ATR_UNUSED static CFDataRef SDMMD__CreateDataFromFileContents(char *path) {
 					if (result == fileStat.st_size) {
 						dataBuffer = CFDataCreate(kCFAllocatorDefault, data, result);
 					} else {
-						printf("SDMMD__CreateDataFromFileContents: Could not read contents at file %s.\n",path);
+						printf("%s: Could not read contents at file %s.\n",__FUNCTION__,path);
 					}
 					Safe(free,data);
 				} else {
-					printf("SDMMD__CreateDataFromFileContents: Could not fstat.\n");
+					printf("%s: Could not fstat.\n",__FUNCTION__);
 				}
 				close(ref);
 			} else {
-				printf("SDMMD__CreateDataFromFileContents: Could not open file %s\n",path);
+				printf("%s: Could not open file %s\n",__FUNCTION__,path);
 			}
 		} else {
-			printf("SDMMD__CreateDataFromFileContents: Could not lstat.\n");
+			printf("%s: Could not lstat.\n",__FUNCTION__);
 		}
 	}
 	return dataBuffer;
@@ -144,10 +144,10 @@ static CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
 				if (CFGetTypeID(propList) == CFDictionaryGetTypeID()) {
 					dict = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, propList);
 				} else {
-					printf("_CreateDictFromFileAtPath: Plist from file %s was not dictionary type.\n",path);
+					printf("%s: Plist from file %s was not dictionary type.\n",__FUNCTION__,path);
 				}
 			} else {
-				printf("_CreateDictFromFileAtPath: Could not create plist from file %s.\n",path);
+				printf("%s: Could not create plist from file %s.\n",__FUNCTION__,path);
 			}
 			CFSafeRelease(propList);
 		}
@@ -354,7 +354,7 @@ static CFTypeRef SDMMD_AMDCopySystemBonjourUniqueID() {
 				CFDictionarySetValue(dict, CFSTR("SystemBUID"), value);
 				SDMMD_store_dict(dict, record, true);
 			} else {
-				printf("SDMMD_AMDCopySystemBonjourUniqueID: Could not generate UUID!\n");
+				printf("%s: Could not generate UUID!\n",__FUNCTION__);
 			}
 		}
 		CFSafeRelease(dict);
@@ -381,7 +381,7 @@ ATR_UNUSED static sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForId
 							CFDictionarySetValue(fileDict, CFSTR("SystemBUID"), bonjourId);
 							result = SDMMD_store_dict(fileDict, path, true);
 							if (result) {
-								printf("SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier: Could not store pairing record at '%s'.\n",path);
+								printf("%s: Could not store pairing record at '%s'.\n",__FUNCTION__,path);
 								result = kAMDPermissionError;
 							} else {
 								CFRetain(fileDict);
