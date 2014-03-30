@@ -14,5 +14,6 @@
 void Test_AMService(struct am_device *apple, SDMMD_AMDeviceRef sdm);
 
 SDM_MD_TestResponse SDM_MD_Test_AMDeviceStartService(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type);
+SDM_MD_TestResponse SDM_MD_Test_AMDeviceSecureStartService(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type);
 
 #endif

@@ -103,9 +103,9 @@
 		22B3D81B18E769A90007F104 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				22B3D81618E751380007F104 /* test_Type.h */,
 				22B3D81418E74FD50007F104 /* tests.h */,
 				22B3D82418E872F10007F104 /* tests.c */,
-				22B3D81618E751380007F104 /* test_Type.h */,
 				22B3D81C18E769BB0007F104 /* AMDevice */,
 				22B3D81D18E769C60007F104 /* AMService */,
 				22B3D81E18E769D80007F104 /* AMConnection */,
@@ -288,6 +288,8 @@
 					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SYMROOT = ../build;
 			};
@@ -303,6 +305,8 @@
 					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SYMROOT = ../build;
 			};

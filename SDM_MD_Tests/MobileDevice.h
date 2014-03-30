@@ -250,7 +250,7 @@ enum {
 	 *      1   if it did
 	 */
 	
-	int AMDeviceIsPaired(struct am_device *device);
+	bool AMDeviceIsPaired(struct am_device *device);
 	
 	/*  iTunes calls this function immediately after testing whether the device is
 	 *  paired. It creates a pairing file and establishes a Lockdown connection.
@@ -291,6 +291,7 @@ enum {
 	 */
 	
 	mach_error_t AMDeviceStartService(struct am_device *device, CFStringRef service_name, service_conn_t *handle, unsigned int *unknown);
+	mach_error_t AMDeviceSecureStartService(struct am_device *device, CFStringRef service_name, service_conn_t *handle, unsigned int *unknown);
 	
 	mach_error_t AMDeviceStartHouseArrestService(struct am_device *device, CFStringRef identifier, void *unknown, service_conn_t *handle, unsigned int *what);
 	

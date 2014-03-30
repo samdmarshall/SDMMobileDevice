@@ -12,6 +12,6 @@
 #include "test_AMDevice.h"
 #include "test_AMService.h"
 
-void Run_CompatibilityTests(struct am_device *apple_test_device, SDMMD_AMDeviceRef sdm_test_device);
+void RunCompatibilityTests(struct am_device *apple_test_device, SDMMD_AMDeviceRef sdm_test_device);
 
 #endif
