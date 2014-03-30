@@ -107,7 +107,11 @@ CFTypeID SDMMD_AMDeviceRefGetTypeID(void) {
 
 SDMMD_lockdown_conn* SDMMD_lockdown_connection_create(uint32_t socket) {
 	SDMMD_lockdown_conn *lockdown = calloc(0x1, sizeof(SDMMD_lockdown_conn));
-	lockdown->connection = socket;
+	if (socket != 0) {
+		lockdown->connection = socket;
+		Safe(free,lockdown->pointer);
+		lockdown->length = 0;
+	}
 	return lockdown;
 }
 
@@ -1012,7 +1016,7 @@ sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, b
 		if (socket) {
 			result = kAMDDeviceDisconnectedError;
 			if (device->ivars.device_active) {
-				if (device->ivars.connection_type == 1) {
+				if (device->ivars.connection_type == kAMDeviceConnectionTypeWiFi) {
 					size_t dataLen = CFDataGetLength(device->ivars.network_address);
 					struct sockaddr_storage address = {0};
 					if (dataLen == sizeof(struct sockaddr_storage)) {
@@ -1066,7 +1070,7 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 	uint32_t socket = 0xffffffff;
 	if (device) {
 		result = SDMMD_AMDevicePair(device);
-		SDMMD_CondSuccessElse(result, {
+		if (SDM_MD_CallSuccessful(result)) {
 			result = kAMDDeviceDisconnectedError;
 			if (device->ivars.device_active && device->ivars.connection_type == kAMDeviceConnectionTypeUSB) {
 				SDMMD__mutex_lock(device->ivars.mutex_lock);
@@ -1108,11 +1112,12 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 				}
 				SDMMD__mutex_unlock(device->ivars.mutex_lock);
 			}
-		}, {
+		}
+		else {
 			if (result == kAMDPairingProhibitedError) {
 				printf("SDMMD_AMDeviceConnect: Could not pair with device, please accept trust prompt on device.\n");
 			}
-		})
+		}
 	} else {
 		result = kAMDInvalidArgumentError;
 	}
@@ -1441,6 +1446,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 	if (dictionary) {
 		device = SDMMD_AMDeviceCreateEmpty();
 		if (device) {
+			
 			CFDictionaryRef properties = (CFDictionaryContainsKey(dictionary, CFSTR("Properties")) ? CFDictionaryGetValue(dictionary, CFSTR("Properties")) : dictionary);
 			
 			CFNumberRef deviceId = CFDictionaryGetValue(properties, CFSTR("DeviceID"));
