@@ -106,6 +106,7 @@
 				22B3D81C18E769BB0007F104 /* AMDevice */,
 				22B3D81D18E769C60007F104 /* AMService */,
 				22B3D81E18E769D80007F104 /* AMConnection */,
+				22B3D82318E866160007F104 /* AFC */,
 			);
 			name = Tests;
 			sourceTree = "<group>";
@@ -133,6 +134,13 @@
 			children = (
 			);
 			name = AMConnection;
+			sourceTree = "<group>";
+		};
+		22B3D82318E866160007F104 /* AFC */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = AFC;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -315,6 +323,7 @@
 				22B3D80D18E74EE40007F104 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

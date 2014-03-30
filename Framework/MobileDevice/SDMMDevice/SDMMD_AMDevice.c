@@ -1406,7 +1406,7 @@ CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, 
 		CFStringRef err = NULL;
 		value = SDMMD_copy_lockdown_value(device, domain, key, &err);
 		if (err) {
-			PrintCFType(err);
+			//PrintCFType(err);
 			value = NULL;
 		}
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);

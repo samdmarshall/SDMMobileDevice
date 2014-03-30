@@ -17,5 +17,10 @@ SDM_MD_TestResponse SDM_MD_Test_AMDeviceConnect(struct am_device *apple, SDMMD_A
 SDM_MD_TestResponse SDM_MD_Test_AMDeviceDisconnect(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type);
 SDM_MD_TestResponse SDM_MD_Test_AMDeviceStartSession(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type);
 SDM_MD_TestResponse SDM_MD_Test_AMDeviceStopSession(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type);
-
+SDM_MD_TestResponse SDM_MD_Test_AMDeviceUSBDeviceID(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type);
+SDM_MD_TestResponse SDM_MD_Test_AMDeviceUSBProductID(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type);
+SDM_MD_TestResponse SDM_MD_Test_AMDeviceUSBLocationID(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type);
+SDM_MD_TestResponse SDM_MD_Test_AMDeviceValidatePairing(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type);
+SDM_MD_TestResponse SDM_MD_Test_AMDeviceCopyValue(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type);
+SDM_MD_TestResponse SDM_MD_Test_Sessioned_AMDeviceCopyValue(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type);
 #endif

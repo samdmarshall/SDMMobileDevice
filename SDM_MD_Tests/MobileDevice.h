@@ -208,6 +208,10 @@ enum {
 	 *   Public routines
 	 * ------------------------------------------------------------------------- */
 	
+	uint32_t AMDeviceUSBDeviceID(struct am_device *device);
+	uint16_t AMDeviceUSBProductID(struct am_device *device);
+	uint32_t AMDeviceUSBLocationID(struct am_device *device);
+	
 	void AMDSetLogLevel(int level);
 	
 	/*  Registers a notification with the current run loop. The callback gets
@@ -432,7 +436,7 @@ enum {
 	mach_error_t AMDeviceDisconnect(struct am_device *device);
 	mach_error_t AMDeviceRetain(struct am_device *device);
 	mach_error_t AMDeviceRelease(struct am_device *device);
-	CFStringRef AMDeviceCopyValue(struct am_device *device, unsigned int, CFStringRef cfstring);
+	CFTypeRef AMDeviceCopyValue(struct am_device *device, CFStringRef domain, CFStringRef key);
 	CFStringRef AMDeviceCopyDeviceIdentifier(struct am_device *device);
 	
 	typedef void (*notify_callback)(CFStringRef notification, void *data);
