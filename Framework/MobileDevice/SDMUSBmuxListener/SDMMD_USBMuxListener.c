@@ -374,10 +374,10 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 				if (response.code == 0x0){
 					(*listener)->isActive = true;
                 } else {
-                    printf("SDMMD_USBMuxStartListener: non-zero response code. trying again. code:%i string:%s\n", response.code, response.string ? CFStringGetCStringPtr(response.string, kCFStringEncodingUTF8):"");
+                    printf("%s: non-zero response code. trying again. code:%i string:%s\n", __FUNCTION__, response.code, response.string ? CFStringGetCStringPtr(response.string, kCFStringEncodingUTF8):"");
                 }
 			} else {
-                printf("SDMMD_USBMuxStartListener: no response payload. trying again.\n");
+                printf("%s: no response payload. trying again.\n",__FUNCTION__);
             }
 			USBMuxPacketRelease(startListen);
 		}

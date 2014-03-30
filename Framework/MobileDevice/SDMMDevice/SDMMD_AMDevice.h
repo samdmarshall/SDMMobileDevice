@@ -45,8 +45,8 @@ struct AMDeviceClassHeader {
 } __attribute ((packed)) AMDeviceClassHeader; // size 0x10
 
 enum {
-	kAMDeviceConnectionTypeUSB = 0,
-	kAMDeviceConnectionTypeWiFi = 1,
+	kAMDeviceConnectionTypeWiFi = 0,
+	kAMDeviceConnectionTypeUSB = 1,
 };
 typedef int32_t AMDeviceConnectionType;
 
@@ -57,17 +57,14 @@ struct AMDeviceClassBody {
 	int16_t padding0;							// 26
 	int32_t unknown1;							// 28
 	CFStringRef unique_device_id;				// 32
-	int32_t unknown2;							// 36
 	AMDeviceConnectionType connection_type;		// 40 (0 for USB, 1 for WiFi)
-	unsigned char unknown3[4];					// 44
+	//unsigned char unknown3[4];					// 44
 	SDMMD_lockdown_conn *lockdown_conn;			// 48
-	unsigned char unknown4[4];					// 52
 	CFStringRef session;						// 56 needs to be not zero in AMDeviceSecureStartService  -- connection
-	int32_t padding1;							// 60
-	pthread_mutex_t mutex_lock;					// 64
-	unsigned char unknown5[60];					// 68
+	char mutx[4];								// 64 "MUTX" string
+	pthread_mutex_t mutex_lock;					// 68
 	CFStringRef service_name;					// 128 bonjour service name
-	unsigned int unknown6;						// 132
+	//unsigned int unknown6;						// 132
 	int32_t interface_index;					// 136
 	int8_t device_active;						// 140
 	unsigned char unknown7[3];					// 141

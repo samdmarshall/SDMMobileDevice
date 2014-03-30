@@ -473,7 +473,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartSessionedService(SDMMD_AMDeviceRef devic
 				result = SDMMD_AMDeviceSecureStartService(device, service, NULL, connection);
 				if (result) {
 					char *serviceString = SDMCFStringGetString(service);
-					printf("SDMMD_AMDeviceSecureStartSessionedService: Could not start service %s for device %i.\n", serviceString, device->ivars.device_id);
+					printf("%s: Could not start service %s for device %i.\n",__FUNCTION__, serviceString, device->ivars.device_id);
 					Safe(free, serviceString);
 				}
 				SDMMD_AMDeviceStopSession(device);

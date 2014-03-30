@@ -107,7 +107,11 @@ CFTypeID SDMMD_AMDeviceRefGetTypeID(void) {
 
 SDMMD_lockdown_conn* SDMMD_lockdown_connection_create(uint32_t socket) {
 	SDMMD_lockdown_conn *lockdown = calloc(0x1, sizeof(SDMMD_lockdown_conn));
-	lockdown->connection = socket;
+	if (socket != 0) {
+		lockdown->connection = socket;
+		Safe(free,lockdown->pointer);
+		lockdown->length = 0;
+	}
 	return lockdown;
 }
 
@@ -116,11 +120,11 @@ X509* SDMMD__decode_certificate(CFDataRef cert) {
 	if (cert) {
 		BIO *newBIO = SDMMD__create_bio_from_data(cert);
 		if (newBIO == 0) {
-			printf("_decode_certificate: Could not create BIO from CFData.\n");
+			printf("%s: Could not create BIO from CFData.\n",__FUNCTION__);
 		} else {
 			result = PEM_read_bio_X509(newBIO, NULL, NULL, NULL);
 			if (result == NULL) {
-				printf("_decode_certificate: PEM_read_bio_X509 failed.\n");
+				printf("%s: PEM_read_bio_X509 failed.\n",__FUNCTION__);
 			}
 			Safe(BIO_free,newBIO);
 		}
@@ -160,13 +164,13 @@ int SDMMD__ssl_verify_callback(int value, X509_STORE_CTX *store) {
 			}
 			
 		} else {
-			printf("_ssl_verify_callback: Error verifying cert: unable to compare.\n");
+			printf("%s: Error verifying cert: unable to compare.\n",__FUNCTION__);
 			result = false;
 		}
 		Safe(free,var_8);
 		Safe(free,var_16);
 	} else {
-		printf("_ssl_verify_callback: Error verifying cert: (%d %s).\n", value, X509_verify_cert_error_string(X509_STORE_CTX_get_error(store)));
+		printf("%s: Error verifying cert: (%d %s).\n",__FUNCTION__, value, X509_verify_cert_error_string(X509_STORE_CTX_get_error(store)));
 	}
 	return result;
 }
@@ -246,7 +250,7 @@ SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostC
 			}
 		}
 	} else {
-		printf("lockssl_handshake: Could not create SSL bio.\n");
+		printf("%s: Could not create SSL bio.\n",__FUNCTION__);
 	}
 	return ssl;
 }
@@ -264,7 +268,7 @@ sdmmd_return_t SDMMD_lockconn_disable_ssl(SDMMD_lockdown_conn *lockdown_conn) {
 			result = SSL_shutdown(lockdown_conn->ssl);
 		}
 		if (result == -1) {
-			printf("lockconn_disable_ssl: Could not shutdown SSL connection %d.\n", -1);
+			printf("%s: Could not shutdown SSL connection %d.\n",__FUNCTION__, -1);
 		}
 		SSL_free(lockdown_conn->ssl);
 		lockdown_conn->ssl = NULL;
@@ -286,7 +290,7 @@ sdmmd_return_t SDMMD_lockconn_send_message(SDMMD_AMDeviceRef device, CFDictionar
 			
 			SDMMD_ServiceSendMessage(conn, dict, kCFPropertyListXMLFormat_v1_0);
 		} else {
-			printf("SDMMD_lockconn_send_message: Could not encode message as XML.\n");
+			printf("%s: Could not encode message as XML.\n",__FUNCTION__);
 		}
 	} else {
 		result = SDMMD_AMDeviceIsValid(device);
@@ -421,7 +425,7 @@ sdmmd_return_t SDMMD_lockdown_connection_destory(SDMMD_lockdown_conn *lockdownCo
 		if (lockdownCon->connection != 0xff) {
 			result = close((uint32_t)lockdownCon->connection);
 			if (result == 0xff) {
-				printf("SDMMD_lockdown_connection_destory: close(2) on socket %lld failed: %d.\n",lockdownCon->connection, result);
+				printf("%s: close(2) on socket %lld failed: %d.\n",__FUNCTION__,lockdownCon->connection, result);
 			}
 			lockdownCon->connection = 0x0;
 		}
@@ -654,7 +658,7 @@ sdmmd_return_t SDMMD__CopyEscrowBag(SDMMD_AMDeviceRef device, CFDataRef *bag) {
 					SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
 					result = SDMMD_store_dict(dict, path, true);
 					if (result) {
-						printf("SDMMD_CopyEscrowBag: Failed to store escrow bag to %s.\n",path);
+						printf("%s: Failed to store escrow bag to %s.\n",__FUNCTION__,path);
 					}
 					Safe(free,path);
 				}
@@ -861,7 +865,7 @@ sdmmd_return_t SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFDictionaryRe
 					CFSafeRelease(recvDict);
 				}
 			} else {
-				printf("SDMMD_send_session_start: Mismatch between Host SystemBUID and Pairing Record SystemBUID, recreate pairing record to ensure host is trustworthy\n");
+				printf("%s: Mismatch between Host SystemBUID and Pairing Record SystemBUID, recreate pairing record to ensure host is trustworthy.\n",__FUNCTION__);
 				result = kAMDInvalidHostIDError;
 			}
 		}
@@ -929,7 +933,7 @@ sdmmd_return_t SDMMD_AMDeviceStartSession(SDMMD_AMDeviceRef device) {
 				}
 			} else {
 				char *reason = SDMMD_AMDErrorString(result);
-				printf("SDMMD_AMDeviceStartSession: Could not start session with device %u: %s\n",device->ivars.device_id,reason);
+				printf("%s: Could not start session with device %u: %s\n",__FUNCTION__,device->ivars.device_id,reason);
 			}
 		}
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
@@ -950,7 +954,7 @@ sdmmd_return_t SDMMD_AMDeviceStopSession(SDMMD_AMDeviceRef device) {
 				result = SDMMD_send_session_stop(device, device->ivars.session);
 				if (result) {
 					char *reason = SDMMD_AMDErrorString(result);
-					printf("SDMMD_AMDeviceStopSession: Could not stop session with device %u: %s\n",device->ivars.device_id,reason);
+					printf("%s: Could not stop session with device %u: %s\n",__FUNCTION__,device->ivars.device_id,reason);
 				}
 				CFSafeRelease(device->ivars.session);
 				device->ivars.session = NULL;
@@ -971,7 +975,7 @@ sdmmd_return_t SDMMD_AMDeviceActivate(SDMMD_AMDeviceRef device, CFDictionaryRef 
 			result = SDMMD_send_activation(device, options);
 			if (result != 0) {
 				char *reason = SDMMD_AMDErrorString(result);
-				printf("SDMMD_AMDeviceActivate: Could not activate device %u %s.\n",device->ivars.device_id,reason);
+				printf("%s: Could not activate device %u %s.\n",__FUNCTION__,device->ivars.device_id,reason);
 			}
 			SDMMD__mutex_unlock(device->ivars.mutex_lock);
 		} else {
@@ -991,7 +995,7 @@ sdmmd_return_t SDMMD_AMDeviceDeactivate(SDMMD_AMDeviceRef device) {
 			result = SDMMD_send_deactivation(device);
 			if (result != 0) {
 				char *reason = SDMMD_AMDErrorString(result);
-				printf("SDMMD_AMDeviceDeactivate: Could not deactivate device %u: %s\n",device->ivars.device_id,reason);
+				printf("%s: Could not deactivate device %u: %s\n",__FUNCTION__,device->ivars.device_id,reason);
 			}
 			SDMMD__mutex_unlock(device->ivars.mutex_lock);
 		} else {
@@ -1012,7 +1016,7 @@ sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, b
 		if (socket) {
 			result = kAMDDeviceDisconnectedError;
 			if (device->ivars.device_active) {
-				if (device->ivars.connection_type == 1) {
+				if (device->ivars.connection_type == kAMDeviceConnectionTypeWiFi) {
 					size_t dataLen = CFDataGetLength(device->ivars.network_address);
 					struct sockaddr_storage address = {0};
 					if (dataLen == sizeof(struct sockaddr_storage)) {
@@ -1066,7 +1070,7 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 	uint32_t socket = 0xffffffff;
 	if (device) {
 		result = SDMMD_AMDevicePair(device);
-		SDMMD_CondSuccessElse(result, {
+		if (SDM_MD_CallSuccessful(result)) {
 			result = kAMDDeviceDisconnectedError;
 			if (device->ivars.device_active && device->ivars.connection_type == kAMDeviceConnectionTypeUSB) {
 				SDMMD__mutex_lock(device->ivars.mutex_lock);
@@ -1084,7 +1088,7 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 									result = kAMDInvalidResponseError;
 									if (CFStringCompare(daemon, CFSTR(AMSVC_LOCKDOWN), 0x0) != kCFCompareEqualTo) {
 										char *dname = SDMCFStringGetString(daemon);
-										printf("SDMMD_AMDeviceConnect: This is not the droid you're looking for (is actually %s). move along,  move along.\n",dname);
+										printf("%s: This is not the droid you're looking for (is actually %s). move along,  move along.\n",__FUNCTION__,dname);
 										Safe(free,dname);
 										SDMMD_AMDeviceDisconnect(device);
 										result = kAMDWrongDroidError;
@@ -1097,7 +1101,7 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 							}
 						}
 					} else {
-						printf("SDMMD_AMDeviceConnect: Could not connect to lockdown port (%d) on device %d - %s: 0x%x\n",0xf27e, device->ivars.device_id,"device with no name",result);
+						printf("%s: Could not connect to lockdown port (%d) on device %d - %s: 0x%x\n",__FUNCTION__,0xf27e, device->ivars.device_id,"device with no name",result);
 					}
 				} else {
 					bool valid = SDMMD_AMDeviceIsValid(device);
@@ -1108,11 +1112,12 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 				}
 				SDMMD__mutex_unlock(device->ivars.mutex_lock);
 			}
-		}, {
+		}
+		else {
 			if (result == kAMDPairingProhibitedError) {
-				printf("SDMMD_AMDeviceConnect: Could not pair with device, please accept trust prompt on device.\n");
+				printf("%s: Could not pair with device, please accept trust prompt on device.\n",__FUNCTION__);
 			}
-		})
+		}
 	} else {
 		result = kAMDInvalidArgumentError;
 	}
@@ -1165,7 +1170,7 @@ sdmmd_return_t SDMMD_AMDeviceValidatePairing(SDMMD_AMDeviceRef device) {
 					SDMMD__mutex_lock(device->ivars.mutex_lock);
 					result = SDMMD_send_validate_pair(device, host);
 					if (result) {
-						printf("SDMMD_AMDeviceValidatePairing: Could not validate pairing with device %u: %s\n",device->ivars.device_id, SDMMD_AMDErrorString(result));
+						printf("%s: Could not validate pairing with device %u: %s\n",__FUNCTION__,device->ivars.device_id, SDMMD_AMDErrorString(result));
 					}
 					SDMMD__mutex_unlock(device->ivars.mutex_lock);
 				} else {
@@ -1200,7 +1205,7 @@ sdmmd_return_t SDMMD_AMDeviceUnpair(SDMMD_AMDeviceRef device) {
 					remove(recordPath);
 					result = SDMMD_send_unpair(device, host);
 					if (result) {
-						printf("SDMMD_AMDeviceUnpair: Could not unpair device %u: %s\n",device->ivars.device_id, SDMMD_AMDErrorString(result));
+						printf("%s: Could not unpair device %u: %s\n",__FUNCTION__,device->ivars.device_id, SDMMD_AMDErrorString(result));
 					}
 					SDMMD__mutex_unlock(device->ivars.mutex_lock);
 				} else {
@@ -1235,14 +1240,14 @@ bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device) {
 			if (errorNum != 2) {
 				errorNum = errno;
 				char *errStr = strerror(errorNum);
-				printf("SDMMD_AMDeviceIsPaired: Could not stat %s: %s\n",path, errStr);
+				printf("%s: Could not stat %s: %s\n",__FUNCTION__,path, errStr);
 			}
 		} else {
 			result = true;
 		}
 		Safe(free,path);
 	} else {
-		printf("SDMMD_AMDeviceIsPaired: No device.\n");
+		printf("%s: No device.\n",__FUNCTION__);
 	}
 	return result;
 }
@@ -1303,7 +1308,7 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 										CFShow(sendPair);
 										result = SDMMD_send_pair(device, sendPair, chapCopy, NULL, &escrowBag);
 										if (!escrowBag) {
-											printf("AMDeviceExtendedPairWithOptions: Could not pair with the device %u: 0x%x\n", device->ivars.device_id, result);
+											printf("%s: Could not pair with the device %u: 0x%x\n",__FUNCTION__, device->ivars.device_id, result);
 										} else {
 											if (record) {
 												CFDictionarySetValue(record, CFSTR("EscrowBag"), escrowBag);
@@ -1317,7 +1322,7 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 											SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
 											result = SDMMD_store_dict(record, path, true);
 											if (result) {
-												printf("AMDeviceExtendedPairWithOptions: Could not store pairing record at '%s'.\n", path);
+												printf("%s: Could not store pairing record at '%s'.\n", __FUNCTION__, path);
 												result = kAMDPermissionError;
 											} else {
 												result = kAMDSuccess;
@@ -1328,10 +1333,10 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 										result = kAMDNoResourcesError;
 									}
 								} else {
-									printf("SDMMD_AMDeviceExtendedPairWithOptions: Could not create system BUID.\n");
+									printf("%s: Could not create system BUID.\n",__FUNCTION__);
 								}
 							} else {
-								printf("SDMMD_AMDeviceExtendedPairWithOptions: Could not create pairing material.\n");
+								printf("%s: Could not create pairing material.\n",__FUNCTION__);
 							}
 							CFSafeRelease(record);
 						} else {
@@ -1366,7 +1371,7 @@ uint32_t SDMMD_AMDeviceUSBLocationID(SDMMD_AMDeviceRef device) {
 		result = device->ivars.location_id;
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 	} else {
-		printf("SDMMD_AMDeviceUSBLocationID: No device\n");
+		printf("%s: No device\n",__FUNCTION__);
 	}
 	return result;
 }
@@ -1378,7 +1383,7 @@ uint16_t SDMMD_AMDeviceUSBProductID(SDMMD_AMDeviceRef device) {
 		result = device->ivars.product_id & 0xffff;
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 	} else {
-		printf("SDMMD_AMDeviceUSBProductID: No device\n");
+		printf("%s: No device\n",__FUNCTION__);
 	}
 	return result;
 }
@@ -1415,7 +1420,7 @@ sdmmd_return_t SDMMD_AMDeviceSetValue(SDMMD_AMDeviceRef device, CFStringRef doma
         if (device->ivars.device_active) {
             SDMMD__mutex_lock(device->ivars.mutex_lock);
             if (!SDMMD_send_set_value(device, domain, key, value)) {
-                printf("SDMMD_AMDeviceSetValue: Could not set value\n");
+                printf("%s: Could not set value\n",__FUNCTION__);
             } else {
                 result = kAMDSuccess;
             }
@@ -1441,6 +1446,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 	if (dictionary) {
 		device = SDMMD_AMDeviceCreateEmpty();
 		if (device) {
+			
 			CFDictionaryRef properties = (CFDictionaryContainsKey(dictionary, CFSTR("Properties")) ? CFDictionaryGetValue(dictionary, CFSTR("Properties")) : dictionary);
 			
 			CFNumberRef deviceId = CFDictionaryGetValue(properties, CFSTR("DeviceID"));
@@ -1741,7 +1747,7 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 					}
 					CFSafeRelease(deviceCopy);
 				} else {
-					printf("SDMMD_AMDeviceMountImage: Could not digest %s\n",cpath);
+					printf("%s: Could not digest %s\n",__FUNCTION__,cpath);
 					result = kAMDDigestFailedError;
 				}
 				Safe(free, sumdigest);
