@@ -292,7 +292,7 @@ enum {
 	
 	mach_error_t AMDeviceStartService(struct am_device *device, CFStringRef service_name, service_conn_t *handle, unsigned int *unknown);
 	mach_error_t AMDeviceSecureStartService(struct am_device *device, CFStringRef service_name, service_conn_t *handle, unsigned int *unknown);
-	
+	mach_error_t AMDeviceLookupApplications(struct am_device *device, CFDictionaryRef options, CFDictionaryRef *result);
 	mach_error_t AMDeviceStartHouseArrestService(struct am_device *device, CFStringRef identifier, void *unknown, service_conn_t *handle, unsigned int *what);
 	
 	/* Stops a session. You should do this before accessing services.
