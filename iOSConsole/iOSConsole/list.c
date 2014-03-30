@@ -34,7 +34,7 @@ void ListConnectedDevices() {
 			if (validDevice) {
 				// attempting to connect to the device
 				result = SDMMD_AMDeviceConnect(device);
-				SDMMD_CondSuccess(result, {
+				if (SDM_MD_CallSuccessful(result)) {
 					CFTypeRef deviceName = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kDeviceName));
 					CFTypeRef deviceUDID = device->ivars.unique_device_id;
 					if (!deviceUDID) {
@@ -46,7 +46,7 @@ void ListConnectedDevices() {
 					CFSafeRelease(deviceUDID);
 					
 					SDMMD_AMDeviceDisconnect(device);
-				})
+				}
 			}
 		}
 	}

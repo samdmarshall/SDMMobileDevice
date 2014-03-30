@@ -19,17 +19,17 @@ void SendDeviceCommand(char *udid, CFDictionaryRef request) {
 		SDMMD_AMConnectionRef powerDiag = AttachToDeviceAndService(device, AMSVC_DIAG_RELAY);
 		if (request) {
 			sdmmd_return_t result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(powerDiag), request, kCFPropertyListXMLFormat_v1_0);
-			SDMMD_CondSuccess(result, {
+			if (SDM_MD_CallSuccessful(result)) {
 				CFStringRef command = CFDictionaryGetValue(request, CFSTR("Request"));
 				char *commandString = SDMCFStringGetString(command);
 				printf("Sent %s command to device, this could take up to 5 seconds.\n",commandString);
 				CFDictionaryRef response;
 				result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(powerDiag), PtrCast(&response, CFPropertyListRef*));
-				SDMMD_CondSuccess(result, {
+				if (SDM_MD_CallSuccessful(result)) {
 					PrintCFDictionary(response);
-				})
+				}
 				Safe(free, commandString);
-			})
+			}
 		}
 	}
 }

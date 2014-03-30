@@ -47,16 +47,16 @@ void Syslog(char *udid) {
 
 void EnableExtendedLogging(SDMMD_AMDeviceRef device) {
 	sdmmd_return_t result = SDMMD_AMDeviceConnect(device);
-	SDMMD_CondSuccess(result, {
+	if (SDM_MD_CallSuccessful(result)) {
 		result = SDMMD_AMDeviceStartSession(device);
-		SDMMD_CondSuccess(result, {
+		if (SDM_MD_CallSuccessful(result)) {
 			CFTypeRef value = SDMMD_AMDeviceCopyValue(device, CFSTR(AMSVC_MOBILE_DEBUG), CFSTR(kEnableLockdownExtendedLogging));
 			if (CFGetTypeID(value) == CFBooleanGetTypeID()) {
 				if (!CFBooleanGetValue(value)) {
 					result = SDMMD_AMDeviceSetValue(device, CFSTR(AMSVC_MOBILE_DEBUG), CFSTR(kEnableLockdownExtendedLogging), kCFBooleanTrue);
-					SDMMD_CondSuccess(result, {
+					if (SDM_MD_CallSuccessful(result)) {
 						printf("Enabling extended logging...\n");
-					})
+					}
 				} else {
 					printf("Extended logging already enabled.\n");
 				}
@@ -64,10 +64,10 @@ void EnableExtendedLogging(SDMMD_AMDeviceRef device) {
 				PrintCFType(value);
 			}
 			CFSafeRelease(value);
-		})
+		}
 		SDMMD_AMDeviceStopSession(device);
 		SDMMD_AMDeviceDisconnect(device);
-	})
+	}
 }
 
 void AttachToSyslog(char *udid) {

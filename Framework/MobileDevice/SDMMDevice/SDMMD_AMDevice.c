@@ -1194,7 +1194,7 @@ sdmmd_return_t SDMMD_AMDeviceUnpair(SDMMD_AMDeviceRef device) {
 	sdmmd_return_t result = kAMDSuccess;
 	if (device) {
 		if (device->ivars.device_active) {
-			char *recordPath = calloc(0x1, 0x401);
+			char *recordPath = calloc(1, sizeof(char[1025]));
 			SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, recordPath);
 			CFMutableDictionaryRef dict = SDMMD__CreateDictFromFileContents(recordPath);
 			if (dict) {
@@ -1229,7 +1229,7 @@ bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device) {
 	bool result = false;
 	if (device) {
 		SDMMD__mutex_lock(device->ivars.mutex_lock);
-		char *path = calloc(0x1, 0x401);
+		char *path = calloc(1, sizeof(char[1025]));
 		
 		SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
@@ -1318,7 +1318,7 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 													CFDictionarySetValue(record, CFSTR("WiFiMACAddress"), wifiAddress);
 												}
 											}
-											char *path = calloc(0x1, 0x401);
+											char *path = calloc(1, sizeof(char[1025]));
 											SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
 											result = SDMMD_store_dict(record, path, true);
 											if (result) {
@@ -1530,27 +1530,28 @@ sdmmd_return_t SDMMD_copy_image(SDMMD_AMDeviceRef device, CFStringRef path) {
 	sdmmd_return_t result = kAMDUndefinedError;
 	if (device) {
 		result = kAMDSuccess;//SDMMD_AMDeviceConnect(device);
-		SDMMD_CondSuccessElse(result, {
+		if (SDM_MD_CallSuccessful(result)) {
 			result = SDMMD_AMDeviceStartSession(device);
-			SDMMD_CondSuccess(result, {
+			if (SDM_MD_CallSuccessful(result)) {
 				SDMMD_AMConnectionRef copyConn = NULL;
 				result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_AFC), NULL, &copyConn);
-				SDMMD_CondSuccess(result, {
+				if (SDM_MD_CallSuccessful(result)) {
 					SDMMD_AFCConnectionRef copyAFCConn = SDMMD_AFCConnectionCreate(copyConn);
 					SDMMD_AFCOperationRef response = NULL;
 					SDMMD_AFCOperationRef makeStaging = SDMMD_AFCOperationCreateMakeDirectory(CFSTR("PublicStaging"));
 					result = SDMMD_AFCProcessOperation(copyAFCConn, makeStaging, &response);
-					SDMMD_CondSuccess(result, {
+					if (SDM_MD_CallSuccessful(result)) {
 						// SDM copy file AFC
 						char *pathString = SDMCFStringGetString(path);
 						result = SDMMD_AMDeviceCopyFile(NULL, NULL, NULL, copyAFCConn, pathString,"PublicStaging/staging.dimage");
 						Safe(free, pathString);
-					})
-				})
-			})
-		}, {
+					}
+				}
+			}
+		}
+		else {
 			
-		})
+		}
 	}
 	return result;
 }
@@ -1564,11 +1565,11 @@ sdmmd_return_t SDMMD__hangup_with_image_mounter_service(SDMMD_AMConnectionRef co
 	if (connection) {
 		SocketConnection socket = SDMMD_TranslateConnectionToSocket(connection);
 		result = SDMMD_ServiceSendMessage(socket, dict, kCFPropertyListXMLFormat_v1_0);
-		SDMMD_CondSuccess(result, {
+		if (SDM_MD_CallSuccessful(result)) {
 			CFPropertyListRef response = NULL;
 			result = SDMMD_ServiceReceiveMessage(socket, &response);
 			PrintCFDictionary(response);
-		})
+		}
 	}
 	return result;
 }

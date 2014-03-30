@@ -48,12 +48,12 @@ SDMMD_AMConnectionRef AttachToDeviceAndService(SDMMD_AMDeviceRef device, char *s
 	SDMMD_AMConnectionRef serviceCon = NULL;
 	if (device) {
 		sdmmd_return_t result = SDMMD_AMDeviceConnect(device);
-		SDMMD_CondSuccess(result, {
+		if (SDM_MD_CallSuccessful(result)) {
 			result = SDMMD_AMDeviceStartSession(device);
-			SDMMD_CondSuccess(result, {
+			if (SDM_MD_CallSuccessful(result)) {
 				CFStringRef serviceString = CFStringCreateWithCString(kCFAllocatorDefault, service, kCFStringEncodingMacRoman);
 				result = SDMMD_AMDeviceStartService(device, serviceString, NULL, &serviceCon);
-				SDMMD_CondSuccessElse(result, {
+				if (SDM_MD_CallSuccessful(result)) {
 					CFTypeRef deviceName = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kDeviceName));
 					char *name = (char*)CFStringGetCStringPtr(deviceName,kCFStringEncodingMacRoman);
 					if (!name) {
@@ -61,14 +61,15 @@ SDMMD_AMConnectionRef AttachToDeviceAndService(SDMMD_AMDeviceRef device, char *s
 					}
 					printf("Connected to %s on \"%s\" ...\n",name,service);
 					CFSafeRelease(deviceName);
-				}, {
+				}
+				else {
 					SDMMD_AMDeviceStopSession(device);
 					SDMMD_AMDeviceDisconnect(device);
 					serviceCon = NULL;
-				})
+				}
 				CFSafeRelease(serviceString);
-			})
-		})
+			}
+		}
 	} else {
 		printf("Could not find device with that UDID\n");
 	}

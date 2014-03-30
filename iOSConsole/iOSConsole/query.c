@@ -15,7 +15,7 @@
 #include "SDMMobileDevice.h"
 
 void RunQueryOnDevice(SDMMD_AMDeviceRef device, char *domain, char *key, sdmmd_return_t result) {
-	SDMMD_CondSuccess(result, {
+	if (SDM_MD_CallSuccessful(result)) {
 		CFStringRef domainString = NULL;
 		CFStringRef keyString = NULL;
 		if (strncmp(domain, "null", strlen("null")) != 0x0) {
@@ -32,7 +32,7 @@ void RunQueryOnDevice(SDMMD_AMDeviceRef device, char *domain, char *key, sdmmd_r
 
 		CFSafeRelease(keyString);
 		CFSafeRelease(domainString);
-	})
+	}
 }
 
 void PerformQuery(char *udid, char *domain, char *key) {
@@ -40,9 +40,9 @@ void PerformQuery(char *udid, char *domain, char *key) {
 		SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 		if (device) {
 			sdmmd_return_t result = SDMMD_AMDeviceConnect(device);
-			SDMMD_CondSuccess(result, {
+			if (SDM_MD_CallSuccessful(result)) {
 				result = SDMMD_AMDeviceStartSession(device);
-				SDMMD_CondSuccess(result, {
+				if (SDM_MD_CallSuccessful(result)) {
 					if (strncmp(domain, kAllDomains, strlen(kAllDomains)) == 0x0 && strncmp(key, kAllKeys, strlen(kAllKeys)) == 0x0) {
 						for (uint32_t i = 0x0; i < SDM_MD_Domain_Count; i++) {
 							printf("%s\n",SDMMDKnownDomain[i].domain);
@@ -55,9 +55,9 @@ void PerformQuery(char *udid, char *domain, char *key) {
 						RunQueryOnDevice(device, domain, key,result);
 					}
 					SDMMD_AMDeviceStopSession(device);
-				})
+				}
 				SDMMD_AMDeviceDisconnect(device);
-			})
+			}
 		}
 	}
 }

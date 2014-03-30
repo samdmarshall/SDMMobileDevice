@@ -71,9 +71,9 @@ struct AMDeviceClassBody {
 	int32_t unknown8;							// 144
 	unsigned char unknown9[4];					// 148
 	CFDataRef network_address;					// 152 stores a sockaddr_storage
-	unsigned char unknown10[4];					// 156
+	//unsigned char unknown10[4];					// 156
 	CFDataRef unknown11;						// 160
-	unsigned char unknown12[4];					// 164
+	//unsigned char unknown12[4];					// 164
 } ATR_PACK AMDeviceClassBody; // size 0x98
 
 struct sdmmd_am_device {

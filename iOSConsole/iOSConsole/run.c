@@ -117,7 +117,7 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
 						}
 						/*
 						sdmmd_return_t result = SDMMD_StartDebuggingSessionOnDevice(device, &connection);
-						SDMMD_CondSuccess(result, {
+						if (SDM_MD_CallSuccessful(result)) {
 							bool launchSuccess = false;
 							CFStringRef path = CFDictionaryGetValue(details, CFSTR("Path"));
 							CFStringRef encodedPath = SDMMD_EncodeDebuggingString(path);
@@ -148,7 +148,7 @@ void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
 							if (launchSuccess) {
 								CFRunLoopRun();
 							}
-						})
+						}
 						*/
 					}
 				}
