@@ -118,13 +118,17 @@ SDM_MD_TestResponse SDM_MD_Test_AMDeviceConnect(struct am_device *apple, SDMMD_A
 	if (apple_return != kAMDSuccess) {
 		printf("\t\tAMDeviceConnect: %08x %s\n",apple_return,SDMMD_AMDErrorString(apple_return));
 	}
-	AMDeviceDisconnect(apple);
+	else {
+		AMDeviceDisconnect(apple);
+	}
 	
 	kern_return_t sdm_return = SDMMD_AMDeviceConnect(sdm);
 	if (sdm_return != kAMDSuccess) {
 		printf("\t\tSDMMD_AMDeviceConnect: %08x %s\n",sdm_return,SDMMD_AMDErrorString(sdm_return));
 	}
-	SDMMD_AMDeviceDisconnect(sdm);
+	else {
+		SDMMD_AMDeviceDisconnect(sdm);
+	}
 	
 	response = ((SDM_MD_CallSuccessful(apple_return) && SDM_MD_CallSuccessful(sdm_return)) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
 	
@@ -367,7 +371,9 @@ SDM_MD_TestResponse SDM_MD_Test_Sessioned_AMDeviceCopyValue(struct am_device *ap
 			if (apple_return == NULL || CFStringCompare(apple_return, CFSTR("GetProhibited"), 0) == kCFCompareEqualTo) {
 				printf("\t\tAMDeviceCopyValue (w/ Session): GetProhibited\n");
 			}
-			AMDeviceStopSession(apple);
+			else {
+				AMDeviceStopSession(apple);
+			}
 		}
 		AMDeviceDisconnect(apple);
 	}
@@ -380,7 +386,9 @@ SDM_MD_TestResponse SDM_MD_Test_Sessioned_AMDeviceCopyValue(struct am_device *ap
 			if (sdm_return == NULL || CFStringCompare(apple_return, CFSTR("GetProhibited"), 0) == kCFCompareEqualTo) {
 				printf("\t\tSDMMD_AMDeviceCopyValue (w/ Session): GetProhibited\n");
 			}
-			SDMMD_AMDeviceStopSession(sdm);
+			else {
+				SDMMD_AMDeviceStopSession(sdm);
+			}
 		}
 		SDMMD_AMDeviceDisconnect(sdm);
 	}
