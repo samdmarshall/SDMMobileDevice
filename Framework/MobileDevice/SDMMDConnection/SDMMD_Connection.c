@@ -211,7 +211,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 							result = SDMMD__CopyEscrowBag(device, &escrowBag);
 							if (result) {
 								char *udidString = SDMCFStringGetString(device->ivars.unique_device_id);
-								printf("AMDeviceSecureStartService: Could not get escrow keybag for device %s!\n", (device->ivars.unique_device_id ? udidString : "device with no name"));
+								printf("%s: Could not get escrow keybag for device %s!\n",__FUNCTION__, (device->ivars.unique_device_id ? udidString : "device with no name"));
 								Safe(free, udidString);
 								mutexLock = true;
 								ssl = NULL;
@@ -252,7 +252,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 						} else {
 							if (escrowBag) {
 								char *udidString = SDMCFStringGetString(device->ivars.unique_device_id);
-								printf("AMDeviceSecureStartService: Escrow bag mismatch for device %s!", (device->ivars.unique_device_id ? udidString : "device with no name"));
+								printf("%s: Escrow bag mismatch for device %s!",__FUNCTION__, (device->ivars.unique_device_id ? udidString : "device with no name"));
 								Safe(free, udidString);
 								char *path = calloc(1024, sizeof(char));
 								SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
@@ -276,7 +276,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 						if (result == kAMDSuccess) {
 							if (enableSSL) {
 								char *udidString = SDMCFStringGetString(device->ivars.unique_device_id);
-								printf("AMDeviceSecureStartService: SSL requested for service %s with device %s.\n", cservice, (device->ivars.unique_device_id ? udidString : "device with no name"));
+								printf("%s: SSL requested for service %s with device %s.\n",__FUNCTION__, cservice, (device->ivars.unique_device_id ? udidString : "device with no name"));
 								Safe(free, udidString);
 								CFMutableDictionaryRef record = NULL;
 								if (socket != -1) {
@@ -343,7 +343,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 							}
 						} else {
 							char *udidString = SDMCFStringGetString(device->ivars.unique_device_id);
-							printf("SDMMD_AMDeviceSecureStartService: Could not connect to \"%s\" service on port %d, device %d - %s.", cservice, port, device->ivars.device_id, udidString);
+							printf("%s: Could not connect to \"%s\" service on port %d, device %d - %s.",__FUNCTION__, cservice, port, device->ivars.device_id, udidString);
 							Safe(free,udidString);
 							//ssl = NULL;
 						}

@@ -24,7 +24,7 @@ SDMMD_AMDeviceRef FindDeviceFromUDID(char *udid) {
 		// Iterating over connected devices
 		for (index = 0; index < numberOfDevices; index++) {
 			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
-			CFTypeRef deviceUDID = device->ivars.unique_device_id;
+			CFTypeRef deviceUDID = CFStringCreateCopy(kCFAllocatorDefault, device->ivars.unique_device_id);
 			if (deviceUDID) {
 				deviceId = (char*)CFStringGetCStringPtr(deviceUDID,kCFStringEncodingMacRoman);
 				if (strncmp(udid, deviceId, strlen(deviceId)) == 0x0) {
