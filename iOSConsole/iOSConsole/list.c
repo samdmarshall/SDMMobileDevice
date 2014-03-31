@@ -36,11 +36,11 @@ void ListConnectedDevices() {
 				result = SDMMD_AMDeviceConnect(device);
 				if (SDM_MD_CallSuccessful(result)) {
 					CFTypeRef deviceName = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kDeviceName));
-					CFTypeRef deviceUDID = device->ivars.unique_device_id;
+					CFTypeRef deviceUDID = CFStringCreateCopy(kCFAllocatorDefault, device->ivars.unique_device_id);
 					if (!deviceUDID) {
 						deviceUDID = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kUniqueDeviceID));
 					}
-					printf("%d) %s : %s\n",index+0x1,CFStringGetCStringPtr(deviceUDID,kCFStringEncodingMacRoman),CFStringGetCStringPtr(deviceName,kCFStringEncodingMacRoman));
+					printf("%d) %s : %s\n",index+0x1,CFStringGetCStringPtr(deviceUDID,kCFStringEncodingUTF8),CFStringGetCStringPtr(deviceName,kCFStringEncodingMacRoman));
 					
 					CFSafeRelease(deviceName);
 					CFSafeRelease(deviceUDID);

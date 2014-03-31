@@ -19,28 +19,57 @@ struct AMDeviceNotificationCallbackInformation {
 	uint32_t msgType;
 };
 
+bool setAppleDevice(struct am_device *device) {
+	if (device->device_id == sdm_test_device->ivars.device_id) {
+		apple_test_device = device;
+		dispatch_semaphore_signal(got_apple_device);
+		return true;
+	}
+	return false;
+}
+
 void callback(struct AMDeviceNotificationCallbackInformation *CallbackInfo) {
 
 	struct am_device *deviceHandle = CallbackInfo->deviceHandle;
 	
-	switch (CallbackInfo->msgType) {
-		case ADNCI_MSG_CONNECTED: {
-			if (deviceHandle->device_id == sdm_test_device->ivars.device_id) {
-				apple_test_device = deviceHandle;
-				dispatch_semaphore_signal(got_apple_device);
+	if (apple_test_device == NULL) {
+		switch (CallbackInfo->msgType) {
+			case ADNCI_MSG_CONNECTED: {
+				if (sdm_test_device != NULL) {
+					setAppleDevice(deviceHandle);
+				}
+				else {
+					CFArrayRef device_array = SDMMD_AMDCreateDeviceList();
+					
+					CFIndex count = CFArrayGetCount(device_array);
+					
+					if (count != 0) {
+						for (CFIndex index = 0; index < count; index++) {
+							sdm_test_device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(device_array, index);
+							if (!setAppleDevice(deviceHandle)) {
+								sdm_test_device = NULL;
+							}
+							else {
+								break;
+							}
+						}
+					}
+					
+				}
+				break;
 			}
-			break;
-		}
-		case ADNCI_MSG_DISCONNECTED: {
-			break;
-		}
-		case ADNCI_MSG_UNKNOWN: {
-			break;
-		}
-		default: {
-			break;
+			case ADNCI_MSG_DISCONNECTED: {
+				break;
+			}
+			case ADNCI_MSG_UNKNOWN: {
+				break;
+			}
+			default: {
+				break;
+			}
 		}
 	}
+	
 	
 }
 
