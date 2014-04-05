@@ -77,7 +77,7 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateReadDirectory(CFStringRef path) {
 	char *cpath = SDMCFStringGetString(path);
 	op->packet->data = calloc(1, strlen(cpath)+1);
 	memcpy(op->packet->data, cpath, strlen(cpath));
-	SDMMD_AFCHeaderInit(&op->packet->header, 0x3, (uint32_t)strlen(cpath)+1+sizeof(struct SDMMD_AFCPacketHeader), 0x0, 0x0);
+	SDMMD_AFCHeaderInit(&(op->packet->header), 0x3, (uint32_t)strlen(cpath)+1+sizeof(struct SDMMD_AFCPacketHeader), 0x0, 0x0);
 	free(cpath);
 	return op;
 }
@@ -251,11 +251,15 @@ sdmmd_return_t SDMMD_AFCConnectionPerformOperation(SDMMD_AFCConnectionRef conn, 
 
 sdmmd_return_t SDMMD_AFCSendOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOperationRef op) {
 	sdmmd_return_t result = kAMDSuccess;
-	CFDataRef headerData = CFDataCreate(kCFAllocatorDefault, (UInt8*)&op->packet->header, sizeof(SDMMD_AFCPacketHeader));
+	CFMutableDataRef headerData = CFDataCreateMutable(kCFAllocatorDefault, (CFIndex)op->packet->header.packetLen);//(kCFAllocatorDefault, (UInt8*)&op->packet->header, sizeof(SDMMD_AFCPacketHeader));
+	CFDataAppendBytes(headerData, (UInt8*)&(op->packet->header), sizeof(SDMMD_AFCPacketHeader));
+	if (op->packet->header.headerLen > sizeof(SDMMD_AFCPacketHeader)) {
+		CFDataAppendBytes(headerData, (UInt8*)(op->packet->data), (uint32_t)op->packet->header.packetLen - sizeof(SDMMD_AFCPacketHeader));
+	}
 	result = SDMMD_DirectServiceSend(SDMMD_TranslateConnectionToSocket(conn->handle), headerData);
 	printf("header sent status: %08x %s\n",result,SDMMD_AMDErrorString(result));
 	if (!(op->packet->header.headerLen == op->packet->header.packetLen && op->packet->data == NULL)) {
-		CFDataRef bodyData = CFDataCreate(kCFAllocatorDefault, (UInt8*)&op->packet->data, (uint32_t)op->packet->header.packetLen - sizeof(SDMMD_AFCPacketHeader));
+		CFDataRef bodyData = CFDataCreate(kCFAllocatorDefault, (UInt8*)(op->packet->data), (uint32_t)op->packet->header.packetLen - sizeof(SDMMD_AFCPacketHeader));
 		result = SDMMD_DirectServiceSend(SDMMD_TranslateConnectionToSocket(conn->handle), bodyData);
 		printf("body sent status: %08x %s\n",result,SDMMD_AMDErrorString(result));
 	}
@@ -293,7 +297,7 @@ sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 	__block SDMMD_AFCOperationRef blockReply;
 	dispatch_sync(conn->operationQueue, ^{
 		conn->semaphore = dispatch_semaphore_create(0x0);
-		op->packet->header.pid = conn->operationCount;
+		op->packet->header.pid = k64BitMask; //conn->operationCount;
 		result = SDMMD_AFCSendOperation(conn, op);
 		dispatch_semaphore_wait(conn->semaphore, op->timeout);
 		SDMMD_AFCReceiveOperation(conn, &blockReply);

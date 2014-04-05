@@ -107,7 +107,7 @@ kern_return_t test_apple_AFCOperationCreateReadDirectory(struct am_device *apple
 				struct afc_connection *afc = NULL;
 				result = AFCConnectionOpen(test_apple_afc_conn, 0, &afc);
 				if (afc) {
-					afc_operation read_dir = AFCOperationCreateReadDirectory(kCFAllocatorDefault, CFSTR(""), NULL);
+					afc_operation read_dir = AFCOperationCreateReadDirectory(kCFAllocatorDefault, CFSTR("Safari"), NULL);
 					result = AFCConnectionProcessOperation(afc, read_dir, 0);
 					if (SDM_MD_CallSuccessful(result)) {
 						CFTypeRef test = AFCOperationGetResultObject(read_dir);
@@ -124,5 +124,7 @@ kern_return_t test_apple_AFCOperationCreateReadDirectory(struct am_device *apple
 	}
 	return apple_return;
 }
+
+// Safari/goog-phish-shavar.db
 
 #endif

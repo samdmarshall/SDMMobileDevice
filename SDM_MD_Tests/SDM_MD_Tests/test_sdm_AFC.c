@@ -106,20 +106,13 @@ kern_return_t test_sdm_AFCOperationCreateReadDirectory(SDMMD_AMDeviceRef sdm) {
 			if (SDM_MD_CallSuccessful(result)) {
 				SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(test_sdm_afc_conn);
 				if (afc) {
-					SDMMD_AFCOperationRef conn_info = SDMMD_AFCOperationCreateReadDirectory(CFSTR(""));
+					SDMMD_AFCOperationRef conn_info = SDMMD_AFCOperationCreateReadDirectory(CFSTR("Safari"));
 					SDMMD_AFCOperationRef response;
 					result = SDMMD_AFCProcessOperation(afc, conn_info, &response);
 					if (SDM_MD_CallSuccessful(result)) {
 						CFDataRef test = SDMMD_GetDataResponseFromOperation(response);
 						if (test) {
 							sdm_return = kAMDSuccess;
-							char *result = (char*)CFDataGetBytePtr(test);
-							if (result[0] == 8) {
-								sdm_return = kAMDNotFoundError;
-							}
-							else if (result[0] == 4) {
-								sdm_return = kAMDFileExistsError;
-							}
 						}
 					}
 					SDMMD_AFCConnectionRelease(afc);
