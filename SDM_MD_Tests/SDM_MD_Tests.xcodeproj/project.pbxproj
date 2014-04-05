@@ -19,6 +19,9 @@
 		22B3D82B18E8885E0007F104 /* test_sdm_AMDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D82A18E8885E0007F104 /* test_sdm_AMDevice.c */; };
 		22B3D82E18E8957D0007F104 /* test_apple_AMService.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D82D18E8957D0007F104 /* test_apple_AMService.c */; };
 		22B3D83118E895900007F104 /* test_sdm_AMService.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D83018E895900007F104 /* test_sdm_AMService.c */; };
+		22EC43DB18F05A7E003BA4C9 /* test_AFC.c in Sources */ = {isa = PBXBuildFile; fileRef = 22EC43DA18F05A7E003BA4C9 /* test_AFC.c */; };
+		22EC43DE18F05BED003BA4C9 /* test_apple_AFC.c in Sources */ = {isa = PBXBuildFile; fileRef = 22EC43DD18F05BED003BA4C9 /* test_apple_AFC.c */; };
+		22EC43E118F05C01003BA4C9 /* test_sdm_AFC.c in Sources */ = {isa = PBXBuildFile; fileRef = 22EC43E018F05C01003BA4C9 /* test_sdm_AFC.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -57,6 +60,12 @@
 		22B3D82D18E8957D0007F104 /* test_apple_AMService.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_apple_AMService.c; sourceTree = "<group>"; };
 		22B3D82F18E895860007F104 /* test_sdm_AMService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_sdm_AMService.h; sourceTree = "<group>"; };
 		22B3D83018E895900007F104 /* test_sdm_AMService.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_sdm_AMService.c; sourceTree = "<group>"; };
+		22EC43D918F05A74003BA4C9 /* test_AFC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_AFC.h; sourceTree = "<group>"; };
+		22EC43DA18F05A7E003BA4C9 /* test_AFC.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_AFC.c; sourceTree = "<group>"; };
+		22EC43DC18F05BE3003BA4C9 /* test_apple_AFC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_apple_AFC.h; sourceTree = "<group>"; };
+		22EC43DD18F05BED003BA4C9 /* test_apple_AFC.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_apple_AFC.c; sourceTree = "<group>"; };
+		22EC43DF18F05BF8003BA4C9 /* test_sdm_AFC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_sdm_AFC.h; sourceTree = "<group>"; };
+		22EC43E018F05C01003BA4C9 /* test_sdm_AFC.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_sdm_AFC.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +171,12 @@
 		22B3D82318E866160007F104 /* AFC */ = {
 			isa = PBXGroup;
 			children = (
+				22EC43D918F05A74003BA4C9 /* test_AFC.h */,
+				22EC43DA18F05A7E003BA4C9 /* test_AFC.c */,
+				22EC43DC18F05BE3003BA4C9 /* test_apple_AFC.h */,
+				22EC43DD18F05BED003BA4C9 /* test_apple_AFC.c */,
+				22EC43DF18F05BF8003BA4C9 /* test_sdm_AFC.h */,
+				22EC43E018F05C01003BA4C9 /* test_sdm_AFC.c */,
 			);
 			name = AFC;
 			sourceTree = "<group>";
@@ -219,12 +234,15 @@
 			files = (
 				22B3D82818E888490007F104 /* test_apple_AMDevice.c in Sources */,
 				22B3D83118E895900007F104 /* test_sdm_AMService.c in Sources */,
+				22EC43DE18F05BED003BA4C9 /* test_apple_AFC.c in Sources */,
 				22B3D82518E872F10007F104 /* tests.c in Sources */,
 				22B3D80618E74EE40007F104 /* main.c in Sources */,
 				22B3D82B18E8885E0007F104 /* test_sdm_AMDevice.c in Sources */,
 				22B3D81318E74FBF0007F104 /* test_AMDevice.c in Sources */,
+				22EC43E118F05C01003BA4C9 /* test_sdm_AFC.c in Sources */,
 				22B3D81A18E75BCC0007F104 /* listener.c in Sources */,
 				22B3D82E18E8957D0007F104 /* test_apple_AMService.c in Sources */,
+				22EC43DB18F05A7E003BA4C9 /* test_AFC.c in Sources */,
 				22B3D82218E76A2C0007F104 /* test_AMService.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

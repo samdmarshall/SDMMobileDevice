@@ -40,7 +40,7 @@ struct sdmmd_AFCConnectionClass {
 	uint64_t operationCount;
 } sdmmd_AFCConnectionClass;
 
-#define SDMMD_AFCConnectionRef struct sdmmd_AFCConnectionClass*
+typedef struct sdmmd_AFCConnectionClass* SDMMD_AFCConnectionRef;
 
 typedef struct SDMMD_AFCPacketHeader {
 	uint64_t signature;
@@ -60,7 +60,7 @@ struct sdmmd_AFCOperation {
 	dispatch_time_t timeout;
 } sdmmd_AFCOperation;
 
-#define SDMMD_AFCOperationRef struct sdmmd_AFCOperation*
+typedef struct sdmmd_AFCOperation* SDMMD_AFCOperationRef;
 
 static char* SDMMD_gAFCPacketTypeNames[39] = {
 	"Invalid",

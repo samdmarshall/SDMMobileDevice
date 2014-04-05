@@ -110,8 +110,13 @@ void Test_Compatibility_AMDevice(struct am_device *apple, SDMMD_AMDeviceRef sdm)
 	SDM_MD_TestResponse session_copy_value_apple = SDM_MD_Test_Sessioned_AMDeviceCopyValue(apple, (SDMMD_AMDeviceRef)apple, kAMD);
 	TestCount(session_copy_value_apple)
 	
-	double percent = floor((double)(test_pass/test_total)*100.f);
-	printf("Passing: %0.f/%0.f %2.f%%\n\n",test_pass,test_total,percent);
+	if (test_total) {
+		double percent = floor((double)(test_pass/test_total)*100.f);
+		printf("Passing: %0.f/%0.f %2.f%%\n\n",test_pass,test_total,percent);
+	}
+	else {
+		printf("No active tests.\n");
+	}
 }
 
 void Test_Functionality_AMDevice(struct am_device *apple, SDMMD_AMDeviceRef sdm) {
@@ -173,8 +178,13 @@ void Test_Functionality_AMDevice(struct am_device *apple, SDMMD_AMDeviceRef sdm)
 	TestCount(session_copy_value)
 	CFSafeRelease(sdm_session_copy_value);
 	
-	double percent = floor((double)(test_pass/test_total)*100.f);
-	printf("Passing: %0.f/%0.f %2.f%%\n\n",test_pass,test_total,percent);
+	if (test_total) {
+		double percent = floor((double)(test_pass/test_total)*100.f);
+		printf("Passing: %0.f/%0.f %2.f%%\n\n",test_pass,test_total,percent);
+	}
+	else {
+		printf("No active tests.\n");
+	}
 }
 
 SDM_MD_TestResponse SDM_MD_Test_AMDeviceConnect(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type) {

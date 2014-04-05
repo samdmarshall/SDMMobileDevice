@@ -47,8 +47,13 @@ void Test_Compatibility_AMService(struct am_device *apple, SDMMD_AMDeviceRef sdm
 	SDM_MD_TestResponse lookup_apps_apple = SDM_MD_Test_AMDeviceLookupApplications(apple, (SDMMD_AMDeviceRef)apple, kAMD);
 	TestCount(lookup_apps_apple)
 		
-	double percent = floor((double)(test_pass/test_total)*100.f);
-	printf("Passing: %0.f/%0.f %2.f%%\n\n",test_pass,test_total,percent);
+	if (test_total) {
+		double percent = floor((double)(test_pass/test_total)*100.f);
+		printf("Passing: %0.f/%0.f %2.f%%\n\n",test_pass,test_total,percent);
+	}
+	else {
+		printf("No active tests.\n");
+	}
 }
 
 void Test_Functionality_AMService(struct am_device *apple, SDMMD_AMDeviceRef sdm) {
@@ -73,8 +78,13 @@ void Test_Functionality_AMService(struct am_device *apple, SDMMD_AMDeviceRef sdm
 	TestCount(lookup_apps)
 	CFSafeRelease(lookup_response);
 	
-	double percent = floor((double)(test_pass/test_total)*100.f);
-	printf("Passing: %0.f/%0.f %2.f%%\n\n",test_pass,test_total,percent);
+	if (test_total) {
+		double percent = floor((double)(test_pass/test_total)*100.f);
+		printf("Passing: %0.f/%0.f %2.f%%\n\n",test_pass,test_total,percent);
+	}
+	else {
+		printf("No active tests.\n");
+	}
 }
 
 SDM_MD_TestResponse SDM_MD_Test_AMDeviceStartService(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type) {

@@ -35,16 +35,18 @@ sdmmd_return_t SDMMD_check_can_touch(SDMMD_AFCConnectionRef conn, CFDataRef *unk
 
 SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(SDMMD_AMConnectionRef conn) {
 	SDMMD_AFCConnectionRef afc = calloc(1, sizeof(struct sdmmd_AFCConnectionClass));
-	afc->handle = conn;
-	char *udidString = SDMCFStringGetString((conn->ivars.device)->ivars.unique_device_id);
-	char *dateString = SDMCFStringGetString(SDMGetCurrentDateString());
-	CFStringRef name = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%s.%s.%s"), "com.samdmarshall.sdmmobiledevice.afc", udidString, dateString);
-	Safe(free, udidString);
-	Safe(free, dateString);
-	char *queueName = SDMCFStringGetString(name);
-	afc->operationQueue = dispatch_queue_create(queueName, NULL);
-	Safe(free, queueName);
-	afc->operationCount = 0;
+	if (afc != NULL) {
+		afc->handle = conn;
+		char *udidString = SDMCFStringGetString((conn->ivars.device)->ivars.unique_device_id);
+		char *dateString = SDMCFStringGetString(SDMGetCurrentDateString());
+		CFStringRef name = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%s.%s.%s"), "com.samdmarshall.sdmmobiledevice.afc", udidString, dateString);
+		Safe(free, udidString);
+		Safe(free, dateString);
+		char *queueName = SDMCFStringGetString(name);
+		afc->operationQueue = dispatch_queue_create(queueName, NULL);
+		Safe(free, queueName);
+		afc->operationCount = 0;
+	}
 	return afc;
 }
 
@@ -237,10 +239,12 @@ sdmmd_return_t SDMMD_AFCSendOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOper
 	sdmmd_return_t result = kAMDSuccess;
 	CFDataRef headerData = CFDataCreate(kCFAllocatorDefault, (UInt8*)&op->packet->header, sizeof(SDMMD_AFCPacketHeader));
 	result = SDMMD_DirectServiceSend(SDMMD_TranslateConnectionToSocket(conn->handle), headerData);
-	printf("header sent status: %08x\n",result);
-	CFDataRef bodyData = CFDataCreate(kCFAllocatorDefault, (UInt8*)&op->packet->data, (uint32_t)op->packet->header.packetLen - sizeof(SDMMD_AFCPacketHeader));
-	result = SDMMD_DirectServiceSend(SDMMD_TranslateConnectionToSocket(conn->handle), bodyData);
-	printf("body sent status: %08x\n",result);
+	printf("header sent status: %08x %s\n",result,SDMMD_AMDErrorString(result));
+	if (!(op->packet->header.headerLen == op->packet->header.packetLen && op->packet->data == NULL)) {
+		CFDataRef bodyData = CFDataCreate(kCFAllocatorDefault, (UInt8*)&op->packet->data, (uint32_t)op->packet->header.packetLen - sizeof(SDMMD_AFCPacketHeader));
+		result = SDMMD_DirectServiceSend(SDMMD_TranslateConnectionToSocket(conn->handle), bodyData);
+		printf("body sent status: %08x %s\n",result,SDMMD_AMDErrorString(result));
+	}
 	return result;
 }
 
