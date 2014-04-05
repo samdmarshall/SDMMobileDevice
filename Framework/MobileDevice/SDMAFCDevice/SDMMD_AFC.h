@@ -62,7 +62,50 @@ struct sdmmd_AFCOperation {
 
 typedef struct sdmmd_AFCOperation* SDMMD_AFCOperationRef;
 
-static char* SDMMD_gAFCPacketTypeNames[39] = {
+enum SDMMD_AFC_Packet_Type {
+	SDMMD_AFC_Packet_Invalid = 0,
+	SDMMD_AFC_Packet_Status,
+	SDMMD_AFC_Packet_Data,
+	SDMMD_AFC_Packet_ReadDirectory = 3,
+	SDMMD_AFC_Packet_ReadFile,
+	SDMMD_AFC_Packet_WriteFile,
+	SDMMD_AFC_Packet_WritePart,
+	SDMMD_AFC_Packet_TruncFile,
+	SDMMD_AFC_Packet_RemovePath = 8,
+	SDMMD_AFC_Packet_MakeDirectory = 9,
+	SDMMD_AFC_Packet_GetFileInfo = 10,
+	SDMMD_AFC_Packet_GetDeviceInfo = 11,
+	SDMMD_AFC_Packet_WriteFileAtomic = 12,
+	SDMMD_AFC_Packet_FileRefOpen = 13,
+	SDMMD_AFC_Packet_FileRefOpenResult = 14,
+	SDMMD_AFC_Packet_FileRefRead = 15,
+	SDMMD_AFC_Packet_FileRefWrite = 16,
+	SDMMD_AFC_Packet_FileRefSeek,
+	SDMMD_AFC_Packet_FileRefTell,
+	SDMMD_AFC_Packet_FileRefTellResult,
+	SDMMD_AFC_Packet_FileRefClose,
+	SDMMD_AFC_Packet_FileRefSetFileSize,
+	SDMMD_AFC_Packet_GetConnectionInfo = 22,
+	SDMMD_AFC_Packet_SetConnectionOptions,
+	SDMMD_AFC_Packet_RenamePath = 24,
+	SDMMD_AFC_Packet_SetFSBlockSize,
+	SDMMD_AFC_Packet_SetSocketBlockSize,
+	SDMMD_AFC_Packet_FileRefLock = 27,
+	SDMMD_AFC_Packet_MakeLink = 28,
+	SDMMD_AFC_Packet_GetFileHash = 29,
+	SDMMD_AFC_Packet_SetModTime = 30,
+	SDMMD_AFC_Packet_GetFileHashWithRange,
+	SDMMD_AFC_Packet_FileRefSetImmutableHint,
+	SDMMD_AFC_Packet_GetSizeOfPathContents,
+	SDMMD_AFC_Packet_RemovePathAndContents,
+	SDMMD_AFC_Packet_DirectoryEnumeratorRefOpen,
+	SDMMD_AFC_Packet_DirectoryEnumeratorRefOpenResult,
+	SDMMD_AFC_Packet_DirectoryEnumeratorRefRead,
+	SDMMD_AFC_Packet_DirectoryEnumeratorRefClose,
+	SDMMD_AFC_Packet_Count
+};
+
+static char* SDMMD_gAFCPacketTypeNames[SDMMD_AFC_Packet_Count] = {
 	"Invalid",
 	"Status",
 	"Data",
