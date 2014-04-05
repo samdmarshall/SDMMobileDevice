@@ -125,6 +125,7 @@ kern_return_t test_apple_AMDeviceCopyValue(struct am_device *apple, CFTypeRef *v
 		if (apple_value == NULL || CFStringCompare(apple_value, CFSTR("GetProhibited"), 0) == kCFCompareEqualTo) {
 			printf("\t\tAMDeviceCopyValue: GetProhibited\n");
 			apple_return = kAMDGetProhibitedError;
+			CFSafeRelease(apple_value);
 		}
 		else {
 			*value = apple_value;
@@ -146,6 +147,7 @@ kern_return_t test_apple_Sessioned_AMDeviceCopyValue(struct am_device *apple, CF
 			if (apple_value == NULL || CFStringCompare(apple_value, CFSTR("GetProhibited"), 0) == kCFCompareEqualTo) {
 				printf("\t\tappleMD_AMDeviceCopyValue (w/ Session): GetProhibited\n");
 				apple_return = kAMDGetProhibitedError;
+				CFSafeRelease(apple_value);
 			}
 			else {
 				*value = apple_value;

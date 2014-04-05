@@ -122,6 +122,7 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateReadDirectory(CFStringRef path);
 SDMMD_AFCOperationRef SDMMD_AFCOperationCreateRemovePath(CFStringRef path);
 SDMMD_AFCOperationRef SDMMD_AFCOperationCreateMakeDirectory(CFStringRef path);
 SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetFileInfo(CFStringRef path);
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetConnectionInfo();
 SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetDeviceInfo();
 SDMMD_AFCOperationRef SDMMD_AFCOperationCreateOpenFile(CFStringRef path, uint16_t mode, void* *fileRef);
 

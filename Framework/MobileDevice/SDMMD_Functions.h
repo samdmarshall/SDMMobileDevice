@@ -304,7 +304,7 @@ static void SDMMD__PairingRecordPathForIdentifier(CFStringRef udid, char *path) 
 	snprintf(path, 1024, "%s%c%s.plist", buffer1, '/', buffer2);
 }
 
-static CFTypeRef SDMMD_CreateUUID() {
+static CFStringRef SDMMD_CreateUUID() {
 	CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
 	CFStringRef str = CFUUIDCreateString(kCFAllocatorDefault, uuid);
 	CFSafeRelease(uuid);
@@ -645,23 +645,23 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 	record = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 	if (record) {
 		CFDictionarySetValue(record, CFSTR("RootCertificate"), rootCert);
-		CFSafeRelease(rootCert);
 		
 		CFDictionarySetValue(record, CFSTR("HostCertificate"), hostCert);
-		CFSafeRelease(hostCert);
 		
 		CFDictionarySetValue(record, CFSTR("DeviceCertificate"), deviceCert);
-		CFSafeRelease(deviceCert);
 		
 		CFDictionarySetValue(record, CFSTR("RootPrivateKey"), rootPrivKey);
-		CFSafeRelease(rootPrivKey);
 		
 		CFDictionarySetValue(record, CFSTR("HostPrivateKey"), hostPrivKey);
-		CFSafeRelease(hostPrivKey);
 		
 		CFDictionarySetValue(record, CFSTR("HostID"), hostId);
-		CFSafeRelease(hostId);
 	}
+	CFSafeRelease(rootCert);
+	CFSafeRelease(hostCert);
+	CFSafeRelease(deviceCert);
+	CFSafeRelease(rootPrivKey);
+	CFSafeRelease(hostPrivKey);
+	CFSafeRelease(hostId);
 	
 	Safe(EVP_PKEY_free,rootEVP);
 	Safe(EVP_PKEY_free,hostEVP);
@@ -669,6 +669,8 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 	Safe(X509_free,rootX509);
 	Safe(X509_free,hostX509);
 	Safe(X509_free,deviceX509);
+	Safe(RSA_free,rootKeyPair);
+	Safe(RSA_free,hostKeyPair);
 	
     return record;
 }

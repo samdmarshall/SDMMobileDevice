@@ -42,15 +42,19 @@ void Test_Functionality_AFC(SDMMD_AMDeviceRef sdm) {
 	double test_fail = 0;
 	double test_total = 0;
 		
-	// AMDeviceStartService Tests
+	// AFCConnectionCreate Tests
 	FunctionalityTestMacro(afc_conn,test_sdm_AFCConnectionCreate,sdm)
 	TestCount(afc_conn)
 	
 	printf("\n");
-	// AMDeviceSecureStartSessionedService Tests
+	// AFCOperationCreateGetDeviceInfo Tests
 	FunctionalityTestMacro(afc_device_info,test_sdm_AFCOperationCreateGetDeviceInfo,sdm)
 	TestCount(afc_device_info)
 
+	printf("\n");
+	// AFCOperationCreateGetConnectionInfo Tests
+	FunctionalityTestMacro(afc_conn_info,test_sdm_AFCOperationCreateGetConnectionInfo,sdm)
+	TestCount(afc_conn_info)
 	
 	if (test_total) {
 		double percent = floor((double)(test_pass/test_total)*100.f);

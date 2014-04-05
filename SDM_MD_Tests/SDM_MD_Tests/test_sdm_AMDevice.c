@@ -124,6 +124,7 @@ kern_return_t test_sdm_AMDeviceCopyValue(SDMMD_AMDeviceRef sdm, CFTypeRef *value
 		if (sdm_value == NULL || CFStringCompare(sdm_value, CFSTR("GetProhibited"), 0) == kCFCompareEqualTo) {
 			printf("\t\tSDMMD_AMDeviceCopyValue: GetProhibited\n");
 			sdm_return = kAMDGetProhibitedError;
+			CFSafeRelease(sdm_value);
 		}
 		else {
 			*value = sdm_value;
@@ -145,6 +146,7 @@ kern_return_t test_sdm_Sessioned_AMDeviceCopyValue(SDMMD_AMDeviceRef sdm, CFType
 			if (sdm_value == NULL || CFStringCompare(sdm_value, CFSTR("GetProhibited"), 0) == kCFCompareEqualTo) {
 				printf("\t\tSDMMD_AMDeviceCopyValue (w/ Session): GetProhibited\n");
 				sdm_return = kAMDGetProhibitedError;
+				CFSafeRelease(sdm_value);
 			}
 			else {
 				*value = sdm_value;

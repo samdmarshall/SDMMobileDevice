@@ -24,6 +24,7 @@ kern_return_t test_sdm_AFCConnectionCreate(SDMMD_AMDeviceRef sdm) {
 				if (afc) {
 					sdm_return = kAMDSuccess;
 					SDMMD_AMDServiceConnectionInvalidate(test_sdm_afc_conn);
+					SDMMD_AFCConnectionRelease(afc);
 				}
 			}
 			SDMMD_AMDeviceStopSession(sdm);
@@ -48,12 +49,46 @@ kern_return_t test_sdm_AFCOperationCreateGetDeviceInfo(SDMMD_AMDeviceRef sdm) {
 					SDMMD_AFCOperationRef deviceInfo = SDMMD_AFCOperationCreateGetDeviceInfo();
 					SDMMD_AFCOperationRef response;
 					result = SDMMD_AFCProcessOperation(afc, deviceInfo, &response);
-					CFDataRef test = SDMMD_GetDataResponseFromOperation(response);
-					if (test) {
-						sdm_return = kAMDSuccess;
-						CFSafeRelease(test);
+					if (SDM_MD_CallSuccessful(result)) {
+						CFDataRef test = SDMMD_GetDataResponseFromOperation(response);
+						if (test) {
+							sdm_return = kAMDSuccess;
+						}
+						SDMMD_AMDServiceConnectionInvalidate(test_sdm_afc_conn);
 					}
-					SDMMD_AMDServiceConnectionInvalidate(test_sdm_afc_conn);
+					SDMMD_AFCConnectionRelease(afc);
+				}
+			}
+			SDMMD_AMDeviceStopSession(sdm);
+		}
+		SDMMD_AMDeviceDisconnect(sdm);
+	}
+	return sdm_return;
+}
+
+kern_return_t test_sdm_AFCOperationCreateGetConnectionInfo(SDMMD_AMDeviceRef sdm) {
+	kern_return_t sdm_return = kAMDUndefinedError;
+	kern_return_t result = SDMMD_AMDeviceConnect(sdm);
+	if (SDM_MD_CallSuccessful(result)) {
+		result = SDMMD_AMDeviceStartSession(sdm);
+		if (SDM_MD_CallSuccessful(result)) {
+			SDMMD_AMConnectionRef test_sdm_afc_conn;
+			result = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			if (SDM_MD_CallSuccessful(result)) {
+				SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(test_sdm_afc_conn);
+				if (afc) {
+					SDMMD_AFCOperationRef conn_info = SDMMD_AFCOperationCreateGetConnectionInfo();
+					SDMMD_AFCOperationRef response;
+					result = SDMMD_AFCProcessOperation(afc, conn_info, &response);
+					if (SDM_MD_CallSuccessful(result)) {
+						CFDataRef test = SDMMD_GetDataResponseFromOperation(response);
+						if (test) {
+							sdm_return = kAMDSuccess;
+							CFShow(test);
+						}
+						SDMMD_AMDServiceConnectionInvalidate(test_sdm_afc_conn);
+					}
+					SDMMD_AFCConnectionRelease(afc);
 				}
 			}
 			SDMMD_AMDeviceStopSession(sdm);

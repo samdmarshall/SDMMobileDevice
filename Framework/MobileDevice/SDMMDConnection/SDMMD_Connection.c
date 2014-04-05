@@ -458,6 +458,7 @@ sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connec
 			}
 		}
 		connection->ivars.socket = -1;
+		Safe(SSL_free,connection->ivars.ssl); // added from AMServiceConnectionFinalize
 		connection->ivars.ssl = NULL;	// _AMDServiceConnectionInvalidate leaks the SSL context?
 	}
 	return result;

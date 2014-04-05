@@ -38,7 +38,9 @@ SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(SDMMD_AMConnectionRef conn) {
 	if (afc != NULL) {
 		afc->handle = conn;
 		char *udidString = SDMCFStringGetString((conn->ivars.device)->ivars.unique_device_id);
-		char *dateString = SDMCFStringGetString(SDMGetCurrentDateString());
+		CFStringRef date_string = SDMGetCurrentDateString();
+		char *dateString = SDMCFStringGetString(date_string);
+		CFSafeRelease(date_string);
 		CFStringRef name = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%s.%s.%s"), "com.samdmarshall.sdmmobiledevice.afc", udidString, dateString);
 		Safe(free, udidString);
 		Safe(free, dateString);
@@ -51,7 +53,10 @@ SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(SDMMD_AMConnectionRef conn) {
 }
 
 void SDMMD_AFCConnectionRelease(SDMMD_AFCConnectionRef conn) {
-	
+	if (conn) {
+		SDMMD_AMDServiceConnectionInvalidate(conn->handle);
+		dispatch_release(conn->operationQueue);
+	}
 }
 
 void SDMMD_AFCHeaderInit(SDMMD_AFCPacketHeader *header, uint32_t command, uint32_t size, uint32_t data, uint32_t pack_num) {
@@ -85,6 +90,13 @@ SDMMD_AFCOperationRef SDMMD
 	return op;
 }
 */
+
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetConnectionInfo() {
+	SDMMD_AFCOperationRef op = calloc(1, sizeof(struct sdmmd_AFCOperation));
+	op->packet = calloc(1, sizeof(struct sdmmd_AFCPacket));
+	SDMMD_AFCHeaderInit(&op->packet->header, 0x16, 0x28, 0x0, 0x0);
+	return op;
+}
 
 SDMMD_AFCOperationRef SDMMD_AFCOperationCreateRemovePath(CFStringRef path) {
 	SDMMD_AFCOperationRef op = calloc(1, sizeof(struct sdmmd_AFCOperation));
