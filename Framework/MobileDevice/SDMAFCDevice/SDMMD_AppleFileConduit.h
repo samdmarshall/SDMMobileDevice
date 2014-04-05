@@ -146,7 +146,23 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateRemovePath(CFStringRef path);
 SDMMD_AFCOperationRef SDMMD_AFCOperationCreateMakeDirectory(CFStringRef path);
 SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetFileInfo(CFStringRef path);
 SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetDeviceInfo();
-SDMMD_AFCOperationRef SDMMD_AFCOperationCreateFileRefOpen(CFStringRef path, uint16_t mode, void* *fileRef);
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateFileRefOpen(CFStringRef path, uint64_t mode, void* *fileRef);
+SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateReadOperation(void* fileRef, uint32_t length);
+SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateWriteOperation(void* fileRef, CFDataRef data);
+SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateSeekOperation(void* fileRef, uint32_t pos);
+SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateTellOperation(void* fileRef);
+SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateCloseOperation(void* fileRef);
+
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetConnectionInfo();
+
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateRenamePath(CFStringRef old, CFStringRef new);
+
+
+SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateLockOperation(void* fileRef);
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateLinkPath(uint64_t linkType, CFStringRef target, CFStringRef link);
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetFileHash(CFStringRef path);
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateSetModTime(CFStringRef ref);
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetFileHashWithRange(CFStringRef path, Range range);
 
 #pragma mark -
 #pragma mark Alias Operations

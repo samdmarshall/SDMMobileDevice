@@ -20,6 +20,8 @@
 #ifndef _SDM_MD_AFC_C_
 #define _SDM_MD_AFC_C_
 
+#if 0
+
 #include "SDMMD_Functions.h"
 #include "SDMMD_AFC.h"
 #include <string.h>
@@ -714,5 +716,7 @@ sdmmd_return_t SDMMD_AFCValidateHeader(SDMMD_AFCHeaderRef header, uint32_t comma
 		
 	}
 }*/
+
+#endif
 
 #endif
