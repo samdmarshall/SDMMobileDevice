@@ -282,9 +282,9 @@ ATR_UNUSED static CFStringRef SDMGetCurrentDateString() {
 }
 
 static char* SDMCFStringGetString(CFStringRef str) {
-	CFIndex alloclen = CFStringGetMaximumSizeForEncoding(CFStringGetLength(str), CFStringGetFastestEncoding(str)) + 1;
+	CFIndex alloclen = CFStringGetMaximumSizeForEncoding(CFStringGetLength(str), kCFStringEncodingUTF8) + 1;
 	char *cstr = calloc(1, alloclen);
-	CFStringGetCString(str, cstr, alloclen, CFStringGetFastestEncoding(str));
+	CFStringGetCString(str, cstr, alloclen, kCFStringEncodingUTF8);
 	return cstr;
 }
 

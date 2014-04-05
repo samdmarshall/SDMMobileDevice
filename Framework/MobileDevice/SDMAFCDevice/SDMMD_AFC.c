@@ -67,7 +67,7 @@ void SDMMD_AFCHeaderInit(SDMMD_AFCPacketHeader *header, uint32_t command, uint32
 	if (pack_num) {
 		header->pid = pack_num;
 	} else {
-		header->pid = 0xffffffff;
+		header->pid = k64BitMask;
 	}
 }
 
@@ -77,7 +77,7 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateReadDirectory(CFStringRef path) {
 	char *cpath = SDMCFStringGetString(path);
 	op->packet->data = calloc(1, strlen(cpath)+1);
 	memcpy(op->packet->data, cpath, strlen(cpath));
-	SDMMD_AFCHeaderInit(&op->packet->header, 0x3, (uint32_t)strlen(cpath)+0x29, 0x0, 0x0);
+	SDMMD_AFCHeaderInit(&op->packet->header, 0x3, (uint32_t)strlen(cpath)+1+sizeof(struct SDMMD_AFCPacketHeader), 0x0, 0x0);
 	free(cpath);
 	return op;
 }
@@ -94,7 +94,7 @@ SDMMD_AFCOperationRef SDMMD
 SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetConnectionInfo() {
 	SDMMD_AFCOperationRef op = calloc(1, sizeof(struct sdmmd_AFCOperation));
 	op->packet = calloc(1, sizeof(struct sdmmd_AFCPacket));
-	SDMMD_AFCHeaderInit(&op->packet->header, 0x16, 0x28, 0x0, 0x0);
+	SDMMD_AFCHeaderInit(&op->packet->header, 0x16, sizeof(struct SDMMD_AFCPacketHeader), 0x0, 0x0);
 	return op;
 }
 
@@ -104,7 +104,7 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateRemovePath(CFStringRef path) {
 	char *cpath = SDMCFStringGetString(path);
 	op->packet->data = calloc(1, strlen(cpath)+1);
 	memcpy(op->packet->data, cpath, strlen(cpath));
-	SDMMD_AFCHeaderInit(&op->packet->header, 0x8, (uint32_t)strlen(cpath)+0x29, 0x0, 0x0);
+	SDMMD_AFCHeaderInit(&op->packet->header, 0x8, (uint32_t)strlen(cpath)+1+sizeof(struct SDMMD_AFCPacketHeader), 0x0, 0x0);
 	free(cpath);
 	return op;
 }
@@ -115,7 +115,7 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateMakeDirectory(CFStringRef path) {
 	char *cpath = SDMCFStringGetString(path);
 	op->packet->data = calloc(1, strlen(cpath)+1);
 	memcpy(op->packet->data, cpath, strlen(cpath));
-	SDMMD_AFCHeaderInit(&op->packet->header, 0x9, (uint32_t)strlen(cpath)+0x29, 0x0, 0x0);
+	SDMMD_AFCHeaderInit(&op->packet->header, 0x9, (uint32_t)strlen(cpath)+1+sizeof(struct SDMMD_AFCPacketHeader), 0x0, 0x0);
 	free(cpath);
 	return op;
 }
@@ -126,7 +126,7 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetFileInfo(CFStringRef path) {
 	char *cpath = SDMCFStringGetString(path);
 	op->packet->data = calloc(1, strlen(cpath)+1);
 	memcpy(op->packet->data, cpath, strlen(cpath));
-	SDMMD_AFCHeaderInit(&op->packet->header, 0xa, (uint32_t)strlen(cpath)+0x29, 0x0, 0x0);
+	SDMMD_AFCHeaderInit(&op->packet->header, 0xa, (uint32_t)strlen(cpath)+1+sizeof(struct SDMMD_AFCPacketHeader), 0x0, 0x0);
 	free(cpath);
 	return op;
 }
@@ -134,7 +134,7 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetFileInfo(CFStringRef path) {
 SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetDeviceInfo() {
 	SDMMD_AFCOperationRef op = calloc(1, sizeof(struct sdmmd_AFCOperation));
 	op->packet = calloc(1, sizeof(struct sdmmd_AFCPacket));
-	SDMMD_AFCHeaderInit(&op->packet->header, 0xb, 0x28, 0x0, 0x0);
+	SDMMD_AFCHeaderInit(&op->packet->header, 0xb, sizeof(struct SDMMD_AFCPacketHeader), 0x0, 0x0);
 	op->timeout = dispatch_time(DISPATCH_TIME_NOW, 0);
 	return op;
 }
@@ -146,7 +146,7 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateOpenFile(CFStringRef path, uint16_
 	op->packet->data = calloc(1, strlen(cpath)+2);
 	op->packet->data = (*(void**)&(mode));
 	memcpy(&op->packet->data[2], cpath, strlen(cpath));
-	SDMMD_AFCHeaderInit(&op->packet->header, 0xd, (uint32_t)strlen(cpath)+0x31, 0x0, 0x0);
+	SDMMD_AFCHeaderInit(&op->packet->header, 0xd, (uint32_t)strlen(cpath)+1+8+sizeof(struct SDMMD_AFCPacketHeader), 0x0, 0x0);
 	free(cpath);
 	return op;
 }
@@ -163,14 +163,14 @@ SDMMD_AFCOperationRef SDMMD
 SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateReadOperation(void* fileRef) {
 	SDMMD_AFCOperationRef op = calloc(1, sizeof(struct sdmmd_AFCOperation));
 	op->packet = calloc(1, sizeof(struct sdmmd_AFCPacket));
-	SDMMD_AFCHeaderInit(&op->packet->header, 0xf, 0x38, 0x0, 0x0);
+	SDMMD_AFCHeaderInit(&op->packet->header, 0xf, 0x10+sizeof(struct SDMMD_AFCPacketHeader), 0x0, 0x0);
 	return op;
 }
 
 SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateWriteOperation(void* thing, CFDataRef data, void* thing2) {
 	SDMMD_AFCOperationRef op = calloc(1, sizeof(struct sdmmd_AFCOperation));
 	op->packet = calloc(1, sizeof(struct sdmmd_AFCPacket));
-	SDMMD_AFCHeaderInit(&op->packet->header, 0x10, 0x30, (uint32_t)CFDataGetLength(data), 0x0);
+	SDMMD_AFCHeaderInit(&op->packet->header, 0x10, 0x8+sizeof(struct SDMMD_AFCPacketHeader), (uint32_t)CFDataGetLength(data), 0x0);
 	return op;
 }
 
@@ -179,10 +179,11 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateRenamePath(CFStringRef old, CFStri
 	op->packet = calloc(1, sizeof(struct sdmmd_AFCPacket));
 	char *oldPath = SDMCFStringGetString(old);
 	char *newPath = SDMCFStringGetString(new);
-	op->packet->data = calloc(1, strlen(oldPath)+strlen(newPath)+2);
+	uint32_t path_length = (uint32_t)(strlen(oldPath)+1+(uint32_t)strlen(newPath)+1);
+	op->packet->data = calloc(1, sizeof(char[path_length]));
 	memcpy(&op->packet->data, oldPath, strlen(oldPath));
 	memcpy(&op->packet->data[strlen(oldPath)+1], newPath, strlen(newPath));
-	SDMMD_AFCHeaderInit(&op->packet->header, 0x18, (uint32_t)strlen(oldPath)+(uint32_t)strlen(newPath)+0x30, 0x0, 0x0);
+	SDMMD_AFCHeaderInit(&op->packet->header, 0x18, path_length+sizeof(struct SDMMD_AFCPacketHeader), 0x0, 0x0);
 	free(oldPath);
 	free(newPath);
 	return op;
@@ -191,7 +192,7 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateRenamePath(CFStringRef old, CFStri
 SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateLockOperation(void* fileRef) {
 	SDMMD_AFCOperationRef op = calloc(1, sizeof(struct sdmmd_AFCOperation));
 	op->packet = calloc(1, sizeof(struct sdmmd_AFCPacket));
-	SDMMD_AFCHeaderInit(&op->packet->header, 0x1b, 0x38, 0x0, 0x0);
+	SDMMD_AFCHeaderInit(&op->packet->header, 0x1b, 0x10+sizeof(struct SDMMD_AFCPacketHeader), 0x0, 0x0);
 	return op;
 }
 
@@ -200,10 +201,11 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateLinkPath(uint64_t linkType, CFStri
 	op->packet = calloc(1, sizeof(struct sdmmd_AFCPacket));
 	char *targetPath = SDMCFStringGetString(target);
 	char *linkPath = SDMCFStringGetString(link);
-	op->packet->data = calloc(1, strlen(targetPath)+strlen(linkPath)+2);
+	uint32_t path_length = (uint32_t)(strlen(targetPath)+strlen(linkPath)+2);
+	op->packet->data = calloc(1, sizeof(char[path_length]));
 	memcpy(&op->packet->data, targetPath, strlen(targetPath));
 	memcpy(&op->packet->data[strlen(targetPath)+1], linkPath, strlen(linkPath));
-	SDMMD_AFCHeaderInit(&op->packet->header, 0x1c, (uint32_t)strlen(targetPath)+(uint32_t)strlen(linkPath)+0x30, 0x0, 0x0);
+	SDMMD_AFCHeaderInit(&op->packet->header, 0x1c, path_length+sizeof(struct SDMMD_AFCPacketHeader), 0x0, 0x0);
 	free(targetPath);
 	free(linkPath);
 	return op;
@@ -214,7 +216,7 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetFileHash(CFStringRef path) {
 	op->packet = calloc(1, sizeof(struct sdmmd_AFCPacket));
 	char *cpath = SDMCFStringGetString(path);
 	memcpy(op->packet->data, cpath, strlen(cpath));
-	SDMMD_AFCHeaderInit(&op->packet->header, 0x1d, (uint32_t)strlen(cpath)+0x29, 0x0, 0x0);
+	SDMMD_AFCHeaderInit(&op->packet->header, 0x1d, (uint32_t)strlen(cpath)+1+sizeof(struct SDMMD_AFCPacketHeader), 0x0, 0x0);
 	free(cpath);
 	return op;
 }
@@ -224,7 +226,7 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateSetModTime(CFStringRef ref) {
 	op->packet = calloc(1, sizeof(struct sdmmd_AFCPacket));
 	char *cref = SDMCFStringGetString(ref);
 	memcpy(op->packet->data, cref, strlen(cref));
-	SDMMD_AFCHeaderInit(&op->packet->header, 0x1e, (uint32_t)strlen(cref)+0x31, 0x0, 0x0);
+	SDMMD_AFCHeaderInit(&op->packet->header, 0x1e, (uint32_t)strlen(cref)+9+sizeof(struct SDMMD_AFCPacketHeader), 0x0, 0x0);
 	free(cref);
 	return op;
 }
@@ -276,8 +278,9 @@ sdmmd_return_t SDMMD_AFCReceiveOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 	result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(conn->handle), (CFDataRef*)&bodyData);
 	struct sdmmd_AFCPacket *packet = calloc(1, sizeof(struct sdmmd_AFCPacket));
 	packet->header = *header;
-	if (bodyData)
+	if (bodyData) {
 		packet->data = (void*)CFDataGetBytePtr(bodyData);
+	}
 	SDMMD_AFCOperationRef response = calloc(1, sizeof(struct sdmmd_AFCOperation));
 	response->packet = packet;
 	response->timeout = 0;

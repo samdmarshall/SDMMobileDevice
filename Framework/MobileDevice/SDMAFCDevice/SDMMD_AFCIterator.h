@@ -43,7 +43,7 @@ typedef struct afc_iterator {
 	struct AFCIteratorClassBody ivars;
 } ATR_PACK afc_iterator;
 
-typedef struct afc_iterator SDMMD_AFCIteratorClass;
+typedef struct afc_iterator* SDMMD_AFCIteratorClass;
 
 #define SDMMD_AFCIteratorRef SDMMD_AFCIteratorClass*
 

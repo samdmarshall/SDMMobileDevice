@@ -208,6 +208,161 @@ enum {
 	 *   Public routines
 	 * ------------------------------------------------------------------------- */
 	
+#if 0
+	typedef struct afc_connection {
+		unsigned int handle;            /* 0 */
+		unsigned int unknown0;          /* 4 */
+		unsigned char unknown1;         /* 8 */
+		unsigned char padding[3];       /* 9 */
+		unsigned int unknown2;          /* 12 */
+		unsigned int unknown3;          /* 16 */
+		unsigned int unknown4;          /* 20 */
+		unsigned int fs_block_size;     /* 24 */
+		unsigned int sock_block_size;   /* 28: always 0x3c */
+		unsigned int io_timeout;        /* 32: from AFCConnectionOpen, usu. 0 */
+		void *afc_lock;                 /* 36 */
+		unsigned int context;           /* 40 */
+	} __attribute__ ((packed)) afc_connection;
+#endif
+	//typedef struct _afc_connection			*afc_connection;
+	
+#if 0
+	typedef struct afc_directory {
+		unsigned char unknown[0];   /* size unknown */
+	} __attribute__ ((packed)) afc_directory;
+#endif
+	//typedef struct _afc_directory			*afc_directory;
+	
+#if 0
+	typedef struct afc_dictionary {
+		unsigned char unknown[0];   /* size unknown */
+	} __attribute__ ((packed)) afc_dictionary;
+#endif
+	//typedef struct _afc_dictionary *afc_dictionary;
+	
+#if 0
+	typedef struct usbmux_listener_1 {                  /* offset   value in iTunes */
+		unsigned int unknown0;                  /* 0        1 */
+		unsigned char *unknown1;                /* 4        ptr, maybe device? */
+		amd_device_attached_callback callback;  /* 8        _AMDDeviceAttached */
+		unsigned int unknown3;                  /* 12 */
+		unsigned int unknown4;                  /* 16 */
+		unsigned int unknown5;                  /* 20 */
+	} __attribute__ ((packed)) usbmux_listener_1;
+	
+	typedef struct usbmux_listener_2 {
+		unsigned char unknown0[4144];
+	} __attribute__ ((packed)) usbmux_listener_2;
+	
+	typedef struct am_bootloader_control_packet {
+		unsigned char opcode;       /* 0 */
+		unsigned char length;       /* 1 */
+		unsigned char magic[2];     /* 2: 0x34, 0x12 */
+		unsigned char payload[0];   /* 4 */
+	} __attribute__ ((packed)) am_bootloader_control_packet;
+#endif
+	
+	typedef int muxconn_t;
+	typedef int am_service;
+	typedef struct _afc_operation *afc_operation;
+	
+#if 0
+	// AFC connection functions
+	//afc_error_t AFCConnectionOpen(am_service handle,uint32_t io_timeout,afc_connection *conn);
+	//afc_error_t AFCConnectionClose(afc_connection conn);
+	// int _AFCConnectionIsValid(afc_connection *conn)
+	uint32_t AFCConnectionGetContext(afc_connection conn);
+	uint32_t AFCConnectionSetContext(afc_connection conn, uint32_t ctx);
+	uint32_t AFCConnectionGetFSBlockSize(afc_connection conn);
+	uint32_t AFCConnectionSetFSBlockSize(afc_connection conn, uint32_t size);
+	uint32_t AFCConnectionGetIOTimeout(afc_connection conn);
+	uint32_t AFCConnectionSetIOTimeout(afc_connection conn, uint32_t timeout);
+	uint32_t AFCConnectionGetSocketBlockSize(afc_connection conn);
+	uint32_t AFCConnectionSetSocketBlockSize(afc_connection conn, uint32_t size);
+#endif
+	
+	CFStringRef AFCCopyErrorString(afc_connection a);
+	CFTypeRef AFCConnectionCopyLastErrorInfo(afc_connection a);
+	
+	// 0001b8e6 T _AFCConnectionCopyLastErrorInfo
+	// 0001a8b6 T _AFCConnectionCreate
+	// 0001b8ca T _AFCConnectionGetStatus
+	// 0001a867 T _AFCConnectionGetTypeID
+	// 0001ae99 T _AFCConnectionInvalidate
+	// 0001b8c1 T _AFCConnectionProcessOperations
+	// 0001abdc T _AFCConnectionScheduleWithRunLoop
+	// 0001b623 T _AFCConnectionSubmitOperation
+	// 0001ad5a T _AFCConnectionUnscheduleFromRunLoop
+	
+	// 000000000000603e T _AFCConnectionProcessOperations
+	// 0000000000005df8 T _AFCConnectionSetCallBack
+	// 00000000000064cc T _AFCConnectionSubmitOperation
+	
+	// 0000000000008512 t _AFCLockCreate
+	// 0000000000007a83 t _AFCLockFree
+	// 00000000000084db t _AFCLockGetTypeID
+	// 0000000000007e69 t _AFCLockLock
+	// 00000000000083f2 t _AFCLockTryLock
+	// 000000000000810c t _AFCLockUnlock
+	
+	const char * AFCGetClientVersionString(void);		// "@(#)PROGRAM:afc  PROJECT:afc-80"
+	
+	// directory related functions
+	afc_error_t AFCDirectoryOpen(afc_connection conn,const char *path, afc_directory *dir);
+	afc_error_t AFCDirectoryRead(afc_connection conn,afc_directory dir,char **dirent);
+	afc_error_t AFCDirectoryClose(afc_connection conn,afc_directory dir);
+	
+	afc_error_t AFCDirectoryCreate(afc_connection conn,const char *dirname);
+	afc_error_t AFCRemovePath(afc_connection conn,const char *dirname);
+	afc_error_t AFCRenamePath(afc_connection conn,const char *from,const char *to);
+	afc_error_t AFCLinkPath(afc_connection conn,uint64_t mode, const char *target,const char *link);
+	//	NSLog(@"linkpath returned %#lx",AFCLinkPath(_afc,(1=hard,2=sym)"/tmp/aaa","/tmp/bbb"));
+	
+	// file i/o functions
+	afc_error_t AFCFileRefOpen(afc_connection conn, const char *path, uint64_t mode,afc_file_ref *ref);
+	afc_error_t AFCFileRefClose(afc_connection conn,afc_file_ref ref);
+	afc_error_t AFCFileRefSeek(afc_connection conn,	afc_file_ref ref, int64_t offset, uint64_t mode);
+	afc_error_t AFCFileRefTell(afc_connection conn, afc_file_ref ref, uint64_t *offset);
+	afc_error_t AFCFileRefRead(afc_connection conn,afc_file_ref ref,void *buf,uint32_t *len);
+	afc_error_t AFCFileRefSetFileSize(afc_connection conn,afc_file_ref ref, uint64_t offset);
+	afc_error_t AFCFileRefWrite(afc_connection conn,afc_file_ref ref, const void *buf, uint32_t len);
+	// afc_error_t AFCFileRefLock(afc_connection *conn, afc_file_ref ref, ...);
+	// 00019747 T _AFCFileRefUnlock
+	
+	// device/file information functions
+	//afc_error_t AFCDeviceInfoOpen(afc_connection conn, afc_dictionary *info);
+	afc_error_t AFCFileInfoOpen(afc_connection conn, const char *path, afc_dictionary *info);
+	afc_error_t AFCKeyValueRead(afc_dictionary dict, const char **key, const char **val);
+	afc_error_t AFCKeyValueClose(afc_dictionary dict);
+	
+	// Notification stuff - only call these on "com.apple.mobile.notification_proxy" (AMSVC_NOTIFICATION_PROXY)
+	
+	// New style - seems to formalise the creation of the "request packet" seperately
+	// from the execution.
+	afc_error_t AFCConnectionProcessOperation(afc_connection *a1, afc_operation op, double timeout);
+	afc_error_t AFCOperationGetResultStatus(afc_operation op);
+	CFTypeRef AFCOperationGetResultObject(afc_operation op);
+	CFTypeID AFCOperationGetTypeID(afc_operation op);
+	// 0000000000002dd3 T _AFCOperationGetState
+	// 00000000000030c5 T _AFCOperationCopyPacketData
+	afc_error_t AFCOperationSetContext(afc_operation op, void *ctx);
+	void *AFCOperationGetContext(afc_operation op);
+	
+	// each of these returns an op, with the appropriate request encoded.  The value of ctx is
+	// available via AFCOperationGetContext()
+	afc_operation AFCOperationCreateGetConnectionInfo(CFAllocatorRef allocator, void *ctx);
+	afc_operation AFCOperationCreateGetDeviceInfo(CFAllocatorRef allocator, void *ctx);
+	afc_operation AFCOperationCreateGetFileHash(CFAllocatorRef allocator, CFStringRef filename, void *ctx);
+	afc_operation AFCOperationCreateGetFileInfo(CFAllocatorRef allocator, CFStringRef filename, void *ctx);
+	afc_operation AFCOperationCreateLinkPath(CFAllocatorRef allocator, uint32_t mode, CFStringRef filename1, CFStringRef filename2, void *ctx);
+	afc_operation AFCOperationCreateMakeDirectory(CFAllocatorRef allocator, CFStringRef filename, void *ctx);
+	afc_operation AFCOperationCreateOpenFile(CFAllocatorRef allocator, CFStringRef filename, void *ctx);
+	afc_operation AFCOperationCreateReadDirectory(CFAllocatorRef allocator, CFStringRef filename, void *ctx);
+	afc_operation AFCOperationCreateRemovePath(CFAllocatorRef allocator, CFStringRef filename, void *ctx);
+	afc_operation AFCOperationCreateRenamePath(CFAllocatorRef allocator, CFStringRef oldname, CFStringRef newname, void *ctx);
+	afc_operation AFCOperationCreateSetConnectionOptions(CFAllocatorRef allocator, CFDictionaryRef dict, void *ctx);
+	afc_operation AFCOperationCreateSetModTime(CFAllocatorRef allocator, CFStringRef filename, uint64_t mtm, void *ctx);
+
 	uint32_t AMDeviceUSBDeviceID(struct am_device *device);
 	uint16_t AMDeviceUSBProductID(struct am_device *device);
 	uint32_t AMDeviceUSBLocationID(struct am_device *device);
@@ -329,7 +484,7 @@ enum {
 	 * Returns:
 	 *      MDERR_OK                if successful
 	 */
-	
+#if 0
 	afc_error_t AFCDirectoryOpen(afc_connection *conn, const char *path, struct afc_directory **dir);
 	
 	/* Acquires the next entry in a directory previously opened with
@@ -349,7 +504,7 @@ enum {
 	afc_error_t AFCRemovePath(afc_connection *conn, const char *dirname);
 	afc_error_t AFCRenamePath(afc_connection *conn, const char *from, const char *to);
 	afc_error_t AFCLinkPath(afc_connection *conn, long long int linktype, const char *target, const char *linkname);
-	
+#endif
 	/* Returns the context field of the given AFC connection. */
 	unsigned int AFCConnectionGetContext(afc_connection *conn);
 	
@@ -412,7 +567,7 @@ enum {
 	/* ----------------------------------------------------------------------------
 	 *   Less-documented public routines
 	 * ------------------------------------------------------------------------- */
-	
+#if 0
 	/* mode 2 = read, mode 3 = write */
 	afc_error_t AFCFileRefOpen(afc_connection *conn, const char *path, unsigned long long mode, afc_file_ref *ref);
 	afc_error_t AFCFileRefSeek(afc_connection *conn, afc_file_ref ref, unsigned long long offset1, unsigned long long offset2);
@@ -424,6 +579,8 @@ enum {
 	afc_error_t AFCFileInfoOpen(afc_connection *conn, const char *path, struct afc_dictionary **info);
 	afc_error_t AFCKeyValueRead(struct afc_dictionary *dict, char **key, char **val);
 	afc_error_t AFCKeyValueClose(struct afc_dictionary *dict);
+	
+#endif 
 	
 	unsigned int AMRestorePerformRecoveryModeRestore(struct am_recovery_device *rdev, CFDictionaryRef opts, void *callback, void *user_info);
 	unsigned int AMRestorePerformRestoreModeRestore(struct am_restore_device *rdev, CFDictionaryRef opts, void *callback, void *user_info);
