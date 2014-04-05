@@ -133,6 +133,25 @@ typedef struct sdmmd_AFCOperation* SDMMD_AFCOperationRef;
 #pragma mark Functions
 
 SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(SDMMD_AMConnectionRef conn);
+
+sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOperationRef *operation);
+
 void SDMMD_AFCConnectionRelease(SDMMD_AFCConnectionRef conn);
+
+#pragma mark -
+#pragma mark Operations
+
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateReadDirectory(CFStringRef path);
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateRemovePath(CFStringRef path);
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateMakeDirectory(CFStringRef path);
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetFileInfo(CFStringRef path);
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetDeviceInfo();
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateFileRefOpen(CFStringRef path, uint16_t mode, void* *fileRef);
+
+#pragma mark -
+#pragma mark Alias Operations
+
+sdmmd_return_t SDMMD_AMDeviceCopyFile(void *thing, void *thing2, void *thing3, SDMMD_AFCConnectionRef conn, char *local, char *remote);
+sdmmd_return_t SDMMD_check_can_touch(SDMMD_AFCConnectionRef conn, CFDataRef *unknown);
 
 #endif
