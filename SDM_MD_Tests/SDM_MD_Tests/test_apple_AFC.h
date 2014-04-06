@@ -12,8 +12,8 @@
 #include "MobileDevice.h"
 
 kern_return_t test_apple_AFCConnectionCreate(struct am_device *apple);
-kern_return_t test_apple_AFCOperationCreateGetDeviceInfo(struct am_device *apple);
-kern_return_t test_apple_AFCOperationCreateGetConnectionInfo(struct am_device *apple);
-kern_return_t test_apple_AFCOperationCreateReadDirectory(struct am_device *apple);
+kern_return_t test_apple_AFCOperationCreateGetDeviceInfo(struct am_device *apple, CFTypeRef *response);
+kern_return_t test_apple_AFCOperationCreateGetConnectionInfo(struct am_device *apple, CFTypeRef *response);
+kern_return_t test_apple_AFCOperationCreateReadDirectory(struct am_device *apple, CFTypeRef *response);
 
 #endif

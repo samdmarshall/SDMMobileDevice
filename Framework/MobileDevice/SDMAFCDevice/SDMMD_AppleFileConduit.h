@@ -136,6 +136,7 @@ SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(SDMMD_AMConnectionRef conn);
 
 sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOperationRef *operation);
 
+void SDMMD_AFCOperationRelease(SDMMD_AFCOperationRef operation);
 void SDMMD_AFCConnectionRelease(SDMMD_AFCConnectionRef conn);
 
 CFStringRef SDMMD_ConvertResponseString(CFDataRef response_data);

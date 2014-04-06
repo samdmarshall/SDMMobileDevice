@@ -36,12 +36,33 @@ SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(SDMMD_AMConnectionRef conn) {
 	return afc;
 }
 
+void SDMMD_AFCOperationRelease(SDMMD_AFCOperationRef operation) {
+	if (operation) {
+		if (operation->packet) {
+			if (operation->packet->header_data) {
+				free(operation->packet->header_data);
+			}
+			
+			if (operation->packet->body_data) {
+				free(operation->packet->body_data);
+			}
+			
+			CFSafeRelease(operation->packet->response);
+			
+			free(operation->packet);
+		}
+		free(operation);
+	}
+}
+
 void SDMMD_AFCConnectionRelease(SDMMD_AFCConnectionRef conn) {
 	if (conn) {
 		SDMMD_AMDServiceConnectionInvalidate(conn->handle);
 		dispatch_release(conn->operationQueue);
 	}
 }
+
+#pragma mark -
 
 void SDMMD_AFCHeaderInit(SDMMD_AFCPacketHeader *header, uint32_t command, uint32_t header_size, uint32_t body_size, uint32_t pack_num) {
 	header->signature = 0x4141504c36414643; // 'APPL6AFC'

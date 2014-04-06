@@ -53,17 +53,20 @@ void Test_Functionality_AFC(SDMMD_AMDeviceRef sdm) {
 	
 	printf("\n");
 	// AFCOperationCreateGetDeviceInfo Tests
-	FunctionalityTestMacro(afc_device_info,test_sdm_AFCOperationCreateGetDeviceInfo,sdm)
+	CFTypeRef afc_device_info_response = NULL;
+	FunctionalityTestMacro(afc_device_info,test_sdm_AFCOperationCreateGetDeviceInfo,sdm,&afc_device_info_response)
 	TestCount(afc_device_info)
 
 	printf("\n");
 	// AFCOperationCreateGetConnectionInfo Tests
-	FunctionalityTestMacro(afc_conn_info,test_sdm_AFCOperationCreateGetConnectionInfo,sdm)
+	CFTypeRef afc_conn_info_response = NULL;
+	FunctionalityTestMacro(afc_conn_info,test_sdm_AFCOperationCreateGetConnectionInfo,sdm,&afc_conn_info_response)
 	TestCount(afc_conn_info)
 	
 	printf("\n");
 	// AFCOperationCreateReadDirectory Tests
-	FunctionalityTestMacro(afc_read_dir,test_sdm_AFCOperationCreateReadDirectory,sdm)
+	CFTypeRef afc_read_dir_response = NULL;
+	FunctionalityTestMacro(afc_read_dir,test_sdm_AFCOperationCreateReadDirectory,sdm,&afc_read_dir_response)
 	TestCount(afc_read_dir)
 	
 	if (test_total) {
@@ -92,11 +95,16 @@ SDM_MD_TestResponse SDM_MD_Test_AFCConnectionCreate(struct am_device *apple, SDM
 SDM_MD_TestResponse SDM_MD_Test_AFCOperationCreateGetDeviceInfo(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type) {
 	SDM_MD_TestResponse response = SDM_MD_TestResponse_Invalid;
 	
-	kern_return_t apple_return = test_apple_AFCOperationCreateGetDeviceInfo(apple);
+	CFTypeRef apple_response = NULL;
+	kern_return_t apple_return = test_apple_AFCOperationCreateGetDeviceInfo(apple, &apple_response);
 	
-	kern_return_t sdm_return = test_sdm_AFCOperationCreateGetDeviceInfo(sdm);
+	CFTypeRef sdm_response = NULL;
+	kern_return_t sdm_return = test_sdm_AFCOperationCreateGetDeviceInfo(sdm, &sdm_response);
 	
-	response = ((SDM_MD_CallSuccessful(apple_return) && SDM_MD_CallSuccessful(sdm_return)) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
+	response = ((SDM_MD_CallSuccessful(apple_return) && SDM_MD_CallSuccessful(sdm_return)) && CFEqual(apple_response, sdm_response) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
+	
+	CFSafeRelease(apple_response);
+	CFSafeRelease(sdm_response);
 	
 	CTEST_ASSERT(type,response)
 	
@@ -106,11 +114,16 @@ SDM_MD_TestResponse SDM_MD_Test_AFCOperationCreateGetDeviceInfo(struct am_device
 SDM_MD_TestResponse SDM_MD_Test_AFCOperationCreateGetConnectionInfo(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type) {
 	SDM_MD_TestResponse response = SDM_MD_TestResponse_Invalid;
 	
-	kern_return_t apple_return = test_apple_AFCOperationCreateGetConnectionInfo(apple);
+	CFTypeRef apple_response = NULL;
+	kern_return_t apple_return = test_apple_AFCOperationCreateGetConnectionInfo(apple, &apple_response);
 	
-	kern_return_t sdm_return = test_sdm_AFCOperationCreateGetConnectionInfo(sdm);
+	CFTypeRef sdm_response = NULL;
+	kern_return_t sdm_return = test_sdm_AFCOperationCreateGetConnectionInfo(sdm, &sdm_response);
 	
-	response = ((SDM_MD_CallSuccessful(apple_return) && SDM_MD_CallSuccessful(sdm_return)) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
+	response = ((SDM_MD_CallSuccessful(apple_return) && SDM_MD_CallSuccessful(sdm_return)) && CFEqual(apple_response, sdm_response) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
+	
+	CFSafeRelease(apple_response);
+	CFSafeRelease(sdm_response);
 	
 	CTEST_ASSERT(type,response)
 	
@@ -120,11 +133,16 @@ SDM_MD_TestResponse SDM_MD_Test_AFCOperationCreateGetConnectionInfo(struct am_de
 SDM_MD_TestResponse SDM_MD_Test_AFCOperationCreateReadDirectory(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type) {
 	SDM_MD_TestResponse response = SDM_MD_TestResponse_Invalid;
 	
-	kern_return_t apple_return = test_apple_AFCOperationCreateReadDirectory(apple);
+	CFTypeRef apple_response = NULL;
+	kern_return_t apple_return = test_apple_AFCOperationCreateReadDirectory(apple, &apple_response);
 	
-	kern_return_t sdm_return = test_sdm_AFCOperationCreateReadDirectory(sdm);
+	CFTypeRef sdm_response = NULL;
+	kern_return_t sdm_return = test_sdm_AFCOperationCreateReadDirectory(sdm, &sdm_response);
 	
-	response = ((SDM_MD_CallSuccessful(apple_return) && SDM_MD_CallSuccessful(sdm_return)) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
+	response = ((SDM_MD_CallSuccessful(apple_return) && SDM_MD_CallSuccessful(sdm_return)) && CFEqual(apple_response, sdm_response) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
+	
+	CFSafeRelease(apple_response);
+	CFSafeRelease(sdm_response);
 	
 	CTEST_ASSERT(type,response)
 	

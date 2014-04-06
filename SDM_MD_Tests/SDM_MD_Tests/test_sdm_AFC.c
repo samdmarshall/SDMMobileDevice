@@ -35,7 +35,7 @@ kern_return_t test_sdm_AFCConnectionCreate(SDMMD_AMDeviceRef sdm) {
 }
 
 
-kern_return_t test_sdm_AFCOperationCreateGetDeviceInfo(SDMMD_AMDeviceRef sdm) {
+kern_return_t test_sdm_AFCOperationCreateGetDeviceInfo(SDMMD_AMDeviceRef sdm, CFTypeRef *response) {
 	kern_return_t sdm_return = kAMDUndefinedError;
 	kern_return_t result = SDMMD_AMDeviceConnect(sdm);
 	if (SDM_MD_CallSuccessful(result)) {
@@ -51,6 +51,7 @@ kern_return_t test_sdm_AFCOperationCreateGetDeviceInfo(SDMMD_AMDeviceRef sdm) {
 					if (SDM_MD_CallSuccessful(result)) {
 						CFTypeRef test = deviceInfo->packet->response;
 						if (test) {
+							*response = test;
 							sdm_return = kAMDSuccess;
 						}
 					}
@@ -64,7 +65,7 @@ kern_return_t test_sdm_AFCOperationCreateGetDeviceInfo(SDMMD_AMDeviceRef sdm) {
 	return sdm_return;
 }
 
-kern_return_t test_sdm_AFCOperationCreateGetConnectionInfo(SDMMD_AMDeviceRef sdm) {
+kern_return_t test_sdm_AFCOperationCreateGetConnectionInfo(SDMMD_AMDeviceRef sdm, CFTypeRef *response) {
 	kern_return_t sdm_return = kAMDUndefinedError;
 	kern_return_t result = SDMMD_AMDeviceConnect(sdm);
 	if (SDM_MD_CallSuccessful(result)) {
@@ -80,6 +81,7 @@ kern_return_t test_sdm_AFCOperationCreateGetConnectionInfo(SDMMD_AMDeviceRef sdm
 					if (SDM_MD_CallSuccessful(result)) {
 						CFTypeRef test = conn_info->packet->response;
 						if (test) {
+							*response = test;
 							sdm_return = kAMDSuccess;
 						}
 					}
@@ -93,7 +95,7 @@ kern_return_t test_sdm_AFCOperationCreateGetConnectionInfo(SDMMD_AMDeviceRef sdm
 	return sdm_return;
 }
 
-kern_return_t test_sdm_AFCOperationCreateReadDirectory(SDMMD_AMDeviceRef sdm) {
+kern_return_t test_sdm_AFCOperationCreateReadDirectory(SDMMD_AMDeviceRef sdm, CFTypeRef *response) {
 	kern_return_t sdm_return = kAMDUndefinedError;
 	kern_return_t result = SDMMD_AMDeviceConnect(sdm);
 	if (SDM_MD_CallSuccessful(result)) {
@@ -109,6 +111,7 @@ kern_return_t test_sdm_AFCOperationCreateReadDirectory(SDMMD_AMDeviceRef sdm) {
 					if (SDM_MD_CallSuccessful(result)) {
 						CFTypeRef test = read_dir->packet->response;
 						if (test) {
+							*response = test;
 							sdm_return = kAMDSuccess;
 						}
 					}

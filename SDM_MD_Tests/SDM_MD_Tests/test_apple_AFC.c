@@ -35,7 +35,7 @@ kern_return_t test_apple_AFCConnectionCreate(struct am_device *apple) {
 	return apple_return;
 }
 
-kern_return_t test_apple_AFCOperationCreateGetDeviceInfo(struct am_device *apple) {
+kern_return_t test_apple_AFCOperationCreateGetDeviceInfo(struct am_device *apple, CFTypeRef *response) {
 	kern_return_t apple_return = kAMDUndefinedError;
 	kern_return_t result = AMDeviceConnect(apple);
 	if (SDM_MD_CallSuccessful(result)) {
@@ -50,8 +50,9 @@ kern_return_t test_apple_AFCOperationCreateGetDeviceInfo(struct am_device *apple
 					afc_operation deviceInfo = AFCOperationCreateGetDeviceInfo(kCFAllocatorDefault, NULL);
 					result = AFCConnectionProcessOperation(afc, deviceInfo, 0);
 					if (SDM_MD_CallSuccessful(result)) {
-						CFDataRef test = AFCOperationGetResultObject(deviceInfo);
+						CFTypeRef test = AFCOperationGetResultObject(deviceInfo);
 						if (test) {
+							*response = test;
 							apple_return = kAMDSuccess;
 						}
 					}
@@ -65,7 +66,7 @@ kern_return_t test_apple_AFCOperationCreateGetDeviceInfo(struct am_device *apple
 	return apple_return;
 }
 
-kern_return_t test_apple_AFCOperationCreateGetConnectionInfo(struct am_device *apple) {
+kern_return_t test_apple_AFCOperationCreateGetConnectionInfo(struct am_device *apple, CFTypeRef *response) {
 	kern_return_t apple_return = kAMDUndefinedError;
 	kern_return_t result = AMDeviceConnect(apple);
 	if (SDM_MD_CallSuccessful(result)) {
@@ -80,8 +81,9 @@ kern_return_t test_apple_AFCOperationCreateGetConnectionInfo(struct am_device *a
 					afc_operation conn_info = AFCOperationCreateGetConnectionInfo(kCFAllocatorDefault, NULL);
 					result = AFCConnectionProcessOperation(afc, conn_info, 0);
 					if (SDM_MD_CallSuccessful(result)) {
-						CFDataRef test = AFCOperationGetResultObject(conn_info);
+						CFTypeRef test = AFCOperationGetResultObject(conn_info);
 						if (test) {
+							*response = test;
 							apple_return = kAMDSuccess;
 						}
 					}
@@ -95,7 +97,7 @@ kern_return_t test_apple_AFCOperationCreateGetConnectionInfo(struct am_device *a
 	return apple_return;
 }
 
-kern_return_t test_apple_AFCOperationCreateReadDirectory(struct am_device *apple) {
+kern_return_t test_apple_AFCOperationCreateReadDirectory(struct am_device *apple, CFTypeRef *response) {
 	kern_return_t apple_return = kAMDUndefinedError;
 	kern_return_t result = AMDeviceConnect(apple);
 	if (SDM_MD_CallSuccessful(result)) {
@@ -107,11 +109,12 @@ kern_return_t test_apple_AFCOperationCreateReadDirectory(struct am_device *apple
 				struct afc_connection *afc = NULL;
 				result = AFCConnectionOpen(test_apple_afc_conn, 0, &afc);
 				if (afc) {
-					afc_operation read_dir = AFCOperationCreateReadDirectory(kCFAllocatorDefault, CFSTR("Safari"), NULL);
+					afc_operation read_dir = AFCOperationCreateReadDirectory(kCFAllocatorDefault, CFSTR(""), NULL);
 					result = AFCConnectionProcessOperation(afc, read_dir, 0);
 					if (SDM_MD_CallSuccessful(result)) {
 						CFTypeRef test = AFCOperationGetResultObject(read_dir);
 						if (test) {
+							*response = test;
 							apple_return = kAMDSuccess;
 						}
 					}
