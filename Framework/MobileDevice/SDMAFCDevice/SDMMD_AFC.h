@@ -20,6 +20,8 @@
 #ifndef _SDM_MD_AFC_H_
 #define _SDM_MD_AFC_H_
 
+#if 0
+
 #include <CoreFoundation/CoreFoundation.h>
 #include "SDMMD_Error.h"
 #include "SDMMD_Service.h"
@@ -194,5 +196,7 @@ sdmmd_return_t SDMMD_AFCSendHeader(SDMMD_AFCConnectionRef afcConn, void*b);
 sdmmd_return_t SDMMD_AFCReadPacket(SDMMD_AFCConnectionRef afcConn, CFTypeRef* b, CFTypeRef* c, CFTypeRef* d);
 sdmmd_return_t SDMMD_AFCReadPacketBody(CFTypeRef a,void*b, CFDataRef* c, uint32_t *readLength);
 sdmmd_return_t SDMMD_AFCSendPacket(SDMMD_AFCConnectionRef afcConn, CFTypeRef b, void* c, uint32_t size);*/
+
+#endif
 
 #endif

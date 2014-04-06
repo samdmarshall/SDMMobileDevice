@@ -21,7 +21,7 @@
 
 #include "SDMMD_Functions.h"
 #include "SDMMD_AMDevice.h"
-#include "SDMMD_AFC.h"
+#include "SDMMD_AppleFileConduit.h"
 #include "SDMMD_Error.h"
 #include "SDMMD_MCP.h"
 #include "SDMMD_USBMuxListener.h"

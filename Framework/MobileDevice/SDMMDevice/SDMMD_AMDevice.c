@@ -40,7 +40,7 @@
 #include <CoreFoundation/CFString.h>
 #include "Core.h"
 #include "SDMMD_Functions.h"
-#include "SDMMD_AFC.h"
+#include "SDMMD_AppleFileConduit.h"
 
 #include <IOKit/IOKitLib.h>
 #include <IOKit/usb/IOUSBLib.h>
@@ -1626,9 +1626,8 @@ sdmmd_return_t SDMMD_copy_image(SDMMD_AMDeviceRef device, CFStringRef path) {
 				result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_AFC), NULL, &copyConn);
 				if (SDM_MD_CallSuccessful(result)) {
 					SDMMD_AFCConnectionRef copyAFCConn = SDMMD_AFCConnectionCreate(copyConn);
-					SDMMD_AFCOperationRef response = NULL;
 					SDMMD_AFCOperationRef makeStaging = SDMMD_AFCOperationCreateMakeDirectory(CFSTR("PublicStaging"));
-					result = SDMMD_AFCProcessOperation(copyAFCConn, makeStaging, &response);
+					result = SDMMD_AFCProcessOperation(copyAFCConn, &makeStaging);
 					if (SDM_MD_CallSuccessful(result)) {
 						// SDM copy file AFC
 						char *pathString = SDMCFStringGetString(path);

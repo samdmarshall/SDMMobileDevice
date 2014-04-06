@@ -24,7 +24,7 @@
 #include "SDMMD_Service.h"
 #include "SDMMD_Functions.h"
 #include "SDMMD_AMDevice.h"
-#include "SDMMD_AFC.h"
+#include "SDMMD_AppleFileConduit.h"
 
 #define kAppLookupMasterKey "ReturnAttributes"
 
