@@ -138,6 +138,10 @@ sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 
 void SDMMD_AFCConnectionRelease(SDMMD_AFCConnectionRef conn);
 
+CFStringRef SDMMD_ConvertResponseString(CFDataRef response_data);
+CFArrayRef SDMMD_ConvertResponseArray(CFDataRef response_data);
+CFDictionaryRef SDMMD_ConvertResponseDictionary(CFDataRef response_data);
+
 #pragma mark -
 #pragma mark Operations
 
@@ -146,12 +150,12 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateRemovePath(CFStringRef path);
 SDMMD_AFCOperationRef SDMMD_AFCOperationCreateMakeDirectory(CFStringRef path);
 SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetFileInfo(CFStringRef path);
 SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetDeviceInfo();
-SDMMD_AFCOperationRef SDMMD_AFCOperationCreateFileRefOpen(CFStringRef path, uint64_t mode, void* *fileRef);
-SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateReadOperation(void* fileRef, uint32_t length);
-SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateWriteOperation(void* fileRef, CFDataRef data);
-SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateSeekOperation(void* fileRef, uint32_t pos);
-SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateTellOperation(void* fileRef);
-SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateCloseOperation(void* fileRef);
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateFileRefOpen(CFStringRef path, uint64_t mode, Pointer *fileRef);
+SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateReadOperation(Pointer fileRef, uint32_t length);
+SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateWriteOperation(Pointer fileRef, CFDataRef data);
+SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateSeekOperation(Pointer fileRef, uint32_t pos);
+SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateTellOperation(Pointer fileRef);
+SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateCloseOperation(Pointer fileRef);
 
 SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetConnectionInfo();
 
