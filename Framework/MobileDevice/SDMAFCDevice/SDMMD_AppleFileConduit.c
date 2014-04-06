@@ -106,7 +106,7 @@ sdmmd_return_t SDMMD_AFCReceiveOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 	free(body);
 	result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(conn->handle), (CFDataRef*)&bodyData);
 	if (bodyData) {
-		(*operation)->packet->response_data = bodyData;
+		(*operation)->packet->response = bodyData;
 	}
 	return result;
 }
@@ -119,6 +119,130 @@ sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 		result = SDMMD_AFCSendOperation(conn, *operation);
 		dispatch_semaphore_wait(conn->semaphore, (*operation)->timeout);
 		SDMMD_AFCReceiveOperation(conn, operation);
+		switch ((*operation)->packet->header.type) {
+			case SDMMD_AFC_Packet_Status: {
+				break;
+			}
+			case SDMMD_AFC_Packet_Data: {
+				break;
+			}
+			case SDMMD_AFC_Packet_ReadDirectory: {
+				(*operation)->packet->response = SDMMD_ConvertResponseArray((*operation)->packet->response);
+				break;
+			}
+			case SDMMD_AFC_Packet_ReadFile: {
+				break;
+			}
+			case SDMMD_AFC_Packet_WriteFile: {
+				break;
+			}
+			case SDMMD_AFC_Packet_WritePart: {
+				break;
+			}
+			case SDMMD_AFC_Packet_TruncFile: {
+				break;
+			}
+			case SDMMD_AFC_Packet_RemovePath: {
+				break;
+			}
+			case SDMMD_AFC_Packet_MakeDirectory: {
+				break;
+			}
+			case SDMMD_AFC_Packet_GetFileInfo: {
+				(*operation)->packet->response = SDMMD_ConvertResponseDictionary((*operation)->packet->response);
+				break;
+			}
+			case SDMMD_AFC_Packet_GetDeviceInfo: {
+				(*operation)->packet->response = SDMMD_ConvertResponseDictionary((*operation)->packet->response);
+				break;
+			}
+			case SDMMD_AFC_Packet_WriteFileAtomic: {
+				break;
+			}
+			case SDMMD_AFC_Packet_FileRefOpen: {
+				break;
+			}
+			case SDMMD_AFC_Packet_FileRefOpenResult: {
+				break;
+			}
+			case SDMMD_AFC_Packet_FileRefRead: {
+				break;
+			}
+			case SDMMD_AFC_Packet_FileRefWrite: {
+				break;
+			}
+			case SDMMD_AFC_Packet_FileRefSeek: {
+				break;
+			}
+			case SDMMD_AFC_Packet_FileRefTell: {
+				break;
+			}
+			case SDMMD_AFC_Packet_FileRefTellResult: {
+				break;
+			}
+			case SDMMD_AFC_Packet_FileRefClose: {
+				break;
+			}
+			case SDMMD_AFC_Packet_FileRefSetFileSize: {
+				break;
+			}
+			case SDMMD_AFC_Packet_GetConnectionInfo: {
+				(*operation)->packet->response = SDMMD_ConvertResponseDictionary((*operation)->packet->response);
+				break;
+			}
+			case SDMMD_AFC_Packet_SetConnectionOptions: {
+				break;
+			}
+			case SDMMD_AFC_Packet_RenamePath: {
+				break;
+			}
+			case SDMMD_AFC_Packet_SetFSBlockSize: {
+				break;
+			}
+			case SDMMD_AFC_Packet_SetSocketBlockSize: {
+				break;
+			}
+			case SDMMD_AFC_Packet_FileRefLock: {
+				break;
+			}
+			case SDMMD_AFC_Packet_MakeLink: {
+				break;
+			}
+			case SDMMD_AFC_Packet_GetFileHash: {
+				break;
+			}
+			case SDMMD_AFC_Packet_SetModTime: {
+				break;
+			}
+			case SDMMD_AFC_Packet_GetFileHashWithRange: {
+				break;
+			}
+			case SDMMD_AFC_Packet_FileRefSetImmutableHint: {
+				break;
+			}
+			case SDMMD_AFC_Packet_GetSizeOfPathContents: {
+				break;
+			}
+			case SDMMD_AFC_Packet_RemovePathAndContents: {
+				break;
+			}
+			case SDMMD_AFC_Packet_DirectoryEnumeratorRefOpen: {
+				break;
+			}
+			case SDMMD_AFC_Packet_DirectoryEnumeratorRefOpenResult: {
+				break;
+			}
+			case SDMMD_AFC_Packet_DirectoryEnumeratorRefRead: {
+				break;
+			}
+			case SDMMD_AFC_Packet_DirectoryEnumeratorRefClose: {
+				break;
+			}
+			default: {
+				break;
+			}
+		}
+		
 		dispatch_release(conn->semaphore);
 		conn->operationCount++;
 	});
@@ -453,7 +577,7 @@ sdmmd_return_t SDMMD_AMDeviceCopyFile(void *thing, void *thing2, void *thing3, S
 sdmmd_return_t SDMMD_check_can_touch(SDMMD_AFCConnectionRef conn, CFDataRef *unknown) {
 	SDMMD_AFCOperationRef fileInfo = SDMMD_AFCOperationCreateGetFileInfo((CFStringRef)*unknown);
 	SDMMD_AFCProcessOperation(conn, &fileInfo);
-	*unknown = fileInfo->packet->response_data;
+	*unknown = fileInfo->packet->response;
 	return kAMDSuccess;
 }
 

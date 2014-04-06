@@ -119,7 +119,7 @@ struct sdmmd_AFCPacket {
 	SDMMD_AFCPacketHeader header;
 	char* header_data;
 	char* body_data;
-	CFDataRef response_data;
+	CFTypeRef response;
 } sdmmd_AFCPacket;
 
 struct sdmmd_AFCOperation {
