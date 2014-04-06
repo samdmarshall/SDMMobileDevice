@@ -49,7 +49,7 @@ kern_return_t test_sdm_AFCOperationCreateGetDeviceInfo(SDMMD_AMDeviceRef sdm) {
 					SDMMD_AFCOperationRef deviceInfo = SDMMD_AFCOperationCreateGetDeviceInfo();
 					result = SDMMD_AFCProcessOperation(afc, &deviceInfo);
 					if (SDM_MD_CallSuccessful(result)) {
-						CFDataRef test = deviceInfo->packet->response_data;
+						CFTypeRef test = deviceInfo->packet->response;
 						if (test) {
 							sdm_return = kAMDSuccess;
 						}
@@ -78,7 +78,7 @@ kern_return_t test_sdm_AFCOperationCreateGetConnectionInfo(SDMMD_AMDeviceRef sdm
 					SDMMD_AFCOperationRef conn_info = SDMMD_AFCOperationCreateGetConnectionInfo();
 					result = SDMMD_AFCProcessOperation(afc, &conn_info);
 					if (SDM_MD_CallSuccessful(result)) {
-						CFDataRef test = conn_info->packet->response_data;
+						CFTypeRef test = conn_info->packet->response;
 						if (test) {
 							sdm_return = kAMDSuccess;
 						}
@@ -104,10 +104,10 @@ kern_return_t test_sdm_AFCOperationCreateReadDirectory(SDMMD_AMDeviceRef sdm) {
 			if (SDM_MD_CallSuccessful(result)) {
 				SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(test_sdm_afc_conn);
 				if (afc) {
-					SDMMD_AFCOperationRef read_dir = SDMMD_AFCOperationCreateReadDirectory(CFSTR("Safari"));
+					SDMMD_AFCOperationRef read_dir = SDMMD_AFCOperationCreateReadDirectory(CFSTR(""));
 					result = SDMMD_AFCProcessOperation(afc, &read_dir);
 					if (SDM_MD_CallSuccessful(result)) {
-						CFDataRef test = read_dir->packet->response_data;
+						CFTypeRef test = read_dir->packet->response;
 						if (test) {
 							sdm_return = kAMDSuccess;
 						}
