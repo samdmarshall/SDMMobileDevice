@@ -1793,8 +1793,12 @@ sdmmd_interface_return_t SDMMD_AMDeviceGetInterfaceType(SDMMD_AMDeviceRef device
 	if (device) {
 		SDMMD__mutex_lock(device->ivars.mutex_lock);
 		
-		if (device->ivars.connection_type == kAMDeviceConnectionTypeUSB) result = kAMDInterfaceConnectionTypeDirect;
-		else if (device->ivars.connection_type == kAMDeviceConnectionTypeWiFi) result = kAMDInterfaceConnectionTypeIndirect;
+		if (device->ivars.connection_type == kAMDeviceConnectionTypeUSB) {
+			result = kAMDInterfaceConnectionTypeDirect;
+		}
+		else if (device->ivars.connection_type == kAMDeviceConnectionTypeWiFi) {
+			result = kAMDInterfaceConnectionTypeIndirect;
+		}
 		
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 	} else {
