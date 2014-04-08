@@ -117,8 +117,8 @@ typedef struct SDMMD_AFCPacketHeader {
 
 struct sdmmd_AFCPacket {
 	SDMMD_AFCPacketHeader header;
-	char* header_data;
-	char* body_data;
+	void * header_data;
+	void * body_data;
 	CFTypeRef response;
 } sdmmd_AFCPacket;
 
