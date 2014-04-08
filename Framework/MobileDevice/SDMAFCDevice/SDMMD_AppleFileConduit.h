@@ -139,9 +139,9 @@ sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 void SDMMD_AFCOperationRelease(SDMMD_AFCOperationRef operation);
 void SDMMD_AFCConnectionRelease(SDMMD_AFCConnectionRef conn);
 
-CFStringRef SDMMD_CreateConvertedResponseString(CFDataRef response_data);
-CFArrayRef SDMMD_CreateConvertedResponseArray(CFDataRef response_data);
-CFDictionaryRef SDMMD_CreateConvertedResponseDictionary(CFDataRef response_data);
+CF_RETURNS_RETAINED CFStringRef SDMMD_ConvertResponseString(CFDataRef CF_RELEASES_ARGUMENT response_data);
+CF_RETURNS_RETAINED CFArrayRef SDMMD_ConvertResponseArray(CFDataRef CF_RELEASES_ARGUMENT response_data);
+CF_RETURNS_RETAINED CFDictionaryRef SDMMD_ConvertResponseDictionary(CFDataRef CF_RELEASES_ARGUMENT response_data);
 
 #pragma mark -
 #pragma mark Operations

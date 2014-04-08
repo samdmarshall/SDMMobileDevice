@@ -155,7 +155,7 @@ sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 				break;
 			}
 			case SDMMD_AFC_Packet_ReadDirectory: {
-				(*operation)->packet->response = SDMMD_CreateConvertedResponseArray((*operation)->packet->response);
+				(*operation)->packet->response = SDMMD_ConvertResponseArray((*operation)->packet->response);
 				break;
 			}
 			case SDMMD_AFC_Packet_ReadFile: {
@@ -177,11 +177,11 @@ sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 				break;
 			}
 			case SDMMD_AFC_Packet_GetFileInfo: {
-				(*operation)->packet->response = SDMMD_CreateConvertedResponseDictionary((*operation)->packet->response);
+				(*operation)->packet->response = SDMMD_ConvertResponseDictionary((*operation)->packet->response);
 				break;
 			}
 			case SDMMD_AFC_Packet_GetDeviceInfo: {
-				(*operation)->packet->response = SDMMD_CreateConvertedResponseDictionary((*operation)->packet->response);
+				(*operation)->packet->response = SDMMD_ConvertResponseDictionary((*operation)->packet->response);
 				break;
 			}
 			case SDMMD_AFC_Packet_WriteFileAtomic: {
@@ -215,7 +215,7 @@ sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 				break;
 			}
 			case SDMMD_AFC_Packet_GetConnectionInfo: {
-				(*operation)->packet->response = SDMMD_CreateConvertedResponseDictionary((*operation)->packet->response);
+				(*operation)->packet->response = SDMMD_ConvertResponseDictionary((*operation)->packet->response);
 				break;
 			}
 			case SDMMD_AFC_Packet_SetConnectionOptions: {
@@ -277,13 +277,11 @@ sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 	return result;
 }
 
-
-
-CFStringRef SDMMD_CreateConvertedResponseString(CFDataRef response_data) {
+CF_RETURNS_RETAINED CFStringRef SDMMD_ConvertResponseString(CFDataRef CF_RELEASES_ARGUMENT response_data) {
 	return CFStringCreateWithBytes(kCFAllocatorDefault, CFDataGetBytePtr(response_data), CFDataGetLength(response_data), kCFStringEncodingUTF8, false);
 }
 
-CFArrayRef SDMMD_CreateConvertedResponseArray(CFDataRef response_data) {
+CF_RETURNS_RETAINED CFArrayRef SDMMD_ConvertResponseArray(CFDataRef CF_RELEASES_ARGUMENT response_data) {
 	CFMutableArrayRef response = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
 	char *offset = (char *)CFDataGetBytePtr(response_data);
 	uint32_t length = (uint32_t)CFDataGetLength(response_data);
@@ -301,7 +299,7 @@ CFArrayRef SDMMD_CreateConvertedResponseArray(CFDataRef response_data) {
 	return response;
 }
 
-CFDictionaryRef SDMMD_CreateConvertedResponseDictionary(CFDataRef response_data) {
+CF_RETURNS_RETAINED CFDictionaryRef SDMMD_ConvertResponseDictionary(CFDataRef CF_RELEASES_ARGUMENT response_data) {
 	CFMutableDictionaryRef response = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 	char *offset = (char *)CFDataGetBytePtr(response_data);
 	uint32_t length = (uint32_t)CFDataGetLength(response_data);
