@@ -132,6 +132,8 @@ sdmmd_return_t SDMMD_AFCReceiveOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 	if (bodyData) {
 		(*operation)->packet->response = bodyData;
 	}
+	CFSafeRelease(headerData);
+	
 	return result;
 }
 
