@@ -292,6 +292,7 @@ CFArrayRef SDMMD_CreateConvertedResponseArray(CFDataRef response_data) {
 		offset = PtrAdd(offset, str_length);
 		
 		CFArrayAppendValue(response, value);
+		CFSafeRelease(value);
 	}
 	return response;
 }
@@ -315,6 +316,8 @@ CFDictionaryRef SDMMD_CreateConvertedResponseDictionary(CFDataRef response_data)
 		offset = PtrAdd(offset, value_str_length);
 		
 		CFDictionaryAddValue(response, key, value);
+		CFSafeRelease(key);
+		CFSafeRelease(value);
 	}
 	return response;
 }
