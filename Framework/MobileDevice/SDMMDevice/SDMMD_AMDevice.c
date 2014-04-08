@@ -1789,13 +1789,13 @@ sdmmd_activation_return_t SDMMD_GetActivationStatus(SDMMD_AMDeviceRef device) {
 }
 
 sdmmd_interface_return_t SDMMD_AMDeviceGetInterfaceType(SDMMD_AMDeviceRef device) {
-    sdmmd_interface_return_t result = kAMDInterfaceConnectionTypeInvalid;
+	sdmmd_interface_return_t result = kAMDInterfaceConnectionTypeInvalid;
 	if (device) {
 		SDMMD__mutex_lock(device->ivars.mutex_lock);
-        
-        if (device->ivars.connection_type == kAMDeviceConnectionTypeUSB) result = kAMDInterfaceConnectionTypeDirect;
-        else if (device->ivars.connection_type == kAMDeviceConnectionTypeWiFi) result = kAMDInterfaceConnectionTypeIndirect;
-        
+		
+		if (device->ivars.connection_type == kAMDeviceConnectionTypeUSB) result = kAMDInterfaceConnectionTypeDirect;
+		else if (device->ivars.connection_type == kAMDeviceConnectionTypeWiFi) result = kAMDInterfaceConnectionTypeIndirect;
+		
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 	} else {
 		printf("%s: No device\n", __FUNCTION__);
