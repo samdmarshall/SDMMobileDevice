@@ -121,16 +121,18 @@ sdmmd_return_t SDMMD_AFCReceiveOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 	free(zeros);
 	
 	result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(conn->handle), (CFDataRef*)&headerData);
-	SDMMD_AFCPacketHeader *header = (SDMMD_AFCPacketHeader *)CFDataGetBytePtr(headerData);
-	
-	CFMutableDataRef bodyData = CFDataCreateMutable(kCFAllocatorDefault, (uint32_t)header->packetLen - (uint32_t)header->headerLen);
-	uint32_t body_length = (uint32_t)header->packetLen - (uint32_t)header->headerLen;
-	char *body = calloc(body_length, sizeof(char));
-	CFDataAppendBytes(bodyData, (UInt8*)body, body_length);
-	free(body);
-	result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(conn->handle), (CFDataRef*)&bodyData);
-	if (bodyData) {
-		(*operation)->packet->response = bodyData;
+	if (result == kAMDSuccess) {
+		SDMMD_AFCPacketHeader *header = (SDMMD_AFCPacketHeader *)CFDataGetBytePtr(headerData);
+		
+		CFMutableDataRef bodyData = CFDataCreateMutable(kCFAllocatorDefault, (uint32_t)header->packetLen - (uint32_t)header->headerLen);
+		uint32_t body_length = (uint32_t)header->packetLen - (uint32_t)header->headerLen;
+		char *body = calloc(body_length, sizeof(char));
+		CFDataAppendBytes(bodyData, (UInt8*)body, body_length);
+		free(body);
+		result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(conn->handle), (CFDataRef*)&bodyData);
+		if (bodyData) {
+			(*operation)->packet->response = bodyData;
+		}
 	}
 	CFSafeRelease(headerData);
 	
