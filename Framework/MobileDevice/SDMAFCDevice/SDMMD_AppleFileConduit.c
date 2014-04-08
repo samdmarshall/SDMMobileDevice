@@ -31,6 +31,7 @@ SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(SDMMD_AMConnectionRef conn) {
 		char *queueName = SDMCFStringGetString(name);
 		afc->operationQueue = dispatch_queue_create(queueName, NULL);
 		Safe(free, queueName);
+		CFSafeRelease(name);
 		afc->operationCount = 0;
 	}
 	return afc;
@@ -560,7 +561,7 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetFileHashWithRange(CFStringRef p
 	char *cpath = SDMCFStringGetString(path);
 	uint32_t data_length = (uint32_t)strlen(cpath)+1+sizeof(Range);
 	op->packet->header_data = calloc(data_length, sizeof(char));
-	memcpy(op->packet->body_data, &range, sizeof(Range));
+	memcpy(op->packet->header_data, &range, sizeof(Range));
 	memcpy(&(op->packet->header_data[sizeof(Range)]), cpath, strlen(cpath));
 	SDMMD_AFCHeaderInit(&(op->packet->header), SDMMD_AFC_Packet_GetFileHashWithRange, data_length, 0, 0);
 	free(cpath);
