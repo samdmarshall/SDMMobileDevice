@@ -125,5 +125,103 @@ kern_return_t test_sdm_AFCOperationCreateReadDirectory(SDMMD_AMDeviceRef sdm, CF
 	return sdm_return;
 }
 
+kern_return_t test_sdm_AFCOperationCreateGetFileInfo(SDMMD_AMDeviceRef sdm, CFTypeRef *response) {
+	kern_return_t sdm_return = kAMDUndefinedError;
+	kern_return_t result = SDMMD_AMDeviceConnect(sdm);
+	if (SDM_MD_CallSuccessful(result)) {
+		result = SDMMD_AMDeviceStartSession(sdm);
+		if (SDM_MD_CallSuccessful(result)) {
+			SDMMD_AMConnectionRef test_sdm_afc_conn;
+			result = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			if (SDM_MD_CallSuccessful(result)) {
+				SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(test_sdm_afc_conn);
+				if (afc) {
+					SDMMD_AFCOperationRef file_info = SDMMD_AFCOperationCreateGetFileInfo(CFSTR("Safari/goog-phish-shavar.db"));
+					result = SDMMD_AFCProcessOperation(afc, &file_info);
+					if (SDM_MD_CallSuccessful(result)) {
+						CFTypeRef test = file_info->packet->response;
+						if (test) {
+							*response = test;
+							sdm_return = kAMDSuccess;
+						}
+					}
+					SDMMD_AFCConnectionRelease(afc);
+				}
+			}
+			SDMMD_AMDeviceStopSession(sdm);
+		}
+		SDMMD_AMDeviceDisconnect(sdm);
+	}
+	return sdm_return;
+}
+
+kern_return_t test_sdm_AFCOperationCreateFileRefOpen(SDMMD_AMDeviceRef sdm, CFTypeRef *response) {
+	kern_return_t sdm_return = kAMDUndefinedError;
+	kern_return_t result = SDMMD_AMDeviceConnect(sdm);
+	if (SDM_MD_CallSuccessful(result)) {
+		result = SDMMD_AMDeviceStartSession(sdm);
+		if (SDM_MD_CallSuccessful(result)) {
+			SDMMD_AMConnectionRef test_sdm_afc_conn;
+			result = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			if (SDM_MD_CallSuccessful(result)) {
+				SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(test_sdm_afc_conn);
+				if (afc) {
+					SDMMD_AFCOperationRef file_ref = SDMMD_AFCOperationCreateFileRefOpen(CFSTR("Safari/goog-phish-shavar.db"), 2);
+					result = SDMMD_AFCProcessOperation(afc, &file_ref);
+					if (SDM_MD_CallSuccessful(result)) {
+						CFTypeRef test = file_ref->packet->response;
+						if (test) {
+							*response = test;
+							sdm_return = kAMDSuccess;
+						}
+					}
+					SDMMD_AFCConnectionRelease(afc);
+				}
+			}
+			SDMMD_AMDeviceStopSession(sdm);
+		}
+		SDMMD_AMDeviceDisconnect(sdm);
+	}
+	return sdm_return;
+}
+
+kern_return_t test_sdm_AFCFileDescriptorCreateReadOperation(SDMMD_AMDeviceRef sdm, CFTypeRef *response) {
+	kern_return_t sdm_return = kAMDUndefinedError;
+	kern_return_t result = SDMMD_AMDeviceConnect(sdm);
+	if (SDM_MD_CallSuccessful(result)) {
+		result = SDMMD_AMDeviceStartSession(sdm);
+		if (SDM_MD_CallSuccessful(result)) {
+			SDMMD_AMConnectionRef test_sdm_afc_conn;
+			result = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			if (SDM_MD_CallSuccessful(result)) {
+				SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(test_sdm_afc_conn);
+				if (afc) {
+					SDMMD_AFCOperationRef file_info = SDMMD_AFCOperationCreateGetFileInfo(CFSTR("Safari/goog-phish-shavar.db"));
+					result = SDMMD_AFCProcessOperation(afc, &file_info);
+					int32_t size = CFStringGetIntValue(CFDictionaryGetValue(file_info->packet->response, CFSTR("st_size")));
+					SDMMD_AFCOperationRef file_ref = SDMMD_AFCOperationCreateFileRefOpen(CFSTR("Safari/goog-phish-shavar.db"), 2);
+					result = SDMMD_AFCProcessOperation(afc, &file_ref);
+					if (SDM_MD_CallSuccessful(result)) {
+						uint64_t fd = 0;
+						memcpy(&fd, CFDataGetBytePtr(file_ref->packet->response), sizeof(uint64_t));
+						SDMMD_AFCOperationRef file_ref_read = SDMMD_AFCFileDescriptorCreateReadOperation(fd, size);
+						result = SDMMD_AFCProcessOperation(afc, &file_ref_read);
+						if (SDM_MD_CallSuccessful(result)) {
+							CFTypeRef test = file_ref_read->packet->response;
+							if (test) {
+								*response = test;
+								sdm_return = kAMDSuccess;
+							}
+						}
+					}
+					SDMMD_AFCConnectionRelease(afc);
+				}
+			}
+			SDMMD_AMDeviceStopSession(sdm);
+		}
+		SDMMD_AMDeviceDisconnect(sdm);
+	}
+	return sdm_return;
+}
 
 #endif

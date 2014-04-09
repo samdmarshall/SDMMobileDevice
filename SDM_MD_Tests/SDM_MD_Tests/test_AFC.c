@@ -75,6 +75,27 @@ void Test_Functionality_AFC(SDMMD_AMDeviceRef sdm) {
 	TestCount(afc_read_dir)
 	CFSafeRelease(afc_read_dir_response);
 	
+	printf("\n");
+	// AFCOperationCreateGetFileInfo Tests
+	CFTypeRef afc_file_info_response = NULL;
+	FunctionalityTestMacro(afc_file_info,test_sdm_AFCOperationCreateGetFileInfo,sdm,&afc_file_info_response)
+	TestCount(afc_file_info)
+	CFSafeRelease(afc_file_info_response);
+	
+	printf("\n");
+	// AFCOperationCreateFileRefOpen Tests
+	CFTypeRef afc_file_ref_open_response = NULL;
+	FunctionalityTestMacro(afc_file_ref_open,test_sdm_AFCOperationCreateFileRefOpen,sdm,&afc_file_ref_open_response)
+	TestCount(afc_file_ref_open)
+	CFSafeRelease(afc_file_ref_open_response);
+	
+	printf("\n");
+	// AFCOperationCreateFileRefOpen Tests
+	CFTypeRef afc_file_read_response = NULL;
+	FunctionalityTestMacro(afc_file_read,test_sdm_AFCFileDescriptorCreateReadOperation,sdm,&afc_file_read_response)
+	TestCount(afc_file_read)
+	CFSafeRelease(afc_file_read_response);
+	
 	if (test_total) {
 		double percent = floor((double)(test_pass/test_total)*100.f);
 		printf("Passing: %0.f/%0.f %2.f%%\n\n",test_pass,test_total,percent);
@@ -144,6 +165,44 @@ SDM_MD_TestResponse SDM_MD_Test_AFCOperationCreateReadDirectory(struct am_device
 	
 	CFTypeRef sdm_response = NULL;
 	kern_return_t sdm_return = test_sdm_AFCOperationCreateReadDirectory(sdm, &sdm_response);
+	
+	response = ((SDM_MD_CallSuccessful(apple_return) && SDM_MD_CallSuccessful(sdm_return)) && CFEqual(apple_response, sdm_response) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
+	
+	CFSafeRelease(apple_response);
+	CFSafeRelease(sdm_response);
+	
+	CTEST_ASSERT(type,response)
+	
+	return response;
+}
+
+SDM_MD_TestResponse SDM_MD_Test_AFCOperationCreateGetFileInfo(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type) {
+	SDM_MD_TestResponse response = SDM_MD_TestResponse_Invalid;
+	
+	CFTypeRef apple_response = NULL;
+	kern_return_t apple_return = kAMDSuccess; //test_apple_AFCOperationCreateReadDirectory(apple, &apple_response);
+	
+	CFTypeRef sdm_response = NULL;
+	kern_return_t sdm_return = test_sdm_AFCOperationCreateGetFileInfo(sdm, &sdm_response);
+	
+	response = ((SDM_MD_CallSuccessful(apple_return) && SDM_MD_CallSuccessful(sdm_return)) && CFEqual(apple_response, sdm_response) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
+	
+	CFSafeRelease(apple_response);
+	CFSafeRelease(sdm_response);
+	
+	CTEST_ASSERT(type,response)
+	
+	return response;
+}
+
+SDM_MD_TestResponse SDM_MD_Test_AFCOperationCreateFileRefOpen(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type) {
+	SDM_MD_TestResponse response = SDM_MD_TestResponse_Invalid;
+	
+	CFTypeRef apple_response = NULL;
+	kern_return_t apple_return = kAMDSuccess; //test_apple_AFCOperationCreateReadDirectory(apple, &apple_response);
+	
+	CFTypeRef sdm_response = NULL;
+	kern_return_t sdm_return = test_sdm_AFCOperationCreateFileRefOpen(sdm, &sdm_response);
 	
 	response = ((SDM_MD_CallSuccessful(apple_return) && SDM_MD_CallSuccessful(sdm_return)) && CFEqual(apple_response, sdm_response) ? SDM_MD_TestResponse_Success : SDM_MD_TestResponse_Failure);
 	
