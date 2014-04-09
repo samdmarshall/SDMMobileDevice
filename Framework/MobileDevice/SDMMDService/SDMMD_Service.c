@@ -200,6 +200,7 @@ sdmmd_return_t SDMMD_ServiceReceiveMessage(SocketConnection handle, CFPropertyLi
 		}
 		else {
 			*data = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+			result = kAMDInvalidResponseError;
 		}
 	}
 	
