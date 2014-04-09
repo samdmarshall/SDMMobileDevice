@@ -193,18 +193,18 @@ sdmmd_return_t SDMMD_ServiceReceiveMessage(SocketConnection handle, CFPropertyLi
 	CFDataRef dataBuffer = NULL;
 	sdmmd_return_t result;
 	
-	if ((result = SDM_MD_CallSuccessful(SDMMD_ServiceReceive(handle, &dataBuffer)))) {
+	result = SDMMD_ServiceReceive(handle, &dataBuffer);
+	if (result == kAMDSuccess) {
 		if (dataBuffer && CFDataGetLength(dataBuffer)) {
-			*data = CFPropertyListCreateWithData(0, dataBuffer, kCFPropertyListImmutable, NULL, NULL);
+			*data = CFPropertyListCreateWithData(kCFAllocatorDefault, dataBuffer, kCFPropertyListImmutable, NULL, NULL);
 		}
 		else {
 			*data = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 		}
-		return (*data != NULL ? kAMDSuccess : kAMDUndefinedError);
+		result = kAMDSuccess;
 	}
-	else {
-		return result;
-	}
+	
+	return result;
 }
 
 sdmmd_return_t SDMMD_ServiceSendStream(SocketConnection handle, CFPropertyListRef data, CFPropertyListFormat format) {
