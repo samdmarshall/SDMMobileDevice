@@ -20,7 +20,6 @@
 		22310DB818750D9E0092C107 /* SDMMD_USBMuxListener.c in Sources */ = {isa = PBXBuildFile; fileRef = 22310DAE18750D430092C107 /* SDMMD_USBMuxListener.c */; };
 		22310DC618750DCF0092C107 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310DC518750DCF0092C107 /* libssl.dylib */; };
 		22310DC818750DE70092C107 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310DC718750DE70092C107 /* libcrypto.dylib */; };
-		22310DC918750DFA0092C107 /* SDMMD_AFC.c in Sources */ = {isa = PBXBuildFile; fileRef = 22310D7B18750D430092C107 /* SDMMD_AFC.c */; };
 		22648F96189440F700133948 /* power.c in Sources */ = {isa = PBXBuildFile; fileRef = 22648F95189440F700133948 /* power.c */; };
 		22648F9B18947DE100133948 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22648F9A18947DE100133948 /* IOKit.framework */; };
 		22B9556B18788CB6004DCBF0 /* syslog.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B9556A18788CB6004DCBF0 /* syslog.c */; };
@@ -33,6 +32,7 @@
 		22B9558A1878F4A7004DCBF0 /* SDMMD_Debugger.c in Sources */ = {isa = PBXBuildFile; fileRef = 22310DA518750D430092C107 /* SDMMD_Debugger.c */; };
 		22C892B3189D75C7008B1D2D /* Buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 22C892B1189D75C7008B1D2D /* Buffer.c */; };
 		22C892B6189D75CC008B1D2D /* CFDataAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22C892B4189D75CC008B1D2D /* CFDataAddition.c */; };
+		22D7FA3F18F56B7A0034CC66 /* SDMMD_AppleFileConduit.c in Sources */ = {isa = PBXBuildFile; fileRef = 22D7FA3D18F56B7A0034CC66 /* SDMMD_AppleFileConduit.c */; };
 		22DEF94018833562008E909F /* CFTypeAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22DEF93F18833562008E909F /* CFTypeAddition.c */; };
 		22FE3F10189E84B2005C2DB2 /* springboard.c in Sources */ = {isa = PBXBuildFile; fileRef = 22FE3F0F189E84B2005C2DB2 /* springboard.c */; };
 		22FFB8CE1880DE140073095D /* CFDictionaryAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22FFB8C21880DE140073095D /* CFDictionaryAddition.c */; };
@@ -131,6 +131,8 @@
 		22C892B2189D75C7008B1D2D /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
 		22C892B4189D75CC008B1D2D /* CFDataAddition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CFDataAddition.c; sourceTree = "<group>"; };
 		22C892B5189D75CC008B1D2D /* CFDataAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFDataAddition.h; sourceTree = "<group>"; };
+		22D7FA3D18F56B7A0034CC66 /* SDMMD_AppleFileConduit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AppleFileConduit.c; sourceTree = "<group>"; };
+		22D7FA3E18F56B7A0034CC66 /* SDMMD_AppleFileConduit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AppleFileConduit.h; sourceTree = "<group>"; };
 		22DEF93E18833556008E909F /* CFTypeAddition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CFTypeAddition.h; sourceTree = "<group>"; };
 		22DEF93F18833562008E909F /* CFTypeAddition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CFTypeAddition.c; sourceTree = "<group>"; };
 		22FE3F0E189E84A4005C2DB2 /* springboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = springboard.h; sourceTree = "<group>"; };
@@ -239,6 +241,8 @@
 		22310D7A18750D430092C107 /* SDMAFCDevice */ = {
 			isa = PBXGroup;
 			children = (
+				22D7FA3D18F56B7A0034CC66 /* SDMMD_AppleFileConduit.c */,
+				22D7FA3E18F56B7A0034CC66 /* SDMMD_AppleFileConduit.h */,
 				22310D7B18750D430092C107 /* SDMMD_AFC.c */,
 				22310D7C18750D430092C107 /* SDMMD_AFC.h */,
 				22310D7D18750D430092C107 /* SDMMD_AFCCondition.c */,
@@ -517,7 +521,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				22B9558A1878F4A7004DCBF0 /* SDMMD_Debugger.c in Sources */,
-				22310DC918750DFA0092C107 /* SDMMD_AFC.c in Sources */,
 				22DEF94018833562008E909F /* CFTypeAddition.c in Sources */,
 				22FE3F10189E84B2005C2DB2 /* springboard.c in Sources */,
 				22FFB8CE1880DE140073095D /* CFDictionaryAddition.c in Sources */,
@@ -530,6 +533,7 @@
 				22310DB418750D9E0092C107 /* SDMMD_AMDevice.c in Sources */,
 				22B9557918789DB7004DCBF0 /* attach.c in Sources */,
 				22C892B3189D75C7008B1D2D /* Buffer.c in Sources */,
+				22D7FA3F18F56B7A0034CC66 /* SDMMD_AppleFileConduit.c in Sources */,
 				22310DB518750D9E0092C107 /* SDMMD_Notification.c in Sources */,
 				22B955821878DA5F004DCBF0 /* apps.c in Sources */,
 				22310DB618750D9E0092C107 /* SDMMD_Service.c in Sources */,
