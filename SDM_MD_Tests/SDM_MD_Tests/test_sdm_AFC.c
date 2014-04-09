@@ -136,7 +136,7 @@ kern_return_t test_sdm_AFCOperationCreateGetFileInfo(SDMMD_AMDeviceRef sdm, CFTy
 			if (SDM_MD_CallSuccessful(result)) {
 				SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(test_sdm_afc_conn);
 				if (afc) {
-					SDMMD_AFCOperationRef file_info = SDMMD_AFCOperationCreateGetFileInfo(CFSTR("Safari/goog-phish-shavar.db"));
+					SDMMD_AFCOperationRef file_info = SDMMD_AFCOperationCreateGetFileInfo(CFSTR(kTestFileForAFC));
 					result = SDMMD_AFCProcessOperation(afc, &file_info);
 					if (SDM_MD_CallSuccessful(result)) {
 						CFTypeRef test = file_info->packet->response;

@@ -177,7 +177,25 @@ sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 				break;
 			}
 			case SDMMD_AFC_Packet_GetFileInfo: {
-				(*operation)->packet->response = SDMMD_ConvertResponseDictionary((*operation)->packet->response);
+				bool should_parse = false;
+				CFIndex data_length = CFDataGetLength((*operation)->packet->response);
+				if (data_length == sizeof(uint64_t)) {
+					uint64_t response;
+					memcpy(&response, CFDataGetBytePtr((*operation)->packet->response), data_length);
+					if (response != 8 && response != 4) {
+						// this file can be accessed.
+						should_parse = true;
+					}
+				}
+				else {
+					should_parse = true;
+				}
+				if (should_parse) {
+					(*operation)->packet->response = SDMMD_ConvertResponseDictionary((*operation)->packet->response);
+				}
+				else {
+					result = kAMDReadError;
+				}
 				break;
 			}
 			case SDMMD_AFC_Packet_GetDeviceInfo: {
