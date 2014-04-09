@@ -43,12 +43,14 @@ int32_t CheckIfExpectingResponse(SocketConnection handle, uint32_t timeout) {
 		to.tv_sec = (time_t) (timeout / 1000);
 		to.tv_usec = (__darwin_suseconds_t) ((timeout - (to.tv_sec * 1000)) * 1000);
 		pto = &to;
-	} else {
+	}
+	else {
 		pto = NULL;
 	}
 	if (!handle.isSSL) {
 		returnValue = select(handle.socket.conn + 1, &fds, NULL, NULL, pto);
-	} else {
+	}
+	else {
 		returnValue = 0;
 	}
 	return returnValue;
@@ -64,10 +66,12 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 		if (handle.isSSL) {
 			if (SSL_is_init_finished(handle.socket.ssl)) {
 				result = SSL_write(handle.socket.ssl, &msgLen, sizeof(uint32_t));
-			} else {
+			}
+			else {
 				return kAMDNotConnectedError;
 			}
-		} else {
+		}
+		else {
 			result = send(handle.socket.conn, &msgLen, sizeof(uint32_t), 0);
 		}
 		// Send data body
@@ -75,7 +79,8 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 			msgLen = ntohl(msgLen);
 			if (handle.isSSL) {
 				result = SSL_write(handle.socket.ssl, CFDataGetBytePtr(data), (uint32_t)msgLen);
-			} else {
+			}
+			else {
 				result = send(handle.socket.conn, CFDataGetBytePtr(data), msgLen, 0);
 			}
 			return (result == msgLen ? kAMDSuccess : kAMDInvalidResponseError);
@@ -96,7 +101,8 @@ sdmmd_return_t SDMMD_DirectServiceSend(SocketConnection handle, CFDataRef data) 
 		// Send data body
 		if (handle.isSSL) {
 			result = SSL_write(handle.socket.ssl, CFDataGetBytePtr(data), (uint32_t)msgLen);
-		} else {
+		}
+		else {
 			result = send(handle.socket.conn, CFDataGetBytePtr(data), msgLen, 0);
 		}
 		return (result == msgLen ? kAMDSuccess : kAMDNotConnectedError);
@@ -125,11 +131,13 @@ sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 			while (remainder) {
 				if (handle.isSSL) {
 					received = SSL_read(handle.socket.ssl, &buffer[length-remainder], remainder);
-				} else {
+				}
+				else {
 					received = recv(handle.socket.conn, &buffer[length-remainder], remainder, 0);
 				}
-				if (!received)
+				if (!received) {
 					break;
+				}
 				remainder -= received;
 			}
 			*data = CFDataCreate(kCFAllocatorDefault, buffer, length);
@@ -150,7 +158,8 @@ sdmmd_return_t SDMMD_DirectServiceReceive(SocketConnection handle, CFDataRef *da
 			while (remainder) {
 				if (handle.isSSL) {
 					received = SSL_read(handle.socket.ssl, &buffer[size-remainder], remainder);
-				} else {
+				}
+				else {
 					received = recv(handle.socket.conn, &buffer[size-remainder], remainder, 0);
 				}
 				if (!received) {
@@ -182,11 +191,13 @@ sdmmd_return_t SDMMD_ServiceReceiveMessage(SocketConnection handle, CFPropertyLi
 	if ((result = SDM_MD_CallSuccessful(SDMMD_ServiceReceive(handle, &dataBuffer)))) {
 		if (dataBuffer && CFDataGetLength(dataBuffer)) {
 			*data = CFPropertyListCreateWithData(0, dataBuffer, kCFPropertyListImmutable, NULL, NULL);
-		} else {
+		}
+		else {
 			*data = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 		}
-		return *data ? kAMDSuccess : kAMDUndefinedError;
-	} else {
+		return (*data != NULL ? kAMDSuccess : kAMDUndefinedError);
+	}
+	else {
 		return result;
 	}
 }
@@ -224,7 +235,8 @@ sdmmd_return_t SDMMD_ServiceReceiveStream(SocketConnection handle, CFPropertyLis
 			CFSafeRelease(read);
 		}
 		result = kAMDSuccess;
-	} else {
+	}
+	else {
 		result = kAMDNotConnectedError;
 	}
 	CFSafeRelease(dataBuffer);
@@ -235,7 +247,8 @@ SocketConnection SDMMD_TranslateConnectionToSocket(SDMMD_AMConnectionRef connect
 	SocketConnection sock;
 	if (connection->ivars.ssl) {
 		sock = (SocketConnection){true, {.ssl = connection->ivars.ssl}};
-	} else {
+	}
+	else {
 		sock = (SocketConnection){false, {.conn = connection->ivars.socket}};
 	}
 	return sock;
