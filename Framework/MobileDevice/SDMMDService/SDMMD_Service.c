@@ -115,6 +115,7 @@ sdmmd_return_t SDMMD_DirectServiceSend(SocketConnection handle, CFDataRef data) 
 sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 	size_t received;
 	uint32_t length = 0;
+	sdmmd_return_t response = kAMDErrorError;
 
 	if (handle.isSSL == true || CheckIfExpectingResponse(handle, 10000)) {
 		// Receive data length header
@@ -142,9 +143,13 @@ sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 			}
 			*data = CFDataCreate(kCFAllocatorDefault, buffer, length);
 			free(buffer);
+			response = kAMDSuccess;
+		}
+		else {
+			response = kAMDInvalidResponseError;
 		}
 	}
-	return kAMDSuccess;
+	return response;
 }
 
 sdmmd_return_t SDMMD_DirectServiceReceive(SocketConnection handle, CFDataRef *data) {
