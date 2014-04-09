@@ -22,6 +22,8 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include "Core.h"
 
+#define kTestFileForAFC "iTunes_Control/iTunes/IC-Info.sidv"
+
 typedef void (*CallBack)(CFDictionaryRef dict, void* arg);
 
 ATR_UNUSED static void SDMMD_Default_mount_callback(CFDictionaryRef dict, int arg) {

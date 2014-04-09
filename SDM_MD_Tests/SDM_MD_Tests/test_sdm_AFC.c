@@ -166,7 +166,7 @@ kern_return_t test_sdm_AFCOperationCreateFileRefOpen(SDMMD_AMDeviceRef sdm, CFTy
 			if (SDM_MD_CallSuccessful(result)) {
 				SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(test_sdm_afc_conn);
 				if (afc) {
-					SDMMD_AFCOperationRef file_ref = SDMMD_AFCOperationCreateFileRefOpen(CFSTR("Safari/goog-phish-shavar.db"), 2);
+					SDMMD_AFCOperationRef file_ref = SDMMD_AFCOperationCreateFileRefOpen(CFSTR(kTestFileForAFC), 2);
 					result = SDMMD_AFCProcessOperation(afc, &file_ref);
 					if (SDM_MD_CallSuccessful(result)) {
 						CFTypeRef test = file_ref->packet->response;
@@ -196,11 +196,11 @@ kern_return_t test_sdm_AFCFileDescriptorCreateReadOperation(SDMMD_AMDeviceRef sd
 			if (SDM_MD_CallSuccessful(result)) {
 				SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(test_sdm_afc_conn);
 				if (afc) {
-					SDMMD_AFCOperationRef file_info = SDMMD_AFCOperationCreateGetFileInfo(CFSTR("Safari/goog-phish-shavar.db"));
+					SDMMD_AFCOperationRef file_info = SDMMD_AFCOperationCreateGetFileInfo(CFSTR(kTestFileForAFC));
 					result = SDMMD_AFCProcessOperation(afc, &file_info);
 					if (SDM_MD_CallSuccessful(result)) {
 						int32_t size = CFStringGetIntValue(CFDictionaryGetValue(file_info->packet->response, CFSTR("st_size")));
-						SDMMD_AFCOperationRef file_ref = SDMMD_AFCOperationCreateFileRefOpen(CFSTR("Safari/goog-phish-shavar.db"), 2);
+						SDMMD_AFCOperationRef file_ref = SDMMD_AFCOperationCreateFileRefOpen(CFSTR(kTestFileForAFC), 2);
 						result = SDMMD_AFCProcessOperation(afc, &file_ref);
 						if (SDM_MD_CallSuccessful(result)) {
 							uint64_t fd = 0;
