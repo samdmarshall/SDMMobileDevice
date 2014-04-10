@@ -90,7 +90,14 @@ void Test_Functionality_AFC(SDMMD_AMDeviceRef sdm) {
 	CFSafeRelease(afc_file_ref_open_response);
 	
 	printf("\n");
-	// AFCOperationCreateFileRefOpen Tests
+	// AFCOperationCreateWriteOperation Tests
+	CFTypeRef afc_file_write_response = NULL;
+	FunctionalityTestMacro(afc_file_write,test_sdm_AFCFileDescriptorCreateWriteOperation,sdm,&afc_file_write_response)
+	TestCount(afc_file_write)
+	CFSafeRelease(afc_file_write_response);
+	
+	printf("\n");
+	// AFCOperationCreateReadOperation Tests
 	CFTypeRef afc_file_read_response = NULL;
 	FunctionalityTestMacro(afc_file_read,test_sdm_AFCFileDescriptorCreateReadOperation,sdm,&afc_file_read_response)
 	TestCount(afc_file_read)

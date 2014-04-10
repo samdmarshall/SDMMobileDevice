@@ -23,6 +23,7 @@
 #include "Core.h"
 
 #define kTestFileForAFC "iTunes_Control/iTunes/IC-Info.sidv"
+#define kTestCreateFileForAFC "sdm_md_test_file.dat"
 
 typedef void (*CallBack)(CFDictionaryRef dict, void* arg);
 

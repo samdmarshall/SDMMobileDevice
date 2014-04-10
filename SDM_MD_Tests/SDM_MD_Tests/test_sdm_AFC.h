@@ -17,6 +17,7 @@ kern_return_t test_sdm_AFCOperationCreateGetConnectionInfo(SDMMD_AMDeviceRef sdm
 kern_return_t test_sdm_AFCOperationCreateReadDirectory(SDMMD_AMDeviceRef sdm, CFTypeRef *response);
 kern_return_t test_sdm_AFCOperationCreateGetFileInfo(SDMMD_AMDeviceRef sdm, CFTypeRef *response);
 kern_return_t test_sdm_AFCOperationCreateFileRefOpen(SDMMD_AMDeviceRef sdm, CFTypeRef *response);
+kern_return_t test_sdm_AFCFileDescriptorCreateWriteOperation(SDMMD_AMDeviceRef sdm, CFTypeRef *response);
 kern_return_t test_sdm_AFCFileDescriptorCreateReadOperation(SDMMD_AMDeviceRef sdm, CFTypeRef *response);
 
 #endif
