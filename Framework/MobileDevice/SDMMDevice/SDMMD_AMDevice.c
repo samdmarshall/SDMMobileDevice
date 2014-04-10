@@ -486,7 +486,8 @@ sdmmd_return_t SDMMD_send_unpair(SDMMD_AMDeviceRef device, CFStringRef hostId) {
 								else {
 									if (CFGetTypeID(error) == CFStringGetTypeID()) {
 										result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(error);
-									} else {
+									}
+									else {
 										result = kAMDInvalidResponseError;
 									}
 								}
@@ -1466,7 +1467,8 @@ uint16_t SDMMD_AMDeviceUSBProductID(SDMMD_AMDeviceRef device) {
 		SDMMD__mutex_lock(device->ivars.mutex_lock);
 		result = device->ivars.product_id & 0xffff;
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
-	} else {
+	}
+	else {
 		printf("%s: No device\n",__FUNCTION__);
 	}
 	return result;
@@ -1753,7 +1755,8 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 														CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
 														if (error) {
 															// convert error
-														} else {
+														}
+														else {
 															CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
 															if (status) {
 																if (CFStringCompare(status, CFSTR("ReceiveBytesAck"), 0) == 0) {
@@ -1910,7 +1913,8 @@ sdmmd_interface_return_t SDMMD_AMDeviceGetInterfaceType(SDMMD_AMDeviceRef device
 		}
 		
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
-	} else {
+	}
+	else {
 		printf("%s: No device\n", __FUNCTION__);
 	}
 	return result;

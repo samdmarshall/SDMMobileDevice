@@ -73,12 +73,14 @@ static const void* SDMMD___AppendValue(CFTypeRef append, CFMutableDataRef contex
 			float num = 0;
 			CFNumberGetValue(append, kCFNumberDoubleType, &num);
 			append = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%g"), num);
-		} else {
+		}
+		else {
 			uint64_t num = 0;
 			CFNumberGetValue(append, kCFNumberSInt64Type, &num);
 			append = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%qi"), num);
 		}
-	} else if (CFGetTypeID(append) == CFBooleanGetTypeID()) {
+	}
+	else if (CFGetTypeID(append) == CFBooleanGetTypeID()) {
 		append = (CFEqual(append, kCFBooleanTrue) ? CFSTR("1") : CFSTR("0"));
 	}
 	if (CFGetTypeID(append) == CFStringGetTypeID()) {
@@ -116,18 +118,22 @@ ATR_UNUSED static CFDataRef SDMMD__CreateDataFromFileContents(char *path) {
 					result = read(ref, data, (size_t)fileStat.st_size);
 					if (result == fileStat.st_size) {
 						dataBuffer = CFDataCreate(kCFAllocatorDefault, data, result);
-					} else {
+					}
+					else {
 						printf("%s: Could not read contents at file %s.\n",__FUNCTION__,path);
 					}
 					Safe(free,data);
-				} else {
+				}
+				else {
 					printf("%s: Could not fstat.\n",__FUNCTION__);
 				}
 				close(ref);
-			} else {
+			}
+			else {
 				printf("%s: Could not open file %s\n",__FUNCTION__,path);
 			}
-		} else {
+		}
+		else {
 			printf("%s: Could not lstat.\n",__FUNCTION__);
 		}
 	}
@@ -143,10 +149,12 @@ static CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
 			if (propList) {
 				if (CFGetTypeID(propList) == CFDictionaryGetTypeID()) {
 					dict = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, propList);
-				} else {
+				}
+				else {
 					printf("%s: Plist from file %s was not dictionary type.\n",__FUNCTION__,path);
 				}
-			} else {
+			}
+			else {
 				printf("%s: Could not create plist from file %s.\n",__FUNCTION__,path);
 			}
 			CFSafeRelease(propList);
@@ -188,7 +196,8 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef ty
 ATR_UNUSED static void SDMMD_openSSLLockCallBack(int mode, int n, const char * file, int line) {
 	if (mode & CRYPTO_LOCK) {
 		//SDMMD__mutex_lock(SDMMobileDevice->sslLocks[n]);
-	} else {
+	}
+	else {
 		//SDMMD__mutex_unlock(SDMMobileDevice->sslLocks[n]);
  	}
 }
@@ -214,7 +223,8 @@ ATR_UNUSED static char *SDMMD_ssl_strerror(SSL *ssl, uint32_t ret) {
 			if (ERR_peek_error()) {
 				snprintf(buffer, 200, "SSL_ERROR_SSL (%s)", ERR_error_string(ERR_peek_error(), NULL));
 				err = buffer;
-			} else {
+			}
+			else {
 				err = "SSL_ERROR_SSL unknown error";
 			}
 			break;
@@ -234,12 +244,15 @@ ATR_UNUSED static char *SDMMD_ssl_strerror(SSL *ssl, uint32_t ret) {
 		case SSL_ERROR_SYSCALL: {
 			if (ERR_peek_error() == 0 && ret == 0) {
 				err = "SSL_ERROR_SYSCALL (Early EOF reached)";
-			} else if (ERR_peek_error() == 0 && ret == -1) {
+			}
+			else if (ERR_peek_error() == 0 && ret == -1) {
 				snprintf(buffer, 200, "SSL_ERROR_SYSCALL errno (%s)", strerror(errno));
 				err = buffer;
-			} else if (ERR_peek_error() == 0) {
+			}
+			else if (ERR_peek_error() == 0) {
 				err = "SSL_ERROR_SYSCALL (WTFERROR)";
-			} else {
+			}
+			else {
 				snprintf(buffer, 200, "SSL_ERROR_SYSCALL internal (%s)", ERR_error_string(ERR_peek_error(), NULL));
 				err = buffer;
 			}
@@ -332,7 +345,8 @@ static sdmmd_return_t SDMMD_store_dict(CFDictionaryRef dict, char *path, bool mo
 		close(ref);
 		result = chmod(path, fileMode);
 		CFSafeRelease(xml);
-	} else {
+	}
+	else {
 		result = kAMDUndefinedError;
 	}
 	return result;
@@ -353,7 +367,8 @@ static CFTypeRef SDMMD_AMDCopySystemBonjourUniqueID() {
 			if (value) {
 				CFDictionarySetValue(dict, CFSTR("SystemBUID"), value);
 				SDMMD_store_dict(dict, record, true);
-			} else {
+			}
+			else {
 				printf("%s: Could not generate UUID!\n",__FUNCTION__);
 			}
 		}
@@ -383,7 +398,8 @@ ATR_UNUSED static sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForId
 							if (result) {
 								printf("%s: Could not store pairing record at '%s'.\n",__FUNCTION__,path);
 								result = kAMDPermissionError;
-							} else {
+							}
+							else {
 								CFRetain(fileDict);
 								*dict = fileDict;
 							}
@@ -516,7 +532,8 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
     if (deviceBIO) {
 	    rsaBIOData = PEM_read_bio_RSAPublicKey(deviceBIO, &pubRSAKey, 0x0, 0x0);
 	    BIO_free(deviceBIO);
-	} else {
+	}
+	else {
 		printf("Could not decode device public key\\n");
 	}
 	
@@ -535,7 +552,8 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 	EVP_PKEY *rootEVP = EVP_PKEY_new();
 	if (!rootEVP) {
 		printf("Could not allocate root EVP key\\n");
-	} else {
+	}
+	else {
 		result = EVP_PKEY_assign(rootEVP, EVP_CTRL_RAND_KEY, PtrCast(rootKeyPair,char*));
 		if (!result) {
 			printf("Could not assign root key pair\n");
@@ -545,7 +563,8 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 	EVP_PKEY *hostEVP = EVP_PKEY_new();
 	if (!hostEVP) {
 		printf("Could not allocate host EVP key\\n");
-	} else {
+	}
+	else {
 		result = EVP_PKEY_assign(hostEVP, EVP_CTRL_RAND_KEY, PtrCast(hostKeyPair,char*));
 		if (!result) {
 			printf("Could not assign host key pair\n");
@@ -555,7 +574,8 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 	EVP_PKEY *deviceEVP = EVP_PKEY_new();
 	if (!deviceEVP) {
 		printf("Could not allocate device EVP key\\n");
-	} else {
+	}
+	else {
 		result = EVP_PKEY_assign(deviceEVP, EVP_CTRL_RAND_KEY, PtrCast(rsaBIOData,char*));
 		if (!result) {
 			printf("Could not assign device key pair\n");
@@ -565,7 +585,8 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 	X509 *rootX509 = X509_new();
 	if (!rootX509) {
 		printf("Could not create root X509\\n");
-	} else {
+	}
+	else {
 		X509_set_pubkey(rootX509, rootEVP);
 		X509_set_version(rootX509, 0x2);
 		
@@ -589,7 +610,8 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 	X509 *hostX509 = X509_new();
 	if (!hostX509) {
 		printf("Could not create host X509\\n");
-	} else {
+	}
+	else {
 		X509_set_pubkey(hostX509, hostEVP);
 		X509_set_version(hostX509, 0x2);
 		
@@ -614,7 +636,8 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 	X509 *deviceX509 = X509_new();
 	if (!deviceX509) {
 		printf("Could not create device X509\\n");
-	} else {
+	}
+	else {
 		X509_set_pubkey(deviceX509, deviceEVP);
 		X509_set_version(deviceX509, 0x2);
 		

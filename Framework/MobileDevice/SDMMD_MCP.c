@@ -51,7 +51,8 @@ void SDMMD_AMDeviceNotificationSubscribe() {
 	if (SDMMobileDevice->usbmuxd == 0) {
 		SDMMobileDevice->usbmuxd = SDMMD_USBMuxCreate();
 		SDMMD_USBMuxStartListener(&SDMMobileDevice->usbmuxd);
-	} else {
+	}
+	else {
 		printf("Initializing this library starts the usbmuxd listener automatically, there isn't a need to call this to start listening for devices.\n");
 	}
 }

@@ -319,7 +319,8 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port
 		SDMMD_USBMuxSend(*socketConn, connect);
 		SDMMD_USBMuxReceive(*socketConn, connect);
 		CFSafeRelease(dict);
-	} else {
+	}
+	else {
 		result = kAMDMuxConnectError;
 	}
 	return result;
@@ -339,24 +340,31 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 					if (CFStringCompare(type, SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketResultType], 0x0) == 0x0) {
 						(*listener)->responseCallback((*listener), packet);
 						CFArrayAppendValue((*listener)->responses, packet);
-					} else if (CFStringCompare(type, SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketAttachType], 0x0) == 0x0) {
+					}
+					else if (CFStringCompare(type, SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketAttachType], 0x0) == 0x0) {
 						(*listener)->attachedCallback((*listener), packet);
-					} else if (CFStringCompare(type, SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketDetachType], 0x0) == 0x0) {
+					}
+					else if (CFStringCompare(type, SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketDetachType], 0x0) == 0x0) {
 						(*listener)->detachedCallback((*listener), packet);
 					}
-				} else {
+				}
+				else {
 					if (CFDictionaryContainsKey(packet->payload, CFSTR("Logs"))) {
 						(*listener)->logsCallback((*listener), packet);
-					} else if (CFDictionaryContainsKey(packet->payload, CFSTR("DeviceList"))) {
+					}
+					else if (CFDictionaryContainsKey(packet->payload, CFSTR("DeviceList"))) {
 						(*listener)->deviceListCallback((*listener), packet);
-					} else if (CFDictionaryContainsKey(packet->payload, CFSTR("ListenerList"))) {
+					}
+					else if (CFDictionaryContainsKey(packet->payload, CFSTR("ListenerList"))) {
 						(*listener)->listenerListCallback((*listener), packet);
-					} else {
+					}
+					else {
 						(*listener)->unknownCallback((*listener), packet);
 					}
 					CFArrayAppendValue((*listener)->responses, packet);
 				}
-			} else {
+			}
+			else {
                 printf("socketSourceEventHandler: failed to decodeCFPropertyList from packet payload\n");
 				// SDM: add a check and catch in here for restarting the listener.
             }
@@ -373,10 +381,12 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 				struct USBMuxResponseCode response = SDMMD_USBMuxParseReponseCode(startListen->payload);
 				if (response.code == 0x0){
 					(*listener)->isActive = true;
-                } else {
+                }
+				else {
                     printf("%s: non-zero response code. trying again. code:%i string:%s\n", __FUNCTION__, response.code, response.string ? CFStringGetCStringPtr(response.string, kCFStringEncodingUTF8):"");
                 }
-			} else {
+			}
+			else {
                 printf("%s: no response payload. trying again.\n",__FUNCTION__);
             }
 			USBMuxPacketRelease(startListen);
@@ -457,7 +467,8 @@ struct USBMuxPacket * SDMMD_USBMuxCreatePacketType(SDMMD_USBMuxPacketMessageType
 	struct USBMuxPacket *packet = (struct USBMuxPacket *)calloc(1, sizeof(struct USBMuxPacket));
 	if (type == kSDMMD_USBMuxPacketListenType || type == kSDMMD_USBMuxPacketConnectType) {
 		packet->timeout = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*0x1e);
-	} else {
+	}
+	else {
 		packet->timeout = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*0x5);
 	}
 	packet->body = (struct USBMuxPacketBody){0x10, 0x1, 0x8, transactionId};

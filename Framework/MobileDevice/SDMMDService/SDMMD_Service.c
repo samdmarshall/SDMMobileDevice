@@ -121,7 +121,8 @@ sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 		// Receive data length header
 		if (handle.isSSL) {
 			received = SSL_read(handle.socket.ssl, &length, 0x4);
-		} else {
+		}
+		else {
 			received = recv(handle.socket.conn, &length, 0x4, 0);
 		}
 		length = ntohl(length);

@@ -58,7 +58,8 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 						PrintCFType(response);
 						result = SDMMD__ConvertServiceError(error);
 						printf("call_and_response: GOT AN ERROR 0x%08x %s.\n",result, SDMMD_AMDErrorString(result));
-					} else {
+					}
+					else {
 						CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
 						if (status) {
 							if (CFStringCompare(status, CFSTR("Complete"), 0) != 0) {
@@ -69,25 +70,30 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 										CFDictionaryRef value = CFArrayGetValueAtIndex(responses, i);
 										handle(value, paramStart);
 									}
-								} else {
+								}
+								else {
 									handle(response, 0);
 								}
-							} else {
+							}
+							else {
 								break;
 							}
 						}
 					}
 					SDMMD_ServiceReceiveStream(sock, (CFPropertyListRef*)&response);
 				}
-			} else {
+			}
+			else {
 				result = kAMDReceiveMessageError;
 				printf("call_and_response: Could not receive response from proxy.\n");
 			}
-		} else {
+		}
+		else {
 			result = kAMDSendMessageError;
 			printf("call_and_response: Could not send request to proxy.\n");
 		}
-	} else {
+	}
+	else {
 		result = kAMDUndefinedError;
 	}
 	return result;
@@ -146,7 +152,8 @@ sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef se
 									if (CFGetTypeID(error) == CFStringGetTypeID()) {
 										result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(error);
 									}
-								} else {
+								}
+								else {
 									CFTypeRef portNumber = CFDictionaryGetValue(response, CFSTR("Port"));
 									if (portNumber) {
 										if (CFGetTypeID(portNumber) == CFNumberGetTypeID()) {
@@ -156,7 +163,8 @@ sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef se
 									CFTypeRef sslService = CFDictionaryGetValue(response, CFSTR("EnableServiceSSL"));
 									if (sslService) {
 										*enableSSL = (CFEqual(sslService, kCFBooleanTrue) ? true : false);
-									} else {
+									}
+									else {
 										*enableSSL = false;
 									}
 									result = 0x0;
@@ -249,7 +257,8 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 							ssl = NULL;
 							CFSafeRelease(escrowBag);
 							Safe(SSL_free,ssl);
-						} else {
+						}
+						else {
 							if (escrowBag) {
 								char *udidString = SDMCFStringGetString(device->ivars.unique_device_id);
 								printf("%s: Escrow bag mismatch for device %s!",__FUNCTION__, (device->ivars.unique_device_id ? udidString : "device with no name"));
@@ -271,7 +280,8 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 								Safe(SSL_free,ssl);
 							}
 						}
-					} else {
+					}
+					else {
 						result = SDMMD__connect_to_port(device, port, timeoutConnection, &socket, ssl ? true : false);
 						if (result == kAMDSuccess) {
 							if (enableSSL) {
@@ -288,14 +298,16 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 											result = kAMDMissingPairRecordError;
 											if (rootCertVal == 0x0) {
 												ssl = NULL;
-											} else {
+											}
+											else {
 												CFTypeRef deviceCertVal = CFDictionaryGetValue(record, CFSTR("DeviceCertificate"));
 												CFTypeRef rootPrivKeyVal = CFDictionaryGetValue(record, CFSTR("RootPrivateKey"));
 												if (deviceCertVal && rootPrivKeyVal) {
 													ssl = SDMMD_lockssl_handshake((device->ivars.lockdown_conn), rootCertVal, deviceCertVal, rootPrivKeyVal, 0x1);
 													if (ssl) {
 														result = kAMDSuccess;
-													} else {
+													}
+													else {
 														printf("_TurnOnSSLOverSocket: Could not perform SSL handshake.\n");
 														result = kAMDNoWifiSyncSupportError;
 													}
@@ -322,10 +334,12 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 											CFSafeRelease(connDict);
 										}
 									}
-								} else {
+								}
+								else {
 									result = kAMDInvalidArgumentError;
 								}
-							} else {
+							}
+							else {
 								CFMutableDictionaryRef connDict = SDMMD_create_dict();
 								result = kAMDNoResourcesError;
 								if (connDict) {
@@ -341,7 +355,8 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 									CFSafeRelease(connDict);
 								}
 							}
-						} else {
+						}
+						else {
 							char *udidString = SDMCFStringGetString(device->ivars.unique_device_id);
 							printf("%s: Could not connect to \"%s\" service on port %d, device %d - %s.",__FUNCTION__, cservice, port, device->ivars.device_id, udidString);
 							Safe(free,udidString);
@@ -351,16 +366,19 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 						Safe(SSL_free,ssl);
 					}
 				}
-			} else {
+			}
+			else {
 				result = kAMDInvalidArgumentError;
 				CFSafeRelease(escrowBag);
 				Safe(SSL_free,ssl);
 			}
-		} else {
+		}
+		else {
 			CFSafeRelease(escrowBag);
 			Safe(SSL_free,ssl);
 		}
-	} else {
+	}
+	else {
 		ssl = NULL;
 		mutexLock = false;
 		result = kAMDInvalidArgumentError;
@@ -391,7 +409,8 @@ sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef 
 				CFMutableDictionaryRef optionsCopy;
 				if (options) {
 				 	optionsCopy = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0x0, options);
-				} else {
+				}
+				else {
 					optionsCopy = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 				}
 				if (optionsCopy) {
@@ -403,14 +422,17 @@ sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef 
 						ssl_enabled = SDMMD_AMDServiceConnectionGetSecureIOContext(*connection);
 						if (ssl_enabled) {
 							result = kAMDNoWifiSyncSupportError;
-						} else {
+						}
+						else {
 							result = kAMDSuccess;
 						}
 					}
-				} else {
+				}
+				else {
 					result = kAMDNoResourcesError;
 				}
-			} else {
+			}
+			else {
 				result = kAMDDeviceDisconnectedError;
 				ssl_enabled = NULL;
 			}

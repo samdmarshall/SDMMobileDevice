@@ -128,7 +128,8 @@ DebuggerCommandRef SDMMD_CreateDebuggingCommand(DebuggerCommandType commandCode,
 	debugCommand->commandCode = commandCode;
 	if (debugCommand->commandCode == kDebugCUSTOMCOMMAND) {
 		debugCommand->command = CFStringCreateCopy(kCFAllocatorDefault, command);
-	} else {
+	}
+	else {
 		debugCommand->command = NULL;
 	}
 	debugCommand->arguments = CFArrayCreateCopy(kCFAllocatorDefault, arguments);
@@ -150,7 +151,8 @@ sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCom
 	char *string = 0x0;
 	if (command->commandCode == kDebugCUSTOMCOMMAND) {
 		string = SDMCFStringGetString(command->command);
-	} else {
+	}
+	else {
 		unsigned long length = strlen(KnownDebugCommands[command->commandCode].code);
 		string = calloc(0x1, S(char)*(length+0x1));
 		strlcpy(string, KnownDebugCommands[command->commandCode].code, length+0x1);
@@ -187,7 +189,8 @@ bool SDMMD_DebuggingReceiveInternalCheck(SocketConnection connection, char *rece
 	memcpy(buffer, CFDataGetBytePtr(receivedData), 0x1);
 	if (SDM_MD_CallSuccessful(result) && receivedChar[0] != 0x0) {
 		didReceiveChar = ((memcmp(buffer, receivedChar, S(char)) == 0x0) ? true : false);
-	} else {
+	}
+	else {
 		didReceiveChar = false;
 	}
 	if (!didReceiveChar) {
@@ -239,7 +242,8 @@ sdmmd_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef dconn, CFDataRe
 		bool validResponse = SDMMD_ValidateChecksumForBuffer(responseBuffer);
 		if (validResponse) {
 			*response = CFDataCreate(kCFAllocatorDefault, PtrCast(&(responseBuffer->data[0x1]), UInt8*), (CFIndex)(responseBuffer->length-kChecksumHashLength-0x1));
-		} else {
+		}
+		else {
 			result = kAMDInvalidResponseError;
 		}
 		BufferRefRelease(responseBuffer);

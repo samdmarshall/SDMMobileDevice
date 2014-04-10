@@ -72,7 +72,8 @@ void SDMMD_AFCHeaderInit(SDMMD_AFCPacketHeader *header, uint32_t command, uint32
 	header->type = command;
 	if (pack_num) {
 		header->pid = pack_num;
-	} else {
+	}
+	else {
 		header->pid = k64BitMask; // but not always? this is really weird
 	}
 }
