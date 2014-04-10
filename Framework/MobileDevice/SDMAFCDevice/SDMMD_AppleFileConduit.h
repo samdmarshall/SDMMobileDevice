@@ -13,6 +13,49 @@
 #include "SDMMD_Error.h"
 #include "SDMMD_Service.h"
 
+#pragma mark -
+#pragma mark DeviceInfo Keys
+
+enum AFC_Device_Info_Key_Values {
+	AFC_Device_Info_Key_FSBlockSize = 0,
+	AFC_Device_Info_Key_FSFreeBytes,
+	AFC_Device_Info_Key_FSTotalBytes,
+	AFC_Device_Info_Key_Model,
+	AFC_Device_Info_Key_count
+};
+
+#define kAFC_Device_Info_FSBlockSize "FSBlockSize"
+#define kAFC_Device_Info_FSFreeBytes "FSFreeBytes"
+#define kAFC_Device_Info_FSTotalBytes "FSTotalBytes"
+#define kAFC_Device_Info_Model "Model"
+
+static CFStringRef AFC_Device_Info_Keys[AFC_Device_Info_Key_count] = {
+	CFSTR(kAFC_Device_Info_FSBlockSize),
+	CFSTR(kAFC_Device_Info_FSFreeBytes),
+	CFSTR(kAFC_Device_Info_FSTotalBytes),
+	CFSTR(kAFC_Device_Info_Model)
+};
+
+#pragma mark -
+#pragma mark ConnectionInfo Keys
+
+enum AFC_Connection_Info_Key_Values {
+	AFC_Connection_Info_Key_ExtendedStatus = 0,
+	AFC_Connection_Info_Key_Version,
+	AFC_Connection_Info_Key_count
+};
+
+#define kAFC_Connection_Info_ExtendedStatus "ExtendedStatus"
+#define kAFC_Connection_Info_Version "Version"
+
+static CFStringRef AFC_Connection_Info_Keys[AFC_Connection_Info_Key_count] = {
+	CFSTR(kAFC_Connection_Info_ExtendedStatus),
+	CFSTR(kAFC_Connection_Info_Version)
+};
+
+#pragma mark -
+#pragma mark FileInfo Keys
+
 enum AFC_File_Info_Key_Values {
 	AFC_File_Info_Key_birthtime = 0,
 	AFC_File_Info_Key_blocks,
@@ -23,21 +66,24 @@ enum AFC_File_Info_Key_Values {
 	AFC_File_Info_Key_count
 };
 
-#define kAFC_st_birthtime "st_birthtime"
-#define kAFC_st_blocks "st_blocks"
-#define kAFC_st_ifmt "st_ifmt"
-#define kAFC_st_mtime "st_mtime"
-#define kAFC_st_nlink "st_nlink"
-#define kAFC_st_size "st_size"
+#define kAFC_File_Info_st_birthtime "st_birthtime"
+#define kAFC_File_Info_st_blocks "st_blocks"
+#define kAFC_File_Info_st_ifmt "st_ifmt"
+#define kAFC_File_Info_st_mtime "st_mtime"
+#define kAFC_File_Info_st_nlink "st_nlink"
+#define kAFC_File_Info_st_size "st_size"
 
 static CFStringRef AFC_File_Info_Keys[AFC_File_Info_Key_count] = {
-	CFSTR(kAFC_st_birthtime),
-	CFSTR(kAFC_st_blocks),
-	CFSTR(kAFC_st_ifmt),
-	CFSTR(kAFC_st_mtime),
-	CFSTR(kAFC_st_nlink),
-	CFSTR(kAFC_st_size)
+	CFSTR(kAFC_File_Info_st_birthtime),
+	CFSTR(kAFC_File_Info_st_blocks),
+	CFSTR(kAFC_File_Info_st_ifmt),
+	CFSTR(kAFC_File_Info_st_mtime),
+	CFSTR(kAFC_File_Info_st_nlink),
+	CFSTR(kAFC_File_Info_st_size)
 };
+
+#pragma mark -
+#pragma mark AFC Packet Type
 
 enum SDMMD_AFC_Packet_Type {
 	SDMMD_AFC_Packet_Invalid = 0,
@@ -124,6 +170,9 @@ static char* SDMMD_gAFCPacketTypeNames[SDMMD_AFC_Packet_Count] = {
 	"DirectoryEnumeratorRefClose"
 };
 
+#pragma mark -
+#pragma mark AFCConnection Objects
+
 struct sdmmd_AFCConnectionClass {
 	SDMMD_AMConnectionRef handle;
 	__unsafe_unretained dispatch_queue_t operationQueue;
@@ -143,8 +192,8 @@ typedef struct SDMMD_AFCPacketHeader {
 
 struct sdmmd_AFCPacket {
 	SDMMD_AFCPacketHeader header;
-	void * header_data;
-	void * body_data;
+	void* header_data;
+	void* body_data;
 	CFTypeRef response;
 } sdmmd_AFCPacket;
 
