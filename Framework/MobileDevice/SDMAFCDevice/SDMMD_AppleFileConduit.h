@@ -13,6 +13,32 @@
 #include "SDMMD_Error.h"
 #include "SDMMD_Service.h"
 
+enum AFC_File_Info_Key_Values {
+	AFC_File_Info_Key_birthtime = 0,
+	AFC_File_Info_Key_blocks,
+	AFC_File_Info_Key_ifmt,
+	AFC_File_Info_Key_mtime,
+	AFC_File_Info_Key_nlink,
+	AFC_File_Info_Key_size,
+	AFC_File_Info_Key_count
+};
+
+#define kAFC_st_birthtime "st_birthtime"
+#define kAFC_st_blocks "st_blocks"
+#define kAFC_st_ifmt "st_ifmt"
+#define kAFC_st_mtime "st_mtime"
+#define kAFC_st_nlink "st_nlink"
+#define kAFC_st_size "st_size"
+
+static CFStringRef AFC_File_Info_Keys[AFC_File_Info_Key_count] = {
+	CFSTR(kAFC_st_birthtime),
+	CFSTR(kAFC_st_blocks),
+	CFSTR(kAFC_st_ifmt),
+	CFSTR(kAFC_st_mtime),
+	CFSTR(kAFC_st_nlink),
+	CFSTR(kAFC_st_size)
+};
+
 enum SDMMD_AFC_Packet_Type {
 	SDMMD_AFC_Packet_Invalid = 0,
 	SDMMD_AFC_Packet_Status,

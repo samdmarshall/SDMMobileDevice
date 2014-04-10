@@ -238,7 +238,7 @@ kern_return_t test_sdm_AFCFileDescriptorCreateReadOperation(SDMMD_AMDeviceRef sd
 					SDMMD_AFCOperationRef file_info = SDMMD_AFCOperationCreateGetFileInfo(CFSTR(kTestCreateFileForAFC));
 					result = SDMMD_AFCProcessOperation(afc, &file_info);
 					if (SDM_MD_CallSuccessful(result)) {
-						int32_t size = CFStringGetIntValue(CFDictionaryGetValue(file_info->packet->response, CFSTR("st_size")));
+						int32_t size = CFStringGetIntValue(CFDictionaryGetValue(file_info->packet->response, AFC_File_Info_Keys[AFC_File_Info_Key_size]));
 						SDMMD_AFCOperationRef file_ref = SDMMD_AFCOperationCreateFileRefOpen(CFSTR(kTestCreateFileForAFC), 2);
 						result = SDMMD_AFCProcessOperation(afc, &file_ref);
 						if (SDM_MD_CallSuccessful(result)) {
