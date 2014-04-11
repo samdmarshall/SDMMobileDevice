@@ -47,12 +47,12 @@ sdmmd_return_t SDMMD_AMDeviceLookupAppInfo(SDMMD_AMDeviceRef device, CFDictionar
 		if (options) {
 			CFDictionaryRef dict = NULL;
 			SDMMD_AMConnectionRef conn = SDMMD_AMDServiceConnectionCreate(0, NULL, dict);
-			result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_INSTALLATION_PROXY), 0x0, &conn);
+			result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_INSTALLATION_PROXY), NULL, &conn);
 			if (result == 0) {
 				CFMutableDictionaryRef dict = SDMMD_create_dict();
 				result = kAMDNoResourcesError;
 				if (dict) {
-					result = SDMMD_perform_command(conn, CFSTR("Lookup"), 0x0, SDMMD_lookup_callback, 0x2, dict, CFSTR("ClientOptions"), options);
+					result = SDMMD_perform_command(conn, CFSTR("Lookup"), 0, SDMMD_lookup_callback, 2, dict, CFSTR("ClientOptions"), options);
 					if (!result) {
 						*response = dict;
 					}
@@ -73,12 +73,12 @@ sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDict
 		if (options) {
 			CFDictionaryRef dict = NULL;
 			SDMMD_AMConnectionRef conn = SDMMD_AMDServiceConnectionCreate(0, NULL, dict);
-			result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_INSTALLATION_PROXY), 0x0, &conn);
+			result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_INSTALLATION_PROXY), NULL, &conn);
 			if (result == 0) {
 				CFMutableDictionaryRef dict = SDMMD_create_dict();
 				result = kAMDNoResourcesError;
 				if (dict) {
-					result = SDMMD_perform_command(conn, CFSTR("Browse"), 0x0, SDMMD_browse_callback, 2, dict, CFSTR("ClientOptions"), options);
+					result = SDMMD_perform_command(conn, CFSTR("Browse"), 0, SDMMD_browse_callback, 2, dict, CFSTR("ClientOptions"), options);
 					if (!result) {
 						*response = dict;
 					}
@@ -109,21 +109,21 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 	sdmmd_return_t result = kAMDInvalidArgumentError;
 	if (path) {
 		if (conn) {
-			char *cpath = calloc(0x1, 0x401);
+			char *cpath = calloc(1, sizeof(char[1024]));
 			ATR_UNUSED struct stat pathStat, remoteStat;
-			Boolean status = CFStringGetCString(path, cpath, 0x401, kCFStringEncodingUTF8);
+			Boolean status = CFStringGetCString(path, cpath, 1024, kCFStringEncodingUTF8);
 			if (status) {
 				CFURLRef deviceURL = SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(path);
 				if (deviceURL) {
 					CFStringRef lastComp = CFURLCopyLastPathComponent(deviceURL);
 					if (lastComp) {
-						CFURLRef base = SDMMD__AMDCFURLCreateWithFileSystemPathRelativeToBase(kCFAllocatorDefault, CFSTR("PublicStaging"), 0x0, 0x1);
+						CFURLRef base = SDMMD__AMDCFURLCreateWithFileSystemPathRelativeToBase(kCFAllocatorDefault, CFSTR("PublicStaging"), 0, true);
 						CFURLRef copy = CFURLCreateCopyAppendingPathComponent(kCFAllocatorDefault, base, lastComp, true);
 						char *copyPath = NULL;
 						SDMMD__AMDCFURLGetCStringForFileSystemPath(copy, copyPath);
-						SDMMD_fire_callback_767f4(transferCallback, unknown, 0x0, CFSTR("PreflightingTransfer"));
+						SDMMD_fire_callback_767f4(transferCallback, unknown, 0, CFSTR("PreflightingTransfer"));
 						//SDMMD_preflight_transfer(&cpath, &pathStat, &remoteStat);
-						SDMMD_fire_callback_767f4(transferCallback, unknown, 0x0, CFSTR("TransferingPackage"));
+						SDMMD_fire_callback_767f4(transferCallback, unknown, 0, CFSTR("TransferingPackage"));
 						ATR_UNUSED SDMMD_AFCConnectionRef afcConn = SDMMD_AFCConnectionCreate(conn);//(r12, conn, 0x0, 0x0, &var_72);
 						// loop that iterates through all of file contents
 						
@@ -194,7 +194,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn
 	SDMMD_AMConnectionRef connection = NULL;
 	bool hasConnection = (conn ? true : false);
 	if (device) {
-		result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_INSTALLATION_PROXY), 0x0, &connection);
+		result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_INSTALLATION_PROXY), NULL, &connection);
 		if (result == 0) {
 			hasConnection = true;
 		}
@@ -211,11 +211,11 @@ sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn
 			CFSafeRelease(pathURL);
 		}
 		if (lastComp) {
-			CFStringRef format = CFStringCreateWithFormat(kCFAllocatorDefault, 0x0, CFSTR("%s%c%@"), "PublicStaging", 0x2f, lastComp);
+			CFStringRef format = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%s%c%@"), "PublicStaging", 0x2f, lastComp);
 			if (format) {
 				char *appName = SDMCFStringGetString(format);
 				printf("%s: Attempting install of %s.\n",__FUNCTION__,appName);
-				result = SDMMD_perform_command(connection, CFSTR("Install"), 0x0, installCallback, 4, unknown, CFSTR("PackagePath"), format, CFSTR("ClientOptions"), options);
+				result = SDMMD_perform_command(connection, CFSTR("Install"), 0, installCallback, 4, unknown, CFSTR("PackagePath"), format, CFSTR("ClientOptions"), options);
 				if (result) {
 					printf("%s: Old style of install failed for (%s).\n",__FUNCTION__,appName);
 				}
@@ -244,7 +244,7 @@ sdmmd_return_t SDMMD_AMDeviceInstallApplication(SDMMD_AMDeviceRef device, CFStri
 	printf("%s: Entry.\n",__FUNCTION__);
 	sdmmd_return_t result = kAMDSuccess;
 	uint32_t socket = -1;
-	SDMMD_AMConnectionRef conn = SDMMD__CreateTemporaryServConn(socket, 0x0);
+	SDMMD_AMConnectionRef conn = SDMMD__CreateTemporaryServConn(socket, 0);
 	if (conn) {
 		CFURLRef url = SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(path);
 		char *urlString = SDMCFURLGetString(url);

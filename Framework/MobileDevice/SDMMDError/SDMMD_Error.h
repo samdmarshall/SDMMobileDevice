@@ -197,15 +197,15 @@ struct SDMMD_DebugReturnCode {
 #define sdmmd_debug_return_t struct SDMMD_DebugReturnCode
 
 typedef enum SDMMD_NotificationErrorCodes {
-	MDERR_NOTIFICATION_MSG_CONNECTED = 0x1,
-	MDERR_NOTIFICATION_MSG_DISCONNECTED = 0x2,
-	MDERR_NOTIFICATION_MSG_UNKNOWN = 0x3
+	MDERR_NOTIFICATION_MSG_CONNECTED = 1,
+	MDERR_NOTIFICATION_MSG_DISCONNECTED = 2,
+	MDERR_NOTIFICATION_MSG_UNKNOWN = 3
 } SDMMD_NotificationErrorCodes;
 
 #define sdmmd_notification_return_t enum SDMMD_NotificationErrorCodes
 
 typedef enum SDMMD_USBMuxErrorCodes {
-	MDERR_USBMUX_OK = 0x0,
+	MDERR_USBMUX_OK = 0,
 	MDERR_USBMUX_ARG_NULL = 0x16,
 	MDERR_USBMUX_FAILED = 0xffffffff
 } SDMMD_USBMuxErrorCodes;

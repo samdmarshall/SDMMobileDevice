@@ -143,7 +143,7 @@ sdmmd_return_t SDMMD_AFCReceiveOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOperationRef *operation) {
 	__block sdmmd_return_t result = kAMDSuccess;
 	dispatch_sync(conn->operationQueue, ^{
-		conn->semaphore = dispatch_semaphore_create(0x0);
+		conn->semaphore = dispatch_semaphore_create(0);
 		(*operation)->packet->header.pid = k64BitMask; //conn->operationCount;
 		result = SDMMD_AFCSendOperation(conn, *operation);
 		dispatch_semaphore_wait(conn->semaphore, (*operation)->timeout);

@@ -181,7 +181,7 @@ sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef se
 
 
 sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStringRef service, CFDictionaryRef options, SDMMD_AMConnectionRef *connection) {
-    uint32_t port = 0x0;
+    uint32_t port = 0;
     uint32_t socket = -1;
     CFDataRef escrowBag = NULL;
 	sdmmd_return_t result = kAMDSuccess;
@@ -269,7 +269,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 								ssl = NULL;
 								if (fileDict) {
 									CFDictionaryRemoveValue(fileDict, CFSTR("EscrowBag"));
-									result = SDMMD_store_dict(fileDict, path, 0x1);
+									result = SDMMD_store_dict(fileDict, path, true);
 									if (result) {
 										printf("_DestroyEscrowBag: Failed to store escrow bag to %s.\n", path);
 									}
@@ -296,7 +296,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 										if (result == kAMDSuccess) {
 											CFTypeRef rootCertVal = CFDictionaryGetValue(record, CFSTR("RootCertificate"));
 											result = kAMDMissingPairRecordError;
-											if (rootCertVal == 0x0) {
+											if (rootCertVal == 0) {
 												ssl = NULL;
 											}
 											else {
@@ -408,10 +408,10 @@ sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef 
 			if (device->ivars.device_active) {
 				CFMutableDictionaryRef optionsCopy;
 				if (options) {
-				 	optionsCopy = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0x0, options);
+				 	optionsCopy = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, options);
 				}
 				else {
-					optionsCopy = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+					optionsCopy = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 				}
 				if (optionsCopy) {
 					CFDictionarySetValue(optionsCopy, CFSTR("CloseOnInvalidate"), kCFBooleanFalse);

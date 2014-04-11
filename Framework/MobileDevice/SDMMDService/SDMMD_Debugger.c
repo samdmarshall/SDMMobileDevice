@@ -95,15 +95,15 @@ uint32_t GenerateChecksumForData(char *strPtr, uint32_t length) {
 
 BufferRef SDMMD_EncodeDebuggingString(CFStringRef command) {
 	char *commandString = SDMCFStringGetString(command);
-	CFIndex encodedLength = ((0x2*strlen(commandString))+kChecksumHashLength+0x1);
-	char *encoded = calloc(0x1, S(char)*encodedLength);
-	for (CFIndex position = 0x0, index = 0x0; index < strlen(commandString); index++) {
-		position = (index*(S(char)*0x2));
+	CFIndex encodedLength = ((2*strlen(commandString))+kChecksumHashLength+1);
+	char *encoded = calloc(1, S(char)*encodedLength);
+	for (CFIndex position = 0, index = 0; index < strlen(commandString); index++) {
+		position = (index*(S(char)*2));
 		encoded[position] = kHexEncodeFirstByte(commandString[index]);
 		encoded[position+1] = kHexEncodeSecondByte(commandString[index]);
 	}
 	Safe(free,commandString);
-	BufferRef commandBuffer = calloc(0x1, S(struct CoreInternalBuffer));
+	BufferRef commandBuffer = calloc(1, S(struct CoreInternalBuffer));
 	commandBuffer->data = encoded;
 	commandBuffer->length = encodedLength;
 	return commandBuffer;
@@ -114,17 +114,17 @@ void SDMMD_FormatDebuggingCommand(BufferRef buffer, CFStringRef command, bool sh
 	AppendBufferToBuffer(buffer, encoded);
 	BufferRefRelease(encoded);
 	char checksumHash[kChecksumHashLength] = { '#', '0', '0' };
-	uint32_t encodedCommandLength = (uint32_t)(buffer->length-kChecksumHashLength-0x1);
+	uint32_t encodedCommandLength = (uint32_t)(buffer->length-kChecksumHashLength-1);
 	if (shouldACK) {
-		uint32_t checksum = GenerateChecksumForData(&(buffer->data[0x1]), encodedCommandLength);
-		checksumHash[0x1] = kHexEncodeFirstByte(checksum);
-		checksumHash[0x2] = kHexEncodeSecondByte(checksum);
+		uint32_t checksum = GenerateChecksumForData(&(buffer->data[1]), encodedCommandLength);
+		checksumHash[1] = kHexEncodeFirstByte(checksum);
+		checksumHash[2] = kHexEncodeSecondByte(checksum);
 	}
 	memcpy(&(buffer->data[encodedCommandLength]), checksumHash, kChecksumHashLength);
 }
 
 DebuggerCommandRef SDMMD_CreateDebuggingCommand(DebuggerCommandType commandCode, CFStringRef command, CFArrayRef arguments) {
-	DebuggerCommandRef debugCommand = calloc(0x1, sizeof(struct DebuggerCommand));
+	DebuggerCommandRef debugCommand = calloc(1, sizeof(struct DebuggerCommand));
 	debugCommand->commandCode = commandCode;
 	if (debugCommand->commandCode == kDebugCUSTOMCOMMAND) {
 		debugCommand->command = CFStringCreateCopy(kCFAllocatorDefault, command);
@@ -147,22 +147,22 @@ sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCom
 	SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
 	BufferRef buffer = CreateBufferRef();
 	char *commandPrefix = "$";
-	memcpy(buffer->data, commandPrefix, 0x1);
-	char *string = 0x0;
+	memcpy(buffer->data, commandPrefix, 1);
+	char *string = NULL;
 	if (command->commandCode == kDebugCUSTOMCOMMAND) {
 		string = SDMCFStringGetString(command->command);
 	}
 	else {
 		unsigned long length = strlen(KnownDebugCommands[command->commandCode].code);
-		string = calloc(0x1, S(char)*(length+0x1));
-		strlcpy(string, KnownDebugCommands[command->commandCode].code, length+0x1);
+		string = calloc(1, S(char)*(length+1));
+		strlcpy(string, KnownDebugCommands[command->commandCode].code, length+1);
 	}
 	AppendStringToBuffer(buffer, string);
 	Safe(free, string);
 
-	CFMutableStringRef entireCommand = CFStringCreateMutable(kCFAllocatorDefault, 0x0);
+	CFMutableStringRef entireCommand = CFStringCreateMutable(kCFAllocatorDefault, 0);
 	CFIndex argumentCount = CFArrayGetCount(command->arguments);
-	for (CFIndex index = 0x0; index < argumentCount; index++) {
+	for (CFIndex index = 0; index < argumentCount; index++) {
 		CFStringRef argString = CFArrayGetValueAtIndex(command->arguments, index);
 		CFStringAppend(entireCommand, argString);
 	}
@@ -183,12 +183,12 @@ sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCom
 
 bool SDMMD_DebuggingReceiveInternalCheck(SocketConnection connection, char *receivedChar) {
 	bool didReceiveChar = false;
-	CFMutableDataRef receivedData = CFDataCreateMutable(kCFAllocatorDefault, 0x1);
+	CFMutableDataRef receivedData = CFDataCreateMutable(kCFAllocatorDefault, 1);
 	sdmmd_return_t result = SDMMD_DirectServiceReceive(connection, PtrCast(&receivedData, CFDataRef*));
-	char *buffer = calloc(0x1, S(char));
-	memcpy(buffer, CFDataGetBytePtr(receivedData), 0x1);
-	if (SDM_MD_CallSuccessful(result) && receivedChar[0] != 0x0) {
-		didReceiveChar = ((memcmp(buffer, receivedChar, S(char)) == 0x0) ? true : false);
+	char *buffer = calloc(1, S(char));
+	memcpy(buffer, CFDataGetBytePtr(receivedData), 1);
+	if (SDM_MD_CallSuccessful(result) && receivedChar[0] != 0) {
+		didReceiveChar = ((memcmp(buffer, receivedChar, S(char)) == 0) ? true : false);
 	}
 	else {
 		didReceiveChar = false;
@@ -201,8 +201,8 @@ bool SDMMD_DebuggingReceiveInternalCheck(SocketConnection connection, char *rece
 }
 
 bool SDMMD_ValidateChecksumForBuffer(BufferRef buffer) {
-	uint32_t checksum = GenerateChecksumForData(&(buffer->data[0x1]), (uint32_t)(buffer->length-kChecksumHashLength-0x1));
-	return ((kHexDecode(buffer->data[buffer->length-0x2]) == kHexDecodeFirstByte(checksum)) && (kHexDecode(buffer->data[buffer->length-0x1]) && kHexDecodeSecondByte(checksum)) ? true : false);
+	uint32_t checksum = GenerateChecksumForData(&(buffer->data[1]), (uint32_t)(buffer->length-kChecksumHashLength-1));
+	return ((kHexDecode(buffer->data[buffer->length-2]) == kHexDecodeFirstByte(checksum)) && (kHexDecode(buffer->data[buffer->length-1]) && kHexDecodeSecondByte(checksum)) ? true : false);
 }
 
 sdmmd_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef dconn, CFDataRef *response) {
@@ -212,36 +212,36 @@ sdmmd_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef dconn, CFDataRe
 	BufferRef responseBuffer = CreateBufferRef();
 	SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
 	if (dconn->ackEnabled) {
-		char ack[0x1];
+		char ack[1];
 		memcpy(ack, (KnownDebugCommands[kDebugACK].code), S(char));
 		shouldReceive = SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, ack);
-		if (strncmp(ack, commandPrefix, S(char)) == 0x0) {
+		if (strncmp(ack, commandPrefix, S(char)) == 0) {
 			shouldReceive = true;
 			skipPrefix = true;
-			memcpy(responseBuffer->data, commandPrefix, 0x1);
+			memcpy(responseBuffer->data, commandPrefix, 1);
 		}
 	}
 	if (shouldReceive && !skipPrefix) {
 		shouldReceive = SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, commandPrefix);
 		if (shouldReceive) {
-			memcpy(responseBuffer->data, commandPrefix, 0x1);
+			memcpy(responseBuffer->data, commandPrefix, 1);
 		}
 	}
 	if (shouldReceive) {
 		uint32_t checksumLength = kChecksumHashLength;
 		bool receivingChecksumResponse = false;
 		while ((checksumLength > 0)) {
-			uint64_t oldSize = IncrementBufferRefBySize(responseBuffer, 0x1);
+			uint64_t oldSize = IncrementBufferRefBySize(responseBuffer, 1);
 			char *data = "#";
 			receivingChecksumResponse = SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, data);
 			if (receivingChecksumResponse) {
 				checksumLength--;
 			}
-			memcpy(&(responseBuffer->data[oldSize]), data, 0x1);
+			memcpy(&(responseBuffer->data[oldSize]), data, 1);
 		}
 		bool validResponse = SDMMD_ValidateChecksumForBuffer(responseBuffer);
 		if (validResponse) {
-			*response = CFDataCreate(kCFAllocatorDefault, PtrCast(&(responseBuffer->data[0x1]), UInt8*), (CFIndex)(responseBuffer->length-kChecksumHashLength-0x1));
+			*response = CFDataCreate(kCFAllocatorDefault, PtrCast(&(responseBuffer->data[1]), UInt8*), (CFIndex)(responseBuffer->length-kChecksumHashLength-0x1));
 		}
 		else {
 			result = kAMDInvalidResponseError;

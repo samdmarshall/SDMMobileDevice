@@ -86,9 +86,9 @@ CFTypeID SDMMD_AMDeviceGetTypeID(void);
 
 typedef enum _AMDInterfaceConnectionType {
     kAMDInterfaceConnectionTypeInvalid  = -1,
-    kAMDInterfaceConnectionTypeUnknown  = 0x0,
-    kAMDInterfaceConnectionTypeDirect   = 0x1,
-    kAMDInterfaceConnectionTypeIndirect = 0x2
+    kAMDInterfaceConnectionTypeUnknown  = 0,
+    kAMDInterfaceConnectionTypeDirect   = 1,
+    kAMDInterfaceConnectionTypeIndirect = 2
 } AMDInterfaceConnectionType;
 typedef AMDInterfaceConnectionType sdmmd_interface_return_t;
 

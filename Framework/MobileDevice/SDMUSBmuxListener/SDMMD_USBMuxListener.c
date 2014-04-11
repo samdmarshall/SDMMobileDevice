@@ -115,8 +115,8 @@ void SDMMD_USBMuxResponseCallback(void *context, struct USBMuxPacket *packet) {
 
 void SDMMD_USBMuxAttachedCallback(void *context, struct USBMuxPacket *packet) {
 	SDMMD_AMDeviceRef newDevice = SDMMD_AMDeviceCreateFromProperties(packet->payload);
-	if (newDevice && !CFArrayContainsValue(SDMMobileDevice->deviceList, CFRangeMake(0x0, CFArrayGetCount(SDMMobileDevice->deviceList)), newDevice)) {
-		CFMutableArrayRef updateWithNew = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, SDMMobileDevice->deviceList);
+	if (newDevice && !CFArrayContainsValue(SDMMobileDevice->deviceList, CFRangeMake(0, CFArrayGetCount(SDMMobileDevice->deviceList)), newDevice)) {
+		CFMutableArrayRef updateWithNew = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0, SDMMobileDevice->deviceList);
 		// give priority to usb over wifi
 		if (newDevice->ivars.connection_type == kAMDeviceConnectionTypeUSB) {
 			CFArrayAppendValue(updateWithNew, newDevice);
@@ -125,7 +125,8 @@ void SDMMD_USBMuxAttachedCallback(void *context, struct USBMuxPacket *packet) {
 			});
 			CFSafeRelease(SDMMobileDevice->deviceList);
 			SDMMobileDevice->deviceList = CFArrayCreateCopy(kCFAllocatorDefault, updateWithNew);
-		} else if (newDevice->ivars.connection_type == kAMDeviceConnectionTypeWiFi) {
+		}
+		else if (newDevice->ivars.connection_type == kAMDeviceConnectionTypeWiFi) {
 			// wifi
 		}
 		CFSafeRelease(updateWithNew);
@@ -139,7 +140,7 @@ void SDMMD_USBMuxDetachedCallback(void *context, struct USBMuxPacket *packet) {
 	uint32_t detachedId;
 	CFNumberRef deviceId = CFDictionaryGetValue(packet->payload, CFSTR("DeviceID"));
 	CFNumberGetValue(deviceId, kCFNumberSInt64Type, &detachedId);
-	CFMutableArrayRef updateWithRemove = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, SDMMobileDevice->deviceList);
+	CFMutableArrayRef updateWithRemove = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0, SDMMobileDevice->deviceList);
 	uint32_t removeCounter = 0x0;
 	SDMMD_AMDeviceRef detachedDevice = NULL;
 	for (uint32_t i = 0x0; i < CFArrayGetCount(SDMMobileDevice->deviceList); i++) {

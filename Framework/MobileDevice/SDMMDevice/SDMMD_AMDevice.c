@@ -230,7 +230,7 @@ SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostC
 							SSL_set_accept_state(ssl);
 						}
 						SSL_set_verify(ssl, SSL_VERIFY_PEER | SSL_VERIFY_FAIL_IF_NO_PEER_CERT, SDMMD__ssl_verify_callback);
-						SSL_set_verify_depth(ssl, 0x0);
+						SSL_set_verify_depth(ssl, 0);
 						SSL_set_bio(ssl, bioSocket, bioSocket);
 						SSL_set_ex_data(ssl, (uint32_t)SDMMobileDevice->peer_certificate_data_index, (void*)deviceCert);
 						result = SSL_do_handshake(ssl);
@@ -244,7 +244,7 @@ SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostC
 								printf("lockssl_handshake: SSL handshake fatal lower level error %d: %s.\n", err, reason);
 							}
 							else {
-								char *reason = SDMMD_ssl_strerror(ssl, 0x0);
+								char *reason = SDMMD_ssl_strerror(ssl, 0);
 								printf("lockssl_handshake: SSL handshake controlled failure %d: %s.\n", err, reason);
 							}
 							Safe(SSL_free,ssl);
@@ -450,7 +450,7 @@ sdmmd_return_t SDMMD_lockdown_connection_destory(SDMMD_lockdown_conn *lockdownCo
 			if (result == 0xff) {
 				printf("%s: close(2) on socket %lld failed: %d.\n",__FUNCTION__,lockdownCon->connection, result);
 			}
-			lockdownCon->connection = 0x0;
+			lockdownCon->connection = 0;
 		}
 		Safe(free,lockdownCon->pointer);
 		result = kAMDSuccess;
@@ -1144,7 +1144,7 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 								status = SDMMD_copy_daemon_name(device, &daemon);
 								if (daemon && status == 0) {
 									//result = kAMDInvalidResponseError;
-									if (CFStringCompare(daemon, CFSTR(AMSVC_LOCKDOWN), 0x0) != kCFCompareEqualTo) {
+									if (CFStringCompare(daemon, CFSTR(AMSVC_LOCKDOWN), 0) != kCFCompareEqualTo) {
 										char *dname = SDMCFStringGetString(daemon);
 										printf("%s: This is not the droid you're looking for (is actually %s). move along,  move along.\n",__FUNCTION__,dname);
 										Safe(free,dname);
@@ -1439,7 +1439,7 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 }
 
 uint32_t SDMMD_AMDeviceUSBDeviceID(SDMMD_AMDeviceRef device) {
-	uint32_t result = 0x0;
+	uint32_t result = 0;
 	if (device) {
 		SDMMD__mutex_lock(device->ivars.mutex_lock);
 		result = device->ivars.device_id;
@@ -1449,7 +1449,7 @@ uint32_t SDMMD_AMDeviceUSBDeviceID(SDMMD_AMDeviceRef device) {
 }
 
 uint32_t SDMMD_AMDeviceUSBLocationID(SDMMD_AMDeviceRef device) {
-	uint32_t result = 0x0;
+	uint32_t result = 0;
 	if (device) {
 		SDMMD__mutex_lock(device->ivars.mutex_lock);
 		result = device->ivars.location_id;
@@ -1462,7 +1462,7 @@ uint32_t SDMMD_AMDeviceUSBLocationID(SDMMD_AMDeviceRef device) {
 }
 
 uint16_t SDMMD_AMDeviceUSBProductID(SDMMD_AMDeviceRef device) {
-	uint16_t result = 0x0;
+	uint16_t result = 0;
 	if (device) {
 		SDMMD__mutex_lock(device->ivars.mutex_lock);
 		result = device->ivars.product_id & 0xffff;
@@ -1567,7 +1567,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 			}
 			
 			device->ivars.device_active = true;
-			device->ivars.unknown8 = 0x0;
+			device->ivars.unknown8 = 0;
 			sdmmd_mutex_init(device->ivars.mutex_lock);
 		}
 	}
@@ -1672,11 +1672,11 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 		CFTypeRef imageType = CFDictionaryGetValue(dict, CFSTR("ImageType"));
 		if (imageType) {
 			CFTypeRef signature = CFDictionaryGetValue(dict, CFSTR("ImageSignature"));
-			char *cpath = calloc(1, 0x401);
-			Boolean pathCopy = CFStringGetCString(path, cpath, 0x400, kCFStringEncodingUTF8);
+			char *cpath = calloc(1, sizeof(char[1024]));
+			Boolean pathCopy = CFStringGetCString(path, cpath, 1024, kCFStringEncodingUTF8);
 			if (pathCopy) {
-				unsigned char *sumdigest = calloc(0x1, 0x20);
-				result = SDMMD_AMDeviceDigestFile(cpath, 0x0, PtrCast(&sumdigest, unsigned char**));
+				unsigned char *sumdigest = calloc(1, sizeof(char[32]));
+				result = SDMMD_AMDeviceDigestFile(cpath, 0, PtrCast(&sumdigest, unsigned char**));
 				if (result) {
 					SDMMD_AMDeviceRef deviceCopy = SDMMD_AMDeviceCreateCopy(device);
 					result = kAMDUndefinedError;
