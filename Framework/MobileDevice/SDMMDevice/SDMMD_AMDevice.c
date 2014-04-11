@@ -1503,11 +1503,9 @@ sdmmd_return_t SDMMD_AMDeviceSetValue(SDMMD_AMDeviceRef device, CFStringRef doma
     if (device) {
         if (device->ivars.device_active) {
             SDMMD__mutex_lock(device->ivars.mutex_lock);
-            if (!SDMMD_send_set_value(device, domain, key, value)) {
+			result = SDMMD_send_set_value(device, domain, key, value);
+            if (result != kAMDSuccess) {
                 printf("%s: Could not set value\n",__FUNCTION__);
-            }
-			else {
-                result = kAMDSuccess;
             }
             SDMMD__mutex_unlock(device->ivars.mutex_lock);
         }
