@@ -609,10 +609,14 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetSizeOfPathContents() {
 	return op;
 }
 
-SDMMD_AFCOperationRef SDMMD_AFCOperationCreateRemovePathAndContents() {
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateRemovePathAndContents(CFStringRef path) {
 	SDMMD_AFCOperationRef op = calloc(1, sizeof(struct sdmmd_AFCOperation));
 	op->packet = calloc(1, sizeof(struct sdmmd_AFCPacket));
-	SDMMD_AFCHeaderInit(&(op->packet->header), SDMMD_AFC_Packet_RemovePathAndContents, 0, 0, 0);
+	char *cref = SDMCFStringGetString(path);
+	uint32_t data_length = (uint32_t)strlen(cref)+1;
+	op->packet->header_data = calloc(data_length, sizeof(char));
+	memcpy(op->packet->header_data, cref, strlen(cref));
+	SDMMD_AFCHeaderInit(&(op->packet->header), SDMMD_AFC_Packet_RemovePathAndContents, data_length, 0, 0);
 	return op;
 }
 

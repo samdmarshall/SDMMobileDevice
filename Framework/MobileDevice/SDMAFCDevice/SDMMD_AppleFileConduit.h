@@ -244,6 +244,9 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetFileHash(CFStringRef path);
 SDMMD_AFCOperationRef SDMMD_AFCOperationCreateSetModTime(CFStringRef ref);
 SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetFileHashWithRange(CFStringRef path, Range range);
 
+
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateRemovePathAndContents(CFStringRef path);
+
 #pragma mark -
 #pragma mark Alias Operations
 
