@@ -195,13 +195,23 @@ sdmmd_return_t SDMMD_ServiceReceiveMessage(SocketConnection handle, CFPropertyLi
 	
 	result = SDMMD_ServiceReceive(handle, &dataBuffer);
 	if (result == kAMDSuccess) {
-		if (dataBuffer && CFDataGetLength(dataBuffer)) {
+		
+		// ServiceReceive success does not guarantee that valid data is available
+		if (dataBuffer) {
+			// CFPropertyListCreateWithData will return NULL if data is invalid format
 			*data = CFPropertyListCreateWithData(kCFAllocatorDefault, dataBuffer, kCFPropertyListImmutable, NULL, NULL);
+			CFRelease(dataBuffer);
 		}
-		else {
-			*data = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+		
+		if (*data == NULL) {
+			// Could not parse received data
 			result = kAMDInvalidResponseError;
 		}
+	}
+	
+	// Return an empty dictionary if a receive OR parse failure occurred
+	if (result != kAMDSuccess) {
+		*data = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 	}
 	
 	return result;
