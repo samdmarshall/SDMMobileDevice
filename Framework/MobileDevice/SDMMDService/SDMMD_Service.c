@@ -200,7 +200,6 @@ sdmmd_return_t SDMMD_ServiceReceiveMessage(SocketConnection handle, CFPropertyLi
 		if (dataBuffer) {
 			// CFPropertyListCreateWithData will return NULL if data is invalid format
 			*data = CFPropertyListCreateWithData(kCFAllocatorDefault, dataBuffer, kCFPropertyListImmutable, NULL, NULL);
-			CFRelease(dataBuffer);
 		}
 		
 		if (*data == NULL) {
@@ -208,6 +207,7 @@ sdmmd_return_t SDMMD_ServiceReceiveMessage(SocketConnection handle, CFPropertyLi
 			result = kAMDInvalidResponseError;
 		}
 	}
+	CFSafeRelease(dataBuffer);
 	
 	// Return an empty dictionary if a receive OR parse failure occurred
 	if (result != kAMDSuccess) {
