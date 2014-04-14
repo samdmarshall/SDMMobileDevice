@@ -329,7 +329,7 @@ sdmmd_return_t SDMMD_lockconn_receive_message(SDMMD_AMDeviceRef device, CFMutabl
 			conn = (SocketConnection){false , {.conn = (uint32_t)device->ivars.lockdown_conn->connection}};
 		}
 		
-		SDMMD_ServiceReceiveMessage(conn, (CFPropertyListRef*)dict);
+		result = SDMMD_ServiceReceiveMessage(conn, (CFPropertyListRef*)dict);
 	}
 	else {
 		result = SDMMD_AMDeviceIsValid(device);
