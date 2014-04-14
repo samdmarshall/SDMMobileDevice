@@ -484,7 +484,23 @@ static char *SDMMD_SoftBehavior_DomainKeys[SDM_MD_SoftBehavior_Domain_Key_Count]
 #pragma mark iTunes Domain Keys
 #pragma mark -
 
-#define kiTunesDomain							"com.apple.mobile.iTunes"
+#define kiTunesDomain						"com.apple.iTunes"
+
+#define kLibraryApplications				"LibraryApplications"
+#define kDeletedApplications				"DeletedApplications"
+#define kWiFiSyncingUserIDs					"WiFiSyncingUserIDs"
+
+/*
+ Looking up app data:
+ https://itunes.apple.com/<LOCALE>/lookup?bundleId=<BUNDLE-ID>
+*/
+
+
+#pragma mark -
+#pragma mark iTunes Mobile Domain Keys
+#pragma mark -
+
+#define kiTunesMobileDomain						"com.apple.mobile.iTunes"
 
 #define kMinITunesVersion						"MinITunesVersion"
 #define kMinMacOSVersion						"MinMacOSVersion"
@@ -674,6 +690,8 @@ static char *SDMMD_Accessibility_DomainKeys[SDM_MD_Accessibility_Domain_Key_Coun
 #define kSetupDone										"SetupDone"
 #define kPBDiagnosticsPresented							"PBDiagnosticsPresented"
 #define kAppleIDPB2Presented							"AppleIDPB2Presented"
+#define kSysCfg											"SysCfg"
+#define kSysCfgData										"SysCfgData"
 
 
 enum SDM_MD_Purple_Domain_Key {
@@ -806,7 +824,7 @@ ATR_UNUSED static struct SDM_MD_Domain_Key SDMMDKnownDomain[SDM_MD_Domain_Count]
 	{kRestrictionDomain, SDMMD_Restriction_DomainKeys, SDM_MD_Restriction_Domain_Key_Count},
 	{kFairplayDomain, SDMMD_Fairplay_DomainKeys, SDM_MD_Fairplay_Domain_Key_Count},
 	{kSoftwareBehaviorDomain, SDMMD_SoftBehavior_DomainKeys, SDM_MD_SoftBehavior_Domain_Key_Count},
-	{kiTunesDomain, SDMMD_iTunes_DomainKeys, SDM_MD_iTunes_Domain_Key_Count},
+	{kiTunesMobileDomain, SDMMD_iTunes_DomainKeys, SDM_MD_iTunes_Domain_Key_Count},
 	{kDeveloperDomain, SDMMD_Developer_DomainKeys, SDM_MD_Developer_Domain_Key_Count},
 	{kDebugDomain, SDMMD_Debug_DomainKeys, SDM_MD_Debug_Domain_Key_Count},
 	{kAccessibilityDomain, SDMMD_Accessibility_DomainKeys, SDM_MD_Accessibility_Domain_Key_Count},

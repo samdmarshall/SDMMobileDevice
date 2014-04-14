@@ -263,31 +263,31 @@ CFPropertyListRef FormatHomescreen(struct SpringboardDeviceInfo *info, CFPropert
 struct SpringboardDeviceInfo* CreateSpringboardInfoFromDevice(SDMMD_AMDeviceRef device) {
 	struct SpringboardDeviceInfo *info = calloc(0x1, S(struct SpringboardDeviceInfo));
 	
-	CFNumberRef dockCount = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesDomain), CFSTR(kHomeScreenIconDockMaxCount));
+	CFNumberRef dockCount = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesMobileDomain), CFSTR(kHomeScreenIconDockMaxCount));
 	CFNumberGetValue(dockCount, kCFNumberSInt32Type, &(info->dockCount));
 	CFSafeRelease(dockCount);
 	
-	CFNumberRef screenRow = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesDomain), CFSTR(kHomeScreenIconRows));
+	CFNumberRef screenRow = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesMobileDomain), CFSTR(kHomeScreenIconRows));
 	CFNumberGetValue(screenRow, kCFNumberSInt32Type, &(info->screenRow));
 	CFSafeRelease(screenRow);
 	
-	CFNumberRef screenColumn = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesDomain), CFSTR(kHomeScreenIconColumns));
+	CFNumberRef screenColumn = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesMobileDomain), CFSTR(kHomeScreenIconColumns));
 	CFNumberGetValue(screenColumn, kCFNumberSInt32Type, &(info->screenColumn));
 	CFSafeRelease(screenColumn);
 	
-	CFNumberRef screenMaxPage = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesDomain), CFSTR(kHomeScreenMaxPages));
+	CFNumberRef screenMaxPage = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesMobileDomain), CFSTR(kHomeScreenMaxPages));
 	CFNumberGetValue(screenMaxPage, kCFNumberSInt32Type, &(info->screenMaxPage));
 	CFSafeRelease(screenMaxPage);
 	
-	CFNumberRef folderRow = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesDomain), CFSTR(kIconFolderRows));
+	CFNumberRef folderRow = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesMobileDomain), CFSTR(kIconFolderRows));
 	CFNumberGetValue(folderRow, kCFNumberSInt32Type, &(info->folderRow));
 	CFSafeRelease(folderRow);
 	
-	CFNumberRef folderColumn = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesDomain), CFSTR(kIconFolderColumns));
+	CFNumberRef folderColumn = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesMobileDomain), CFSTR(kIconFolderColumns));
 	CFNumberGetValue(folderColumn, kCFNumberSInt32Type, &(info->folderColumn));
 	CFSafeRelease(folderColumn);
 	
-	CFNumberRef folderMaxPage = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesDomain), CFSTR(kIconFolderMaxPages));
+	CFNumberRef folderMaxPage = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesMobileDomain), CFSTR(kIconFolderMaxPages));
 	CFNumberGetValue(folderMaxPage, kCFNumberSInt32Type, &(info->folderMaxPage));
 	CFSafeRelease(folderMaxPage);
 

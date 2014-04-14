@@ -142,7 +142,7 @@ kern_return_t test_sdm_Sessioned_AMDeviceCopyValue(SDMMD_AMDeviceRef sdm, CFType
 	if (SDM_MD_CallSuccessful(result)) {
 		result = SDMMD_AMDeviceStartSession(sdm);
 		if (SDM_MD_CallSuccessful(result)) {
-			sdm_value = SDMMD_AMDeviceCopyValue(sdm, CFSTR(kiTunesDomain), CFSTR(kMinMacOSVersion));
+			sdm_value = SDMMD_AMDeviceCopyValue(sdm, CFSTR(kiTunesMobileDomain), CFSTR(kMinMacOSVersion));
 			if (sdm_value == NULL || CFStringCompare(sdm_value, CFSTR("GetProhibited"), 0) == kCFCompareEqualTo) {
 				printf("\t\tSDMMD_AMDeviceCopyValue (w/ Session): GetProhibited\n");
 				sdm_return = kAMDGetProhibitedError;
