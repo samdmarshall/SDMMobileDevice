@@ -192,6 +192,7 @@ sdmmd_return_t SDMMD_ServiceSendMessage(SocketConnection handle, CFPropertyListR
 sdmmd_return_t SDMMD_ServiceReceiveMessage(SocketConnection handle, CFPropertyListRef *data) {
 	CFDataRef dataBuffer = NULL;
 	sdmmd_return_t result;
+	*data = NULL;
 	
 	result = SDMMD_ServiceReceive(handle, &dataBuffer);
 	if (result == kAMDSuccess) {
