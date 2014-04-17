@@ -247,7 +247,7 @@ void SDMMD_USBMuxClose(SDMMD_USBMuxListenerRef listener) {
  */
 
 uint32_t SDMMD_ConnectToUSBMux() {
-	sdmmd_return_t result = kAMDSuccess;
+	int result = 0x0;
 	
 	// Initialize socket
 	uint32_t sock = socket(AF_UNIX, SOCK_STREAM, 0);
@@ -297,6 +297,11 @@ uint32_t SDMMD_ConnectToUSBMux() {
 			int err = errno;
 			printf("%s: ioctl FIONBIO failed: %d - %s\n", __FUNCTION__, err, strerror(err));
 		}
+	}
+	
+	if (!result) {
+		close(sock);
+		sock = -1;
 	}
 	
 	return sock;
