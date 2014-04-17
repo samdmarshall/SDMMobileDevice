@@ -25,8 +25,7 @@
 #define kTestFileForAFC "iTunes_Control/iTunes/IC-Info.sidv"
 #define kTestCreateFileForAFC "sdm_md_test_file.dat"
 
-typedef void (*CallBack)(CFDictionaryRef dict, int arg);
-typedef void (*CallBack_Ptr)(CFDictionaryRef dict, void* arg);
+typedef void (*CallBack)(CFDictionaryRef dict, void* arg);
 
 ATR_UNUSED static void SDMMD_Default_mount_callback(CFDictionaryRef dict, int arg) {
 	CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));

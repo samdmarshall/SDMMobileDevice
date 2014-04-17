@@ -68,7 +68,7 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 									uint64_t count = CFArrayGetCount(responses);
 									for (uint32_t i = 0; i < count; i++) {
 										CFDictionaryRef value = CFArrayGetValueAtIndex(responses, i);
-										handle(value, (int)paramStart);
+										handle(value, paramStart);
 									}
 								}
 								else {
