@@ -298,6 +298,8 @@ typedef enum SDMMD_LockdownError {
 
 #define sdmmd_dl_return_t enum SDMMD_LockdownError
 
+sdmmd_return_t SDMMD_ImageMounterErrorConvert(CFStringRef error);
+
 sdmmd_dl_return_t SDMMD__ConvertLockdowndError(CFStringRef error);
 
 sdmmd_return_t SDMMD__ConvertServiceError(CFStringRef error);

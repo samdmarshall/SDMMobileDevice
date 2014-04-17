@@ -22,6 +22,62 @@
 
 #include "SDMMD_Error.h"
 
+sdmmd_return_t SDMMD_ImageMounterErrorConvert(CFStringRef error) {
+	sdmmd_return_t result = kAMDSuccess;
+	if (CFEqual(error, CFSTR("MissingImageSignature"))) {
+		result = kAMDMobileImageMounterMissingImageSignature;
+	}
+	else if (CFEqual(error, CFSTR("ResponseCreationFailed"))) {
+		result = kAMDMobileImageMounterResponseCreationFailed;
+	}
+	else if (CFEqual(error, CFSTR("MissingImageType"))) {
+		result = kAMDMobileImageMounterMissingImageType;
+	}
+	else if (CFEqual(error, CFSTR("MissingImagePath"))) {
+		result = kAMDMobileImageMounterMissingImagePath;
+	}
+	else if (CFEqual(error, CFSTR("ImageMapLoadFailed "))) {
+		result = kAMDMobileImageMounterImageMapLoadFailed;
+	}
+	else if (CFEqual(error, CFSTR("AlreadyMounted"))) {
+		result = kAMDMobileImageMounterAlreadyMounted;
+	}
+	else if (CFEqual(error, CFSTR("ImageMoveFailed"))) {
+		result = kAMDMobileImageMounterImageMoveFailed;
+	}
+	else if (CFEqual(error, CFSTR("MountPathMissing"))) {
+		result = kAMDMobileImageMounterMountPathMissing;
+	}
+	else if (CFEqual(error, CFSTR("MountPathNotEmpty"))) {
+		result = kAMDMobileImageMounterMountPathNotEmpty;
+	}
+	else if (CFEqual(error, CFSTR("ImageMountFailed"))) {
+		result = kAMDMobileImageMounterImageMountFailed;
+	}
+	else if (CFEqual(error, CFSTR("TrustCacheLoadFailed"))) {
+		result = kAMDMobileImageMounterTrustCacheLoadFailed;
+	}
+	else if (CFEqual(error, CFSTR("DigestFailed"))) {
+		result = kAMDMobileImageMounterDigestFailed;
+	}
+	else if (CFEqual(error, CFSTR("DigestCreationFailed"))) {
+		result = kAMDMobileImageMounterDigestCreationFailed;
+	}
+	else if (CFEqual(error, CFSTR("ImageVerificationFailed"))) {
+		result = kAMDMobileImageMounterImageVerificationFailed;
+	}
+	else if (CFEqual(error, CFSTR("ImageInfoCreationFailed"))) {
+		result = kAMDMobileImageMounterImageInfoCreationFailed;
+	}
+	else if (CFEqual(error, CFSTR("ImageMapStoreFailed"))) {
+		result = kAMDMobileImageMounterImageMapStoreFailed;
+	}
+	else {
+		result = kAMDErrorError;
+	}
+	return result;
+}
+
 sdmmd_dl_return_t SDMMD__ConvertLockdowndError(CFStringRef error) {
 	sdmmd_dl_return_t result = 0xe8000013;
 	if (error) {

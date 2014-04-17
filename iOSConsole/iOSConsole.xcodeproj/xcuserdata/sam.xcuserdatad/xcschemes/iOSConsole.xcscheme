@@ -67,6 +67,10 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "9781f990d6859a4fb057edb899aa688fa4ebdfff"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "--develop"
             isEnabled = "YES">
          </CommandLineArgument>

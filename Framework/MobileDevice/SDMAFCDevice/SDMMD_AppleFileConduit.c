@@ -676,6 +676,45 @@ sdmmd_return_t SDMMD_AMDeviceCopyFile(void *thing, void *thing2, void *thing3, S
 				result = SDMMD_AFCProcessOperation(conn, &write_op);
 				if (SDM_MD_CallSuccessful(result)) {
 					// probably fire a callback?
+					
+				}
+				else {
+					break;
+				}
+			}
+			SDMMD_AFCOperationRef file_close = SDMMD_AFCFileDescriptorCreateCloseOperation(file_descriptor);
+			SDMMD_AFCProcessOperation(conn, &file_close);
+		}
+	}
+	CFSafeRelease(local_file);
+	return result;
+}
+
+sdmmd_return_t SDMMD_AMDeviceRemoteCopyFile(void *thing, void *thing2, void *thing3, SDMMD_AFCConnectionRef conn, char *local, char *remote) {
+	sdmmd_return_t result = kAMDSuccess;
+	CFDataRef local_file = CFDataCreateFromFilePath(local);
+	if (local_file) {
+		uint32_t packets = (uint32_t)((CFDataGetLength(local_file)+kAFCMaxTransferSize-1)/kAFCMaxTransferSize);
+		CFStringRef remote_path = CFStringCreateWithBytes(kCFAllocatorDefault, (const UInt8 *)remote, strlen(remote), kCFStringEncodingUTF8, false);
+		SDMMD_AFCOperationRef file_create = SDMMD_AFCOperationCreateFileRefOpen(remote_path, 2);
+		result = SDMMD_AFCProcessOperation(conn, &file_create);
+		if (SDM_MD_CallSuccessful(result)) {
+			uint64_t file_descriptor;
+			memcpy(&file_descriptor, CFDataGetBytePtr(file_create->packet->response), sizeof(uint64_t));
+			
+			uint64_t offset = 0;
+			uint64_t remainder = 0;
+			for (uint32_t index = 0; index < packets; index++) {
+				offset = kAFCMaxTransferSize*index;
+				remainder = (CFDataGetLength(local_file) - offset);
+				remainder = (remainder > kAFCMaxTransferSize ? kAFCMaxTransferSize : remainder);
+				CFRange current_read = CFRangeMake((CFIndex)offset, (CFIndex)remainder);
+				CFDataRef write_data = CFDataCreateFromSubrangeOfData(local_file, current_read);
+				SDMMD_AFCOperationRef write_op = SDMMD_AFCFileDescriptorCreateReadOperation(file_descriptor, remainder);
+				result = SDMMD_AFCProcessOperation(conn, &write_op);
+				if (SDM_MD_CallSuccessful(result)) {
+					// probably fire a callback?
+					CFShow(write_op->packet->response);
 				}
 				else {
 					break;
