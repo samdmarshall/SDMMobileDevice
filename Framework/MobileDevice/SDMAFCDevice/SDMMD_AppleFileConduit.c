@@ -15,6 +15,8 @@
 #include <sys/types.h>
 #include "Core.h"
 
+#define kAFCMaxTransferSize 4194304
+
 void SDMMD_AFCHeaderInit(SDMMD_AFCPacketHeader *header, uint32_t command, uint32_t size, uint32_t data, uint32_t pack_num);
 
 SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(SDMMD_AMConnectionRef conn) {
@@ -651,7 +653,40 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateRemovePathAndContents(CFStringRef 
 #pragma mark Alias Operations
 
 sdmmd_return_t SDMMD_AMDeviceCopyFile(void *thing, void *thing2, void *thing3, SDMMD_AFCConnectionRef conn, char *local, char *remote) {
-	return kAMDSuccess;
+	sdmmd_return_t result = kAMDSuccess;
+	CFDataRef local_file = CFDataCreateFromFilePath(local);
+	if (local_file) {
+		uint32_t packets = ceil(CFDataGetLength(local_file)/kAFCMaxTransferSize);
+		CFStringRef remote_path = CFStringCreateWithBytes(kCFAllocatorDefault, (const UInt8 *)remote, strlen(remote), kCFStringEncodingUTF8, false);
+		SDMMD_AFCOperationRef file_create = SDMMD_AFCOperationCreateFileRefOpen(remote_path, 2);
+		result = SDMMD_AFCProcessOperation(conn, &file_create);
+		if (SDM_MD_CallSuccessful(result)) {
+			uint64_t file_descriptor;
+			memcpy(&file_descriptor, CFDataGetBytePtr(file_create->packet->response), sizeof(uint64_t));
+			
+			uint64_t offset = 0;
+			uint64_t remainder = 0;
+			for (uint32_t index = 0; index < packets; index++) {
+				offset = kAFCMaxTransferSize*index;
+				remainder = (CFDataGetLength(local_file) - offset);
+				remainder = (remainder > kAFCMaxTransferSize ? kAFCMaxTransferSize : remainder);
+				CFRange current_read = CFRangeMake((CFIndex)offset, (CFIndex)remainder);
+				CFDataRef write_data = CFDataCreateFromSubrangeOfData(local_file, current_read);
+				SDMMD_AFCOperationRef write_op = SDMMD_AFCFileDescriptorCreateWriteOperation(file_descriptor, write_data);
+				result = SDMMD_AFCProcessOperation(conn, &write_op);
+				if (SDM_MD_CallSuccessful(result)) {
+					
+				}
+				else {
+					break;
+				}
+			}
+			SDMMD_AFCOperationRef file_close = SDMMD_AFCFileDescriptorCreateCloseOperation(file_descriptor);
+			SDMMD_AFCProcessOperation(conn, &file_close);
+		}
+	}
+	CFSafeRelease(local_file);
+	return result;
 }
 
 sdmmd_return_t SDMMD_check_can_touch(SDMMD_AFCConnectionRef conn, CFDataRef *unknown) {
