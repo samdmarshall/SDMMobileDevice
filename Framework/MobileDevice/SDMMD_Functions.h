@@ -448,7 +448,7 @@ ATR_UNUSED static Boolean SDMMD__AMDCFURLGetCStringForFileSystemPath(CFURLRef ur
 	return false;
 }
 
-ATR_UNUSED static void SDMMD_fire_callback(CallBack handle, void* unknown, CFStringRef status) {
+ATR_UNUSED static void SDMMD_fire_callback(CallBack handle, int unknown, CFStringRef status) {
 	if (handle) {
 		CFMutableDictionaryRef dict = SDMMD_create_dict();
 		if (dict) {
@@ -458,7 +458,7 @@ ATR_UNUSED static void SDMMD_fire_callback(CallBack handle, void* unknown, CFStr
 	}
 }
 
-ATR_UNUSED static void SDMMD_fire_callback_767f4(CallBack handle, void* unknown, uint32_t percent, CFStringRef string) {
+ATR_UNUSED static void SDMMD_fire_callback_767f4(CallBack handle, int unknown, uint32_t percent, CFStringRef string) {
 	if (handle) {
 		CFMutableDictionaryRef dict = SDMMD_create_dict();
 		CFNumberRef num = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &percent);

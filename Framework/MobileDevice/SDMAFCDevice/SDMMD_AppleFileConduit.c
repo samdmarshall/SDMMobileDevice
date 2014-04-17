@@ -708,8 +708,6 @@ sdmmd_return_t SDMMD_AMDeviceRemoteCopyFile(void *thing, void *thing2, void *thi
 				offset = kAFCMaxTransferSize*index;
 				remainder = (CFDataGetLength(local_file) - offset);
 				remainder = (remainder > kAFCMaxTransferSize ? kAFCMaxTransferSize : remainder);
-				CFRange current_read = CFRangeMake((CFIndex)offset, (CFIndex)remainder);
-				CFDataRef write_data = CFDataCreateFromSubrangeOfData(local_file, current_read);
 				SDMMD_AFCOperationRef write_op = SDMMD_AFCFileDescriptorCreateReadOperation(file_descriptor, remainder);
 				result = SDMMD_AFCProcessOperation(conn, &write_op);
 				if (SDM_MD_CallSuccessful(result)) {

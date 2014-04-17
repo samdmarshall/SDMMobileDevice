@@ -175,7 +175,7 @@ CFStringRef SDMMD_PathToDeviceSupport(SDMMD_AMDeviceRef device) {
 		SDMMD_AMDeviceStopSession(device);
 		SDMMD_AMDeviceDisconnect(device);
 		if (os_version && build_version) {
-			CFStringRef sdk_path = /*gCFSTR("/Users/sam");*/ SDMMD_CopyDeviceSupportPathFromXCRUN();
+			CFStringRef sdk_path = /*CFSTR("/Users/sam");*/ SDMMD_CopyDeviceSupportPathFromXCRUN();
 			CFStringRef device_support = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%@/DeviceSupport/%@"), sdk_path, os_version);
 			char *device_support_cstr = SDMCFStringGetString(device_support);
 			bool isDir = false;
@@ -260,7 +260,7 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 					if (deviceCopy) {
 						result = SDMMD_AMDeviceSecureStartSessionedService(device, CFSTR(AMSVC_MOBILE_IMAGE_MOUNT), &connection);
 						if (result == 0) {
-							SDMMD_fire_callback(handle, unknown, CFSTR("LookingUpImage"));
+							SDMMD_fire_callback(handle, (int)unknown, CFSTR("LookingUpImage"));
 							if (connection) {
 								CFMutableDictionaryRef commandDict = SDMMD_create_dict();
 								if (commandDict) {
@@ -307,10 +307,10 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 								bool supported = SDMMD_device_os_is_at_least(device, CFSTR("3.0"));
 								bool mounted = false;
 								if (supported && result != kAMDSuccess) {
-									SDMMD_fire_callback(handle, unknown, CFSTR("CopyingImage"));
+									SDMMD_fire_callback(handle, (int)unknown, CFSTR("CopyingImage"));
 									result = SDMMD_copy_image(device, path);
 									if (result != kAMDSuccess) {
-										SDMMD_fire_callback(handle, unknown, CFSTR("StreamingImage"));
+										SDMMD_fire_callback(handle, (int)unknown, CFSTR("StreamingImage"));
 										char fspath[0x400] = {0};
 										Boolean fsRep = CFStringGetFileSystemRepresentation(path, fspath, 0x400);
 										if (fsRep) {
@@ -380,7 +380,7 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 										}
 									}
 									if (!mounted) {
-										SDMMD_fire_callback(handle, unknown, CFSTR("MountingImage"));
+										SDMMD_fire_callback(handle, (int)unknown, CFSTR("MountingImage"));
 										CFMutableDictionaryRef mountDict = SDMMD_create_dict();
 										if (mountDict) {
 											CFDictionarySetValue(mountDict, CFSTR("Command"), CFSTR("MountImage"));

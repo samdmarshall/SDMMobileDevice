@@ -52,7 +52,7 @@ sdmmd_return_t SDMMD_AMDeviceLookupAppInfo(SDMMD_AMDeviceRef device, CFDictionar
 				CFMutableDictionaryRef dict = SDMMD_create_dict();
 				result = kAMDNoResourcesError;
 				if (dict) {
-					result = SDMMD_perform_command(conn, CFSTR("Lookup"), 0, SDMMD_lookup_callback, 2, dict, CFSTR("ClientOptions"), options);
+					result = SDMMD_perform_command(conn, CFSTR("Lookup"), 0, (CallBack)SDMMD_lookup_callback, 2, dict, CFSTR("ClientOptions"), options);
 					if (!result) {
 						*response = dict;
 					}
@@ -78,7 +78,7 @@ sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDict
 				CFMutableDictionaryRef dict = SDMMD_create_dict();
 				result = kAMDNoResourcesError;
 				if (dict) {
-					result = SDMMD_perform_command(conn, CFSTR("Browse"), 0, SDMMD_browse_callback, 2, dict, CFSTR("ClientOptions"), options);
+					result = SDMMD_perform_command(conn, CFSTR("Browse"), 0, (CallBack)SDMMD_browse_callback, 2, dict, CFSTR("ClientOptions"), options);
 					if (!result) {
 						*response = dict;
 					}
@@ -121,9 +121,9 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 						CFURLRef copy = CFURLCreateCopyAppendingPathComponent(kCFAllocatorDefault, base, lastComp, true);
 						char *copyPath = NULL;
 						SDMMD__AMDCFURLGetCStringForFileSystemPath(copy, copyPath);
-						SDMMD_fire_callback_767f4(transferCallback, unknown, 0, CFSTR("PreflightingTransfer"));
+						SDMMD_fire_callback_767f4(transferCallback, (int)unknown, 0, CFSTR("PreflightingTransfer"));
 						//SDMMD_preflight_transfer(&cpath, &pathStat, &remoteStat);
-						SDMMD_fire_callback_767f4(transferCallback, unknown, 0, CFSTR("TransferingPackage"));
+						SDMMD_fire_callback_767f4(transferCallback, (int)unknown, 0, CFSTR("TransferingPackage"));
 						ATR_UNUSED SDMMD_AFCConnectionRef afcConn = SDMMD_AFCConnectionCreate(conn);//(r12, conn, 0x0, 0x0, &var_72);
 						// loop that iterates through all of file contents
 						
