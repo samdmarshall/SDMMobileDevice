@@ -247,7 +247,7 @@ void SDMMD_USBMuxClose(SDMMD_USBMuxListenerRef listener) {
  */
 
 uint32_t SDMMD_ConnectToUSBMux() {
-	sdmmd_return_t result = kAMDSuccess;
+	int result = 0x0;
 	
 	// Initialize socket
 	uint32_t sock = socket(AF_UNIX, SOCK_STREAM, 0);
@@ -297,6 +297,11 @@ uint32_t SDMMD_ConnectToUSBMux() {
 			int err = errno;
 			printf("%s: ioctl FIONBIO failed: %d - %s\n", __FUNCTION__, err, strerror(err));
 		}
+	}
+	
+	if (!result) {
+		close(sock);
+		sock = -1;
 	}
 	
 	return sock;
@@ -377,7 +382,7 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 				
 		while (!(*listener)->isActive) {
 			struct USBMuxPacket *startListen = SDMMD_USBMuxCreatePacketType(kSDMMD_USBMuxPacketListenType, NULL);
-			SDMMD_USBMuxListenerSend(*listener, startListen);
+			SDMMD_USBMuxListenerSend(*listener, &startListen);
 			if (startListen->payload) {
 				struct USBMuxResponseCode response = SDMMD_USBMuxParseReponseCode(startListen->payload);
 				if (response.code == 0x0){
@@ -395,17 +400,17 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 	});
 }
 
-void SDMMD_USBMuxListenerSend(SDMMD_USBMuxListenerRef listener, struct USBMuxPacket *packet) {
+void SDMMD_USBMuxListenerSend(SDMMD_USBMuxListenerRef listener, struct USBMuxPacket **packet) {
 	listener->semaphore = dispatch_semaphore_create(0x0);
-	SDMMD_USBMuxSend(listener->socket, packet);
-	dispatch_semaphore_wait(listener->semaphore, packet->timeout);
+	SDMMD_USBMuxSend(listener->socket, *packet);
+	dispatch_semaphore_wait(listener->semaphore, (*packet)->timeout);
 	
 	CFMutableArrayRef updateWithRemove = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, listener->responses);
-	struct USBMuxPacket *responsePacket = (struct USBMuxPacket *)calloc(0x1, sizeof(struct USBMuxPacket));
+	struct USBMuxPacket *responsePacket = NULL;
 	uint32_t removeCounter = 0x0;
 	for (uint32_t i = 0x0; i < CFArrayGetCount(listener->responses); i++) {
 		struct USBMuxPacket *response = (struct USBMuxPacket *)CFArrayGetValueAtIndex(listener->responses, i);
-		if (packet->body.tag == response->body.tag) {
+		if ((*packet)->body.tag == response->body.tag) {
 			responsePacket = response;
 			CFArrayRemoveValueAtIndex(updateWithRemove, i-removeCounter);
 			removeCounter++;
@@ -414,7 +419,11 @@ void SDMMD_USBMuxListenerSend(SDMMD_USBMuxListenerRef listener, struct USBMuxPac
 	CFSafeRelease(listener->responses);
 	listener->responses = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, updateWithRemove);
 	CFSafeRelease(updateWithRemove);
-	*packet = *responsePacket;
+	USBMuxPacketRelease(*packet);
+	if (!responsePacket) {
+		responsePacket = (struct USBMuxPacket *)calloc(0x1, sizeof(struct USBMuxPacket));
+	}
+	*packet = responsePacket;
 	dispatch_release(listener->semaphore);
 }
 

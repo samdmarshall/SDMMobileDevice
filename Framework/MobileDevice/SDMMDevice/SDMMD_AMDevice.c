@@ -1581,7 +1581,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 bool SDMMD_AMDeviceIsAttached(SDMMD_AMDeviceRef device) {
 	bool result = false;
 	struct USBMuxPacket *devicesPacket = SDMMD_USBMuxCreatePacketType(kSDMMD_USBMuxPacketListDevicesType, NULL);
-	SDMMD_USBMuxListenerSend(SDMMobileDevice->usbmuxd, devicesPacket);
+	SDMMD_USBMuxListenerSend(SDMMobileDevice->usbmuxd, &devicesPacket);
 	for (uint32_t i = 0; i < CFArrayGetCount(SDMMobileDevice->deviceList); i++) {
 		SDMMD_AMDeviceRef deviceCheck = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(SDMMobileDevice->deviceList, i);
 		if (SDMMD_AMDeviceGetConnectionID(device) == SDMMD_AMDeviceGetConnectionID(deviceCheck)) {
@@ -1595,7 +1595,7 @@ bool SDMMD_AMDeviceIsAttached(SDMMD_AMDeviceRef device) {
 
 CFArrayRef SDMMD_AMDCreateDeviceList() {
 	struct USBMuxPacket *devicesPacket = SDMMD_USBMuxCreatePacketType(kSDMMD_USBMuxPacketListDevicesType, NULL);
-	SDMMD_USBMuxListenerSend(SDMMobileDevice->usbmuxd, devicesPacket);
+	SDMMD_USBMuxListenerSend(SDMMobileDevice->usbmuxd, &devicesPacket);
 	USBMuxPacketRelease(devicesPacket);
 	CFArrayRef deviceArray = CFArrayCreateCopy(kCFAllocatorDefault, SDMMobileDevice->deviceList);
 	return deviceArray;

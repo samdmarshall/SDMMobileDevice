@@ -122,7 +122,15 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port
 SDMMD_USBMuxListenerRef SDMMD_USBMuxCreate();
 void SDMMD_USBMuxClose(SDMMD_USBMuxListenerRef listener);
 void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener);
-void SDMMD_USBMuxListenerSend(SDMMD_USBMuxListenerRef listener, struct USBMuxPacket *packet);
+
+/*
+ * Pass reference to packet to send. Upon return, *packet will either contain response
+ * packet or empty packet structure.
+ */
+void SDMMD_USBMuxListenerSend(SDMMD_USBMuxListenerRef listener, struct USBMuxPacket **packet);
+/*
+ * Pass packet structure to store result in.
+ */
 void SDMMD_USBMuxListenerReceive(SDMMD_USBMuxListenerRef listener, struct USBMuxPacket *packet);
 
 struct USBMuxPacket * SDMMD_USBMuxCreatePacketType(SDMMD_USBMuxPacketMessageType type, CFDictionaryRef payload);
