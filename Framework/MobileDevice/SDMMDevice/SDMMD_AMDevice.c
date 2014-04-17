@@ -1602,7 +1602,7 @@ CFArrayRef SDMMD_AMDCreateDeviceList() {
 }
 
 SDMMD_AMDeviceRef SDMMD_AMDeviceCreateCopy(SDMMD_AMDeviceRef device) {
-	SDMMD_AMDeviceRef copy = (SDMMD_AMDeviceRef)malloc(sizeof(struct sdmmd_am_device));
+	SDMMD_AMDeviceRef copy = (SDMMD_AMDeviceRef)calloc(1, sizeof(struct sdmmd_am_device));
 	memcpy(copy, device, sizeof(struct sdmmd_am_device));
 	return copy;
 }

@@ -23,6 +23,7 @@ static char *appsArg = "-a,--apps";
 static char *infoArg = "-i,--info";
 static char *runArg = "-r,--run";
 static char *powerArg = "-p,--diag";
+static char *devArg = "-x,--develop";
 
 enum iOSConsoleOptions {
 	OptionsHelp = 0x0,
@@ -34,6 +35,7 @@ enum iOSConsoleOptions {
 	OptionsInfo,
 	OptionsRun,
 	OptionsDiag,
+	OptionsDev,
 	OptionsCount
 };
 
@@ -46,7 +48,8 @@ static struct option long_options[OptionsCount] = {
 	{"apps", no_argument, 0x0, 'a'},
 	{"info", no_argument, 0x0, 'i'},
 	{"run", required_argument, 0x0, 'r'},
-	{"diag", required_argument, 0x0, 'p'}
+	{"diag", required_argument, 0x0, 'p'},
+	{"develop", no_argument, 0x0, 'x'}
 };
 
 static bool optionsEnable[OptionsCount] = {};
@@ -101,7 +104,8 @@ int main(int argc, const char * argv[]) {
 				if (optarg && !optionsEnable[OptionsAttach]) {
 					service = optarg;
 					optionsEnable[OptionsAttach] = true;
-				} else {
+				}
+				else {
 					printf("please specify a service name to attach");
 				}
 				break;
@@ -122,7 +126,8 @@ int main(int argc, const char * argv[]) {
 					}
 					if (argsCounter == 0x2) {
 						key = (char*)SDMCFStringGetString(CFArrayGetValueAtIndex(argsArray, 0x1));
-					} else {
+					}
+					else {
 						key = calloc(0x1, sizeof(char)*(strlen(kAllKeys)+0x1));
 						memcpy(key, kAllKeys, strlen(kAllKeys));
 					}
@@ -153,6 +158,10 @@ int main(int argc, const char * argv[]) {
 				}
 				break;
 			};
+			case 'x': {
+				optionsEnable[OptionsDev] = true;
+				break;
+			}
 			default: {
 				printf("--help for help");
 				break;
@@ -170,7 +179,9 @@ int main(int argc, const char * argv[]) {
 			printf("%s : display info of a device\n",infoArg);
 			printf("%s [bundle id] : run an application with specified [bundle id]\n",runArg);
 			printf("%s [sleep|reboot|shutdown] : perform diag power operations on a device\n",powerArg);
-		} else {
+			printf("%s : setup device for development\n",devArg);
+		}
+		else {
 			if (strncmp(help, "service", strlen("service")) == 0x0) {
 				printf(" shorthand : service identifier\n--------------------------------\n");
 				for (uint32_t i = 0x0; i < SDM_MD_Service_Count; i++) {
@@ -194,15 +205,20 @@ int main(int argc, const char * argv[]) {
 	if (optionsEnable[OptionsDevice]) {
 		if (optionsEnable[OptionsInfo]) {
 			
-		} else if (optionsEnable[OptionsApps]) {
+		}
+		else if (optionsEnable[OptionsApps]) {
 			LookupAppsOnDevice(udid);
-		} else if (optionsEnable[OptionsAttach]) {
+		}
+		else if (optionsEnable[OptionsAttach]) {
 			PerformService(udid, service);
-		} else if (optionsEnable[OptionsQuery]) {
+		}
+		else if (optionsEnable[OptionsQuery]) {
 			PerformQuery(udid, domain, key);
-		} else if (optionsEnable[OptionsRun]) {
+		}
+		else if (optionsEnable[OptionsRun]) {
 			RunAppOnDeviceWithIdentifier(udid, bundle);
-		} else if (optionsEnable[OptionsDiag]) {
+		}
+		else if (optionsEnable[OptionsDiag]) {
 			if (diagArg) {
 				if (strncmp(diagArg, "sleep", strlen("sleep")) == 0x0) {
 					SendSleepToDevice(udid);
@@ -212,6 +228,9 @@ int main(int argc, const char * argv[]) {
 					SendShutdownToDevice(udid);
 				}
 			}
+		}
+		else if (optionsEnable[OptionsDev]) {
+			SetupDeviceForDevelopment(udid);
 		}
 	}
 	Safe(free, domain);

@@ -158,6 +158,7 @@ CFStringRef SDMMD_CopyDeviceSupportPathFromXCRUN() {
 	char *path = calloc(1, sizeof(char[1024]));
     fgets(path, sizeof(char[1024]), output_pipe);
     pclose(output_pipe);
+	strtok(path, "\n");
 	CFStringRef xcrun_path = CFStringCreateWithCString(NULL, path, kCFStringEncodingUTF8);
 	Safe(free,path);
     return xcrun_path;
@@ -167,8 +168,10 @@ CFStringRef SDMMD_PathToDeviceSupport(SDMMD_AMDeviceRef device) {
 	CFStringRef dev_support_path = NULL;
 	if (device) {
 		SDMMD_AMDeviceConnect(device);
+		SDMMD_AMDeviceStartSession(device);
 		CFStringRef os_version = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kProductVersion));
 		CFStringRef build_version = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kBuildVersion));
+		SDMMD_AMDeviceStopSession(device);
 		SDMMD_AMDeviceDisconnect(device);
 		if (os_version && build_version) {
 			CFStringRef sdk_path = SDMMD_CopyDeviceSupportPathFromXCRUN();

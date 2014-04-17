@@ -35,7 +35,7 @@ SDMMD_AMDeviceRef FindDeviceFromUDID(char *udid) {
 			}
 		}
 		if (foundDevice) {
-			device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
+			device = SDMMD_AMDeviceCreateCopy((SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index));
 		}
 	} else {
 		printf("No devices connected.\n");

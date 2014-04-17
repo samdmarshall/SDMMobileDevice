@@ -17,5 +17,6 @@
 #include "apps.h"
 #include "run.h"
 #include "power.h"
+#include "dev.h"
 
 #endif

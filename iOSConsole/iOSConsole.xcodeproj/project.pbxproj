@@ -35,6 +35,7 @@
 		22D7FA3F18F56B7A0034CC66 /* SDMMD_AppleFileConduit.c in Sources */ = {isa = PBXBuildFile; fileRef = 22D7FA3D18F56B7A0034CC66 /* SDMMD_AppleFileConduit.c */; };
 		22DEF94018833562008E909F /* CFTypeAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22DEF93F18833562008E909F /* CFTypeAddition.c */; };
 		22EFC8BC1900293500C29BFF /* File.c in Sources */ = {isa = PBXBuildFile; fileRef = 22EFC8BA1900293500C29BFF /* File.c */; };
+		22EFC8C01900331500C29BFF /* dev.c in Sources */ = {isa = PBXBuildFile; fileRef = 22EFC8BF1900331500C29BFF /* dev.c */; };
 		22FE3F10189E84B2005C2DB2 /* springboard.c in Sources */ = {isa = PBXBuildFile; fileRef = 22FE3F0F189E84B2005C2DB2 /* springboard.c */; };
 		22FFB8CE1880DE140073095D /* CFDictionaryAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22FFB8C21880DE140073095D /* CFDictionaryAddition.c */; };
 		22FFB8CF1880DE140073095D /* Matrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 22FFB8C61880DE140073095D /* Matrix.c */; };
@@ -140,6 +141,8 @@
 		22EFC8B91900293500C29BFF /* Endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Endian.h; sourceTree = "<group>"; };
 		22EFC8BA1900293500C29BFF /* File.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = File.c; sourceTree = "<group>"; };
 		22EFC8BB1900293500C29BFF /* File.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = File.h; sourceTree = "<group>"; };
+		22EFC8BE1900330E00C29BFF /* dev.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = dev.h; sourceTree = "<group>"; };
+		22EFC8BF1900331500C29BFF /* dev.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dev.c; sourceTree = "<group>"; };
 		22FE3F0E189E84A4005C2DB2 /* springboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = springboard.h; sourceTree = "<group>"; };
 		22FE3F0F189E84B2005C2DB2 /* springboard.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = springboard.c; sourceTree = "<group>"; };
 		22FFB8C01880DE140073095D /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
@@ -205,6 +208,7 @@
 		22310D6B1874F4B10092C107 /* iOSConsole */ = {
 			isa = PBXGroup;
 			children = (
+				22EFC8BD1900330400C29BFF /* dev */,
 				22FFB8BF1880DE140073095D /* Core */,
 				22648F93189440D800133948 /* power */,
 				22B955861878F145004DCBF0 /* run */,
@@ -422,6 +426,15 @@
 			name = run;
 			sourceTree = "<group>";
 		};
+		22EFC8BD1900330400C29BFF /* dev */ = {
+			isa = PBXGroup;
+			children = (
+				22EFC8BE1900330E00C29BFF /* dev.h */,
+				22EFC8BF1900331500C29BFF /* dev.c */,
+			);
+			name = dev;
+			sourceTree = "<group>";
+		};
 		22FE3F0D189E8491005C2DB2 /* springboard */ = {
 			isa = PBXGroup;
 			children = (
@@ -530,6 +543,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22B9558A1878F4A7004DCBF0 /* SDMMD_Debugger.c in Sources */,
+				22EFC8C01900331500C29BFF /* dev.c in Sources */,
 				22DEF94018833562008E909F /* CFTypeAddition.c in Sources */,
 				22FE3F10189E84B2005C2DB2 /* springboard.c in Sources */,
 				22FFB8CE1880DE140073095D /* CFDictionaryAddition.c in Sources */,
