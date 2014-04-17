@@ -194,6 +194,9 @@ void SDMMD_AMDebugConnectionClose(SDMMD_AMDebugConnectionRef dconn);
 sdmmd_return_t SDMMD_AMDebugConnectionStart(SDMMD_AMDebugConnectionRef dconn);
 sdmmd_return_t SDMMD_AMDebugConnectionStop(SDMMD_AMDebugConnectionRef dconn);
 
+sdmmd_return_t SDMMD_AMDeviceMountDeveloperImage(SDMMD_AMDeviceRef device); // use me instead of the one below for convenience
+sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef dict, CallBack handle, void* unknown);
+
 DebuggerCommandRef SDMMD_CreateDebuggingCommand(DebuggerCommandType commandCode, CFStringRef command, CFArrayRef arguments);
 void SDMMD_DebuggingCommandRelease(DebuggerCommandRef command);
 

@@ -87,6 +87,8 @@
 		22DEF97C188350E6008E909F /* Number.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF96E188350E6008E909F /* Number.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22DEF97D188350E6008E909F /* Pointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF96F188350E6008E909F /* Pointer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22DEF97E188350E6008E909F /* Range.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF970188350E6008E909F /* Range.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22EFC8B61900282500C29BFF /* File.c in Sources */ = {isa = PBXBuildFile; fileRef = 22EFC8B51900282500C29BFF /* File.c */; };
+		22EFC8B71900291600C29BFF /* File.h in Headers */ = {isa = PBXBuildFile; fileRef = 22EFC8B41900281B00C29BFF /* File.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3F38D21C18AECF7C00DE5FA9 /* SDMTypeTranslation.h in Headers */ = {isa = PBXBuildFile; fileRef = 3F38D21B18AECE1200DE5FA9 /* SDMTypeTranslation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3F38D22218B3B82800DE5FA9 /* Array.h in Headers */ = {isa = PBXBuildFile; fileRef = 2278490F18AFE5A100D1D6FB /* Array.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
@@ -228,6 +230,8 @@
 		22DEF970188350E6008E909F /* Range.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Range.h; sourceTree = "<group>"; };
 		22DEF97F18835209008E909F /* Attributes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Attributes.h; sourceTree = "<group>"; };
 		22DEF9811883722B008E909F /* SDMMD_Types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_Types.h; sourceTree = "<group>"; };
+		22EFC8B41900281B00C29BFF /* File.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = File.h; sourceTree = "<group>"; };
+		22EFC8B51900282500C29BFF /* File.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = File.c; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		3F38D21B18AECE1200DE5FA9 /* SDMTypeTranslation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMTypeTranslation.h; sourceTree = "<group>"; };
@@ -448,6 +452,8 @@
 			children = (
 				22C892AE189D75A8008B1D2D /* Buffer.h */,
 				22C892AD189D75A8008B1D2D /* Buffer.c */,
+				22EFC8B41900281B00C29BFF /* File.h */,
+				22EFC8B51900282500C29BFF /* File.c */,
 				22DEF961188350E6008E909F /* Core.h */,
 				22DEF962188350E6008E909F /* CoreFoundation */,
 				22DEF967188350E6008E909F /* Geometry */,
@@ -562,6 +568,7 @@
 				22D7FA3A18F0B2F50034CC66 /* SDMMD_AppleFileConduit.h in Headers */,
 				22D5F318179C81FD00C34745 /* SDMMD_Applications.h in Headers */,
 				22D5F31A179C820200C34745 /* SDMMD_Notification.h in Headers */,
+				22EFC8B71900291600C29BFF /* File.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -645,6 +652,7 @@
 				22AD934F178A1675002ACFB1 /* SDMMD_MRUSBDevice.c in Sources */,
 				22AD9356178A16CF002ACFB1 /* SDMMD_MDFUModeDevice.c in Sources */,
 				22AD9359178A1759002ACFB1 /* SDMMD_MRestorableDevice.c in Sources */,
+				22EFC8B61900282500C29BFF /* File.c in Sources */,
 				22AD936A178A17B0002ACFB1 /* SDMMD_MRestoreModeDevice.c in Sources */,
 				22C892AB189D75A1008B1D2D /* CFDataAddition.c in Sources */,
 				22D5F317179C81FD00C34745 /* SDMMD_Applications.c in Sources */,

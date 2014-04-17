@@ -675,7 +675,7 @@ sdmmd_return_t SDMMD_AMDeviceCopyFile(void *thing, void *thing2, void *thing3, S
 				SDMMD_AFCOperationRef write_op = SDMMD_AFCFileDescriptorCreateWriteOperation(file_descriptor, write_data);
 				result = SDMMD_AFCProcessOperation(conn, &write_op);
 				if (SDM_MD_CallSuccessful(result)) {
-					
+					// probably fire a callback?
 				}
 				else {
 					break;
