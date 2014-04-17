@@ -401,7 +401,7 @@ void SDMMD_USBMuxListenerSend(SDMMD_USBMuxListenerRef listener, struct USBMuxPac
 	dispatch_semaphore_wait(listener->semaphore, packet->timeout);
 	
 	CFMutableArrayRef updateWithRemove = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, listener->responses);
-	struct USBMuxPacket *responsePacket = (struct USBMuxPacket *)calloc(0x1, sizeof(struct USBMuxPacket));
+	struct USBMuxPacket *responsePacket = NULL;
 	uint32_t removeCounter = 0x0;
 	for (uint32_t i = 0x0; i < CFArrayGetCount(listener->responses); i++) {
 		struct USBMuxPacket *response = (struct USBMuxPacket *)CFArrayGetValueAtIndex(listener->responses, i);
@@ -415,6 +415,7 @@ void SDMMD_USBMuxListenerSend(SDMMD_USBMuxListenerRef listener, struct USBMuxPac
 	listener->responses = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, updateWithRemove);
 	CFSafeRelease(updateWithRemove);
 	USBMuxPacketRelease(packet);
+	if (!responsePacket) responsePacket = (struct USBMuxPacket *)calloc(0x1, sizeof(struct USBMuxPacket));
 	*packet = *responsePacket;
 	dispatch_release(listener->semaphore);
 }
