@@ -414,7 +414,6 @@ void SDMMD_USBMuxListenerSend(SDMMD_USBMuxListenerRef listener, struct USBMuxPac
 	CFSafeRelease(listener->responses);
 	listener->responses = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, updateWithRemove);
 	CFSafeRelease(updateWithRemove);
-	USBMuxPacketRelease(packet);
 	*packet = *responsePacket;
 	dispatch_release(listener->semaphore);
 }

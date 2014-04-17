@@ -32,6 +32,8 @@
 
 #define kChecksumHashLength 0x3
 
+#define kDeveloperImageStreamSize 0x10000
+
 static char *kHexEncodeString = "0123456789ABCDEF";
 #define kHexDecode(byte) ((byte >= '0' && byte <= '9') ? (byte - '0') : ( (byte >= 'a' && byte <= 'f') ? (10 + byte - 'a') : ((byte >= 'A' && byte <= 'F') ? (10 + byte - 'A') : byte)))
 
@@ -116,7 +118,7 @@ sdmmd_return_t SDMMD_copy_image(SDMMD_AMDeviceRef device, CFStringRef path) {
 					if (SDM_MD_CallSuccessful(result)) {
 						// SDM copy file AFC
 						char *pathString = SDMCFStringGetString(path);
-						result = SDMMD_AMDeviceCopyFile(NULL, NULL, NULL, copyAFCConn, pathString,"PublicStaging/staging.dimage");
+						result = SDMMD_AMDeviceCopyFile(NULL, NULL, NULL, copyAFCConn, pathString, "PublicStaging/staging.dimage");
 						//SDMMD_AMDeviceRemoteCopyFile(NULL, NULL, NULL, copyAFCConn, pathString,"PublicStaging/staging.dimage");
 						Safe(free, pathString);
 					}
@@ -175,7 +177,7 @@ CFStringRef SDMMD_PathToDeviceSupport(SDMMD_AMDeviceRef device) {
 		SDMMD_AMDeviceStopSession(device);
 		SDMMD_AMDeviceDisconnect(device);
 		if (os_version && build_version) {
-			CFStringRef sdk_path = CFSTR("/Users/sam"); // SDMMD_CopyDeviceSupportPathFromXCRUN();
+			CFStringRef sdk_path = SDMMD_CopyDeviceSupportPathFromXCRUN();
 			CFStringRef device_support = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%@/DeviceSupport/%@"), sdk_path, os_version);
 			char *device_support_cstr = SDMCFStringGetString(device_support);
 			bool isDir = false;
@@ -339,8 +341,17 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 															if (status) {
 																if (CFStringCompare(status, CFSTR("ReceiveBytesAck"), 0) == 0) {
 																	// block code
-																	CFShow(response);
-#if 0
+																	CFDataRef image_file = CFDataCreateFromPath(path);
+																	uint64_t offset = 0;
+																	uint64_t remainder = 0;
+																	while (offset < fileStat.st_size) {
+																		remainder = (fileStat.st_size - offset);
+																		remainder = (remainder > kDeveloperImageStreamSize ? kDeveloperImageStreamSize : remainder);
+																		CFRange current_read = CFRangeMake((CFIndex)offset, (CFIndex)remainder);
+																		CFDataRef image_stream = CFDataCreateFromSubrangeOfData(image_file, current_read);
+																		result = SDMMD_DirectServiceSend(SDMMD_TranslateConnectionToSocket(connection), image_stream);
+																		offset += remainder;
+																	}
 																	 //uint32_t (^block)(uint32_t, uint32_t, CFTypeRef) = ^(uint32_t size, uint32_t code, CFTypeRef thing){return code;};
 																	 //result = SDMMD_read_file(fspath, 0x10000, block);
 																	 //if (result == 0) {
@@ -362,7 +373,6 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 																	 		}
 																	 	}
 																	 //}
-#endif
 																}
 															}
 															else {
