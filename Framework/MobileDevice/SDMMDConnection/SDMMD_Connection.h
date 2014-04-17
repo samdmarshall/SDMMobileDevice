@@ -53,7 +53,7 @@ typedef struct am_connection* SDMMD_AMConnectionRef;
 #pragma mark FUNCTIONS
 #pragma mark -
 
-sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef command, uint64_t code, void (*callback)(CFDictionaryRef dict, int arg), uint32_t argsCount, void* paramStart, ...);
+sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef command, uint64_t code, CallBack callback, uint32_t argsCount, void* paramStart, ...);
 
 SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, SSL* ssl);
 SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(uint32_t socket, SSL* ssl, CFDictionaryRef dict);

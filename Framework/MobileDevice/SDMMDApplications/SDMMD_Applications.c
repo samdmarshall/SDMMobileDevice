@@ -78,7 +78,7 @@ sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDict
 				CFMutableDictionaryRef dict = SDMMD_create_dict();
 				result = kAMDNoResourcesError;
 				if (dict) {
-					result = SDMMD_perform_command(conn, CFSTR("Browse"), 0, (CallBack)SDMMD_browse_callback, 2, dict, CFSTR("ClientOptions"), options);
+					result = SDMMD_perform_command(conn, CFSTR("Browse"), 0, SDMMD_browse_callback, 2, dict, CFSTR("ClientOptions"), options);
 					if (!result) {
 						*response = dict;
 					}
