@@ -175,7 +175,7 @@ CFStringRef SDMMD_PathToDeviceSupport(SDMMD_AMDeviceRef device) {
 		SDMMD_AMDeviceStopSession(device);
 		SDMMD_AMDeviceDisconnect(device);
 		if (os_version && build_version) {
-			CFStringRef sdk_path = CFSTR("/Users/sam");//SDMMD_CopyDeviceSupportPathFromXCRUN();
+			CFStringRef sdk_path = /*gCFSTR("/Users/sam");*/ SDMMD_CopyDeviceSupportPathFromXCRUN();
 			CFStringRef device_support = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%@/DeviceSupport/%@"), sdk_path, os_version);
 			char *device_support_cstr = SDMCFStringGetString(device_support);
 			bool isDir = false;
