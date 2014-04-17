@@ -270,7 +270,13 @@ SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostC
 
 sdmmd_return_t SDMMD_lockconn_enable_ssl(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostCert, CFTypeRef deviceCert, CFTypeRef hostPrivKey, uint32_t num) {
 	sdmmd_return_t result = kAMDSuccess;
-	lockdown_conn->ssl = SDMMD_lockssl_handshake(lockdown_conn, hostCert, deviceCert, hostPrivKey, num);
+	SSL *handshake = SDMMD_lockssl_handshake(lockdown_conn, hostCert, deviceCert, hostPrivKey, num);
+	if (handshake) {
+		lockdown_conn->ssl = handshake;
+	}
+	else {
+		result = kAMDErrorError;
+	}
 	return result;
 }
 

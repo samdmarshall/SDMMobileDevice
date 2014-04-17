@@ -84,9 +84,10 @@ static const void* SDMMD___AppendValue(CFTypeRef append, CFMutableDataRef contex
 		append = (CFEqual(append, kCFBooleanTrue) ? CFSTR("1") : CFSTR("0"));
 	}
 	if (CFGetTypeID(append) == CFStringGetTypeID()) {
-		CFIndex length = CFStringGetLength(append),
-				alloclen = CFStringGetMaximumSizeForEncoding(length, kCFStringEncodingUTF8),
-				usedlen = 0;
+		CFIndex length = CFStringGetLength(append);
+		CFIndex alloclen = CFStringGetMaximumSizeForEncoding(length, kCFStringEncodingUTF8);
+		CFIndex usedlen = 0;
+		
 		uint8_t *alloc = calloc(1, alloclen + 1);
 		
 		CFStringGetBytes(append, CFRangeMake(0, length), kCFStringEncodingUTF8, 0, false, alloc, alloclen, &usedlen);
