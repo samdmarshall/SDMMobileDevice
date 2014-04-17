@@ -420,7 +420,9 @@ void SDMMD_USBMuxListenerSend(SDMMD_USBMuxListenerRef listener, struct USBMuxPac
 	listener->responses = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, updateWithRemove);
 	CFSafeRelease(updateWithRemove);
 	USBMuxPacketRelease(*packet);
-	if (!responsePacket) responsePacket = (struct USBMuxPacket *)calloc(0x1, sizeof(struct USBMuxPacket));
+	if (!responsePacket) {
+		responsePacket = (struct USBMuxPacket *)calloc(0x1, sizeof(struct USBMuxPacket));
+	}
 	*packet = responsePacket;
 	dispatch_release(listener->semaphore);
 }
