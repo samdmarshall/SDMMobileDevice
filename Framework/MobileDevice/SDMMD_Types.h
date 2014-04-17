@@ -32,7 +32,7 @@ ATR_UNUSED static void SDMMD_Default_mount_callback(CFDictionaryRef dict, int ar
 	if (CFEqual(status, CFSTR("LookingUpImage"))) {
 		printf("[  0%%] Looking up developer disk image\n");
 	} else if (CFEqual(status, CFSTR("CopyingImage"))) {
-		printf("[ 30%%] Copying DeveloperDiskImage.dmg to device\n");
+		printf("[ 30%%] Copying \"DeveloperDiskImage.dmg\" to device\n");
     } else if (CFEqual(status, CFSTR("MountingImage"))) {
 		printf("[ 90%%] Mounting developer disk image\n");
 	}

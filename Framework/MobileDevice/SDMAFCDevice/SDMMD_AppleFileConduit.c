@@ -656,7 +656,7 @@ sdmmd_return_t SDMMD_AMDeviceCopyFile(void *thing, void *thing2, void *thing3, S
 	sdmmd_return_t result = kAMDSuccess;
 	CFDataRef local_file = CFDataCreateFromFilePath(local);
 	if (local_file) {
-		uint32_t packets = ceil(CFDataGetLength(local_file)/kAFCMaxTransferSize);
+		uint32_t packets = (uint32_t)((CFDataGetLength(local_file)+kAFCMaxTransferSize-1)/kAFCMaxTransferSize);
 		CFStringRef remote_path = CFStringCreateWithBytes(kCFAllocatorDefault, (const UInt8 *)remote, strlen(remote), kCFStringEncodingUTF8, false);
 		SDMMD_AFCOperationRef file_create = SDMMD_AFCOperationCreateFileRefOpen(remote_path, 2);
 		result = SDMMD_AFCProcessOperation(conn, &file_create);
