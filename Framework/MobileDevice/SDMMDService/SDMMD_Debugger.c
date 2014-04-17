@@ -175,6 +175,23 @@ CFStringRef SDMMD_PathToDeviceSupport(SDMMD_AMDeviceRef device) {
 		SDMMD_AMDeviceStopSession(device);
 		SDMMD_AMDeviceDisconnect(device);
 		if (os_version && build_version) {
+			// Standardize the ProductVersion string to 2 number components (e.g "7.0.6" becomes "7.0", "9 becomes 9.0")
+			CFArrayRef osVersionComponents = CFStringCreateArrayBySeparatingStrings(kCFAllocatorDefault, os_version, CFSTR("."));
+			CFMutableStringRef truncatedOSVersion = CFStringCreateMutable(kCFAllocatorDefault, 0);
+			if (CFArrayGetCount(osVersionComponents) > 0) {
+				CFStringAppend(truncatedOSVersion, CFArrayGetValueAtIndex(osVersionComponents, 0));
+				CFStringAppend(truncatedOSVersion, CFSTR("."));
+				if (CFArrayGetCount(osVersionComponents) > 1) {
+					CFStringAppend(truncatedOSVersion, CFArrayGetValueAtIndex(osVersionComponents, 1));
+				}
+				else {
+					CFStringAppend(truncatedOSVersion, CFSTR("0"));
+				}
+			}
+			CFSafeRelease(osVersionComponents);
+			CFSafeRelease(os_version);
+			os_version = truncatedOSVersion;
+			
 			CFStringRef sdk_path = /*CFSTR("/Users/sam");*/ SDMMD_CopyDeviceSupportPathFromXCRUN();
 			CFStringRef device_support = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%@/DeviceSupport/%@"), sdk_path, os_version);
 			char *device_support_cstr = SDMCFStringGetString(device_support);
@@ -220,6 +237,7 @@ CFDictionaryRef SDMMD_CreateImageDictionary(CFStringRef device_support_image) {
 			CFDataRef signature_data = CFDataCreateFromFilePath(signature_path_cstr);
 			CFDictionarySetValue(dict, CFSTR("ImageType"), CFSTR("Developer"));
 			CFDictionarySetValue(dict, CFSTR("ImageSignature"), signature_data);
+			CFSafeRelease(signature_data);
 		}
 		Safe(free, signature_path_cstr);
 		CFSafeRelease(signature_path);
@@ -252,7 +270,7 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 			char *cpath = calloc(1, sizeof(char[1024]));
 			Boolean pathCopy = CFStringGetCString(path, cpath, 1024, kCFStringEncodingUTF8);
 			if (pathCopy) {
-				unsigned char *sumdigest = calloc(1, sizeof(char[32]));
+				unsigned char *sumdigest = calloc(1, sizeof(unsigned char[32]));
 				result = SDMMD_AMDeviceDigestFile(cpath, 0, PtrCast(&sumdigest, unsigned char**));
 				if (result) {
 					SDMMD_AMDeviceRef deviceCopy = SDMMD_AMDeviceCreateCopy(device);
