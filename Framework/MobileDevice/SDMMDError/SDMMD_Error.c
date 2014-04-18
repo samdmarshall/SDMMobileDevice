@@ -30,6 +30,18 @@
 
 #include "SDMMD_Error.h"
 
+kern_return_t SDMMD__ErrorHandler(ErrorConvert converter, CFDictionaryRef response) {
+	kern_return_t response_code = kAMDInvalidResponseError;
+	CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
+	if (error) {
+		response_code = converter(error);
+	}
+	else {
+		response_code = kAMDSuccess;
+	}
+	return response_code;
+}
+
 sdmmd_return_t SDMMD_ImageMounterErrorConvert(CFStringRef error) {
 	sdmmd_return_t result = kAMDSuccess;
 	if (CFEqual(error, CFSTR("MissingImageSignature"))) {

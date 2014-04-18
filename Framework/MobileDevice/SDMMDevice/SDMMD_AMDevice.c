@@ -437,14 +437,8 @@ sdmmd_return_t SDMMD_send_set_value(SDMMD_AMDeviceRef device, CFStringRef domain
                         CFMutableDictionaryRef resultDict = NULL;
                         result = SDMMD_lockconn_receive_message(device, &resultDict);
                         if (result == kAMDSuccess) {
-                            CFStringRef error = CFDictionaryGetValue(resultDict, CFSTR("Error"));
-                            if (error) {
-                                result = kAMDInvalidResponseError;
-                                if (CFGetTypeID(error) == CFStringGetTypeID()) {
-                                    result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(error);
-                                }
-                            }
-                            CFSafeRelease(resultDict);
+							result = SDMMD__ErrorHandler(SDMMD__ConvertLockdowndError, resultDict);
+							CFSafeRelease(resultDict);
                         }
                     }
                 }
@@ -493,18 +487,7 @@ sdmmd_return_t SDMMD_send_unpair(SDMMD_AMDeviceRef device, CFStringRef hostId) {
 							result = SDMMD_lockconn_receive_message(device, &response);
 							//PrintCFType(response);
 							if (result == kAMDSuccess) {
-								CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
-								if (!error) {
-									result = kAMDSuccess;
-								}
-								else {
-									if (CFGetTypeID(error) == CFStringGetTypeID()) {
-										result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(error);
-									}
-									else {
-										result = kAMDInvalidResponseError;
-									}
-								}
+								result = SDMMD__ErrorHandler(SDMMD__ConvertLockdowndError, response);
 							}
 						}
 					}
@@ -550,14 +533,9 @@ sdmmd_return_t SDMMD_send_pair(SDMMD_AMDeviceRef device, CFMutableDictionaryRef 
 							result = SDMMD_lockconn_receive_message(device, &response);
 							CFShow(response);
 							if (result == kAMDSuccess) {
-								CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
-								if (error) {
-									result = kAMDInvalidResponseError;
-									if (CFGetTypeID(error) == CFStringGetTypeID()) {
-										result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(error);
-									}
-								}
-								else {
+								result = SDMMD__ErrorHandler(SDMMD__ConvertLockdowndError, response);
+								
+								if (SDM_MD_CallSuccessful(result)) {
 									*escrowBag = CFDictionaryGetValue(response, CFSTR("EscrowBag"));
 									if (escrowBag) {
 										result = kAMDSuccess;
@@ -605,18 +583,7 @@ sdmmd_return_t SDMMD_send_validate_pair(SDMMD_AMDeviceRef device, CFStringRef ho
 							result = SDMMD_lockconn_receive_message(device, &response);
 							//PrintCFType(response);
 							if (result == kAMDSuccess) {
-								CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
-								if (!error) {
-									result = kAMDSuccess;
-								}
-								else {
-									if (CFGetTypeID(error) == CFStringGetTypeID()) {
-										result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(error);
-									}
-									else {
-										result = kAMDInvalidResponseError;
-									}
-								}
+								result = SDMMD__ErrorHandler(SDMMD__ConvertLockdowndError, response);
 							} 
 						}
 					}

@@ -60,14 +60,11 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 			result = SDMMD_ServiceReceiveStream(sock, (CFPropertyListRef*)&response);
 			if (result == 0 && response) {
 				while (result == 0) {
-					CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
+					result = SDMMD__ErrorHandler(SDMMD__ConvertServiceError, response);
 					
-					if (error) {
-						PrintCFType(response);
-						result = SDMMD__ConvertServiceError(error);
-						printf("call_and_response: GOT AN ERROR 0x%08x %s.\n",result, SDMMD_AMDErrorString(result));
-					}
-					else {
+					CheckErrorAndReturn(result);
+					
+					if (SDM_MD_CallSuccessful(result)) {
 						CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
 						if (status) {
 							if (CFStringCompare(status, CFSTR("Complete"), 0) != 0) {
@@ -104,7 +101,8 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 	else {
 		result = kAMDUndefinedError;
 	}
-	return result;
+	
+	ExitLabelAndReturn(result);
 }
 
 SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, SSL *ssl) {
@@ -154,14 +152,11 @@ sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef se
 							CFMutableDictionaryRef response = NULL;
 							result = SDMMD_lockconn_receive_message(device, &response);
 							if (result == 0 && response) {
-								result = kAMDInvalidResponseError;
-								CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
-								if (error) {
-									if (CFGetTypeID(error) == CFStringGetTypeID()) {
-										result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(error);
-									}
-								}
-								else {
+								result = SDMMD__ErrorHandler(SDMMD__ConvertLockdowndError, response);
+								
+								CheckErrorAndReturn(result);
+								
+								if (SDM_MD_CallSuccessful(result)) {
 									CFTypeRef portNumber = CFDictionaryGetValue(response, CFSTR("Port"));
 									if (portNumber) {
 										if (CFGetTypeID(portNumber) == CFNumberGetTypeID()) {
@@ -184,7 +179,8 @@ sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef se
 			}
 		}
 	}
-	return result;
+	
+	ExitLabelAndReturn(result);
 }
 
 

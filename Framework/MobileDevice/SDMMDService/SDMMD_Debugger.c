@@ -129,7 +129,10 @@ sdmmd_return_t SDMMD_copy_image(SDMMD_AMDeviceRef device, CFStringRef path) {
 						result = SDMMD_AMDeviceCopyFile(NULL, NULL, NULL, copyAFCConn, pathString, "PublicStaging/staging.dimage");
 						Safe(free, pathString);
 					}
+					SDMMD_AFCOperationRelease(makeStaging);
+					SDMMD_AFCConnectionRelease(copyAFCConn);
 				}
+				SDMMD_AMDServiceConnectionInvalidate(copyConn);
 			}
 		}
 		else {
@@ -272,11 +275,11 @@ sdmmd_return_t SDMMD_stream_image(SDMMD_AMConnectionRef connection, CFStringRef 
 		CheckErrorAndReturn(result);
 		
 		if (response) {
-			CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
-			if (error) {
-				result = SDMMD_ImageMounterErrorConvert(error);
-			}
-			else {
+			result = SDMMD__ErrorHandler(SDMMD_ImageMounterErrorConvert, response);
+			
+			CheckErrorAndReturn(result);
+			
+			if (SDM_MD_CallSuccessful(result)) {
 				CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
 				if (status) {
 					if (CFStringCompare(status, CFSTR("ReceiveBytesAck"), 0) == 0) {
@@ -296,12 +299,11 @@ sdmmd_return_t SDMMD_stream_image(SDMMD_AMConnectionRef connection, CFStringRef 
 						result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&getStatus);
 						
 						if (result == 0) {
-							CFTypeRef error = CFDictionaryGetValue(getStatus, CFSTR("Error"));
-							if (error) {
-								// convert error
-								result = SDMMD_ImageMounterErrorConvert(error);
-							}
-							else {
+							result = SDMMD__ErrorHandler(SDMMD_ImageMounterErrorConvert, response);
+							
+							CheckErrorAndReturn(result);
+							
+							if (SDM_MD_CallSuccessful(result)) {
 								CFTypeRef streamStatus = CFDictionaryGetValue(getStatus, CFSTR("Status"));
 								if (streamStatus) {
 									if (CFStringCompare(streamStatus, CFSTR("Complete"), 0x0) == 0) {
@@ -345,12 +347,11 @@ sdmmd_return_t SDMMD_mount_image(SDMMD_AMConnectionRef connection, CFStringRef i
 			result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&response);
 			if (result == 0) {
 				if (response) {
-					CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
-					if (error) {
-						// convert error
-						result = SDMMD_ImageMounterErrorConvert(error);
-					}
-					else {
+					result = SDMMD__ErrorHandler(SDMMD_ImageMounterErrorConvert, response);
+					
+					CheckErrorAndReturn(result);
+					
+					if (SDM_MD_CallSuccessful(result)) {
 						CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
 						if (status) {
 							if (CFEqual(status, CFSTR("Complete"))) {
@@ -371,7 +372,8 @@ sdmmd_return_t SDMMD_mount_image(SDMMD_AMConnectionRef connection, CFStringRef i
 			}
 		}
 	}
-	return result;
+	
+	ExitLabelAndReturn(result);
 }
 
 sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef dict, CallBack handle, void* unknown) {
@@ -412,11 +414,11 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 					CheckErrorAndReturn(result);
 					
 					if (response) {
-						CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
-						if (error) {
-							result = SDMMD__ConvertServiceError(error);
-						}
-						else {
+						result = SDMMD__ErrorHandler(SDMMD__ConvertServiceError, response);
+						
+						CheckErrorAndReturn(result);
+						
+						if (SDM_MD_CallSuccessful(result)) {
 							CFTypeRef image = CFDictionaryGetValue(response, CFSTR("ImagePresent"));
 							if (image) {
 								if (CFEqual(image, kCFBooleanTrue)) {
@@ -452,6 +454,7 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 					}
 					
 				}
+				SDMMD_AMDServiceConnectionInvalidate(connection);
 				CFSafeRelease(device_copy);
 				CheckErrorAndReturn(result);
 			}

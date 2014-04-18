@@ -695,15 +695,17 @@ sdmmd_return_t SDMMD_AMDeviceCopyFile(void *thing, void *thing2, void *thing3, S
 				result = SDMMD_AFCProcessOperation(conn, &write_op);
 				if (SDM_MD_CallSuccessful(result)) {
 					// probably fire a callback?
-					
 				}
 				else {
 					break;
 				}
+				SDMMD_AFCOperationRelease(write_op);
 			}
 			SDMMD_AFCOperationRef file_close = SDMMD_AFCFileDescriptorCreateCloseOperation(file_descriptor);
 			SDMMD_AFCProcessOperation(conn, &file_close);
+			SDMMD_AFCOperationRelease(file_close);
 		}
+		SDMMD_AFCOperationRelease(file_create);
 	}
 	CFSafeRelease(local_file);
 	return result;
@@ -731,15 +733,17 @@ sdmmd_return_t SDMMD_AMDeviceRemoteCopyFile(void *thing, void *thing2, void *thi
 				result = SDMMD_AFCProcessOperation(conn, &write_op);
 				if (SDM_MD_CallSuccessful(result)) {
 					// probably fire a callback?
-
 				}
 				else {
 					break;
 				}
+				SDMMD_AFCOperationRelease(write_op);
 			}
 			SDMMD_AFCOperationRef file_close = SDMMD_AFCFileDescriptorCreateCloseOperation(file_descriptor);
 			SDMMD_AFCProcessOperation(conn, &file_close);
+			SDMMD_AFCOperationRelease(file_close);
 		}
+		SDMMD_AFCOperationRelease(file_create);
 	}
 	CFSafeRelease(local_file);
 	return result;
@@ -748,7 +752,8 @@ sdmmd_return_t SDMMD_AMDeviceRemoteCopyFile(void *thing, void *thing2, void *thi
 sdmmd_return_t SDMMD_check_can_touch(SDMMD_AFCConnectionRef conn, CFDataRef *unknown) {
 	SDMMD_AFCOperationRef fileInfo = SDMMD_AFCOperationCreateGetFileInfo((CFStringRef)*unknown);
 	SDMMD_AFCProcessOperation(conn, &fileInfo);
-	*unknown = fileInfo->packet->response;
+	*unknown = CFRetain(fileInfo->packet->response);
+	SDMMD_AFCOperationRelease(fileInfo);
 	return kAMDSuccess;
 }
 

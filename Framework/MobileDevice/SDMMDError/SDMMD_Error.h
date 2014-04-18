@@ -204,7 +204,7 @@ typedef enum SDMMD_Errors {
 } SDMMD_Errors;
 //via: for (int i = 0; i < 157; i++) { NSLog(@"\t%s = AMDErrorMake(%i), //0x%x", AMDErrorString(0xe8000000 + i), i, 0xe8000000 + i); }
 
-#define sdmmd_return_t enum SDMMD_Errors
+typedef kern_return_t sdmmd_return_t;
 
 struct SDMMD_DebugReturnCode {
 	enum SDMMD_Errors result;
@@ -313,7 +313,11 @@ typedef enum SDMMD_LockdownError {
 	LD_ERR_NotAValidChaperoneHost = 0xe8000083,
 } SDMMD_LockdownError;
 
-#define sdmmd_dl_return_t enum SDMMD_LockdownError
+typedef sdmmd_return_t sdmmd_dl_return_t;
+
+typedef kern_return_t (*ErrorConvert)(CFStringRef error);
+
+kern_return_t SDMMD__ErrorHandler(ErrorConvert converter, CFDictionaryRef response);
 
 sdmmd_return_t SDMMD_ImageMounterErrorConvert(CFStringRef error);
 
