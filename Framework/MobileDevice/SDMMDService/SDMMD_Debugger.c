@@ -32,7 +32,7 @@
 
 #define kChecksumHashLength 0x3
 
-#define kDeveloperImageStreamSize 4194304
+#define kDeveloperImageStreamSize 0x100000
 
 static char *kHexEncodeString = "0123456789ABCDEF";
 #define kHexDecode(byte) ((byte >= '0' && byte <= '9') ? (byte - '0') : ( (byte >= 'a' && byte <= 'f') ? (10 + byte - 'a') : ((byte >= 'A' && byte <= 'F') ? (10 + byte - 'A') : byte)))
