@@ -23,6 +23,11 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include "Core.h"
 
+#define CheckErrorAndReturn \
+if (!SDM_MD_CallSuccessful(result)) { \
+	return result; \
+}
+
 #define AMDErrorMake(num) (0xe8000000 | (num))
 typedef enum SDMMD_Errors {
 	kAMDSuccess = 0x0,

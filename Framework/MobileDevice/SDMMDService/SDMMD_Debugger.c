@@ -242,11 +242,6 @@ sdmmd_return_t SDMMD_AMDeviceMountDeveloperImage(SDMMD_AMDeviceRef device) {
 	return result;
 }
 
-#define CheckErrorAndReturn \
-if (!SDM_MD_CallSuccessful(result)) { \
-return result; \
-}
-
 sdmmd_return_t SDMMD_stream_image(SDMMD_AMConnectionRef connection, CFStringRef path, CFStringRef image_type) {
 	sdmmd_return_t result = kAMDSuccess;
 	char fspath[0x400] = {0};
