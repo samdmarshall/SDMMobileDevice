@@ -27,18 +27,18 @@
 
 typedef void (*CallBack)(CFDictionaryRef dict, void* arg);
 
-ATR_UNUSED static void SDMMD_Default_mount_callback(CFDictionaryRef dict, int arg) {
+ATR_UNUSED static void SDMMD_Default_mount_callback(CFDictionaryRef dict, void* arg) {
 	CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
 	if (CFEqual(status, CFSTR("LookingUpImage"))) {
 		printf("[  0%%] Looking up developer disk image\n");
-	} else if (CFEqual(status, CFSTR("CopyingImage"))) {
+	} else if (CFEqual(status, CFSTR("CopyingImage")) || CFEqual(status, CFSTR("StreamingImage"))) {
 		printf("[ 30%%] Copying \"DeveloperDiskImage.dmg\" to device\n");
     } else if (CFEqual(status, CFSTR("MountingImage"))) {
 		printf("[ 90%%] Mounting developer disk image\n");
 	}
 }
 
-ATR_UNUSED static void SDMMD_Default_transfer_callback(CFDictionaryRef dict, int arg) {
+ATR_UNUSED static void SDMMD_Default_transfer_callback(CFDictionaryRef dict, void* arg) {
     int percent;
     CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
     CFNumberGetValue(CFDictionaryGetValue(dict, CFSTR("PercentComplete")), kCFNumberSInt32Type, &percent);
@@ -51,7 +51,7 @@ ATR_UNUSED static void SDMMD_Default_transfer_callback(CFDictionaryRef dict, int
     }
 }
 
-ATR_UNUSED static void SDMMD_Default_install_callback(CFDictionaryRef dict, int arg) {
+ATR_UNUSED static void SDMMD_Default_install_callback(CFDictionaryRef dict, void* arg) {
     int percent;
     CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
     CFNumberGetValue(CFDictionaryGetValue(dict, CFSTR("PercentComplete")), kCFNumberSInt32Type, &percent);

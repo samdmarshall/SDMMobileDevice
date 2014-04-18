@@ -299,11 +299,6 @@ uint32_t SDMMD_ConnectToUSBMux() {
 		}
 	}
 	
-	if (!result) {
-		close(sock);
-		sock = -1;
-	}
-	
 	return sock;
 }
 
@@ -333,6 +328,7 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port
 }
 
 void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
+	__block uint64_t bad_packet_counter = 0;
 	dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0x0), ^{
 		(*listener)->socket = SDMMD_ConnectToUSBMux();
 		(*listener)->socketSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, (*listener)->socket, 0x0, (*listener)->socketQueue);
@@ -371,8 +367,12 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 				}
 			}
 			else {
+				bad_packet_counter++;
                 printf("socketSourceEventHandler: failed to decodeCFPropertyList from packet payload\n");
-				// SDM: add a check and catch in here for restarting the listener.
+				if (bad_packet_counter > 10) {
+					printf("eating bad packets, exiting...\n");
+					exit(EXIT_FAILURE);
+				}
             }
 		});
         dispatch_source_set_cancel_handler((*listener)->socketSource, ^{

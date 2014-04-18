@@ -448,7 +448,7 @@ ATR_UNUSED static Boolean SDMMD__AMDCFURLGetCStringForFileSystemPath(CFURLRef ur
 	return false;
 }
 
-ATR_UNUSED static void SDMMD_fire_callback(CallBack handle, int unknown, CFStringRef status) {
+ATR_UNUSED static void SDMMD_fire_callback(CallBack handle, void* unknown, CFStringRef status) {
 	if (handle) {
 		CFMutableDictionaryRef dict = SDMMD_create_dict();
 		if (dict) {
@@ -458,7 +458,7 @@ ATR_UNUSED static void SDMMD_fire_callback(CallBack handle, int unknown, CFStrin
 	}
 }
 
-ATR_UNUSED static void SDMMD_fire_callback_767f4(CallBack handle, int unknown, uint32_t percent, CFStringRef string) {
+ATR_UNUSED static void SDMMD_fire_callback_767f4(CallBack handle, void* unknown, uint32_t percent, CFStringRef string) {
 	if (handle) {
 		CFMutableDictionaryRef dict = SDMMD_create_dict();
 		CFNumberRef num = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &percent);
@@ -699,31 +699,31 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
     return record;
 }
 
-ATR_UNUSED static sdmmd_return_t SDMMD_AMDeviceDigestFile(char *path, int value, unsigned char **digest) {
+#define HASH_LENGTH SHA_DIGEST_LENGTH
+
+ATR_UNUSED static unsigned char* DataToSHA1(CFDataRef data) {
+	unsigned char hash[HASH_LENGTH];
 	SHA_CTX ctx;
 	SHA1_Init(&ctx);
-	struct stat pathStat;
-	ssize_t result = lstat(path, &pathStat);
-	if (result != -1) {
-		int ref = open(path, O_RDONLY);
-		if (ref != -1) {
-			struct stat fileStat;
-			result = fstat(ref, &fileStat);
-			if (result != -1) {
-				unsigned char *data = calloc(1, (unsigned long)fileStat.st_size);
-				result = read(ref, data, (size_t)fileStat.st_size);
-				if (result == fileStat.st_size) {
-					for (size_t i = 0; i < fileStat.st_size; i++) {
-						SHA1_Update(&ctx, &(data[i]), sizeof(char));
-					}
-
-				}
-				Safe(free, data);
-			}
-		}
+	for (size_t index = 0; index < CFDataGetLength(data); index++) {
+		SHA1_Update(&ctx, PtrAdd(CFDataGetBytePtr(data), index), sizeof(char));
 	}
-	SHA1_Final(*digest, &ctx);
-	return (sdmmd_return_t)result;
+	SHA1_Final(hash, &ctx);
+	unsigned char *digest = calloc(HASH_LENGTH, sizeof(char));
+	memcpy(digest, hash, sizeof(char[HASH_LENGTH]));
+	return digest;
+}
+
+ATR_UNUSED static sdmmd_return_t SDMMD_AMDeviceDigestFile(CFStringRef path, unsigned char **digest) {
+	sdmmd_return_t result = kAMDSuccess;
+	CFDataRef data = CFDataCreateFromPath(path);
+	if (data) {
+		*digest = DataToSHA1(data);
+	}
+	else {
+		result = kAMDDigestFailedError;
+	}
+	return result;
 }
 
 #endif

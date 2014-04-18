@@ -712,7 +712,7 @@ sdmmd_return_t SDMMD_AMDeviceRemoteCopyFile(void *thing, void *thing2, void *thi
 				result = SDMMD_AFCProcessOperation(conn, &write_op);
 				if (SDM_MD_CallSuccessful(result)) {
 					// probably fire a callback?
-					CFShow(write_op->packet->response);
+
 				}
 				else {
 					break;

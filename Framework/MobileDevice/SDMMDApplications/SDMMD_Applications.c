@@ -121,9 +121,9 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 						CFURLRef copy = CFURLCreateCopyAppendingPathComponent(kCFAllocatorDefault, base, lastComp, true);
 						char *copyPath = NULL;
 						SDMMD__AMDCFURLGetCStringForFileSystemPath(copy, copyPath);
-						SDMMD_fire_callback_767f4(transferCallback, (int)unknown, 0, CFSTR("PreflightingTransfer"));
+						SDMMD_fire_callback_767f4(transferCallback, unknown, 0, CFSTR("PreflightingTransfer"));
 						//SDMMD_preflight_transfer(&cpath, &pathStat, &remoteStat);
-						SDMMD_fire_callback_767f4(transferCallback, (int)unknown, 0, CFSTR("TransferingPackage"));
+						SDMMD_fire_callback_767f4(transferCallback, unknown, 0, CFSTR("TransferingPackage"));
 						ATR_UNUSED SDMMD_AFCConnectionRef afcConn = SDMMD_AFCConnectionCreate(conn);//(r12, conn, 0x0, 0x0, &var_72);
 						// loop that iterates through all of file contents
 						
