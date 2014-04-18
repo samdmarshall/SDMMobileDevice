@@ -423,9 +423,11 @@ ATR_UNUSED static sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForId
 	return result;
 }
 
+#define DefaultApplicationLookupDictionaryCount 6
+
 ATR_UNUSED static CFArrayRef SDMMD_ApplicationLookupDictionary() {
-	const void* values[6] = {CFSTR(kAppLookupKeyCFBundleIdentifier), CFSTR(kAppLookupKeyApplicationType), CFSTR(kAppLookupKeyCFBundleDisplayName), CFSTR(kAppLookupKeyCFBundleName), CFSTR(kAppLookupKeyContainer), CFSTR(kAppLookupKeyPath)};
-	return CFArrayCreate(kCFAllocatorDefault, values, 6, &kCFTypeArrayCallBacks);
+	const void* values[DefaultApplicationLookupDictionaryCount] = {CFSTR(kAppLookupKeyCFBundleIdentifier), CFSTR(kAppLookupKeyApplicationType), CFSTR(kAppLookupKeyCFBundleDisplayName), CFSTR(kAppLookupKeyCFBundleName), CFSTR(kAppLookupKeyContainer), CFSTR(kAppLookupKeyPath)};
+	return CFArrayCreate(kCFAllocatorDefault, values, DefaultApplicationLookupDictionaryCount, &kCFTypeArrayCallBacks);
 }
 
 ATR_UNUSED static CFURLRef SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(CFStringRef path) {

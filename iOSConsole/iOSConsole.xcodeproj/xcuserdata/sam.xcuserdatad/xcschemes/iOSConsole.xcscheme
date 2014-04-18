@@ -72,6 +72,10 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--develop"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--apps"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
