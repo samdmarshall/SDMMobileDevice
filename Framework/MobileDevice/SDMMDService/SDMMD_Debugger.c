@@ -256,12 +256,12 @@ sdmmd_return_t SDMMD_stream_image(SDMMD_AMConnectionRef connection, CFStringRef 
 		CFDictionarySetValue(streamDict, CFSTR("ImageSize"), size);
 		result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(connection), streamDict, kCFPropertyListXMLFormat_v1_0);
 		
-		CheckErrorAndReturn;
+		CheckErrorAndReturn(result);
 		
 		CFDictionaryRef response;
 		result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&response);
 		
-		CheckErrorAndReturn;
+		CheckErrorAndReturn(result);
 		
 		if (response) {
 			CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
@@ -317,7 +317,8 @@ sdmmd_return_t SDMMD_stream_image(SDMMD_AMConnectionRef connection, CFStringRef 
 	else {
 		result = kAMDNoResourcesError;
 	}
-	return result;
+	
+	ExitLabelAndReturn(result);
 }
 
 sdmmd_return_t SDMMD_mount_image(SDMMD_AMConnectionRef connection, CFStringRef image_type, CFDataRef signature, bool *mounted) {
@@ -378,7 +379,7 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 			SDMMD_AMDeviceRef device_copy = SDMMD_AMDeviceCreateCopy(device);
 			if (SDMMD_AMDeviceIsValid(device_copy)) {
 				result = SDMMD_AMDeviceSecureStartSessionedService(device, CFSTR(AMSVC_MOBILE_IMAGE_MOUNT), &connection);
-				CheckErrorAndReturn;
+				CheckErrorAndReturn(result);
 				
 				SDMMD_fire_callback(handle, unknown, CFSTR("LookingUpImage"));
 				if (connection) {
@@ -391,16 +392,16 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 						result = kAMDNoResourcesError;
 					}
 					
-					CheckErrorAndReturn;
+					CheckErrorAndReturn(result);
 					
 					result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(connection), commandDict, kCFPropertyListXMLFormat_v1_0);
 					
-					CheckErrorAndReturn;
+					CheckErrorAndReturn(result);
 					
 					CFDictionaryRef response;
 					result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&response);
 					
-					CheckErrorAndReturn;
+					CheckErrorAndReturn(result);
 					
 					if (response) {
 						CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
@@ -432,13 +433,11 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 						}
 					}
 					
-					CheckErrorAndReturn;
+					CheckErrorAndReturn(result);
 					
 					bool mounted = false;
 					SDMMD_fire_callback(handle, unknown, CFSTR("MountingImage"));
 					result = SDMMD_mount_image(connection, image_type, signature, &mounted);
-					
-					CheckErrorAndReturn;
 					
 					if (mounted) {
 						result = SDMMD__hangup_with_image_mounter_service(connection);
@@ -446,6 +445,7 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 					
 				}
 				CFSafeRelease(device_copy);
+				CheckErrorAndReturn(result);
 			}
 			else {
 				result = kAMDUndefinedError;
@@ -459,7 +459,7 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 		result = kAMDMissingOptionsError;
 	}
 	
-	return result;
+	ExitLabelAndReturn(result);
 }
 
 uint32_t GenerateChecksumForData(char *strPtr, uint32_t length) {

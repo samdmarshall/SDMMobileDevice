@@ -23,10 +23,14 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include "Core.h"
 
-#define CheckErrorAndReturn \
-if (!SDM_MD_CallSuccessful(result)) { \
-	return result; \
+#define CheckErrorAndReturn(value) \
+if (!SDM_MD_CallSuccessful(value)) { \
+	goto ExitLabel; \
 }
+
+#define ExitLabelAndReturn(value) \
+ExitLabel: \
+return value;
 
 #define AMDErrorMake(num) (0xe8000000 | (num))
 typedef enum SDMMD_Errors {
