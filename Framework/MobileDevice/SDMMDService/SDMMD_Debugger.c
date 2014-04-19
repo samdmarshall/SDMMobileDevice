@@ -126,7 +126,7 @@ sdmmd_return_t SDMMD_copy_image(SDMMD_AMDeviceRef device, CFStringRef path) {
 					if (SDM_MD_CallSuccessful(result)) {
 						// SDM copy file AFC
 						char *pathString = SDMCFStringGetString(path);
-						result = SDMMD_AMDeviceCopyFile(NULL, NULL, NULL, copyAFCConn, pathString, "PublicStaging/staging.dimage");
+						result = SDMMD_AMDeviceCopyFile(SDMMD_Default_AFC_CopyFile_Callback, NULL, NULL, copyAFCConn, pathString, "PublicStaging/staging.dimage");
 						Safe(free, pathString);
 					}
 					SDMMD_AFCOperationRelease(makeStaging);
@@ -182,7 +182,7 @@ CFStringRef SDMMD_PathToDeviceSupport(SDMMD_AMDeviceRef device) {
 	if (device) {
 		SDMMD_AMDeviceConnect(device);
 		SDMMD_AMDeviceStartSession(device);
-		CFStringRef os_version = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kProductVersion));
+		CFStringRef os_version = CFStringCreateWithSubstring(kCFAllocatorDefault, SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kProductVersion)), CFRangeMake(0, 3));
 		CFStringRef build_version = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kBuildVersion));
 		SDMMD_AMDeviceStopSession(device);
 		SDMMD_AMDeviceDisconnect(device);
@@ -307,7 +307,7 @@ sdmmd_return_t SDMMD_stream_image(SDMMD_AMConnectionRef connection, CFStringRef 
 								CFTypeRef streamStatus = CFDictionaryGetValue(getStatus, CFSTR("Status"));
 								if (streamStatus) {
 									if (CFStringCompare(streamStatus, CFSTR("Complete"), 0x0) == 0) {
-										result = 0x0;
+										result = kAMDSuccess;
 									}
 								}
 							}

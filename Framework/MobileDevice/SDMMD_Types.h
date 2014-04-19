@@ -36,11 +36,22 @@
 
 typedef void (*CallBack)(CFDictionaryRef dict, void* arg);
 
+ATR_UNUSED static void SDMMD_Default_AFC_CopyFile_Callback(CFDictionaryRef dict, void* arg) {
+    uint32_t percent = 0;
+    CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
+	if (CFEqual(status, CFSTR("CopyingFile"))) {
+		CFStringRef local_path = CFDictionaryGetValue(dict, CFSTR("LocalPath"));
+		CFStringRef remote_path = CFDictionaryGetValue(dict, CFSTR("RemotePath"));
+		CFNumberGetValue(CFDictionaryGetValue(dict, CFSTR("PercentComplete")), kCFNumberSInt32Type, &percent);
+		printf("[%3d%%] Copying \"%s\" to \"%s\"\n", percent, CFStringGetCStringPtr(local_path, kCFStringEncodingUTF8), CFStringGetCStringPtr(remote_path, kCFStringEncodingUTF8));
+	}
+}
+
 ATR_UNUSED static void SDMMD_Default_mount_callback(CFDictionaryRef dict, void* arg) {
 	CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
 	if (CFEqual(status, CFSTR("LookingUpImage"))) {
 		printf("[  0%%] Looking up developer disk image\n");
-	} else if (CFEqual(status, CFSTR("CopyingImage")) || CFEqual(status, CFSTR("StreamingImage"))) {
+	} else if (CFEqual(status, CFSTR("CopyingImage"))) {
 		printf("[ 30%%] Copying \"DeveloperDiskImage.dmg\" to device\n");
     } else if (CFEqual(status, CFSTR("MountingImage"))) {
 		printf("[ 90%%] Mounting developer disk image\n");
@@ -54,7 +65,7 @@ ATR_UNUSED static void SDMMD_Default_transfer_callback(CFDictionaryRef dict, voi
     if (CFEqual(status, CFSTR("CopyingFile"))) {
         CFStringRef path = CFDictionaryGetValue(dict, CFSTR("Path"));
         if (!CFStringHasSuffix(path, CFSTR(".ipa"))) {
-            printf("[%3d%%] Copying %s to device\n", percent, CFStringGetCStringPtr(path, kCFStringEncodingMacRoman));
+            printf("[%3d%%] Copying %s to device\n", percent, CFStringGetCStringPtr(path, kCFStringEncodingUTF8));
 			
         }
     }
@@ -64,7 +75,7 @@ ATR_UNUSED static void SDMMD_Default_install_callback(CFDictionaryRef dict, void
     int percent;
     CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
     CFNumberGetValue(CFDictionaryGetValue(dict, CFSTR("PercentComplete")), kCFNumberSInt32Type, &percent);
-    printf("[%3d%%] %s\n", percent, CFStringGetCStringPtr(status, kCFStringEncodingMacRoman));
+    printf("[%3d%%] %s\n", percent, CFStringGetCStringPtr(status, kCFStringEncodingUTF8));
 }
 
 #endif

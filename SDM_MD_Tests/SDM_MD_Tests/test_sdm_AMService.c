@@ -18,7 +18,7 @@ kern_return_t test_sdm_AMDeviceStartService(SDMMD_AMDeviceRef sdm) {
 		result = SDMMD_AMDeviceStartSession(sdm);
 		if (SDM_MD_CallSuccessful(result)) {
 			SDMMD_AMConnectionRef test_sdm_conn;
-			sdm_return = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_PURPLE_TEST), NULL, &test_sdm_conn);
+			sdm_return = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_conn);
 			if (sdm_return != kAMDSuccess) {
 				printf("\t\tSDMMD_AMDeviceStartService: %08x %s\n",sdm_return,SDMMD_AMDErrorString(sdm_return));
 			}
@@ -36,7 +36,7 @@ kern_return_t test_sdm_AMDeviceSecureStartService(SDMMD_AMDeviceRef sdm) {
 		result = SDMMD_AMDeviceStartSession(sdm);
 		if (SDM_MD_CallSuccessful(result)) {
 			SDMMD_AMConnectionRef test_sdm_conn;
-			sdm_return = SDMMD_AMDeviceSecureStartService(sdm, CFSTR(AMSVC_DEBUG_IMAGE_MOUNT), NULL, &test_sdm_conn);
+			sdm_return = SDMMD_AMDeviceSecureStartService(sdm, CFSTR(AMSVC_MOBILE_IMAGE_MOUNT), NULL, &test_sdm_conn);
 			if (sdm_return != kAMDSuccess) {
 				printf("\t\tSDMMD_AMDeviceSecureStartService: %08x %s\n",sdm_return,SDMMD_AMDErrorString(sdm_return));
 			}
