@@ -587,8 +587,8 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateLinkPath(uint64_t linkType, CFStri
 	uint32_t link_length = (uint32_t)strlen(linkPath)+1;
 	uint32_t path_length = target_length + link_length;
 	op->packet->header_data = calloc(1, sizeof(char[path_length]));
-	memcpy(&op->packet->header_data, targetPath, target_length);
-	memcpy(&op->packet->header_data[target_length], linkPath, link_length);
+	memcpy(&(op->packet->header_data[0]), targetPath, target_length-1);
+	memcpy(&(op->packet->header_data[target_length]), linkPath, link_length);
 	SDMMD_AFCHeaderInit(&(op->packet->header), SDMMD_AFC_Packet_MakeLink, path_length, 0, 0);
 	free(targetPath);
 	free(linkPath);
