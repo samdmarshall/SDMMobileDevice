@@ -126,6 +126,7 @@ SDM_MD_TestResponse SDM_MD_Test_AFCConnectionCreate(struct am_device *apple, SDM
 	return response;
 }
 
+// this test will sometimes fail due to differences in FSFreeBytes value.
 SDM_MD_TestResponse SDM_MD_Test_AFCOperationCreateGetDeviceInfo(struct am_device *apple, SDMMD_AMDeviceRef sdm, char *type) {
 	SDM_MD_TestResponse response = SDM_MD_TestResponse_Invalid;
 	
