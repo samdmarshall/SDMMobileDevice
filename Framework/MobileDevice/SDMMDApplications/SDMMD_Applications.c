@@ -47,6 +47,7 @@ void SDMMD_browse_callback(CFDictionaryRef dict, void* response) {
 
 void SDMMD_lookup_callback(CFDictionaryRef dict, void* response) {
 	response = (void*)dict;
+	CFShow(response);
 }
 
 sdmmd_return_t SDMMD_AMDeviceLookupAppInfo(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef *response) {

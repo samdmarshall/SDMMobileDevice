@@ -1135,6 +1135,7 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 									else {
 										result = kAMDSuccess;
 									}
+									CFSafeRelease(daemon);
 								}
 								else {
 									result = kAMDNoResourcesError;
@@ -1344,7 +1345,7 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 			if (getValue) {
 				mutexIsLocked = true;
 				result = kAMDPairingProhibitedError;
-				CFStringRef err;
+				CFStringRef err = NULL;
 				CFTypeRef wifiAddress = SDMMD_copy_lockdown_value(device, NULL, CFSTR(kWiFiAddress), &err);
 				CFTypeRef value = SDMMD_copy_lockdown_value(device, NULL, CFSTR(kDevicePublicKey), &err);
 				//CFShow(value);

@@ -40,7 +40,7 @@
 
 #define kChecksumHashLength 0x3
 
-#define kDeveloperImageStreamSize 0x100000
+#define kDeveloperImageStreamSize 0x400000
 
 static char *kHexEncodeString = "0123456789ABCDEF";
 #define kHexDecode(byte) ((byte >= '0' && byte <= '9') ? (byte - '0') : ( (byte >= 'a' && byte <= 'f') ? (10 + byte - 'a') : ((byte >= 'A' && byte <= 'F') ? (10 + byte - 'A') : byte)))
@@ -182,7 +182,9 @@ CFStringRef SDMMD_PathToDeviceSupport(SDMMD_AMDeviceRef device) {
 	if (device) {
 		SDMMD_AMDeviceConnect(device);
 		SDMMD_AMDeviceStartSession(device);
-		CFStringRef os_version = CFStringCreateWithSubstring(kCFAllocatorDefault, SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kProductVersion)), CFRangeMake(0, 3));
+		CFStringRef full_os_version = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kProductVersion));
+		CFStringRef os_version = CFStringCreateWithSubstring(kCFAllocatorDefault, full_os_version, CFRangeMake(0, 3));
+		CFSafeRelease(full_os_version);
 		CFStringRef build_version = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kBuildVersion));
 		SDMMD_AMDeviceStopSession(device);
 		SDMMD_AMDeviceDisconnect(device);
@@ -266,6 +268,7 @@ sdmmd_return_t SDMMD_stream_image(SDMMD_AMConnectionRef connection, CFStringRef 
 		CFDictionarySetValue(streamDict, CFSTR("ImageType"), image_type);
 		CFDictionarySetValue(streamDict, CFSTR("ImageSize"), size);
 		result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(connection), streamDict, kCFPropertyListXMLFormat_v1_0);
+		CFSafeRelease(size);
 		
 		CheckErrorAndReturn(result);
 		
@@ -279,44 +282,42 @@ sdmmd_return_t SDMMD_stream_image(SDMMD_AMConnectionRef connection, CFStringRef 
 			
 			CheckErrorAndReturn(result);
 			
-			if (SDM_MD_CallSuccessful(result)) {
-				CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
-				if (status) {
-					if (CFStringCompare(status, CFSTR("ReceiveBytesAck"), 0) == 0) {
-						// block code
-						CFDataRef image_file = CFDataCreateFromPath(path);
-						uint64_t offset = 0;
-						uint64_t remainder = 0;
-						while (offset < fileStat.st_size) {
-							remainder = (fileStat.st_size - offset);
-							remainder = (remainder > kDeveloperImageStreamSize ? kDeveloperImageStreamSize : remainder);
-							CFRange current_read = CFRangeMake((CFIndex)offset, (CFIndex)remainder);
-							CFDataRef image_stream = CFDataCreateFromSubrangeOfData(image_file, current_read);
-							result = SDMMD_DirectServiceSend(SDMMD_TranslateConnectionToSocket(connection), image_stream);
-							offset += remainder;
-						}
-						CFDictionaryRef getStatus;
-						result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&getStatus);
+			CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
+			if (status) {
+				if (CFStringCompare(status, CFSTR("ReceiveBytesAck"), 0) == 0) {
+					// block code
+					CFDataRef image_file = CFDataCreateFromPath(path);
+					uint64_t offset = 0;
+					uint64_t remainder = 0;
+					while (offset < fileStat.st_size) {
+						remainder = (fileStat.st_size - offset);
+						remainder = (remainder > kDeveloperImageStreamSize ? kDeveloperImageStreamSize : remainder);
+						CFRange current_read = CFRangeMake((CFIndex)offset, (CFIndex)remainder);
+						CFDataRef image_stream = CFDataCreateFromSubrangeOfData(image_file, current_read);
+						result = SDMMD_DirectServiceSend(SDMMD_TranslateConnectionToSocket(connection), image_stream);
+						CheckErrorAndReturn(result);
+						offset += remainder;
+						CFSafeRelease(image_stream);
+					}
+					CFDictionaryRef getStatus;
+					result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&getStatus);
+					
+					if (result == 0) {
+						result = SDMMD__ErrorHandler(SDMMD_ImageMounterErrorConvert, response);
 						
-						if (result == 0) {
-							result = SDMMD__ErrorHandler(SDMMD_ImageMounterErrorConvert, response);
-							
-							CheckErrorAndReturn(result);
-							
-							if (SDM_MD_CallSuccessful(result)) {
-								CFTypeRef streamStatus = CFDictionaryGetValue(getStatus, CFSTR("Status"));
-								if (streamStatus) {
-									if (CFStringCompare(streamStatus, CFSTR("Complete"), 0x0) == 0) {
-										result = kAMDSuccess;
-									}
-								}
+						CheckErrorAndReturn(result);
+						
+						CFTypeRef streamStatus = CFDictionaryGetValue(getStatus, CFSTR("Status"));
+						if (streamStatus) {
+							if (CFStringCompare(streamStatus, CFSTR("Complete"), 0x0) == 0) {
+								result = kAMDSuccess;
 							}
 						}
 					}
 				}
-				else {
-					result = kAMDUndefinedError;
-				}
+			}
+			else {
+				result = kAMDUndefinedError;
 			}
 		}
 		else {
@@ -351,15 +352,13 @@ sdmmd_return_t SDMMD_mount_image(SDMMD_AMConnectionRef connection, CFStringRef i
 					
 					CheckErrorAndReturn(result);
 					
-					if (SDM_MD_CallSuccessful(result)) {
-						CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
-						if (status) {
-							if (CFEqual(status, CFSTR("Complete"))) {
-								*mounted = true;
-							}
-							else {
-								result = kAMDMissingDigestError;
-							}
+					CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
+					if (status) {
+						if (CFEqual(status, CFSTR("Complete"))) {
+							*mounted = true;
+						}
+						else {
+							result = kAMDMissingDigestError;
 						}
 					}
 				}
@@ -386,6 +385,8 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 		if (image_type) {
 			unsigned char sum_digest[HASH_LENGTH];
 			result = SDMMD_AMDeviceDigestFile(path, PtrCast(&sum_digest, unsigned char **));
+			CheckErrorAndReturn(result);
+			
 			SDMMD_AMDeviceRef device_copy = SDMMD_AMDeviceCreateCopy(device);
 			if (SDMMD_AMDeviceIsValid(device_copy)) {
 				result = SDMMD_AMDeviceSecureStartSessionedService(device, CFSTR(AMSVC_MOBILE_IMAGE_MOUNT), &connection);
@@ -418,15 +419,13 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 						
 						CheckErrorAndReturn(result);
 						
-						if (SDM_MD_CallSuccessful(result)) {
-							CFTypeRef image = CFDictionaryGetValue(response, CFSTR("ImagePresent"));
-							if (image) {
-								if (CFEqual(image, kCFBooleanTrue)) {
-									digest = CFDictionaryGetValue(response, CFSTR("ImageDigest"));
-								}
-								else {
-									result = kAMDMissingDigestError;
-								}
+						CFTypeRef image = CFDictionaryGetValue(response, CFSTR("ImagePresent"));
+						if (image) {
+							if (CFEqual(image, kCFBooleanTrue)) {
+								digest = CFDictionaryGetValue(response, CFSTR("ImageDigest"));
+							}
+							else {
+								result = kAMDMissingDigestError;
 							}
 						}
 					}

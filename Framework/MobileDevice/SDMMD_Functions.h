@@ -451,11 +451,13 @@ ATR_UNUSED static CFURLRef SDMMD__AMDCFURLCreateWithFileSystemPathRelativeToBase
 }
 
 ATR_UNUSED static Boolean SDMMD__AMDCFURLGetCStringForFileSystemPath(CFURLRef urlRef, char *cpath) {
+	Boolean result = false;
 	CFTypeRef url = CFURLCopyFileSystemPath(urlRef, kCFURLPOSIXPathStyle);
 	if (url) {
-		return CFStringGetCString(url, cpath, 1025, kCFStringEncodingUTF8);
+		result = CFStringGetCString(url, cpath, 1025, kCFStringEncodingUTF8);
 	}
-	return false;
+	CFSafeRelease(url);
+	return result;
 }
 
 ATR_UNUSED static void SDMMD_fire_callback(CallBack handle, void* unknown, CFStringRef status) {
@@ -475,8 +477,8 @@ ATR_UNUSED static void SDMMD_fire_callback_767f4(CallBack handle, void* unknown,
 		if (dict) {
 			CFDictionarySetValue(dict, CFSTR("Status"), string);
 			CFDictionarySetValue(dict, CFSTR("PercentComplete"), num);
-			CFSafeRelease(num);
 		}
+		CFSafeRelease(num);
 		handle(dict, unknown);
 	}
 }
@@ -716,10 +718,11 @@ ATR_UNUSED static unsigned char* DataToSHA1(CFDataRef data) {
 	SHA_CTX ctx;
 	SHA1_Init(&ctx);
 	for (size_t index = 0; index < CFDataGetLength(data); index++) {
-		SHA1_Update(&ctx, PtrAdd(CFDataGetBytePtr(data), index), sizeof(char));
+		SHA1_Update(&ctx, PtrAdd(CFDataGetBytePtr(data), index), sizeof(unsigned char));
 	}
 	SHA1_Final(hash, &ctx);
-	unsigned char *digest = calloc(HASH_LENGTH, sizeof(char));
+	unsigned char *digest = (unsigned char *)malloc(HASH_LENGTH);
+	memset(digest, 0, sizeof(unsigned char[HASH_LENGTH]));
 	memcpy(digest, hash, sizeof(char[HASH_LENGTH]));
 	return digest;
 }

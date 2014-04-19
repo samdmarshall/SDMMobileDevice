@@ -34,7 +34,7 @@
 #include <sys/types.h>
 #include "Core.h"
 
-#define kAFCMaxTransferSize 1048576 // 4194304
+#define kAFCMaxTransferSize 4194304
 
 void SDMMD_AFCHeaderInit(SDMMD_AFCPacketHeader *header, uint32_t command, uint32_t size, uint32_t data, uint32_t pack_num);
 
@@ -686,6 +686,7 @@ sdmmd_return_t SDMMD_AMDeviceCopyFile(CallBack callback, void *thing2, void *thi
 			uint64_t offset = 0;
 			uint64_t remainder = 0;
 			uint32_t percent_calc = 30;
+			bool should_stop = false;
 			for (uint32_t index = 0; index < packets; index++) {
 				offset = kAFCMaxTransferSize*index;
 				remainder = (CFDataGetLength(local_file) - offset);
@@ -695,28 +696,38 @@ sdmmd_return_t SDMMD_AMDeviceCopyFile(CallBack callback, void *thing2, void *thi
 				SDMMD_AFCOperationRef write_op = SDMMD_AFCFileDescriptorCreateWriteOperation(file_descriptor, write_data);
 				result = SDMMD_AFCProcessOperation(conn, &write_op);
 				if (SDM_MD_CallSuccessful(result)) {
-					CFMutableDictionaryRef status = SDMMD_create_dict();
-					CFDictionarySetValue(status, CFSTR("Status"), CFSTR("CopyingFile"));
-					double test = (double)CFDataGetLength(local_file);
-					percent_calc += (floor(((double)remainder / test) * 100.0) * 0.59);
-					CFNumberRef percent = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &percent_calc);
-					CFDictionarySetValue(status, CFSTR("PercentComplete"), percent);
-					CFStringRef local_path = CFStringCreateWithBytes(kCFAllocatorDefault, (const UInt8 *)local, strlen(local), kCFStringEncodingUTF8, false);
-					CFDictionarySetValue(status, CFSTR("LocalPath"), local_path);
-					CFDictionarySetValue(status, CFSTR("RemotePath"), remote_path);
-					callback(status, thing3);
-					CFSafeRelease(status);
+					if (callback != NULL) {
+						CFMutableDictionaryRef status = SDMMD_create_dict();
+						CFDictionarySetValue(status, CFSTR("Status"), CFSTR("CopyingFile"));
+						double test = (double)CFDataGetLength(local_file);
+						percent_calc += (floor(((double)remainder / test) * 100.0) * 0.59);
+						CFNumberRef percent = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &percent_calc);
+						CFDictionarySetValue(status, CFSTR("PercentComplete"), percent);
+						CFStringRef local_path = CFStringCreateWithBytes(kCFAllocatorDefault, (const UInt8 *)local, strlen(local), kCFStringEncodingUTF8, false);
+						CFDictionarySetValue(status, CFSTR("LocalPath"), local_path);
+						CFDictionarySetValue(status, CFSTR("RemotePath"), remote_path);
+						callback(status, thing3);
+						CFSafeRelease(status);
+						CFSafeRelease(local_path);
+						CFSafeRelease(percent);
+					}
 				}
 				else {
-					break;
+					should_stop = true;
 				}
 				SDMMD_AFCOperationRelease(write_op);
+				CFSafeRelease(write_data);
+				
+				if (should_stop) {
+					break;
+				}
 			}
 			SDMMD_AFCOperationRef file_close = SDMMD_AFCFileDescriptorCreateCloseOperation(file_descriptor);
 			SDMMD_AFCProcessOperation(conn, &file_close);
 			SDMMD_AFCOperationRelease(file_close);
 		}
 		SDMMD_AFCOperationRelease(file_create);
+		CFSafeRelease(remote_path);
 	}
 	CFSafeRelease(local_file);
 	return result;
@@ -755,6 +766,7 @@ sdmmd_return_t SDMMD_AMDeviceRemoteCopyFile(CallBack callback, void *thing2, voi
 			SDMMD_AFCOperationRelease(file_close);
 		}
 		SDMMD_AFCOperationRelease(file_create);
+		CFSafeRelease(remote_path);
 	}
 	CFSafeRelease(local_file);
 	return result;

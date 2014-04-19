@@ -214,7 +214,8 @@ sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCom
 sdmmd_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef dconn, CFDataRef *response);
 
 
-
+bool SDMMD_device_os_is_at_least(SDMMD_AMDeviceRef device, CFStringRef version);
+sdmmd_return_t SDMMD_stream_image(SDMMD_AMConnectionRef connection, CFStringRef path, CFStringRef image_type);
 
 //sdmmd_debug_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef connection, SDMMD_DebugCommandType commandType, CFStringRef command);
 //sdmmd_debug_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef connection, CFDataRef *data);
