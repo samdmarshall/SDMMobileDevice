@@ -534,7 +534,7 @@ sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCom
 	SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
 	BufferRef buffer = CreateBufferRef();
 	char *commandPrefix = "$";
-	memcpy(buffer->data, commandPrefix, 1);
+	memcpy(buffer->data, commandPrefix, sizeof(char));
 	char *string = NULL;
 	if (command->commandCode == kDebugCUSTOMCOMMAND) {
 		string = SDMCFStringGetString(command->command);
@@ -573,7 +573,7 @@ bool SDMMD_DebuggingReceiveInternalCheck(SocketConnection connection, char *rece
 	CFMutableDataRef receivedData = CFDataCreateMutable(kCFAllocatorDefault, 1);
 	sdmmd_return_t result = SDMMD_DirectServiceReceive(connection, PtrCast(&receivedData, CFDataRef*));
 	char *buffer = calloc(1, S(char));
-	memcpy(buffer, CFDataGetBytePtr(receivedData), 1);
+	memcpy(buffer, CFDataGetBytePtr(receivedData), sizeof(char));
 	if (SDM_MD_CallSuccessful(result) && receivedChar[0] != 0) {
 		didReceiveChar = ((memcmp(buffer, receivedChar, S(char)) == 0) ? true : false);
 	}
@@ -605,26 +605,26 @@ sdmmd_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef dconn, CFDataRe
 		if (strncmp(ack, commandPrefix, S(char)) == 0) {
 			shouldReceive = true;
 			skipPrefix = true;
-			memcpy(responseBuffer->data, commandPrefix, 1);
+			memcpy(responseBuffer->data, commandPrefix, sizeof(char));
 		}
 	}
 	if (shouldReceive && !skipPrefix) {
 		shouldReceive = SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, commandPrefix);
 		if (shouldReceive) {
-			memcpy(responseBuffer->data, commandPrefix, 1);
+			memcpy(responseBuffer->data, commandPrefix, sizeof(char));
 		}
 	}
 	if (shouldReceive) {
 		uint32_t checksumLength = kChecksumHashLength;
 		bool receivingChecksumResponse = false;
 		while ((checksumLength > 0)) {
-			uint64_t oldSize = IncrementBufferRefBySize(responseBuffer, 1);
+			uint64_t oldSize = IncrementBufferRefBySize(responseBuffer, sizeof(char));
 			char *data = "#";
 			receivingChecksumResponse = SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, data);
 			if (receivingChecksumResponse) {
 				checksumLength--;
 			}
-			memcpy(&(responseBuffer->data[oldSize]), data, 1);
+			memcpy(&(responseBuffer->data[oldSize]), data, sizeof(char));
 		}
 		bool validResponse = SDMMD_ValidateChecksumForBuffer(responseBuffer);
 		if (validResponse) {
