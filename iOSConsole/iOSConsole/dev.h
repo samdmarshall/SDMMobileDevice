@@ -15,6 +15,6 @@
 void SetupDeviceForDevelopment(char *udid);
 void TranferAppForInstallOnDevice(char *udid, char *app_path);
 void InstallApplicationOnDevice(char *udid, char *app_path);
-void StartDebuggingAndDetach(char *udid);
+void StartDebuggingAndDetach(char *udid, char *app_path);
 
 #endif

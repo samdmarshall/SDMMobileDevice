@@ -94,9 +94,10 @@ int main(int argc, const char * argv[]) {
 	}
 	if (optionsEnable[OptionsDevice]) {
 		SetupDeviceForDevelopment(udid);
+		
 		TranferAppForInstallOnDevice(udid, app_path);
 		InstallApplicationOnDevice(udid, app_path);
-		StartDebuggingAndDetach(udid);
+		StartDebuggingAndDetach(udid, app_path);
 	}
 	
     return 0;

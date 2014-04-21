@@ -81,6 +81,13 @@ sdmmd_return_t SDMMD_AMDebugConnectionStart(SDMMD_AMDebugConnectionRef dconn) {
 	
 	dconn->connection = SDMMD_AMDServiceConnectionCreate(0, NULL, NULL);
 	result = SDMMD_AMDeviceStartService(dconn->device, CFSTR(AMSVC_DEBUG_SERVER), NULL, &(dconn->connection));
+		
+	result = SDMMD_AMDeviceStopSession(dconn->device);
+	CheckErrorAndReturn(result);
+	
+	result = SDMMD_AMDeviceDisconnect(dconn->device);
+	CheckErrorAndReturn(result);
+
 	
 	ExitLabelAndReturn(result);
 }

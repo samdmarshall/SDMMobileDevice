@@ -216,6 +216,9 @@ sdmmd_return_t SDMMD_AMDeviceCopyApplication(SDMMD_AMDeviceRef device, CFStringR
 		result = SDMMD_AMDeviceTransferApplication(connection, path, NULL, SDMMD_Default_transfer_callback, NULL);
 		CheckErrorAndReturn(result);
 		
+		result = SDMMD_AMDServiceConnectionInvalidate(connection);
+		CheckErrorAndReturn(result);
+		
 		result = SDMMD_AMDeviceStopSession(device);
 		CheckErrorAndReturn(result);
 		
@@ -247,7 +250,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn
 			CFSafeRelease(pathURL);
 		}
 		if (lastComp) {
-			CFStringRef format = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%s%c%@"), "PublicStaging", 0x2f, lastComp);
+			CFStringRef format = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("PublicStaging/%@"), lastComp);
 			if (format) {
 				char *appName = SDMCFStringGetString(format);
 				printf("%s: Attempting install of %s.\n",__FUNCTION__,appName);
