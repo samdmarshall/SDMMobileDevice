@@ -250,22 +250,20 @@ sdmmd_return_t SDMMD_ServiceReceiveStream(SocketConnection handle, CFPropertyLis
 	CFDataRef dataBuffer = NULL;
 	sdmmd_return_t result = SDMMD_ServiceReceive(handle, &dataBuffer);
 
-	if (SDM_MD_CallSuccessful(result)) {
-		if (dataBuffer && CFDataGetLength(dataBuffer)) {
-			CFReadStreamRef read = CFReadStreamCreateWithBytesNoCopy(kCFAllocatorDefault, CFDataGetBytePtr(dataBuffer), CFDataGetLength(dataBuffer), kCFAllocatorNull);
+	CheckErrorAndReturn(result);
+	
+	if (dataBuffer && CFDataGetLength(dataBuffer)) {
+		CFReadStreamRef read = CFReadStreamCreateWithBytesNoCopy(kCFAllocatorDefault, CFDataGetBytePtr(dataBuffer), CFDataGetLength(dataBuffer), kCFAllocatorNull);
 
-			CFReadStreamOpen(read);
-			*data = CFPropertyListCreateWithStream(kCFAllocatorDefault, read, CFDataGetLength(dataBuffer), kCFPropertyListMutableContainersAndLeaves, NULL, NULL);
-			CFReadStreamClose(read);
-			CFSafeRelease(read);
-		}
-		result = kAMDSuccess;
+		CFReadStreamOpen(read);
+		*data = CFPropertyListCreateWithStream(kCFAllocatorDefault, read, CFDataGetLength(dataBuffer), kCFPropertyListMutableContainersAndLeaves, NULL, NULL);
+		CFReadStreamClose(read);
+		CFSafeRelease(read);
 	}
-	else {
-		result = kAMDNotConnectedError;
-	}
+	result = kAMDSuccess;
+	
 	CFSafeRelease(dataBuffer);
-	return result;
+	ExitLabelAndReturn(result);
 }
 
 SocketConnection SDMMD_TranslateConnectionToSocket(SDMMD_AMConnectionRef connection) {
