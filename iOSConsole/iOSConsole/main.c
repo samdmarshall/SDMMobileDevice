@@ -25,6 +25,7 @@ static char *runArg = "-r,--run";
 static char *powerArg = "-p,--diag";
 static char *devArg = "-x,--develop";
 static char *installArg = "-t,--install";
+static char *profileArg = "-c,--profile";
 
 enum iOSConsoleOptions {
 	OptionsHelp = 0x0,
@@ -38,6 +39,7 @@ enum iOSConsoleOptions {
 	OptionsDiag,
 	OptionsDev,
 	OptionsInstall,
+	OptionsConfig,
 	OptionsCount
 };
 
@@ -52,7 +54,8 @@ static struct option long_options[OptionsCount] = {
 	{"run", required_argument, 0x0, 'r'},
 	{"diag", required_argument, 0x0, 'p'},
 	{"develop", no_argument, 0x0, 'x'},
-	{"install", required_argument, 0x0, 't'}
+	{"install", required_argument, 0x0, 't'},
+	{"profile", required_argument, 0x0, 'c'}
 };
 
 static bool optionsEnable[OptionsCount] = {};
@@ -80,7 +83,7 @@ int main(int argc, const char * argv[]) {
 	int c;
 	while (searchArgs) {
 		int option_index = 0x0;
-		c = getopt_long (argc, (char * const *)argv, "lh:d:ais:q:p:t:",long_options, &option_index);
+		c = getopt_long (argc, (char * const *)argv, "lh:d:ais:q:p:t:c:",long_options, &option_index);
 		if (c == -1) {
 			break;
 		}
@@ -174,6 +177,13 @@ int main(int argc, const char * argv[]) {
 				}
 				break;
 			}
+			case 'c': {
+				if (optarg) {
+					optionsEnable[OptionsConfig] = true;
+					installPath = optarg;
+				}
+				break;
+			}
 			default: {
 				printf("--help for help");
 				break;
@@ -192,6 +202,8 @@ int main(int argc, const char * argv[]) {
 			printf("%s [bundle id] : run an application with specified [bundle id]\n",runArg);
 			printf("%s [sleep|reboot|shutdown] : perform diag power operations on a device\n",powerArg);
 			printf("%s : setup device for development\n",devArg);
+			printf("%s [.app path] : install specificed .app to a device\n",installArg);
+			printf("%s [.mobileconfig path] : install specificed .mobileconfig to a device\n",profileArg);
 		}
 		else {
 			if (strncmp(help, "service", strlen("service")) == 0x0) {
@@ -246,6 +258,9 @@ int main(int argc, const char * argv[]) {
 		}
 		else if (optionsEnable[OptionsInstall]) {
 			InstallAppToDevice(udid, installPath);
+		}
+		else if (optionsEnable[OptionsConfig]) {
+			InstallProfileToDevice(udid, installPath);
 		}
 	}
 	Safe(free, domain);

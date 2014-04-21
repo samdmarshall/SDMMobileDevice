@@ -182,6 +182,7 @@
 		2215AB9617525D9000AD1981 /* SDMMD_MRestorableDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_MRestorableDevice.h; sourceTree = "<group>"; };
 		2215AB9717525D9000AD1981 /* SDMMD_MRestorableDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_MRestorableDevice.c; sourceTree = "<group>"; };
 		222C290518A32C5B005B3A26 /* SDMMD_AMAuthInstall.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SDMMD_AMAuthInstall.h; path = SDMMDAuthInstall/SDMMD_AMAuthInstall.h; sourceTree = "<group>"; };
+		222EF653190597FD000270C3 /* SDMMD_MobileConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_MobileConfig.h; sourceTree = "<group>"; };
 		225AC5BE175B976500A47071 /* SDMMD_Notification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Notification.h; sourceTree = "<group>"; };
 		225AC5BF175B976500A47071 /* SDMMD_Notification.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_Notification.c; sourceTree = "<group>"; };
 		225ACB44175FBFA300A47071 /* SDMMD_Debugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Debugger.h; sourceTree = "<group>"; };
@@ -371,6 +372,7 @@
 				2215A8AF175010A300AD1981 /* SDMMD_Service.c */,
 				225ACB44175FBFA300A47071 /* SDMMD_Debugger.h */,
 				225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */,
+				222EF653190597FD000270C3 /* SDMMD_MobileConfig.h */,
 			);
 			path = SDMMDService;
 			sourceTree = "<group>";

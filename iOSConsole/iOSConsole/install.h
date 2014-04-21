@@ -10,5 +10,6 @@
 #define iOSConsole_install_h
 
 void InstallAppToDevice(char *udid, char *path);
+void InstallProfileToDevice(char *udid, char *path);
 
 #endif
