@@ -59,6 +59,7 @@
 /* Begin PBXFileReference section */
 		220B5B1B188374D80082AF84 /* SDMMD_Types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Types.h; sourceTree = "<group>"; };
 		220B5B1C188375040082AF84 /* Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Attributes.h; sourceTree = "<group>"; };
+		2225F1E81905D35400AF501E /* SDMMD_Debugger_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_Debugger_Internal.h; sourceTree = "<group>"; };
 		222EF60E19055DF5000270C3 /* install.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = install.h; sourceTree = "<group>"; };
 		222EF60F19055DFD000270C3 /* install.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = install.c; sourceTree = "<group>"; };
 		22310D661874F4B10092C107 /* iOSConsole */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iOSConsole; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -340,6 +341,7 @@
 		22310DA418750D430092C107 /* SDMMDService */ = {
 			isa = PBXGroup;
 			children = (
+				2225F1E81905D35400AF501E /* SDMMD_Debugger_Internal.h */,
 				22310DA518750D430092C107 /* SDMMD_Debugger.c */,
 				22310DA618750D430092C107 /* SDMMD_Debugger.h */,
 				22310DA718750D430092C107 /* SDMMD_Service.c */,
