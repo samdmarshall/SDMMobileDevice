@@ -739,4 +739,106 @@ ATR_UNUSED static sdmmd_return_t SDMMD_AMDeviceDigestFile(CFStringRef path, unsi
 	return result;
 }
 
+enum SDM_MobileDevice_Model_ID {
+	SDM_MobileDevice_Model_ID_Invalid,
+	SDM_MobileDevice_Model_ID_iPad1_1,
+	SDM_MobileDevice_Model_ID_iPad2_1,
+	SDM_MobileDevice_Model_ID_iPad2_2,
+	SDM_MobileDevice_Model_ID_iPad2_3,
+	SDM_MobileDevice_Model_ID_iPad2_4,
+	SDM_MobileDevice_Model_ID_iPad2_5,
+	SDM_MobileDevice_Model_ID_iPad2_6,
+	SDM_MobileDevice_Model_ID_iPad2_7,
+	SDM_MobileDevice_Model_ID_iPad3_1,
+	SDM_MobileDevice_Model_ID_iPad3_2,
+	SDM_MobileDevice_Model_ID_iPad3_3,
+	SDM_MobileDevice_Model_ID_iPad3_4,
+	SDM_MobileDevice_Model_ID_iPad3_5,
+	SDM_MobileDevice_Model_ID_iPad3_6,
+	SDM_MobileDevice_Model_ID_iPad4_1,
+	SDM_MobileDevice_Model_ID_iPad4_2,
+	SDM_MobileDevice_Model_ID_iPad4_3,
+	SDM_MobileDevice_Model_ID_iPad4_4,
+	SDM_MobileDevice_Model_ID_iPad4_5,
+	SDM_MobileDevice_Model_ID_iPad4_6,
+	SDM_MobileDevice_Model_ID_iPhone1_1,
+	SDM_MobileDevice_Model_ID_iPhone1_2,
+	SDM_MobileDevice_Model_ID_iPhone2_1,
+	SDM_MobileDevice_Model_ID_iPhone3_1,
+	SDM_MobileDevice_Model_ID_iPhone3_2,
+	SDM_MobileDevice_Model_ID_iPhone3_3,
+	SDM_MobileDevice_Model_ID_iPhone4_1,
+	SDM_MobileDevice_Model_ID_iPhone5_1,
+	SDM_MobileDevice_Model_ID_iPhone5_2,
+	SDM_MobileDevice_Model_ID_iPhone5_3,
+	SDM_MobileDevice_Model_ID_iPhone5_4,
+	SDM_MobileDevice_Model_ID_iPhone6_1,
+	SDM_MobileDevice_Model_ID_iPhone6_2,
+	SDM_MobileDevice_Model_ID_iPod1_1,
+	SDM_MobileDevice_Model_ID_iPod2_1,
+	SDM_MobileDevice_Model_ID_iPod3_1,
+	SDM_MobileDevice_Model_ID_iPod4_1,
+	SDM_MobileDevice_Model_ID_iPod5_1,
+	SDM_MobileDevice_Model_ID_Count
+};
+
+struct SDM_MobileDevice_Model_Info {
+	char *model;
+	char *name;
+};
+
+static struct SDM_MobileDevice_Model_Info SDM_MobileDevice_Model_ID_Names[SDM_MobileDevice_Model_ID_Count] = {
+	{"", "Invalid"},
+	{"iPad1,1", "iPad 1"},
+	{"iPad2,1", "iPad 2"},
+	{"iPad2,2", "iPad 2"},
+	{"iPad2,3", "iPad 2"},
+	{"iPad2,4", "iPad 2"},
+	{"iPad2,5", "iPad Mini 1"},
+	{"iPad2,6", "iPad Mini 1"},
+	{"iPad2,7", "iPad Mini 1"},
+	{"iPad3,1", "iPad 3"},
+	{"iPad3,2", "iPad 3"},
+	{"iPad3,3", "iPad 3"},
+	{"iPad3,4", "iPad 4"},
+	{"iPad3,5", "iPad 4"},
+	{"iPad3,6", "iPad 4"},
+	{"iPad4,1", "iPad Air"},
+	{"iPad4,2", "iPad Air"},
+	{"iPad4,3", "iPad Air"},
+	{"iPad4,4", "iPad Mini 2"},
+	{"iPad4,5", "iPad Mini 2"},
+	{"iPad4,6", "iPad Mini 2"},
+	{"iPhone1,1", "iPhone 2G"},
+	{"iPhone1,2", "iPhone 3G"},
+	{"iPhone2,1", "iPhone 3GS"},
+	{"iPhone3,1", "iPhone 4"},
+	{"iPhone3,2", "iPhone 4"},
+	{"iPhone3,3", "iPhone 4"},
+	{"iPhone4,1", "iPhone 4S"},
+	{"iPhone5,1", "iPhone 5"},
+	{"iPhone5,2", "iPhone 5"},
+	{"iPhone5,3", "iPhone 5C"},
+	{"iPhone5,4", "iPhone 5C"},
+	{"iPhone6,1", "iPhone 5S"},
+	{"iPhone6,2", "iPhone 5S"},
+	{"iPod1,1", "iPod Touch 1G"},
+	{"iPod2,1", "iPod Touch 2G"},
+	{"iPod3,1", "iPod Touch 3G"},
+	{"iPod4,1", "iPod Touch 4G"},
+	{"iPod5,1", "iPod Touch 5G"}
+};
+
+ATR_UNUSED static char* SDMMD_ResolveModelToName(CFStringRef model) {
+	char *model_cstr = SDMCFStringGetString(model);
+	char *model_name = "Unknown";
+	for (uint32_t index = 0; index < SDM_MobileDevice_Model_ID_Count; index++) {
+		if (strcmp(SDM_MobileDevice_Model_ID_Names[index].model, model_cstr) == 0) {
+			model_name = SDM_MobileDevice_Model_ID_Names[index].name;
+			break;
+		}
+	}
+	return model_name;
+}
+
 #endif

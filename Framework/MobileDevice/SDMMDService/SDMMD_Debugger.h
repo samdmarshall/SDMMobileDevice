@@ -213,7 +213,6 @@ BufferRef SDMMD_EncodeDebuggingString(CFStringRef command);
 sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCommandRef command, CFDataRef *response);
 sdmmd_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef dconn, CFDataRef *response);
 
-
 bool SDMMD_device_os_is_at_least(SDMMD_AMDeviceRef device, CFStringRef version);
 sdmmd_return_t SDMMD_stream_image(SDMMD_AMConnectionRef connection, CFStringRef path, CFStringRef image_type);
 
