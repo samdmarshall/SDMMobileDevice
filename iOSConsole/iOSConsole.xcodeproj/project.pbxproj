@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		222EF61019055DFD000270C3 /* install.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF60F19055DFD000270C3 /* install.c */; };
 		22310D6A1874F4B10092C107 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310D691874F4B10092C107 /* CoreFoundation.framework */; };
 		22310D6D1874F4B10092C107 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 22310D6C1874F4B10092C107 /* main.c */; };
 		22310D6F1874F4B10092C107 /* iOSConsole.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 22310D6E1874F4B10092C107 /* iOSConsole.1 */; };
@@ -58,6 +59,8 @@
 /* Begin PBXFileReference section */
 		220B5B1B188374D80082AF84 /* SDMMD_Types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Types.h; sourceTree = "<group>"; };
 		220B5B1C188375040082AF84 /* Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Attributes.h; sourceTree = "<group>"; };
+		222EF60E19055DF5000270C3 /* install.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = install.h; sourceTree = "<group>"; };
+		222EF60F19055DFD000270C3 /* install.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = install.c; sourceTree = "<group>"; };
 		22310D661874F4B10092C107 /* iOSConsole */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iOSConsole; sourceTree = BUILT_PRODUCTS_DIR; };
 		22310D691874F4B10092C107 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		22310D6C1874F4B10092C107 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
@@ -174,6 +177,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		222EF61119055E01000270C3 /* install */ = {
+			isa = PBXGroup;
+			children = (
+				222EF60E19055DF5000270C3 /* install.h */,
+				222EF60F19055DFD000270C3 /* install.c */,
+			);
+			name = install;
+			sourceTree = "<group>";
+		};
 		22310D5D1874F4B10092C107 = {
 			isa = PBXGroup;
 			children = (
@@ -208,6 +220,7 @@
 		22310D6B1874F4B10092C107 /* iOSConsole */ = {
 			isa = PBXGroup;
 			children = (
+				222EF61119055E01000270C3 /* install */,
 				22EFC8BD1900330400C29BFF /* dev */,
 				22FFB8BF1880DE140073095D /* Core */,
 				22648F93189440D800133948 /* power */,
@@ -567,6 +580,7 @@
 				22B9557D1878A7A2004DCBF0 /* service.c in Sources */,
 				22B95571187895DB004DCBF0 /* query.c in Sources */,
 				22FFB8D01880DE140073095D /* Vector.c in Sources */,
+				222EF61019055DFD000270C3 /* install.c in Sources */,
 				22B9557418789837004DCBF0 /* list.c in Sources */,
 				22B9556B18788CB6004DCBF0 /* syslog.c in Sources */,
 				22310D6D1874F4B10092C107 /* main.c in Sources */,

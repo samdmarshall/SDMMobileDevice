@@ -128,62 +128,63 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 					if (lastComp) {
 						CFURLRef base = SDMMD__AMDCFURLCreateWithFileSystemPathRelativeToBase(kCFAllocatorDefault, CFSTR("PublicStaging"), 0, true);
 						CFURLRef copy = CFURLCreateCopyAppendingPathComponent(kCFAllocatorDefault, base, lastComp, true);
-						char *copyPath = NULL;
+						char *copyPath = calloc(1024, sizeof(char));
 						SDMMD__AMDCFURLGetCStringForFileSystemPath(copy, copyPath);
 						SDMMD_fire_callback_767f4(transferCallback, unknown, 0, CFSTR("PreflightingTransfer"));
 						//SDMMD_preflight_transfer(&cpath, &pathStat, &remoteStat);
 						SDMMD_fire_callback_767f4(transferCallback, unknown, 0, CFSTR("TransferingPackage"));
-						ATR_UNUSED SDMMD_AFCConnectionRef afcConn = SDMMD_AFCConnectionCreate(conn);//(r12, conn, 0x0, 0x0, &var_72);
-						// loop that iterates through all of file contents
+						SDMMD_AFCConnectionRef afcConn = SDMMD_AFCConnectionCreate(conn);//(r12, conn, 0x0, 0x0, &var_72);
+						if (afcConn) {
+							result = kAMDSuccess;
+						}
+						CheckErrorAndReturn(result);
 						
+						result = SDMMD_AMDeviceCopy(afcConn, cpath, copyPath);
 						
-						/*if (result == 0) {
- 							CFDataRef touchResponse;
-							result = SDMMD_check_can_touch(afcConn, &touchResponse);
-							if (result == 0) {
-								CFURLRef parent = CFURLCreateCopyDeletingLastPathComponent(r12, r13);
-								result = SDMMD_make_path(afcConn, parent);
-								if (result == 0) {
-									result = SDMMD_nuke_path(afcConn, r13);
-									if ((result | 0x8) == 0x8) {
-										int statResult = lstat(cpath, &pathStat);
-										if (statResult != 0xff) {
-											f ((var_84 & 0xffff & 0xf000) != 0xa000) {
-												if (rax == 0x8000) {
-													rbx = SDMMD_copy_touch_file(&remoteStat, transferCallback, unknown, afcConn, &cpath, &copyPath);
-												} else {
-													if (rax == 0x4000) {
-														rbx = SDMMD_copy_directory(&remoteStat, transferCallback, unknown, afcConn, &cpath, &copyPath);
-													} else {
-														printf("transfer_package: Don't know how to copy this type of file: %s\n", cpath);
-													}
-												}
-											} else {
-												rbx = SDMMD_copy_symlink(afcConn, &cpath, &copyPath);
-											}
-											r14 = 0x0;
-											if (rbx != 0x0) {
-												r9 = SDMMD_AFCErrorString(rbx);
-												printf("transfer_package: Could not copy %s to %s on the device.\n", cpath, copyPath);
-												result = kAMDUndefinedError;
-											}
-											result = SDMMD_AFCConnectionClose(afcConn);
-											if (result) {
-												printf("transfer_package: Could not close AFC connection. error: %i\n", result);
-											}
-											CFSafeRelease(r12);
+						/*
+						CFDataRef touchResponse;
+						result = SDMMD_check_can_touch(afcConn, &touchResponse);
+						CheckErrorAndReturn(result);
+						
+						CFURLRef parent = CFURLCreateCopyDeletingLastPathComponent(r12, r13);
+						result = SDMMD_make_path(afcConn, parent);
+						CheckErrorAndReturn(result);
+									
+						result = SDMMD_nuke_path(afcConn, r13);
+						if ((result | 0x8) == 0x8) {
+							int statResult = lstat(cpath, &pathStat);
+							if (statResult != 0xff) {
+								if ((var_84 & 0xffff & 0xf000) != 0xa000) {
+									if (rax == 0x8000) {
+										rbx = SDMMD_copy_touch_file(&remoteStat, transferCallback, unknown, afcConn, &cpath, &copyPath);
+									}
+									else {
+										if (rax == 0x4000) {
+											rbx = SDMMD_copy_directory(&remoteStat, transferCallback, unknown, afcConn, &cpath, &copyPath);
+										}
+										else {
+											printf("transfer_package: Don't know how to copy this type of file: %s\n", cpath);
 										}
 									}
-								} else {
-									// error!
 								}
+								else {
+									rbx = SDMMD_copy_symlink(afcConn, &cpath, &copyPath);
+								}
+							r14 = 0x0;
+							if (rbx != 0x0) {
+								r9 = SDMMD_AFCErrorString(rbx);
+								printf("transfer_package: Could not copy %s to %s on the device.\n", cpath, copyPath);
+								result = kAMDUndefinedError;
 							}
-						}*/
+							result = SDMMD_AFCConnectionClose(afcConn);
+							if (result) {
+								printf("transfer_package: Could not close AFC connection. error: %i\n", result);
+							}
+							CFSafeRelease(r12);
+						}
+						 */
 						CFSafeRelease(base);
 						CFSafeRelease(copy);
-					}
-					else {
-						result = kAMDUndefinedError;
 					}
 					CFSafeRelease(lastComp);
 				}
@@ -195,7 +196,33 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 			Safe(free, cpath);
 		}
 	}
-	return result;
+	
+	ExitLabelAndReturn(result);
+}
+
+sdmmd_return_t SDMMD_AMDeviceCopyApplication(SDMMD_AMDeviceRef device, CFStringRef path) {
+	sdmmd_return_t result = kAMDNotConnectedError;
+	SDMMD_AMConnectionRef connection = NULL;
+	if (device) {
+		result = SDMMD_AMDeviceConnect(device);
+		CheckErrorAndReturn(result);
+		
+		result = SDMMD_AMDeviceStartSession(device);
+		CheckErrorAndReturn(result);
+		
+		result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_AFC), NULL, &connection);
+		CheckErrorAndReturn(result);
+		
+		result = SDMMD_AMDeviceTransferApplication(connection, path, NULL, SDMMD_Default_transfer_callback, NULL);
+		CheckErrorAndReturn(result);
+		
+		result = SDMMD_AMDeviceStopSession(device);
+		CheckErrorAndReturn(result);
+		
+		result = SDMMD_AMDeviceDisconnect(device);
+		CheckErrorAndReturn(result);
+	}
+	ExitLabelAndReturn(result);
 }
 
 sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn, SDMMD_AMDeviceRef device, CFURLRef path, CFDictionaryRef options, CallBack installCallback, void* unknown) {
@@ -250,7 +277,6 @@ sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn
 }
 
 sdmmd_return_t SDMMD_AMDeviceInstallApplication(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef options, CallBack installCallback, void* unknown) {
-	printf("%s: Entry.\n",__FUNCTION__);
 	sdmmd_return_t result = kAMDSuccess;
 	uint32_t socket = -1;
 	SDMMD_AMConnectionRef conn = SDMMD__CreateTemporaryServConn(socket, 0);
@@ -271,6 +297,34 @@ sdmmd_return_t SDMMD_AMDeviceInstallApplication(SDMMD_AMDeviceRef device, CFStri
 		result = kAMDUndefinedError;
 	}
 	return result;
+}
+
+sdmmd_return_t SDMMD_AMDeviceInstallApp(SDMMD_AMDeviceRef device, CFStringRef path) {
+	sdmmd_return_t result = kAMDNotConnectedError;
+	SDMMD_AMConnectionRef connection = NULL;
+	if (device) {
+		result = SDMMD_AMDeviceConnect(device);
+		CheckErrorAndReturn(result);
+		
+		result = SDMMD_AMDeviceStartSession(device);
+		CheckErrorAndReturn(result);
+		
+		result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_AFC), NULL, &connection);
+		CheckErrorAndReturn(result);
+		
+		CFStringRef keys[] = { CFSTR("PackageType") };
+		CFStringRef values[] = { CFSTR("Developer") };
+		CFDictionaryRef options = CFDictionaryCreate(NULL, (const void **)&keys, (const void **)&values, 1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+		result = SDMMD_AMDeviceInstallApplication(device, path, options, SDMMD_Default_install_callback, NULL);
+		CheckErrorAndReturn(result);
+		
+		result = SDMMD_AMDeviceStopSession(device);
+		CheckErrorAndReturn(result);
+		
+		result = SDMMD_AMDeviceDisconnect(device);
+		CheckErrorAndReturn(result);
+	}
+	ExitLabelAndReturn(result);
 }
 
 #endif

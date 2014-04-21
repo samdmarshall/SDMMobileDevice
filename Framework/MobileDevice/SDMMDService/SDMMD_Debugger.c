@@ -74,26 +74,28 @@ void SDMMD_AMDebugConnectionClose(SDMMD_AMDebugConnectionRef dconn) {
 
 sdmmd_return_t SDMMD_AMDebugConnectionStart(SDMMD_AMDebugConnectionRef dconn) {
 	sdmmd_return_t result = SDMMD_AMDeviceConnect(dconn->device);
-	if (SDM_MD_CallSuccessful(result)) {
-		result = SDMMD_AMDeviceStartSession(dconn->device);
-		if (SDM_MD_CallSuccessful(result)) {
-			dconn->connection = SDMMD_AMDServiceConnectionCreate(0, NULL, NULL);
-			result = SDMMD_AMDeviceStartService(dconn->device, CFSTR(AMSVC_DEBUG_SERVER), NULL, &(dconn->connection));
-		}
-	}
-	return result;
+	CheckErrorAndReturn(result);
+	
+	result = SDMMD_AMDeviceStartSession(dconn->device);
+	CheckErrorAndReturn(result);
+	
+	dconn->connection = SDMMD_AMDServiceConnectionCreate(0, NULL, NULL);
+	result = SDMMD_AMDeviceStartService(dconn->device, CFSTR(AMSVC_DEBUG_SERVER), NULL, &(dconn->connection));
+	
+	ExitLabelAndReturn(result);
 }
 
 sdmmd_return_t SDMMD_AMDebugConnectionStop(SDMMD_AMDebugConnectionRef dconn) {
 	sdmmd_return_t result = kAMDSuccess;
-	if (SDM_MD_CallSuccessful(result)) {
-		SDMMD_AMDServiceConnectionInvalidate(dconn->connection);
-		result = SDMMD_AMDeviceStopSession(dconn->device);
-		if (SDM_MD_CallSuccessful(result)) {
-			result = SDMMD_AMDeviceDisconnect(dconn->device);
-		}
-	}
-	return result;
+	SDMMD_AMDServiceConnectionInvalidate(dconn->connection);
+	
+	result = SDMMD_AMDeviceStopSession(dconn->device);
+	CheckErrorAndReturn(result);
+	
+	result = SDMMD_AMDeviceDisconnect(dconn->device);
+	CheckErrorAndReturn(result);
+	
+	ExitLabelAndReturn(result);
 }
 
 bool SDMMD_device_os_is_at_least(SDMMD_AMDeviceRef device, CFStringRef version) {
@@ -114,32 +116,32 @@ sdmmd_return_t SDMMD_copy_image(SDMMD_AMDeviceRef device, CFStringRef path) {
 	sdmmd_return_t result = kAMDUndefinedError;
 	if (device) {
 		result = kAMDSuccess;//SDMMD_AMDeviceConnect(device);
-		if (SDM_MD_CallSuccessful(result)) {
-			result = SDMMD_AMDeviceStartSession(device);
-			if (SDM_MD_CallSuccessful(result)) {
-				SDMMD_AMConnectionRef copyConn = NULL;
-				result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_AFC), NULL, &copyConn);
-				if (SDM_MD_CallSuccessful(result)) {
-					SDMMD_AFCConnectionRef copyAFCConn = SDMMD_AFCConnectionCreate(copyConn);
-					SDMMD_AFCOperationRef makeStaging = SDMMD_AFCOperationCreateMakeDirectory(CFSTR("PublicStaging"));
-					result = SDMMD_AFCProcessOperation(copyAFCConn, &makeStaging);
-					if (SDM_MD_CallSuccessful(result)) {
-						// SDM copy file AFC
-						char *pathString = SDMCFStringGetString(path);
-						result = SDMMD_AMDeviceCopyFile(SDMMD_Default_AFC_CopyFile_Callback, NULL, NULL, copyAFCConn, pathString, "PublicStaging/staging.dimage");
-						Safe(free, pathString);
-					}
-					SDMMD_AFCOperationRelease(makeStaging);
-					SDMMD_AFCConnectionRelease(copyAFCConn);
-				}
-				SDMMD_AMDServiceConnectionInvalidate(copyConn);
-			}
-		}
-		else {
-			
-		}
+		CheckErrorAndReturn(result);
+		
+		result = SDMMD_AMDeviceStartSession(device);
+		CheckErrorAndReturn(result);
+		
+		SDMMD_AMConnectionRef copyConn = NULL;
+		result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_AFC), NULL, &copyConn);
+		CheckErrorAndReturn(result);
+		
+		SDMMD_AFCConnectionRef copyAFCConn = SDMMD_AFCConnectionCreate(copyConn);
+		SDMMD_AFCOperationRef makeStaging = SDMMD_AFCOperationCreateMakeDirectory(CFSTR("PublicStaging"));
+		result = SDMMD_AFCProcessOperation(copyAFCConn, &makeStaging);
+		CheckErrorAndReturn(result);
+		
+		// SDM copy file AFC
+		char *pathString = SDMCFStringGetString(path);
+		result = SDMMD_AMDeviceCopyFile(SDMMD_Default_AFC_CopyFile_Callback, NULL, NULL, copyAFCConn, pathString, "PublicStaging/staging.dimage");
+		Safe(free, pathString);
+		
+		SDMMD_AFCOperationRelease(makeStaging);
+		SDMMD_AFCConnectionRelease(copyAFCConn);
+		
+		SDMMD_AMDServiceConnectionInvalidate(copyConn);
 	}
-	return result;
+	
+	ExitLabelAndReturn(result);
 }
 
 sdmmd_return_t SDMMD__hangup_with_image_mounter_service(SDMMD_AMConnectionRef connection) {
@@ -151,13 +153,13 @@ sdmmd_return_t SDMMD__hangup_with_image_mounter_service(SDMMD_AMConnectionRef co
 	if (connection) {
 		SocketConnection socket = SDMMD_TranslateConnectionToSocket(connection);
 		result = SDMMD_ServiceSendMessage(socket, dict, kCFPropertyListXMLFormat_v1_0);
-		if (SDM_MD_CallSuccessful(result)) {
-			CFPropertyListRef response = NULL;
-			result = SDMMD_ServiceReceiveMessage(socket, &response);
-			PrintCFDictionary(response);
-		}
+		CheckErrorAndReturn(result);
+		
+		CFPropertyListRef response = NULL;
+		result = SDMMD_ServiceReceiveMessage(socket, &response);
+		PrintCFDictionary(response);
 	}
-	return result;
+	ExitLabelAndReturn(result);
 }
 
 CFStringRef SDMMD_CopyDeviceSupportPathFromXCRUN() {
@@ -343,35 +345,35 @@ sdmmd_return_t SDMMD_mount_image(SDMMD_AMConnectionRef connection, CFStringRef i
 			CFDictionarySetValue(mountDict, CFSTR("ImageSignature"), signature);
 		}
 		result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(connection), mountDict, kCFPropertyListXMLFormat_v1_0);
-		if (result == 0) {
-			CFDictionaryRef response;
-			result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&response);
-			if (result == 0) {
-				if (response) {
-					result = SDMMD__ErrorHandler(SDMMD_ImageMounterErrorConvert, response);
+		CheckErrorAndReturn(result);
+		
+		CFDictionaryRef response;
+		result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&response);
+		CheckErrorAndReturn(result);
+		
+		if (response) {
+			result = SDMMD__ErrorHandler(SDMMD_ImageMounterErrorConvert, response);
 					
-					CheckErrorAndReturn(result);
+			CheckErrorAndReturn(result);
 					
-					CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
-					if (status) {
-						if (CFEqual(status, CFSTR("Complete"))) {
-							*mounted = true;
-						}
-						else {
-							result = kAMDMissingDigestError;
-						}
-					}
+			CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
+			if (status) {
+				if (CFEqual(status, CFSTR("Complete"))) {
+					*mounted = true;
 				}
 				else {
-					result = kAMDReadError;
+					result = kAMDMissingDigestError;
 				}
 			}
-			else {
-				result = kAMDReadError;
-			}
+		}
+		else {
+			result = kAMDReadError;
 		}
 	}
-	
+	else {
+		result = kAMDReadError;
+	}
+
 	ExitLabelAndReturn(result);
 }
 
@@ -557,15 +559,16 @@ sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCom
 	CFSafeRelease(entireCommand);
 	CFDataRef sending = CFDataCreate(kCFAllocatorDefault, PtrCast(buffer->data, UInt8*), (CFIndex)(buffer->length));
 	result = SDMMD_ServiceSend(debuggingSocket, sending);
-	if (SDM_MD_CallSuccessful(result)) {
-		result = SDMMD_DebuggingReceive(dconn, response);
-		if (SDM_MD_CallSuccessful(result) && command->commandCode == kDebugQStartNoAckMode) {
-			dconn->ackEnabled = false;
-		}
+	CheckErrorAndReturn(result);
+	
+	result = SDMMD_DebuggingReceive(dconn, response);
+	if (SDM_MD_CallSuccessful(result) && command->commandCode == kDebugQStartNoAckMode) {
+		dconn->ackEnabled = false;
 	}
+	
 	BufferRefRelease(buffer);
 	CFSafeRelease(sending);
-	return result;
+	ExitLabelAndReturn(result);
 }
 
 bool SDMMD_DebuggingReceiveInternalCheck(SocketConnection connection, char *receivedChar) {

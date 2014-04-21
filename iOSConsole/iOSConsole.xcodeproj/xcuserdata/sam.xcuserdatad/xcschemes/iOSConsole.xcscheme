@@ -72,6 +72,14 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--develop"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--install"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/Users/sam/Projects/Rekt/build/Debug-iphoneos/Rekt.app"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

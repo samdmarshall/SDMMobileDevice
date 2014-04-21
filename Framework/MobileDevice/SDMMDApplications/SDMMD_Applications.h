@@ -80,6 +80,9 @@
 #pragma mark FUNCTIONS
 #pragma mark -
 
+sdmmd_return_t SDMMD_AMDeviceCopyApplication(SDMMD_AMDeviceRef device, CFStringRef path);
+sdmmd_return_t SDMMD_AMDeviceInstallApp(SDMMD_AMDeviceRef device, CFStringRef path);
+
 sdmmd_return_t SDMMD_AMDeviceLookupAppInfo(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef *response);
 sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef *response);
 sdmmd_return_t SDMMD_AMDeviceInstallApplication(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef options, CallBack installCallback, void* unknown);

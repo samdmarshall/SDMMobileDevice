@@ -33,6 +33,7 @@
 #include <string.h>
 #include <sys/types.h>
 #include "Core.h"
+#include <dirent.h>
 
 #define kAFCMaxTransferSize 4194304
 
@@ -671,6 +672,48 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateRemovePathAndContents(CFStringRef 
 #pragma mark -
 #pragma mark Alias Operations
 
+sdmmd_return_t SDMMD_AMDeviceCopy(SDMMD_AFCConnectionRef conn, char *local, char *remote) {
+	sdmmd_return_t result = kAMDSuccess;
+	bool is_dir = false;
+	bool does_exist = FileExistsAtPathIsDir(local, &is_dir);
+	if (does_exist) {
+		if (is_dir) {
+			CFStringRef new_dir = CFStringCreateWithCString(kCFAllocatorDefault, remote, kCFStringEncodingUTF8);
+			SDMMD_AFCOperationRef make_dir = SDMMD_AFCOperationCreateMakeDirectory(new_dir);
+			result = SDMMD_AFCProcessOperation(conn, &make_dir);
+			CheckErrorAndReturn(result);
+			CFSafeRelease(new_dir);
+			
+			struct dirent *ent;
+			DIR *dir = opendir(local);
+			while ((ent = readdir(dir)) != NULL) {
+				char *file_name = ent->d_name;
+				if (!((strncmp(file_name, ".", sizeof(char[1])) == 0 && ent->d_namlen == 1) || (strncmp(file_name, "..", sizeof(char[2])) == 0 && ent->d_namlen == 2))) {
+					uint32_t local_length = (uint32_t)strlen(local)+1+(uint32_t)strlen(file_name)+1;
+					char *new_local = calloc(local_length, sizeof(char));
+					snprintf(new_local, local_length, "%s/%s",local,file_name);
+					
+					uint32_t remote_length = (uint32_t)strlen(remote)+1+(uint32_t)strlen(file_name)+1;
+					char *new_remote = calloc(remote_length, sizeof(char));
+					snprintf(new_remote, remote_length, "%s/%s",remote,file_name);
+					
+					result = SDMMD_AMDeviceCopy(conn, new_local, new_remote);
+					Safe(free,new_local);
+					Safe(free,new_remote);
+				}
+			}
+			closedir(dir);
+		}
+		else {
+			result = SDMMD_AMDeviceCopyFile(NULL, NULL, NULL, conn, local, remote);
+		}
+	}
+	else {
+		result = kAMDNotFoundError;
+	}
+	ExitLabelAndReturn(result);
+}
+
 sdmmd_return_t SDMMD_AMDeviceCopyFile(CallBack callback, void *thing2, void *thing3, SDMMD_AFCConnectionRef conn, char *local, char *remote) {
 	sdmmd_return_t result = kAMDSuccess;
 	CFDataRef local_file = CFDataCreateFromFilePath(local);
@@ -679,58 +722,59 @@ sdmmd_return_t SDMMD_AMDeviceCopyFile(CallBack callback, void *thing2, void *thi
 		CFStringRef remote_path = CFStringCreateWithBytes(kCFAllocatorDefault, (const UInt8 *)remote, strlen(remote), kCFStringEncodingUTF8, false);
 		SDMMD_AFCOperationRef file_create = SDMMD_AFCOperationCreateFileRefOpen(remote_path, 2);
 		result = SDMMD_AFCProcessOperation(conn, &file_create);
-		if (SDM_MD_CallSuccessful(result)) {
-			uint64_t file_descriptor;
-			memcpy(&file_descriptor, CFDataGetBytePtr(file_create->packet->response), sizeof(uint64_t));
+		CheckErrorAndReturn(result);
+		
+		uint64_t file_descriptor;
+		memcpy(&file_descriptor, CFDataGetBytePtr(file_create->packet->response), sizeof(uint64_t));
 			
-			uint64_t offset = 0;
-			uint64_t remainder = 0;
-			uint32_t percent_calc = 30;
-			bool should_stop = false;
-			for (uint32_t index = 0; index < packets; index++) {
-				offset = kAFCMaxTransferSize*index;
-				remainder = (CFDataGetLength(local_file) - offset);
-				remainder = (remainder > kAFCMaxTransferSize ? kAFCMaxTransferSize : remainder);
-				CFRange current_read = CFRangeMake((CFIndex)offset, (CFIndex)remainder);
-				CFDataRef write_data = CFDataCreateFromSubrangeOfData(local_file, current_read);
-				SDMMD_AFCOperationRef write_op = SDMMD_AFCFileDescriptorCreateWriteOperation(file_descriptor, write_data);
-				result = SDMMD_AFCProcessOperation(conn, &write_op);
-				if (SDM_MD_CallSuccessful(result)) {
-					if (callback != NULL) {
-						CFMutableDictionaryRef status = SDMMD_create_dict();
-						CFDictionarySetValue(status, CFSTR("Status"), CFSTR("CopyingFile"));
-						double test = (double)CFDataGetLength(local_file);
-						percent_calc += (floor(((double)remainder / test) * 100.0) * 0.59);
-						CFNumberRef percent = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &percent_calc);
-						CFDictionarySetValue(status, CFSTR("PercentComplete"), percent);
-						CFStringRef local_path = CFStringCreateWithBytes(kCFAllocatorDefault, (const UInt8 *)local, strlen(local), kCFStringEncodingUTF8, false);
-						CFDictionarySetValue(status, CFSTR("LocalPath"), local_path);
-						CFDictionarySetValue(status, CFSTR("RemotePath"), remote_path);
-						callback(status, thing3);
-						CFSafeRelease(status);
-						CFSafeRelease(local_path);
-						CFSafeRelease(percent);
-					}
-				}
-				else {
-					should_stop = true;
-				}
-				SDMMD_AFCOperationRelease(write_op);
-				CFSafeRelease(write_data);
-				
-				if (should_stop) {
-					break;
+		uint64_t offset = 0;
+		uint64_t remainder = 0;
+		uint32_t percent_calc = 30;
+		bool should_stop = false;
+		for (uint32_t index = 0; index < packets; index++) {
+			offset = kAFCMaxTransferSize*index;
+			remainder = (CFDataGetLength(local_file) - offset);
+			remainder = (remainder > kAFCMaxTransferSize ? kAFCMaxTransferSize : remainder);
+			CFRange current_read = CFRangeMake((CFIndex)offset, (CFIndex)remainder);
+			CFDataRef write_data = CFDataCreateFromSubrangeOfData(local_file, current_read);
+			SDMMD_AFCOperationRef write_op = SDMMD_AFCFileDescriptorCreateWriteOperation(file_descriptor, write_data);
+			result = SDMMD_AFCProcessOperation(conn, &write_op);
+			if (SDM_MD_CallSuccessful(result)) {
+				if (callback != NULL) {
+					CFMutableDictionaryRef status = SDMMD_create_dict();
+					CFDictionarySetValue(status, CFSTR("Status"), CFSTR("CopyingFile"));
+					double test = (double)CFDataGetLength(local_file);
+					percent_calc += (floor(((double)remainder / test) * 100.0) * 0.59);
+					CFNumberRef percent = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &percent_calc);
+					CFDictionarySetValue(status, CFSTR("PercentComplete"), percent);
+					CFStringRef local_path = CFStringCreateWithBytes(kCFAllocatorDefault, (const UInt8 *)local, strlen(local), kCFStringEncodingUTF8, false);
+					CFDictionarySetValue(status, CFSTR("LocalPath"), local_path);
+					CFDictionarySetValue(status, CFSTR("RemotePath"), remote_path);
+					callback(status, thing3);
+					CFSafeRelease(status);
+					CFSafeRelease(local_path);
+					CFSafeRelease(percent);
 				}
 			}
-			SDMMD_AFCOperationRef file_close = SDMMD_AFCFileDescriptorCreateCloseOperation(file_descriptor);
-			SDMMD_AFCProcessOperation(conn, &file_close);
-			SDMMD_AFCOperationRelease(file_close);
+			else {
+				should_stop = true;
+			}
+			SDMMD_AFCOperationRelease(write_op);
+			CFSafeRelease(write_data);
+			
+			if (should_stop) {
+				break;
+			}
 		}
+		SDMMD_AFCOperationRef file_close = SDMMD_AFCFileDescriptorCreateCloseOperation(file_descriptor);
+		SDMMD_AFCProcessOperation(conn, &file_close);
+		SDMMD_AFCOperationRelease(file_close);
+		
 		SDMMD_AFCOperationRelease(file_create);
 		CFSafeRelease(remote_path);
 	}
 	CFSafeRelease(local_file);
-	return result;
+	ExitLabelAndReturn(result);
 }
 
 sdmmd_return_t SDMMD_AMDeviceRemoteCopyFile(CallBack callback, void *thing2, void *thing3, SDMMD_AFCConnectionRef conn, char *local, char *remote) {
@@ -741,35 +785,37 @@ sdmmd_return_t SDMMD_AMDeviceRemoteCopyFile(CallBack callback, void *thing2, voi
 		CFStringRef remote_path = CFStringCreateWithBytes(kCFAllocatorDefault, (const UInt8 *)remote, strlen(remote), kCFStringEncodingUTF8, false);
 		SDMMD_AFCOperationRef file_create = SDMMD_AFCOperationCreateFileRefOpen(remote_path, 2);
 		result = SDMMD_AFCProcessOperation(conn, &file_create);
-		if (SDM_MD_CallSuccessful(result)) {
-			uint64_t file_descriptor;
-			memcpy(&file_descriptor, CFDataGetBytePtr(file_create->packet->response), sizeof(uint64_t));
+		CheckErrorAndReturn(result);
+	
+		uint64_t file_descriptor;
+		memcpy(&file_descriptor, CFDataGetBytePtr(file_create->packet->response), sizeof(uint64_t));
 			
-			uint64_t offset = 0;
-			uint64_t remainder = 0;
-			for (uint32_t index = 0; index < packets; index++) {
-				offset = kAFCMaxTransferSize*index;
-				remainder = (CFDataGetLength(local_file) - offset);
-				remainder = (remainder > kAFCMaxTransferSize ? kAFCMaxTransferSize : remainder);
-				SDMMD_AFCOperationRef write_op = SDMMD_AFCFileDescriptorCreateReadOperation(file_descriptor, remainder);
-				result = SDMMD_AFCProcessOperation(conn, &write_op);
-				if (SDM_MD_CallSuccessful(result)) {
-					// probably fire a callback?
-				}
-				else {
-					break;
-				}
-				SDMMD_AFCOperationRelease(write_op);
+		uint64_t offset = 0;
+		uint64_t remainder = 0;
+		for (uint32_t index = 0; index < packets; index++) {
+			offset = kAFCMaxTransferSize*index;
+			remainder = (CFDataGetLength(local_file) - offset);
+			remainder = (remainder > kAFCMaxTransferSize ? kAFCMaxTransferSize : remainder);
+			SDMMD_AFCOperationRef write_op = SDMMD_AFCFileDescriptorCreateReadOperation(file_descriptor, remainder);
+			result = SDMMD_AFCProcessOperation(conn, &write_op);
+			if (SDM_MD_CallSuccessful(result)) {
+				// probably fire a callback?
 			}
-			SDMMD_AFCOperationRef file_close = SDMMD_AFCFileDescriptorCreateCloseOperation(file_descriptor);
-			SDMMD_AFCProcessOperation(conn, &file_close);
-			SDMMD_AFCOperationRelease(file_close);
+			else {
+				break;
+			}
+			SDMMD_AFCOperationRelease(write_op);
 		}
+		SDMMD_AFCOperationRef file_close = SDMMD_AFCFileDescriptorCreateCloseOperation(file_descriptor);
+		SDMMD_AFCProcessOperation(conn, &file_close);
+		SDMMD_AFCOperationRelease(file_close);
+		
 		SDMMD_AFCOperationRelease(file_create);
 		CFSafeRelease(remote_path);
 	}
 	CFSafeRelease(local_file);
-	return result;
+
+	ExitLabelAndReturn(result);
 }
 
 sdmmd_return_t SDMMD_check_can_touch(SDMMD_AFCConnectionRef conn, CFDataRef *unknown) {

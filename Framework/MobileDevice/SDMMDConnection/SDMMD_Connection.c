@@ -64,25 +64,23 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 					
 					CheckErrorAndReturn(result);
 					
-					if (SDM_MD_CallSuccessful(result)) {
-						CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
-						if (status) {
-							if (CFStringCompare(status, CFSTR("Complete"), 0) != 0) {
-								CFArrayRef responses = CFDictionaryGetValue(response, CFSTR("CurrentList"));
-								if (responses) {
-									uint64_t count = CFArrayGetCount(responses);
-									for (uint32_t i = 0; i < count; i++) {
-										CFDictionaryRef value = CFArrayGetValueAtIndex(responses, i);
-										handle(value, paramStart);
-									}
-								}
-								else {
-									handle(response, 0);
+					CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
+					if (status) {
+						if (CFStringCompare(status, CFSTR("Complete"), 0) != 0) {
+							CFArrayRef responses = CFDictionaryGetValue(response, CFSTR("CurrentList"));
+							if (responses) {
+								uint64_t count = CFArrayGetCount(responses);
+								for (uint32_t i = 0; i < count; i++) {
+									CFDictionaryRef value = CFArrayGetValueAtIndex(responses, i);
+									handle(value, paramStart);
 								}
 							}
 							else {
-								break;
+								handle(response, 0);
 							}
+						}
+						else {
+							break;
 						}
 					}
 					SDMMD_ServiceReceiveStream(sock, (CFPropertyListRef*)&response);
@@ -148,31 +146,30 @@ sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef se
 						}
 						result = SDMMD_lockconn_send_message(device, dict);
 						CFSafeRelease(dict);
-						if (result == 0) {
-							CFMutableDictionaryRef response = NULL;
-							result = SDMMD_lockconn_receive_message(device, &response);
-							if (result == 0 && response) {
-								result = SDMMD__ErrorHandler(SDMMD__ConvertLockdowndError, response);
+						CheckErrorAndReturn(result);
+						
+						CFMutableDictionaryRef response = NULL;
+						result = SDMMD_lockconn_receive_message(device, &response);
+						CheckErrorAndReturn(result);
+						
+						if (response) {
+							result = SDMMD__ErrorHandler(SDMMD__ConvertLockdowndError, response);
+							CheckErrorAndReturn(result);
 								
-								CheckErrorAndReturn(result);
-								
-								if (SDM_MD_CallSuccessful(result)) {
-									CFTypeRef portNumber = CFDictionaryGetValue(response, CFSTR("Port"));
-									if (portNumber) {
-										if (CFGetTypeID(portNumber) == CFNumberGetTypeID()) {
-											CFNumberGetValue(portNumber, kCFNumberIntType, port);
-										}
-									}
-									CFTypeRef sslService = CFDictionaryGetValue(response, CFSTR("EnableServiceSSL"));
-									if (sslService) {
-										*enableSSL = (CFEqual(sslService, kCFBooleanTrue) ? true : false);
-									}
-									else {
-										*enableSSL = false;
-									}
-									result = 0x0;
+							CFTypeRef portNumber = CFDictionaryGetValue(response, CFSTR("Port"));
+							if (portNumber) {
+								if (CFGetTypeID(portNumber) == CFNumberGetTypeID()) {
+									CFNumberGetValue(portNumber, kCFNumberIntType, port);
 								}
 							}
+							CFTypeRef sslService = CFDictionaryGetValue(response, CFSTR("EnableServiceSSL"));
+							if (sslService) {
+								*enableSSL = (CFEqual(sslService, kCFBooleanTrue) ? true : false);
+							}
+							else {
+								*enableSSL = false;
+							}
+							result = 0x0;
 						}
 					}
 				}

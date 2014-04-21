@@ -454,7 +454,7 @@ ATR_UNUSED static Boolean SDMMD__AMDCFURLGetCStringForFileSystemPath(CFURLRef ur
 	Boolean result = false;
 	CFTypeRef url = CFURLCopyFileSystemPath(urlRef, kCFURLPOSIXPathStyle);
 	if (url) {
-		result = CFStringGetCString(url, cpath, 1025, kCFStringEncodingUTF8);
+		result = CFStringGetCString(url, cpath, 1024, kCFStringEncodingUTF8);
 	}
 	CFSafeRelease(url);
 	return result;

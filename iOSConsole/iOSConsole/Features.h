@@ -18,5 +18,6 @@
 #include "run.h"
 #include "power.h"
 #include "dev.h"
+#include "install.h"
 
 #endif
