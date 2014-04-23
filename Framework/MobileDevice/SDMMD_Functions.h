@@ -705,8 +705,6 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 	Safe(X509_free,rootX509);
 	Safe(X509_free,hostX509);
 	Safe(X509_free,deviceX509);
-	Safe(RSA_free,rootKeyPair);
-	Safe(RSA_free,hostKeyPair);
 	
     return record;
 }
