@@ -11,6 +11,7 @@
 
 #include <SDMMobileDevice/SDMMobileDevice.h>
 
+kern_return_t test_sdm__CreatePairingMaterial();
 kern_return_t test_sdm_AMDeviceConnect(SDMMD_AMDeviceRef sdm);
 kern_return_t test_sdm_AMDeviceDisconnect(SDMMD_AMDeviceRef sdm);
 kern_return_t test_sdm_AMDeviceStartSession(SDMMD_AMDeviceRef sdm);

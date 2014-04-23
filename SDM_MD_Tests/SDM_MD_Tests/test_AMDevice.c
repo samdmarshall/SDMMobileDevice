@@ -125,6 +125,9 @@ void Test_Functionality_AMDevice(struct am_device *apple, SDMMD_AMDeviceRef sdm)
 	double test_fail = 0;
 	double test_total = 0;
 	
+	FunctionalityTestMacro(pairing_material, test_sdm__CreatePairingMaterial)
+	TestCount(pairing_material)
+	
 	// AMDeviceUSBDeviceID Tests
 	FunctionalityTestMacro(usb_id,test_sdm_AMDeviceUSBDeviceID,sdm)
 	TestCount(usb_id)
