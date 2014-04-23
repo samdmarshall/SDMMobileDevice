@@ -22,6 +22,7 @@
 		22EC43DB18F05A7E003BA4C9 /* test_AFC.c in Sources */ = {isa = PBXBuildFile; fileRef = 22EC43DA18F05A7E003BA4C9 /* test_AFC.c */; };
 		22EC43DE18F05BED003BA4C9 /* test_apple_AFC.c in Sources */ = {isa = PBXBuildFile; fileRef = 22EC43DD18F05BED003BA4C9 /* test_apple_AFC.c */; };
 		22EC43E118F05C01003BA4C9 /* test_sdm_AFC.c in Sources */ = {isa = PBXBuildFile; fileRef = 22EC43E018F05C01003BA4C9 /* test_sdm_AFC.c */; };
+		3FADB4FA1908786600C0D0D8 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FADB4F91908786600C0D0D8 /* libcrypto.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -66,6 +67,7 @@
 		22EC43DD18F05BED003BA4C9 /* test_apple_AFC.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_apple_AFC.c; sourceTree = "<group>"; };
 		22EC43DF18F05BF8003BA4C9 /* test_sdm_AFC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_sdm_AFC.h; sourceTree = "<group>"; };
 		22EC43E018F05C01003BA4C9 /* test_sdm_AFC.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_sdm_AFC.c; sourceTree = "<group>"; };
+		3FADB4F91908786600C0D0D8 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FADB4FA1908786600C0D0D8 /* libcrypto.dylib in Frameworks */,
 				22B3D81118E74F2E0007F104 /* MobileDevice.framework in Frameworks */,
 				22B3D80F18E74F1E0007F104 /* SDMMobileDevice.framework in Frameworks */,
 				22B3D80318E74EE40007F104 /* CoreFoundation.framework in Frameworks */,
@@ -102,6 +105,7 @@
 		22B3D80118E74EE40007F104 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3FADB4F91908786600C0D0D8 /* libcrypto.dylib */,
 				22B3D81718E75A690007F104 /* MobileDevice.h */,
 				22B3D81018E74F2E0007F104 /* MobileDevice.framework */,
 				22B3D80E18E74F1E0007F104 /* SDMMobileDevice.framework */,
