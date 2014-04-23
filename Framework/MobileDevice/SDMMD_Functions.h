@@ -694,7 +694,6 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 	}
 	CFSafeRelease(rootCert);
 	CFSafeRelease(hostCert);
-	CFSafeRelease(deviceCert);
 	CFSafeRelease(rootPrivKey);
 	CFSafeRelease(hostPrivKey);
 	CFSafeRelease(hostId);
