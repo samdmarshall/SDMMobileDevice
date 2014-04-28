@@ -538,12 +538,12 @@ ATR_UNUSED static BIO* SDMMD__create_bio_from_data(CFDataRef data) {
 	return bio;
 }
 
-ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef deviceCert) {
+ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef devicePubkey) {
 	CFMutableDictionaryRef record = NULL;
-	RSA *pubRSAKey = NULL, *rsaBIOData = NULL;
-    BIO *deviceBIO = SDMMD__create_bio_from_data(deviceCert);
+	RSA *rsaBIOData = NULL;
+    BIO *deviceBIO = SDMMD__create_bio_from_data(devicePubkey);
     if (deviceBIO) {
-	    rsaBIOData = PEM_read_bio_RSAPublicKey(deviceBIO, &pubRSAKey, 0x0, 0x0);
+	    PEM_read_bio_RSAPublicKey(deviceBIO, &rsaBIOData, NULL, NULL);
 	    BIO_free(deviceBIO);
 	}
 	else {
