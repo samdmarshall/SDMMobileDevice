@@ -496,9 +496,9 @@ ATR_UNUSED static int SDMMD__add_ext(X509 *cert, int flag, char *name) {
 }
 
 ATR_UNUSED static CFDataRef SDMMD__create_data_from_bp(BIO* bio) {
-	UInt8 buffer[4096];
-    long length = BIO_get_mem_data(bio, &buffer);
-    CFDataRef data = CFDataCreate(kCFAllocatorDefault, buffer, length);
+	BUF_MEM * memptr = NULL;
+    BIO_get_mem_ptr(bio, &memptr);
+    CFDataRef data = CFDataCreate(kCFAllocatorDefault, (void *)memptr->data, memptr->length);
     return data;
 }
 
