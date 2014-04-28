@@ -496,15 +496,14 @@ ATR_UNUSED static int SDMMD__add_ext(X509 *cert, int flag, char *name) {
 }
 
 ATR_UNUSED static CFDataRef SDMMD__create_data_from_bp(BIO* bio) {
-	UInt8 buffer[4096];
-    long length = BIO_get_mem_data(bio, &buffer);
-    CFDataRef data = CFDataCreate(kCFAllocatorDefault, buffer, length);
+	BUF_MEM * memptr = NULL;
+    BIO_get_mem_ptr(bio, &memptr);
+    CFDataRef data = CFDataCreate(kCFAllocatorDefault, (void *)memptr->data, memptr->length);
     return data;
 }
 
 ATR_UNUSED static CFDataRef SDMMD_CreateDataFromX509Certificate(X509 *cert) {
-    BIO_METHOD *method = BIO_s_mem();
-	BIO *bio = BIO_new(method);
+	BIO *bio = BIO_new(BIO_s_mem());
 	CFDataRef data = NULL;
     if (bio) {
 		int result = PEM_write_bio_X509(bio, cert);
@@ -538,12 +537,12 @@ ATR_UNUSED static BIO* SDMMD__create_bio_from_data(CFDataRef data) {
 	return bio;
 }
 
-ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef deviceCert) {
+ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef devicePubkey) {
 	CFMutableDictionaryRef record = NULL;
-	RSA *pubRSAKey = NULL, *rsaBIOData = NULL;
-    BIO *deviceBIO = SDMMD__create_bio_from_data(deviceCert);
+	RSA *rsaBIOData = NULL;
+    BIO *deviceBIO = SDMMD__create_bio_from_data(devicePubkey);
     if (deviceBIO) {
-	    rsaBIOData = PEM_read_bio_RSAPublicKey(deviceBIO, &pubRSAKey, 0x0, 0x0);
+	    PEM_read_bio_RSAPublicKey(deviceBIO, &rsaBIOData, NULL, NULL);
 	    BIO_free(deviceBIO);
 	}
 	else {
@@ -616,8 +615,10 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 		SDMMD__add_ext(rootX509, NID_basic_constraints, "critical,CA:TRUE");
 		SDMMD__add_ext(rootX509, NID_subject_key_identifier, "hash");
 		
-		const EVP_MD *rootHash = EVP_sha1();
-		X509_sign(rootX509, rootEVP, rootHash);
+		result = X509_sign(rootX509, rootEVP, EVP_sha1());
+		if (!result) {
+			printf("Could not sign root cert\\n");
+		}
 	}
 	
 	X509 *hostX509 = X509_new();
@@ -642,8 +643,10 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 		SDMMD__add_ext(hostX509, NID_subject_key_identifier, "hash");
 		SDMMD__add_ext(hostX509, NID_key_usage, "critical,digitalSignature,keyEncipherment");
 		
-		const EVP_MD *hostHash = EVP_sha1();
-		X509_sign(hostX509, rootEVP, hostHash);
+		result = X509_sign(hostX509, rootEVP, EVP_sha1());
+		if (!result) {
+			printf("Could not sign host cert\\n");
+		}
 	}
 	
 	X509 *deviceX509 = X509_new();
@@ -668,12 +671,15 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 		SDMMD__add_ext(deviceX509, NID_subject_key_identifier, "hash");
 		SDMMD__add_ext(deviceX509, NID_key_usage, "critical,digitalSignature,keyEncipherment");
 		
-		const EVP_MD *deviceHash = EVP_sha1();
-		X509_sign(deviceX509, rootEVP, deviceHash);
+		result = X509_sign(deviceX509, rootEVP, EVP_sha1());
+		if (!result) {
+			printf("Could not sign device cert\\n");
+		}
 	}
 	
 	CFDataRef rootCert = SDMMD_CreateDataFromX509Certificate(rootX509);
 	CFDataRef hostCert = SDMMD_CreateDataFromX509Certificate(hostX509);
+	CFDataRef deviceCert = SDMMD_CreateDataFromX509Certificate(deviceX509);
 	CFDataRef rootPrivKey = SDMMD_CreateDataFromPrivateKey(rootEVP);
 	CFDataRef hostPrivKey = SDMMD_CreateDataFromPrivateKey(hostEVP);
 	CFStringRef hostId = SDMMD_CreateUUID();
@@ -694,6 +700,7 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 	}
 	CFSafeRelease(rootCert);
 	CFSafeRelease(hostCert);
+	CFSafeRelease(deviceCert);
 	CFSafeRelease(rootPrivKey);
 	CFSafeRelease(hostPrivKey);
 	CFSafeRelease(hostId);
