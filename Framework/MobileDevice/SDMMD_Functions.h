@@ -503,8 +503,7 @@ ATR_UNUSED static CFDataRef SDMMD__create_data_from_bp(BIO* bio) {
 }
 
 ATR_UNUSED static CFDataRef SDMMD_CreateDataFromX509Certificate(X509 *cert) {
-    BIO_METHOD *method = BIO_s_mem();
-	BIO *bio = BIO_new(method);
+	BIO *bio = BIO_new(BIO_s_mem());
 	CFDataRef data = NULL;
     if (bio) {
 		int result = PEM_write_bio_X509(bio, cert);
@@ -616,8 +615,10 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 		SDMMD__add_ext(rootX509, NID_basic_constraints, "critical,CA:TRUE");
 		SDMMD__add_ext(rootX509, NID_subject_key_identifier, "hash");
 		
-		const EVP_MD *rootHash = EVP_sha1();
-		X509_sign(rootX509, rootEVP, rootHash);
+		result = X509_sign(rootX509, rootEVP, EVP_sha1());
+		if (!result) {
+			printf("Could not sign root cert\\n");
+		}
 	}
 	
 	X509 *hostX509 = X509_new();
@@ -642,8 +643,10 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 		SDMMD__add_ext(hostX509, NID_subject_key_identifier, "hash");
 		SDMMD__add_ext(hostX509, NID_key_usage, "critical,digitalSignature,keyEncipherment");
 		
-		const EVP_MD *hostHash = EVP_sha1();
-		X509_sign(hostX509, rootEVP, hostHash);
+		result = X509_sign(hostX509, rootEVP, EVP_sha1());
+		if (!result) {
+			printf("Could not sign host cert\\n");
+		}
 	}
 	
 	X509 *deviceX509 = X509_new();
@@ -668,8 +671,10 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 		SDMMD__add_ext(deviceX509, NID_subject_key_identifier, "hash");
 		SDMMD__add_ext(deviceX509, NID_key_usage, "critical,digitalSignature,keyEncipherment");
 		
-		const EVP_MD *deviceHash = EVP_sha1();
-		X509_sign(deviceX509, rootEVP, deviceHash);
+		result = X509_sign(deviceX509, rootEVP, EVP_sha1());
+		if (!result) {
+			printf("Could not sign device cert\\n");
+		}
 	}
 	
 	CFDataRef rootCert = SDMMD_CreateDataFromX509Certificate(rootX509);
