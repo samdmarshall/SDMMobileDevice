@@ -674,6 +674,7 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 	
 	CFDataRef rootCert = SDMMD_CreateDataFromX509Certificate(rootX509);
 	CFDataRef hostCert = SDMMD_CreateDataFromX509Certificate(hostX509);
+	CFDataRef deviceCert = SDMMD_CreateDataFromX509Certificate(deviceX509);
 	CFDataRef rootPrivKey = SDMMD_CreateDataFromPrivateKey(rootEVP);
 	CFDataRef hostPrivKey = SDMMD_CreateDataFromPrivateKey(hostEVP);
 	CFStringRef hostId = SDMMD_CreateUUID();
@@ -694,6 +695,7 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 	}
 	CFSafeRelease(rootCert);
 	CFSafeRelease(hostCert);
+	CFSafeRelease(deviceCert);
 	CFSafeRelease(rootPrivKey);
 	CFSafeRelease(hostPrivKey);
 	CFSafeRelease(hostId);
