@@ -39,7 +39,9 @@
 	<CFStringRef>={DLMessageDeviceReady}
  ]
  
- now send
+
+ 
+ it seems that for doing a restore, you need to parse the mbdb
  
  
  

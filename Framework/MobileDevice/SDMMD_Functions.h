@@ -717,7 +717,7 @@ ATR_UNUSED static CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef 
 
 #define HASH_LENGTH SHA_DIGEST_LENGTH
 
-ATR_UNUSED static unsigned char* DataToSHA1(CFDataRef data) {
+ATR_UNUSED static unsigned char * DataToSHA1(CFDataRef data) {
 	unsigned char hash[HASH_LENGTH];
 	SHA_CTX ctx;
 	SHA1_Init(&ctx);
