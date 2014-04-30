@@ -198,6 +198,7 @@
 		225AD7311765FE7700A47071 /* SDMMD_USBMuxListener.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_USBMuxListener.c; sourceTree = "<group>"; };
 		22648F9818947C4300133948 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		2278490F18AFE5A100D1D6FB /* Array.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Array.h; sourceTree = "<group>"; };
+		22A58E1919114EA100303D31 /* SDMMD_MobileBackup2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_MobileBackup2.h; sourceTree = "<group>"; };
 		22AD8E5817871506002ACFB1 /* SDMMD_AFC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AFC.h; sourceTree = "<group>"; };
 		22AD8E5917871506002ACFB1 /* SDMMD_AFC.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AFC.c; sourceTree = "<group>"; };
 		22AD8E631787465A002ACFB1 /* SDMMD_AMDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AMDevice.h; sourceTree = "<group>"; };
@@ -377,6 +378,7 @@
 				225ACB44175FBFA300A47071 /* SDMMD_Debugger.h */,
 				225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */,
 				222EF653190597FD000270C3 /* SDMMD_MobileConfig.h */,
+				22A58E1919114EA100303D31 /* SDMMD_MobileBackup2.h */,
 			);
 			path = SDMMDService;
 			sourceTree = "<group>";
