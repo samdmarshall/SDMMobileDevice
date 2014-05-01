@@ -28,6 +28,8 @@
 #ifndef _SDM_MD_AFCDEVICE_H_
 #define _SDM_MD_AFCDEVICE_H_
 
+#if 0
+
 #include <CoreFoundation/CoreFoundation.h>
 #include "SDMMD_Error.h"
 #include "SDMMD_AFCLock.h"
@@ -98,5 +100,6 @@ void SDMMD_AFCConnectionRefClassInitialize(void);
 
 SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(void*a, uint32_t sock,void*c,void*d,void*e);
 
+#endif
 
 #endif

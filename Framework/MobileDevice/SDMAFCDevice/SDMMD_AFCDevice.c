@@ -28,6 +28,8 @@
 #ifndef _SDM_MD_AFCDEVICE_C_
 #define _SDM_MD_AFCDEVICE_C_
 
+#if 0
+
 #include "SDMMD_AFCDevice.h"
 #include "CFRuntime.h"
 #include <sys/types.h>
@@ -84,4 +86,5 @@ CFTypeID SDMMD_AFCConnectionGetTypeID(void) {
     return _kSDMMD_AFCConnectionRefID;
 }
 
+#endif
 #endif

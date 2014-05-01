@@ -28,6 +28,9 @@
 #ifndef _SDM_MD_AFCOPERATION_C_
 #define _SDM_MD_AFCOPERATION_C_
 
+#if 0
+
 #include "SDMMD_AFCOperation.h"
 
+#endif
 #endif

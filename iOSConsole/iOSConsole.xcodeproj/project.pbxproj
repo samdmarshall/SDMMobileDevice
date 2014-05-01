@@ -23,6 +23,7 @@
 		22310DC818750DE70092C107 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310DC718750DE70092C107 /* libcrypto.dylib */; };
 		22648F96189440F700133948 /* power.c in Sources */ = {isa = PBXBuildFile; fileRef = 22648F95189440F700133948 /* power.c */; };
 		22648F9B18947DE100133948 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22648F9A18947DE100133948 /* IOKit.framework */; };
+		22A58EBA19119F1100303D31 /* CFStringAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22A58EB819119F1100303D31 /* CFStringAddition.c */; };
 		22B9556B18788CB6004DCBF0 /* syslog.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B9556A18788CB6004DCBF0 /* syslog.c */; };
 		22B95571187895DB004DCBF0 /* query.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B95570187895DB004DCBF0 /* query.c */; };
 		22B9557418789837004DCBF0 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B9557318789837004DCBF0 /* list.c */; };
@@ -117,6 +118,8 @@
 		22648F94189440EF00133948 /* power.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = power.h; sourceTree = "<group>"; };
 		22648F95189440F700133948 /* power.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = power.c; sourceTree = "<group>"; };
 		22648F9A18947DE100133948 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		22A58EB819119F1100303D31 /* CFStringAddition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CFStringAddition.c; sourceTree = "<group>"; };
+		22A58EB919119F1100303D31 /* CFStringAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFStringAddition.h; sourceTree = "<group>"; };
 		22B9556A18788CB6004DCBF0 /* syslog.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = syslog.c; sourceTree = "<group>"; };
 		22B9556C18788D51004DCBF0 /* Features.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Features.h; sourceTree = "<group>"; };
 		22B9556D18788D59004DCBF0 /* syslog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = syslog.h; sourceTree = "<group>"; };
@@ -484,6 +487,8 @@
 		22FFB8C11880DE140073095D /* CoreFoundation */ = {
 			isa = PBXGroup;
 			children = (
+				22A58EB819119F1100303D31 /* CFStringAddition.c */,
+				22A58EB919119F1100303D31 /* CFStringAddition.h */,
 				22C892B4189D75CC008B1D2D /* CFDataAddition.c */,
 				22C892B5189D75CC008B1D2D /* CFDataAddition.h */,
 				22FFB8C31880DE140073095D /* CFDictionaryAddition.h */,
@@ -566,6 +571,7 @@
 				22310DB118750D9E0092C107 /* SDMMD_Applications.c in Sources */,
 				22310DB218750D9E0092C107 /* SDMMD_Connection.c in Sources */,
 				22648F96189440F700133948 /* power.c in Sources */,
+				22A58EBA19119F1100303D31 /* CFStringAddition.c in Sources */,
 				22C892B6189D75CC008B1D2D /* CFDataAddition.c in Sources */,
 				22310DB318750D9E0092C107 /* SDMMD_Error.c in Sources */,
 				22310DB418750D9E0092C107 /* SDMMD_AMDevice.c in Sources */,

@@ -28,6 +28,8 @@
 #ifndef _SDM_MD_AFCLOCK_H_
 #define _SDM_MD_AFCLOCK_H_
 
+#if 0
+
 #include "SDMMD_Error.h"
 #include <stdint.h>
 #include <pthread.h>
@@ -66,4 +68,5 @@ SDMMD_AFCLockRef SDMMD_AFCLockCreate();
 sdmmd_return_t SDMMD_AFCLockLock(SDMMD_AFCLockRef lock);
 sdmmd_return_t SDMMD_AFCLockUnlock(SDMMD_AFCLockRef lock);
 
+#endif
 #endif

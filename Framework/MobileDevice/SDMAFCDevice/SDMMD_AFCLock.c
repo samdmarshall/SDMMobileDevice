@@ -28,6 +28,8 @@
 #ifndef _SDM_MD_AFCLOCK_C_
 #define _SDM_MD_AFCLOCK_C_
 
+#if 0
+
 #include "SDMMD_AFCLock.h"
 #include "CFRuntime.h"
 #include "SDMMD_Functions.h"
@@ -84,5 +86,6 @@ sdmmd_return_t SDMMD_AFCLockUnlock(SDMMD_AFCLockRef lock) {
 	return result;
 }
 
+#endif
 
 #endif

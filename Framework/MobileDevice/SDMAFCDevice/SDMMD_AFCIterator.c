@@ -28,6 +28,9 @@
 #ifndef _SDM_MD_AFCITERATOR_C_
 #define _SDM_MD_AFCITERATOR_C_
 
+#if 0
+
 #include "SDMMD_AFCIterator.h"
 
+#endif
 #endif

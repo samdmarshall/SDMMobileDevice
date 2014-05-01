@@ -28,6 +28,8 @@
 #ifndef _SDM_MD_AFCITERATOR_H_
 #define _SDM_MD_AFCITERATOR_H_
 
+#if 0
+
 #import <CoreFoundation/CoreFoundation.h>
 
 #pragma mark -
@@ -59,4 +61,5 @@ typedef struct afc_iterator* SDMMD_AFCIteratorClass;
 #pragma mark FUNCTIONS
 #pragma mark -
 
+#endif
 #endif

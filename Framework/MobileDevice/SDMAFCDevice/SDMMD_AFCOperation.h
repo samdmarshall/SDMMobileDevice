@@ -28,6 +28,8 @@
 #ifndef _SDM_MD_AFCOPERATION_H_
 #define _SDM_MD_AFCOPERATION_H_
 
+#if 0
+
 #include "SDMMD_AFCLock.h"
 #include "SDMMD_AFCCondition.h"
 
@@ -69,4 +71,5 @@ typedef struct afc_operation SDMMD_AFCOperationClass;
 #pragma mark FUNCTIONS
 #pragma mark -
 
+#endif
 #endif
