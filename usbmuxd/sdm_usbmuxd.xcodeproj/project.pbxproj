@@ -12,6 +12,10 @@
 		22648FAE189494B500133948 /* usbmuxd.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 22648FAD189494B500133948 /* usbmuxd.1 */; };
 		22648FB5189494D600133948 /* usbmuxd.c in Sources */ = {isa = PBXBuildFile; fileRef = 22648FB4189494D600133948 /* usbmuxd.c */; };
 		22648FB81894954400133948 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22648FB71894954400133948 /* IOKit.framework */; };
+		22A58EC21911E53A00303D31 /* CFDataAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22A58EBE1911E53A00303D31 /* CFDataAddition.c */; };
+		22A58EC31911E53A00303D31 /* CFStringAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22A58EC01911E53A00303D31 /* CFStringAddition.c */; };
+		22A58ECA1911E54500303D31 /* Buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 22A58EC51911E54500303D31 /* Buffer.c */; };
+		22A58ECB1911E54500303D31 /* File.c in Sources */ = {isa = PBXBuildFile; fileRef = 22A58EC81911E54500303D31 /* File.c */; };
 		22E4FF381894AE5800480C95 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E4FF371894AE5800480C95 /* Security.framework */; };
 		22F3067218987EE700F4D2EE /* CFDictionaryAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22F3066418987EE700F4D2EE /* CFDictionaryAddition.c */; };
 		22F3067318987EE700F4D2EE /* CFTypeAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22F3066618987EE700F4D2EE /* CFTypeAddition.c */; };
@@ -40,6 +44,16 @@
 		22648FB4189494D600133948 /* usbmuxd.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = usbmuxd.c; sourceTree = "<group>"; };
 		22648FB6189494E100133948 /* usbmuxd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = usbmuxd.h; sourceTree = "<group>"; };
 		22648FB71894954400133948 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		22A58EBE1911E53A00303D31 /* CFDataAddition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CFDataAddition.c; sourceTree = "<group>"; };
+		22A58EBF1911E53A00303D31 /* CFDataAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFDataAddition.h; sourceTree = "<group>"; };
+		22A58EC01911E53A00303D31 /* CFStringAddition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CFStringAddition.c; sourceTree = "<group>"; };
+		22A58EC11911E53A00303D31 /* CFStringAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFStringAddition.h; sourceTree = "<group>"; };
+		22A58EC41911E54500303D31 /* Array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Array.h; sourceTree = "<group>"; };
+		22A58EC51911E54500303D31 /* Buffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Buffer.c; sourceTree = "<group>"; };
+		22A58EC61911E54500303D31 /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
+		22A58EC71911E54500303D31 /* Endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Endian.h; sourceTree = "<group>"; };
+		22A58EC81911E54500303D31 /* File.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = File.c; sourceTree = "<group>"; };
+		22A58EC91911E54500303D31 /* File.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = File.h; sourceTree = "<group>"; };
 		22E4FF371894AE5800480C95 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		22F3066118987EE700F4D2EE /* Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Attributes.h; sourceTree = "<group>"; };
 		22F3066218987EE700F4D2EE /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
@@ -114,6 +128,12 @@
 		22F3066018987EE700F4D2EE /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				22A58EC41911E54500303D31 /* Array.h */,
+				22A58EC51911E54500303D31 /* Buffer.c */,
+				22A58EC61911E54500303D31 /* Buffer.h */,
+				22A58EC71911E54500303D31 /* Endian.h */,
+				22A58EC81911E54500303D31 /* File.c */,
+				22A58EC91911E54500303D31 /* File.h */,
 				22F3066118987EE700F4D2EE /* Attributes.h */,
 				22F3066218987EE700F4D2EE /* Core.h */,
 				22F3066318987EE700F4D2EE /* CoreFoundation */,
@@ -130,6 +150,10 @@
 		22F3066318987EE700F4D2EE /* CoreFoundation */ = {
 			isa = PBXGroup;
 			children = (
+				22A58EBE1911E53A00303D31 /* CFDataAddition.c */,
+				22A58EBF1911E53A00303D31 /* CFDataAddition.h */,
+				22A58EC01911E53A00303D31 /* CFStringAddition.c */,
+				22A58EC11911E53A00303D31 /* CFStringAddition.h */,
 				22F3066418987EE700F4D2EE /* CFDictionaryAddition.c */,
 				22F3066518987EE700F4D2EE /* CFDictionaryAddition.h */,
 				22F3066618987EE700F4D2EE /* CFTypeAddition.c */,
@@ -203,10 +227,14 @@
 			files = (
 				22F3067518987EE700F4D2EE /* Vector.c in Sources */,
 				22F3067318987EE700F4D2EE /* CFTypeAddition.c in Sources */,
+				22A58ECA1911E54500303D31 /* Buffer.c in Sources */,
 				22F3067418987EE700F4D2EE /* Matrix.c in Sources */,
 				22F3067218987EE700F4D2EE /* CFDictionaryAddition.c in Sources */,
+				22A58ECB1911E54500303D31 /* File.c in Sources */,
 				22648FB5189494D600133948 /* usbmuxd.c in Sources */,
 				22648FAC189494B500133948 /* main.c in Sources */,
+				22A58EC21911E53A00303D31 /* CFDataAddition.c in Sources */,
+				22A58EC31911E53A00303D31 /* CFStringAddition.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
