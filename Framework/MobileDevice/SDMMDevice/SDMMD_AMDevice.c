@@ -532,15 +532,24 @@ sdmmd_return_t SDMMD_send_pair(SDMMD_AMDeviceRef device, CFMutableDictionaryRef 
 						result = SDMMD_lockconn_send_message(device, pRecord);
 						if (result == kAMDSuccess) {
 							result = SDMMD_lockconn_receive_message(device, &response);
-							CFShow(response);
 							if (result == kAMDSuccess) {
 								result = SDMMD__ErrorHandler(SDMMD__ConvertLockdowndError, response);
 								
 								if (SDM_MD_CallSuccessful(result)) {
-									*escrowBag = CFDictionaryGetValue(response, CFSTR("EscrowBag"));
-									if (escrowBag) {
-										result = kAMDSuccess;
-										CFRetain(*escrowBag);
+									
+									CFDataRef bagData = NULL;
+									if (CFDictionaryContainsValue(response, CFSTR("ExtendedResponse"))) {
+										bagData = CFDictionaryGetValue(response, CFSTR("ExtendedResponse"));
+									}
+									else {
+										bagData = CFDictionaryGetValue(response, CFSTR("EscrowBag"));
+									}
+									
+									if (bagData) {
+										*escrowBag = CFRetain(bagData);
+									}
+									else {
+										result = kAMDInvalidResponseError;
 									}
 								}
 							}
@@ -551,12 +560,6 @@ sdmmd_return_t SDMMD_send_pair(SDMMD_AMDeviceRef device, CFMutableDictionaryRef 
 		}
 		else {
 			result = kAMDNotConnectedError;
-		}
-    }
-    if ((response) && (CFDictionaryContainsValue(response, CFSTR("ExtendedResponse")))) {
-		*escrowBag = CFDictionaryGetValue(response, CFSTR("ExtendedResponse"));
-		if (escrowBag) {
-			result = kAMDSuccess;
 		}
     }
     CFSafeRelease(response);
