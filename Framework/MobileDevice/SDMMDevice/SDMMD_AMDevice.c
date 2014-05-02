@@ -668,17 +668,20 @@ sdmmd_return_t SDMMD_copy_daemon_name(SDMMD_AMDeviceRef device, CFStringRef *nam
 sdmmd_return_t SDMMD__CopyEscrowBag(SDMMD_AMDeviceRef device, CFDataRef *bag) {
 	sdmmd_return_t result = kAMDInvalidArgumentError;
 	if (device) {
-		CFMutableDictionaryRef dict;
+		CFMutableDictionaryRef dict = NULL;
 		result = SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(device, &dict);
-		if (result == 0) {
-			CFTypeRef wifiValue = NULL, bagValue;
+		if (result == kAMDSuccess) {
+			CFTypeRef wifiValue = NULL;
 			if (!CFDictionaryContainsKey(dict, CFSTR("WiFiMACAddress"))) {
 				wifiValue = SDMMD_AMDeviceCopyValue(device, CFSTR("NULL"), CFSTR("WiFiMACAddress"));
 				if (CFGetTypeID(wifiValue) == CFStringGetTypeID()) {
 					CFDictionarySetValue(dict, CFSTR("WiFiMACAddress"), wifiValue);
 				}
+				
 			}
-			bagValue = CFDictionaryGetValue(dict, CFSTR("EscrowBag"));
+			CFSafeRelease(wifiValue);
+			
+			CFTypeRef bagValue = CFDictionaryGetValue(dict, CFSTR("EscrowBag"));
 			if (bagValue) {
 				if (CFGetTypeID(bagValue) == CFDataGetTypeID()) {
 					CFRetain(bagValue);
@@ -692,9 +695,8 @@ sdmmd_return_t SDMMD__CopyEscrowBag(SDMMD_AMDeviceRef device, CFDataRef *bag) {
 					Safe(free,path);
 				}
 			}
-			CFSafeRelease(dict);
-			//CFSafeRelease(wifiValue);
 		}
+		CFSafeRelease(dict);
 	}
 	return result;
 }
