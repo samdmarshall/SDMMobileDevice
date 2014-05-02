@@ -291,9 +291,8 @@ sdmmd_return_t SDMMD_lockconn_enable_ssl(SDMMD_lockdown_conn *lockdown_conn, CFT
 sdmmd_return_t SDMMD_lockconn_disable_ssl(SDMMD_lockdown_conn *lockdown_conn) {
 	sdmmd_return_t result = kAMDSuccess;
 	if (lockdown_conn->ssl) {
-		if (result == 0) {
-			result = SSL_shutdown(lockdown_conn->ssl);
-		}
+		result = SSL_shutdown(lockdown_conn->ssl);
+		
 		if (result == -1) {
 			printf("%s: Could not shutdown SSL connection %d.\n",__FUNCTION__, -1);
 		}
@@ -359,47 +358,48 @@ CFTypeRef SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain
 	sdmmd_return_t result = kAMDSuccess;
 	if (device) {
 		if (device->ivars.lockdown_conn) {
-			CFMutableDictionaryRef getVal = SDMMD__CreateMessageDict(CFSTR("GetValue"));
-			if (getVal) {
-				CFMutableDictionaryRef response;
-				if (domain == NULL) {
-					domain = CFSTR("NULL");
+			CFMutableDictionaryRef request = SDMMD__CreateMessageDict(CFSTR("GetValue"));
+			if (request) {
+				CFMutableDictionaryRef response = NULL;
+				
+				if (domain && CFStringCompare(domain, CFSTR("NULL"), 0) != 0) {
+					CFDictionarySetValue(request, CFSTR("Domain"), domain);
 				}
-				if (key == NULL) {
-					key = CFSTR("NULL");
+				if (key && CFStringCompare(key, CFSTR("NULL"), 0) != 0) {
+					CFDictionarySetValue(request, CFSTR("Key"), key);
 				}
 				
-				if (CFStringCompare(domain, CFSTR("NULL"), 0) != 0) {
-					CFDictionarySetValue(getVal, CFSTR("Domain"), domain);
-				}
-				if (CFStringCompare(key, CFSTR("NULL"), 0) != 0) {
-					CFDictionarySetValue(getVal, CFSTR("Key"), key);
-				}
-				
-				result = SDMMD_lockconn_send_message(device, getVal);
-				CFSafeRelease(getVal);
+				result = SDMMD_lockconn_send_message(device, request);
 				if (result == kAMDSuccess) {
 					result = SDMMD_lockconn_receive_message(device, &response);
 					if (result == kAMDSuccess && response) {
-						*err = CFDictionaryGetValue(response, CFSTR("Error"));
-						if (*err) {
-							if (CFGetTypeID(*err) == CFStringGetTypeID()) {
-								result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(*err);
+						CFStringRef error = CFDictionaryGetValue(response, CFSTR("Error"));
+						if (error) {
+							if (CFGetTypeID(error) == CFStringGetTypeID()) {
+								if (err) {
+									// Retain error if it is being passed to caller
+									*err = CFRetain(error);
+								}
+								result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(error);
 							}
 							else {
 								result = kAMDInvalidResponseError;
 							}
 						}
 						else {
-							value = CFDictionaryGetValue(response, CFSTR("Value"));
+							// Retain returned value from response
+							value = CFRetain(CFDictionaryGetValue(response, CFSTR("Value")));
 							result = kAMDSuccess;
 						}
 					}
 				}
+				// Response structure no longer needed, value or error is retained
+				CFSafeRelease(response);
 			}
 			else {
 				result = kAMDNoResourcesError;
 			}
+			CFSafeRelease(request);
 		}
 		else {
 			result = kAMDNotConnectedError;
@@ -409,7 +409,7 @@ CFTypeRef SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain
 		result = kAMDInvalidArgumentError;
 	}
 	if (result != kAMDSuccess) {
-		value = NULL;
+		printf("%s: Could not copy value (%x)\n", __FUNCTION__, result);
 	}
 	return value;
 }
@@ -531,31 +531,35 @@ sdmmd_return_t SDMMD_send_pair(SDMMD_AMDeviceRef device, CFMutableDictionaryRef 
 						result = SDMMD_lockconn_send_message(device, pRecord);
 						if (result == kAMDSuccess) {
 							result = SDMMD_lockconn_receive_message(device, &response);
-							CFShow(response);
 							if (result == kAMDSuccess) {
 								result = SDMMD__ErrorHandler(SDMMD__ConvertLockdowndError, response);
 								
 								if (SDM_MD_CallSuccessful(result)) {
-									*escrowBag = CFDictionaryGetValue(response, CFSTR("EscrowBag"));
-									if (escrowBag) {
-										result = kAMDSuccess;
-										CFRetain(*escrowBag);
+									
+									CFDataRef bagData = NULL;
+									if (CFDictionaryContainsValue(response, CFSTR("ExtendedResponse"))) {
+										bagData = CFDictionaryGetValue(response, CFSTR("ExtendedResponse"));
+									}
+									else {
+										bagData = CFDictionaryGetValue(response, CFSTR("EscrowBag"));
+									}
+									
+									if (bagData) {
+										*escrowBag = CFRetain(bagData);
+									}
+									else {
+										result = kAMDInvalidResponseError;
 									}
 								}
 							}
 						}
                     }
+					CFSafeRelease(pRecord);
 				}
 			}
 		}
 		else {
 			result = kAMDNotConnectedError;
-		}
-    }
-    if ((response) && (CFDictionaryContainsValue(response, CFSTR("ExtendedResponse")))) {
-		*escrowBag = CFDictionaryGetValue(response, CFSTR("ExtendedResponse"));
-		if (escrowBag) {
-			result = kAMDSuccess;
 		}
     }
     CFSafeRelease(response);
@@ -608,7 +612,7 @@ sdmmd_return_t SDMMD_send_validate_pair(SDMMD_AMDeviceRef device, CFStringRef ho
 }
 
 sdmmd_return_t SDMMD_copy_daemon_name(SDMMD_AMDeviceRef device, CFStringRef *name) {
-	sdmmd_return_t result = 0;
+	sdmmd_return_t result = kAMDSuccess;
 	CFMutableDictionaryRef response = NULL;
 	if (device) {
 		if (device->ivars.lockdown_conn->connection) {
@@ -663,17 +667,20 @@ sdmmd_return_t SDMMD_copy_daemon_name(SDMMD_AMDeviceRef device, CFStringRef *nam
 sdmmd_return_t SDMMD__CopyEscrowBag(SDMMD_AMDeviceRef device, CFDataRef *bag) {
 	sdmmd_return_t result = kAMDInvalidArgumentError;
 	if (device) {
-		CFMutableDictionaryRef dict;
+		CFMutableDictionaryRef dict = NULL;
 		result = SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(device, &dict);
-		if (result == 0) {
-			CFTypeRef wifiValue = NULL, bagValue;
+		if (result == kAMDSuccess) {
+			CFTypeRef wifiValue = NULL;
 			if (!CFDictionaryContainsKey(dict, CFSTR("WiFiMACAddress"))) {
 				wifiValue = SDMMD_AMDeviceCopyValue(device, CFSTR("NULL"), CFSTR("WiFiMACAddress"));
 				if (CFGetTypeID(wifiValue) == CFStringGetTypeID()) {
 					CFDictionarySetValue(dict, CFSTR("WiFiMACAddress"), wifiValue);
 				}
+				
 			}
-			bagValue = CFDictionaryGetValue(dict, CFSTR("EscrowBag"));
+			CFSafeRelease(wifiValue);
+			
+			CFTypeRef bagValue = CFDictionaryGetValue(dict, CFSTR("EscrowBag"));
 			if (bagValue) {
 				if (CFGetTypeID(bagValue) == CFDataGetTypeID()) {
 					CFRetain(bagValue);
@@ -687,9 +694,8 @@ sdmmd_return_t SDMMD__CopyEscrowBag(SDMMD_AMDeviceRef device, CFDataRef *bag) {
 					Safe(free,path);
 				}
 			}
-			CFSafeRelease(dict);
-			//CFSafeRelease(wifiValue);
 		}
+		CFSafeRelease(dict);
 	}
 	return result;
 }
@@ -763,9 +769,9 @@ sdmmd_return_t SDMMD_send_activation(SDMMD_AMDeviceRef device, CFDictionaryRef d
 				if (messageDict) {
 					CFDictionarySetValue(messageDict, CFSTR("ActivationRecord"), dict);
 					result = SDMMD_lockconn_send_message(device, messageDict);
-					if (result == 0) {
+					if (result == kAMDSuccess) {
 						result = SDMMD_lockconn_receive_message(device, &message);
-						if (result == 0) {
+						if (result == kAMDSuccess) {
 							CFTypeRef msg = CFDictionaryGetValue(message, CFSTR("Error"));
 							if (msg) {
 								result = kAMDInvalidResponseError;
@@ -794,9 +800,9 @@ sdmmd_return_t SDMMD_send_deactivation(SDMMD_AMDeviceRef device) {
 			CFMutableDictionaryRef messageDict = SDMMD__CreateMessageDict(CFSTR("Deactivate"));
 			if (messageDict) {
 				result = SDMMD_lockconn_send_message(device, messageDict);
-				if (result == 0) {
+				if (result == kAMDSuccess) {
 					result = SDMMD_lockconn_receive_message(device, &message);
-					if (result == 0) {
+					if (result == kAMDSuccess) {
 						CFTypeRef msg = CFDictionaryGetValue(message, CFSTR("Error"));
 						if (msg) {
 							result = kAMDInvalidResponseError;
@@ -848,11 +854,11 @@ sdmmd_return_t SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFDictionaryRe
 				result = SDMMD_lockconn_send_message(device, message);
 				//PrintCFType(message);
 				CFSafeRelease(message);
-				if (result == 0) {
+				if (result == kAMDSuccess) {
 					CFMutableDictionaryRef recvDict = NULL;
 					result = SDMMD_lockconn_receive_message(device, &recvDict);
 					//PrintCFType(recvDict);
-					if (result == 0) {
+					if (result == kAMDSuccess) {
 						//CFShow(recvDict);
 						CFTypeRef resultStr = CFDictionaryGetValue(recvDict, CFSTR("Error"));
 						if (!resultStr) {
@@ -919,9 +925,9 @@ sdmmd_return_t SDMMD_send_session_stop(SDMMD_AMDeviceRef device, CFTypeRef sessi
 					CFDictionarySetValue(dict, CFSTR("SessionID"), session);
 					result = SDMMD_lockconn_send_message(device, dict);
 					CFSafeRelease(dict);
-					if (result == 0) {
+					if (result == kAMDSuccess) {
 						result = SDMMD_lockconn_receive_message(device, &response);
-						if (result == 0) {
+						if (result == kAMDSuccess) {
 							CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
 							if (error && CFGetTypeID(error) == CFStringGetTypeID()) {
 								result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(error);
@@ -952,9 +958,9 @@ sdmmd_return_t SDMMD_AMDeviceStartSession(SDMMD_AMDeviceRef device) {
 	if (device->ivars.device_active) {
 		SDMMD__mutex_lock(device->ivars.mutex_lock);
 		result = SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(device, &record);
-		if (result == 0) {
+		if (result == kAMDSuccess) {
 			result = SDMMD_send_session_start(device, record, &device->ivars.session);
-			if (result == 0 && device->ivars.session) {
+			if (result == kAMDSuccess && device->ivars.session) {
 				Boolean hasKey = CFDictionaryContainsKey(record, CFSTR("EscrowBag"));
 				if (!hasKey) {
 					hasKey = CFDictionaryContainsKey(record, CFSTR("WiFiMACAddress"));
@@ -1322,7 +1328,7 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 	bool mutexIsLocked = false;
 	bool getValue = true;
 	CFMutableDictionaryRef chapCopy = NULL;
- 	CFDataRef escrowBag = NULL;
+ 	
 	if (device) {
 		result = kAMDDeviceDisconnectedError;
 		if (device->ivars.device_active) {
@@ -1364,7 +1370,9 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 									if (sendPair) {
 										CFDictionaryRemoveValue(sendPair, CFSTR("RootPrivateKey"));
 										CFDictionaryRemoveValue(sendPair, CFSTR("HostPrivateKey"));
-										CFShow(sendPair);
+										
+										CFDataRef escrowBag = NULL;
+										// escrowBag is returned by reference with +1 retain
 										result = SDMMD_send_pair(device, sendPair, chapCopy, NULL, &escrowBag);
 										if (!escrowBag) {
 											printf("%s: Could not pair with the device %u: 0x%x\n",__FUNCTION__, device->ivars.device_id, result);
@@ -1390,14 +1398,17 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 											}
 											Safe(free,path);
 										}
+										CFSafeRelease(escrowBag);
 									}
 									else {
 										result = kAMDNoResourcesError;
 									}
+									CFSafeRelease(sendPair);
 								}
 								else {
 									printf("%s: Could not create system BUID.\n",__FUNCTION__);
 								}
+								CFSafeRelease(buid);
 							}
 							else {
 								printf("%s: Could not create pairing material.\n",__FUNCTION__);
@@ -1463,13 +1474,7 @@ uint32_t SDMMD_AMDeviceGetConnectionID(SDMMD_AMDeviceRef device) {
 CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key) {
 	CFTypeRef value = NULL;
 	if (device->ivars.device_active) {
-		if (domain == NULL) {
-			domain = CFSTR("NULL");
-		}
-		if (key == NULL) {
-			key = CFSTR("NULL");
-		}
-			
+		
 		SDMMD__mutex_lock(device->ivars.mutex_lock);
 		CFStringRef err = NULL;
 		value = SDMMD_copy_lockdown_value(device, domain, key, &err);
@@ -1477,6 +1482,7 @@ CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, 
 			CFSafeRelease(value);
 			value = NULL;
 		}
+		CFSafeRelease(err);
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 	}
 	return value;
@@ -1594,7 +1600,7 @@ sdmmd_sim_return_t SDMMD_GetSIMStatusCode(SDMMD_AMDeviceRef device) {
 			}
 		}
 	}
-	//CFSafeRelease(deviceSIMStatus);
+	CFSafeRelease(deviceSIMStatus);
 	return result;
 }
 
@@ -1609,7 +1615,7 @@ sdmmd_activation_return_t SDMMD_GetActivationStatus(SDMMD_AMDeviceRef device) {
 			}
 		}
 	}
-	//CFSafeRelease(deviceActivationState);
+	CFSafeRelease(deviceActivationState);
 	return result;
 }
 
