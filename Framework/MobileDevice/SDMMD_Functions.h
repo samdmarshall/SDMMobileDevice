@@ -334,7 +334,7 @@ static CFStringRef SDMMD_CreateUUID() {
 }
 
 static sdmmd_return_t SDMMD_store_dict(CFDictionaryRef dict, char *path, bool mode) {
-	sdmmd_return_t result = 0;
+	sdmmd_return_t result = kAMDSuccess;
 	char buf[1025] = {0};
 	
 	// NOTE: Should implement all the error reporting here, including use of "mode"

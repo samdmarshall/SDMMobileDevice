@@ -291,9 +291,8 @@ sdmmd_return_t SDMMD_lockconn_enable_ssl(SDMMD_lockdown_conn *lockdown_conn, CFT
 sdmmd_return_t SDMMD_lockconn_disable_ssl(SDMMD_lockdown_conn *lockdown_conn) {
 	sdmmd_return_t result = kAMDSuccess;
 	if (lockdown_conn->ssl) {
-		if (result == 0) {
-			result = SSL_shutdown(lockdown_conn->ssl);
-		}
+		result = SSL_shutdown(lockdown_conn->ssl);
+		
 		if (result == -1) {
 			printf("%s: Could not shutdown SSL connection %d.\n",__FUNCTION__, -1);
 		}
@@ -613,7 +612,7 @@ sdmmd_return_t SDMMD_send_validate_pair(SDMMD_AMDeviceRef device, CFStringRef ho
 }
 
 sdmmd_return_t SDMMD_copy_daemon_name(SDMMD_AMDeviceRef device, CFStringRef *name) {
-	sdmmd_return_t result = 0;
+	sdmmd_return_t result = kAMDSuccess;
 	CFMutableDictionaryRef response = NULL;
 	if (device) {
 		if (device->ivars.lockdown_conn->connection) {
@@ -770,9 +769,9 @@ sdmmd_return_t SDMMD_send_activation(SDMMD_AMDeviceRef device, CFDictionaryRef d
 				if (messageDict) {
 					CFDictionarySetValue(messageDict, CFSTR("ActivationRecord"), dict);
 					result = SDMMD_lockconn_send_message(device, messageDict);
-					if (result == 0) {
+					if (result == kAMDSuccess) {
 						result = SDMMD_lockconn_receive_message(device, &message);
-						if (result == 0) {
+						if (result == kAMDSuccess) {
 							CFTypeRef msg = CFDictionaryGetValue(message, CFSTR("Error"));
 							if (msg) {
 								result = kAMDInvalidResponseError;
@@ -801,9 +800,9 @@ sdmmd_return_t SDMMD_send_deactivation(SDMMD_AMDeviceRef device) {
 			CFMutableDictionaryRef messageDict = SDMMD__CreateMessageDict(CFSTR("Deactivate"));
 			if (messageDict) {
 				result = SDMMD_lockconn_send_message(device, messageDict);
-				if (result == 0) {
+				if (result == kAMDSuccess) {
 					result = SDMMD_lockconn_receive_message(device, &message);
-					if (result == 0) {
+					if (result == kAMDSuccess) {
 						CFTypeRef msg = CFDictionaryGetValue(message, CFSTR("Error"));
 						if (msg) {
 							result = kAMDInvalidResponseError;
@@ -855,11 +854,11 @@ sdmmd_return_t SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFDictionaryRe
 				result = SDMMD_lockconn_send_message(device, message);
 				//PrintCFType(message);
 				CFSafeRelease(message);
-				if (result == 0) {
+				if (result == kAMDSuccess) {
 					CFMutableDictionaryRef recvDict = NULL;
 					result = SDMMD_lockconn_receive_message(device, &recvDict);
 					//PrintCFType(recvDict);
-					if (result == 0) {
+					if (result == kAMDSuccess) {
 						//CFShow(recvDict);
 						CFTypeRef resultStr = CFDictionaryGetValue(recvDict, CFSTR("Error"));
 						if (!resultStr) {
@@ -926,9 +925,9 @@ sdmmd_return_t SDMMD_send_session_stop(SDMMD_AMDeviceRef device, CFTypeRef sessi
 					CFDictionarySetValue(dict, CFSTR("SessionID"), session);
 					result = SDMMD_lockconn_send_message(device, dict);
 					CFSafeRelease(dict);
-					if (result == 0) {
+					if (result == kAMDSuccess) {
 						result = SDMMD_lockconn_receive_message(device, &response);
-						if (result == 0) {
+						if (result == kAMDSuccess) {
 							CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));
 							if (error && CFGetTypeID(error) == CFStringGetTypeID()) {
 								result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(error);
@@ -959,9 +958,9 @@ sdmmd_return_t SDMMD_AMDeviceStartSession(SDMMD_AMDeviceRef device) {
 	if (device->ivars.device_active) {
 		SDMMD__mutex_lock(device->ivars.mutex_lock);
 		result = SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(device, &record);
-		if (result == 0) {
+		if (result == kAMDSuccess) {
 			result = SDMMD_send_session_start(device, record, &device->ivars.session);
-			if (result == 0 && device->ivars.session) {
+			if (result == kAMDSuccess && device->ivars.session) {
 				Boolean hasKey = CFDictionaryContainsKey(record, CFSTR("EscrowBag"));
 				if (!hasKey) {
 					hasKey = CFDictionaryContainsKey(record, CFSTR("WiFiMACAddress"));
