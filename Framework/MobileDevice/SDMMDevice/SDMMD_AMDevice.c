@@ -1475,13 +1475,7 @@ uint32_t SDMMD_AMDeviceGetConnectionID(SDMMD_AMDeviceRef device) {
 CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key) {
 	CFTypeRef value = NULL;
 	if (device->ivars.device_active) {
-		if (domain == NULL) {
-			domain = CFSTR("NULL");
-		}
-		if (key == NULL) {
-			key = CFSTR("NULL");
-		}
-			
+		
 		SDMMD__mutex_lock(device->ivars.mutex_lock);
 		CFStringRef err = NULL;
 		value = SDMMD_copy_lockdown_value(device, domain, key, &err);
