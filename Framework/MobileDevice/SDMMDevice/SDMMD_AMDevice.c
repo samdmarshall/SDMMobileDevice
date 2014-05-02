@@ -1607,7 +1607,7 @@ sdmmd_sim_return_t SDMMD_GetSIMStatusCode(SDMMD_AMDeviceRef device) {
 			}
 		}
 	}
-	//CFSafeRelease(deviceSIMStatus);
+	CFSafeRelease(deviceSIMStatus);
 	return result;
 }
 
@@ -1622,7 +1622,7 @@ sdmmd_activation_return_t SDMMD_GetActivationStatus(SDMMD_AMDeviceRef device) {
 			}
 		}
 	}
-	//CFSafeRelease(deviceActivationState);
+	CFSafeRelease(deviceActivationState);
 	return result;
 }
 
