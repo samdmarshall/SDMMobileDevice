@@ -1329,7 +1329,7 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 	bool mutexIsLocked = false;
 	bool getValue = true;
 	CFMutableDictionaryRef chapCopy = NULL;
- 	CFDataRef escrowBag = NULL;
+ 	
 	if (device) {
 		result = kAMDDeviceDisconnectedError;
 		if (device->ivars.device_active) {
@@ -1371,7 +1371,9 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 									if (sendPair) {
 										CFDictionaryRemoveValue(sendPair, CFSTR("RootPrivateKey"));
 										CFDictionaryRemoveValue(sendPair, CFSTR("HostPrivateKey"));
-										CFShow(sendPair);
+										
+										CFDataRef escrowBag = NULL;
+										// escrowBag is returned by reference with +1 retain
 										result = SDMMD_send_pair(device, sendPair, chapCopy, NULL, &escrowBag);
 										if (!escrowBag) {
 											printf("%s: Could not pair with the device %u: 0x%x\n",__FUNCTION__, device->ivars.device_id, result);
@@ -1397,14 +1399,17 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 											}
 											Safe(free,path);
 										}
+										CFSafeRelease(escrowBag);
 									}
 									else {
 										result = kAMDNoResourcesError;
 									}
+									CFSafeRelease(sendPair);
 								}
 								else {
 									printf("%s: Could not create system BUID.\n",__FUNCTION__);
 								}
+								CFSafeRelease(buid);
 							}
 							else {
 								printf("%s: Could not create pairing material.\n",__FUNCTION__);
