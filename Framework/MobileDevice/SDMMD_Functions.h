@@ -372,10 +372,12 @@ static CFTypeRef SDMMD_AMDCopySystemBonjourUniqueID() {
 	if (dict) {
 		value = CFStringCreateCopy(kCFAllocatorDefault, CFDictionaryGetValue(dict, CFSTR("SystemBUID")));
 		if (value == NULL) {
-			value = SDMMD_CreateUUID();
-			if (value) {
-				CFDictionarySetValue(dict, CFSTR("SystemBUID"), value);
+			CFStringRef newUUID = SDMMD_CreateUUID();
+			if (newUUID) {
+				CFDictionarySetValue(dict, CFSTR("SystemBUID"), newUUID);
 				SDMMD_store_dict(dict, record, true);
+				
+				value = newUUID;
 			}
 			else {
 				printf("%s: Could not generate UUID!\n",__FUNCTION__);
