@@ -555,6 +555,7 @@ sdmmd_return_t SDMMD_send_pair(SDMMD_AMDeviceRef device, CFMutableDictionaryRef 
 							}
 						}
                     }
+					CFSafeRelease(pRecord);
 				}
 			}
 		}
