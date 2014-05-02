@@ -359,47 +359,48 @@ CFTypeRef SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain
 	sdmmd_return_t result = kAMDSuccess;
 	if (device) {
 		if (device->ivars.lockdown_conn) {
-			CFMutableDictionaryRef getVal = SDMMD__CreateMessageDict(CFSTR("GetValue"));
-			if (getVal) {
-				CFMutableDictionaryRef response;
-				if (domain == NULL) {
-					domain = CFSTR("NULL");
+			CFMutableDictionaryRef request = SDMMD__CreateMessageDict(CFSTR("GetValue"));
+			if (request) {
+				CFMutableDictionaryRef response = NULL;
+				
+				if (domain && CFStringCompare(domain, CFSTR("NULL"), 0) != 0) {
+					CFDictionarySetValue(request, CFSTR("Domain"), domain);
 				}
-				if (key == NULL) {
-					key = CFSTR("NULL");
+				if (key && CFStringCompare(key, CFSTR("NULL"), 0) != 0) {
+					CFDictionarySetValue(request, CFSTR("Key"), key);
 				}
 				
-				if (CFStringCompare(domain, CFSTR("NULL"), 0) != 0) {
-					CFDictionarySetValue(getVal, CFSTR("Domain"), domain);
-				}
-				if (CFStringCompare(key, CFSTR("NULL"), 0) != 0) {
-					CFDictionarySetValue(getVal, CFSTR("Key"), key);
-				}
-				
-				result = SDMMD_lockconn_send_message(device, getVal);
-				CFSafeRelease(getVal);
+				result = SDMMD_lockconn_send_message(device, request);
 				if (result == kAMDSuccess) {
 					result = SDMMD_lockconn_receive_message(device, &response);
 					if (result == kAMDSuccess && response) {
-						*err = CFDictionaryGetValue(response, CFSTR("Error"));
-						if (*err) {
-							if (CFGetTypeID(*err) == CFStringGetTypeID()) {
-								result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(*err);
+						CFStringRef error = CFDictionaryGetValue(response, CFSTR("Error"));
+						if (error) {
+							if (CFGetTypeID(error) == CFStringGetTypeID()) {
+								if (err) {
+									// Retain error if it is being passed to caller
+									*err = CFRetain(error);
+								}
+								result = (sdmmd_return_t)SDMMD__ConvertLockdowndError(error);
 							}
 							else {
 								result = kAMDInvalidResponseError;
 							}
 						}
 						else {
-							value = CFDictionaryGetValue(response, CFSTR("Value"));
+							// Retain returned value from response
+							value = CFRetain(CFDictionaryGetValue(response, CFSTR("Value")));
 							result = kAMDSuccess;
 						}
 					}
 				}
+				// Response structure no longer needed, value or error is retained
+				CFSafeRelease(response);
 			}
 			else {
 				result = kAMDNoResourcesError;
 			}
+			CFSafeRelease(request);
 		}
 		else {
 			result = kAMDNotConnectedError;
