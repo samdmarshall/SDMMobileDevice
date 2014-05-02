@@ -1489,6 +1489,7 @@ CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, 
 			CFSafeRelease(value);
 			value = NULL;
 		}
+		CFSafeRelease(err);
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 	}
 	return value;
