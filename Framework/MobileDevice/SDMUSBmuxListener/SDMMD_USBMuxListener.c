@@ -262,23 +262,29 @@ uint32_t SDMMD_ConnectToUSBMux() {
 	
 	// Set send/receive buffer sizes
 	uint32_t bufSize = 0x00010400;
-	if (setsockopt(sock, SOL_SOCKET, SO_SNDBUF, &bufSize, sizeof(bufSize))) {
-		result = 0x1;
-		int err = errno;
-		printf("%s: setsockopt SO_SNDBUF failed: %d - %s\n", __FUNCTION__, err, strerror(err));
+	if (!result) {
+		if (setsockopt(sock, SOL_SOCKET, SO_SNDBUF, &bufSize, sizeof(bufSize))) {
+			result = 0x1;
+			int err = errno;
+			printf("%s: setsockopt SO_SNDBUF failed: %d - %s\n", __FUNCTION__, err, strerror(err));
+		}
 	}
-	if (setsockopt(sock, SOL_SOCKET, SO_RCVBUF, &bufSize, sizeof(bufSize))) {
-		result = 0x2;
-		int err = errno;
-		printf("%s: setsockopt SO_RCVBUF failed: %d - %s\n", __FUNCTION__, err, strerror(err));
+	if (!result) {
+		if (setsockopt(sock, SOL_SOCKET, SO_RCVBUF, &bufSize, sizeof(bufSize))) {
+			result = 0x2;
+			int err = errno;
+			printf("%s: setsockopt SO_RCVBUF failed: %d - %s\n", __FUNCTION__, err, strerror(err));
+		}
 	}
 	
-	// Disable SIGPIPE on socket i/o error
-	uint32_t noPipe = 1;
-	if (setsockopt(sock, SOL_SOCKET, SO_NOSIGPIPE, &noPipe, sizeof(noPipe))) {
-		result = 0x3;
-		int err = errno;
-		printf("%s: setsockopt SO_NOSIGPIPE failed: %d - %s\n", __FUNCTION__, err, strerror(err));
+	if (!result) {
+		// Disable SIGPIPE on socket i/o error
+		uint32_t noPipe = 1;
+		if (setsockopt(sock, SOL_SOCKET, SO_NOSIGPIPE, &noPipe, sizeof(noPipe))) {
+			result = 0x3;
+			int err = errno;
+			printf("%s: setsockopt SO_NOSIGPIPE failed: %d - %s\n", __FUNCTION__, err, strerror(err));
+		}
 	}
 	
 	if (!result) {
@@ -305,6 +311,12 @@ uint32_t SDMMD_ConnectToUSBMux() {
 			int err = errno;
 			printf("%s: ioctl FIONBIO failed: %d - %s\n", __FUNCTION__, err, strerror(err));
 		}
+	}
+	
+	if (result) {
+		// Socket creation failed
+		close(sock);
+		sock = -1;
 	}
 	
 	return sock;
