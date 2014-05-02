@@ -409,7 +409,7 @@ CFTypeRef SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain
 		result = kAMDInvalidArgumentError;
 	}
 	if (result != kAMDSuccess) {
-		printf("%s: Could not copy value (%x)", __FUNCTION__, result);
+		printf("%s: Could not copy value (%x)\n", __FUNCTION__, result);
 	}
 	return value;
 }
