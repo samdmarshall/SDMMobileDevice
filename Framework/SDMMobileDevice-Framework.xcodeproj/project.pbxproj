@@ -37,6 +37,8 @@
 		2215A84017500DE700AD1981 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2215A83F17500DE700AD1981 /* CoreFoundation.framework */; };
 		222EF6EB1905BDB8000270C3 /* SDMMD_Debugger_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 222EF6E91905BD09000270C3 /* SDMMD_Debugger_Internal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		222EF6EC1905BDB8000270C3 /* SDMMD_MobileConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 222EF653190597FD000270C3 /* SDMMD_MobileConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		224CAB7E191449580079689D /* SDMMD_MobileBackup2.c in Sources */ = {isa = PBXBuildFile; fileRef = 224CAB7D191449580079689D /* SDMMD_MobileBackup2.c */; };
+		224CAB7F191455A50079689D /* SDMMD_MobileBackup2.h in Headers */ = {isa = PBXBuildFile; fileRef = 22A58E1919114EA100303D31 /* SDMMD_MobileBackup2.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		225ACB46175FBFA300A47071 /* SDMMD_Debugger.h in Headers */ = {isa = PBXBuildFile; fileRef = 225ACB44175FBFA300A47071 /* SDMMD_Debugger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		225ACB47175FBFA300A47071 /* SDMMD_Debugger.c in Sources */ = {isa = PBXBuildFile; fileRef = 225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */; };
 		225AD7321765FE7700A47071 /* SDMMD_USBMuxListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 225AD7301765FE7700A47071 /* SDMMD_USBMuxListener.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -188,6 +190,7 @@
 		222C290518A32C5B005B3A26 /* SDMMD_AMAuthInstall.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SDMMD_AMAuthInstall.h; path = SDMMDAuthInstall/SDMMD_AMAuthInstall.h; sourceTree = "<group>"; };
 		222EF653190597FD000270C3 /* SDMMD_MobileConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_MobileConfig.h; sourceTree = "<group>"; };
 		222EF6E91905BD09000270C3 /* SDMMD_Debugger_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_Debugger_Internal.h; sourceTree = "<group>"; };
+		224CAB7D191449580079689D /* SDMMD_MobileBackup2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_MobileBackup2.c; sourceTree = "<group>"; };
 		225AC5BE175B976500A47071 /* SDMMD_Notification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Notification.h; sourceTree = "<group>"; };
 		225AC5BF175B976500A47071 /* SDMMD_Notification.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_Notification.c; sourceTree = "<group>"; };
 		225ACB44175FBFA300A47071 /* SDMMD_Debugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Debugger.h; sourceTree = "<group>"; };
@@ -383,6 +386,7 @@
 				225ACB45175FBFA300A47071 /* SDMMD_Debugger.c */,
 				222EF653190597FD000270C3 /* SDMMD_MobileConfig.h */,
 				22A58E1919114EA100303D31 /* SDMMD_MobileBackup2.h */,
+				224CAB7D191449580079689D /* SDMMD_MobileBackup2.c */,
 			);
 			path = SDMMDService;
 			sourceTree = "<group>";
@@ -583,6 +587,7 @@
 				22D5F318179C81FD00C34745 /* SDMMD_Applications.h in Headers */,
 				22D5F31A179C820200C34745 /* SDMMD_Notification.h in Headers */,
 				222EF6EB1905BDB8000270C3 /* SDMMD_Debugger_Internal.h in Headers */,
+				224CAB7F191455A50079689D /* SDMMD_MobileBackup2.h in Headers */,
 				22A58E1F191157F600303D31 /* CFStringAddition.h in Headers */,
 				222EF6EC1905BDB8000270C3 /* SDMMD_MobileConfig.h in Headers */,
 				22EFC8B71900291600C29BFF /* File.h in Headers */,
@@ -664,6 +669,7 @@
 				22AD8E7517875346002ACFB1 /* SDMMD_Error.c in Sources */,
 				22AD8F261789B3DF002ACFB1 /* SDMMD_MCP.c in Sources */,
 				22AD91C31789D715002ACFB1 /* SDMMD_Service.c in Sources */,
+				224CAB7E191449580079689D /* SDMMD_MobileBackup2.c in Sources */,
 				22AD91C51789D71A002ACFB1 /* SDMMD_Connection.c in Sources */,
 				22AD9349178A1622002ACFB1 /* SDMMD_MRecoveryModeDevice.c in Sources */,
 				22DEF974188350E6008E909F /* CFTypeAddition.c in Sources */,
