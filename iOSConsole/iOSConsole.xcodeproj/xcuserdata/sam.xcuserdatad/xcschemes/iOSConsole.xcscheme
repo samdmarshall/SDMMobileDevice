@@ -72,10 +72,14 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--profile"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "/Users/sam/Desktop/Example.mobileconfig"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-z"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

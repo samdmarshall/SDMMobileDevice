@@ -50,6 +50,21 @@ void SDMMD_lookup_callback(CFDictionaryRef dict, void* response) {
 	CFShow(response);
 }
 
+/*
+ Commands:
+ Install
+ Lookup
+ CheckCapabilitiesMatch
+ Upgrade
+ Uninstall
+ Browse
+ Archive
+ Restore
+ RemoveArchive
+ LookupArchives
+ 
+ */
+
 sdmmd_return_t SDMMD_AMDeviceLookupAppInfo(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef *response) {
 	sdmmd_return_t result = kAMDInvalidArgumentError;
 	if (device) {

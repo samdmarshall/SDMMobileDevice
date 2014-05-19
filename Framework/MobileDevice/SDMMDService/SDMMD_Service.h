@@ -45,27 +45,27 @@ typedef struct SocketConnection {
 #pragma mark -
 
 #define AMSVC_AFC					"com.apple.afc"
-#define AMSVC_AFC2					"com.apple.afc2"
+#define AMSVC_AFC2					"com.apple.afc2" // hi
 #define AMSVC_BACKUP				"com.apple.mobilebackup"
 #define AMSVC_BACKUP2				"com.apple.mobilebackup2"
-#define AMSVC_CRASH_REPORT_COPY		"com.apple.crashreportcopy"
+#define AMSVC_CRASH_REPORT_COPY		"com.apple.crashreportcopy" // nope
 #define AMSVC_CRASH_REPORT_COPY_MOB	"com.apple.crashreportcopymobile"
 #define AMSVC_CRASH_REPORT_COPY_MV	"com.apple.crashreportmover"
-#define AMSVC_PURPLE_TEST			"com.apple.purpletestr"
+#define AMSVC_PURPLE_TEST			"com.apple.purpletestr" // expects
 #define AMSVC_SYNC					"com.apple.mobilesync"
 #define AMSVC_SCREENSHOT			"com.apple.screenshotr"
 #define AMSVC_MIS_AGENT				"com.apple.misagent"
 #define AMSVC_SPRINGBOARD_SERVICES	"com.apple.springboardservices"
-#define AMSVC_ATC					"com.apple.atc"
+#define AMSVC_ATC					"com.apple.atc" // expects
 #define AMSVC_PACKETCAPTURE			"com.apple.pcapd"
 #define AMSVC_WEB_INSPECTOR			"com.apple.webinspector"
-#define AMSVC_RASD					"com.apple.rasd"
+#define AMSVC_RASD					"com.apple.rasd" // expects
 
-#define AMSVC_THERMAL_MONITOR		"com.apple.thermalmonitor.thermtgraphrelay"
+#define AMSVC_THERMAL_MONITOR		"com.apple.thermalmonitor.thermtgraphrelay" // expects
 
-#define AMSVC_AIT_AITD				"com.apple.ait.aitd"
+#define AMSVC_AIT_AITD				"com.apple.ait.aitd" // accessibility response
 
-#define AMSVC_HPD_MOBILE			"com.apple.hpd.mobile"
+#define AMSVC_HPD_MOBILE			"com.apple.hpd.mobile" // expects
 
 #define AMSVC_SYSLOG_RELAY			"com.apple.syslog_relay"
 #define AMSVC_FILE_RELAY			"com.apple.mobile.file_relay"
@@ -73,30 +73,30 @@ typedef struct SocketConnection {
 #define AMSVC_DIAG_RELAY			"com.apple.mobile.diagnostics_relay"
 
 #define AMSVC_MOBILE_DEBUG			"com.apple.mobile.debug"
-#define AMSVC_SYSTEM_PROFILER		"com.apple.mobile.system_profiler"
+#define AMSVC_SYSTEM_PROFILER		"com.apple.mobile.system_profiler" // invalid
 #define AMSVC_INSTALLATION_PROXY	"com.apple.mobile.installation_proxy"
 #define AMSVC_FACTORY_PROXY			"com.apple.mobile.factory_proxy"
 #define AMSVC_NOTIFICATION_PROXY	"com.apple.mobile.notification_proxy"
 #define AMSVC_HOUSE_ARREST			"com.apple.mobile.house_arrest"
-#define AMSVC_LOCKDOWN				"com.apple.mobile.lockdown"
-#define AMSVC_SOFTWARE_UPDATE		"com.apple.mobile.software_update"
+#define AMSVC_LOCKDOWN				"com.apple.mobile.lockdown" // invalid
+#define AMSVC_SOFTWARE_UPDATE		"com.apple.mobile.software_update" // invalid
 #define AMSVC_DEBUG_IMAGE_MOUNT		"com.apple.mobile.debug_image_mount"
 #define AMSVC_MOBILE_IMAGE_MOUNT	"com.apple.mobile.mobile_image_mounter"
 #define AMSVC_MCINSTALL				"com.apple.mobile.MCInstall"
 #define AMSVC_MDMSERVICE			"com.apple.mobile.MDMService"
-#define AMSVC_HEARTBEAT				"com.apple.mobile.heartbeat"
-#define AMSVC_ASSERTATION_AGENT		"com.apple.mobile.assertion_agent"
+#define AMSVC_HEARTBEAT				"com.apple.mobile.heartbeat" // expects
+#define AMSVC_ASSERTATION_AGENT		"com.apple.mobile.assertion_agent" // expects
 
-#define AMSVC_IOSDIAG_RELAY			"com.apple.iosdiagnostics.relay"
+#define AMSVC_IOSDIAG_RELAY			"com.apple.iosdiagnostics.relay" // expects
 
 #define AMSVC_DEBUG_SERVER			"com.apple.debugserver"
-#define AMSVC_DEBUG_SERVER_SECURE	"com.apple.debugserver.secure"
+#define AMSVC_DEBUG_SERVER_SECURE	"com.apple.debugserver.secure" // used for apple tv?
 #define AMSVC_DEBUG_SERVER_APPLIST	"com.apple.debugserver.applist"
-#define AMSVC_FETCH_SYMBOLS			"com.apple.dt.fetchsymbols"
+#define AMSVC_FETCH_SYMBOLS			"com.apple.dt.fetchsymbols" // expects
 #define AMSVC_SIMULATE_LOCATION		"com.apple.dt.simulatelocation"
 
-#define AMSVC_RADIOS_TEST_MOBILE	"com.apple.radios.wirelesstester.mobile"
-#define AMSVC_RADIOS_TEST_ROOT		"com.apple.radios.wirelesstester.root"
+#define AMSVC_RADIOS_TEST_MOBILE	"com.apple.radios.wirelesstester.mobile" // expects
+#define AMSVC_RADIOS_TEST_ROOT		"com.apple.radios.wirelesstester.root" // expects
 
 struct SDM_MD_Service_Identifiers {
 	char *identifier;

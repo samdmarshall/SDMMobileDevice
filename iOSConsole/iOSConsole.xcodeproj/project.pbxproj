@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		22247E0A1928F67600719F8D /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = 22247E091928F67600719F8D /* test.c */; };
 		222EF61019055DFD000270C3 /* install.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF60F19055DFD000270C3 /* install.c */; };
 		22310D6A1874F4B10092C107 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310D691874F4B10092C107 /* CoreFoundation.framework */; };
 		22310D6D1874F4B10092C107 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 22310D6C1874F4B10092C107 /* main.c */; };
@@ -60,6 +61,8 @@
 /* Begin PBXFileReference section */
 		220B5B1B188374D80082AF84 /* SDMMD_Types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Types.h; sourceTree = "<group>"; };
 		220B5B1C188375040082AF84 /* Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Attributes.h; sourceTree = "<group>"; };
+		22247E081928F66E00719F8D /* test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
+		22247E091928F67600719F8D /* test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test.c; sourceTree = "<group>"; };
 		2225F1E81905D35400AF501E /* SDMMD_Debugger_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_Debugger_Internal.h; sourceTree = "<group>"; };
 		222EF60E19055DF5000270C3 /* install.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = install.h; sourceTree = "<group>"; };
 		222EF60F19055DFD000270C3 /* install.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = install.c; sourceTree = "<group>"; };
@@ -181,6 +184,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		22247E071928F65600719F8D /* test */ = {
+			isa = PBXGroup;
+			children = (
+				22247E081928F66E00719F8D /* test.h */,
+				22247E091928F67600719F8D /* test.c */,
+			);
+			name = test;
+			sourceTree = "<group>";
+		};
 		222EF61119055E01000270C3 /* install */ = {
 			isa = PBXGroup;
 			children = (
@@ -410,6 +422,7 @@
 		22B9557A1878A780004DCBF0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				22247E071928F65600719F8D /* test */,
 				22FE3F0D189E8491005C2DB2 /* springboard */,
 				22B9557B1878A795004DCBF0 /* service */,
 				22B9556918788C9F004DCBF0 /* syslog */,
@@ -584,6 +597,7 @@
 				22310DB618750D9E0092C107 /* SDMMD_Service.c in Sources */,
 				22FFB8CF1880DE140073095D /* Matrix.c in Sources */,
 				22310DB818750D9E0092C107 /* SDMMD_USBMuxListener.c in Sources */,
+				22247E0A1928F67600719F8D /* test.c in Sources */,
 				22B955881878F14F004DCBF0 /* run.c in Sources */,
 				22B9557D1878A7A2004DCBF0 /* service.c in Sources */,
 				22B95571187895DB004DCBF0 /* query.c in Sources */,

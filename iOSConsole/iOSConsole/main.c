@@ -26,6 +26,7 @@ static char *powerArg = "-p,--diag";
 static char *devArg = "-x,--develop";
 static char *installArg = "-t,--install";
 static char *profileArg = "-c,--profile";
+static char *testArg = "-z,--test";
 
 enum iOSConsoleOptions {
 	OptionsHelp = 0x0,
@@ -40,6 +41,7 @@ enum iOSConsoleOptions {
 	OptionsDev,
 	OptionsInstall,
 	OptionsConfig,
+	OptionsTest,
 	OptionsCount
 };
 
@@ -55,7 +57,8 @@ static struct option long_options[OptionsCount] = {
 	{"diag", required_argument, 0x0, 'p'},
 	{"develop", no_argument, 0x0, 'x'},
 	{"install", required_argument, 0x0, 't'},
-	{"profile", required_argument, 0x0, 'c'}
+	{"profile", required_argument, 0x0, 'c'},
+	{"test", no_argument, 0x0, 'z'}
 };
 
 static bool optionsEnable[OptionsCount] = {};
@@ -83,7 +86,7 @@ int main(int argc, const char * argv[]) {
 	int c;
 	while (searchArgs) {
 		int option_index = 0x0;
-		c = getopt_long (argc, (char * const *)argv, "lh:d:ais:q:p:t:c:",long_options, &option_index);
+		c = getopt_long (argc, (char * const *)argv, "lh:d:ais:q:p:t:c:z",long_options, &option_index);
 		if (c == -1) {
 			break;
 		}
@@ -184,6 +187,10 @@ int main(int argc, const char * argv[]) {
 				}
 				break;
 			}
+			case 'z': {
+				optionsEnable[OptionsTest] = true;
+				break;
+			}
 			default: {
 				printf("--help for help");
 				break;
@@ -261,6 +268,9 @@ int main(int argc, const char * argv[]) {
 		}
 		else if (optionsEnable[OptionsConfig]) {
 			InstallProfileToDevice(udid, installPath);
+		}
+		else if (optionsEnable[OptionsTest]) {
+			WhatDoesThisDo(udid);
 		}
 	}
 	Safe(free, domain);

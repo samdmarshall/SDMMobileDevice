@@ -19,5 +19,6 @@
 #include "power.h"
 #include "dev.h"
 #include "install.h"
+#include "test.h"
 
 #endif

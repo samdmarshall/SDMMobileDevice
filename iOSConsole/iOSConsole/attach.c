@@ -51,16 +51,17 @@ SDMMD_AMConnectionRef AttachToDeviceAndService(SDMMD_AMDeviceRef device, char *s
 		if (SDM_MD_CallSuccessful(result)) {
 			result = SDMMD_AMDeviceStartSession(device);
 			if (SDM_MD_CallSuccessful(result)) {
-				CFStringRef serviceString = CFStringCreateWithCString(kCFAllocatorDefault, service, kCFStringEncodingMacRoman);
+				CFStringRef serviceString = CFStringCreateWithCString(kCFAllocatorDefault, service, kCFStringEncodingUTF8);
 				result = SDMMD_AMDeviceStartService(device, serviceString, NULL, &serviceCon);
 				if (SDM_MD_CallSuccessful(result)) {
 					CFTypeRef deviceName = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kDeviceName));
-					char *name = (char*)CFStringGetCStringPtr(deviceName,kCFStringEncodingMacRoman);
+					char *name = CreateCStringFromCFStringRef(deviceName);
 					if (!name) {
 						name = "unnamed device";
 					}
 					printf("Connected to %s on \"%s\" ...\n",name,service);
 					CFSafeRelease(deviceName);
+					Safe(free,name);
 				}
 				else {
 					SDMMD_AMDeviceStopSession(device);
