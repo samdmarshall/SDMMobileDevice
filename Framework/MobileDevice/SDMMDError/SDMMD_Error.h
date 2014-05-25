@@ -40,6 +40,7 @@ if (!SDM_MD_CallSuccessful(value)) { \
 ExitLabel: \
 return value;
 
+
 #define AMDErrorMake(num) (0xe8000000 | (num))
 typedef enum SDMMD_Errors {
 	kAMDSuccess = 0x0,

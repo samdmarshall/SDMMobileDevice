@@ -575,6 +575,7 @@ sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCom
 	
 	BufferRefRelease(buffer);
 	CFSafeRelease(sending);
+	
 	ExitLabelAndReturn(result);
 }
 

@@ -103,6 +103,7 @@ void SDMMD_AFCHeaderInit(SDMMD_AFCPacketHeader *header, uint32_t command, uint32
 sdmmd_return_t SDMMD_AFCSendOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOperationRef op);
 sdmmd_return_t SDMMD_AFCReceiveOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOperationRef *op);
 
+#if 0
 sdmmd_return_t SDMMD_AFCConnectionPerformOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOperationRef op) {
 	__block sdmmd_return_t result = kAMDSuccess;
 	dispatch_sync(conn->operationQueue, ^{
@@ -116,6 +117,7 @@ sdmmd_return_t SDMMD_AFCConnectionPerformOperation(SDMMD_AFCConnectionRef conn, 
 	conn->operationCount++;
 	return result;
 }
+#endif
 
 sdmmd_return_t SDMMD_AFCSendOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOperationRef op) {
 	sdmmd_return_t result = kAMDSuccess;
@@ -681,8 +683,8 @@ sdmmd_return_t SDMMD_AMDeviceCopy(SDMMD_AFCConnectionRef conn, char *local, char
 			CFStringRef new_dir = CFStringCreateWithCString(kCFAllocatorDefault, remote, kCFStringEncodingUTF8);
 			SDMMD_AFCOperationRef make_dir = SDMMD_AFCOperationCreateMakeDirectory(new_dir);
 			result = SDMMD_AFCProcessOperation(conn, &make_dir);
-			CheckErrorAndReturn(result);
 			CFSafeRelease(new_dir);
+			CheckErrorAndReturn(result);
 			
 			struct dirent *ent;
 			DIR *dir = opendir(local);
@@ -719,9 +721,10 @@ sdmmd_return_t SDMMD_AMDeviceCopyFile(CallBack callback, void *thing2, void *thi
 	CFDataRef local_file = CFDataCreateFromFilePath(local);
 	if (local_file) {
 		uint32_t packets = (uint32_t)((CFDataGetLength(local_file)+kAFCMaxTransferSize-1)/kAFCMaxTransferSize);
-		CFStringRef remote_path = CFStringCreateWithBytes(kCFAllocatorDefault, (const UInt8 *)remote, strlen(remote), kCFStringEncodingUTF8, false);
-		SDMMD_AFCOperationRef file_create = SDMMD_AFCOperationCreateFileRefOpen(remote_path, 2);
+		CFStringRef send_remote_path = CFStringCreateWithBytes(kCFAllocatorDefault, (const UInt8 *)remote, strlen(remote), kCFStringEncodingUTF8, false);
+		SDMMD_AFCOperationRef file_create = SDMMD_AFCOperationCreateFileRefOpen(send_remote_path, 2);
 		result = SDMMD_AFCProcessOperation(conn, &file_create);
+		CFSafeRelease(send_remote_path);
 		CheckErrorAndReturn(result);
 		
 		uint64_t file_descriptor;
@@ -749,10 +752,12 @@ sdmmd_return_t SDMMD_AMDeviceCopyFile(CallBack callback, void *thing2, void *thi
 					CFDictionarySetValue(status, CFSTR("PercentComplete"), percent);
 					CFStringRef local_path = CFStringCreateWithBytes(kCFAllocatorDefault, (const UInt8 *)local, strlen(local), kCFStringEncodingUTF8, false);
 					CFDictionarySetValue(status, CFSTR("LocalPath"), local_path);
+					CFStringRef remote_path = CFStringCreateWithBytes(kCFAllocatorDefault, (const UInt8 *)remote, strlen(remote), kCFStringEncodingUTF8, false);
 					CFDictionarySetValue(status, CFSTR("RemotePath"), remote_path);
 					callback(status, thing3);
 					CFSafeRelease(status);
 					CFSafeRelease(local_path);
+					CFSafeRelease(remote_path);
 					CFSafeRelease(percent);
 				}
 			}
@@ -771,10 +776,11 @@ sdmmd_return_t SDMMD_AMDeviceCopyFile(CallBack callback, void *thing2, void *thi
 		SDMMD_AFCOperationRelease(file_close);
 		
 		SDMMD_AFCOperationRelease(file_create);
-		CFSafeRelease(remote_path);
 	}
+	
+ExitLabel:
 	CFSafeRelease(local_file);
-	ExitLabelAndReturn(result);
+	return result;
 }
 
 sdmmd_return_t SDMMD_AMDeviceRemoteCopyFile(CallBack callback, void *thing2, void *thing3, SDMMD_AFCConnectionRef conn, char *local, char *remote) {
@@ -785,6 +791,7 @@ sdmmd_return_t SDMMD_AMDeviceRemoteCopyFile(CallBack callback, void *thing2, voi
 		CFStringRef remote_path = CFStringCreateWithBytes(kCFAllocatorDefault, (const UInt8 *)remote, strlen(remote), kCFStringEncodingUTF8, false);
 		SDMMD_AFCOperationRef file_create = SDMMD_AFCOperationCreateFileRefOpen(remote_path, 2);
 		result = SDMMD_AFCProcessOperation(conn, &file_create);
+		CFSafeRelease(remote_path);
 		CheckErrorAndReturn(result);
 	
 		uint64_t file_descriptor;
@@ -811,11 +818,11 @@ sdmmd_return_t SDMMD_AMDeviceRemoteCopyFile(CallBack callback, void *thing2, voi
 		SDMMD_AFCOperationRelease(file_close);
 		
 		SDMMD_AFCOperationRelease(file_create);
-		CFSafeRelease(remote_path);
 	}
+	
+ExitLabel:
 	CFSafeRelease(local_file);
-
-	ExitLabelAndReturn(result);
+	return result;
 }
 
 sdmmd_return_t SDMMD_check_can_touch(SDMMD_AFCConnectionRef conn, CFDataRef *unknown) {

@@ -268,11 +268,13 @@ sdmmd_return_t SDMMD_ServiceReceiveStream(SocketConnection handle, CFPropertyLis
 
 SocketConnection SDMMD_TranslateConnectionToSocket(SDMMD_AMConnectionRef connection) {
 	SocketConnection sock;
-	if (connection && connection->ivars.ssl) {
-		sock = (SocketConnection){true, {.ssl = connection->ivars.ssl}};
-	}
-	else {
-		sock = (SocketConnection){false, {.conn = connection->ivars.socket}};
+	if (connection != NULL) {
+		if (connection->ivars.ssl != NULL) {
+			sock = (SocketConnection){true, {.ssl = connection->ivars.ssl}};
+		}
+		else {
+			sock = (SocketConnection){false, {.conn = connection->ivars.socket}};
+		}
 	}
 	return sock;
 }
