@@ -120,37 +120,91 @@ sdmmd_return_t SDMMD_DirectServiceSend(SocketConnection handle, CFDataRef data) 
 	}
 }
 
+size_t SDMMD__ServiceReceiveBytesSock(SocketConnection handle, void * buffer, size_t length)
+{
+	ssize_t received;
+	size_t receivedTotal = 0;
+	
+	do {
+		// Try to read up to length
+		received = recv(handle.socket.conn, &buffer[receivedTotal], length - receivedTotal, 0);
+		if (received == 0) {
+			// EOF
+			break;
+		}
+		else if (received < 0) {
+			printf("recv error: (%s)\n", strerror(errno));
+			break;
+		}
+		
+		// Move ahead length
+		receivedTotal += received;
+		
+	} while (receivedTotal < length);
+	
+	return receivedTotal;
+}
+
+size_t SDMMD__ServiceReceiveBytesSSL(SocketConnection handle, void * buffer, int length)
+{
+	int received, receivedTotal = 0;
+	
+	do {
+		// Try to read up to length
+		received = SSL_read(handle.socket.ssl, &buffer[receivedTotal], length - receivedTotal);
+		if (received <= 0) {
+			// Read failed, check if theres an SSL error
+			int ret = SSL_get_error(handle.socket.ssl, received);
+			printf("SSL_read error (%x)\n", ret);
+			break;
+		}
+		
+		// Move ahead length
+		receivedTotal += received;
+		
+	} while (receivedTotal < length);
+	
+	return receivedTotal;
+}
+
+/*
+ * Assumes buffer is allocated up to length
+ * Returns received byte length
+ */
+size_t SDMMD__ServiceReceiveBytes(SocketConnection handle, void * buffer, size_t length)
+{
+	if (handle.isSSL) {
+		// Note: SSL only handles int sizes :(
+		return SDMMD__ServiceReceiveBytesSSL(handle, buffer, (int)length);
+	}
+	else {
+		return SDMMD__ServiceReceiveBytesSock(handle, buffer, length);
+	}
+}
+
 sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 	size_t received;
 	uint32_t length = 0;
 	sdmmd_return_t response = kAMDErrorError;
 
 	if (handle.isSSL == true || CheckIfExpectingResponse(handle, 10000)) {
+		
 		// Receive data length header
-		if (handle.isSSL) {
-			received = SSL_read(handle.socket.ssl, &length, 0x4);
-		}
-		else {
-			received = recv(handle.socket.conn, &length, 0x4, 0);
-		}
-		length = ntohl(length);
+		// Note: in iOS 8 the header 4-byte int may have to be read in multiple parts
+		received = SDMMD__ServiceReceiveBytes(handle, &length, 0x4);
+		
+		
 		if (received == 0x4) {
+			// Convert from device byte order
+			length = ntohl(length);
+			
 			// Receive data body
-			unsigned char *buffer = calloc(0x1, length);
-			uint32_t remainder = length;
-			while (remainder) {
-				if (handle.isSSL) {
-					received = SSL_read(handle.socket.ssl, &buffer[length-remainder], remainder);
-				}
-				else {
-					received = recv(handle.socket.conn, &buffer[length-remainder], remainder, 0);
-				}
-				if (!received) {
-					break;
-				}
-				remainder -= received;
-			}
-			*data = CFDataCreate(kCFAllocatorDefault, buffer, length);
+			unsigned char * buffer = calloc(0x1, length);
+			received = SDMMD__ServiceReceiveBytes(handle, buffer, length);
+			
+			// Create data object only from received byte length
+			*data = CFDataCreate(kCFAllocatorDefault, buffer, received);
+			
 			free(buffer);
 			response = kAMDSuccess;
 		}
