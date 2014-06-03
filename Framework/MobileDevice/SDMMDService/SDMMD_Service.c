@@ -153,11 +153,9 @@ size_t SDMMD__ServiceReceiveBytesSSL(SocketConnection handle, void * buffer, int
 		// Try to read up to length
 		received = SSL_read(handle.socket.ssl, &buffer[receivedTotal], length - receivedTotal);
 		if (received <= 0) {
-			// Read failed, check if theres an SSL error (SSL_ERROR_ZERO_RETURN indicates finished reading length)
+			// Read failed, check if theres an SSL error
 			int ret = SSL_get_error(handle.socket.ssl, received);
-			if (ret != SSL_ERROR_ZERO_RETURN) {
-				printf("SSL_read error (%x)", ret);
-			}
+			printf("SSL_read error (%x)", ret);
 			break;
 		}
 		
