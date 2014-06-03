@@ -67,7 +67,19 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "342881d85f5d5651b7465122e05a13faf99b97a2"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "2c0b9b9909ca27368bec92caacfa180fac5b777b"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = " -s"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "syslog"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
@@ -80,7 +92,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-z"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
       <AdditionalOptions>

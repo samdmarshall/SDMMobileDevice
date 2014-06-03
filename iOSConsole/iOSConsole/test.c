@@ -23,8 +23,13 @@ void WhatDoesThisDo(char *udid) {
 		SDMMD_AMDeviceStartSession(device);
 		CFDictionaryRef dict = NULL;
 		SDMMD_AMConnectionRef conn = SDMMD_AMDServiceConnectionCreate(0, NULL, dict);
-		result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_AIT_AITD), NULL, &conn);
+		result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_DIAG_RELAY), NULL, &conn);
 		if (result == 0) {
+			
+			CFMutableDictionaryRef optionsDict = SDMMD_create_dict();
+			CFDictionarySetValue(optionsDict, CFSTR("Request"), CFSTR("GasGauge"));
+			
+			result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(conn), optionsDict, kCFPropertyListXMLFormat_v1_0);
 			
 			CFMutableDictionaryRef response;
 			result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(conn), &response);

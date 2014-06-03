@@ -202,14 +202,15 @@ sdmmd_return_t SDMMD_ServiceReceiveMessage(SocketConnection handle, CFPropertyLi
 	CFDataRef dataBuffer = NULL;
 	sdmmd_return_t result;
 	*data = NULL;
-	
+	CFErrorRef error = NULL;
+
 	result = SDMMD_ServiceReceive(handle, &dataBuffer);
 	if (result == kAMDSuccess) {
 		
 		// ServiceReceive success does not guarantee that valid data is available
 		if (dataBuffer) {
 			// CFPropertyListCreateWithData will return NULL if data is invalid format
-			*data = CFPropertyListCreateWithData(kCFAllocatorDefault, dataBuffer, kCFPropertyListImmutable, NULL, NULL);
+			*data = CFPropertyListCreateWithData(kCFAllocatorDefault, dataBuffer, kCFPropertyListImmutable, NULL, &error);
 		}
 		
 		if (*data == NULL) {

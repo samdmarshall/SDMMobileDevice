@@ -26,12 +26,15 @@ SDMMD_AMDeviceRef FindDeviceFromUDID(char *udid) {
 			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
 			CFTypeRef deviceUDID = CFStringCreateCopy(kCFAllocatorDefault, device->ivars.unique_device_id);
 			if (deviceUDID) {
-				deviceId = (char*)CFStringGetCStringPtr(deviceUDID,kCFStringEncodingMacRoman);
+				deviceId = (char*)CreateCStringFromCFStringRef(deviceUDID);
+				CFSafeRelease(deviceUDID);
 				if (strncmp(udid, deviceId, strlen(deviceId)) == 0x0) {
 					foundDevice = true;
+				}
+				free(deviceId);
+				if (foundDevice) {
 					break;
 				}
-				CFSafeRelease(deviceUDID);
 			}
 		}
 		if (foundDevice) {
@@ -57,7 +60,9 @@ SDMMD_AMConnectionRef AttachToDeviceAndService(SDMMD_AMDeviceRef device, char *s
 					CFTypeRef deviceName = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kDeviceName));
 					char *name = CreateCStringFromCFStringRef(deviceName);
 					if (!name) {
-						name = "unnamed device";
+						int unnamed_str_len = strlen("unnamed device");
+						name = calloc(1, sizeof(char[unnamed_str_len]));
+						memcpy(name, "unnamed device", sizeof(char[unnamed_str_len]));
 					}
 					printf("Connected to %s on \"%s\" ...\n",name,service);
 					CFSafeRelease(deviceName);

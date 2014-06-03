@@ -55,6 +55,7 @@ void ListConnectedDevices() {
 					
 					CFSafeRelease(deviceName);
 					CFSafeRelease(deviceUDID);
+					CFSafeRelease(deviceModel);
 					
 					SDMMD_AMDeviceDisconnect(device);
 				}
