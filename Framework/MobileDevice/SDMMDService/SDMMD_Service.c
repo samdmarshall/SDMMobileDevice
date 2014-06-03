@@ -133,7 +133,7 @@ size_t SDMMD__ServiceReceiveBytesSock(SocketConnection handle, void * buffer, si
 			break;
 		}
 		else if (received < 0) {
-			printf("recv error: (%s)", strerror(errno));
+			printf("recv error: (%s)\n", strerror(errno));
 			break;
 		}
 		
@@ -155,7 +155,7 @@ size_t SDMMD__ServiceReceiveBytesSSL(SocketConnection handle, void * buffer, int
 		if (received <= 0) {
 			// Read failed, check if theres an SSL error
 			int ret = SSL_get_error(handle.socket.ssl, received);
-			printf("SSL_read error (%x)", ret);
+			printf("SSL_read error (%x)\n", ret);
 			break;
 		}
 		
