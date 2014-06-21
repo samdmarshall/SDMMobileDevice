@@ -10,6 +10,7 @@
 #define SDMMobileDevice_Framework_SDMMD_MobileBackup2_c
 
 #include "SDMMD_MobileBackup2.h"
+#include "SDMMD_Connection_Internal.h"
 #include "SDMMD_Service.h"
 #include "Core.h"
 

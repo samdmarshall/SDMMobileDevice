@@ -33,6 +33,8 @@
 #include "SDMMD_Service.h"
 #include "SDMMD_Functions.h"
 #include "SDMMD_AMDevice.h"
+#include "SDMMD_AMDevice_Internal.h"
+#include "SDMMD_Connection_Private.h"
 #include "Core.h"
 
 sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef command, uint64_t code, CallBack handle, uint32_t argsCount, void* paramStart, ...) {

@@ -29,6 +29,7 @@
 #define _SDM_MD_CONNECTION_CLASS_C_
 
 #include "SDMMD_Connection_Class.h"
+#include "SDMMD_Connection_Internal.h"
 #include "Core.h"
 
 static Boolean SDMMD_AMConnectionRefEqual(CFTypeRef cf1, CFTypeRef cf2) {

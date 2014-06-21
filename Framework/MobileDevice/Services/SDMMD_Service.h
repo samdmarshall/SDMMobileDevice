@@ -32,13 +32,7 @@
 #include "SDMMD_Error.h"
 #include "SDMMD_Connection.h"
 
-typedef struct SocketConnection {
-	bool isSSL;
-	union {
-		SSL *ssl;
-		uint32_t conn;
-	} socket;
-} SocketConnection;
+typedef struct SocketConnection SocketConnection;
 
 #pragma mark -
 #pragma mark Service List

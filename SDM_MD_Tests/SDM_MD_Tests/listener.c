@@ -20,7 +20,7 @@ struct AMDeviceNotificationCallbackInformation {
 };
 
 bool setAppleDevice(struct am_device *device) {
-	if (device->device_id == sdm_test_device->ivars.device_id) {
+	if (device->device_id == SDMMD_AMDeviceUSBDeviceID(sdm_test_device)) {
 		apple_test_device = device;
 		dispatch_semaphore_signal(got_apple_device);
 		return true;

@@ -1,5 +1,5 @@
 /*
- *  SDMMD_AMDevice_Class.h
+ *  SDMMD_Connection_Internal.h
  *  SDMMobileDevice
  *
  * Copyright (c) 2014, Sam Marshall
@@ -25,26 +25,38 @@
  *
  */
 
-#ifndef _SDM_MD_ADMDEVICE_CLASS_H_
-#define _SDM_MD_ADMDEVICE_CLASS_H_
+#ifndef _SDM_MD_CONNECTION_INTERNAL_H_
+#define _SDM_MD_CONNECTION_INTERNAL_H_
 
 #include <CoreFoundation/CoreFoundation.h>
+#include "CFRuntime.h"
+#include <openssl/ssl.h>
 
-// Please do not access ivars of the AMDevice objects if you can avoid it, they are subject to change.
+#include "SDMMD_AMDevice_Class.h"
 
-typedef struct SDMMD_lockdown_conn_internal SDMMD_lockdown_conn;
+typedef struct SocketConnection {
+	bool isSSL;
+	union {
+		SSL *ssl;
+		uint32_t conn;
+	} socket;
+} SocketConnection;
 
-typedef struct sdmmd_am_device* SDMMD_AMDeviceRef;
+struct AMConnectionClassBody {
+	uint32_t socket;			// 16
+	unsigned char unknown0[4];	// 20
+	SSL *ssl;					// 24
+	unsigned char unknown1[4];	// 28
+	int8_t closeOnInvalid;		// 32
+	int8_t isValid;				// 33
+	unsigned char unknown2[2];	// 34
+	SDMMD_AMDeviceRef device;	// 36
+	char service[128];			// 40
+} __attribute__ ((packed)) AMConnectionClassBody; // size 0x98
 
-void SDMMD_AMDeviceRefClassInitialize();
-
-CFTypeID SDMMD_AMDeviceRefGetTypeID();
-
-/*!
- @function SDMMD_AMDeviceCreateEmpty
- @discussion
- Creating an empty device object, used in conjunction with SDMMD_AMDeviceCreateFromProperties(), returns a SDMMD_AMDeviceRef object.
- */
-SDMMD_AMDeviceRef SDMMD_AMDeviceCreateEmpty();
+struct am_connection {
+	CFRuntimeBase base;
+	struct AMConnectionClassBody ivars;
+} __attribute__ ((packed)) am_connection;
 
 #endif

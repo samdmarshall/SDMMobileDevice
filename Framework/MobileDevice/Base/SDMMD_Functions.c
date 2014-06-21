@@ -32,6 +32,8 @@
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
 #include "SDMMD_Functions.h"
+#include "SDMMD_AMDevice_Internal.h"
+#include "SDMMD_SSL_Functions.h"
 #include "Core.h"
 
 #if WIN32

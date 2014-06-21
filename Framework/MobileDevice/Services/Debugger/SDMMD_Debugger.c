@@ -31,6 +31,8 @@
 #include "SDMMD_Debugger.h"
 #include "SDMMD_Functions.h"
 #include "SDMMD_AppleFileConduit.h"
+#include "SDMMD_Connection_Private.h"
+#include "SDMMD_SSL_Functions.h"
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <stdio.h>

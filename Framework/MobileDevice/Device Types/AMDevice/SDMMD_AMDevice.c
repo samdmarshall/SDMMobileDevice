@@ -32,6 +32,8 @@
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
 #include "SDMMD_AMDevice.h"
+#include "SDMMD_AMDevice_Internal.h"
+#include "SDMMD_Connection_Private.h"
 #include "SDMMD_Functions.h"
 #include "SDMMD_Service.h"
 #include "SDMMD_USBMuxListener.h"
@@ -50,6 +52,7 @@
 #include "Core.h"
 #include "SDMMD_Functions.h"
 #include "SDMMD_AppleFileConduit.h"
+#include "SDMMD_SSL_Functions.h"
 
 #include <IOKit/IOKitLib.h>
 #include <IOKit/usb/IOUSBLib.h>
@@ -1429,6 +1432,14 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 	}
 	return result;
+}
+
+CFStringRef SDMMD_AMDeviceCopyUDID(SDMMD_AMDeviceRef device) {
+	CFStringRef udid = CFSTR("");
+	if (device) {
+		udid = device->ivars.unique_device_id;
+	}
+	return CFStringCreateCopy(kCFAllocatorDefault, udid);
 }
 
 uint32_t SDMMD_AMDeviceUSBDeviceID(SDMMD_AMDeviceRef device) {

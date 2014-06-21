@@ -29,10 +29,12 @@
 #define _SDM_MD_APPLICATIONS_C_
 
 #include "SDMMD_Applications.h"
+#include "SDMMD_AMDevice_Internal.h"
 #include "SDMMD_Service.h"
 #include "SDMMD_Functions.h"
 #include "SDMMD_AMDevice.h"
 #include "SDMMD_AppleFileConduit.h"
+#include "SDMMD_Connection_Private.h"
 #include "Core.h"
 
 #define kAppLookupMasterKey "ReturnAttributes"

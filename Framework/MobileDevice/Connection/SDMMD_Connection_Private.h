@@ -1,5 +1,5 @@
 /*
- *  SDMMD_AMDevice_Class.h
+ *  SDMMD_Connection_Private.h
  *  SDMMobileDevice
  *
  * Copyright (c) 2014, Sam Marshall
@@ -25,26 +25,17 @@
  *
  */
 
-#ifndef _SDM_MD_ADMDEVICE_CLASS_H_
-#define _SDM_MD_ADMDEVICE_CLASS_H_
+#ifndef _SDM_MD_CONNECTION_PRIVATE_H_
+#define _SDM_MD_CONNECTION_PRIVATE_H_
 
 #include <CoreFoundation/CoreFoundation.h>
+#include "CFRuntime.h"
+#include <openssl/ssl.h>
+#include "SDMMD_Connection_Class.h"
+#include "SDMMD_Connection_Internal.h"
 
-// Please do not access ivars of the AMDevice objects if you can avoid it, they are subject to change.
-
-typedef struct SDMMD_lockdown_conn_internal SDMMD_lockdown_conn;
-
-typedef struct sdmmd_am_device* SDMMD_AMDeviceRef;
-
-void SDMMD_AMDeviceRefClassInitialize();
-
-CFTypeID SDMMD_AMDeviceRefGetTypeID();
-
-/*!
- @function SDMMD_AMDeviceCreateEmpty
- @discussion
- Creating an empty device object, used in conjunction with SDMMD_AMDeviceCreateFromProperties(), returns a SDMMD_AMDeviceRef object.
- */
-SDMMD_AMDeviceRef SDMMD_AMDeviceCreateEmpty();
+SSL* SDMMD_AMDServiceConnectionGetSecureIOContext(SDMMD_AMConnectionRef connection);
+SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, SSL* ssl);
+SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(uint32_t socket, SSL* ssl, CFDictionaryRef dict);
 
 #endif

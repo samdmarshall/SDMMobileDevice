@@ -29,6 +29,8 @@
 #define SDMMobileDevice_Framework_SDMMD_AppleFileConduit_c
 
 #include "SDMMD_AppleFileConduit.h"
+#include "SDMMD_AMDevice_Internal.h"
+#include "SDMMD_Connection_Internal.h"
 #include "SDMMD_Functions.h"
 #include <string.h>
 #include <sys/types.h>

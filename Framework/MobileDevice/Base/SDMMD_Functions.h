@@ -45,7 +45,7 @@
 #include "SDMMD_AMDevice.h"
 #include "SDMMD_Applications.h"
 #include "CFTypeAddition.h"
-#include "SDMMD_SSL_Functions.h"
+//#include "SDMMD_SSL_Functions.h"
 
 #if WIN32
 #define CFRangeMake(a, b) (CFRange){a, b}

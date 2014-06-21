@@ -32,6 +32,7 @@
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
 #include "SDMMD_Service.h"
+#include "SDMMD_Connection_Internal.h"
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/select.h>

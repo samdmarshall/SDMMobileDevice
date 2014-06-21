@@ -31,7 +31,7 @@ int main(int argc, const char * argv[]) {
 	dispatch_release(sema);
 	
 	if (apple_test_device != NULL && sdm_test_device != NULL) {
-		CFTypeRef deviceUDID = CFStringCreateCopy(kCFAllocatorDefault, sdm_test_device->ivars.unique_device_id);
+		CFTypeRef deviceUDID = SDMMD_AMDeviceCopyUDID(sdm_test_device);
 		if (!deviceUDID) {
 			deviceUDID = SDMMD_AMDeviceCopyValue(sdm_test_device, NULL, CFSTR(kUniqueDeviceID));
 		}
