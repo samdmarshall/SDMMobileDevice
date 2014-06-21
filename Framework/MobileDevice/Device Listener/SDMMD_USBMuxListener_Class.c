@@ -63,7 +63,6 @@ static void SDMMD_USBMuxListenerRefFinalize(CFTypeRef cf) {
 	dispatch_async(dispatch_get_main_queue(), ^{
 		CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), kSDMMD_USBMuxListenerStoppedListenerNotification, NULL, NULL, true);
 	});
-	Safe(free,listener);
 }
 
 static CFTypeID _kSDMMD_USBMuxListenerRefID = _kCFRuntimeNotATypeID;

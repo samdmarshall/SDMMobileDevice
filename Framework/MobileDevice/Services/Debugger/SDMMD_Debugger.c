@@ -68,7 +68,7 @@ SDMMD_AMDebugConnectionRef SDMMD_AMDebugConnectionCreateForDevice(SDMMD_AMDevice
 void SDMMD_AMDebugConnectionClose(SDMMD_AMDebugConnectionRef dconn) {
 	CFSafeRelease(dconn->device);
 	SDMMD_AMDServiceConnectionInvalidate(dconn->connection);
-	Safe(free, dconn->connection);
+	CFSafeRelease(dconn->connection);
 	Safe(free, dconn);
 }
 
@@ -142,8 +142,8 @@ sdmmd_return_t SDMMD_copy_image(SDMMD_AMDeviceRef device, CFStringRef path) {
 		result = SDMMD_AMDeviceCopyFile(SDMMD_Default_AFC_CopyFile_Callback, NULL, NULL, copyAFCConn, pathString, "PublicStaging/staging.dimage");
 		Safe(free, pathString);
 		
-		SDMMD_AFCOperationRelease(makeStaging);
-		SDMMD_AFCConnectionRelease(copyAFCConn);
+		CFSafeRelease(makeStaging);
+		CFSafeRelease(copyAFCConn);
 		
 		SDMMD_AMDServiceConnectionInvalidate(copyConn);
 	}

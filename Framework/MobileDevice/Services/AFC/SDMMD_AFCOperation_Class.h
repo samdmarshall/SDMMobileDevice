@@ -47,11 +47,22 @@ struct sdmmd_AFCPacket {
 	CFTypeRef response;
 } sdmmd_AFCPacket;
 
-struct sdmmd_AFCOperation {
+struct sdmmd_AFCOperationBody {
 	struct sdmmd_AFCPacket *packet;
 	dispatch_time_t timeout;
-} sdmmd_AFCOperation;
+} sdmmd_AFCOperationBody;
+
+struct sdmmd_AFCOperation {
+	CFRuntimeBase base;
+	struct sdmmd_AFCOperationBody ivars;
+} ATR_PACK sdmmd_AFCOperation;
 
 typedef struct sdmmd_AFCOperation* SDMMD_AFCOperationRef;
+
+void SDMMD_AFCOperationRefClassInitialize(void);
+
+CFTypeID SDMMD_AFCOperationRefGetTypeID(void);
+
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateEmpty();
 
 #endif

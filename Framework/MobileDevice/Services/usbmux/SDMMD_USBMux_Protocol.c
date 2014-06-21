@@ -29,6 +29,7 @@
 #define _SDM_MD_USBMUX_PROTOCOL_C_
 
 #include "SDMMD_USBMux_Protocol.h"
+#include "SDMMD_USBMuxListener.h"
 #include <sys/socket.h>
 
 void SDMMD_USBMuxSend(uint32_t sock, struct USBMuxPacket *packet);

@@ -35,6 +35,8 @@ void InitializeSDMMobileDeviceClasses() {
 	SDMMD_USBMuxListenerRefClassInitialize();
 	SDMMD_AMDeviceRefClassInitialize();
 	SDMMD_AMConnectionRefClassInitialize();
+	SDMMD_AFCConnectionRefClassInitialize();
+	SDMMD_AFCOperationRefClassInitialize();
 	SDMMD_SDMMobileDeviceRefClassInitialize();
 }
 

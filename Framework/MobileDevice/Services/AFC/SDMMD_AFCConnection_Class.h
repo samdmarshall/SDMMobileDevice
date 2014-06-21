@@ -47,4 +47,10 @@ struct sdmmd_AFCConnectionClass {
 
 typedef struct sdmmd_AFCConnectionClass* SDMMD_AFCConnectionRef;
 
+void SDMMD_AFCConnectionRefClassInitialize(void);
+
+CFTypeID SDMMD_AFCConnectionRefGetTypeID(void);
+
+SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreateEmpty();
+
 #endif

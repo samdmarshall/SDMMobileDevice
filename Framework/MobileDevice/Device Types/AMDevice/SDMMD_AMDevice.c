@@ -35,6 +35,7 @@
 #include "SDMMD_Functions.h"
 #include "SDMMD_Service.h"
 #include "SDMMD_USBMuxListener.h"
+#include "SDMMD_USBMux_Protocol.h"
 #include <string.h>
 #include <errno.h>
 #include <openssl/bio.h>
