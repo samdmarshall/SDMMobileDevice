@@ -29,15 +29,23 @@
 #define _SDM_MD_MCP_H_
 
 #include <CoreFoundation/CoreFoundation.h>
+#include "CFRuntime.h"
 #include "SDMMD_USBMuxListener.h"
 
-struct sdm_mobiledevice {
+struct sdm_mobiledevice_body {
 	SDMMD_USBMuxListenerRef usbmuxd;
 	CFArrayRef deviceList;
 	uint64_t peer_certificate_data_index;
+} ATR_PACK sdm_mobiledevice_body;
+
+struct sdm_mobiledevice {
+	CFRuntimeBase base;
+	struct sdm_mobiledevice_body ivars;
 } ATR_PACK sdm_mobiledevice;
 
 typedef struct sdm_mobiledevice* SDMMobileDeviceRef;
+
+CFTypeID SDMMobileDeviceRefGetTypeID();
 
 SDMMobileDeviceRef InitializeSDMMobileDevice();
 void SDMMD_AMDeviceNotificationSubscribe();

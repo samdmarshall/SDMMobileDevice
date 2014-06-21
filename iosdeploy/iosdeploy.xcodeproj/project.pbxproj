@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		220A7C9E194225C600BDF453 /* CFStringAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 220A7C9C194225C600BDF453 /* CFStringAddition.c */; };
 		222EF6611905AC3E000270C3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 222EF6601905AC3E000270C3 /* CoreFoundation.framework */; };
 		222EF6641905AC3E000270C3 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6631905AC3E000270C3 /* main.c */; };
 		222EF6661905AC3E000270C3 /* iosdeploy.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 222EF6651905AC3E000270C3 /* iosdeploy.1 */; };
@@ -53,6 +54,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		220A7C9C194225C600BDF453 /* CFStringAddition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CFStringAddition.c; sourceTree = "<group>"; };
+		220A7C9D194225C600BDF453 /* CFStringAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFStringAddition.h; sourceTree = "<group>"; };
 		222EF65D1905AC3E000270C3 /* iosdeploy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iosdeploy; sourceTree = BUILT_PRODUCTS_DIR; };
 		222EF6601905AC3E000270C3 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		222EF6631905AC3E000270C3 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
@@ -316,6 +319,8 @@
 		222EF6C51905AC70000270C3 /* CoreFoundation */ = {
 			isa = PBXGroup;
 			children = (
+				220A7C9C194225C600BDF453 /* CFStringAddition.c */,
+				220A7C9D194225C600BDF453 /* CFStringAddition.h */,
 				222EF6BF1905AC70000270C3 /* CFDataAddition.h */,
 				222EF6C01905AC70000270C3 /* CFDataAddition.c */,
 				222EF6C11905AC70000270C3 /* CFDictionaryAddition.h */,
@@ -445,6 +450,7 @@
 				222EF6DA1905AC70000270C3 /* Vector.c in Sources */,
 				222EF6E81905AE3E000270C3 /* dev.c in Sources */,
 				222EF6B61905AC56000270C3 /* SDMMD_Notification.c in Sources */,
+				220A7C9E194225C600BDF453 /* CFStringAddition.c in Sources */,
 				222EF6A51905AC56000270C3 /* SDMMD_AppleFileConduit.c in Sources */,
 				222EF6B01905AC56000270C3 /* SDMMD_AMDevice.c in Sources */,
 				222EF6B31905AC56000270C3 /* SDMMD_MRestorableDevice.c in Sources */,
@@ -561,6 +567,7 @@
 				222EF66B1905AC3E000270C3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

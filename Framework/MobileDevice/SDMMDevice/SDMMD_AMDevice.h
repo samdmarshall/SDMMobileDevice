@@ -29,6 +29,7 @@
 #define _SDM_MD_ADMDEVICE_H_
 
 #include <CoreFoundation/CoreFoundation.h>
+#include "CFRuntime.h"
 #include <openssl/ssl.h>
 #include "SDMMD_Error.h"
 #include "SDMMD_Keys.h"
@@ -85,7 +86,7 @@ struct AMDeviceClassBody {
 } ATR_PACK AMDeviceClassBody; // size 0x98
 
 struct sdmmd_am_device {
-	struct AMDeviceClassHeader base;
+	CFRuntimeBase base;
 	struct AMDeviceClassBody ivars;
 } ATR_PACK sdmmd_am_device;
 
