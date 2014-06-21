@@ -1,5 +1,5 @@
 /*
- *  SDMMD_Classes.h
+ *  SDMMD_AFCOperation_Class.h
  *  SDMMobileDevice
  *
  * Copyright (c) 2014, Sam Marshall
@@ -25,14 +25,33 @@
  *
  */
 
-#ifndef _SDM_MD_CLASSES_H_
-#define _SDM_MD_CLASSES_H_
+#ifndef _SDM_MD_AFCOPERATION_CLASS_H_
+#define _SDM_MD_AFCOPERATION_CLASS_H_
 
-#include "SDMMD_MCP_Class.h"
-#include "SDMMD_AMDevice_Class.h"
-#include "SDMMD_Connection_Class.h"
-#include "SDMMD_USBMuxListener_Class.h"
-#include "SDMMD_AFCOperation_Class.h"
-#include "SDMMD_AFCConnection_Class.h"
+#include <CoreFoundation/CoreFoundation.h>
+#include "CFRuntime.h"
+#include "Core.h"
+
+typedef struct SDMMD_AFCPacketHeader {
+	uint64_t signature;
+	uint64_t packetLen;
+	uint64_t headerLen;
+	uint64_t pid;
+	uint64_t type;
+} ATR_PACK SDMMD_AFCPacketHeader;
+
+struct sdmmd_AFCPacket {
+	SDMMD_AFCPacketHeader header;
+	void* header_data;
+	void* body_data;
+	CFTypeRef response;
+} sdmmd_AFCPacket;
+
+struct sdmmd_AFCOperation {
+	struct sdmmd_AFCPacket *packet;
+	dispatch_time_t timeout;
+} sdmmd_AFCOperation;
+
+typedef struct sdmmd_AFCOperation* SDMMD_AFCOperationRef;
 
 #endif

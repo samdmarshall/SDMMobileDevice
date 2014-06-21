@@ -1,5 +1,5 @@
 /*
- *  SDMMD_Classes.h
+ *  SDMMD_AFCConnection_Class.h
  *  SDMMobileDevice
  *
  * Copyright (c) 2014, Sam Marshall
@@ -25,14 +25,26 @@
  *
  */
 
-#ifndef _SDM_MD_CLASSES_H_
-#define _SDM_MD_CLASSES_H_
+#ifndef _SDM_MD_AFCCONNECTION_CLASS_H_
+#define _SDM_MD_AFCCONNECTION_CLASS_H_
 
-#include "SDMMD_MCP_Class.h"
-#include "SDMMD_AMDevice_Class.h"
+#include <CoreFoundation/CoreFoundation.h>
+#include "CFRuntime.h"
+#include "Core.h"
 #include "SDMMD_Connection_Class.h"
-#include "SDMMD_USBMuxListener_Class.h"
-#include "SDMMD_AFCOperation_Class.h"
-#include "SDMMD_AFCConnection_Class.h"
+
+struct sdmmd_AFCConnectionClassBody {
+	SDMMD_AMConnectionRef handle;
+	__unsafe_unretained dispatch_queue_t operationQueue;
+	__unsafe_unretained dispatch_semaphore_t semaphore;
+	uint64_t operationCount;
+} sdmmd_AFCConnectionClassBody;
+
+struct sdmmd_AFCConnectionClass {
+	CFRuntimeBase base;
+	struct sdmmd_AFCConnectionClassBody ivars;
+} ATR_PACK sdmmd_AFCConnectionClass;
+
+typedef struct sdmmd_AFCConnectionClass* SDMMD_AFCConnectionRef;
 
 #endif

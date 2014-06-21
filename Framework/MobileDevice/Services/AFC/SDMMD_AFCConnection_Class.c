@@ -1,5 +1,5 @@
 /*
- *  SDMMD_Classes.h
+ *  SDMMD_AFCConnection_Class.c
  *  SDMMobileDevice
  *
  * Copyright (c) 2014, Sam Marshall
@@ -25,14 +25,9 @@
  *
  */
 
-#ifndef _SDM_MD_CLASSES_H_
-#define _SDM_MD_CLASSES_H_
+#ifndef _SDM_MD_AFCCONNECTION_CLASS_C_
+#define _SDM_MD_AFCCONNECTION_CLASS_C_
 
-#include "SDMMD_MCP_Class.h"
-#include "SDMMD_AMDevice_Class.h"
-#include "SDMMD_Connection_Class.h"
-#include "SDMMD_USBMuxListener_Class.h"
-#include "SDMMD_AFCOperation_Class.h"
 #include "SDMMD_AFCConnection_Class.h"
 
 #endif

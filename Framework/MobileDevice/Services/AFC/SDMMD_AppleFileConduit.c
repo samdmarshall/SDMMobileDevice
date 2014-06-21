@@ -42,7 +42,7 @@ void SDMMD_AFCHeaderInit(SDMMD_AFCPacketHeader *header, uint32_t command, uint32
 SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(SDMMD_AMConnectionRef conn) {
 	SDMMD_AFCConnectionRef afc = calloc(1, sizeof(struct sdmmd_AFCConnectionClass));
 	if (afc != NULL) {
-		afc->handle = conn;
+		afc->ivars.handle = conn;
 		char *udidString = SDMCFStringGetString((conn->ivars.device)->ivars.unique_device_id);
 		CFStringRef date_string = SDMGetCurrentDateString();
 		char *dateString = SDMCFStringGetString(date_string);
@@ -51,10 +51,10 @@ SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(SDMMD_AMConnectionRef conn) {
 		Safe(free, udidString);
 		Safe(free, dateString);
 		char *queueName = SDMCFStringGetString(name);
-		afc->operationQueue = dispatch_queue_create(queueName, NULL);
+		afc->ivars.operationQueue = dispatch_queue_create(queueName, NULL);
 		Safe(free, queueName);
 		CFSafeRelease(name);
-		afc->operationCount = 0;
+		afc->ivars.operationCount = 0;
 	}
 	return afc;
 }
@@ -80,8 +80,8 @@ void SDMMD_AFCOperationRelease(SDMMD_AFCOperationRef operation) {
 
 void SDMMD_AFCConnectionRelease(SDMMD_AFCConnectionRef conn) {
 	if (conn) {
-		SDMMD_AMDServiceConnectionInvalidate(conn->handle);
-		dispatch_release(conn->operationQueue);
+		SDMMD_AMDServiceConnectionInvalidate(conn->ivars.handle);
+		dispatch_release(conn->ivars.operationQueue);
 	}
 }
 
@@ -126,12 +126,12 @@ sdmmd_return_t SDMMD_AFCSendOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOper
 	if (op->packet->header.headerLen > sizeof(SDMMD_AFCPacketHeader)) {
 		CFDataAppendBytes(headerData, (UInt8*)(op->packet->header_data), (uint32_t)op->packet->header.headerLen - sizeof(SDMMD_AFCPacketHeader));
 	}
-	result = SDMMD_DirectServiceSend(SDMMD_TranslateConnectionToSocket(conn->handle), headerData);
+	result = SDMMD_DirectServiceSend(SDMMD_TranslateConnectionToSocket(conn->ivars.handle), headerData);
 	CFSafeRelease(headerData);
 	//printf("header sent status: %08x %s\n",result,SDMMD_AMDErrorString(result));
 	if (!(op->packet->header.headerLen == op->packet->header.packetLen && op->packet->body_data == NULL)) {
 		CFDataRef bodyData = CFDataCreate(kCFAllocatorDefault, (UInt8*)(op->packet->body_data), (uint32_t)op->packet->header.packetLen - (uint32_t)op->packet->header.headerLen);
-		result = SDMMD_DirectServiceSend(SDMMD_TranslateConnectionToSocket(conn->handle), bodyData);
+		result = SDMMD_DirectServiceSend(SDMMD_TranslateConnectionToSocket(conn->ivars.handle), bodyData);
 		CFSafeRelease(bodyData);
 		//printf("body sent status: %08x %s\n",result,SDMMD_AMDErrorString(result));
 	}
@@ -145,7 +145,7 @@ sdmmd_return_t SDMMD_AFCReceiveOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 	CFDataAppendBytes(headerData, (UInt8*)zeros, sizeof(SDMMD_AFCPacketHeader));
 	free(zeros);
 	
-	result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(conn->handle), (CFDataRef*)&headerData);
+	result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(conn->ivars.handle), (CFDataRef*)&headerData);
 	if (result == kAMDSuccess) {
 		SDMMD_AFCPacketHeader *header = (SDMMD_AFCPacketHeader *)CFDataGetBytePtr(headerData);
 		
@@ -154,7 +154,7 @@ sdmmd_return_t SDMMD_AFCReceiveOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 		char *body = calloc(body_length, sizeof(char));
 		CFDataAppendBytes(bodyData, (UInt8*)body, body_length);
 		free(body);
-		result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(conn->handle), (CFDataRef*)&bodyData);
+		result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(conn->ivars.handle), (CFDataRef*)&bodyData);
 		if (bodyData) {
 			(*operation)->packet->response = bodyData;
 		}
@@ -166,11 +166,11 @@ sdmmd_return_t SDMMD_AFCReceiveOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 
 sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCOperationRef *operation) {
 	__block sdmmd_return_t result = kAMDSuccess;
-	dispatch_sync(conn->operationQueue, ^{
-		conn->semaphore = dispatch_semaphore_create(0);
+	dispatch_sync(conn->ivars.operationQueue, ^{
+		conn->ivars.semaphore = dispatch_semaphore_create(0);
 		(*operation)->packet->header.pid = k64BitMask; //conn->operationCount;
 		result = SDMMD_AFCSendOperation(conn, *operation);
-		dispatch_semaphore_wait(conn->semaphore, (*operation)->timeout);
+		dispatch_semaphore_wait(conn->ivars.semaphore, (*operation)->timeout);
 		SDMMD_AFCReceiveOperation(conn, operation);
 		switch ((*operation)->packet->header.type) {
 			case SDMMD_AFC_Packet_Status: {
@@ -314,8 +314,8 @@ sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 			}
 		}
 		
-		dispatch_release(conn->semaphore);
-		conn->operationCount++;
+		dispatch_release(conn->ivars.semaphore);
+		conn->ivars.operationCount++;
 	});
 	return result;
 }
