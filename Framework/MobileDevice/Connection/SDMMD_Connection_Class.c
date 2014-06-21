@@ -30,4 +30,55 @@
 
 #include "SDMMD_Connection_Class.h"
 
+static Boolean SDMMD_AMConnectionRefEqual(CFTypeRef cf1, CFTypeRef cf2) {
+	SDMMD_AMConnectionRef connection1 = (SDMMD_AMConnectionRef)cf1;
+	SDMMD_AMConnectionRef connection2 = (SDMMD_AMConnectionRef)cf2;
+	
+	return (connection1->ivars.socket == connection2->ivars.socket);
+}
+
+static CFStringRef SDMMD_AMConnectionRefCopyFormattingDesc(CFTypeRef cf, CFDictionaryRef formatOpts) {
+	SDMMD_AMConnectionRef connection = (SDMMD_AMConnectionRef)cf;
+	return CFStringCreateWithFormat(CFGetAllocator(connection), NULL, CFSTR("<SDMMD_AMConnectionRef %p>{socket = %d}"), connection, connection->ivars.socket);
+}
+
+static CFStringRef SDMMD_AMConnectionRefCopyDebugDesc(CFTypeRef cf) {
+	SDMMD_AMConnectionRef connection = (SDMMD_AMConnectionRef)cf;
+	return CFStringCreateWithFormat(CFGetAllocator(connection), NULL, CFSTR("<SDMMD_AMConnectionRef %p>{socket = %d}"), connection, connection->ivars.socket);
+}
+
+static void SDMMD_AMConnectionRefFinalize(CFTypeRef cf) {
+	SDMMD_AMConnectionRef connection = (SDMMD_AMConnectionRef)cf;
+	Safe(SSL_free,connection->ivars.ssl);
+	connection->ivars.ssl = NULL;
+}
+
+static CFTypeID _kSDMMD_AMConnectionRefID = _kCFRuntimeNotATypeID;
+
+static CFRuntimeClass _kSDMMD_AMConnectionRefClass = {0};
+
+void SDMMD_AMConnectionRefClassInitialize(void) {
+	_kSDMMD_AMConnectionRefClass.version = 0;
+	_kSDMMD_AMConnectionRefClass.className = "SDMMD_AMConnectionRef";
+	_kSDMMD_AMConnectionRefClass.init = NULL;
+	_kSDMMD_AMConnectionRefClass.copy = NULL;
+	_kSDMMD_AMConnectionRefClass.finalize = SDMMD_AMConnectionRefFinalize;
+	_kSDMMD_AMConnectionRefClass.equal = SDMMD_AMConnectionRefEqual;
+	_kSDMMD_AMConnectionRefClass.hash = NULL;
+	_kSDMMD_AMConnectionRefClass.copyFormattingDesc = SDMMD_AMConnectionRefCopyFormattingDesc;
+	_kSDMMD_AMConnectionRefClass.copyDebugDesc = SDMMD_AMConnectionRefCopyDebugDesc;
+	_kSDMMD_AMConnectionRefClass.reclaim = NULL;
+	_kSDMMD_AMConnectionRefID = _CFRuntimeRegisterClass((const CFRuntimeClass * const)&_kSDMMD_AMConnectionRefClass);
+}
+
+CFTypeID SDMMD_AMConnectionRefGetTypeID(void) {
+	return _kSDMMD_AMConnectionRefID;
+}
+
+SDMMD_AMConnectionRef SDMMD_AMConnectionCreateEmpty() {
+	uint32_t extra = sizeof(AMConnectionClassBody);
+	SDMMD_AMConnectionRef device = (SDMMD_AMConnectionRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, _kSDMMD_AMConnectionRefID, extra, NULL);
+	return device;
+}
+
 #endif

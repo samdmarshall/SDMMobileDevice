@@ -117,7 +117,7 @@ void SDMMD_USBMuxResponseCallback(void *context, struct USBMuxPacket *packet) {
 				printf("usbmuxd returned%s: %d - %s.\n", (response.code ? " error" : ""), response.code, (response.string ? CFStringGetCStringPtr(response.string, kCFStringEncodingUTF8) : "Unknown Error Description"));
 			}
 		});
-		dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->semaphore);
+		dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->ivars.semaphore);
 	}
 }
 
@@ -172,7 +172,7 @@ void SDMMD_USBMuxDetachedCallback(void *context, struct USBMuxPacket *packet) {
 }
 
 void SDMMD_USBMuxLogsCallback(void *context, struct USBMuxPacket *packet) {
-	dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->semaphore);
+	dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->ivars.semaphore);
 }
 
 void SDMMD_USBMuxDeviceListCallback(void *context, struct USBMuxPacket *packet) {
@@ -195,14 +195,14 @@ void SDMMD_USBMuxDeviceListCallback(void *context, struct USBMuxPacket *packet) 
 			struct USBMuxPacket *devicePacket = calloc(1, sizeof(struct USBMuxPacket));
 			memcpy(devicePacket, packet, sizeof(struct USBMuxPacket));
 			devicePacket->payload = CFArrayGetValueAtIndex(devices, i);
-			((SDMMD_USBMuxListenerRef)context)->attachedCallback(context, devicePacket);
+			((SDMMD_USBMuxListenerRef)context)->ivars.attachedCallback(context, devicePacket);
 		}
 	}
-	dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->semaphore);
+	dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->ivars.semaphore);
 }
 
 void SDMMD_USBMuxListenerListCallback(void *context, struct USBMuxPacket *packet) {
-	dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->semaphore);
+	dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->ivars.semaphore);
 }
 
 void SDMMD_USBMuxUnknownCallback(void *context, struct USBMuxPacket *packet) {
@@ -210,37 +210,37 @@ void SDMMD_USBMuxUnknownCallback(void *context, struct USBMuxPacket *packet) {
 	if (packet->payload) {
 		PrintCFType(packet->payload);
 	}
-	dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->semaphore);
+	dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->ivars.semaphore);
 }
 
 SDMMD_USBMuxListenerRef SDMMD_USBMuxCreate() {
 	SDMMD_USBMuxListenerRef listener = (SDMMD_USBMuxListenerRef)calloc(1, sizeof(struct USBMuxListenerClass));
-	listener->socket = -1;
-	listener->isActive = false;
-	listener->socketQueue = dispatch_queue_create("com.samdmarshall.sdmmobiledevice.socketQueue", NULL);
-	listener->responseCallback = SDMMD_USBMuxResponseCallback;
-	listener->attachedCallback = SDMMD_USBMuxAttachedCallback;
-	listener->detachedCallback = SDMMD_USBMuxDetachedCallback;
-	listener->logsCallback = SDMMD_USBMuxLogsCallback;
-	listener->deviceListCallback = SDMMD_USBMuxDeviceListCallback;
-	listener->listenerListCallback = SDMMD_USBMuxListenerListCallback;
-	listener->unknownCallback = SDMMD_USBMuxUnknownCallback;
-	listener->responses = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, NULL);
+	listener->ivars.socket = -1;
+	listener->ivars.isActive = false;
+	listener->ivars.socketQueue = dispatch_queue_create("com.samdmarshall.sdmmobiledevice.socketQueue", NULL);
+	listener->ivars.responseCallback = SDMMD_USBMuxResponseCallback;
+	listener->ivars.attachedCallback = SDMMD_USBMuxAttachedCallback;
+	listener->ivars.detachedCallback = SDMMD_USBMuxDetachedCallback;
+	listener->ivars.logsCallback = SDMMD_USBMuxLogsCallback;
+	listener->ivars.deviceListCallback = SDMMD_USBMuxDeviceListCallback;
+	listener->ivars.listenerListCallback = SDMMD_USBMuxListenerListCallback;
+	listener->ivars.unknownCallback = SDMMD_USBMuxUnknownCallback;
+	listener->ivars.responses = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, NULL);
 	return listener;
 }
 
 void SDMMD_USBMuxClose(SDMMD_USBMuxListenerRef listener) {
-	listener->isActive = false;
-	CFSafeRelease(listener->responses);
-	Safe(close,listener->socket);
-	Safe(dispatch_release,listener->socketQueue);
-	listener->responseCallback = NULL;
-	listener->attachedCallback = NULL;
-	listener->detachedCallback = NULL;
-	listener->logsCallback = NULL;
-	listener->deviceListCallback = NULL;
-	listener->listenerListCallback = NULL;
-	listener->unknownCallback = NULL;
+	listener->ivars.isActive = false;
+	CFSafeRelease(listener->ivars.responses);
+	Safe(close,listener->ivars.socket);
+	Safe(dispatch_release,listener->ivars.socketQueue);
+	listener->ivars.responseCallback = NULL;
+	listener->ivars.attachedCallback = NULL;
+	listener->ivars.detachedCallback = NULL;
+	listener->ivars.logsCallback = NULL;
+	listener->ivars.deviceListCallback = NULL;
+	listener->ivars.listenerListCallback = NULL;
+	listener->ivars.unknownCallback = NULL;
 	dispatch_async(dispatch_get_main_queue(), ^{
 		CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), kSDMMD_USBMuxListenerStoppedListenerNotification, NULL, NULL, true);
 	});
@@ -350,40 +350,40 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port
 void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 	__block uint64_t bad_packet_counter = 0;
 	dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0x0), ^{
-		(*listener)->socket = SDMMD_ConnectToUSBMux();
-		(*listener)->socketSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, (*listener)->socket, 0x0, (*listener)->socketQueue);
-		dispatch_source_set_event_handler((*listener)->socketSource, ^{
+		(*listener)->ivars.socket = SDMMD_ConnectToUSBMux();
+		(*listener)->ivars.socketSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, (*listener)->ivars.socket, 0x0, (*listener)->ivars.socketQueue);
+		dispatch_source_set_event_handler((*listener)->ivars.socketSource, ^{
             //printf("socketSourceEventHandler: fired\n");
 			struct USBMuxPacket *packet = (struct USBMuxPacket *)calloc(0x1, sizeof(struct USBMuxPacket));
-			SDMMD_USBMuxReceive((*listener)->socket, packet);
+			SDMMD_USBMuxReceive((*listener)->ivars.socket, packet);
 			if (CFPropertyListIsValid(packet->payload, kCFPropertyListXMLFormat_v1_0)) {
 				if (CFDictionaryContainsKey(packet->payload, CFSTR("MessageType"))) {
 					CFStringRef type = CFDictionaryGetValue(packet->payload, CFSTR("MessageType"));
 					if (CFStringCompare(type, SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketResultType], 0x0) == 0x0) {
-						(*listener)->responseCallback((*listener), packet);
-						CFArrayAppendValue((*listener)->responses, packet);
+						(*listener)->ivars.responseCallback((*listener), packet);
+						CFArrayAppendValue((*listener)->ivars.responses, packet);
 					}
 					else if (CFStringCompare(type, SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketAttachType], 0x0) == 0x0) {
-						(*listener)->attachedCallback((*listener), packet);
+						(*listener)->ivars.attachedCallback((*listener), packet);
 					}
 					else if (CFStringCompare(type, SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketDetachType], 0x0) == 0x0) {
-						(*listener)->detachedCallback((*listener), packet);
+						(*listener)->ivars.detachedCallback((*listener), packet);
 					}
 				}
 				else {
 					if (CFDictionaryContainsKey(packet->payload, CFSTR("Logs"))) {
-						(*listener)->logsCallback((*listener), packet);
+						(*listener)->ivars.logsCallback((*listener), packet);
 					}
 					else if (CFDictionaryContainsKey(packet->payload, CFSTR("DeviceList"))) {
-						(*listener)->deviceListCallback((*listener), packet);
+						(*listener)->ivars.deviceListCallback((*listener), packet);
 					}
 					else if (CFDictionaryContainsKey(packet->payload, CFSTR("ListenerList"))) {
-						(*listener)->listenerListCallback((*listener), packet);
+						(*listener)->ivars.listenerListCallback((*listener), packet);
 					}
 					else {
-						(*listener)->unknownCallback((*listener), packet);
+						(*listener)->ivars.unknownCallback((*listener), packet);
 					}
-					CFArrayAppendValue((*listener)->responses, packet);
+					CFArrayAppendValue((*listener)->ivars.responses, packet);
 				}
 			}
 			else {
@@ -395,18 +395,18 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 				}
             }
 		});
-        dispatch_source_set_cancel_handler((*listener)->socketSource, ^{
+        dispatch_source_set_cancel_handler((*listener)->ivars.socketSource, ^{
             printf("socketSourceEventCancelHandler: source canceled\n");
         });
-		dispatch_resume((*listener)->socketSource);
+		dispatch_resume((*listener)->ivars.socketSource);
 				
-		while (!(*listener)->isActive) {
+		while (!(*listener)->ivars.isActive) {
 			struct USBMuxPacket *startListen = SDMMD_USBMuxCreatePacketType(kSDMMD_USBMuxPacketListenType, NULL);
 			SDMMD_USBMuxListenerSend(*listener, &startListen);
 			if (startListen->payload) {
 				struct USBMuxResponseCode response = SDMMD_USBMuxParseReponseCode(startListen->payload);
 				if (response.code == 0x0){
-					(*listener)->isActive = true;
+					(*listener)->ivars.isActive = true;
                 }
 				else {
                     printf("%s: non-zero response code. trying again. code:%i string:%s\n", __FUNCTION__, response.code, response.string ? CFStringGetCStringPtr(response.string, kCFStringEncodingUTF8):"");
@@ -421,30 +421,30 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 }
 
 void SDMMD_USBMuxListenerSend(SDMMD_USBMuxListenerRef listener, struct USBMuxPacket **packet) {
-	listener->semaphore = dispatch_semaphore_create(0x0);
-	SDMMD_USBMuxSend(listener->socket, *packet);
-	dispatch_semaphore_wait(listener->semaphore, (*packet)->timeout);
+	listener->ivars.semaphore = dispatch_semaphore_create(0x0);
+	SDMMD_USBMuxSend(listener->ivars.socket, *packet);
+	dispatch_semaphore_wait(listener->ivars.semaphore, (*packet)->timeout);
 	
-	CFMutableArrayRef updateWithRemove = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, listener->responses);
+	CFMutableArrayRef updateWithRemove = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, listener->ivars.responses);
 	struct USBMuxPacket *responsePacket = NULL;
 	uint32_t removeCounter = 0x0;
-	for (uint32_t i = 0x0; i < CFArrayGetCount(listener->responses); i++) {
-		struct USBMuxPacket *response = (struct USBMuxPacket *)CFArrayGetValueAtIndex(listener->responses, i);
+	for (uint32_t i = 0x0; i < CFArrayGetCount(listener->ivars.responses); i++) {
+		struct USBMuxPacket *response = (struct USBMuxPacket *)CFArrayGetValueAtIndex(listener->ivars.responses, i);
 		if ((*packet)->body.tag == response->body.tag) {
 			responsePacket = response;
 			CFArrayRemoveValueAtIndex(updateWithRemove, i-removeCounter);
 			removeCounter++;
 		}
 	}
-	CFSafeRelease(listener->responses);
-	listener->responses = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, updateWithRemove);
+	CFSafeRelease(listener->ivars.responses);
+	listener->ivars.responses = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, updateWithRemove);
 	CFSafeRelease(updateWithRemove);
 	USBMuxPacketRelease(*packet);
 	if (!responsePacket) {
 		responsePacket = (struct USBMuxPacket *)calloc(0x1, sizeof(struct USBMuxPacket));
 	}
 	*packet = responsePacket;
-	dispatch_release(listener->semaphore);
+	dispatch_release(listener->ivars.semaphore);
 }
 
 void SDMMD_USBMuxSend(uint32_t sock, struct USBMuxPacket *packet) {	
@@ -468,7 +468,7 @@ void SDMMD_USBMuxSend(uint32_t sock, struct USBMuxPacket *packet) {
 }
 
 void SDMMD_USBMuxListenerReceive(SDMMD_USBMuxListenerRef listener, struct USBMuxPacket *packet) {
-	SDMMD_USBMuxReceive(listener->socket, packet);
+	SDMMD_USBMuxReceive(listener->ivars.socket, packet);
 }
 
 void SDMMD_USBMuxReceive(uint32_t sock, struct USBMuxPacket *packet) {

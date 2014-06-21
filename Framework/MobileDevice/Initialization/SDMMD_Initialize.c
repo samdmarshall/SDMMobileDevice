@@ -33,6 +33,7 @@
 
 void InitializeSDMMobileDeviceClasses() {
 	SDMMD_AMDeviceRefClassInitialize();
+	SDMMD_AMConnectionRefClassInitialize();
 	SDMMD_SDMMobileDeviceRefClassInitialize();
 }
 

@@ -1,16 +1,16 @@
 /*
- *  SDMMD_USBmuxListener.h
+ *  SDMMD_USBmuxListener_Class.h
  *  SDMMobileDevice
  *
  * Copyright (c) 2014, Sam Marshall
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the 
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met:
  *
  * 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
  *
- * 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer 
+ * 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer
  * 		in the documentation and/or other materials provided with the distribution.
  *
  * 3. Neither the name of Sam Marshall nor the names of its contributors may be used to endorse or promote products derived from this
@@ -25,34 +25,37 @@
  *
  */
 
-#ifndef _SDM_MD_USBMUXLISTENER_H_
-#define _SDM_MD_USBMUXLISTENER_H_
+#ifndef _SDM_MD_USBMUXLISTENER_CLASS_H_
+#define _SDM_MD_USBMUXLISTENER_CLASS_H_
 
-#include "SDMMD_USBMuxListener_Class.h"
-#include "SDMMD_Error.h"
-#include "SDMMD_AMDevice.h"
+#include <CoreFoundation/CoreFoundation.h>
+#include "CFRuntime.h"
+#include "Core.h"
+#include "SDMMD_USBMuxListener_Types.h"
 
-#pragma mark -
-#pragma mark Functions
-#pragma mark -
+typedef void (*callbackFunction)(void *, struct USBMuxPacket *);
 
-sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port, uint32_t *socketConn);
+struct USBMuxListenerClassBody {
+	uint32_t socket;
+	bool isActive;
+	__unsafe_unretained dispatch_queue_t socketQueue;
+	__unsafe_unretained dispatch_source_t socketSource;
+	__unsafe_unretained dispatch_semaphore_t semaphore;
+	callbackFunction responseCallback;
+	callbackFunction attachedCallback;
+	callbackFunction detachedCallback;
+	callbackFunction logsCallback;
+	callbackFunction deviceListCallback;
+	callbackFunction listenerListCallback;
+	callbackFunction unknownCallback;
+	CFMutableArrayRef responses;
+} USBMuxListenerClassBody;
 
-SDMMD_USBMuxListenerRef SDMMD_USBMuxCreate();
-void SDMMD_USBMuxClose(SDMMD_USBMuxListenerRef listener);
-void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener);
+struct USBMuxListenerClass {
+	CFRuntimeBase base;
+	struct USBMuxListenerClassBody ivars;
+} ATR_PACK USBMuxListenerClass;
 
-/*
- * Pass reference to packet to send. Upon return, *packet will either contain response
- * packet or empty packet structure.
- */
-void SDMMD_USBMuxListenerSend(SDMMD_USBMuxListenerRef listener, struct USBMuxPacket **packet);
-/*
- * Pass packet structure to store result in.
- */
-void SDMMD_USBMuxListenerReceive(SDMMD_USBMuxListenerRef listener, struct USBMuxPacket *packet);
-
-struct USBMuxPacket * SDMMD_USBMuxCreatePacketType(SDMMD_USBMuxPacketMessageType type, CFDictionaryRef payload);
-void USBMuxPacketRelease(struct USBMuxPacket *packet);
+typedef struct USBMuxListenerClass * SDMMD_USBMuxListenerRef;
 
 #endif
