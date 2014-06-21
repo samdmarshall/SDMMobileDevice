@@ -183,6 +183,7 @@
 		22FB07FF1955FE2000B73D75 /* SDMMD_AFCConnection_Class.h in Headers */ = {isa = PBXBuildFile; fileRef = 22FB07FA1955FC4B00B73D75 /* SDMMD_AFCConnection_Class.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22FB08001955FE2000B73D75 /* SDMMD_AFCOperation_Class.h in Headers */ = {isa = PBXBuildFile; fileRef = 22FB07F71955FC2A00B73D75 /* SDMMD_AFCOperation_Class.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22FB08011955FE2000B73D75 /* SDMMD_pcap.h in Headers */ = {isa = PBXBuildFile; fileRef = 22A429B1192A7F3F000F983C /* SDMMD_pcap.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22FB08051955FF5400B73D75 /* SDMMD_USBMux_Protocol.c in Sources */ = {isa = PBXBuildFile; fileRef = 22FB08041955FF5400B73D75 /* SDMMD_USBMux_Protocol.c */; };
 		3F38D21C18AECF7C00DE5FA9 /* SDMTypeTranslation.h in Headers */ = {isa = PBXBuildFile; fileRef = 3F38D21B18AECE1200DE5FA9 /* SDMTypeTranslation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3F38D22218B3B82800DE5FA9 /* Array.h in Headers */ = {isa = PBXBuildFile; fileRef = 2278490F18AFE5A100D1D6FB /* Array.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
@@ -350,6 +351,8 @@
 		22FB07FA1955FC4B00B73D75 /* SDMMD_AFCConnection_Class.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_AFCConnection_Class.h; sourceTree = "<group>"; };
 		22FB07FB1955FC5700B73D75 /* SDMMD_AFCConnection_Class.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AFCConnection_Class.c; sourceTree = "<group>"; };
 		22FB07FD1955FCCF00B73D75 /* SDMMD_AFC_Types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_AFC_Types.h; sourceTree = "<group>"; };
+		22FB08031955FF4C00B73D75 /* SDMMD_USBMux_Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_USBMux_Protocol.h; sourceTree = "<group>"; };
+		22FB08041955FF5400B73D75 /* SDMMD_USBMux_Protocol.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_USBMux_Protocol.c; sourceTree = "<group>"; };
 		3F38D21B18AECE1200DE5FA9 /* SDMTypeTranslation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMTypeTranslation.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -622,6 +625,7 @@
 			children = (
 				2215A8AE175010A300AD1981 /* SDMMD_Service.h */,
 				2215A8AF175010A300AD1981 /* SDMMD_Service.c */,
+				22FB08021955FF0C00B73D75 /* usbmux */,
 				22FB07DA1955E4C700B73D75 /* Lockdown */,
 				222C290418A32C23005B3A26 /* AuthInstall */,
 				22FB07D41955DEE200B73D75 /* Notifications */,
@@ -799,6 +803,16 @@
 			path = MobileDevice/Base/SSL;
 			sourceTree = SOURCE_ROOT;
 		};
+		22FB08021955FF0C00B73D75 /* usbmux */ = {
+			isa = PBXGroup;
+			children = (
+				22FB08031955FF4C00B73D75 /* SDMMD_USBMux_Protocol.h */,
+				22FB08041955FF5400B73D75 /* SDMMD_USBMux_Protocol.c */,
+			);
+			name = usbmux;
+			path = MobileDevice/Services/usbmux;
+			sourceTree = SOURCE_ROOT;
+		};
 		29B97314FDCFA39411CA2CEA /* SDM_MD_Demo */ = {
 			isa = PBXGroup;
 			children = (
@@ -878,18 +892,18 @@
 				224CAB7F191455A50079689D /* SDMMD_MobileBackup2.h in Headers */,
 				22A58E1F191157F600303D31 /* CFStringAddition.h in Headers */,
 				222EF6EC1905BDB8000270C3 /* SDMMD_MobileConfig.h in Headers */,
+				22EFC8B71900291600C29BFF /* File.h in Headers */,
+				22FB07F51955FB5500B73D75 /* SDMMD_USBMuxListener_Types.h in Headers */,
 				22FB07E71955EB8900B73D75 /* SDMMD_Classes.h in Headers */,
 				22FB07E81955EB8900B73D75 /* SDMMD_MCP_Class.h in Headers */,
 				22FB07E91955EB8900B73D75 /* SDMMD_AMDevice_Class.h in Headers */,
-				22EFC8B71900291600C29BFF /* File.h in Headers */,
-				22FB07F51955FB5500B73D75 /* SDMMD_USBMuxListener_Types.h in Headers */,
 				22FB07F61955FB5500B73D75 /* SDMMD_USBMuxListener_Class.h in Headers */,
-				22FB07F01955F24900B73D75 /* SDMMD_SSL_Functions.h in Headers */,
 				22FB07ED1955F04200B73D75 /* SDMMD_Connection_Class.h in Headers */,
-				22FB07DE1955E95300B73D75 /* SDMMD_Initialize.h in Headers */,
-				22FB07FE1955FE2000B73D75 /* SDMMD_AFC_Types.h in Headers */,
 				22FB07FF1955FE2000B73D75 /* SDMMD_AFCConnection_Class.h in Headers */,
 				22FB08001955FE2000B73D75 /* SDMMD_AFCOperation_Class.h in Headers */,
+				22FB07F01955F24900B73D75 /* SDMMD_SSL_Functions.h in Headers */,
+				22FB07DE1955E95300B73D75 /* SDMMD_Initialize.h in Headers */,
+				22FB07FE1955FE2000B73D75 /* SDMMD_AFC_Types.h in Headers */,
 				22FB08011955FE2000B73D75 /* SDMMD_pcap.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1059,6 +1073,7 @@
 				22AD936A178A17B0002ACFB1 /* SDMMD_MRestoreModeDevice.c in Sources */,
 				22FB07E11955E9C700B73D75 /* SDMMD_MCP_Class.c in Sources */,
 				22C892AB189D75A1008B1D2D /* CFDataAddition.c in Sources */,
+				22FB08051955FF5400B73D75 /* SDMMD_USBMux_Protocol.c in Sources */,
 				22FB07EC1955ECCD00B73D75 /* SDMMD_Connection_Class.c in Sources */,
 				22D5F317179C81FD00C34745 /* SDMMD_Applications.c in Sources */,
 				22D5F319179C820200C34745 /* SDMMD_Notification.c in Sources */,
