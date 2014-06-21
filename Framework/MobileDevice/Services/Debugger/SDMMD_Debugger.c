@@ -81,7 +81,7 @@ sdmmd_return_t SDMMD_AMDebugConnectionStart(SDMMD_AMDebugConnectionRef dconn) {
 	
 	dconn->connection = SDMMD_AMDServiceConnectionCreate(0, NULL, NULL);
 	result = SDMMD_AMDeviceStartService(dconn->device, CFSTR(AMSVC_DEBUG_SERVER), NULL, &(dconn->connection));
-		
+	
 	result = SDMMD_AMDeviceStopSession(dconn->device);
 	CheckErrorAndReturn(result);
 	
@@ -572,11 +572,12 @@ sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCom
 	if (SDM_MD_CallSuccessful(result) && command->commandCode == kDebugQStartNoAckMode) {
 		dconn->ackEnabled = false;
 	}
-	
+
+ExitLabel:
 	BufferRefRelease(buffer);
 	CFSafeRelease(sending);
 	
-	ExitLabelAndReturn(result);
+	return result;
 }
 
 bool SDMMD_DebuggingReceiveInternalCheck(SocketConnection connection, char *receivedChar) {

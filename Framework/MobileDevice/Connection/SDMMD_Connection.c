@@ -200,7 +200,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 				SDMMD__mutex_lock(device->ivars.mutex_lock);
 				bool timeoutConnection = false;
 				bool closeOnInvalidate = true;
-				bool directSocket = false;
+				ATR_UNUSED bool directSocket = false;
 				bool canConnect = true;
 				if (options) {
 					CFTypeRef closeVal = CFDictionaryGetValue(options, CFSTR("CloseOnInvalidate"));
@@ -237,7 +237,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 					}
 				}
 				if (canConnect) {
-					bool appSocket = false;
+					ATR_UNUSED bool appSocket = false;
 					CFTypeRef curAppSocket = CFPreferencesCopyAppValue(CFSTR("DirectSocket"), kCFPreferencesCurrentApplication);
 					if (curAppSocket) {
 						appSocket = CFEqual(curAppSocket, kCFBooleanTrue);

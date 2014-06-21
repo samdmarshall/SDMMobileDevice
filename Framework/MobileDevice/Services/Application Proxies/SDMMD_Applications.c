@@ -151,10 +151,10 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 						SDMMD_AFCConnectionRef afcConn = SDMMD_AFCConnectionCreate(conn);//(r12, conn, 0x0, 0x0, &var_72);
 						if (afcConn) {
 							result = kAMDSuccess;
+							CheckErrorAndReturn(result);
+							
+							result = SDMMD_AMDeviceCopy(afcConn, cpath, copyPath);
 						}
-						CheckErrorAndReturn(result);
-						
-						result = SDMMD_AMDeviceCopy(afcConn, cpath, copyPath);
 						
 						/*
 						CFDataRef touchResponse;
@@ -198,6 +198,7 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 							CFSafeRelease(r12);
 						}
 						 */
+						Safe(free, copyPath);
 						CFSafeRelease(base);
 						CFSafeRelease(copy);
 					}

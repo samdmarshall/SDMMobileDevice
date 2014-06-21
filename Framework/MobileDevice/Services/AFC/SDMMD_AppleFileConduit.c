@@ -804,7 +804,7 @@ sdmmd_return_t SDMMD_check_can_touch(SDMMD_AFCConnectionRef conn, CFDataRef *unk
 	SDMMD_AFCProcessOperation(conn, &fileInfo);
 	*unknown = CFRetain(fileInfo->ivars.packet->response);
 	CFSafeRelease(fileInfo);
-	return kAMDSuccess;
+	return kAMDSuccess; // lol
 }
 
 #endif

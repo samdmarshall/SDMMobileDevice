@@ -1264,6 +1264,7 @@ sdmmd_return_t SDMMD_AMDeviceUnpair(SDMMD_AMDeviceRef device) {
 	CFStringRef host = CFDictionaryGetValue(dict, CFSTR("HostID"));
 	if (!host) {
 		result = kAMDInvalidPairRecordError;
+		Safe(free,recordPath);
 	}
 	else {
 		CFRetain(host);

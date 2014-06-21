@@ -157,7 +157,6 @@
 		22DEF973188350E6008E909F /* CFDictionaryAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF964188350E6008E909F /* CFDictionaryAddition.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22DEF974188350E6008E909F /* CFTypeAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22DEF965188350E6008E909F /* CFTypeAddition.c */; };
 		22DEF975188350E6008E909F /* CFTypeAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF966188350E6008E909F /* CFTypeAddition.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		22DEF978188350E6008E909F /* Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF96A188350E6008E909F /* Matrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22DEF97B188350E6008E909F /* Logging.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF96D188350E6008E909F /* Logging.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22DEF97C188350E6008E909F /* Number.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF96E188350E6008E909F /* Number.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22DEF97D188350E6008E909F /* Pointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF96F188350E6008E909F /* Pointer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -320,11 +319,6 @@
 		22DEF964188350E6008E909F /* CFDictionaryAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFDictionaryAddition.h; sourceTree = "<group>"; };
 		22DEF965188350E6008E909F /* CFTypeAddition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CFTypeAddition.c; sourceTree = "<group>"; };
 		22DEF966188350E6008E909F /* CFTypeAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFTypeAddition.h; sourceTree = "<group>"; };
-		22DEF968188350E6008E909F /* GeometryMaths.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryMaths.h; sourceTree = "<group>"; };
-		22DEF969188350E6008E909F /* Matrix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Matrix.c; sourceTree = "<group>"; };
-		22DEF96A188350E6008E909F /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Matrix.h; sourceTree = "<group>"; };
-		22DEF96B188350E6008E909F /* Vector.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Vector.c; sourceTree = "<group>"; };
-		22DEF96C188350E6008E909F /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector.h; sourceTree = "<group>"; };
 		22DEF96D188350E6008E909F /* Logging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logging.h; sourceTree = "<group>"; };
 		22DEF96E188350E6008E909F /* Number.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Number.h; sourceTree = "<group>"; };
 		22DEF96F188350E6008E909F /* Pointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pointer.h; sourceTree = "<group>"; };
@@ -500,7 +494,6 @@
 				22EFC8B51900282500C29BFF /* File.c */,
 				22DEF961188350E6008E909F /* Core.h */,
 				22DEF962188350E6008E909F /* CoreFoundation */,
-				22DEF967188350E6008E909F /* Geometry */,
 				22DEF96D188350E6008E909F /* Logging.h */,
 				22DEF96E188350E6008E909F /* Number.h */,
 				22DEF96F188350E6008E909F /* Pointer.h */,
@@ -526,18 +519,6 @@
 				22DEF965188350E6008E909F /* CFTypeAddition.c */,
 			);
 			path = CoreFoundation;
-			sourceTree = "<group>";
-		};
-		22DEF967188350E6008E909F /* Geometry */ = {
-			isa = PBXGroup;
-			children = (
-				22DEF968188350E6008E909F /* GeometryMaths.h */,
-				22DEF969188350E6008E909F /* Matrix.c */,
-				22DEF96A188350E6008E909F /* Matrix.h */,
-				22DEF96B188350E6008E909F /* Vector.c */,
-				22DEF96C188350E6008E909F /* Vector.h */,
-			);
-			path = Geometry;
 			sourceTree = "<group>";
 		};
 		22F9CF3519324C6A007A696D /* Old */ = {
@@ -873,7 +854,6 @@
 				22AD9355178A16CF002ACFB1 /* SDMMD_MDFUModeDevice.h in Headers */,
 				22DEF97B188350E6008E909F /* Logging.h in Headers */,
 				22DEF97C188350E6008E909F /* Number.h in Headers */,
-				22DEF978188350E6008E909F /* Matrix.h in Headers */,
 				22DEF975188350E6008E909F /* CFTypeAddition.h in Headers */,
 				22DEF973188350E6008E909F /* CFDictionaryAddition.h in Headers */,
 				22DEF971188350E6008E909F /* Core.h in Headers */,
@@ -1001,7 +981,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0600;
 				TargetAttributes = {
 					227032C4193F7D0000363472 = {
 						CreatedOnToolsVersion = 6.0;
@@ -1228,6 +1208,7 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				EXECUTABLE_PREFIX = lib;
@@ -1256,6 +1237,7 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1281,6 +1263,7 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1313,6 +1296,7 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
@@ -1337,8 +1321,10 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1365,8 +1351,10 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
