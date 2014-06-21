@@ -32,11 +32,13 @@
 
 #include "SDMMD_Error.h"
 #include "SDMMD_Keys.h"
+/* Private
 #include "SDMMD_MRecoveryModeDevice.h"
 #include "SDMMD_MRUSBDevice.h"
 #include "SDMMD_MDFUModeDevice.h"
 #include "SDMMD_MRestoreModeDevice.h"
 #include "SDMMD_MRestorableDevice.h"
+*/
 #include "SDMMD_Types.h"
 
 

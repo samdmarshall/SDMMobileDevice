@@ -30,7 +30,6 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 #include "CFRuntime.h"
-#include "Core.h"
 #include "SDMMD_Connection_Class.h"
 
 struct sdmmd_AFCConnectionClassBody {
@@ -43,7 +42,7 @@ struct sdmmd_AFCConnectionClassBody {
 struct sdmmd_AFCConnectionClass {
 	CFRuntimeBase base;
 	struct sdmmd_AFCConnectionClassBody ivars;
-} ATR_PACK sdmmd_AFCConnectionClass;
+} __attribute__ ((packed)) sdmmd_AFCConnectionClass;
 
 typedef struct sdmmd_AFCConnectionClass* SDMMD_AFCConnectionRef;
 

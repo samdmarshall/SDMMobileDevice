@@ -29,7 +29,6 @@
 #define _SDM_MD_ADMDEVICE_CLASS_H_
 
 #include <CoreFoundation/CoreFoundation.h>
-#include "Core.h"
 #include "CFRuntime.h"
 #include <openssl/ssl.h>
 
@@ -40,7 +39,7 @@ typedef struct SDMMD_lockdown_conn {
 	SSL *ssl; 						// 8
 	uint64_t *pointer;				// 16
 	uint64_t length;				// 24
-} ATR_PACK SDMMD_lockdown_conn;
+} __attribute__ ((packed)) SDMMD_lockdown_conn;
 
 struct AMDeviceClassHeader {
 	unsigned char header[16];		// AMDeviceClass CF Header
@@ -76,12 +75,12 @@ struct AMDeviceClassBody {
 	//unsigned char unknown10[4];					// 156
 	CFDataRef unknown11;						// 160
 	//unsigned char unknown12[4];					// 164
-} ATR_PACK AMDeviceClassBody; // size 0x98
+} __attribute__ ((packed)) AMDeviceClassBody; // size 0x98
 
 struct sdmmd_am_device {
 	CFRuntimeBase base;
 	struct AMDeviceClassBody ivars;
-} ATR_PACK sdmmd_am_device;
+} __attribute__ ((packed)) sdmmd_am_device;
 
 typedef struct sdmmd_am_device* SDMMD_AMDeviceRef;
 

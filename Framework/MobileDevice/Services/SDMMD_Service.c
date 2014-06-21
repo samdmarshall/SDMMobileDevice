@@ -35,6 +35,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/select.h>
+#include "Core.h"
 
 int32_t CheckIfExpectingResponse(SocketConnection handle, uint32_t timeout) {
 	fd_set fds;

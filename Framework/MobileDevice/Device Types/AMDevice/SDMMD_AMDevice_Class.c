@@ -29,6 +29,7 @@
 #define _SDM_MD_ADMDEVICE_CLASS_C_
 
 #include "SDMMD_AMDevice_Class.h"
+#include "Core.h"
 
 static Boolean SDMMD_AMDeviceRefEqual(CFTypeRef cf1, CFTypeRef cf2) {
 	SDMMD_AMDeviceRef device1 = (SDMMD_AMDeviceRef)cf1;

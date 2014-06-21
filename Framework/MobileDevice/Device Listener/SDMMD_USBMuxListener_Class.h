@@ -30,7 +30,6 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 #include "CFRuntime.h"
-#include "Core.h"
 #include "SDMMD_USBMuxListener_Types.h"
 
 typedef void (*callbackFunction)(void *, struct USBMuxPacket *);
@@ -54,7 +53,7 @@ struct USBMuxListenerClassBody {
 struct USBMuxListenerClass {
 	CFRuntimeBase base;
 	struct USBMuxListenerClassBody ivars;
-} ATR_PACK USBMuxListenerClass;
+} USBMuxListenerClass;
 
 typedef struct USBMuxListenerClass * SDMMD_USBMuxListenerRef;
 

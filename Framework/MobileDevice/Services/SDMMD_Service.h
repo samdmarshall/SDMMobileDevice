@@ -152,7 +152,7 @@ enum SDM_MD_Service_Enum {
 	SDM_MD_Service_Count
 };
 
-ATR_UNUSED static struct SDM_MD_Service_Identifiers SDMMDServiceIdentifiers[SDM_MD_Service_Count] = {
+__attribute__ ((unused)) static struct SDM_MD_Service_Identifiers SDMMDServiceIdentifiers[SDM_MD_Service_Count] = {
 	{AMSVC_AFC, "afc"},
 	{AMSVC_AFC2, "afc2"},
 	{AMSVC_BACKUP, "backup"},

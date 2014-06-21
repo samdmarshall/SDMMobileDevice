@@ -117,7 +117,7 @@ struct SDMMD_AMDebugConnection {
 	SDMMD_AMDeviceRef device;
 	SDMMD_AMConnectionRef connection;
 	bool ackEnabled;
-} ATR_PACK SDMMD_AMDebugConnection;
+} __attribute__ ((packed)) SDMMD_AMDebugConnection;
 
 typedef struct SDMMD_AMDebugConnection* SDMMD_AMDebugConnectionRef;
 
@@ -208,7 +208,7 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 DebuggerCommandRef SDMMD_CreateDebuggingCommand(DebuggerCommandType commandCode, CFStringRef command, CFArrayRef arguments);
 void SDMMD_DebuggingCommandRelease(DebuggerCommandRef command);
 
-BufferRef SDMMD_EncodeDebuggingString(CFStringRef command);
+//BufferRef SDMMD_EncodeDebuggingString(CFStringRef command);
 
 sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCommandRef command, CFDataRef *response);
 sdmmd_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef dconn, CFDataRef *response);

@@ -11,21 +11,6 @@
 		222EF6611905AC3E000270C3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 222EF6601905AC3E000270C3 /* CoreFoundation.framework */; };
 		222EF6641905AC3E000270C3 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6631905AC3E000270C3 /* main.c */; };
 		222EF6661905AC3E000270C3 /* iosdeploy.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 222EF6651905AC3E000270C3 /* iosdeploy.1 */; };
-		222EF6A51905AC56000270C3 /* SDMMD_AppleFileConduit.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF66E1905AC55000270C3 /* SDMMD_AppleFileConduit.c */; };
-		222EF6AC1905AC56000270C3 /* SDMMD_MCP.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF67E1905AC55000270C3 /* SDMMD_MCP.c */; };
-		222EF6AD1905AC56000270C3 /* SDMMD_Applications.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6801905AC55000270C3 /* SDMMD_Applications.c */; };
-		222EF6AE1905AC56000270C3 /* SDMMD_Connection.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6831905AC55000270C3 /* SDMMD_Connection.c */; };
-		222EF6AF1905AC56000270C3 /* SDMMD_Error.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6861905AC55000270C3 /* SDMMD_Error.c */; };
-		222EF6B01905AC56000270C3 /* SDMMD_AMDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6891905AC55000270C3 /* SDMMD_AMDevice.c */; };
-		222EF6B11905AC56000270C3 /* SDMMD_MDFUModeDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF68C1905AC55000270C3 /* SDMMD_MDFUModeDevice.c */; };
-		222EF6B21905AC56000270C3 /* SDMMD_MRecoveryModeDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF68E1905AC55000270C3 /* SDMMD_MRecoveryModeDevice.c */; };
-		222EF6B31905AC56000270C3 /* SDMMD_MRestorableDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6901905AC55000270C3 /* SDMMD_MRestorableDevice.c */; };
-		222EF6B41905AC56000270C3 /* SDMMD_MRestoreModeDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6921905AC55000270C3 /* SDMMD_MRestoreModeDevice.c */; };
-		222EF6B51905AC56000270C3 /* SDMMD_MRUSBDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6941905AC55000270C3 /* SDMMD_MRUSBDevice.c */; };
-		222EF6B61905AC56000270C3 /* SDMMD_Notification.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6971905AC55000270C3 /* SDMMD_Notification.c */; };
-		222EF6B71905AC56000270C3 /* SDMMD_Debugger.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF69A1905AC55000270C3 /* SDMMD_Debugger.c */; };
-		222EF6B81905AC56000270C3 /* SDMMD_Service.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF69C1905AC55000270C3 /* SDMMD_Service.c */; };
-		222EF6B91905AC56000270C3 /* SDMMD_USBMuxListener.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6A11905AC55000270C3 /* SDMMD_USBMuxListener.c */; };
 		222EF6D41905AC70000270C3 /* Buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6BB1905AC70000270C3 /* Buffer.c */; };
 		222EF6D51905AC70000270C3 /* File.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6BD1905AC70000270C3 /* File.c */; };
 		222EF6D61905AC70000270C3 /* CFDataAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6C01905AC70000270C3 /* CFDataAddition.c */; };
@@ -33,11 +18,13 @@
 		222EF6D81905AC70000270C3 /* CFTypeAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6C41905AC70000270C3 /* CFTypeAddition.c */; };
 		222EF6D91905AC70000270C3 /* Matrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6C71905AC70000270C3 /* Matrix.c */; };
 		222EF6DA1905AC70000270C3 /* Vector.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6C91905AC70000270C3 /* Vector.c */; };
-		222EF6DC1905AC93000270C3 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 222EF6DB1905AC93000270C3 /* libcrypto.dylib */; };
-		222EF6DE1905AC97000270C3 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 222EF6DD1905AC97000270C3 /* libssl.dylib */; };
 		222EF6E11905ACEF000270C3 /* attach.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6E01905ACEF000270C3 /* attach.c */; };
 		222EF6E41905AD0D000270C3 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6E31905AD0D000270C3 /* list.c */; };
 		222EF6E81905AE3E000270C3 /* dev.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6E71905AE3E000270C3 /* dev.c */; };
+		22FB086A19560EFD00B73D75 /* libSDMMobileDeviceStatic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22FB086919560EFD00B73D75 /* libSDMMobileDeviceStatic.a */; };
+		22FB086B19560F9600B73D75 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 222EF6DD1905AC97000270C3 /* libssl.dylib */; };
+		22FB086C19560F9C00B73D75 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 222EF6DB1905AC93000270C3 /* libcrypto.dylib */; };
+		22FB086E19560FA600B73D75 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22FB086D19560FA600B73D75 /* IOKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -60,54 +47,6 @@
 		222EF6601905AC3E000270C3 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		222EF6631905AC3E000270C3 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		222EF6651905AC3E000270C3 /* iosdeploy.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = iosdeploy.1; sourceTree = "<group>"; };
-		222EF66C1905AC55000270C3 /* SDMMD_Types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Types.h; sourceTree = "<group>"; };
-		222EF66D1905AC55000270C3 /* CFRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFRuntime.h; sourceTree = "<group>"; };
-		222EF66E1905AC55000270C3 /* SDMMD_AppleFileConduit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AppleFileConduit.c; sourceTree = "<group>"; };
-		222EF66F1905AC55000270C3 /* SDMMD_AppleFileConduit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AppleFileConduit.h; sourceTree = "<group>"; };
-		222EF6701905AC55000270C3 /* SDMMD_AFC.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AFC.c; sourceTree = "<group>"; };
-		222EF6711905AC55000270C3 /* SDMMD_AFC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AFC.h; sourceTree = "<group>"; };
-		222EF6721905AC55000270C3 /* SDMMD_AFCCondition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AFCCondition.c; sourceTree = "<group>"; };
-		222EF6731905AC55000270C3 /* SDMMD_AFCCondition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AFCCondition.h; sourceTree = "<group>"; };
-		222EF6741905AC55000270C3 /* SDMMD_AFCDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AFCDevice.c; sourceTree = "<group>"; };
-		222EF6751905AC55000270C3 /* SDMMD_AFCDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AFCDevice.h; sourceTree = "<group>"; };
-		222EF6761905AC55000270C3 /* SDMMD_AFCIterator.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AFCIterator.c; sourceTree = "<group>"; };
-		222EF6771905AC55000270C3 /* SDMMD_AFCIterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AFCIterator.h; sourceTree = "<group>"; };
-		222EF6781905AC55000270C3 /* SDMMD_AFCLock.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AFCLock.c; sourceTree = "<group>"; };
-		222EF6791905AC55000270C3 /* SDMMD_AFCLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AFCLock.h; sourceTree = "<group>"; };
-		222EF67A1905AC55000270C3 /* SDMMD_AFCOperation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AFCOperation.c; sourceTree = "<group>"; };
-		222EF67B1905AC55000270C3 /* SDMMD_AFCOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AFCOperation.h; sourceTree = "<group>"; };
-		222EF67D1905AC55000270C3 /* SDMMD_Functions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Functions.h; sourceTree = "<group>"; };
-		222EF67E1905AC55000270C3 /* SDMMD_MCP.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_MCP.c; sourceTree = "<group>"; };
-		222EF67F1905AC55000270C3 /* SDMMD_MCP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_MCP.h; sourceTree = "<group>"; };
-		222EF6801905AC55000270C3 /* SDMMD_Applications.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_Applications.c; sourceTree = "<group>"; };
-		222EF6811905AC55000270C3 /* SDMMD_Applications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Applications.h; sourceTree = "<group>"; };
-		222EF6831905AC55000270C3 /* SDMMD_Connection.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_Connection.c; sourceTree = "<group>"; };
-		222EF6841905AC55000270C3 /* SDMMD_Connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Connection.h; sourceTree = "<group>"; };
-		222EF6861905AC55000270C3 /* SDMMD_Error.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_Error.c; sourceTree = "<group>"; };
-		222EF6871905AC55000270C3 /* SDMMD_Error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Error.h; sourceTree = "<group>"; };
-		222EF6891905AC55000270C3 /* SDMMD_AMDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AMDevice.c; sourceTree = "<group>"; };
-		222EF68A1905AC55000270C3 /* SDMMD_AMDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AMDevice.h; sourceTree = "<group>"; };
-		222EF68B1905AC55000270C3 /* SDMMD_Keys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Keys.h; sourceTree = "<group>"; };
-		222EF68C1905AC55000270C3 /* SDMMD_MDFUModeDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_MDFUModeDevice.c; sourceTree = "<group>"; };
-		222EF68D1905AC55000270C3 /* SDMMD_MDFUModeDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_MDFUModeDevice.h; sourceTree = "<group>"; };
-		222EF68E1905AC55000270C3 /* SDMMD_MRecoveryModeDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_MRecoveryModeDevice.c; sourceTree = "<group>"; };
-		222EF68F1905AC55000270C3 /* SDMMD_MRecoveryModeDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_MRecoveryModeDevice.h; sourceTree = "<group>"; };
-		222EF6901905AC55000270C3 /* SDMMD_MRestorableDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_MRestorableDevice.c; sourceTree = "<group>"; };
-		222EF6911905AC55000270C3 /* SDMMD_MRestorableDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_MRestorableDevice.h; sourceTree = "<group>"; };
-		222EF6921905AC55000270C3 /* SDMMD_MRestoreModeDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_MRestoreModeDevice.c; sourceTree = "<group>"; };
-		222EF6931905AC55000270C3 /* SDMMD_MRestoreModeDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_MRestoreModeDevice.h; sourceTree = "<group>"; };
-		222EF6941905AC55000270C3 /* SDMMD_MRUSBDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_MRUSBDevice.c; sourceTree = "<group>"; };
-		222EF6951905AC55000270C3 /* SDMMD_MRUSBDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_MRUSBDevice.h; sourceTree = "<group>"; };
-		222EF6971905AC55000270C3 /* SDMMD_Notification.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_Notification.c; sourceTree = "<group>"; };
-		222EF6981905AC55000270C3 /* SDMMD_Notification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Notification.h; sourceTree = "<group>"; };
-		222EF69A1905AC55000270C3 /* SDMMD_Debugger.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_Debugger.c; sourceTree = "<group>"; };
-		222EF69B1905AC55000270C3 /* SDMMD_Debugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Debugger.h; sourceTree = "<group>"; };
-		222EF69C1905AC55000270C3 /* SDMMD_Service.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_Service.c; sourceTree = "<group>"; };
-		222EF69D1905AC55000270C3 /* SDMMD_Service.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Service.h; sourceTree = "<group>"; };
-		222EF69F1905AC55000270C3 /* SDMMobileDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMobileDevice.h; sourceTree = "<group>"; };
-		222EF6A01905AC55000270C3 /* SDMTranslation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMTranslation.h; sourceTree = "<group>"; };
-		222EF6A11905AC55000270C3 /* SDMMD_USBMuxListener.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_USBMuxListener.c; sourceTree = "<group>"; };
-		222EF6A21905AC55000270C3 /* SDMMD_USBMuxListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_USBMuxListener.h; sourceTree = "<group>"; };
 		222EF6BA1905AC70000270C3 /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
 		222EF6BB1905AC70000270C3 /* Buffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Buffer.c; sourceTree = "<group>"; };
 		222EF6BC1905AC70000270C3 /* File.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = File.h; sourceTree = "<group>"; };
@@ -139,7 +78,8 @@
 		222EF6E31905AD0D000270C3 /* list.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = list.c; path = ../../iOSConsole/iOSConsole/list.c; sourceTree = "<group>"; };
 		222EF6E61905AE3E000270C3 /* dev.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dev.h; path = ../../iOSConsole/iOSConsole/dev.h; sourceTree = "<group>"; };
 		222EF6E71905AE3E000270C3 /* dev.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dev.c; path = ../../iOSConsole/iOSConsole/dev.c; sourceTree = "<group>"; };
-		222EF6EA1905BD5D000270C3 /* SDMMD_Debugger_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_Debugger_Internal.h; sourceTree = "<group>"; };
+		22FB086919560EFD00B73D75 /* libSDMMobileDeviceStatic.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDMMobileDeviceStatic.a; path = /Users/sam/Projects/SDMMobileDevice/Framework/../build/Debug/libSDMMobileDeviceStatic.a; sourceTree = "<absolute>"; };
+		22FB086D19560FA600B73D75 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,8 +87,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				222EF6DE1905AC97000270C3 /* libssl.dylib in Frameworks */,
-				222EF6DC1905AC93000270C3 /* libcrypto.dylib in Frameworks */,
+				22FB086E19560FA600B73D75 /* IOKit.framework in Frameworks */,
+				22FB086C19560F9C00B73D75 /* libcrypto.dylib in Frameworks */,
+				22FB086B19560F9600B73D75 /* libssl.dylib in Frameworks */,
+				22FB086A19560EFD00B73D75 /* libSDMMobileDeviceStatic.a in Frameworks */,
 				222EF6611905AC3E000270C3 /* CoreFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -159,7 +101,6 @@
 		222EF6541905AC3E000270C3 = {
 			isa = PBXGroup;
 			children = (
-				222EF6A41905AC55000270C3 /* MobileDevice */,
 				222EF6621905AC3E000270C3 /* iosdeploy */,
 				222EF65F1905AC3E000270C3 /* Frameworks */,
 				222EF65E1905AC3E000270C3 /* Products */,
@@ -177,6 +118,8 @@
 		222EF65F1905AC3E000270C3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				22FB086D19560FA600B73D75 /* IOKit.framework */,
+				22FB086919560EFD00B73D75 /* libSDMMobileDeviceStatic.a */,
 				222EF6DD1905AC97000270C3 /* libssl.dylib */,
 				222EF6DB1905AC93000270C3 /* libcrypto.dylib */,
 				222EF6601905AC3E000270C3 /* CoreFoundation.framework */,
@@ -194,127 +137,6 @@
 			);
 			path = iosdeploy;
 			sourceTree = "<group>";
-		};
-		222EF67C1905AC55000270C3 /* SDMAFCDevice */ = {
-			isa = PBXGroup;
-			children = (
-				222EF66E1905AC55000270C3 /* SDMMD_AppleFileConduit.c */,
-				222EF66F1905AC55000270C3 /* SDMMD_AppleFileConduit.h */,
-				222EF6701905AC55000270C3 /* SDMMD_AFC.c */,
-				222EF6711905AC55000270C3 /* SDMMD_AFC.h */,
-				222EF6721905AC55000270C3 /* SDMMD_AFCCondition.c */,
-				222EF6731905AC55000270C3 /* SDMMD_AFCCondition.h */,
-				222EF6741905AC55000270C3 /* SDMMD_AFCDevice.c */,
-				222EF6751905AC55000270C3 /* SDMMD_AFCDevice.h */,
-				222EF6761905AC55000270C3 /* SDMMD_AFCIterator.c */,
-				222EF6771905AC55000270C3 /* SDMMD_AFCIterator.h */,
-				222EF6781905AC55000270C3 /* SDMMD_AFCLock.c */,
-				222EF6791905AC55000270C3 /* SDMMD_AFCLock.h */,
-				222EF67A1905AC55000270C3 /* SDMMD_AFCOperation.c */,
-				222EF67B1905AC55000270C3 /* SDMMD_AFCOperation.h */,
-			);
-			path = SDMAFCDevice;
-			sourceTree = "<group>";
-		};
-		222EF6821905AC55000270C3 /* SDMMDApplications */ = {
-			isa = PBXGroup;
-			children = (
-				222EF6801905AC55000270C3 /* SDMMD_Applications.c */,
-				222EF6811905AC55000270C3 /* SDMMD_Applications.h */,
-			);
-			path = SDMMDApplications;
-			sourceTree = "<group>";
-		};
-		222EF6851905AC55000270C3 /* SDMMDConnection */ = {
-			isa = PBXGroup;
-			children = (
-				222EF6831905AC55000270C3 /* SDMMD_Connection.c */,
-				222EF6841905AC55000270C3 /* SDMMD_Connection.h */,
-			);
-			path = SDMMDConnection;
-			sourceTree = "<group>";
-		};
-		222EF6881905AC55000270C3 /* SDMMDError */ = {
-			isa = PBXGroup;
-			children = (
-				222EF6861905AC55000270C3 /* SDMMD_Error.c */,
-				222EF6871905AC55000270C3 /* SDMMD_Error.h */,
-			);
-			path = SDMMDError;
-			sourceTree = "<group>";
-		};
-		222EF6961905AC55000270C3 /* SDMMDevice */ = {
-			isa = PBXGroup;
-			children = (
-				222EF6891905AC55000270C3 /* SDMMD_AMDevice.c */,
-				222EF68A1905AC55000270C3 /* SDMMD_AMDevice.h */,
-				222EF68B1905AC55000270C3 /* SDMMD_Keys.h */,
-				222EF68C1905AC55000270C3 /* SDMMD_MDFUModeDevice.c */,
-				222EF68D1905AC55000270C3 /* SDMMD_MDFUModeDevice.h */,
-				222EF68E1905AC55000270C3 /* SDMMD_MRecoveryModeDevice.c */,
-				222EF68F1905AC55000270C3 /* SDMMD_MRecoveryModeDevice.h */,
-				222EF6901905AC55000270C3 /* SDMMD_MRestorableDevice.c */,
-				222EF6911905AC55000270C3 /* SDMMD_MRestorableDevice.h */,
-				222EF6921905AC55000270C3 /* SDMMD_MRestoreModeDevice.c */,
-				222EF6931905AC55000270C3 /* SDMMD_MRestoreModeDevice.h */,
-				222EF6941905AC55000270C3 /* SDMMD_MRUSBDevice.c */,
-				222EF6951905AC55000270C3 /* SDMMD_MRUSBDevice.h */,
-			);
-			path = SDMMDevice;
-			sourceTree = "<group>";
-		};
-		222EF6991905AC55000270C3 /* SDMMDNotification */ = {
-			isa = PBXGroup;
-			children = (
-				222EF6971905AC55000270C3 /* SDMMD_Notification.c */,
-				222EF6981905AC55000270C3 /* SDMMD_Notification.h */,
-			);
-			path = SDMMDNotification;
-			sourceTree = "<group>";
-		};
-		222EF69E1905AC55000270C3 /* SDMMDService */ = {
-			isa = PBXGroup;
-			children = (
-				222EF6EA1905BD5D000270C3 /* SDMMD_Debugger_Internal.h */,
-				222EF69A1905AC55000270C3 /* SDMMD_Debugger.c */,
-				222EF69B1905AC55000270C3 /* SDMMD_Debugger.h */,
-				222EF69C1905AC55000270C3 /* SDMMD_Service.c */,
-				222EF69D1905AC55000270C3 /* SDMMD_Service.h */,
-			);
-			path = SDMMDService;
-			sourceTree = "<group>";
-		};
-		222EF6A31905AC55000270C3 /* SDMUSBmuxListener */ = {
-			isa = PBXGroup;
-			children = (
-				222EF6A11905AC55000270C3 /* SDMMD_USBMuxListener.c */,
-				222EF6A21905AC55000270C3 /* SDMMD_USBMuxListener.h */,
-			);
-			path = SDMUSBmuxListener;
-			sourceTree = "<group>";
-		};
-		222EF6A41905AC55000270C3 /* MobileDevice */ = {
-			isa = PBXGroup;
-			children = (
-				222EF66C1905AC55000270C3 /* SDMMD_Types.h */,
-				222EF66D1905AC55000270C3 /* CFRuntime.h */,
-				222EF67C1905AC55000270C3 /* SDMAFCDevice */,
-				222EF67D1905AC55000270C3 /* SDMMD_Functions.h */,
-				222EF67E1905AC55000270C3 /* SDMMD_MCP.c */,
-				222EF67F1905AC55000270C3 /* SDMMD_MCP.h */,
-				222EF6821905AC55000270C3 /* SDMMDApplications */,
-				222EF6851905AC55000270C3 /* SDMMDConnection */,
-				222EF6881905AC55000270C3 /* SDMMDError */,
-				222EF6961905AC55000270C3 /* SDMMDevice */,
-				222EF6991905AC55000270C3 /* SDMMDNotification */,
-				222EF69E1905AC55000270C3 /* SDMMDService */,
-				222EF69F1905AC55000270C3 /* SDMMobileDevice.h */,
-				222EF6A01905AC55000270C3 /* SDMTranslation.h */,
-				222EF6A31905AC55000270C3 /* SDMUSBmuxListener */,
-			);
-			name = MobileDevice;
-			path = /Users/sam/Projects/SDMMobileDevice/iOSConsole/../Framework/MobileDevice;
-			sourceTree = "<absolute>";
 		};
 		222EF6C51905AC70000270C3 /* CoreFoundation */ = {
 			isa = PBXGroup;
@@ -429,31 +251,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				222EF6B41905AC56000270C3 /* SDMMD_MRestoreModeDevice.c in Sources */,
-				222EF6B11905AC56000270C3 /* SDMMD_MDFUModeDevice.c in Sources */,
-				222EF6AF1905AC56000270C3 /* SDMMD_Error.c in Sources */,
 				222EF6641905AC3E000270C3 /* main.c in Sources */,
-				222EF6B21905AC56000270C3 /* SDMMD_MRecoveryModeDevice.c in Sources */,
 				222EF6D41905AC70000270C3 /* Buffer.c in Sources */,
 				222EF6E11905ACEF000270C3 /* attach.c in Sources */,
-				222EF6B81905AC56000270C3 /* SDMMD_Service.c in Sources */,
 				222EF6D61905AC70000270C3 /* CFDataAddition.c in Sources */,
-				222EF6B91905AC56000270C3 /* SDMMD_USBMuxListener.c in Sources */,
-				222EF6AD1905AC56000270C3 /* SDMMD_Applications.c in Sources */,
-				222EF6B51905AC56000270C3 /* SDMMD_MRUSBDevice.c in Sources */,
 				222EF6D81905AC70000270C3 /* CFTypeAddition.c in Sources */,
-				222EF6B71905AC56000270C3 /* SDMMD_Debugger.c in Sources */,
-				222EF6AC1905AC56000270C3 /* SDMMD_MCP.c in Sources */,
 				222EF6E41905AD0D000270C3 /* list.c in Sources */,
 				222EF6D51905AC70000270C3 /* File.c in Sources */,
-				222EF6AE1905AC56000270C3 /* SDMMD_Connection.c in Sources */,
 				222EF6DA1905AC70000270C3 /* Vector.c in Sources */,
 				222EF6E81905AE3E000270C3 /* dev.c in Sources */,
-				222EF6B61905AC56000270C3 /* SDMMD_Notification.c in Sources */,
 				220A7C9E194225C600BDF453 /* CFStringAddition.c in Sources */,
-				222EF6A51905AC56000270C3 /* SDMMD_AppleFileConduit.c in Sources */,
-				222EF6B01905AC56000270C3 /* SDMMD_AMDevice.c in Sources */,
-				222EF6B31905AC56000270C3 /* SDMMD_MRestorableDevice.c in Sources */,
 				222EF6D71905AC70000270C3 /* CFDictionaryAddition.c in Sources */,
 				222EF6D91905AC70000270C3 /* Matrix.c in Sources */,
 			);
@@ -535,6 +342,7 @@
 		222EF66A1905AC3E000270C3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SYMROOT = ../build;
 			};
@@ -543,6 +351,7 @@
 		222EF66B1905AC3E000270C3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SYMROOT = ../build;
 			};

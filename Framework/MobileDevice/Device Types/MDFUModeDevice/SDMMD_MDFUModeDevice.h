@@ -36,7 +36,7 @@
 
 struct AMDFUModeDeviceClassHeader {
 	unsigned char header[16];	// 16
-} ATR_PACK AMDFUModeDeviceClassHeader; // 0x10
+} __attribute__ ((packed)) AMDFUModeDeviceClassHeader; // 0x10
 
 struct AMDFUModeDeviceClassBody {
 	// 16
@@ -47,12 +47,12 @@ struct AMDFUModeDeviceClassBody {
 	int8_t a;					// 48
 	int32_t valid_product; 		// 52
 	// 56
-} ATR_PACK AMDFUModeDeviceClassBody; // 0x30
+} __attribute__ ((packed)) AMDFUModeDeviceClassBody; // 0x30
 
 struct am_dfu_device {
 	struct AMDFUModeDeviceClassHeader base;
 	struct AMDFUModeDeviceClassBody ivars;
-} ATR_PACK am_dfu_device;
+} __attribute__ ((packed)) am_dfu_device;
 
 typedef struct am_dfu_device SDMMD_AMDFUModeDeviceClass;
 

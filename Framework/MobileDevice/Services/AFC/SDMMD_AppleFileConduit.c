@@ -596,14 +596,14 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateSetModTime(CFStringRef ref) {
 	return op;
 }
 
-SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetFileHashWithRange(CFStringRef path, Range range) {
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateGetFileHashWithRange(CFStringRef path, CFRange range) {
 	SDMMD_AFCOperationRef op = SDMMD_AFCOperationCreateEmpty();
 	op->ivars.packet = calloc(1, sizeof(struct sdmmd_AFCPacket));
 	char *cpath = SDMCFStringGetString(path);
-	uint32_t data_length = (uint32_t)strlen(cpath)+1+sizeof(Range);
+	uint32_t data_length = (uint32_t)strlen(cpath)+1+sizeof(CFRange);
 	op->ivars.packet->header_data = calloc(data_length, sizeof(char));
-	memcpy(op->ivars.packet->header_data, &range, sizeof(Range));
-	memcpy(&(op->ivars.packet->header_data[sizeof(Range)]), cpath, strlen(cpath));
+	memcpy(op->ivars.packet->header_data, &range, sizeof(CFRange));
+	memcpy(&(op->ivars.packet->header_data[sizeof(CFRange)]), cpath, strlen(cpath));
 	SDMMD_AFCHeaderInit(&(op->ivars.packet->header), SDMMD_AFC_Packet_GetFileHashWithRange, data_length, 0, 0);
 	free(cpath);
 	return op;

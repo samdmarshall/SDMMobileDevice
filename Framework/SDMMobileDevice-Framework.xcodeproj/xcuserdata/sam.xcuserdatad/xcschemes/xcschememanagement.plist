@@ -4,20 +4,15 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>SDMMobileDevice-Static.xcscheme</key>
+		<key>SDMMobileDevice.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>5</integer>
+			<integer>1</integer>
 		</dict>
-		<key>SDMMobileDevice.xcscheme_^#shared#^_</key>
+		<key>SDMMobileDeviceStatic.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>0</integer>
-		</dict>
-		<key>SwiftSDMMobileDevice.xcscheme</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>6</integer>
+			<integer>2</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
@@ -33,6 +28,16 @@
 			<true/>
 		</dict>
 		<key>22C8A9ED1944F4980026BD07</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>22FB080A19560D7600B73D75</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>22FB083E19560E5800B73D75</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -30,6 +30,7 @@
 
 #include "SDMMD_AFCConnection_Class.h"
 #include "SDMMD_Connection.h"
+#include "Core.h"
 
 static Boolean SDMMD_AFCConnectionRefEqual(CFTypeRef cf1, CFTypeRef cf2) {
 	SDMMD_AFCConnectionRef connection1 = (SDMMD_AFCConnectionRef)cf1;

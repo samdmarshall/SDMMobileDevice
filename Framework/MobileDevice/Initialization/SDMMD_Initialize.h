@@ -29,7 +29,6 @@
 #define _SDM_MD_INITIALIZE_H_
 
 #include <CoreFoundation/CoreFoundation.h>
-#include "CFRuntime.h"
 
 void InitializeSDMMobileDeviceClasses();
 

@@ -39,13 +39,13 @@ struct USBMuxPacketBody {
 	uint32_t reserved;
 	uint32_t type;
 	uint32_t tag;
-} ATR_PACK USBMuxPacketBody;
+} __attribute__ ((packed)) USBMuxPacketBody;
 
 struct USBMuxPacket {
 	dispatch_time_t timeout;
 	struct USBMuxPacketBody body;
 	CFPropertyListRef payload;
-} ATR_PACK USBMuxPacket;
+} __attribute__ ((packed)) USBMuxPacket;
 
 typedef enum SDMMD_USBMuxPacketMessageType {
 	kSDMMD_USBMuxPacketInvalidType = 0x0,

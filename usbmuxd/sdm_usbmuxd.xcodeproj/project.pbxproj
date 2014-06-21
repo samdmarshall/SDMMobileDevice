@@ -200,7 +200,7 @@
 		22648F9D189494B500133948 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = "Sam Marshall";
 			};
 			buildConfigurationList = 22648FA0189494B500133948 /* Build configuration list for PBXProject "sdm_usbmuxd" */;
@@ -312,7 +312,6 @@
 		22648FB2189494B500133948 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/sam/Projects/SDMMobileDevice/build/Release,
@@ -327,7 +326,6 @@
 		22648FB3189494B500133948 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/sam/Projects/SDMMobileDevice/build/Release,

@@ -30,7 +30,6 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 #include "CFRuntime.h"
-#include "Core.h"
 
 typedef struct SDMMD_AFCPacketHeader {
 	uint64_t signature;
@@ -38,7 +37,7 @@ typedef struct SDMMD_AFCPacketHeader {
 	uint64_t headerLen;
 	uint64_t pid;
 	uint64_t type;
-} ATR_PACK SDMMD_AFCPacketHeader;
+} __attribute__ ((packed)) SDMMD_AFCPacketHeader;
 
 struct sdmmd_AFCPacket {
 	SDMMD_AFCPacketHeader header;
@@ -55,7 +54,7 @@ struct sdmmd_AFCOperationBody {
 struct sdmmd_AFCOperation {
 	CFRuntimeBase base;
 	struct sdmmd_AFCOperationBody ivars;
-} ATR_PACK sdmmd_AFCOperation;
+} __attribute__ ((packed)) sdmmd_AFCOperation;
 
 typedef struct sdmmd_AFCOperation* SDMMD_AFCOperationRef;
 

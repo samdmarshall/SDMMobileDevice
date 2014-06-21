@@ -29,14 +29,13 @@
 #define _SDM_MD_TYPES_H_
 
 #include <CoreFoundation/CoreFoundation.h>
-#include "Core.h"
 
 #define kTestFileForAFC "iTunes_Control/iTunes/IC-Info.sidv"
 #define kTestCreateFileForAFC "sdm_md_test_file.dat"
 
 typedef void (*CallBack)(CFDictionaryRef dict, void* arg);
 
-ATR_UNUSED static void SDMMD_Default_AFC_CopyFile_Callback(CFDictionaryRef dict, void* arg) {
+__attribute__ ((unused)) static void SDMMD_Default_AFC_CopyFile_Callback(CFDictionaryRef dict, void* arg) {
     uint32_t percent = 0;
     CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
 	if (CFEqual(status, CFSTR("CopyingFile"))) {
@@ -47,7 +46,7 @@ ATR_UNUSED static void SDMMD_Default_AFC_CopyFile_Callback(CFDictionaryRef dict,
 	}
 }
 
-ATR_UNUSED static void SDMMD_Default_mount_callback(CFDictionaryRef dict, void* arg) {
+__attribute__ ((unused)) static void SDMMD_Default_mount_callback(CFDictionaryRef dict, void* arg) {
 	CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
 	if (CFEqual(status, CFSTR("LookingUpImage"))) {
 		printf("[  0%%] Looking up developer disk image\n");
@@ -58,7 +57,7 @@ ATR_UNUSED static void SDMMD_Default_mount_callback(CFDictionaryRef dict, void* 
 	}
 }
 
-ATR_UNUSED static void SDMMD_Default_transfer_callback(CFDictionaryRef dict, void* arg) {
+__attribute__ ((unused)) static void SDMMD_Default_transfer_callback(CFDictionaryRef dict, void* arg) {
     int percent;
     CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
     CFNumberGetValue(CFDictionaryGetValue(dict, CFSTR("PercentComplete")), kCFNumberSInt32Type, &percent);
@@ -71,7 +70,7 @@ ATR_UNUSED static void SDMMD_Default_transfer_callback(CFDictionaryRef dict, voi
     }
 }
 
-ATR_UNUSED static void SDMMD_Default_install_callback(CFDictionaryRef dict, void* arg) {
+__attribute__ ((unused)) static void SDMMD_Default_install_callback(CFDictionaryRef dict, void* arg) {
     int percent;
     CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
     CFNumberGetValue(CFDictionaryGetValue(dict, CFSTR("PercentComplete")), kCFNumberSInt32Type, &percent);

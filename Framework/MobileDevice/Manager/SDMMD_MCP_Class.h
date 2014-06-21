@@ -36,12 +36,12 @@ struct sdm_mobiledevice_body {
 	SDMMD_USBMuxListenerRef usbmuxd;
 	CFArrayRef deviceList;
 	uint64_t peer_certificate_data_index;
-} ATR_PACK sdm_mobiledevice_body;
+} __attribute__ ((packed)) sdm_mobiledevice_body;
 
 struct sdm_mobiledevice {
 	CFRuntimeBase base;
 	struct sdm_mobiledevice_body ivars;
-} ATR_PACK sdm_mobiledevice;
+} __attribute__ ((packed)) sdm_mobiledevice;
 
 typedef struct sdm_mobiledevice* SDMMobileDeviceRef;
 

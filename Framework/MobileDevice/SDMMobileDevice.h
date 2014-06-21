@@ -30,7 +30,6 @@
 
 #include "SDMMD_Initialize.h"
 
-
 #include "SDMMD_Functions.h"
 #include "SDMMD_AMDevice.h"
 #include "SDMMD_AppleFileConduit.h"
