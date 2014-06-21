@@ -123,16 +123,16 @@ void SDMMD_USBMuxResponseCallback(void *context, struct USBMuxPacket *packet) {
 
 void SDMMD_USBMuxAttachedCallback(void *context, struct USBMuxPacket *packet) {
 	SDMMD_AMDeviceRef newDevice = SDMMD_AMDeviceCreateFromProperties(packet->payload);
-	if (newDevice && !CFArrayContainsValue(SDMMobileDevice->deviceList, CFRangeMake(0, CFArrayGetCount(SDMMobileDevice->deviceList)), newDevice)) {
-		CFMutableArrayRef updateWithNew = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0, SDMMobileDevice->deviceList);
+	if (newDevice && !CFArrayContainsValue(SDMMobileDevice->ivars.deviceList, CFRangeMake(0, CFArrayGetCount(SDMMobileDevice->ivars.deviceList)), newDevice)) {
+		CFMutableArrayRef updateWithNew = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0, SDMMobileDevice->ivars.deviceList);
 		// give priority to usb over wifi
 		if (newDevice->ivars.connection_type == kAMDeviceConnectionTypeUSB) {
 			CFArrayAppendValue(updateWithNew, newDevice);
 			dispatch_async(dispatch_get_main_queue(), ^{
 				CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), kSDMMD_USBMuxListenerDeviceAttachedNotification, NULL, NULL, true);
 			});
-			CFSafeRelease(SDMMobileDevice->deviceList);
-			SDMMobileDevice->deviceList = CFArrayCreateCopy(kCFAllocatorDefault, updateWithNew);
+			CFSafeRelease(SDMMobileDevice->ivars.deviceList);
+			SDMMobileDevice->ivars.deviceList = CFArrayCreateCopy(kCFAllocatorDefault, updateWithNew);
 		}
 		else if (newDevice->ivars.connection_type == kAMDeviceConnectionTypeWiFi) {
 			// wifi
@@ -148,11 +148,11 @@ void SDMMD_USBMuxDetachedCallback(void *context, struct USBMuxPacket *packet) {
 	uint32_t detachedId;
 	CFNumberRef deviceId = CFDictionaryGetValue(packet->payload, CFSTR("DeviceID"));
 	CFNumberGetValue(deviceId, kCFNumberSInt64Type, &detachedId);
-	CFMutableArrayRef updateWithRemove = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0, SDMMobileDevice->deviceList);
+	CFMutableArrayRef updateWithRemove = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0, SDMMobileDevice->ivars.deviceList);
 	uint32_t removeCounter = 0x0;
 	SDMMD_AMDeviceRef detachedDevice = NULL;
-	for (uint32_t i = 0x0; i < CFArrayGetCount(SDMMobileDevice->deviceList); i++) {
-		detachedDevice = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(SDMMobileDevice->deviceList, i);
+	for (uint32_t i = 0x0; i < CFArrayGetCount(SDMMobileDevice->ivars.deviceList); i++) {
+		detachedDevice = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(SDMMobileDevice->ivars.deviceList, i);
 		//CFRetain(detachedDevice);
 		// add something for then updating to use wifi if available.
 		if (detachedId == SDMMD_AMDeviceGetConnectionID(detachedDevice)) {
@@ -163,8 +163,8 @@ void SDMMD_USBMuxDetachedCallback(void *context, struct USBMuxPacket *packet) {
 			});
 		}
 	}
-	CFSafeRelease(SDMMobileDevice->deviceList);
-	SDMMobileDevice->deviceList = CFArrayCreateCopy(kCFAllocatorDefault, updateWithRemove);
+	CFSafeRelease(SDMMobileDevice->ivars.deviceList);
+	SDMMobileDevice->ivars.deviceList = CFArrayCreateCopy(kCFAllocatorDefault, updateWithRemove);
 	CFSafeRelease(updateWithRemove);
 	dispatch_async(dispatch_get_main_queue(), ^{
 		CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), kSDMMD_USBMuxListenerDeviceDetachedNotificationFinished, NULL, NULL, true);
@@ -178,20 +178,20 @@ void SDMMD_USBMuxLogsCallback(void *context, struct USBMuxPacket *packet) {
 void SDMMD_USBMuxDeviceListCallback(void *context, struct USBMuxPacket *packet) {
 	// SDM: used to prune bad records from being retained
 	CFMutableArrayRef newList = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
-	for (uint32_t i = 0x0; i < CFArrayGetCount(SDMMobileDevice->deviceList); i++) {
-		SDMMD_AMDeviceRef deviceFromList = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(SDMMobileDevice->deviceList, i);
+	for (uint32_t i = 0x0; i < CFArrayGetCount(SDMMobileDevice->ivars.deviceList); i++) {
+		SDMMD_AMDeviceRef deviceFromList = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(SDMMobileDevice->ivars.deviceList, i);
 		if (SDMMD_AMDeviceIsValid(deviceFromList)) {
 			CFArrayAppendValue(newList, deviceFromList);
 		}
 	}
-	CFSafeRelease(SDMMobileDevice->deviceList);
-	SDMMobileDevice->deviceList = CFArrayCreateCopy(kCFAllocatorDefault, newList);
+	CFSafeRelease(SDMMobileDevice->ivars.deviceList);
+	SDMMobileDevice->ivars.deviceList = CFArrayCreateCopy(kCFAllocatorDefault, newList);
 	CFSafeRelease(newList);
 
 	CFArrayRef devices = CFDictionaryGetValue(packet->payload, CFSTR("DeviceList"));
 	for (uint32_t i = 0x0; i < CFArrayGetCount(devices); i++) {
 		SDMMD_AMDeviceRef deviceFromList = SDMMD_AMDeviceCreateFromProperties(CFArrayGetValueAtIndex(devices, i));
-		if (deviceFromList && !CFArrayContainsValue(SDMMobileDevice->deviceList, CFRangeMake(0x0, CFArrayGetCount(SDMMobileDevice->deviceList)), deviceFromList)) {
+		if (deviceFromList && !CFArrayContainsValue(SDMMobileDevice->ivars.deviceList, CFRangeMake(0x0, CFArrayGetCount(SDMMobileDevice->ivars.deviceList)), deviceFromList)) {
 			struct USBMuxPacket *devicePacket = calloc(1, sizeof(struct USBMuxPacket));
 			memcpy(devicePacket, packet, sizeof(struct USBMuxPacket));
 			devicePacket->payload = CFArrayGetValueAtIndex(devices, i);

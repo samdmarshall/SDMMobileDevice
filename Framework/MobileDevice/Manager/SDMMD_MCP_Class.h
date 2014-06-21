@@ -1,16 +1,16 @@
 /*
- *  SDMMD_MCP.h
+ *  SDMMD_MCP_Class.h
  *  SDMMobileDevice
  *
  * Copyright (c) 2014, Sam Marshall
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the 
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met:
  *
  * 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
  *
- * 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer 
+ * 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer
  * 		in the documentation and/or other materials provided with the distribution.
  *
  * 3. Neither the name of Sam Marshall nor the names of its contributors may be used to endorse or promote products derived from this
@@ -25,8 +25,8 @@
  *
  */
 
-#ifndef _SDM_MD_MCP_H_
-#define _SDM_MD_MCP_H_
+#ifndef _SDM_MD_MCP_CLASS_H_
+#define _SDM_MD_MCP_CLASS_H_
 
 #include <CoreFoundation/CoreFoundation.h>
 #include "CFRuntime.h"
@@ -45,12 +45,10 @@ struct sdm_mobiledevice {
 
 typedef struct sdm_mobiledevice* SDMMobileDeviceRef;
 
+void SDMMD_SDMMobileDeviceRefClassInitialize();
+
 CFTypeID SDMMobileDeviceRefGetTypeID();
 
-SDMMobileDeviceRef InitializeSDMMobileDevice();
-void SDMMD_AMDeviceNotificationSubscribe();
-void SDMMD_AMDeviceNotificationUnsubscribe();
-
-#define SDMMobileDevice InitializeSDMMobileDevice()
+SDMMobileDeviceRef SDMMobileDeviceRefCreateEmpty();
 
 #endif

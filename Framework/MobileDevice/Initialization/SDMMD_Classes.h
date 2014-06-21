@@ -1,5 +1,5 @@
 /*
- *  SDMMobileDevice.h
+ *  SDMMD_Classes.h
  *  SDMMobileDevice
  *
  * Copyright (c) 2014, Sam Marshall
@@ -25,20 +25,11 @@
  *
  */
 
-#ifndef _SDM_MOBILE_DEVICE_H_
-#define _SDM_MOBILE_DEVICE_H_
+#ifndef _SDM_MD_CLASSES_H_
+#define _SDM_MD_CLASSES_H_
 
-#include "SDMMD_Initialize.h"
-
-
-#include "SDMMD_Functions.h"
-#include "SDMMD_AMDevice.h"
-#include "SDMMD_AppleFileConduit.h"
-#include "SDMMD_Error.h"
-#include "SDMMD_MCP.h"
-#include "SDMMD_USBMuxListener.h"
-#include "SDMMD_Applications.h"
-#include "SDMMD_Notification.h"
-#include "SDMMD_Debugger.h"
+#include "SDMMD_MCP_Class.h"
+#include "SDMMD_AMDevice_Class.h"
+#include "SDMMD_Connection_Class.h"
 
 #endif

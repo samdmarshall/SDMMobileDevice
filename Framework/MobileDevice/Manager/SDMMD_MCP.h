@@ -1,16 +1,16 @@
 /*
- *  SDMMobileDevice.h
+ *  SDMMD_MCP.h
  *  SDMMobileDevice
  *
  * Copyright (c) 2014, Sam Marshall
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the 
  * following conditions are met:
  *
  * 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
  *
- * 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer
+ * 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer 
  * 		in the documentation and/or other materials provided with the distribution.
  *
  * 3. Neither the name of Sam Marshall nor the names of its contributors may be used to endorse or promote products derived from this
@@ -25,20 +25,15 @@
  *
  */
 
-#ifndef _SDM_MOBILE_DEVICE_H_
-#define _SDM_MOBILE_DEVICE_H_
+#ifndef _SDM_MD_MCP_H_
+#define _SDM_MD_MCP_H_
 
-#include "SDMMD_Initialize.h"
+#include "SDMMD_MCP_Class.h"
 
+SDMMobileDeviceRef InitializeSDMMobileDevice();
+void SDMMD_AMDeviceNotificationSubscribe();
+void SDMMD_AMDeviceNotificationUnsubscribe();
 
-#include "SDMMD_Functions.h"
-#include "SDMMD_AMDevice.h"
-#include "SDMMD_AppleFileConduit.h"
-#include "SDMMD_Error.h"
-#include "SDMMD_MCP.h"
-#include "SDMMD_USBMuxListener.h"
-#include "SDMMD_Applications.h"
-#include "SDMMD_Notification.h"
-#include "SDMMD_Debugger.h"
+#define SDMMobileDevice InitializeSDMMobileDevice()
 
 #endif

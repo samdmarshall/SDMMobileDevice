@@ -1,5 +1,5 @@
 /*
- *  SDMMobileDevice.h
+ *  SDMMD_AMAuthInstall.h
  *  SDMMobileDevice
  *
  * Copyright (c) 2014, Sam Marshall
@@ -25,20 +25,47 @@
  *
  */
 
-#ifndef _SDM_MOBILE_DEVICE_H_
-#define _SDM_MOBILE_DEVICE_H_
+#ifndef _SDM_MD_AMAUTHINSTALL_H_
+#define _SDM_MD_AMAUTHINSTALL_H_
 
-#include "SDMMD_Initialize.h"
+#include <CoreFoundation/CoreFoundation.h>
+#include "CFRuntime.h"
 
+struct unknown {
+	CFMutableDictionaryRef a;
+	NULL; // 0x8
+	NULL; // 0x10
+}
 
-#include "SDMMD_Functions.h"
-#include "SDMMD_AMDevice.h"
-#include "SDMMD_AppleFileConduit.h"
-#include "SDMMD_Error.h"
-#include "SDMMD_MCP.h"
-#include "SDMMD_USBMuxListener.h"
-#include "SDMMD_Applications.h"
-#include "SDMMD_Notification.h"
-#include "SDMMD_Debugger.h"
+struct AMAuthInstallClassHeader {
+	char header[16];
+} __attribute ((packed)) AMAuthInstallClassHeader;
+
+struct AMAuthInstallClassBody {
+	// 16
+	int8_t VariantSpecifiesRestoreBehavior; // 40
+	int8_t ApPersonalizationEnabled; // 41
+	int8_t BasebandPersonalizationEnabled; // 42
+	CFLocaleRef locale; // 48
+	CFStringRef signingServer; // 56 (contains "http://gs.apple.com:80/")
+	CFUUID uuid; // 64
+	struct unknown *buffer; // 88 (calloc(0x1, 0x18))
+	CFDataRef VendorData; // 96
+	CFStringRef fusingServer; // 120 (contains "http://17.209.80.108:8080/vegads/fuser")
+	CFMutableDictionaryRef f; // 152
+	CFMutableDictionaryRef g; // 160
+	CFMutableDictionaryRef h; // 168
+	int32_t debugFlags; // 296
+	CFMutableDictionaryRef c; // 304
+	CFMutableDictionaryRef empty1; // 320
+	CFMutableDictionaryRef d; // 328
+	CFMutableDictionaryRef e; // 360
+	CFTypeRef entitlements; // 368
+} __attribute ((packed)) AMAuthInstallClassBody;
+
+struct AMAuthInstallClass {
+	CFRuntimeBase base;
+	struct AMAuthInstallClassBody *ivars;
+} __attribute ((packed)) AMAuthInstallClass;
 
 #endif

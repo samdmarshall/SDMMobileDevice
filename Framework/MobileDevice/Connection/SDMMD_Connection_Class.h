@@ -1,16 +1,16 @@
 /*
- *  SDMMD_Connection.h
+ *  SDMMD_Connection_Class.h
  *  SDMMobileDevice
  *
  * Copyright (c) 2014, Sam Marshall
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the 
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met:
  *
  * 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
  *
- * 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer 
+ * 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer
  * 		in the documentation and/or other materials provided with the distribution.
  *
  * 3. Neither the name of Sam Marshall nor the names of its contributors may be used to endorse or promote products derived from this
@@ -25,17 +25,15 @@
  *
  */
 
-#ifndef _SDM_MD_CONNECTION_H_
-#define _SDM_MD_CONNECTION_H_
+#ifndef _SDM_MD_CONNECTION_CLASS_H_
+#define _SDM_MD_CONNECTION_CLASS_H_
 
 #include <CoreFoundation/CoreFoundation.h>
-#include "SDMMD_Error.h"
-#include "SDMMD_AMDevice.h"
+#include "CFRuntime.h"
+#include "Core.h"
 #include <openssl/ssl.h>
 
-struct AMConnectionClassHeader {
-	unsigned char header[16];		// AMConnectionClass CF Header 
-} __attribute ((packed)) AMConnectionClassHeader; // size 0x10
+#include "SDMMD_AMDevice_Class.h"
 
 struct AMConnectionClassBody {
 	uint32_t socket;			// 16
@@ -50,33 +48,12 @@ struct AMConnectionClassBody {
 } ATR_PACK AMConnectionClassBody; // size 0x98
 
 struct am_connection {
-	struct AMConnectionClassHeader base;
+	CFRuntimeBase base;
 	struct AMConnectionClassBody ivars;
 } ATR_PACK am_connection;
 
 /* Classes */
 typedef struct am_connection* SDMMD_AMConnectionRef;
 
-#pragma mark -
-#pragma mark FUNCTIONS
-#pragma mark -
-
-sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef command, uint64_t code, CallBack callback, uint32_t argsCount, void* paramStart, ...);
-
-SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, SSL* ssl);
-SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(uint32_t socket, SSL* ssl, CFDictionaryRef dict);
-
-sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef service, CFDictionaryRef options, SDMMD_AMConnectionRef *connection);
-sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStringRef service, CFDictionaryRef options, SDMMD_AMConnectionRef *connection);
-
-void SDMMD_AMDServiceConnectionSetServiceName(SDMMD_AMConnectionRef *connection, CFStringRef service);
-void SDMMD_AMDServiceConnectionSetDevice(SDMMD_AMConnectionRef *connection, SDMMD_AMDeviceRef device);
-
-uint32_t SDMMD_AMDServiceConnectionGetSocket(SDMMD_AMConnectionRef connection);
-SSL* SDMMD_AMDServiceConnectionGetSecureIOContext(SDMMD_AMConnectionRef connection);
-
-sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connection);
-
-sdmmd_return_t SDMMD_AMDeviceSecureStartSessionedService(SDMMD_AMDeviceRef device, CFStringRef service, SDMMD_AMConnectionRef *connection);
 
 #endif

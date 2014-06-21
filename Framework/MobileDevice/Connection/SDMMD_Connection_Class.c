@@ -1,5 +1,5 @@
 /*
- *  SDMMD_AMAuthInstall.h
+ *  SDMMD_Connection_Class.c
  *  SDMMobileDevice
  *
  * Copyright (c) 2014, Sam Marshall
@@ -25,46 +25,9 @@
  *
  */
 
-#ifndef _SDM_MD_AMAUTHINSTALL_H_
-#define _SDM_MD_AMAUTHINSTALL_H_
+#ifndef _SDM_MD_CONNECTION_CLASS_C_
+#define _SDM_MD_CONNECTION_CLASS_C_
 
-#include <CoreFoundation/CoreFoundation.h>
-
-struct unknown {
-	CFMutableDictionaryRef a;
-	NULL; // 0x8
-	NULL; // 0x10
-}
-
-struct AMAuthInstallClassHeader {
-	char header[16];
-} __attribute ((packed)) AMAuthInstallClassHeader;
-
-struct AMAuthInstallClassBody {
-	// 16
-	int8_t VariantSpecifiesRestoreBehavior; // 40
-	int8_t ApPersonalizationEnabled; // 41
-	int8_t BasebandPersonalizationEnabled; // 42
-	CFLocaleRef locale; // 48
-	CFStringRef signingServer; // 56 (contains "http://gs.apple.com:80/")
-	CFUUID uuid; // 64
-	struct unknown *buffer; // 88 (calloc(0x1, 0x18))
-	CFDataRef VendorData; // 96
-	CFStringRef fusingServer; // 120 (contains "http://17.209.80.108:8080/vegads/fuser")
-	CFMutableDictionaryRef f; // 152
-	CFMutableDictionaryRef g; // 160
-	CFMutableDictionaryRef h; // 168
-	int32_t debugFlags; // 296
-	CFMutableDictionaryRef c; // 304
-	CFMutableDictionaryRef empty1; // 320
-	CFMutableDictionaryRef d; // 328
-	CFMutableDictionaryRef e; // 360
-	CFTypeRef entitlements; // 368
-} __attribute ((packed)) AMAuthInstallClassBody;
-
-struct AMAuthInstallClass {
-	struct AMAuthInstallClassHeader *header;
-	struct AMAuthInstallClassBody *ivars;
-} __attribute ((packed)) AMAuthInstallClass;
+#include "SDMMD_Connection_Class.h"
 
 #endif

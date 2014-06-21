@@ -1,5 +1,5 @@
 /*
- *  SDMMD_MCP.c
+ *  SDMMD_Connection.h
  *  SDMMobileDevice
  *
  * Copyright (c) 2014, Sam Marshall
@@ -25,52 +25,34 @@
  *
  */
 
-#ifndef _SDM_MD_MCP_C_
-#define _SDM_MD_MCP_C_
+#ifndef _SDM_MD_CONNECTION_H_
+#define _SDM_MD_CONNECTION_H_
 
-#include "SDMMD_MCP.h"
-#include "SDMMD_Functions.h"
-#include <openssl/ssl.h>
-#include <openssl/err.h>
-#include <openssl/crypto.h>
+#include "SDMMD_Connection_Class.h"
+#include "SDMMD_Error.h"
+#include "SDMMD_AMDevice.h"
 
-static SDMMobileDeviceRef controller = nil;
-static dispatch_once_t once;
 
-SDMMobileDeviceRef InitializeSDMMobileDevice() {
-	dispatch_once(&once, ^{
-		if (!controller) {
-			controller = (SDMMobileDeviceRef)malloc(sizeof(struct sdm_mobiledevice));
-			
-			SDMMD_AMDeviceRefClassInitialize();
-			
-			controller->deviceList = CFArrayCreate(kCFAllocatorDefault, NULL, 0, &kCFTypeArrayCallBacks);
-			controller->usbmuxd = SDMMD_USBMuxCreate();
-			SDMMD_USBMuxStartListener(&controller->usbmuxd);
-			SSL_library_init();
-			ERR_load_crypto_strings();
-			SSL_load_error_strings();
-			controller->peer_certificate_data_index = SDMMD_lockssl_init();
-		}
-	});
-	return controller;
-}
+#pragma mark -
+#pragma mark FUNCTIONS
+#pragma mark -
 
-void SDMMD_AMDeviceNotificationSubscribe() {
-	SDMMobileDevice;
-	if (SDMMobileDevice->usbmuxd == 0) {
-		SDMMobileDevice->usbmuxd = SDMMD_USBMuxCreate();
-		SDMMD_USBMuxStartListener(&SDMMobileDevice->usbmuxd);
-	}
-	else {
-		printf("Initializing this library starts the usbmuxd listener automatically, there isn't a need to call this to start listening for devices.\n");
-	}
-}
+sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef command, uint64_t code, CallBack callback, uint32_t argsCount, void* paramStart, ...);
 
-void SDMMD_AMDeviceNotificationUnsubscribe() {
-	if (SDMMobileDevice->usbmuxd) {
-		SDMMD_USBMuxClose(SDMMobileDevice->usbmuxd);
-	}
-}
+SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, SSL* ssl);
+SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(uint32_t socket, SSL* ssl, CFDictionaryRef dict);
+
+sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef service, CFDictionaryRef options, SDMMD_AMConnectionRef *connection);
+sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStringRef service, CFDictionaryRef options, SDMMD_AMConnectionRef *connection);
+
+void SDMMD_AMDServiceConnectionSetServiceName(SDMMD_AMConnectionRef *connection, CFStringRef service);
+void SDMMD_AMDServiceConnectionSetDevice(SDMMD_AMConnectionRef *connection, SDMMD_AMDeviceRef device);
+
+uint32_t SDMMD_AMDServiceConnectionGetSocket(SDMMD_AMConnectionRef connection);
+SSL* SDMMD_AMDServiceConnectionGetSecureIOContext(SDMMD_AMConnectionRef connection);
+
+sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connection);
+
+sdmmd_return_t SDMMD_AMDeviceSecureStartSessionedService(SDMMD_AMDeviceRef device, CFStringRef service, SDMMD_AMConnectionRef *connection);
 
 #endif

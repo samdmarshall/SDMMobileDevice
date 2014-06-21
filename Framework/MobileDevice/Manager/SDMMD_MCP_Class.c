@@ -1,5 +1,5 @@
 /*
- *  SDMMobileDevice.h
+ *  SDMMD_MCP_Class.c
  *  SDMMobileDevice
  *
  * Copyright (c) 2014, Sam Marshall
@@ -25,20 +25,39 @@
  *
  */
 
-#ifndef _SDM_MOBILE_DEVICE_H_
-#define _SDM_MOBILE_DEVICE_H_
+#ifndef _SDM_MD_MCP_CLASS_C_
+#define _SDM_MD_MCP_CLASS_C_
 
-#include "SDMMD_Initialize.h"
+#include "SDMMD_MCP_Class.h"
 
+static void SDMMD_SDMMobileDeviceRefFinalize(CFTypeRef cf) {
+	SDMMobileDeviceRef manager = (SDMMobileDeviceRef)cf;
+	CFSafeRelease(manager->ivars.usbmuxd);
+	CFSafeRelease(manager->ivars.deviceList);
+}
 
-#include "SDMMD_Functions.h"
-#include "SDMMD_AMDevice.h"
-#include "SDMMD_AppleFileConduit.h"
-#include "SDMMD_Error.h"
-#include "SDMMD_MCP.h"
-#include "SDMMD_USBMuxListener.h"
-#include "SDMMD_Applications.h"
-#include "SDMMD_Notification.h"
-#include "SDMMD_Debugger.h"
+static CFTypeID _kSDMMD_SDMMobileDeviceRefID = _kCFRuntimeNotATypeID;
+
+static CFRuntimeClass _kSDMMD_SDMMobileDeviceRefClass = {0};
+
+void SDMMD_SDMMobileDeviceRefClassInitialize() {
+	_kSDMMD_SDMMobileDeviceRefClass.version = 0;
+	_kSDMMD_SDMMobileDeviceRefClass.className = "SDMMobileDeviceRef";
+	_kSDMMD_SDMMobileDeviceRefClass.init = NULL;
+	_kSDMMD_SDMMobileDeviceRefClass.copy = NULL;
+	_kSDMMD_SDMMobileDeviceRefClass.finalize = SDMMD_SDMMobileDeviceRefFinalize;
+	_kSDMMD_SDMMobileDeviceRefClass.equal = NULL;
+	_kSDMMD_SDMMobileDeviceRefClass.hash = NULL;
+	_kSDMMD_SDMMobileDeviceRefClass.copyFormattingDesc = NULL;
+	_kSDMMD_SDMMobileDeviceRefClass.copyDebugDesc = NULL;
+	_kSDMMD_SDMMobileDeviceRefClass.reclaim = NULL;
+	_kSDMMD_SDMMobileDeviceRefID = _CFRuntimeRegisterClass((const CFRuntimeClass * const)&_kSDMMD_SDMMobileDeviceRefClass);
+}
+
+SDMMobileDeviceRef SDMMobileDeviceRefCreateEmpty() {
+	uint32_t extra = sizeof(sdm_mobiledevice_body);
+	SDMMobileDeviceRef manager = (SDMMobileDeviceRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, _kSDMMD_SDMMobileDeviceRefID, extra, NULL);
+	return manager;
+}
 
 #endif
