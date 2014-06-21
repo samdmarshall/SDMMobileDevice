@@ -28,6 +28,12 @@
 #ifndef _SDM_MD_USBMUXLISTENER_TYPES_H_
 #define _SDM_MD_USBMUXLISTENER_TYPES_H_
 
+static const CFStringRef kSDMMD_USBMuxListenerDeviceAttachedNotification = CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotification");
+static const CFStringRef kSDMMD_USBMuxListenerDeviceAttachedNotificationFinished = CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotificationFinished");
+static const CFStringRef kSDMMD_USBMuxListenerDeviceDetachedNotification = CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotification");
+static const CFStringRef kSDMMD_USBMuxListenerDeviceDetachedNotificationFinished = CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotificationFinished");
+static const CFStringRef kSDMMD_USBMuxListenerStoppedListenerNotification = CFSTR("SDMMD_USBMuxListenerStoppedListenerNotification");
+
 struct USBMuxPacketBody {
 	uint32_t length;
 	uint32_t reserved;

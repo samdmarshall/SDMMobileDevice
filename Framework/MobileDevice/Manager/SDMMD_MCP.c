@@ -55,21 +55,4 @@ SDMMobileDeviceRef InitializeSDMMobileDevice() {
 	return controller;
 }
 
-void SDMMD_AMDeviceNotificationSubscribe() {
-	SDMMobileDevice;
-	if (SDMMobileDevice->ivars.usbmuxd == 0) {
-		SDMMobileDevice->ivars.usbmuxd = SDMMD_USBMuxCreate();
-		SDMMD_USBMuxStartListener(&SDMMobileDevice->ivars.usbmuxd);
-	}
-	else {
-		printf("Initializing this library starts the usbmuxd listener automatically, there isn't a need to call this to start listening for devices.\n");
-	}
-}
-
-void SDMMD_AMDeviceNotificationUnsubscribe() {
-	if (SDMMobileDevice->ivars.usbmuxd) {
-		SDMMD_USBMuxClose(SDMMobileDevice->ivars.usbmuxd);
-	}
-}
-
 #endif

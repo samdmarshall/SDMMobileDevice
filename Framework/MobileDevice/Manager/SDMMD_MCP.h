@@ -31,8 +31,6 @@
 #include "SDMMD_MCP_Class.h"
 
 SDMMobileDeviceRef InitializeSDMMobileDevice();
-void SDMMD_AMDeviceNotificationSubscribe();
-void SDMMD_AMDeviceNotificationUnsubscribe();
 
 #define SDMMobileDevice InitializeSDMMobileDevice()
 

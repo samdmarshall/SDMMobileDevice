@@ -32,6 +32,7 @@
 #include "SDMMD_Classes.h"
 
 void InitializeSDMMobileDeviceClasses() {
+	SDMMD_USBMuxListenerRefClassInitialize();
 	SDMMD_AMDeviceRefClassInitialize();
 	SDMMD_AMConnectionRefClassInitialize();
 	SDMMD_SDMMobileDeviceRefClassInitialize();

@@ -58,4 +58,10 @@ struct USBMuxListenerClass {
 
 typedef struct USBMuxListenerClass * SDMMD_USBMuxListenerRef;
 
+void SDMMD_USBMuxListenerRefClassInitialize(void);
+
+CFTypeID SDMMD_USBMuxListenerRefGetTypeID(void);
+
+SDMMD_USBMuxListenerRef SDMMD_USBMuxListenerCreateEmpty();
+
 #endif

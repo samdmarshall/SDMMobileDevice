@@ -36,12 +36,6 @@
 #include <sys/un.h>
 #include "Core.h"
 
-const CFStringRef kSDMMD_USBMuxListenerDeviceAttachedNotification = CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotification");
-const CFStringRef kSDMMD_USBMuxListenerDeviceAttachedNotificationFinished = CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotificationFinished");
-const CFStringRef kSDMMD_USBMuxListenerDeviceDetachedNotification = CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotification");
-const CFStringRef kSDMMD_USBMuxListenerDeviceDetachedNotificationFinished = CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotificationFinished");
-const CFStringRef kSDMMD_USBMuxListenerStoppedListenerNotification = CFSTR("SDMMD_USBMuxListenerStoppedListenerNotification");
-
 typedef struct USBMuxResponseCode {
 	uint32_t code;
 	CFStringRef string;
@@ -214,7 +208,7 @@ void SDMMD_USBMuxUnknownCallback(void *context, struct USBMuxPacket *packet) {
 }
 
 SDMMD_USBMuxListenerRef SDMMD_USBMuxCreate() {
-	SDMMD_USBMuxListenerRef listener = (SDMMD_USBMuxListenerRef)calloc(1, sizeof(struct USBMuxListenerClass));
+	SDMMD_USBMuxListenerRef listener = (SDMMD_USBMuxListenerRef)SDMMD_USBMuxListenerCreateEmpty();
 	listener->ivars.socket = -1;
 	listener->ivars.isActive = false;
 	listener->ivars.socketQueue = dispatch_queue_create("com.samdmarshall.sdmmobiledevice.socketQueue", NULL);
@@ -227,24 +221,6 @@ SDMMD_USBMuxListenerRef SDMMD_USBMuxCreate() {
 	listener->ivars.unknownCallback = SDMMD_USBMuxUnknownCallback;
 	listener->ivars.responses = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, NULL);
 	return listener;
-}
-
-void SDMMD_USBMuxClose(SDMMD_USBMuxListenerRef listener) {
-	listener->ivars.isActive = false;
-	CFSafeRelease(listener->ivars.responses);
-	Safe(close,listener->ivars.socket);
-	Safe(dispatch_release,listener->ivars.socketQueue);
-	listener->ivars.responseCallback = NULL;
-	listener->ivars.attachedCallback = NULL;
-	listener->ivars.detachedCallback = NULL;
-	listener->ivars.logsCallback = NULL;
-	listener->ivars.deviceListCallback = NULL;
-	listener->ivars.listenerListCallback = NULL;
-	listener->ivars.unknownCallback = NULL;
-	dispatch_async(dispatch_get_main_queue(), ^{
-		CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), kSDMMD_USBMuxListenerStoppedListenerNotification, NULL, NULL, true);
-	});
-	Safe(free,listener);
 }
 
 
