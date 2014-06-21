@@ -44,6 +44,13 @@
 		225AD7321765FE7700A47071 /* SDMMD_USBMuxListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 225AD7301765FE7700A47071 /* SDMMD_USBMuxListener.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		225AD7331765FE7700A47071 /* SDMMD_USBMuxListener.c in Sources */ = {isa = PBXBuildFile; fileRef = 225AD7311765FE7700A47071 /* SDMMD_USBMuxListener.c */; };
 		22648F9918947C4300133948 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22648F9818947C4300133948 /* IOKit.framework */; };
+		2270AC661956432E006BBE84 /* SDMMD_MCP_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 2270AC63195641CC006BBE84 /* SDMMD_MCP_Internal.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		2270AC671956432E006BBE84 /* SDMMD_Connection_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 2299C423195624EB00C75891 /* SDMMD_Connection_Internal.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		2270AC681956432E006BBE84 /* SDMMD_Connection_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2299C424195626A000C75891 /* SDMMD_Connection_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		2270AC691956432E006BBE84 /* SDMMD_USBMuxListener_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 2270AC6219564127006BBE84 /* SDMMD_USBMuxListener_Internal.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		2270AC6A1956432E006BBE84 /* SDMMD_USBMux_Protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 22FB08031955FF4C00B73D75 /* SDMMD_USBMux_Protocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2270AC6B1956432E006BBE84 /* SDMMD_AFCConnection_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 2270AC6419564281006BBE84 /* SDMMD_AFCConnection_Internal.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		2270AC6C1956432E006BBE84 /* SDMMD_AFCOperation_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 2270AC65195642D7006BBE84 /* SDMMD_AFCOperation_Internal.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		2299C41C195623A600C75891 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2299C41B195623A600C75891 /* main.swift */; };
 		22A58E1E191157F600303D31 /* CFStringAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 22A58E1C191157F600303D31 /* CFStringAddition.c */; };
 		22AD8E651787465A002ACFB1 /* SDMMD_AMDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 22AD8E631787465A002ACFB1 /* SDMMD_AMDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -276,6 +283,10 @@
 		225AD7301765FE7700A47071 /* SDMMD_USBMuxListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_USBMuxListener.h; sourceTree = "<group>"; };
 		225AD7311765FE7700A47071 /* SDMMD_USBMuxListener.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_USBMuxListener.c; sourceTree = "<group>"; };
 		22648F9818947C4300133948 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		2270AC6219564127006BBE84 /* SDMMD_USBMuxListener_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_USBMuxListener_Internal.h; sourceTree = "<group>"; };
+		2270AC63195641CC006BBE84 /* SDMMD_MCP_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_MCP_Internal.h; sourceTree = "<group>"; };
+		2270AC6419564281006BBE84 /* SDMMD_AFCConnection_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_AFCConnection_Internal.h; sourceTree = "<group>"; };
+		2270AC65195642D7006BBE84 /* SDMMD_AFCOperation_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_AFCOperation_Internal.h; sourceTree = "<group>"; };
 		2278490F18AFE5A100D1D6FB /* Array.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Array.h; sourceTree = "<group>"; };
 		2299C419195623A600C75891 /* SwiftTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwiftTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2299C41B195623A600C75891 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -676,8 +687,10 @@
 			children = (
 				22FB07FD1955FCCF00B73D75 /* SDMMD_AFC_Types.h */,
 				22FB07FA1955FC4B00B73D75 /* SDMMD_AFCConnection_Class.h */,
+				2270AC6419564281006BBE84 /* SDMMD_AFCConnection_Internal.h */,
 				22FB07FB1955FC5700B73D75 /* SDMMD_AFCConnection_Class.c */,
 				22FB07F71955FC2A00B73D75 /* SDMMD_AFCOperation_Class.h */,
+				2270AC65195642D7006BBE84 /* SDMMD_AFCOperation_Internal.h */,
 				22FB07F81955FC3500B73D75 /* SDMMD_AFCOperation_Class.c */,
 				22D7FA3718F0B1AD0034CC66 /* SDMMD_AppleFileConduit.h */,
 				22D7FA3818F0B1BC0034CC66 /* SDMMD_AppleFileConduit.c */,
@@ -712,6 +725,7 @@
 			children = (
 				22FB07F41955F8F200B73D75 /* SDMMD_USBMuxListener_Types.h */,
 				22FB07F11955F79000B73D75 /* SDMMD_USBMuxListener_Class.h */,
+				2270AC6219564127006BBE84 /* SDMMD_USBMuxListener_Internal.h */,
 				22FB07F21955F79900B73D75 /* SDMMD_USBMuxListener_Class.c */,
 				225AD7301765FE7700A47071 /* SDMMD_USBMuxListener.h */,
 				225AD7311765FE7700A47071 /* SDMMD_USBMuxListener.c */,
@@ -738,6 +752,7 @@
 			isa = PBXGroup;
 			children = (
 				22FB07DF1955E9BD00B73D75 /* SDMMD_MCP_Class.h */,
+				2270AC63195641CC006BBE84 /* SDMMD_MCP_Internal.h */,
 				22FB07E01955E9C700B73D75 /* SDMMD_MCP_Class.c */,
 				22AD8F231789B3DF002ACFB1 /* SDMMD_MCP.h */,
 				22AD8F241789B3DF002ACFB1 /* SDMMD_MCP.c */,
@@ -879,6 +894,7 @@
 				22FB07F51955FB5500B73D75 /* SDMMD_USBMuxListener_Types.h in Headers */,
 				22FB07FE1955FE2000B73D75 /* SDMMD_AFC_Types.h in Headers */,
 				22FB082E19560DED00B73D75 /* CFTypeAddition.h in Headers */,
+				2270AC6A1956432E006BBE84 /* SDMMD_USBMux_Protocol.h in Headers */,
 				22FB07E71955EB8900B73D75 /* SDMMD_Classes.h in Headers */,
 				22AD9347178A1609002ACFB1 /* SDMMD_MRecoveryModeDevice.h in Headers */,
 				22AD9350178A1678002ACFB1 /* SDMMD_MRUSBDevice.h in Headers */,
@@ -888,6 +904,12 @@
 				222EF6EB1905BDB8000270C3 /* SDMMD_Debugger_Internal.h in Headers */,
 				135697D817FEB9CB00039D19 /* SDMTranslation.h in Headers */,
 				22C77D331956211000525576 /* SDMMD_AMDevice_Internal.h in Headers */,
+				2270AC661956432E006BBE84 /* SDMMD_MCP_Internal.h in Headers */,
+				2270AC671956432E006BBE84 /* SDMMD_Connection_Internal.h in Headers */,
+				2270AC681956432E006BBE84 /* SDMMD_Connection_Private.h in Headers */,
+				2270AC691956432E006BBE84 /* SDMMD_USBMuxListener_Internal.h in Headers */,
+				2270AC6B1956432E006BBE84 /* SDMMD_AFCConnection_Internal.h in Headers */,
+				2270AC6C1956432E006BBE84 /* SDMMD_AFCOperation_Internal.h in Headers */,
 				3F38D21C18AECF7C00DE5FA9 /* SDMTypeTranslation.h in Headers */,
 				22FB083219560DF200B73D75 /* Range.h in Headers */,
 				22FB083319560DF200B73D75 /* Attributes.h in Headers */,

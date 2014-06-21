@@ -1,5 +1,5 @@
 /*
- *  SDMMD_USBmuxListener_Class.h
+ *  SDMMD_USBMuxListener_Internal.h
  *  SDMMobileDevice
  *
  * Copyright (c) 2014, Sam Marshall
@@ -25,18 +25,34 @@
  *
  */
 
-#ifndef _SDM_MD_USBMUXLISTENER_CLASS_H_
-#define _SDM_MD_USBMUXLISTENER_CLASS_H_
+#ifndef SDMMobileDevice_Framework_SDMMD_USBMuxListener_Internal_h
+#define SDMMobileDevice_Framework_SDMMD_USBMuxListener_Internal_h
 
 #include <CoreFoundation/CoreFoundation.h>
+#include "SDMMD_USBMuxListener_Types.h"
 #include "CFRuntime.h"
 
-typedef struct USBMuxListenerClass * SDMMD_USBMuxListenerRef;
+typedef void (*callbackFunction)(void *, struct USBMuxPacket *);
 
-void SDMMD_USBMuxListenerRefClassInitialize(void);
+struct USBMuxListenerClassBody {
+	uint32_t socket;
+	bool isActive;
+	__unsafe_unretained dispatch_queue_t socketQueue;
+	__unsafe_unretained dispatch_source_t socketSource;
+	__unsafe_unretained dispatch_semaphore_t semaphore;
+	callbackFunction responseCallback;
+	callbackFunction attachedCallback;
+	callbackFunction detachedCallback;
+	callbackFunction logsCallback;
+	callbackFunction deviceListCallback;
+	callbackFunction listenerListCallback;
+	callbackFunction unknownCallback;
+	CFMutableArrayRef responses;
+} USBMuxListenerClassBody;
 
-CFTypeID SDMMD_USBMuxListenerRefGetTypeID(void);
-
-SDMMD_USBMuxListenerRef SDMMD_USBMuxListenerCreateEmpty();
+struct USBMuxListenerClass {
+	CFRuntimeBase base;
+	struct USBMuxListenerClassBody ivars;
+} USBMuxListenerClass;
 
 #endif

@@ -31,7 +31,9 @@
 #include "SDMMD_USBMuxListener.h"
 #include "SDMMD_USBMux_Protocol.h"
 #include "SDMMD_AMDevice_Internal.h"
+#include "SDMMD_USBMuxListener_Internal.h"
 #include "SDMMD_MCP.h"
+#include "SDMMD_MCP_Internal.h"
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <unistd.h>

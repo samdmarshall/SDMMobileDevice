@@ -1,5 +1,5 @@
 /*
- *  SDMMD_USBmuxListener_Class.h
+ *  SDMMD_MCP_Internal.h
  *  SDMMobileDevice
  *
  * Copyright (c) 2014, Sam Marshall
@@ -25,18 +25,22 @@
  *
  */
 
-#ifndef _SDM_MD_USBMUXLISTENER_CLASS_H_
-#define _SDM_MD_USBMUXLISTENER_CLASS_H_
+#ifndef SDMMobileDevice_Framework_SDMMD_MCP_Internal_h
+#define SDMMobileDevice_Framework_SDMMD_MCP_Internal_h
 
 #include <CoreFoundation/CoreFoundation.h>
 #include "CFRuntime.h"
+#include "SDMMD_USBMuxListener.h"
 
-typedef struct USBMuxListenerClass * SDMMD_USBMuxListenerRef;
+struct sdm_mobiledevice_body {
+	SDMMD_USBMuxListenerRef usbmuxd;
+	CFArrayRef deviceList;
+	uint64_t peer_certificate_data_index;
+} __attribute__ ((packed)) sdm_mobiledevice_body;
 
-void SDMMD_USBMuxListenerRefClassInitialize(void);
-
-CFTypeID SDMMD_USBMuxListenerRefGetTypeID(void);
-
-SDMMD_USBMuxListenerRef SDMMD_USBMuxListenerCreateEmpty();
+struct sdm_mobiledevice {
+	CFRuntimeBase base;
+	struct sdm_mobiledevice_body ivars;
+} __attribute__ ((packed)) sdm_mobiledevice;
 
 #endif

@@ -53,6 +53,7 @@
 #include "SDMMD_Functions.h"
 #include "SDMMD_AppleFileConduit.h"
 #include "SDMMD_SSL_Functions.h"
+#include "SDMMD_MCP_Internal.h"
 
 #include <IOKit/IOKitLib.h>
 #include <IOKit/usb/IOUSBLib.h>

@@ -47,12 +47,12 @@ SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(SDMMD_AMConnectionRef conn) {
 	SDMMD_AFCConnectionRef afc = calloc(1, sizeof(struct sdmmd_AFCConnectionClass));
 	if (afc != NULL) {
 		afc->handle = conn;
-		char *udidString = SDMCFStringGetString((conn->ivars.device)->ivars.unique_device_id);
+		CFStringRef udidString = SDMMD_AMDeviceCopyUDID(conn->ivars.device);
 		CFStringRef date_string = SDMGetCurrentDateString();
 		char *dateString = SDMCFStringGetString(date_string);
 		CFSafeRelease(date_string);
-		CFStringRef name = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%s.%s.%s"), "com.samdmarshall.sdmmobiledevice.afc", udidString, dateString);
-		Safe(free, udidString);
+		CFStringRef name = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%s.%@.%s"), "com.samdmarshall.sdmmobiledevice.afc", udidString, dateString);
+		CFSafeRelease(udidString);
 		Safe(free, dateString);
 		char *queueName = SDMCFStringGetString(name);
 		afc->operationQueue = dispatch_queue_create(queueName, NULL);

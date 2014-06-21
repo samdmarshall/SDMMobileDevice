@@ -1,5 +1,5 @@
 /*
- *  SDMMD_USBmuxListener_Class.h
+ *  SDMMD_AFCConnection_Internal.h
  *  SDMMobileDevice
  *
  * Copyright (c) 2014, Sam Marshall
@@ -25,18 +25,23 @@
  *
  */
 
-#ifndef _SDM_MD_USBMUXLISTENER_CLASS_H_
-#define _SDM_MD_USBMUXLISTENER_CLASS_H_
+#ifndef SDMMobileDevice_Framework_SDMMD_AFCConnection_Internal_h
+#define SDMMobileDevice_Framework_SDMMD_AFCConnection_Internal_h
 
 #include <CoreFoundation/CoreFoundation.h>
 #include "CFRuntime.h"
+#include "SDMMD_Connection_Class.h"
 
-typedef struct USBMuxListenerClass * SDMMD_USBMuxListenerRef;
+struct sdmmd_AFCConnectionClassBody {
+	SDMMD_AMConnectionRef handle;
+	__unsafe_unretained dispatch_queue_t operationQueue;
+	__unsafe_unretained dispatch_semaphore_t semaphore;
+	uint64_t operationCount;
+} sdmmd_AFCConnectionClassBody;
 
-void SDMMD_USBMuxListenerRefClassInitialize(void);
-
-CFTypeID SDMMD_USBMuxListenerRefGetTypeID(void);
-
-SDMMD_USBMuxListenerRef SDMMD_USBMuxListenerCreateEmpty();
+struct sdmmd_AFCConnectionClass {
+	CFRuntimeBase base;
+	struct sdmmd_AFCConnectionClassBody ivars;
+} __attribute__ ((packed)) sdmmd_AFCConnectionClass;
 
 #endif

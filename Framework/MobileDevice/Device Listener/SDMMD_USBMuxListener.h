@@ -31,6 +31,7 @@
 #include "SDMMD_USBMuxListener_Class.h"
 #include "SDMMD_Error.h"
 #include "SDMMD_AMDevice.h"
+#include "SDMMD_USBMuxListener_Types.h"
 
 #pragma mark -
 #pragma mark Functions

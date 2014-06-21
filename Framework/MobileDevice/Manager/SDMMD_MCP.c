@@ -35,6 +35,7 @@
 #include <openssl/err.h>
 #include <openssl/crypto.h>
 #include "SDMMD_SSL_Functions.h"
+#include "SDMMD_MCP_Internal.h"
 
 static SDMMobileDeviceRef controller = nil;
 static dispatch_once_t once;

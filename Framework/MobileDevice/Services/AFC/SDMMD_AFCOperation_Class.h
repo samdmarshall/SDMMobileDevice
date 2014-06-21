@@ -31,31 +31,6 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include "CFRuntime.h"
 
-typedef struct SDMMD_AFCPacketHeader {
-	uint64_t signature;
-	uint64_t packetLen;
-	uint64_t headerLen;
-	uint64_t pid;
-	uint64_t type;
-} __attribute__ ((packed)) SDMMD_AFCPacketHeader;
-
-struct sdmmd_AFCPacket {
-	SDMMD_AFCPacketHeader header;
-	void* header_data;
-	void* body_data;
-	CFTypeRef response;
-} sdmmd_AFCPacket;
-
-struct sdmmd_AFCOperationBody {
-	struct sdmmd_AFCPacket *packet;
-	dispatch_time_t timeout;
-} sdmmd_AFCOperationBody;
-
-struct sdmmd_AFCOperation {
-	CFRuntimeBase base;
-	struct sdmmd_AFCOperationBody ivars;
-} __attribute__ ((packed)) sdmmd_AFCOperation;
-
 typedef struct sdmmd_AFCOperation* SDMMD_AFCOperationRef;
 
 void SDMMD_AFCOperationRefClassInitialize(void);

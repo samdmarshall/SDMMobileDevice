@@ -30,18 +30,6 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 #include "CFRuntime.h"
-#include "SDMMD_USBMuxListener.h"
-
-struct sdm_mobiledevice_body {
-	SDMMD_USBMuxListenerRef usbmuxd;
-	CFArrayRef deviceList;
-	uint64_t peer_certificate_data_index;
-} __attribute__ ((packed)) sdm_mobiledevice_body;
-
-struct sdm_mobiledevice {
-	CFRuntimeBase base;
-	struct sdm_mobiledevice_body ivars;
-} __attribute__ ((packed)) sdm_mobiledevice;
 
 typedef struct sdm_mobiledevice* SDMMobileDeviceRef;
 

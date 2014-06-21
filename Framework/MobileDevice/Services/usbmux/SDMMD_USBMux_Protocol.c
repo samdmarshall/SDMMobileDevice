@@ -30,6 +30,7 @@
 
 #include "SDMMD_USBMux_Protocol.h"
 #include "SDMMD_USBMuxListener.h"
+#include "SDMMD_USBMuxListener_Internal.h"
 #include "Core.h"
 #include <sys/socket.h>
 

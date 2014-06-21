@@ -43,7 +43,7 @@ void ListConnectedDevices() {
 					}
 					SDMMD_AMDeviceStopSession(device);
 					
-					CFTypeRef deviceUDID = CFStringCreateCopy(kCFAllocatorDefault, device->ivars.unique_device_id);
+					CFTypeRef deviceUDID = SDMMD_AMDeviceCopyUDID(device);
 					if (!deviceUDID) {
 						deviceUDID = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kUniqueDeviceID));
 					}

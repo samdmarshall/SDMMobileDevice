@@ -32,18 +32,6 @@
 #include "CFRuntime.h"
 #include "SDMMD_Connection_Class.h"
 
-struct sdmmd_AFCConnectionClassBody {
-	SDMMD_AMConnectionRef handle;
-	__unsafe_unretained dispatch_queue_t operationQueue;
-	__unsafe_unretained dispatch_semaphore_t semaphore;
-	uint64_t operationCount;
-} sdmmd_AFCConnectionClassBody;
-
-struct sdmmd_AFCConnectionClass {
-	CFRuntimeBase base;
-	struct sdmmd_AFCConnectionClassBody ivars;
-} __attribute__ ((packed)) sdmmd_AFCConnectionClass;
-
 typedef struct sdmmd_AFCConnectionClass* SDMMD_AFCConnectionRef;
 
 void SDMMD_AFCConnectionRefClassInitialize(void);
