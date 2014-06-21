@@ -478,6 +478,15 @@
 			path = CoreFoundation;
 			sourceTree = "<group>";
 		};
+		22E0C82A19561A1B00077B4E /* Functions */ = {
+			isa = PBXGroup;
+			children = (
+				22AD8E7817875B1E002ACFB1 /* SDMMD_Functions.h */,
+				22FB0874195614B700B73D75 /* SDMMD_Functions.c */,
+			);
+			name = Functions;
+			sourceTree = "<group>";
+		};
 		22F9CF3519324C6A007A696D /* Old */ = {
 			isa = PBXGroup;
 			children = (
@@ -703,11 +712,10 @@
 		22FB07D91955DF7300B73D75 /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				22FB07EE1955F18400B73D75 /* SSL */,
 				22AD9A44178F2CBF002ACFB1 /* CFRuntime.h */,
 				22DEF9811883722B008E909F /* SDMMD_Types.h */,
-				22AD8E7817875B1E002ACFB1 /* SDMMD_Functions.h */,
-				22FB0874195614B700B73D75 /* SDMMD_Functions.c */,
+				22E0C82A19561A1B00077B4E /* Functions */,
+				22FB07EE1955F18400B73D75 /* SSL */,
 			);
 			name = Base;
 			path = MobileDevice/Base;
@@ -1222,6 +1230,7 @@
 				22FB084219560E5800B73D75 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "SDMMobileDevice-Framework" */ = {
 			isa = XCConfigurationList;
