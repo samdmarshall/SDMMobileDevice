@@ -10,7 +10,7 @@
 #define iOSConsole_dev_h
 
 #include <CoreFoundation/CoreFoundation.h>
-#include "SDMMobileDevice.h"
+#include <SDMMobileDevice/SDMMobileDevice.h>
 
 void SetupDeviceForDevelopment(char *udid);
 void TranferAppForInstallOnDevice(char *udid, char *app_path);

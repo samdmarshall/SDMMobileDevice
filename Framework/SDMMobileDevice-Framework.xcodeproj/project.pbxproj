@@ -732,7 +732,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "SDMMobileDevice-Info.plist";
 				INSTALL_PATH = "";
-				LD_DYLIB_INSTALL_NAME = "@rpath/SDMMobileDevice.framework/Versions/A/SDMMobileDevice";
+				LD_DYLIB_INSTALL_NAME = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "";
@@ -765,7 +765,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "SDMMobileDevice-Info.plist";
 				INSTALL_PATH = "";
-				LD_DYLIB_INSTALL_NAME = "@rpath/SDMMobileDevice.framework/Versions/A/SDMMobileDevice";
+				LD_DYLIB_INSTALL_NAME = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "";

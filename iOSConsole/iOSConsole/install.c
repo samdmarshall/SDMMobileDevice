@@ -10,10 +10,10 @@
 #define iOSConsole_install_c
 
 #include "install.h"
-#include "SDMMobileDevice.h"
+#include <SDMMobileDevice/SDMMobileDevice.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include "attach.h"
-#include "Core.h"
+#include <SDMMobileDevice/Core.h>
 
 void InstallAppToDevice(char *udid, char *path) {
 	SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);

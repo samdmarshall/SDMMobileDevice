@@ -15,8 +15,8 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <notify.h>
 
-#include "SDMMobileDevice.h"
-#include "Core.h"
+#include <SDMMobileDevice/SDMMobileDevice.h>
+#include <SDMMobileDevice/Core.h>
 
 static char *kDebugType = "<Debug>";
 static char *kWarningType = "<Warning>";

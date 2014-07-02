@@ -13,7 +13,7 @@
 #include "apps.h"
 #include "attach.h"
 #include <CoreFoundation/CoreFoundation.h>
-#include "SDMMobileDevice.h"
+#include <SDMMobileDevice/SDMMobileDevice.h>
 
 void RunAppOnDeviceWithIdentifier(char *udid, char* identifier) {
 	SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);

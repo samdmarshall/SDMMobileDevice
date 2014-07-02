@@ -10,7 +10,7 @@
 #define iOSConsole_attach_h
 
 #include <CoreFoundation/CoreFoundation.h>
-#include "SDMMobileDevice.h"
+#include <SDMMobileDevice/SDMMobileDevice.h>
 
 SDMMD_AMDeviceRef FindDeviceFromUDID(char *udid);
 SDMMD_AMConnectionRef AttachToDeviceAndService(SDMMD_AMDeviceRef device, char *service);

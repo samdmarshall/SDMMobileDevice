@@ -11,7 +11,7 @@
 
 #include "dev.h"
 #include "attach.h"
-#include "SDMMD_Debugger_Internal.h"
+#include <SDMMobileDevice/SDMMD_Debugger_Internal.h>
 #include <sys/socket.h>
 #include <sys/un.h>
 

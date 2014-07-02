@@ -12,7 +12,7 @@
 #include "springboard.h"
 #include "attach.h"
 
-#include "Core.h"
+#include <SDMMobileDevice/Core.h>
 
 bool AppHasBundleID(CFDictionaryRef app, CFStringRef bundleID, CFDictionaryRef *appInfo);
 bool FolderContainsBundleID(CFDictionaryRef folder, CFStringRef bundleID, CFDictionaryRef *appInfo);

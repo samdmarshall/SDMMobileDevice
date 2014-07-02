@@ -16,7 +16,7 @@
 #include "attach.h"
 #include "syslog.h"
 #include "springboard.h"
-#include "Core.h"
+#include <SDMMobileDevice/Core.h>
 
 void ServiceSocketCallback(CFSocketRef s, CFSocketCallBackType callbackType, CFDataRef address, const void *data, void *info) {
     CFSocketNativeHandle socket = (CFSocketNativeHandle)(*((CFSocketNativeHandle *)data));

@@ -11,8 +11,8 @@
 
 #include "query.h"
 #include "attach.h"
-#include "Core.h"
-#include "SDMMobileDevice.h"
+#include <SDMMobileDevice/Core.h>
+#include <SDMMobileDevice/SDMMobileDevice.h>
 
 void RunQueryOnDevice(SDMMD_AMDeviceRef device, char *domain, char *key, sdmmd_return_t result) {
 	if (SDM_MD_CallSuccessful(result)) {

@@ -10,7 +10,7 @@
 #define iOSConsole_power_c
 
 #include "power.h"
-#include "Core.h"
+#include <SDMMobileDevice/Core.h>
 #include "attach.h"
 
 void SendDeviceCommand(char *udid, CFDictionaryRef request) {

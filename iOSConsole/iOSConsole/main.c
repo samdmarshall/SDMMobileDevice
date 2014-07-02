@@ -9,8 +9,8 @@
 #include <getopt.h>
 #include <CoreFoundation/CoreFoundation.h>
 
-#include "SDMMobileDevice.h"
-#include "Core.h"
+#include <SDMMobileDevice/SDMMobileDevice.h>
+#include <SDMMobileDevice/Core.h>
 
 #include "Features.h"
 
