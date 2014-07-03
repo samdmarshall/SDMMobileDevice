@@ -26,7 +26,7 @@ static char *powerArg = "-p,--diag";
 static char *devArg = "-x,--develop";
 static char *installArg = "-t,--install";
 static char *profileArg = "-c,--profile";
-static char *testArg = "-z,--test";
+ATR_UNUSED static char *testArg = "-z,--test";
 
 enum iOSConsoleOptions {
 	OptionsHelp = 0x0,

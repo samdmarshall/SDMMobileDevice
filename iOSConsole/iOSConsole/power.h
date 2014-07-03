@@ -10,7 +10,6 @@
 #define iOSConsole_power_h
 
 #include <CoreFoundation/CoreFoundation.h>
-#include "SDMMobileDevice.h"
 
 void SendSleepToDevice(char *udid);
 void SendRebootToDevice(char *udid);

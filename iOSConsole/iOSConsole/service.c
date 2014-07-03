@@ -17,6 +17,7 @@
 #include "syslog.h"
 #include "springboard.h"
 #include "Core.h"
+#include "SDMMD_Connection_Internal.h"
 
 void ServiceSocketCallback(CFSocketRef s, CFSocketCallBackType callbackType, CFDataRef address, const void *data, void *info) {
     CFSocketNativeHandle socket = (CFSocketNativeHandle)(*((CFSocketNativeHandle *)data));

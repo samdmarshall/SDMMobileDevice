@@ -14,6 +14,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include "attach.h"
 #include "Core.h"
+#include "SDMMD_Connection_Internal.h"
 
 void InstallAppToDevice(char *udid, char *path) {
 	SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);

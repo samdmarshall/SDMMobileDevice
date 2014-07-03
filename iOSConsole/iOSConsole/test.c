@@ -13,6 +13,8 @@
 #include "SDMMobileDevice.h"
 #include <CoreFoundation/CoreFoundation.h>
 #include "attach.h"
+#include "SDMMD_Connection_Private.h"
+#include "SDMMD_Connection_Internal.h"
 #include "Core.h"
 
 void WhatDoesThisDo(char *udid) {
@@ -32,24 +34,24 @@ void WhatDoesThisDo(char *udid) {
 			result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(conn), optionsDict, kCFPropertyListXMLFormat_v1_0);
 			
 			CFMutableDictionaryRef response;
-			result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(conn), &response);
+			result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(conn), (CFPropertyListRef *)&response);
 			if (SDM_MD_CallSuccessful(result)) {
 				PrintCFType(response);
 			}
 			
-			result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(conn), &response);
+			result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(conn), (CFPropertyListRef *)&response);
 			if (SDM_MD_CallSuccessful(result)) {
 				PrintCFType(response);
 			}
 			
-			result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(conn), &response);
+			result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(conn), (CFPropertyListRef *)&response);
 			if (SDM_MD_CallSuccessful(result)) {
 				PrintCFType(response);
 			}
 
 		}
 		else {
-			printf("%s: Was unable to start the service on the device: %i\n",__FUNCTION__,device->ivars.device_id);
+			printf("%s: Was unable to start the service on the device: %i\n",__FUNCTION__,SDMMD_AMDeviceUSBDeviceID(device));
 		}
 	}
 }

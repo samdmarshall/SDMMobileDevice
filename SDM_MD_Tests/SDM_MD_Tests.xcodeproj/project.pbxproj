@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		22B3D80318E74EE40007F104 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B3D80218E74EE40007F104 /* CoreFoundation.framework */; };
 		22B3D80618E74EE40007F104 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D80518E74EE40007F104 /* main.c */; };
-		22B3D80F18E74F1E0007F104 /* SDMMobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B3D80E18E74F1E0007F104 /* SDMMobileDevice.framework */; };
 		22B3D81118E74F2E0007F104 /* MobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B3D81018E74F2E0007F104 /* MobileDevice.framework */; };
 		22B3D81318E74FBF0007F104 /* test_AMDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D81218E74FBF0007F104 /* test_AMDevice.c */; };
 		22B3D81A18E75BCC0007F104 /* listener.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D81918E75BCC0007F104 /* listener.c */; };
@@ -22,6 +21,7 @@
 		22EC43DB18F05A7E003BA4C9 /* test_AFC.c in Sources */ = {isa = PBXBuildFile; fileRef = 22EC43DA18F05A7E003BA4C9 /* test_AFC.c */; };
 		22EC43DE18F05BED003BA4C9 /* test_apple_AFC.c in Sources */ = {isa = PBXBuildFile; fileRef = 22EC43DD18F05BED003BA4C9 /* test_apple_AFC.c */; };
 		22EC43E118F05C01003BA4C9 /* test_sdm_AFC.c in Sources */ = {isa = PBXBuildFile; fileRef = 22EC43E018F05C01003BA4C9 /* test_sdm_AFC.c */; };
+		22FB086619560EDB00B73D75 /* SDMMobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22FB086519560EDB00B73D75 /* SDMMobileDevice.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -66,6 +66,7 @@
 		22EC43DD18F05BED003BA4C9 /* test_apple_AFC.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_apple_AFC.c; sourceTree = "<group>"; };
 		22EC43DF18F05BF8003BA4C9 /* test_sdm_AFC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_sdm_AFC.h; sourceTree = "<group>"; };
 		22EC43E018F05C01003BA4C9 /* test_sdm_AFC.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_sdm_AFC.c; sourceTree = "<group>"; };
+		22FB086519560EDB00B73D75 /* SDMMobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDMMobileDevice.framework; path = ../build/Debug/SDMMobileDevice.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,8 +74,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22FB086619560EDB00B73D75 /* SDMMobileDevice.framework in Frameworks */,
 				22B3D81118E74F2E0007F104 /* MobileDevice.framework in Frameworks */,
-				22B3D80F18E74F1E0007F104 /* SDMMobileDevice.framework in Frameworks */,
 				22B3D80318E74EE40007F104 /* CoreFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -102,6 +103,7 @@
 		22B3D80118E74EE40007F104 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				22FB086519560EDB00B73D75 /* SDMMobileDevice.framework */,
 				22B3D81718E75A690007F104 /* MobileDevice.h */,
 				22B3D81018E74F2E0007F104 /* MobileDevice.framework */,
 				22B3D80E18E74F1E0007F104 /* SDMMobileDevice.framework */,
@@ -207,7 +209,7 @@
 		22B3D7F718E74EE40007F104 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = "Sam Marshall";
 			};
 			buildConfigurationList = 22B3D7FA18E74EE40007F104 /* Build configuration list for PBXProject "SDM_MD_Tests" */;
@@ -283,8 +285,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = macosx10.9;
 			};
 			name = Debug;
 		};
@@ -316,18 +318,19 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.9;
 			};
 			name = Release;
 		};
 		22B3D80C18E74EE40007F104 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(BUILD_DIR)/$(CONFIGURATION)",
 					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+					/Users/sam/Projects/SDMMobileDevice/build/Debug,
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "";
@@ -340,11 +343,12 @@
 		22B3D80D18E74EE40007F104 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(BUILD_DIR)/$(CONFIGURATION)",
 					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+					/Users/sam/Projects/SDMMobileDevice/build/Debug,
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "";

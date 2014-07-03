@@ -26,7 +26,7 @@ kern_return_t test_sdm_AFCConnectionCreate(SDMMD_AMDeviceRef sdm) {
 				if (afc) {
 					sdm_return = kAMDSuccess;
 					SDMMD_AMDServiceConnectionInvalidate(test_sdm_afc_conn);
-					SDMMD_AFCConnectionRelease(afc);
+					CFSafeRelease(afc);
 				}
 			}
 			SDMMD_AMDeviceStopSession(sdm);
@@ -51,13 +51,13 @@ kern_return_t test_sdm_AFCOperationCreateGetDeviceInfo(SDMMD_AMDeviceRef sdm, CF
 					SDMMD_AFCOperationRef deviceInfo = SDMMD_AFCOperationCreateGetDeviceInfo();
 					result = SDMMD_AFCProcessOperation(afc, &deviceInfo);
 					if (SDM_MD_CallSuccessful(result)) {
-						CFTypeRef test = deviceInfo->packet->response;
+						CFTypeRef test = SDMMD_AFCOperationGetPacketResponse(deviceInfo);
 						if (test) {
 							*response = test;
 							sdm_return = kAMDSuccess;
 						}
 					}
-					SDMMD_AFCConnectionRelease(afc);
+					CFSafeRelease(afc);
 				}
 			}
 			SDMMD_AMDeviceStopSession(sdm);
@@ -81,13 +81,13 @@ kern_return_t test_sdm_AFCOperationCreateGetConnectionInfo(SDMMD_AMDeviceRef sdm
 					SDMMD_AFCOperationRef conn_info = SDMMD_AFCOperationCreateGetConnectionInfo();
 					result = SDMMD_AFCProcessOperation(afc, &conn_info);
 					if (SDM_MD_CallSuccessful(result)) {
-						CFTypeRef test = conn_info->packet->response;
+						CFTypeRef test = SDMMD_AFCOperationGetPacketResponse(conn_info);
 						if (test) {
 							*response = test;
 							sdm_return = kAMDSuccess;
 						}
 					}
-					SDMMD_AFCConnectionRelease(afc);
+					CFSafeRelease(afc);
 				}
 			}
 			SDMMD_AMDeviceStopSession(sdm);
@@ -111,13 +111,13 @@ kern_return_t test_sdm_AFCOperationCreateReadDirectory(SDMMD_AMDeviceRef sdm, CF
 					SDMMD_AFCOperationRef read_dir = SDMMD_AFCOperationCreateReadDirectory(CFSTR(""));
 					result = SDMMD_AFCProcessOperation(afc, &read_dir);
 					if (SDM_MD_CallSuccessful(result)) {
-						CFTypeRef test = read_dir->packet->response;
+						CFTypeRef test = SDMMD_AFCOperationGetPacketResponse(read_dir);
 						if (test) {
 							*response = test;
 							sdm_return = kAMDSuccess;
 						}
 					}
-					SDMMD_AFCConnectionRelease(afc);
+					CFSafeRelease(afc);
 				}
 			}
 			SDMMD_AMDeviceStopSession(sdm);
@@ -141,13 +141,13 @@ kern_return_t test_sdm_AFCOperationCreateGetFileInfo(SDMMD_AMDeviceRef sdm, CFTy
 					SDMMD_AFCOperationRef file_info = SDMMD_AFCOperationCreateGetFileInfo(CFSTR(kTestFileForAFC));
 					result = SDMMD_AFCProcessOperation(afc, &file_info);
 					if (SDM_MD_CallSuccessful(result)) {
-						CFTypeRef test = file_info->packet->response;
+						CFTypeRef test = SDMMD_AFCOperationGetPacketResponse(file_info);
 						if (test) {
 							*response = test;
 							sdm_return = kAMDSuccess;
 						}
 					}
-					SDMMD_AFCConnectionRelease(afc);
+					CFSafeRelease(afc);
 				}
 			}
 			SDMMD_AMDeviceStopSession(sdm);
@@ -171,13 +171,13 @@ kern_return_t test_sdm_AFCOperationCreateFileRefOpen(SDMMD_AMDeviceRef sdm, CFTy
 					SDMMD_AFCOperationRef file_ref = SDMMD_AFCOperationCreateFileRefOpen(CFSTR(kTestFileForAFC), 2);
 					result = SDMMD_AFCProcessOperation(afc, &file_ref);
 					if (SDM_MD_CallSuccessful(result)) {
-						CFTypeRef test = file_ref->packet->response;
+						CFTypeRef test = SDMMD_AFCOperationGetPacketResponse(file_ref);
 						if (test) {
 							*response = test;
 							sdm_return = kAMDSuccess;
 						}
 					}
-					SDMMD_AFCConnectionRelease(afc);
+					CFSafeRelease(afc);
 				}
 			}
 			SDMMD_AMDeviceStopSession(sdm);
@@ -202,19 +202,20 @@ kern_return_t test_sdm_AFCFileDescriptorCreateWriteOperation(SDMMD_AMDeviceRef s
 					result = SDMMD_AFCProcessOperation(afc, &file_ref);
 					if (SDM_MD_CallSuccessful(result)) {
 						uint64_t fd = 0;
-						memcpy(&fd, CFDataGetBytePtr(file_ref->packet->response), sizeof(uint64_t));
+						CFTypeRef file_ref_response = SDMMD_AFCOperationGetPacketResponse(file_ref);
+						memcpy(&fd, CFDataGetBytePtr(file_ref_response), sizeof(uint64_t));
 						CFDataRef write_data = CFDataCreate(kCFAllocatorDefault, (const UInt8 *)test_write_bytes, strlen(test_write_bytes));
 						SDMMD_AFCOperationRef file_ref_read = SDMMD_AFCFileDescriptorCreateWriteOperation(fd, write_data);
 						result = SDMMD_AFCProcessOperation(afc, &file_ref_read);
 						if (SDM_MD_CallSuccessful(result)) {
-							CFTypeRef test = file_ref_read->packet->response;
-							if (test) {
-								*response = test;
+							CFTypeRef file_ref_read_response = SDMMD_AFCOperationGetPacketResponse(file_ref_read);
+							if (file_ref_read_response) {
+								*response = file_ref_read_response;
 								sdm_return = kAMDSuccess;
 							}
 						}
 					}
-					SDMMD_AFCConnectionRelease(afc);
+					CFSafeRelease(afc);
 				}
 			}
 			SDMMD_AMDeviceStopSession(sdm);
@@ -238,24 +239,26 @@ kern_return_t test_sdm_AFCFileDescriptorCreateReadOperation(SDMMD_AMDeviceRef sd
 					SDMMD_AFCOperationRef file_info = SDMMD_AFCOperationCreateGetFileInfo(CFSTR(kTestCreateFileForAFC));
 					result = SDMMD_AFCProcessOperation(afc, &file_info);
 					if (SDM_MD_CallSuccessful(result)) {
-						int32_t size = CFStringGetIntValue(CFDictionaryGetValue(file_info->packet->response, AFC_File_Info_Keys[AFC_File_Info_Key_size]));
+						CFTypeRef file_info_response = SDMMD_AFCOperationGetPacketResponse(file_info);
+						int32_t size = CFStringGetIntValue(CFDictionaryGetValue(file_info_response, AFC_File_Info_Keys[AFC_File_Info_Key_size]));
 						SDMMD_AFCOperationRef file_ref = SDMMD_AFCOperationCreateFileRefOpen(CFSTR(kTestCreateFileForAFC), 2);
 						result = SDMMD_AFCProcessOperation(afc, &file_ref);
 						if (SDM_MD_CallSuccessful(result)) {
 							uint64_t fd = 0;
-							memcpy(&fd, CFDataGetBytePtr(file_ref->packet->response), sizeof(uint64_t));
+							CFTypeRef file_ref_response = SDMMD_AFCOperationGetPacketResponse(file_ref);
+							memcpy(&fd, CFDataGetBytePtr(file_ref_response), sizeof(uint64_t));
 							SDMMD_AFCOperationRef file_ref_read = SDMMD_AFCFileDescriptorCreateReadOperation(fd, size);
 							result = SDMMD_AFCProcessOperation(afc, &file_ref_read);
 							if (SDM_MD_CallSuccessful(result)) {
-								CFTypeRef test = file_ref_read->packet->response;
-								if (test) {
-									*response = test;
+								CFTypeRef file_ref_read_response = SDMMD_AFCOperationGetPacketResponse(file_ref_read);
+								if (file_ref_read_response) {
+									*response = file_ref_read_response;
 									sdm_return = kAMDSuccess;
 								}
 							}
 						}
 					}
-					SDMMD_AFCConnectionRelease(afc);
+					CFSafeRelease(afc);
 				}
 			}
 			SDMMD_AMDeviceStopSession(sdm);
