@@ -16,6 +16,7 @@
 #include <notify.h>
 
 #include "SDMMobileDevice.h"
+#include "SDMMD_Connection_Internal.h"
 #include "Core.h"
 
 static char *kDebugType = "<Debug>";

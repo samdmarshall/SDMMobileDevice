@@ -7,21 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		220A7C9E194225C600BDF453 /* CFStringAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 220A7C9C194225C600BDF453 /* CFStringAddition.c */; };
 		222EF6611905AC3E000270C3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 222EF6601905AC3E000270C3 /* CoreFoundation.framework */; };
 		222EF6641905AC3E000270C3 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6631905AC3E000270C3 /* main.c */; };
 		222EF6661905AC3E000270C3 /* iosdeploy.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 222EF6651905AC3E000270C3 /* iosdeploy.1 */; };
-		222EF6D41905AC70000270C3 /* Buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6BB1905AC70000270C3 /* Buffer.c */; };
-		222EF6D51905AC70000270C3 /* File.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6BD1905AC70000270C3 /* File.c */; };
-		222EF6D61905AC70000270C3 /* CFDataAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6C01905AC70000270C3 /* CFDataAddition.c */; };
-		222EF6D71905AC70000270C3 /* CFDictionaryAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6C21905AC70000270C3 /* CFDictionaryAddition.c */; };
-		222EF6D81905AC70000270C3 /* CFTypeAddition.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6C41905AC70000270C3 /* CFTypeAddition.c */; };
-		222EF6D91905AC70000270C3 /* Matrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6C71905AC70000270C3 /* Matrix.c */; };
-		222EF6DA1905AC70000270C3 /* Vector.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6C91905AC70000270C3 /* Vector.c */; };
 		222EF6E11905ACEF000270C3 /* attach.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6E01905ACEF000270C3 /* attach.c */; };
 		222EF6E41905AD0D000270C3 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6E31905AD0D000270C3 /* list.c */; };
 		222EF6E81905AE3E000270C3 /* dev.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6E71905AE3E000270C3 /* dev.c */; };
-		22FB086A19560EFD00B73D75 /* libSDMMobileDeviceStatic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22FB086919560EFD00B73D75 /* libSDMMobileDeviceStatic.a */; };
+		22B24AA619658A5F00A592DE /* libSDMMobileDeviceStatic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B24AA519658A5F00A592DE /* libSDMMobileDeviceStatic.a */; };
 		22FB086B19560F9600B73D75 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 222EF6DD1905AC97000270C3 /* libssl.dylib */; };
 		22FB086C19560F9C00B73D75 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 222EF6DB1905AC93000270C3 /* libcrypto.dylib */; };
 		22FB086E19560FA600B73D75 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22FB086D19560FA600B73D75 /* IOKit.framework */; };
@@ -41,35 +33,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		220A7C9C194225C600BDF453 /* CFStringAddition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CFStringAddition.c; sourceTree = "<group>"; };
-		220A7C9D194225C600BDF453 /* CFStringAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFStringAddition.h; sourceTree = "<group>"; };
 		222EF65D1905AC3E000270C3 /* iosdeploy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iosdeploy; sourceTree = BUILT_PRODUCTS_DIR; };
 		222EF6601905AC3E000270C3 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		222EF6631905AC3E000270C3 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		222EF6651905AC3E000270C3 /* iosdeploy.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = iosdeploy.1; sourceTree = "<group>"; };
-		222EF6BA1905AC70000270C3 /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
-		222EF6BB1905AC70000270C3 /* Buffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Buffer.c; sourceTree = "<group>"; };
-		222EF6BC1905AC70000270C3 /* File.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = File.h; sourceTree = "<group>"; };
-		222EF6BD1905AC70000270C3 /* File.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = File.c; sourceTree = "<group>"; };
-		222EF6BE1905AC70000270C3 /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
-		222EF6BF1905AC70000270C3 /* CFDataAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFDataAddition.h; sourceTree = "<group>"; };
-		222EF6C01905AC70000270C3 /* CFDataAddition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CFDataAddition.c; sourceTree = "<group>"; };
-		222EF6C11905AC70000270C3 /* CFDictionaryAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFDictionaryAddition.h; sourceTree = "<group>"; };
-		222EF6C21905AC70000270C3 /* CFDictionaryAddition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CFDictionaryAddition.c; sourceTree = "<group>"; };
-		222EF6C31905AC70000270C3 /* CFTypeAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFTypeAddition.h; sourceTree = "<group>"; };
-		222EF6C41905AC70000270C3 /* CFTypeAddition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CFTypeAddition.c; sourceTree = "<group>"; };
-		222EF6C61905AC70000270C3 /* GeometryMaths.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryMaths.h; sourceTree = "<group>"; };
-		222EF6C71905AC70000270C3 /* Matrix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Matrix.c; sourceTree = "<group>"; };
-		222EF6C81905AC70000270C3 /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Matrix.h; sourceTree = "<group>"; };
-		222EF6C91905AC70000270C3 /* Vector.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Vector.c; sourceTree = "<group>"; };
-		222EF6CA1905AC70000270C3 /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector.h; sourceTree = "<group>"; };
-		222EF6CC1905AC70000270C3 /* Logging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logging.h; sourceTree = "<group>"; };
-		222EF6CD1905AC70000270C3 /* Number.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Number.h; sourceTree = "<group>"; };
-		222EF6CE1905AC70000270C3 /* Pointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pointer.h; sourceTree = "<group>"; };
-		222EF6CF1905AC70000270C3 /* Range.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Range.h; sourceTree = "<group>"; };
-		222EF6D01905AC70000270C3 /* Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Attributes.h; sourceTree = "<group>"; };
-		222EF6D11905AC70000270C3 /* Array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Array.h; sourceTree = "<group>"; };
-		222EF6D21905AC70000270C3 /* Endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Endian.h; sourceTree = "<group>"; };
 		222EF6DB1905AC93000270C3 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		222EF6DD1905AC97000270C3 /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
 		222EF6DF1905ACEF000270C3 /* attach.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = attach.h; path = ../../iOSConsole/iOSConsole/attach.h; sourceTree = "<group>"; };
@@ -78,7 +45,21 @@
 		222EF6E31905AD0D000270C3 /* list.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = list.c; path = ../../iOSConsole/iOSConsole/list.c; sourceTree = "<group>"; };
 		222EF6E61905AE3E000270C3 /* dev.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dev.h; path = ../../iOSConsole/iOSConsole/dev.h; sourceTree = "<group>"; };
 		222EF6E71905AE3E000270C3 /* dev.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dev.c; path = ../../iOSConsole/iOSConsole/dev.c; sourceTree = "<group>"; };
-		22FB086919560EFD00B73D75 /* libSDMMobileDeviceStatic.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDMMobileDeviceStatic.a; path = /Users/sam/Projects/SDMMobileDevice/Framework/../build/Debug/libSDMMobileDeviceStatic.a; sourceTree = "<absolute>"; };
+		2270F36D19658E320050DCFA /* Array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Array.h; path = ../Core/Core/Array.h; sourceTree = "<group>"; };
+		2270F36E19658E320050DCFA /* Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Attributes.h; path = ../Core/Core/Attributes.h; sourceTree = "<group>"; };
+		2270F36F19658E320050DCFA /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Buffer.h; path = ../Core/Core/Buffer.h; sourceTree = "<group>"; };
+		2270F37019658E320050DCFA /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Core.h; path = ../Core/Core/Core.h; sourceTree = "<group>"; };
+		2270F37119658E320050DCFA /* Endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Endian.h; path = ../Core/Core/Endian.h; sourceTree = "<group>"; };
+		2270F37219658E320050DCFA /* File.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = File.h; path = ../Core/Core/File.h; sourceTree = "<group>"; };
+		2270F37319658E320050DCFA /* Logging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Logging.h; path = ../Core/Core/Logging.h; sourceTree = "<group>"; };
+		2270F37419658E320050DCFA /* Number.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Number.h; path = ../Core/Core/Number.h; sourceTree = "<group>"; };
+		2270F37519658E320050DCFA /* Pointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Pointer.h; path = ../Core/Core/Pointer.h; sourceTree = "<group>"; };
+		2270F37619658E320050DCFA /* Range.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Range.h; path = ../Core/Core/Range.h; sourceTree = "<group>"; };
+		2270F37719658E3F0050DCFA /* CFDataAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CFDataAddition.h; path = ../Core/Core/CoreFoundation/CFDataAddition.h; sourceTree = "<group>"; };
+		2270F37819658E3F0050DCFA /* CFDictionaryAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CFDictionaryAddition.h; path = ../Core/Core/CoreFoundation/CFDictionaryAddition.h; sourceTree = "<group>"; };
+		2270F37919658E3F0050DCFA /* CFStringAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CFStringAddition.h; path = ../Core/Core/CoreFoundation/CFStringAddition.h; sourceTree = "<group>"; };
+		2270F37A19658E3F0050DCFA /* CFTypeAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CFTypeAddition.h; path = ../Core/Core/CoreFoundation/CFTypeAddition.h; sourceTree = "<group>"; };
+		22B24AA519658A5F00A592DE /* libSDMMobileDeviceStatic.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDMMobileDeviceStatic.a; path = ../build/Release/libSDMMobileDeviceStatic.a; sourceTree = "<group>"; };
 		22FB086D19560FA600B73D75 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -87,10 +68,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22B24AA619658A5F00A592DE /* libSDMMobileDeviceStatic.a in Frameworks */,
 				22FB086E19560FA600B73D75 /* IOKit.framework in Frameworks */,
 				22FB086C19560F9C00B73D75 /* libcrypto.dylib in Frameworks */,
 				22FB086B19560F9600B73D75 /* libssl.dylib in Frameworks */,
-				22FB086A19560EFD00B73D75 /* libSDMMobileDeviceStatic.a in Frameworks */,
 				222EF6611905AC3E000270C3 /* CoreFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -101,6 +82,7 @@
 		222EF6541905AC3E000270C3 = {
 			isa = PBXGroup;
 			children = (
+				2270F36C19658E1F0050DCFA /* Core */,
 				222EF6621905AC3E000270C3 /* iosdeploy */,
 				222EF65F1905AC3E000270C3 /* Frameworks */,
 				222EF65E1905AC3E000270C3 /* Products */,
@@ -118,8 +100,8 @@
 		222EF65F1905AC3E000270C3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				22B24AA519658A5F00A592DE /* libSDMMobileDeviceStatic.a */,
 				22FB086D19560FA600B73D75 /* IOKit.framework */,
-				22FB086919560EFD00B73D75 /* libSDMMobileDeviceStatic.a */,
 				222EF6DD1905AC97000270C3 /* libssl.dylib */,
 				222EF6DB1905AC93000270C3 /* libcrypto.dylib */,
 				222EF6601905AC3E000270C3 /* CoreFoundation.framework */,
@@ -131,61 +113,11 @@
 			isa = PBXGroup;
 			children = (
 				222EF6E51905AE30000270C3 /* src */,
-				222EF6D31905AC70000270C3 /* Core */,
 				222EF6631905AC3E000270C3 /* main.c */,
 				222EF6651905AC3E000270C3 /* iosdeploy.1 */,
 			);
 			path = iosdeploy;
 			sourceTree = "<group>";
-		};
-		222EF6C51905AC70000270C3 /* CoreFoundation */ = {
-			isa = PBXGroup;
-			children = (
-				220A7C9C194225C600BDF453 /* CFStringAddition.c */,
-				220A7C9D194225C600BDF453 /* CFStringAddition.h */,
-				222EF6BF1905AC70000270C3 /* CFDataAddition.h */,
-				222EF6C01905AC70000270C3 /* CFDataAddition.c */,
-				222EF6C11905AC70000270C3 /* CFDictionaryAddition.h */,
-				222EF6C21905AC70000270C3 /* CFDictionaryAddition.c */,
-				222EF6C31905AC70000270C3 /* CFTypeAddition.h */,
-				222EF6C41905AC70000270C3 /* CFTypeAddition.c */,
-			);
-			path = CoreFoundation;
-			sourceTree = "<group>";
-		};
-		222EF6CB1905AC70000270C3 /* Geometry */ = {
-			isa = PBXGroup;
-			children = (
-				222EF6C61905AC70000270C3 /* GeometryMaths.h */,
-				222EF6C71905AC70000270C3 /* Matrix.c */,
-				222EF6C81905AC70000270C3 /* Matrix.h */,
-				222EF6C91905AC70000270C3 /* Vector.c */,
-				222EF6CA1905AC70000270C3 /* Vector.h */,
-			);
-			path = Geometry;
-			sourceTree = "<group>";
-		};
-		222EF6D31905AC70000270C3 /* Core */ = {
-			isa = PBXGroup;
-			children = (
-				222EF6BA1905AC70000270C3 /* Buffer.h */,
-				222EF6BB1905AC70000270C3 /* Buffer.c */,
-				222EF6BC1905AC70000270C3 /* File.h */,
-				222EF6BD1905AC70000270C3 /* File.c */,
-				222EF6BE1905AC70000270C3 /* Core.h */,
-				222EF6C51905AC70000270C3 /* CoreFoundation */,
-				222EF6CB1905AC70000270C3 /* Geometry */,
-				222EF6CC1905AC70000270C3 /* Logging.h */,
-				222EF6CD1905AC70000270C3 /* Number.h */,
-				222EF6CE1905AC70000270C3 /* Pointer.h */,
-				222EF6CF1905AC70000270C3 /* Range.h */,
-				222EF6D01905AC70000270C3 /* Attributes.h */,
-				222EF6D11905AC70000270C3 /* Array.h */,
-				222EF6D21905AC70000270C3 /* Endian.h */,
-			);
-			name = Core;
-			path = /Users/sam/Projects/SDMMobileDevice/Framework/../Core/Core;
-			sourceTree = "<absolute>";
 		};
 		222EF6E51905AE30000270C3 /* src */ = {
 			isa = PBXGroup;
@@ -198,6 +130,27 @@
 				222EF6E71905AE3E000270C3 /* dev.c */,
 			);
 			name = src;
+			sourceTree = "<group>";
+		};
+		2270F36C19658E1F0050DCFA /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				2270F37719658E3F0050DCFA /* CFDataAddition.h */,
+				2270F37819658E3F0050DCFA /* CFDictionaryAddition.h */,
+				2270F37919658E3F0050DCFA /* CFStringAddition.h */,
+				2270F37A19658E3F0050DCFA /* CFTypeAddition.h */,
+				2270F36D19658E320050DCFA /* Array.h */,
+				2270F36E19658E320050DCFA /* Attributes.h */,
+				2270F36F19658E320050DCFA /* Buffer.h */,
+				2270F37019658E320050DCFA /* Core.h */,
+				2270F37119658E320050DCFA /* Endian.h */,
+				2270F37219658E320050DCFA /* File.h */,
+				2270F37319658E320050DCFA /* Logging.h */,
+				2270F37419658E320050DCFA /* Number.h */,
+				2270F37519658E320050DCFA /* Pointer.h */,
+				2270F37619658E320050DCFA /* Range.h */,
+			);
+			name = Core;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -252,17 +205,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				222EF6641905AC3E000270C3 /* main.c in Sources */,
-				222EF6D41905AC70000270C3 /* Buffer.c in Sources */,
 				222EF6E11905ACEF000270C3 /* attach.c in Sources */,
-				222EF6D61905AC70000270C3 /* CFDataAddition.c in Sources */,
-				222EF6D81905AC70000270C3 /* CFTypeAddition.c in Sources */,
 				222EF6E41905AD0D000270C3 /* list.c in Sources */,
-				222EF6D51905AC70000270C3 /* File.c in Sources */,
-				222EF6DA1905AC70000270C3 /* Vector.c in Sources */,
 				222EF6E81905AE3E000270C3 /* dev.c in Sources */,
-				220A7C9E194225C600BDF453 /* CFStringAddition.c in Sources */,
-				222EF6D71905AC70000270C3 /* CFDictionaryAddition.c in Sources */,
-				222EF6D91905AC70000270C3 /* Matrix.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -342,18 +287,31 @@
 		222EF66A1905AC3E000270C3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/sam/Projects/SDMMobileDevice/build/Release,
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SYMROOT = ../build;
+				USER_HEADER_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)/usr/local/include/";
 			};
 			name = Debug;
 		};
 		222EF66B1905AC3E000270C3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/sam/Projects/SDMMobileDevice/build/Release,
+				);
+				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SYMROOT = ../build;
+				USER_HEADER_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)/usr/local/include/";
 			};
 			name = Release;
 		};

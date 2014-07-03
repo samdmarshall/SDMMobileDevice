@@ -34,13 +34,13 @@
 
 #include "SDMMD_AMDevice_Class.h"
 
-typedef struct SocketConnection {
+struct SocketConnection {
 	bool isSSL;
 	union {
 		SSL *ssl;
 		uint32_t conn;
 	} socket;
-} SocketConnection;
+};
 
 struct AMConnectionClassBody {
 	uint32_t socket;			// 16

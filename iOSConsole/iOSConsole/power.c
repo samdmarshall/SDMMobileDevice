@@ -12,19 +12,23 @@
 #include "power.h"
 #include "Core.h"
 #include "attach.h"
+#include "SDMMobileDevice.h"
+#include "SDMMD_Service.h"
+#include "SDMMD_Connection_Internal.h"
 
 void SendDeviceCommand(char *udid, CFDictionaryRef request) {
 	SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 	if (device) {
 		SDMMD_AMConnectionRef powerDiag = AttachToDeviceAndService(device, AMSVC_DIAG_RELAY);
 		if (request) {
-			sdmmd_return_t result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(powerDiag), request, kCFPropertyListXMLFormat_v1_0);
+			SocketConnection socket = SDMMD_TranslateConnectionToSocket(powerDiag);
+			sdmmd_return_t result = SDMMD_ServiceSendMessage(socket, request, kCFPropertyListXMLFormat_v1_0);
 			if (SDM_MD_CallSuccessful(result)) {
 				CFStringRef command = CFDictionaryGetValue(request, CFSTR("Request"));
 				char *commandString = SDMCFStringGetString(command);
 				printf("Sent %s command to device, this could take up to 5 seconds.\n",commandString);
 				CFDictionaryRef response;
-				result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(powerDiag), PtrCast(&response, CFPropertyListRef*));
+				result = SDMMD_ServiceReceiveMessage(socket, PtrCast(&response, CFPropertyListRef*));
 				if (SDM_MD_CallSuccessful(result)) {
 					PrintCFDictionary(response);
 				}

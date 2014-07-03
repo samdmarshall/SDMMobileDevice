@@ -12,6 +12,7 @@
 #include "attach.h"
 #include "list.h"
 #include "dev.h"
+#include "Attributes.h"
 
 
 ATR_UNUSED static char *helpArg = "-h,--help";

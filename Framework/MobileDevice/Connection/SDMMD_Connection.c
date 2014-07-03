@@ -456,6 +456,10 @@ void SDMMD_AMDServiceConnectionSetDevice(SDMMD_AMConnectionRef *connection, SDMM
 	(*connection)->ivars.device = device;
 }
 
+SDMMD_AMDeviceRef SDMMD_AMDServiceConnectionGetDevice(SDMMD_AMConnectionRef connection) {
+	return connection->ivars.device;
+}
+
 void SDMMD_AMDServiceConnectionSetServiceName(SDMMD_AMConnectionRef *connection, CFStringRef service) {
 	if (service) {
 		CFStringGetCString(service, (*connection)->ivars.service, 128, kCFStringEncodingUTF8);

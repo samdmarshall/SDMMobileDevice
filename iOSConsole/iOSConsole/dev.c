@@ -10,8 +10,10 @@
 #define iOSConsole_dev_c
 
 #include "dev.h"
+#include "SDMMobileDevice.h"
 #include "attach.h"
 #include "SDMMD_Debugger_Internal.h"
+#include "SDMMD_AFCConnection_Class.h"
 #include <sys/socket.h>
 #include <sys/un.h>
 
@@ -32,7 +34,7 @@ void SetupDeviceForDevelopment(char *udid) {
 void TranferAppForInstallOnDevice(char *udid, char *app_path) {
 	SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 	if (device) {
-		CFStringRef path = CFStringCreateWithBytes(kCFAllocatorDefault, app_path, strlen(app_path), kCFStringEncodingUTF8, false);
+		CFStringRef path = CFStringCreateWithBytes(kCFAllocatorDefault, (UInt8 *)app_path, strlen(app_path), kCFStringEncodingUTF8, false);
 		SDMMD_AMDeviceCopyApplication(device, path);
 		CFSafeRelease(path);
 	}
@@ -41,7 +43,7 @@ void TranferAppForInstallOnDevice(char *udid, char *app_path) {
 void InstallApplicationOnDevice(char *udid, char *app_path) {
 	SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 	if (device) {
-		CFStringRef path = CFStringCreateWithBytes(kCFAllocatorDefault, app_path, strlen(app_path), kCFStringEncodingUTF8, false);
+		CFStringRef path = CFStringCreateWithBytes(kCFAllocatorDefault, (UInt8 *)app_path, strlen(app_path), kCFStringEncodingUTF8, false);
 		SDMMD_AMDeviceInstallApp(device, path);
 		CFSafeRelease(path);
 	}
@@ -75,7 +77,7 @@ void socket_callback(CFSocketRef s, CFSocketCallBackType callbackType, CFDataRef
     control_message->cmsg_type = SCM_RIGHTS;
     control_message->cmsg_len = CMSG_LEN(sizeof(int));
 	
-    *((uintptr_t *) CMSG_DATA(control_message)) = info;
+    *((uintptr_t *) CMSG_DATA(control_message)) = (uintptr_t)info;
 	
     sendmsg(socket, &message, 0);
     CFSocketInvalidate(s);
@@ -134,7 +136,7 @@ void StartDebuggingAndDetach(char *udid, char *app_path) {
 	SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 	if (device) {
 
-		CFStringRef bundleId = CFStringCreateWithBytes(kCFAllocatorDefault, app_path, strlen(app_path), kCFStringEncodingUTF8, false);
+		CFStringRef bundleId = CFStringCreateWithBytes(kCFAllocatorDefault, (UInt8 *)app_path, strlen(app_path), kCFStringEncodingUTF8, false);
 		CFURLRef relative_url = CFURLCreateWithFileSystemPath(NULL, bundleId, kCFURLPOSIXPathStyle, false);
 		CFURLRef disk_app_url = CFURLCopyAbsoluteURL(relative_url);
 		CFStringRef bundle_identifier = copy_disk_app_identifier(disk_app_url);
@@ -143,7 +145,8 @@ void StartDebuggingAndDetach(char *udid, char *app_path) {
 		SDMMD_AMDebugConnectionRef debug = SDMMD_AMDebugConnectionCreateForDevice(device);
 		SDMMD_AMDebugConnectionStart(debug);
 		
-		CFSocketContext context = { 0, debug->connection->ivars.socket, NULL, NULL, NULL };
+		uintptr_t socket = SDMMD_AMDServiceConnectionGetSocket(debug->connection);
+		CFSocketContext context = { 0, (void*)socket, NULL, NULL, NULL };
 		CFSocketRef fdvendor = CFSocketCreate(NULL, AF_UNIX, 0, 0, kCFSocketAcceptCallBack, &socket_callback, &context);
 		
 		int yes = 1;
@@ -162,7 +165,7 @@ void StartDebuggingAndDetach(char *udid, char *app_path) {
 		CFRelease(address_data);
 		CFRunLoopAddSource(CFRunLoopGetMain(), CFSocketCreateRunLoopSource(NULL, fdvendor, 0), kCFRunLoopCommonModes);
 		
-		SDMMD_AMDeviceRef device = debug->connection->ivars.device;
+		SDMMD_AMDeviceRef device = SDMMD_AMDServiceConnectionGetDevice(debug->connection);
 		CFMutableStringRef cmds = CFStringCreateMutableCopy(NULL, 0, LLDB_PREP_CMDS);
 		CFRange range = { 0, CFStringGetLength(cmds) };
 		

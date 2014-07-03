@@ -11,7 +11,8 @@
 
 #include "springboard.h"
 #include "attach.h"
-
+#include "SDMMD_Service.h"
+#include "SDMMD_Connection_Internal.h"
 #include "Core.h"
 
 bool AppHasBundleID(CFDictionaryRef app, CFStringRef bundleID, CFDictionaryRef *appInfo);

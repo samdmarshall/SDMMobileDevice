@@ -32,6 +32,8 @@
 #include "SDMMD_AMDevice_Internal.h"
 #include "Core.h"
 
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 static Boolean SDMMD_AMDeviceRefEqual(CFTypeRef cf1, CFTypeRef cf2) {
 	SDMMD_AMDeviceRef device1 = (SDMMD_AMDeviceRef)cf1;
 	SDMMD_AMDeviceRef device2 = (SDMMD_AMDeviceRef)cf2;

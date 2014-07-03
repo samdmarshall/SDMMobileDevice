@@ -32,6 +32,8 @@
 #include "SDMMD_Connection_Internal.h"
 #include "Core.h"
 
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 static Boolean SDMMD_AMConnectionRefEqual(CFTypeRef cf1, CFTypeRef cf2) {
 	SDMMD_AMConnectionRef connection1 = (SDMMD_AMConnectionRef)cf1;
 	SDMMD_AMConnectionRef connection2 = (SDMMD_AMConnectionRef)cf2;

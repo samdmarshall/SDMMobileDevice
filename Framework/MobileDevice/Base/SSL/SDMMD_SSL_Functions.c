@@ -32,6 +32,8 @@
 #include "Core.h"
 #include "SDMMD_Error.h"
 
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 CFStringRef SDMMD_CreateUUID() {
 	CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
 	CFStringRef str = CFUUIDCreateString(kCFAllocatorDefault, uuid);

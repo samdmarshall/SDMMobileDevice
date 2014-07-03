@@ -95,5 +95,8 @@ SDMMD_AFCOperationRef SDMMD_AFCOperationCreateEmpty() {
 	return operation;
 }
 
+CFTypeRef SDMMD_AFCOperationGetPacketResponse(SDMMD_AFCOperationRef operation) {
+	return operation->ivars.packet->response;
+}
 
 #endif
