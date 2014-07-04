@@ -10,7 +10,7 @@
 #define iOSConsole_power_c
 
 #include "power.h"
-#include "Core.h"
+#include <SDMMobileDevice/Core.h>
 #include "attach.h"
 #include "SDMMobileDevice.h"
 #include "SDMMD_Service.h"

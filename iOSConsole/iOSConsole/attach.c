@@ -10,7 +10,7 @@
 #define iOSConsole_attach_c
 
 #include "attach.h"
-#include "Core.h"
+#include <SDMMobileDevice/Core.h>
 
 SDMMD_AMDeviceRef FindDeviceFromUDID(char *udid) {
 	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
