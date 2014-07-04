@@ -10,7 +10,7 @@
 #define iOSConsole_springboard_h
 
 #include <CoreFoundation/CoreFoundation.h>
-#include "SDMMobileDevice.h"
+#include <SDMMobileDevice/SDMMobileDevice.h>
 
 enum SpringboardIconType {
 	SpringboardIconTypeInvalid = 0x0,

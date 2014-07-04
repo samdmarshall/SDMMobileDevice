@@ -10,7 +10,7 @@
 #define usbmuxd_usbmuxd_h
 
 #include <CoreFoundation/CoreFoundation.h>
-#include "Core.h"
+#include <SDMMobileDevice/Core.h>
 
 struct USBMuxPacketBody {
 	uint32_t length;

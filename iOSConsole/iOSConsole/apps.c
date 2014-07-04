@@ -10,10 +10,10 @@
 #define iOSConsole_apps_c
 
 #include "apps.h"
-#include "SDMMobileDevice.h"
+#include <SDMMobileDevice/SDMMobileDevice.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include "attach.h"
-#include "Core.h"
+#include <SDMMobileDevice/Core.h>
 
 void LookupAppsOnDevice(char *udid) {
 	SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
