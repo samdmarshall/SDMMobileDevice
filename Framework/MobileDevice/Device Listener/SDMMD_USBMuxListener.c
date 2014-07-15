@@ -366,6 +366,9 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 					CFArrayAppendValue((*listener)->ivars.responses, packet);
 				}
 			}
+			else if (packet->body.length == 0) {
+				// ignore this zero length packet
+			}
 			else {
 				bad_packet_counter++;
                 printf("socketSourceEventHandler: failed to decodeCFPropertyList from packet payload\n");

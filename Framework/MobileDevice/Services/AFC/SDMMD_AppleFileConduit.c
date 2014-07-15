@@ -774,7 +774,10 @@ sdmmd_return_t SDMMD_AMDeviceRemoteCopyFile(CallBack callback, void *thing2, voi
 	
 		uint64_t file_descriptor;
 		memcpy(&file_descriptor, CFDataGetBytePtr(file_create->ivars.packet->response), sizeof(uint64_t));
-			
+		
+		mode_t fileMode = (S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+		int local_fd = open(local, O_CREAT | O_RDWR, fileMode);
+		
 		uint64_t offset = 0;
 		uint64_t remainder = 0;
 		for (uint32_t index = 0; index < packets; index++) {
@@ -785,6 +788,8 @@ sdmmd_return_t SDMMD_AMDeviceRemoteCopyFile(CallBack callback, void *thing2, voi
 			result = SDMMD_AFCProcessOperation(conn, &write_op);
 			if (SDM_MD_CallSuccessful(result)) {
 				// probably fire a callback?
+				CFTypeRef data = SDMMD_AFCOperationGetPacketResponse(write_op);
+				write(local_fd, CFDataGetBytePtr(data), CFDataGetLength(data));
 			}
 			else {
 				break;
@@ -794,6 +799,8 @@ sdmmd_return_t SDMMD_AMDeviceRemoteCopyFile(CallBack callback, void *thing2, voi
 		SDMMD_AFCOperationRef file_close = SDMMD_AFCFileDescriptorCreateCloseOperation(file_descriptor);
 		SDMMD_AFCProcessOperation(conn, &file_close);
 		CFSafeRelease(file_close);
+		
+		close(local_fd);
 		
 		CFSafeRelease(file_create);
 	}
