@@ -28,11 +28,16 @@
 #ifndef _SDM_MD_USBMUXLISTENER_TYPES_H_
 #define _SDM_MD_USBMUXLISTENER_TYPES_H_
 
-static const CFStringRef kSDMMD_USBMuxListenerDeviceAttachedNotification = CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotification");
-static const CFStringRef kSDMMD_USBMuxListenerDeviceAttachedNotificationFinished = CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotificationFinished");
-static const CFStringRef kSDMMD_USBMuxListenerDeviceDetachedNotification = CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotification");
-static const CFStringRef kSDMMD_USBMuxListenerDeviceDetachedNotificationFinished = CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotificationFinished");
-static const CFStringRef kSDMMD_USBMuxListenerStoppedListenerNotification = CFSTR("SDMMD_USBMuxListenerStoppedListenerNotification");
+#include <CoreFoundation/CoreFoundation.h>
+
+// Initialize static CFString key arrays
+void SDMMD_USBMuxListener_Types_Initialize(void);
+
+static CFStringRef kSDMMD_USBMuxListenerDeviceAttachedNotification;
+static CFStringRef kSDMMD_USBMuxListenerDeviceAttachedNotificationFinished;
+static CFStringRef kSDMMD_USBMuxListenerDeviceDetachedNotification;
+static CFStringRef kSDMMD_USBMuxListenerDeviceDetachedNotificationFinished;
+static CFStringRef kSDMMD_USBMuxListenerStoppedListenerNotification;
 
 struct USBMuxPacketBody {
 	uint32_t length;
@@ -66,21 +71,7 @@ typedef enum SDMMD_USBMuxPacketMessageType {
 
 #define kKnownSDMMD_USBMuxPacketMessageType kSDMMD_USBMuxPacketMessageCount
 
-static CFStringRef SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketMessageCount] = {
-	CFSTR("Invalid"),
-	CFSTR("Connect"),
-	CFSTR("Listen"),
-	CFSTR("Result"),
-	CFSTR("Attached"),
-	CFSTR("Detached"),
-	CFSTR("Logs"),
-	CFSTR("ListDevices"),
-	CFSTR("ListListeners"),
-	CFSTR("ReadBUID"),
-	CFSTR("ReadPairRecord"),
-	CFSTR("SavePairRecord"),
-	CFSTR("DeletePairRecord")
-};
+static CFStringRef SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketMessageCount];
 
 typedef enum SDMMD_USBMuxResultCodeType {
 	SDMMD_USBMuxResult_OK = 0x0,

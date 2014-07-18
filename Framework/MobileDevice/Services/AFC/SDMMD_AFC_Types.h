@@ -28,6 +28,11 @@
 #ifndef _SDM_MD_AFC_TYPES_H_
 #define _SDM_MD_AFC_TYPES_H_
 
+#include <CoreFoundation/CoreFoundation.h>
+
+// Initialize static CFString key arrays
+void SDMMD_AFC_Types_Initialize(void);
+
 #pragma mark -
 #pragma mark DeviceInfo Keys
 
@@ -44,12 +49,7 @@ enum AFC_Device_Info_Key_Values {
 #define kAFC_Device_Info_FSTotalBytes "FSTotalBytes"
 #define kAFC_Device_Info_Model "Model"
 
-static CFStringRef AFC_Device_Info_Keys[AFC_Device_Info_Key_count] = {
-	CFSTR(kAFC_Device_Info_FSBlockSize),
-	CFSTR(kAFC_Device_Info_FSFreeBytes),
-	CFSTR(kAFC_Device_Info_FSTotalBytes),
-	CFSTR(kAFC_Device_Info_Model)
-};
+static CFStringRef AFC_Device_Info_Keys[AFC_Device_Info_Key_count];
 
 #pragma mark -
 #pragma mark ConnectionInfo Keys
@@ -63,10 +63,7 @@ enum AFC_Connection_Info_Key_Values {
 #define kAFC_Connection_Info_ExtendedStatus "ExtendedStatus"
 #define kAFC_Connection_Info_Version "Version"
 
-static CFStringRef AFC_Connection_Info_Keys[AFC_Connection_Info_Key_count] = {
-	CFSTR(kAFC_Connection_Info_ExtendedStatus),
-	CFSTR(kAFC_Connection_Info_Version)
-};
+static CFStringRef AFC_Connection_Info_Keys[AFC_Connection_Info_Key_count];
 
 #pragma mark -
 #pragma mark FileInfo Keys
@@ -88,14 +85,7 @@ enum AFC_File_Info_Key_Values {
 #define kAFC_File_Info_st_nlink "st_nlink"
 #define kAFC_File_Info_st_size "st_size"
 
-static CFStringRef AFC_File_Info_Keys[AFC_File_Info_Key_count] = {
-	CFSTR(kAFC_File_Info_st_birthtime),
-	CFSTR(kAFC_File_Info_st_blocks),
-	CFSTR(kAFC_File_Info_st_ifmt),
-	CFSTR(kAFC_File_Info_st_mtime),
-	CFSTR(kAFC_File_Info_st_nlink),
-	CFSTR(kAFC_File_Info_st_size)
-};
+static CFStringRef AFC_File_Info_Keys[AFC_File_Info_Key_count];
 
 #pragma mark -
 #pragma mark AFC Packet Type
