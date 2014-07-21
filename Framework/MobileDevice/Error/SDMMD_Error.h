@@ -234,25 +234,15 @@ typedef struct SDMMD_SIMStatusCode {
 	uint32_t resultCode;
 } SDMMD_SIMStatusCode;
 
+// Implemented in SDMMD_AMDevice.c
+// Initializes KnownSIMCodes and KnownActivationStates
+void SDMMD_AMDevice_Status_Initialize(void);
+
 #define sdmmd_sim_return_t struct SDMMD_SIMStatusCode
 
 #define kKnownSIMCodesNum 0xd
 
-static struct SDMMD_SIMStatusCode KnownSIMCodes[kKnownSIMCodesNum] = {
-	{CFSTR("kCTSIMSupportSIMStatusUnavailable"), 0x0},
-	{CFSTR("kCTSIMSupportSIMStatusReady"), 0x1},
-	{CFSTR("kCTSIMSupportSIMStatusNotReady"), 0x2},
-	{CFSTR("kCTSIMSupportSIMStatusPINLocked"), 0x3},
-	{CFSTR("kCTSIMSupportSIMStatusPUKLocked"), 0x4},
-	{CFSTR("kCTSIMSupportSIMStatusNetworkLocked"), 0x5},
-	{CFSTR("kCTSIMSupportSIMStatusCorporateLocked"), 0x6},
-	{CFSTR("kCTSIMSupportSIMStatusOperatorLocked"), 0x7},
-	{CFSTR("kCTSIMSupportSIMStatusOperatorSubsetLocked"), 0x8},
-	{CFSTR("kCTSIMSupportSIMStatusServiceProviderLocked"), 0x9},
-	{CFSTR("kCTSIMSupportSIMStatusMemoryFailure"), 0xa},
-	{CFSTR("kCTSIMSupportSIMStatusFixedDialingLocked"), 0xb},
-	{CFSTR("kCTSIMSupportSIMStatusBlacklisted"), 0xc}
-};
+static struct SDMMD_SIMStatusCode KnownSIMCodes[kKnownSIMCodesNum];
 
 typedef struct SDMMD_ActivationState {
 	CFStringRef statusName;
@@ -263,17 +253,7 @@ typedef struct SDMMD_ActivationState {
 
 #define kKnownActivationStatesNum 0x9
 
-static struct SDMMD_ActivationState KnownActivationStates[kKnownActivationStatesNum] = {
-	{CFSTR("Unactivated"), 0x0},
-	{CFSTR("Activated"), 0x1},
-	{CFSTR("FactoryActivated"), 0x2},
-	{CFSTR("SoftActivated"), 0x3},
-	{CFSTR("MismatchedIMEI"), 0x4},
-	{CFSTR("MismatchedICCID"), 0x5},
-	{CFSTR("MissingSIM"), 0x6},
-	{CFSTR("WildcardActivated"), 0x7},
-	{CFSTR("Expired"), 0x8},
-};
+static struct SDMMD_ActivationState KnownActivationStates[kKnownActivationStatesNum];
 
 typedef enum SDMMD_LockdownError {
 	LD_ERR_OK = 0x0,
