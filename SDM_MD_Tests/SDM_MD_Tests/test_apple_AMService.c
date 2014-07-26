@@ -19,7 +19,12 @@ kern_return_t test_apple_AMDeviceStartService(struct am_device *apple) {
 		result = AMDeviceStartSession(apple);
 		if (SDM_MD_CallSuccessful(result)) {
 			service_conn_t test_apple_conn;
-			apple_return = AMDeviceStartService(apple, CFSTR(AMSVC_AFC), &test_apple_conn, NULL);
+			if (SDMMD_AMDeviceGetInterfaceType(apple) == kAMDInterfaceConnectionTypeIndirect) {
+				apple_return = AMDeviceSecureStartService(apple, CFSTR(AMSVC_AFC), NULL, &test_apple_conn);
+			}
+			else {
+				apple_return = AMDeviceStartService(apple, CFSTR(AMSVC_AFC), &test_apple_conn, NULL);
+			}
 			if (apple_return != kAMDSuccess) {
 				printf("\t\tAMDeviceStartService: %08x %s\n",apple_return,SDMMD_AMDErrorString(apple_return));
 			}

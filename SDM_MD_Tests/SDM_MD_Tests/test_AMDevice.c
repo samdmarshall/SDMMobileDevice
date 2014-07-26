@@ -268,12 +268,12 @@ SDM_MD_TestResponse SDM_MD_Test_AMDeviceUSBProductID(struct am_device *apple, SD
 	SDM_MD_TestResponse response = SDM_MD_TestResponse_Invalid;
 	
 	uint32_t apple_return = AMDeviceUSBProductID(apple);
-	if (apple_return == 0) {
+	if (apple_return == 0 && SDMMD_AMDeviceGetInterfaceType(apple) != kAMDInterfaceConnectionTypeIndirect) {
 		printf("\t\tAMDeviceUSBProductID: %i\n",apple_return);
 	}
 	
 	uint32_t sdm_return = SDMMD_AMDeviceUSBProductID(sdm);
-	if (sdm_return == 0) {
+	if (sdm_return == 0 && SDMMD_AMDeviceGetInterfaceType(sdm) != kAMDInterfaceConnectionTypeIndirect) {
 		printf("\t\tSDMMD_AMDeviceUSBProductID: %i\n",sdm_return);
 	}
 	
@@ -288,12 +288,12 @@ SDM_MD_TestResponse SDM_MD_Test_AMDeviceUSBLocationID(struct am_device *apple, S
 	SDM_MD_TestResponse response = SDM_MD_TestResponse_Invalid;
 	
 	uint32_t apple_return = AMDeviceUSBLocationID(apple);
-	if (apple_return == 0) {
+	if (apple_return == 0 && SDMMD_AMDeviceGetInterfaceType(apple) != kAMDInterfaceConnectionTypeIndirect) {
 		printf("\t\tAMDeviceUSBLocationID: %i\n",apple_return);
 	}
 	
 	uint32_t sdm_return = SDMMD_AMDeviceUSBLocationID(sdm);
-	if (sdm_return == 0) {
+	if (sdm_return == 0 && SDMMD_AMDeviceGetInterfaceType(sdm) != kAMDInterfaceConnectionTypeIndirect) {
 		printf("\t\tSDMMD_AMDeviceUSBLocationID: %i\n",sdm_return);
 	}
 	

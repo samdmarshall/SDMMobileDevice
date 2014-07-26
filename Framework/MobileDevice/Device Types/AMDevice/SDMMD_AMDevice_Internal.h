@@ -57,23 +57,18 @@ struct AMDeviceClassBody {
 	int16_t padding0;							// 26
 	int32_t unknown1;							// 28
 	CFStringRef unique_device_id;				// 32
-	AMDeviceConnectionType connection_type;		// 40 (0 for USB, 1 for WiFi)
-	//unsigned char unknown3[4];					// 44
+	AMDeviceConnectionType connection_type;		// 40 (1 for USB, 0 for WiFi)
 	SDMMD_lockdown_conn *lockdown_conn;			// 48
 	CFStringRef session;						// 56 needs to be not zero in AMDeviceSecureStartService  -- connection
 	char mutx[4];								// 64 "MUTX" string
 	pthread_mutex_t mutex_lock;					// 68
 	CFStringRef service_name;					// 128 bonjour service name
-	//unsigned int unknown6;						// 132
 	int32_t interface_index;					// 136
 	int8_t device_active;						// 140
 	unsigned char unknown7[3];					// 141
-	int32_t unknown8;							// 144
-	unsigned char unknown9[4];					// 148
-	CFDataRef network_address;					// 152 stores a sockaddr_storage
-	//unsigned char unknown10[4];					// 156
-	CFDataRef unknown11;						// 160
-	//unsigned char unknown12[4];					// 164
+	int64_t unknown8;							// 144
+	CFDataRef unknownData;						// 152
+	CFDataRef network_address;					// 160 stores a sockaddr_storage
 } __attribute__ ((packed)) AMDeviceClassBody; // size 0x98
 
 struct sdmmd_am_device {
@@ -88,7 +83,7 @@ sdmmd_return_t SDMMD__CopyEscrowBag(SDMMD_AMDeviceRef device, CFDataRef *bag);
 //SDMMD_lockdown_conn* SDMMD_lockdown_connection_create(uint32_t socket);
 //sdmmd_return_t SDMMD_lockconn_enable_ssl(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostCert, CFTypeRef deviceCert, CFTypeRef hostPrivKey, uint32_t num);
 
-SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostCert, CFTypeRef deviceCert, CFTypeRef hostPrivKey, uint32_t num);
+SSL* SDMMD_lockssl_handshake(uint64_t socket, CFTypeRef hostCert, CFTypeRef deviceCert, CFTypeRef hostPrivKey, uint32_t num);
 sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, bool hasTimeout, uint32_t *socketConn, bool isSSL);
 
 sdmmd_return_t SDMMD_lockconn_send_message(SDMMD_AMDeviceRef device, CFDictionaryRef dict);

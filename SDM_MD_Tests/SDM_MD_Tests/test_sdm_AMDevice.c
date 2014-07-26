@@ -81,7 +81,7 @@ kern_return_t test_sdm_AMDeviceUSBDeviceID(SDMMD_AMDeviceRef sdm) {
 kern_return_t test_sdm_AMDeviceUSBProductID(SDMMD_AMDeviceRef sdm) {
 	kern_return_t sdm_return = kAMDUndefinedError;
 	uint32_t sdm_product_id = SDMMD_AMDeviceUSBProductID(sdm);
-	if (sdm_product_id == 0) {
+	if (sdm_product_id == 0 && SDMMD_AMDeviceGetInterfaceType(sdm) != kAMDInterfaceConnectionTypeIndirect) {
 		printf("\t\tSDMMD_AMDeviceUSBProductID: %i\n",sdm_return);
 	}
 	else {
@@ -93,7 +93,7 @@ kern_return_t test_sdm_AMDeviceUSBProductID(SDMMD_AMDeviceRef sdm) {
 kern_return_t test_sdm_AMDeviceUSBLocationID(SDMMD_AMDeviceRef sdm) {
 	kern_return_t sdm_return = kAMDUndefinedError;
 	uint32_t sdm_location_id = SDMMD_AMDeviceUSBLocationID(sdm);
-	if (sdm_location_id == 0) {
+	if (sdm_location_id == 0 && SDMMD_AMDeviceGetInterfaceType(sdm) != kAMDInterfaceConnectionTypeIndirect) {
 		printf("\t\tSDMMD_AMDeviceUSBLocationID: %i\n",sdm_return);
 	}
 	else {
@@ -120,6 +120,11 @@ kern_return_t test_sdm_AMDeviceCopyValue(SDMMD_AMDeviceRef sdm, CFTypeRef *value
 	CFTypeRef sdm_value = NULL;
 	kern_return_t result = SDMMD_AMDeviceConnect(sdm);
 	if (SDM_MD_CallSuccessful(result)) {
+		
+		if (SDMMD_AMDeviceGetInterfaceType(sdm) == kAMDInterfaceConnectionTypeIndirect) {
+			SDMMD_AMDeviceStartSession(sdm);
+		}
+		
 		sdm_value = SDMMD_AMDeviceCopyValue(sdm, NULL, CFSTR(kUniqueDeviceID));
 		if (sdm_value == NULL || CFStringCompare(sdm_value, CFSTR("GetProhibited"), 0) == kCFCompareEqualTo) {
 			printf("\t\tSDMMD_AMDeviceCopyValue: GetProhibited\n");
@@ -130,6 +135,11 @@ kern_return_t test_sdm_AMDeviceCopyValue(SDMMD_AMDeviceRef sdm, CFTypeRef *value
 			*value = sdm_value;
 			sdm_return = kAMDSuccess;
 		}
+		
+		if (SDMMD_AMDeviceGetInterfaceType(sdm) == kAMDInterfaceConnectionTypeIndirect) {
+			SDMMD_AMDeviceStopSession(sdm);
+		}
+		
 		SDMMD_AMDeviceDisconnect(sdm);
 	}
 	return sdm_return;

@@ -60,6 +60,7 @@
 #include <IOKit/IOCFPlugIn.h>
 #include <mach/mach_port.h>
 
+#include <netdb.h>
 
 SDMMD_lockdown_conn* SDMMD_lockdown_connection_create(uint32_t socket) {
 	SDMMD_lockdown_conn *lockdown = calloc(0x1, sizeof(SDMMD_lockdown_conn));
@@ -136,21 +137,21 @@ int SDMMD__ssl_verify_callback(int value, X509_STORE_CTX *store) {
 	return result;
 }
 
-SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostCert, CFTypeRef deviceCert, CFTypeRef hostPrivKey, uint32_t num) {
+SSL* SDMMD_lockssl_handshake(uint64_t socket, CFTypeRef hostCert, CFTypeRef deviceCert, CFTypeRef hostPrivKey, uint32_t num) {
 	SSL *ssl = NULL;
 	SSL_CTX *sslCTX = NULL;
 	sdmmd_return_t result = kAMDSuccess;
 	BIO_METHOD *bioMethod = BIO_s_socket();
 	BIO *bioSocket = BIO_new(bioMethod);
 	if (bioSocket) {
-		BIO_set_fd(bioSocket, lockdown_conn->connection, 0);
+		BIO_set_fd(bioSocket, socket, 0);
 		X509 *cert = SDMMD__decode_certificate(hostCert);
-		if (cert == 0) {
+		if (cert == NULL) {
 			printf("_create_ssl_context: Could not certificate.\n");
 		}
 		RSA *rsa = NULL;
 		BIO *dataBIO = SDMMD__create_bio_from_data(hostPrivKey);
-		if (dataBIO == 0) {
+		if (dataBIO == NULL) {
 			printf("_create_ssl_context: Could not decode host private key.\n");
 			Safe(X509_free,cert);
 		}
@@ -226,7 +227,7 @@ SSL* SDMMD_lockssl_handshake(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostC
 
 sdmmd_return_t SDMMD_lockconn_enable_ssl(SDMMD_lockdown_conn *lockdown_conn, CFTypeRef hostCert, CFTypeRef deviceCert, CFTypeRef hostPrivKey, uint32_t num) {
 	sdmmd_return_t result = kAMDSuccess;
-	SSL *handshake = SDMMD_lockssl_handshake(lockdown_conn, hostCert, deviceCert, hostPrivKey, num);
+	SSL *handshake = SDMMD_lockssl_handshake(lockdown_conn->connection, hostCert, deviceCert, hostPrivKey, num);
 	if (handshake) {
 		lockdown_conn->ssl = handshake;
 	}
@@ -659,7 +660,7 @@ sdmmd_return_t SDMMD__CopyEscrowBag(SDMMD_AMDeviceRef device, CFDataRef *bag) {
 				if (CFGetTypeID(bagValue) == CFDataGetTypeID()) {
 					CFRetain(bagValue);
 					*bag = bagValue;
-					char *path = calloc(1, 0x401);
+					char *path = calloc(1024, sizeof(char));
 					SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
 					result = SDMMD_store_dict(dict, path, true);
 					if (result) {
@@ -1043,60 +1044,73 @@ sdmmd_return_t SDMMD_AMDeviceDeactivate(SDMMD_AMDeviceRef device) {
 }
 
 sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, bool hasTimeout, uint32_t *socketConn, bool isSSL) {
-	sdmmd_return_t result = kAMDSuccess;
-	uint32_t sock = 0xffffffff;
-	uint32_t mask = true;
+	sdmmd_return_t result = kAMDInvalidArgumentError;
+	port = htons(port);
+	uint32_t sock = -1;
+	uint32_t mask = 1;
 	struct timeval timeout = { .tv_sec = 25, .tv_usec = 0 };
-	if (device) {
-		if (socket) {
-			result = kAMDDeviceDisconnectedError;
-			if (device->ivars.device_active) {
-				if (device->ivars.connection_type == kAMDeviceConnectionTypeWiFi) {
-					size_t dataLen = CFDataGetLength(device->ivars.network_address);
-					struct sockaddr_storage address = {0};
-					if (dataLen == sizeof(struct sockaddr_storage)) {
-						CFDataGetBytes(device->ivars.network_address, CFRangeMake(0, dataLen), (UInt8*)&address);
-						sock = socket(AF_INET, SOCK_STREAM, 0);
-						if (setsockopt(sock, SOL_SOCKET, SO_NOSIGPIPE, &mask, sizeof(mask))) {
-							
-						}
-						if (setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout))) {
-						 
-						}
-						if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout))) {
-						 
-						}
-						result = connect(sock, (const struct sockaddr *)&address, sizeof(struct sockaddr_in));
-						printf("connection status: %i\n",result);
+	if (device != NULL && socketConn) {
+		result = kAMDDeviceDisconnectedError;
+		if (device->ivars.device_active) {
+			if (device->ivars.connection_type == kAMDeviceConnectionTypeWiFi) {
+				size_t dataLen = CFDataGetLength(device->ivars.network_address);
+				struct sockaddr_storage address = {0};
+				if (dataLen == sizeof(struct sockaddr_storage)) {
+					CFDataGetBytes(device->ivars.network_address, CFRangeMake(0, dataLen), (UInt8*)&address);
+					socklen_t socketaddrSize = address.ss_len;
+					if (address.ss_family != AF_INET && address.ss_family != AF_INET6) {
+						printf("%s: This doesn't seem to be a valid AF_INET or AF_INET6\n",__FUNCTION__);
+						return result;
 					}
-					else {
-						printf("_AMDeviceConnectByAddressAndPort: doesn't look like a sockaddr_storage.\n");
+					
+					struct sockaddr_in *portChange = (struct sockaddr_in *)&address;
+					portChange->sin_port = (in_port_t)port;
+					
+					sock = socket(address.ss_family, SOCK_STREAM, 0);
+					
+					if (setsockopt(sock, SOL_SOCKET, SO_NOSIGPIPE, &mask, sizeof(mask))) {
+						int err = errno;
+						printf("%s: setsockopt SO_NOSIGPIPE failed: %d - %s\n", __FUNCTION__, err, strerror(err));
+					}
+					
+					result = connect(sock, (const struct sockaddr *)&address, socketaddrSize);
+					if (result != 0) {
 						result = kAMDMuxConnectError;
+						return result;
+					}
+					
+					if (setsockopt(sock, SOL_SOCKET, SO_NOSIGPIPE, &mask, sizeof(mask))) {
+						int err = errno;
+						printf("%s: setsockopt SO_NOSIGPIPE failed: %d - %s\n", __FUNCTION__, err, strerror(err));
+					}
+					
+					if (setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout))) {
+						int err = errno;
+						printf("%s: setsockopt SO_SNDTIMEO failed: %d - %s\n", __FUNCTION__, err, strerror(err));
+					}
+					
+					if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout))) {
+						int err = errno;
+						printf("%s: setsockopt SO_RCVTIMEO failed: %d - %s\n", __FUNCTION__, err, strerror(err));
 					}
 				}
 				else {
-					result = SDMMD_USBMuxConnectByPort(device, port, &sock);
-					if (result) {
-						result = kAMDMuxConnectError;
-					}
+					printf("%s: doesn't look like a sockaddr_storage.\n",__FUNCTION__);
+					result = kAMDMuxConnectError;
 				}
-				/*if (setsockopt(sock, 0xffff, 0x1022, &mask, 0x4)) {
-					
-				}
-				mask = 0x19;
-				if (setsockopt(sock, 0xffff, 0x1005, &mask, 0x10)) {
-					
-				}
-				if (setsockopt(sock, 0xffff, 0x1006, &mask, 0x10)) {
-					
-				}*/
-				*socketConn = sock;
 			}
-			/*if (sock != 0xff) {
-				if (close(sock) == 0xff) {
-					printf("_connect_to_port: close(2) on socket %d failed: %d.\n",sock,errno);
+			else {
+				result = SDMMD_USBMuxConnectByPort(device, port, &sock);
+				if (result) {
+					result = kAMDMuxConnectError;
 				}
-			}*/
+			}
+			*socketConn = sock;
+		}
+		if (sock == -1) {
+			if (close(sock) == -1) {
+				printf("%s: close(2) on socket %d failed: %d.\n",__FUNCTION__,sock,errno);
+			}
 		}
 	}
 	return result;
@@ -1110,13 +1124,13 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 	}
 	CheckErrorAndReturn(result);
 	
-	result = SDMMD_AMDevicePair(device);	
+	//result = SDMMD_AMDevicePair(device);
 	if (SDM_MD_CallSuccessful(result)) {
 		result = kAMDDeviceDisconnectedError;
-		if (device->ivars.device_active && device->ivars.connection_type == kAMDeviceConnectionTypeUSB) {
+		if (device->ivars.device_active /*&& device->ivars.connection_type == kAMDeviceConnectionTypeUSB*/) {
 			SDMMD__mutex_lock(device->ivars.mutex_lock);
 			if (device->ivars.lockdown_conn == 0) {
-				uint32_t status = SDMMD__connect_to_port(device, 0x7ef2, true, &socket, false);
+				uint32_t status = SDMMD__connect_to_port(device, 62078, true, &socket, false);
 				if (status == kAMDSuccess) {
 					result = kAMDNotConnectedError;
 					if (socket != 0xff) {
@@ -1534,7 +1548,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 			CFNumberGetValue(deviceId, kCFNumberSInt32Type/*0x4*/, &device->ivars.device_id);
 			
 			CFStringRef serialNumber = CFDictionaryGetValue(properties, CFSTR("SerialNumber"));
-			device->ivars.unique_device_id = serialNumber;
+			device->ivars.unique_device_id = CFStringCreateCopy(kCFAllocatorDefault, serialNumber);
 			
 			CFStringRef linkType = CFDictionaryGetValue(properties, CFSTR("ConnectionType"));
 			if (CFStringCompare(linkType, CFSTR("USB"), 0) == 0) {
@@ -1551,8 +1565,15 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 				device->ivars.connection_type = kAMDeviceConnectionTypeWiFi;
 				CFDataRef netAddress = CFDataCreateCopy(kCFAllocatorDefault, CFDictionaryGetValue(properties, CFSTR("NetworkAddress")));
 				device->ivars.network_address = netAddress;
-				device->ivars.unknown11 = netAddress;
-				device->ivars.service_name = CFDictionaryGetValue(properties, CFSTR("EscapedFullServiceName"));
+				
+				CFMutableStringRef serviceName = CFStringCreateMutableCopy(kCFAllocatorDefault, 0, CFDictionaryGetValue(properties, CFSTR("EscapedFullServiceName")));
+				CFRange searchRange = CFRangeMake(0, CFStringGetLength(serviceName));
+				CFStringFindAndReplace(serviceName, CFSTR("\\"), CFSTR(""), searchRange, 0);
+				device->ivars.service_name = CFStringCreateCopy(kCFAllocatorDefault, serviceName);
+				
+				CFNumberRef interfaceIndex = CFDictionaryGetValue(properties, CFSTR("InterfaceIndex"));
+				CFNumberGetValue(interfaceIndex, kCFNumberSInt32Type, &(device->ivars.interface_index));
+				
 			}
 			else {
 				

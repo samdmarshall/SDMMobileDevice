@@ -285,11 +285,11 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 						}
 					}
 					else {
-						result = SDMMD__connect_to_port(device, port, timeoutConnection, &socket, ssl ? true : false);
+						result = SDMMD__connect_to_port(device, port, timeoutConnection, &socket, enableSSL);
 						if (result == kAMDSuccess) {
 							if (enableSSL) {
 								char *udidString = SDMCFStringGetString(device->ivars.unique_device_id);
-								printf("%s: SSL requested for service %s with device %s.\n",__FUNCTION__, cservice, (device->ivars.unique_device_id ? udidString : "device with no name"));
+								//printf("%s: SSL requested for service %s with device %s.\n",__FUNCTION__, cservice, (device->ivars.unique_device_id ? udidString : "device with no name"));
 								Safe(free, udidString);
 								CFMutableDictionaryRef record = NULL;
 								if (socket != -1) {
@@ -306,7 +306,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 												CFTypeRef deviceCertVal = CFDictionaryGetValue(record, CFSTR("DeviceCertificate"));
 												CFTypeRef rootPrivKeyVal = CFDictionaryGetValue(record, CFSTR("RootPrivateKey"));
 												if (deviceCertVal && rootPrivKeyVal) {
-													ssl = SDMMD_lockssl_handshake((device->ivars.lockdown_conn), rootCertVal, deviceCertVal, rootPrivKeyVal, 0x1);
+													ssl = SDMMD_lockssl_handshake(socket, rootCertVal, deviceCertVal, rootPrivKeyVal, 0x1);
 													if (ssl) {
 														result = kAMDSuccess;
 													}

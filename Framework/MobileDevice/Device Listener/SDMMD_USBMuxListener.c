@@ -124,15 +124,15 @@ void SDMMD_USBMuxAttachedCallback(void *context, struct USBMuxPacket *packet) {
 	if (newDevice && !CFArrayContainsValue(SDMMobileDevice->ivars.deviceList, CFRangeMake(0, CFArrayGetCount(SDMMobileDevice->ivars.deviceList)), newDevice)) {
 		CFMutableArrayRef updateWithNew = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0, SDMMobileDevice->ivars.deviceList);
 		// give priority to usb over wifi
-		if (newDevice->ivars.connection_type == kAMDeviceConnectionTypeUSB) {
+		//if (newDevice->ivars.connection_type == kAMDeviceConnectionTypeUSB) {
 			CFArrayAppendValue(updateWithNew, newDevice);
 			dispatch_async(dispatch_get_main_queue(), ^{
 				CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), kSDMMD_USBMuxListenerDeviceAttachedNotification, NULL, NULL, true);
 			});
 			CFSafeRelease(SDMMobileDevice->ivars.deviceList);
 			SDMMobileDevice->ivars.deviceList = CFArrayCreateCopy(kCFAllocatorDefault, updateWithNew);
-		}
-		else if (newDevice->ivars.connection_type == kAMDeviceConnectionTypeWiFi) {
+		//} else
+		if (newDevice->ivars.connection_type == kAMDeviceConnectionTypeWiFi) {
 			// wifi
 		}
 		CFSafeRelease(updateWithNew);
@@ -311,12 +311,12 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port
 		CFDictionarySetValue(dict, CFSTR("DeviceID"), deviceNum);
 		CFSafeRelease(deviceNum);
 		struct USBMuxPacket *connect = SDMMD_USBMuxCreatePacketType(kSDMMD_USBMuxPacketConnectType, dict);
-		if (port != 0x7ef2) {
-			uint16_t newPort = htons(port);
-			CFNumberRef portNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt16Type, &newPort);
+		//if (port != 0x7ef2) {
+		//	uint16_t newPort = htons(port);
+			CFNumberRef portNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt16Type, &port);
 			CFDictionarySetValue((CFMutableDictionaryRef)connect->payload, CFSTR("PortNumber"), portNumber);
 			CFSafeRelease(portNumber);
-		}
+		//}
 		SDMMD_USBMuxSend(*socketConn, connect);
 		SDMMD_USBMuxReceive(*socketConn, connect);
 		CFSafeRelease(dict);
@@ -340,8 +340,8 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 				if (CFDictionaryContainsKey(packet->payload, CFSTR("MessageType"))) {
 					CFStringRef type = CFDictionaryGetValue(packet->payload, CFSTR("MessageType"));
 					if (CFStringCompare(type, SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketResultType], 0x0) == 0x0) {
-						(*listener)->ivars.responseCallback((*listener), packet);
 						CFArrayAppendValue((*listener)->ivars.responses, packet);
+						(*listener)->ivars.responseCallback((*listener), packet);
 					}
 					else if (CFStringCompare(type, SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketAttachType], 0x0) == 0x0) {
 						(*listener)->ivars.attachedCallback((*listener), packet);

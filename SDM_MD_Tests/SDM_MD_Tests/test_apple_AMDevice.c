@@ -82,7 +82,7 @@ kern_return_t test_apple_AMDeviceUSBDeviceID(struct am_device *apple) {
 kern_return_t test_apple_AMDeviceUSBProductID(struct am_device *apple) {
 	kern_return_t apple_return = kAMDUndefinedError;
 	uint32_t apple_product_id = AMDeviceUSBProductID(apple);
-	if (apple_product_id == 0) {
+	if (apple_product_id == 0 && SDMMD_AMDeviceGetInterfaceType(apple) != kAMDInterfaceConnectionTypeIndirect) {
 		printf("\t\tAMDeviceUSBProductID: %i\n",apple_return);
 	}
 	else {
@@ -94,7 +94,7 @@ kern_return_t test_apple_AMDeviceUSBProductID(struct am_device *apple) {
 kern_return_t test_apple_AMDeviceUSBLocationID(struct am_device *apple) {
 	kern_return_t apple_return = kAMDUndefinedError;
 	uint32_t apple_location_id = AMDeviceUSBLocationID(apple);
-	if (apple_location_id == 0) {
+	if (apple_location_id == 0 && SDMMD_AMDeviceGetInterfaceType(apple) != kAMDInterfaceConnectionTypeIndirect) {
 		printf("\t\tAMDeviceUSBLocationID: %i\n",apple_return);
 	}
 	else {
@@ -121,6 +121,11 @@ kern_return_t test_apple_AMDeviceCopyValue(struct am_device *apple, CFTypeRef *v
 	CFTypeRef apple_value = NULL;
 	kern_return_t result = AMDeviceConnect(apple);
 	if (SDM_MD_CallSuccessful(result)) {
+		
+		if (SDMMD_AMDeviceGetInterfaceType(apple) == kAMDInterfaceConnectionTypeIndirect) {
+			AMDeviceStartSession(apple);
+		}
+		
 		apple_value = AMDeviceCopyValue(apple, NULL, CFSTR(kUniqueDeviceID));
 		if (apple_value == NULL || CFStringCompare(apple_value, CFSTR("GetProhibited"), 0) == kCFCompareEqualTo) {
 			printf("\t\tAMDeviceCopyValue: GetProhibited\n");
@@ -131,6 +136,11 @@ kern_return_t test_apple_AMDeviceCopyValue(struct am_device *apple, CFTypeRef *v
 			*value = apple_value;
 			apple_return = kAMDSuccess;
 		}
+		
+		if (SDMMD_AMDeviceGetInterfaceType(apple) == kAMDInterfaceConnectionTypeIndirect) {
+			AMDeviceStopSession(apple);
+		}
+		
 		AMDeviceDisconnect(apple);
 	}
 	return apple_return;

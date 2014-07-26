@@ -20,7 +20,12 @@ kern_return_t test_sdm_AFCConnectionCreate(SDMMD_AMDeviceRef sdm) {
 		result = SDMMD_AMDeviceStartSession(sdm);
 		if (SDM_MD_CallSuccessful(result)) {
 			SDMMD_AMConnectionRef test_sdm_afc_conn;
-			result = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			if (SDMMD_AMDeviceGetInterfaceType(sdm) == kAMDInterfaceConnectionTypeIndirect) {
+				result = SDMMD_AMDeviceSecureStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			}
+			else {
+				result = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			}
 			if (SDM_MD_CallSuccessful(result)) {
 				SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(test_sdm_afc_conn);
 				if (afc) {
@@ -44,7 +49,12 @@ kern_return_t test_sdm_AFCOperationCreateGetDeviceInfo(SDMMD_AMDeviceRef sdm, CF
 		result = SDMMD_AMDeviceStartSession(sdm);
 		if (SDM_MD_CallSuccessful(result)) {
 			SDMMD_AMConnectionRef test_sdm_afc_conn;
-			result = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			if (SDMMD_AMDeviceGetInterfaceType(sdm) == kAMDInterfaceConnectionTypeIndirect) {
+				result = SDMMD_AMDeviceSecureStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			}
+			else {
+				result = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			}
 			if (SDM_MD_CallSuccessful(result)) {
 				SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(test_sdm_afc_conn);
 				if (afc) {
@@ -74,7 +84,12 @@ kern_return_t test_sdm_AFCOperationCreateGetConnectionInfo(SDMMD_AMDeviceRef sdm
 		result = SDMMD_AMDeviceStartSession(sdm);
 		if (SDM_MD_CallSuccessful(result)) {
 			SDMMD_AMConnectionRef test_sdm_afc_conn;
-			result = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			if (SDMMD_AMDeviceGetInterfaceType(sdm) == kAMDInterfaceConnectionTypeIndirect) {
+				result = SDMMD_AMDeviceSecureStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			}
+			else {
+				result = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			}
 			if (SDM_MD_CallSuccessful(result)) {
 				SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(test_sdm_afc_conn);
 				if (afc) {
@@ -104,7 +119,12 @@ kern_return_t test_sdm_AFCOperationCreateReadDirectory(SDMMD_AMDeviceRef sdm, CF
 		result = SDMMD_AMDeviceStartSession(sdm);
 		if (SDM_MD_CallSuccessful(result)) {
 			SDMMD_AMConnectionRef test_sdm_afc_conn;
-			result = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			if (SDMMD_AMDeviceGetInterfaceType(sdm) == kAMDInterfaceConnectionTypeIndirect) {
+				result = SDMMD_AMDeviceSecureStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			}
+			else {
+				result = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			}
 			if (SDM_MD_CallSuccessful(result)) {
 				SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(test_sdm_afc_conn);
 				if (afc) {
@@ -134,7 +154,14 @@ kern_return_t test_sdm_AFCOperationCreateGetFileInfo(SDMMD_AMDeviceRef sdm, CFTy
 		result = SDMMD_AMDeviceStartSession(sdm);
 		if (SDM_MD_CallSuccessful(result)) {
 			SDMMD_AMConnectionRef test_sdm_afc_conn;
-			result = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			
+			if (SDMMD_AMDeviceGetInterfaceType(sdm) == kAMDInterfaceConnectionTypeIndirect) {
+				result = SDMMD_AMDeviceSecureStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			}
+			else {
+				result = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			}
+			
 			if (SDM_MD_CallSuccessful(result)) {
 				SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(test_sdm_afc_conn);
 				if (afc) {
@@ -164,7 +191,12 @@ kern_return_t test_sdm_AFCOperationCreateFileRefOpen(SDMMD_AMDeviceRef sdm, CFTy
 		result = SDMMD_AMDeviceStartSession(sdm);
 		if (SDM_MD_CallSuccessful(result)) {
 			SDMMD_AMConnectionRef test_sdm_afc_conn;
-			result = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			if (SDMMD_AMDeviceGetInterfaceType(sdm) == kAMDInterfaceConnectionTypeIndirect) {
+				result = SDMMD_AMDeviceSecureStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			}
+			else {
+				result = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			}
 			if (SDM_MD_CallSuccessful(result)) {
 				SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(test_sdm_afc_conn);
 				if (afc) {
@@ -194,7 +226,12 @@ kern_return_t test_sdm_AFCFileDescriptorCreateWriteOperation(SDMMD_AMDeviceRef s
 		result = SDMMD_AMDeviceStartSession(sdm);
 		if (SDM_MD_CallSuccessful(result)) {
 			SDMMD_AMConnectionRef test_sdm_afc_conn;
-			result = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			if (SDMMD_AMDeviceGetInterfaceType(sdm) == kAMDInterfaceConnectionTypeIndirect) {
+				result = SDMMD_AMDeviceSecureStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			}
+			else {
+				result = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			}
 			if (SDM_MD_CallSuccessful(result)) {
 				SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(test_sdm_afc_conn);
 				if (afc) {
@@ -232,7 +269,12 @@ kern_return_t test_sdm_AFCFileDescriptorCreateReadOperation(SDMMD_AMDeviceRef sd
 		result = SDMMD_AMDeviceStartSession(sdm);
 		if (SDM_MD_CallSuccessful(result)) {
 			SDMMD_AMConnectionRef test_sdm_afc_conn;
-			result = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			if (SDMMD_AMDeviceGetInterfaceType(sdm) == kAMDInterfaceConnectionTypeIndirect) {
+				result = SDMMD_AMDeviceSecureStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			}
+			else {
+				result = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_afc_conn);
+			}
 			if (SDM_MD_CallSuccessful(result)) {
 				SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(test_sdm_afc_conn);
 				if (afc) {

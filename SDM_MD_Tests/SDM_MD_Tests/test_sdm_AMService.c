@@ -18,7 +18,12 @@ kern_return_t test_sdm_AMDeviceStartService(SDMMD_AMDeviceRef sdm) {
 		result = SDMMD_AMDeviceStartSession(sdm);
 		if (SDM_MD_CallSuccessful(result)) {
 			SDMMD_AMConnectionRef test_sdm_conn;
-			sdm_return = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_conn);
+			if (SDMMD_AMDeviceGetInterfaceType(sdm) == kAMDInterfaceConnectionTypeIndirect) {
+				sdm_return = SDMMD_AMDeviceSecureStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_conn);
+			}
+			else {
+				sdm_return = SDMMD_AMDeviceStartService(sdm, CFSTR(AMSVC_AFC), NULL, &test_sdm_conn);
+			}
 			if (sdm_return != kAMDSuccess) {
 				printf("\t\tSDMMD_AMDeviceStartService: %08x %s\n",sdm_return,SDMMD_AMDErrorString(sdm_return));
 			}
