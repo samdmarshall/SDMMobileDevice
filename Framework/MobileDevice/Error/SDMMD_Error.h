@@ -47,6 +47,15 @@ if (!SDM_MD_CallSuccessful(value)) { \
 ExitLabel: \
 return value;
 
+#define XStringify(s) Stringify(s)
+#define Stringify(s) #s
+
+#define setsockoptCond(socket, type, value, arg, cond) \
+if (setsockopt(sock, type, value, &arg, sizeof(arg))) { \
+	cond \
+	int err = errno; \
+	printf("%s: setsockopt %s failed: %d - %s\n",__FUNCTION__,XStringify(value),err,strerror(err)); \
+}
 
 #define AMDErrorMake(num) (0xe8000000 | (num))
 typedef enum SDMMD_Errors {

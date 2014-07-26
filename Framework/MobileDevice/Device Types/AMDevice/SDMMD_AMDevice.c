@@ -198,11 +198,11 @@ SSL* SDMMD_lockssl_handshake(uint64_t socket, CFTypeRef hostCert, CFTypeRef devi
 							uint32_t err = SSL_get_error(ssl, result);
 							if (err) {
 								char *reason = SDMMD_ssl_strerror(ssl, err);
-								printf("lockssl_handshake: SSL handshake fatal lower level error %d: %s.\n", err, reason);
+								printf("%s: SSL handshake fatal lower level error %d: %s.\n",__FUNCTION__, err, reason);
 							}
 							else {
 								char *reason = SDMMD_ssl_strerror(ssl, 0);
-								printf("lockssl_handshake: SSL handshake controlled failure %d: %s.\n", err, reason);
+								printf("%s: SSL handshake controlled failure %d: %s.\n", __FUNCTION__, err, reason);
 							}
 							Safe(SSL_free,ssl);
 							ssl = 0x0;
@@ -413,9 +413,9 @@ sdmmd_return_t SDMMD_lockdown_connection_destory(SDMMD_lockdown_conn *lockdownCo
 	if (lockdownCon) {
 		Safe(SSL_free,lockdownCon->ssl);
 		lockdownCon->ssl = NULL;
-		if (lockdownCon->connection != 0xff) {
+		if (lockdownCon->connection != -1) {
 			result = close((uint32_t)lockdownCon->connection);
-			if (result == 0xff) {
+			if (result == -1) {
 				printf("%s: close(2) on socket %lld failed: %d.\n",__FUNCTION__,lockdownCon->connection, result);
 			}
 			lockdownCon->connection = 0;
@@ -1068,10 +1068,7 @@ sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, b
 					
 					sock = socket(address.ss_family, SOCK_STREAM, 0);
 					
-					if (setsockopt(sock, SOL_SOCKET, SO_NOSIGPIPE, &mask, sizeof(mask))) {
-						int err = errno;
-						printf("%s: setsockopt SO_NOSIGPIPE failed: %d - %s\n", __FUNCTION__, err, strerror(err));
-					}
+					setsockoptCond(sock, SOL_SOCKET, SO_NOSIGPIPE, mask, {})
 					
 					result = connect(sock, (const struct sockaddr *)&address, socketaddrSize);
 					if (result != 0) {
@@ -1079,20 +1076,9 @@ sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, b
 						return result;
 					}
 					
-					if (setsockopt(sock, SOL_SOCKET, SO_NOSIGPIPE, &mask, sizeof(mask))) {
-						int err = errno;
-						printf("%s: setsockopt SO_NOSIGPIPE failed: %d - %s\n", __FUNCTION__, err, strerror(err));
-					}
-					
-					if (setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout))) {
-						int err = errno;
-						printf("%s: setsockopt SO_SNDTIMEO failed: %d - %s\n", __FUNCTION__, err, strerror(err));
-					}
-					
-					if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout))) {
-						int err = errno;
-						printf("%s: setsockopt SO_RCVTIMEO failed: %d - %s\n", __FUNCTION__, err, strerror(err));
-					}
+					setsockoptCond(sock, SOL_SOCKET, SO_NOSIGPIPE, mask, {})
+					setsockoptCond(sock, SOL_SOCKET, SO_SNDTIMEO, timeout, {})
+					setsockoptCond(sock, SOL_SOCKET, SO_RCVTIMEO, timeout, {})
 				}
 				else {
 					printf("%s: doesn't look like a sockaddr_storage.\n",__FUNCTION__);
@@ -1119,6 +1105,7 @@ sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, b
 sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 	sdmmd_return_t result = kAMDSuccess;
 	uint32_t socket = 0xffffffff;
+	uint32_t lockdownPort = 62078;
 	if (!device) {
 		result = kAMDInvalidArgumentError;
 	}
@@ -1130,10 +1117,10 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 		if (device->ivars.device_active /*&& device->ivars.connection_type == kAMDeviceConnectionTypeUSB*/) {
 			SDMMD__mutex_lock(device->ivars.mutex_lock);
 			if (device->ivars.lockdown_conn == 0) {
-				uint32_t status = SDMMD__connect_to_port(device, 62078, true, &socket, false);
+				uint32_t status = SDMMD__connect_to_port(device, lockdownPort, true, &socket, false);
 				if (status == kAMDSuccess) {
 					result = kAMDNotConnectedError;
-					if (socket != 0xff) {
+					if (socket != -1) {
 						device->ivars.lockdown_conn = SDMMD_lockdown_connection_create(socket);
 						result = kAMDNoResourcesError;
 						if (device->ivars.lockdown_conn->connection) {
@@ -1160,7 +1147,7 @@ sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device) {
 					}
 				}
 				else {
-					printf("%s: Could not connect to lockdown port (%d) on device %d - %s: 0x%x\n",__FUNCTION__,0xf27e, device->ivars.device_id,"device with no name",result);
+					printf("%s: Could not connect to lockdown port (%d) on device %d - %s: 0x%x\n",__FUNCTION__,lockdownPort, device->ivars.device_id,"device with no name",result);
 				}
 			}
 			else {

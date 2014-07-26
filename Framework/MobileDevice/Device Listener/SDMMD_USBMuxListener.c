@@ -235,7 +235,7 @@ SDMMD_USBMuxListenerRef SDMMD_USBMuxCreate() {
  */
 
 uint32_t SDMMD_ConnectToUSBMux() {
-	int result = 0x0;
+	int result = 0;
 	
 	// Initialize socket
 	uint32_t sock = socket(AF_UNIX, SOCK_STREAM, 0);
@@ -243,28 +243,16 @@ uint32_t SDMMD_ConnectToUSBMux() {
 	// Set send/receive buffer sizes
 	uint32_t bufSize = 0x00010400;
 	if (!result) {
-		if (setsockopt(sock, SOL_SOCKET, SO_SNDBUF, &bufSize, sizeof(bufSize))) {
-			result = 0x1;
-			int err = errno;
-			printf("%s: setsockopt SO_SNDBUF failed: %d - %s\n", __FUNCTION__, err, strerror(err));
-		}
-	}
-	if (!result) {
-		if (setsockopt(sock, SOL_SOCKET, SO_RCVBUF, &bufSize, sizeof(bufSize))) {
-			result = 0x2;
-			int err = errno;
-			printf("%s: setsockopt SO_RCVBUF failed: %d - %s\n", __FUNCTION__, err, strerror(err));
-		}
+		setsockoptCond(sock, SOL_SOCKET, SO_SNDBUF, bufSize, {result = 1;})
 	}
 	
 	if (!result) {
-		// Disable SIGPIPE on socket i/o error
-		uint32_t noPipe = 1;
-		if (setsockopt(sock, SOL_SOCKET, SO_NOSIGPIPE, &noPipe, sizeof(noPipe))) {
-			result = 0x3;
-			int err = errno;
-			printf("%s: setsockopt SO_NOSIGPIPE failed: %d - %s\n", __FUNCTION__, err, strerror(err));
-		}
+		setsockoptCond(sock, SOL_SOCKET, SO_RCVBUF, bufSize, {result = 2;})
+	}
+	
+	if (!result) {
+		uint32_t noPipe = 1; // Disable SIGPIPE on socket i/o error
+		setsockoptCond(sock, SOL_SOCKET, SO_NOSIGPIPE, noPipe, {result = 3;})
 	}
 	
 	if (!result) {
@@ -311,12 +299,11 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port
 		CFDictionarySetValue(dict, CFSTR("DeviceID"), deviceNum);
 		CFSafeRelease(deviceNum);
 		struct USBMuxPacket *connect = SDMMD_USBMuxCreatePacketType(kSDMMD_USBMuxPacketConnectType, dict);
-		//if (port != 0x7ef2) {
-		//	uint16_t newPort = htons(port);
-			CFNumberRef portNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt16Type, &port);
-			CFDictionarySetValue((CFMutableDictionaryRef)connect->payload, CFSTR("PortNumber"), portNumber);
-			CFSafeRelease(portNumber);
-		//}
+
+		CFNumberRef portNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt16Type, &port);
+		CFDictionarySetValue((CFMutableDictionaryRef)connect->payload, CFSTR("PortNumber"), portNumber);
+		CFSafeRelease(portNumber);
+		
 		SDMMD_USBMuxSend(*socketConn, connect);
 		SDMMD_USBMuxReceive(*socketConn, connect);
 		CFSafeRelease(dict);
@@ -351,6 +338,7 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 					}
 				}
 				else {
+					CFArrayAppendValue((*listener)->ivars.responses, packet);
 					if (CFDictionaryContainsKey(packet->payload, CFSTR("Logs"))) {
 						(*listener)->ivars.logsCallback((*listener), packet);
 					}
@@ -363,7 +351,6 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 					else {
 						(*listener)->ivars.unknownCallback((*listener), packet);
 					}
-					CFArrayAppendValue((*listener)->ivars.responses, packet);
 				}
 			}
 			else if (packet->body.length == 0) {
@@ -371,7 +358,7 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 			}
 			else {
 				bad_packet_counter++;
-                printf("socketSourceEventHandler: failed to decodeCFPropertyList from packet payload\n");
+                printf("%s: failed to decodeCFPropertyList from packet payload\n",__FUNCTION__);
 				if (bad_packet_counter > 10) {
 					printf("eating bad packets, exiting...\n");
 					exit(EXIT_FAILURE);
@@ -379,7 +366,7 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
             }
 		});
         dispatch_source_set_cancel_handler((*listener)->ivars.socketSource, ^{
-            printf("socketSourceEventCancelHandler: source canceled\n");
+            printf("%s: source canceled\n",__FUNCTION__);
         });
 		dispatch_resume((*listener)->ivars.socketSource);
 				

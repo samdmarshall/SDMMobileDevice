@@ -32,7 +32,7 @@ uint32_t SDM_USBMux_SocketCreate() {
 	unlink(sdm_usbmuxd_path);
 	struct sockaddr_un local;
 	uint32_t sock = socket(AF_UNIX, SOCK_STREAM, 0x0);
-	if (sock != 0xff) {
+	if (sock != -1) {
 		local.sun_family = AF_UNIX;
 		strcpy(local.sun_path, sdm_usbmuxd_path);
 		unlink(local.sun_path);
