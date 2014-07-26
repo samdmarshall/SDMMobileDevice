@@ -49,7 +49,29 @@ void ListConnectedDevices() {
 					}
 					char *udid_cstr = SDMCFStringGetString(deviceUDID);
 					char *name_cstr = SDMCFStringGetString(deviceName);
-					printf("%d) %s : %s (%s)\n",index+0x1,udid_cstr,name_cstr,SDMMD_ResolveModelToName(deviceModel));
+					char *connection_type = "N/A";
+					switch (SDMMD_AMDeviceGetInterfaceType(device)) {
+						case kAMDInterfaceConnectionTypeInvalid: {
+							connection_type = "Invalid";
+							break;
+						}
+						case kAMDInterfaceConnectionTypeDirect: {
+							connection_type = "USB";
+							break;
+						}
+						case kAMDInterfaceConnectionTypeIndirect: {
+							connection_type = "WiFi";
+							break;
+						}
+						case kAMDInterfaceConnectionTypeUnknown: {
+							connection_type = "Unknown";
+							break;
+						}
+						default: {
+							break;
+						}
+					}
+					printf("%d) %s : %s (%s) (%s)\n",index+0x1,udid_cstr,name_cstr,SDMMD_ResolveModelToName(deviceModel), connection_type);
 					Safe(free, udid_cstr);
 					Safe(free, name_cstr);
 					

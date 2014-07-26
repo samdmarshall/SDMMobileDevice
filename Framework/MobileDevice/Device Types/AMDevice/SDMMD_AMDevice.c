@@ -719,7 +719,7 @@ bool SDMMD_isDeviceAttached(uint32_t device_id) {
 				SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, i);
 				if (device) {
 					uint32_t fetched_id = SDMMD_AMDeviceGetConnectionID(device);
-					result = (fetched_id == device_id ? SDMMD_isDeviceAttachedUSB(device->ivars.location_id) : false);
+					result = (fetched_id == device_id);// ? SDMMD_isDeviceAttachedUSB(device->ivars.location_id) : false);
 					if (result) {
 						break;
 					}
