@@ -98,62 +98,54 @@ void SDMMD___ConvertDictEntry(const void* key, const void* value, void* context)
 
 CFDataRef SDMMD__CreateDataFromFileContents(char *path) {
 	CFDataRef dataBuffer = NULL;
-	if (path) {
-		struct stat pathStat;
-		ssize_t result = lstat(path, &pathStat);
-		if (result != -1) {
-			int ref = open(path, O_RDONLY);
-			if (ref != -1) {
-				struct stat fileStat;
-				result = fstat(ref, &fileStat);
-				if (result != -1) {
-					unsigned char *data = calloc(1, (unsigned long)fileStat.st_size);
-					result = read(ref, data, (size_t)fileStat.st_size);
-					if (result == fileStat.st_size) {
-						dataBuffer = CFDataCreate(kCFAllocatorDefault, data, result);
-					}
-					else {
-						printf("%s: Could not read contents at file %s.\n",__FUNCTION__,path);
-					}
-					Safe(free,data);
-				}
-				else {
-					printf("%s: Could not fstat.\n",__FUNCTION__);
-				}
-				close(ref);
-			}
-			else {
-				printf("%s: Could not open file %s\n",__FUNCTION__,path);
-			}
-		}
-		else {
-			printf("%s: Could not lstat.\n",__FUNCTION__);
-		}
-	}
+	unsigned char *data = NULL;
+	
+	EvalConditionalAndReturnWithMessage((path == NULL), "Invalid path.")
+	
+	struct stat pathStat;
+	ssize_t result = lstat(path, &pathStat);
+	EvalConditionalAndReturnWithMessage((result == -1), "Could not lstat.")
+		
+	int ref = open(path, O_RDONLY);
+	EvalConditionalAndReturnWithMessage((ref == -1), "Could not open file.")
+		
+	struct stat fileStat;
+	result = fstat(ref, &fileStat);
+	EvalConditionalAndReturnWithMessage((result == -1), "Count not fstat.")
+		
+	data = calloc(1, (unsigned long)fileStat.st_size);
+	result = read(ref, data, (size_t)fileStat.st_size);
+	EvalConditionalAndReturnWithMessage((result != fileStat.st_size), "Could not read contents of file.")
+		
+	dataBuffer = CFDataCreate(kCFAllocatorDefault, data, result);
+	
+ExitLabel:
+	Safe(free,data);
+	
 	return dataBuffer;
 }
 
 CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
 	CFMutableDictionaryRef dict = NULL;
-	if (path) {
-		CFDataRef fileData = SDMMD__CreateDataFromFileContents(path);
-		if (fileData) {
-			CFTypeRef propList = CFPropertyListCreateWithData(kCFAllocatorDefault, fileData, kCFPropertyListMutableContainersAndLeaves, NULL, NULL);
-			if (propList) {
-				if (CFGetTypeID(propList) == CFDictionaryGetTypeID()) {
-					dict = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, propList);
-				}
-				else {
-					printf("%s: Plist from file %s was not dictionary type.\n",__FUNCTION__,path);
-				}
-			}
-			else {
-				printf("%s: Could not create plist from file %s.\n",__FUNCTION__,path);
-			}
-			CFSafeRelease(propList);
-		}
-		CFSafeRelease(fileData);
-	}
+	CFDataRef fileData = NULL;
+	CFTypeRef propList = NULL;
+	
+	EvalConditionalAndReturnWithMessage((path == NULL), "Invalid path.")
+	
+	fileData = SDMMD__CreateDataFromFileContents(path);
+	EvalConditionalAndReturnWithMessage((fileData == NULL), "Could not read from file.")
+	
+	propList = CFPropertyListCreateWithData(kCFAllocatorDefault, fileData, kCFPropertyListMutableContainersAndLeaves, NULL, NULL);
+	EvalConditionalAndReturnWithMessage((propList == NULL), "Could not create plist from file.")
+	
+	EvalConditionalAndReturnWithMessage((CFGetTypeID(propList) != CFDictionaryGetTypeID()), "Plist from file was not dictionary type.")
+	
+	dict = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, propList);
+	
+ExitLabel:
+	CFSafeRelease(propList);
+	CFSafeRelease(fileData);
+	
 	return dict;
 }
 

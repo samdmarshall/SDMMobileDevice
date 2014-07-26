@@ -30,6 +30,14 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
+#define EvalConditionalAndReturn(cond) EvalConditionalAndReturnWithMessage(cond, "error")
+
+#define EvalConditionalAndReturnWithMessage(cond, message) \
+if cond { \
+	printf("%s: %s\n",__FUNCTION__,message); \
+	goto ExitLabel; \
+}
+
 #define CheckErrorAndReturn(value) \
 if (!SDM_MD_CallSuccessful(value)) { \
 	goto ExitLabel; \

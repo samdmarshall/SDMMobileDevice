@@ -388,12 +388,13 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 		CFSafeRelease(escrowBag);
 		Safe(SSL_free,ssl);
 	}
-	//loc_6eb42;
-	/*if (socket != 0xff) {
-		if (close(socket) == 0xff) {
+
+	/*if (socket == -1) {
+		if (close(socket) == -1) {
 			printf("SDMMD_AMDeviceSecureStartService: close(2) on socket %d failed: %d.\n", socket, errno);
 		}
 	}*/
+	
 	if (mutexLock) {
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 	}
@@ -476,7 +477,7 @@ SSL* SDMMD_AMDServiceConnectionGetSecureIOContext(SDMMD_AMConnectionRef connecti
 
 sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connection) {
 	sdmmd_return_t result = kAMDSuccess;
-	if (connection && connection->ivars.isValid) {
+	if (connection != NULL && connection->ivars.isValid) {
 		connection->ivars.isValid = false;
 		if (connection->ivars.closeOnInvalid && connection->ivars.socket != -1) {
 			if (shutdown(connection->ivars.socket, SHUT_RDWR) == -1) {
@@ -493,7 +494,7 @@ sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connec
 
 sdmmd_return_t SDMMD_AMDeviceSecureStartSessionedService(SDMMD_AMDeviceRef device, CFStringRef service, SDMMD_AMConnectionRef *connection) {
 	sdmmd_return_t result = kAMDSuccess;
-	if (device) {
+	if (device != NULL) {
 		result = SDMMD_AMDeviceConnect(device);
 		if (result == 0) {
 			result = SDMMD_AMDeviceStartSession(device);
