@@ -290,7 +290,7 @@ uint32_t SDMMD_ConnectToUSBMux() {
 	return sock;
 }
 
-sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port, uint32_t *socketConn) {
+sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint16_t port, uint32_t *socketConn) {
 	sdmmd_return_t result = kAMDSuccess;
 	*socketConn = SDMMD_ConnectToUSBMux();
 	if (*socketConn) {

@@ -279,6 +279,7 @@ sdmmd_return_t SDMMD_stream_image(SDMMD_AMConnectionRef connection, CFStringRef 
 		CFDictionarySetValue(streamDict, CFSTR("ImageType"), image_type);
 		CFDictionarySetValue(streamDict, CFSTR("ImageSize"), size);
 		result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(connection), streamDict, kCFPropertyListXMLFormat_v1_0);
+		CFSafeRelease(streamDict);
 		CFSafeRelease(size);
 		
 		CheckErrorAndReturn(result);
@@ -334,7 +335,6 @@ sdmmd_return_t SDMMD_stream_image(SDMMD_AMConnectionRef connection, CFStringRef 
 		else {
 			result = kAMDReadError;
 		}
-		CFSafeRelease(size);
 	}
 	else {
 		result = kAMDNoResourcesError;
@@ -354,6 +354,7 @@ sdmmd_return_t SDMMD_mount_image(SDMMD_AMConnectionRef connection, CFStringRef i
 			CFDictionarySetValue(mountDict, CFSTR("ImageSignature"), signature);
 		}
 		result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(connection), mountDict, kCFPropertyListXMLFormat_v1_0);
+		CFSafeRelease(mountDict);
 		CheckErrorAndReturn(result);
 		
 		CFDictionaryRef response;
@@ -417,6 +418,7 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 					CheckErrorAndReturn(result);
 					
 					result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(connection), commandDict, kCFPropertyListXMLFormat_v1_0);
+					CFSafeRelease(commandDict);
 					
 					CheckErrorAndReturn(result);
 					

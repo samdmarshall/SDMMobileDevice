@@ -56,14 +56,14 @@
 kern_return_t sdmmd_mutex_init(pthread_mutex_t thread);
 int SDMMD__mutex_lock(pthread_mutex_t mutex);
 int SDMMD__mutex_unlock(pthread_mutex_t mutex);
-const void* SDMMD___AppendValue(CFTypeRef append, CFMutableDataRef context);
+void SDMMD___AppendValue(CFTypeRef append, CFMutableDataRef context);
 void SDMMD___ConvertDictEntry(const void* key, const void* value, void* context);
 CFDataRef SDMMD__CreateDataFromFileContents(char *path);
 CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path);
 CFMutableDictionaryRef SDMMD_create_dict();
 CFMutableDictionaryRef SDMMD__CreateRequestDict(CFStringRef type);
 CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type);
-CFStringRef SDMGetCurrentDateString();
+CFStringRef SDMCreateCurrentDateString();
 char* SDMCFStringGetString(CFStringRef str);
 char* SDMCFURLGetString(CFURLRef url);
 CFStringRef SDMMD__GetPairingRecordDirectoryPath();

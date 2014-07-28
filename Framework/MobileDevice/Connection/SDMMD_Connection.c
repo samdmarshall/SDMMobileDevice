@@ -57,6 +57,7 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 
 		SocketConnection sock = SDMMD_TranslateConnectionToSocket(conn);
 		result = SDMMD_ServiceSendStream(sock, message, kCFPropertyListXMLFormat_v1_0);
+		CFSafeRelease(message);
 		if (result == 0) {
 			CFDictionaryRef response = NULL;
 			result = SDMMD_ServiceReceiveStream(sock, (CFPropertyListRef*)&response);

@@ -58,35 +58,41 @@ int SDMMD__mutex_unlock(pthread_mutex_t mutex) {
 	return pthread_mutex_unlock(&mutex);
 }
 
-const void* SDMMD___AppendValue(CFTypeRef append, CFMutableDataRef context) {
+void SDMMD___AppendValue(CFTypeRef append, CFMutableDataRef context) {
 	// over-allocation, check hopper again because this seems to be inaccurate with the results of a previous version of MobileDevice
+	CFTypeRef item = NULL;
 	if (CFGetTypeID(append) == CFNumberGetTypeID()) {
 		if (CFNumberIsFloatType(append)) {
 			float num = 0;
 			CFNumberGetValue(append, kCFNumberDoubleType, &num);
-			append = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%g"), num);
+			item = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%g"), num);
 		}
 		else {
 			uint64_t num = 0;
 			CFNumberGetValue(append, kCFNumberSInt64Type, &num);
-			append = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%qi"), num);
+			item = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%qi"), num);
 		}
 	}
 	else if (CFGetTypeID(append) == CFBooleanGetTypeID()) {
-		append = (CFEqual(append, kCFBooleanTrue) ? CFSTR("1") : CFSTR("0"));
+		item = (CFEqual(append, kCFBooleanTrue) ? CFSTR("1") : CFSTR("0"));
 	}
-	if (CFGetTypeID(append) == CFStringGetTypeID()) {
-		CFIndex length = CFStringGetLength(append);
+	else if (CFGetTypeID(append) == CFStringGetTypeID()) {
+		item = CFStringCreateCopy(kCFAllocatorDefault, append);
+	}
+	
+	if (CFGetTypeID(item) == CFStringGetTypeID()) {
+		CFIndex length = CFStringGetLength(item);
 		CFIndex alloclen = CFStringGetMaximumSizeForEncoding(length, kCFStringEncodingUTF8);
 		CFIndex usedlen = 0;
 		
 		uint8_t *alloc = calloc(1, alloclen + 1);
 		
-		CFStringGetBytes(append, CFRangeMake(0, length), kCFStringEncodingUTF8, 0, false, alloc, alloclen, &usedlen);
+		CFStringGetBytes(item, CFRangeMake(0, length), kCFStringEncodingUTF8, 0, false, alloc, alloclen, &usedlen);
 		CFDataAppendBytes(context, alloc, usedlen);
 		Safe(free,alloc);
 	}
-	return NULL;
+	
+	CFSafeRelease(item);
 }
 
 void SDMMD___ConvertDictEntry(const void* key, const void* value, void* context) {
@@ -178,7 +184,7 @@ CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type) {
 	
 }
 
-CFStringRef SDMGetCurrentDateString() {
+CFStringRef SDMCreateCurrentDateString() {
 	CFLocaleRef currentLocale = CFLocaleCopyCurrent();
 	CFDateRef date = CFDateCreate(kCFAllocatorDefault, CFAbsoluteTimeGetCurrent());
 	CFDateFormatterRef customDateFormatter = CFDateFormatterCreate(NULL, currentLocale, kCFDateFormatterNoStyle, kCFDateFormatterNoStyle);
@@ -373,6 +379,8 @@ sdmmd_return_t SDMMD_AMDeviceDigestFile(CFStringRef path, unsigned char **digest
 	else {
 		result = kAMDDigestFailedError;
 	}
+	CFSafeRelease(data);
+	
 	return result;
 }
 
@@ -385,6 +393,8 @@ char* SDMMD_ResolveModelToName(CFStringRef model) {
 			break;
 		}
 	}
+	Safe(free,model_cstr);
+	
 	return model_name;
 }
 

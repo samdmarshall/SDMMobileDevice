@@ -48,7 +48,7 @@ SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(SDMMD_AMConnectionRef conn) {
 	if (afc != NULL) {
 		afc->handle = conn;
 		CFStringRef udidString = SDMMD_AMDeviceCopyUDID(conn->ivars.device);
-		CFStringRef date_string = SDMGetCurrentDateString();
+		CFStringRef date_string = SDMCreateCurrentDateString();
 		char *dateString = SDMCFStringGetString(date_string);
 		CFSafeRelease(date_string);
 		CFStringRef name = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%s.%@.%s"), "com.samdmarshall.sdmmobiledevice.afc", udidString, dateString);

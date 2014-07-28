@@ -828,7 +828,6 @@ sdmmd_return_t SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFDictionaryRe
 			if (isValidHostBUID && result == kAMDSuccess) { // SDM: this is a check against the host BUID and the BUID of the pairing record. this is a security measure.
 				result = SDMMD_lockconn_send_message(device, message);
 				//PrintCFType(message);
-				CFSafeRelease(message);
 				if (result == kAMDSuccess) {
 					CFMutableDictionaryRef recvDict = NULL;
 					result = SDMMD_lockconn_receive_message(device, &recvDict);
@@ -879,6 +878,7 @@ sdmmd_return_t SDMMD_send_session_start(SDMMD_AMDeviceRef device, CFDictionaryRe
 				printf("%s: Mismatch between Host SystemBUID and Pairing Record SystemBUID, recreate pairing record to ensure host is trustworthy.\n",__FUNCTION__);
 				result = kAMDInvalidHostIDError;
 			}
+			CFSafeRelease(message);
 		}
 		CFSafeRelease(var32);
 		CFSafeRelease(var20);
@@ -1427,6 +1427,7 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 				}
 				CFSafeRelease(value);
 				CFSafeRelease(wifiAddress);
+				CFSafeRelease(chapCopy);
 			}
 		}
 	}
@@ -1557,6 +1558,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 				CFRange searchRange = CFRangeMake(0, CFStringGetLength(serviceName));
 				CFStringFindAndReplace(serviceName, CFSTR("\\"), CFSTR(""), searchRange, 0);
 				device->ivars.service_name = CFStringCreateCopy(kCFAllocatorDefault, serviceName);
+				CFSafeRelease(serviceName);
 				
 				CFNumberRef interfaceIndex = CFDictionaryGetValue(properties, CFSTR("InterfaceIndex"));
 				CFNumberGetValue(interfaceIndex, kCFNumberSInt32Type, &(device->ivars.interface_index));
