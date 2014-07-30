@@ -28,6 +28,14 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include "SDMMD_USBMuxListener_Types.h"
 
+CFStringRef kSDMMD_USBMuxListenerDeviceAttachedNotification;
+CFStringRef kSDMMD_USBMuxListenerDeviceAttachedNotificationFinished;
+CFStringRef kSDMMD_USBMuxListenerDeviceDetachedNotification;
+CFStringRef kSDMMD_USBMuxListenerDeviceDetachedNotificationFinished;
+CFStringRef kSDMMD_USBMuxListenerStoppedListenerNotification;
+
+CFStringRef SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketMessageCount];
+
 void SDMMD_USBMuxListener_Types_Initialize()
 {
     kSDMMD_USBMuxListenerDeviceAttachedNotification = CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotification");

@@ -49,7 +49,7 @@ enum AFC_Device_Info_Key_Values {
 #define kAFC_Device_Info_FSTotalBytes "FSTotalBytes"
 #define kAFC_Device_Info_Model "Model"
 
-static CFStringRef AFC_Device_Info_Keys[AFC_Device_Info_Key_count];
+extern CFStringRef AFC_Device_Info_Keys[AFC_Device_Info_Key_count];
 
 #pragma mark -
 #pragma mark ConnectionInfo Keys
@@ -63,7 +63,7 @@ enum AFC_Connection_Info_Key_Values {
 #define kAFC_Connection_Info_ExtendedStatus "ExtendedStatus"
 #define kAFC_Connection_Info_Version "Version"
 
-static CFStringRef AFC_Connection_Info_Keys[AFC_Connection_Info_Key_count];
+extern CFStringRef AFC_Connection_Info_Keys[AFC_Connection_Info_Key_count];
 
 #pragma mark -
 #pragma mark FileInfo Keys
@@ -85,7 +85,7 @@ enum AFC_File_Info_Key_Values {
 #define kAFC_File_Info_st_nlink "st_nlink"
 #define kAFC_File_Info_st_size "st_size"
 
-static CFStringRef AFC_File_Info_Keys[AFC_File_Info_Key_count];
+extern CFStringRef AFC_File_Info_Keys[AFC_File_Info_Key_count];
 
 #pragma mark -
 #pragma mark AFC Packet Type

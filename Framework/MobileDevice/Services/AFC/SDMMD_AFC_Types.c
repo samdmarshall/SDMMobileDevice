@@ -27,6 +27,10 @@
 
 #include "SDMMD_AFC_Types.h"
 
+CFStringRef AFC_Device_Info_Keys[AFC_Device_Info_Key_count];
+CFStringRef AFC_Connection_Info_Keys[AFC_Connection_Info_Key_count];
+CFStringRef AFC_File_Info_Keys[AFC_File_Info_Key_count];
+
 void SDMMD_AFC_Types_Initialize()
 {
     AFC_Device_Info_Keys[AFC_Device_Info_Key_FSBlockSize] = CFSTR(kAFC_Device_Info_FSBlockSize);
