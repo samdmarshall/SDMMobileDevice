@@ -310,6 +310,7 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port
 		CFNumberRef deviceNum = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &device->ivars.device_id);
 		CFDictionarySetValue(dict, CFSTR("DeviceID"), deviceNum);
 		CFSafeRelease(deviceNum);
+        
 		struct USBMuxPacket *connect = SDMMD_USBMuxCreatePacketType(kSDMMD_USBMuxPacketConnectType, dict);
 		if (port != 0x7ef2) {
 			uint16_t newPort = htons(port);
@@ -318,7 +319,12 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port
 			CFSafeRelease(portNumber);
 		}
 		SDMMD_USBMuxSend(*socketConn, connect);
-		SDMMD_USBMuxReceive(*socketConn, connect);
+        USBMuxPacketRelease(connect);
+        
+        struct USBMuxPacket * response = SDMMD_USBMuxCreatePacketEmpty();
+		SDMMD_USBMuxReceive(*socketConn, response);
+        USBMuxPacketRelease(response);
+        
 		CFSafeRelease(dict);
 	}
 	else {
@@ -403,8 +409,13 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 	});
 }
 
+struct USBMuxPacket * SDMMD_USBMuxCreatePacketEmpty(void) {
+    struct USBMuxPacket *packet = (struct USBMuxPacket *)calloc(1, sizeof(struct USBMuxPacket));
+    return packet;
+}
+
 struct USBMuxPacket * SDMMD_USBMuxCreatePacketType(SDMMD_USBMuxPacketMessageType type, CFDictionaryRef dict) {
-	struct USBMuxPacket *packet = (struct USBMuxPacket *)calloc(1, sizeof(struct USBMuxPacket));
+	struct USBMuxPacket *packet = SDMMD_USBMuxCreatePacketEmpty();
 	if (type == kSDMMD_USBMuxPacketListenType || type == kSDMMD_USBMuxPacketConnectType) {
 		packet->timeout = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*0x1e);
 	}
