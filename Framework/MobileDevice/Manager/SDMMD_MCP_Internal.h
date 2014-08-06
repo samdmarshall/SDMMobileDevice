@@ -29,8 +29,8 @@
 #define SDMMobileDevice_Framework_SDMMD_MCP_Internal_h
 
 #include <CoreFoundation/CoreFoundation.h>
-#include "CFRuntime.h"
-#include "SDMMD_USBMuxListener.h"
+#include <SDMMobileDevice/CFRuntime.h>
+#include <SDMMobileDevice/SDMMD_USBMuxListener.h>
 
 struct sdm_mobiledevice_body {
 	SDMMD_USBMuxListenerRef usbmuxd;

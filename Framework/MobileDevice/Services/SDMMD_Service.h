@@ -32,7 +32,7 @@
 #include "SDMMD_Error.h"
 #include "SDMMD_Connection.h"
 
-typedef struct SocketConnection SocketConnection;
+typedef struct SocketConnection_Internal SocketConnection;
 
 #pragma mark -
 #pragma mark Service List

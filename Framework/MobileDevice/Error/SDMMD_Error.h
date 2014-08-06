@@ -30,6 +30,14 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
+#define EvalAndEval(cond, eval) \
+if cond { \
+	eval; \
+	goto ExitLabel; \
+}
+
+#define ValueIsNullEval(value, eval) EvalAndEval((value == NULL), eval)
+
 #define EvalConditionalAndReturn(cond) EvalConditionalAndReturnWithMessage(cond, "error")
 
 #define EvalConditionalAndReturnWithMessage(cond, message) \

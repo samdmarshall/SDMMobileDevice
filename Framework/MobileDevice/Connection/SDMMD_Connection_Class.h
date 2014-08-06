@@ -29,7 +29,7 @@
 #define _SDM_MD_CONNECTION_CLASS_H_
 
 #include <CoreFoundation/CoreFoundation.h>
-#include "CFRuntime.h"
+#include <SDMMobileDevice/CFRuntime.h>
 
 /* Classes */
 typedef struct am_connection* SDMMD_AMConnectionRef;

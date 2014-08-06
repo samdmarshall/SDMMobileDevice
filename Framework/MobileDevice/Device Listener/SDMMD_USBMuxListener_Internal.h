@@ -29,8 +29,8 @@
 #define SDMMobileDevice_Framework_SDMMD_USBMuxListener_Internal_h
 
 #include <CoreFoundation/CoreFoundation.h>
-#include "SDMMD_USBMuxListener_Types.h"
-#include "CFRuntime.h"
+#include <SDMMobileDevice/SDMMD_USBMuxListener_Types.h>
+#include <SDMMobileDevice/CFRuntime.h>
 
 typedef void (*callbackFunction)(void *, struct USBMuxPacket *);
 

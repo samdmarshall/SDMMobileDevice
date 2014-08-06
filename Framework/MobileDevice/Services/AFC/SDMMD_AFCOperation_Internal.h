@@ -29,7 +29,7 @@
 #define SDMMobileDevice_Framework_SDMMD_AFCOperation_Internal_h
 
 #include <CoreFoundation/CoreFoundation.h>
-#include "CFRuntime.h"
+#include <SDMMobileDevice/CFRuntime.h>
 
 typedef struct SDMMD_AFCPacketHeader {
 	uint64_t signature;

@@ -29,9 +29,9 @@
 #define SDMMobileDevice_Framework_SDMMD_AMDevice_Internal_h
 
 #include <CoreFoundation/CoreFoundation.h>
-#include "CFRuntime.h"
+#include <SDMMobileDevice/CFRuntime.h>
 #include <openssl/ssl.h>
-#include "SDMMD_Error.h"
+#include <SDMMobileDevice/SDMMD_Error.h>
 
 struct SDMMD_lockdown_conn_internal {
 	uint64_t connection;			// 0

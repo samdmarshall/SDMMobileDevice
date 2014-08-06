@@ -133,56 +133,50 @@ SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(uint32_t socket, SSL* ssl
 }
 
 sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef service, CFTypeRef escrowBag, uint32_t *port, bool *enableSSL) {
-	sdmmd_return_t result = kAMDInvalidArgumentError;
-	if (device) {
-		result = kAMDNotConnectedError;
-		if (device->ivars.lockdown_conn) {
-			result = kAMDInvalidArgumentError;
-			if (service) {
-				if (port != 0 && enableSSL != 0) {
-					CFMutableDictionaryRef dict = SDMMD__CreateMessageDict(CFSTR("StartService"));
-					result = kAMDNoResourcesError;
-					if (dict) {
-						CFDictionarySetValue(dict, CFSTR("Service"), service);
-						if (escrowBag) {
-							CFDictionarySetValue(dict, CFSTR("EscrowBag"), escrowBag);
-						}
-						result = SDMMD_lockconn_send_message(device, dict);
-						CFSafeRelease(dict);
-						CheckErrorAndReturn(result);
-						
-						CFMutableDictionaryRef response = NULL;
-						result = SDMMD_lockconn_receive_message(device, &response);
-						CheckErrorAndReturn(result);
-						
-						if (response) {
-							result = SDMMD__ErrorHandler(SDMMD__ConvertLockdowndError, response);
-							CheckErrorAndReturn(result);
-								
-							CFTypeRef portNumber = CFDictionaryGetValue(response, CFSTR("Port"));
-							if (portNumber) {
-								if (CFGetTypeID(portNumber) == CFNumberGetTypeID()) {
-									CFNumberGetValue(portNumber, kCFNumberIntType, port);
-								}
-							}
-							CFTypeRef sslService = CFDictionaryGetValue(response, CFSTR("EnableServiceSSL"));
-							if (sslService) {
-								*enableSSL = (CFEqual(sslService, kCFBooleanTrue) ? true : false);
-							}
-							else {
-								*enableSSL = false;
-							}
-							result = 0x0;
-						}
-					}
+	sdmmd_return_t result = kAMDSuccess;
+	ValueIsNullEval(device, {result = kAMDInvalidArgumentError;});
+	ValueIsNullEval(device->ivars.lockdown_conn, {result = kAMDNotConnectedError;});
+	ValueIsNullEval(service, {result = kAMDInvalidArgumentError;});
+	
+	if (port != 0 && enableSSL != 0) {
+		CFMutableDictionaryRef dict = SDMMD__CreateMessageDict(CFSTR("StartService"));
+		ValueIsNullEval(dict, {result = kAMDNoResourcesError;});
+		
+		CFDictionarySetValue(dict, CFSTR("Service"), service);
+		if (escrowBag) {
+			CFDictionarySetValue(dict, CFSTR("EscrowBag"), escrowBag);
+		}
+		
+		result = SDMMD_lockconn_send_message(device, dict);
+		CFSafeRelease(dict);
+		CheckErrorAndReturn(result);
+		
+		CFMutableDictionaryRef response = NULL;
+		result = SDMMD_lockconn_receive_message(device, &response);
+		CheckErrorAndReturn(result);
+		
+		if (response) {
+			result = SDMMD__ErrorHandler(SDMMD__ConvertLockdowndError, response);
+			CheckErrorAndReturn(result);
+			
+			CFTypeRef portNumber = CFDictionaryGetValue(response, CFSTR("Port"));
+			if (portNumber) {
+				if (CFGetTypeID(portNumber) == CFNumberGetTypeID()) {
+					CFNumberGetValue(portNumber, kCFNumberIntType, port);
 				}
+			}
+			CFTypeRef sslService = CFDictionaryGetValue(response, CFSTR("EnableServiceSSL"));
+			if (sslService) {
+				*enableSSL = (CFEqual(sslService, kCFBooleanTrue) ? true : false);
+			}
+			else {
+				*enableSSL = false;
 			}
 		}
 	}
 	
 	ExitLabelAndReturn(result);
 }
-
 
 sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStringRef service, CFDictionaryRef options, SDMMD_AMConnectionRef *connection) {
     uint32_t port = 0;

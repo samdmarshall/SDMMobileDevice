@@ -29,7 +29,7 @@
 #define _SDM_MD_MCP_CLASS_H_
 
 #include <CoreFoundation/CoreFoundation.h>
-#include "CFRuntime.h"
+#include <SDMMobileDevice/CFRuntime.h>
 
 typedef struct sdm_mobiledevice* SDMMobileDeviceRef;
 

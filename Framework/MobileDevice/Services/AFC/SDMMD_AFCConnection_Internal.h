@@ -29,8 +29,8 @@
 #define SDMMobileDevice_Framework_SDMMD_AFCConnection_Internal_h
 
 #include <CoreFoundation/CoreFoundation.h>
-#include "CFRuntime.h"
-#include "SDMMD_Connection_Class.h"
+#include <SDMMobileDevice/CFRuntime.h>
+#include <SDMMobileDevice/SDMMD_Connection_Class.h>
 
 struct sdmmd_AFCConnectionClassBody {
 	SDMMD_AMConnectionRef handle;
