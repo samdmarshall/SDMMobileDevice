@@ -42,6 +42,7 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint16_t port
 SDMMD_USBMuxListenerRef SDMMD_USBMuxCreate();
 void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener);
 
+struct USBMuxPacket * SDMMD_USBMuxCreatePacketEmpty(void);
 struct USBMuxPacket * SDMMD_USBMuxCreatePacketType(SDMMD_USBMuxPacketMessageType type, CFDictionaryRef payload);
 void USBMuxPacketRelease(struct USBMuxPacket *packet);
 
