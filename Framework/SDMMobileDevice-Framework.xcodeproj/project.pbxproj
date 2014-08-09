@@ -130,7 +130,7 @@
 		22B24A981965838600A592DE /* Buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C892AE189D75A8008B1D2D /* Buffer.h */; };
 		22B24A991965838600A592DE /* File.h in Headers */ = {isa = PBXBuildFile; fileRef = 22EFC8B41900281B00C29BFF /* File.h */; };
 		22B24A9A1965838600A592DE /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF961188350E6008E909F /* Core.h */; };
-		22B24A9B1965838600A592DE /* CFStringAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = 22A58E1D191157F600303D31 /* CFStringAddition.h */; };
+		22B24A9B1965838600A592DE /* CFStringAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = 22A58E1D191157F600303D31 /* CFStringAddition.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		22B24A9C1965838600A592DE /* CFDataAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C892AA189D75A1008B1D2D /* CFDataAddition.h */; };
 		22B24A9D1965838700A592DE /* CFDictionaryAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF964188350E6008E909F /* CFDictionaryAddition.h */; };
 		22B24A9E1965838700A592DE /* Logging.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF96D188350E6008E909F /* Logging.h */; };
@@ -1042,10 +1042,10 @@
 				22B24A951965836200A592DE /* SDMMD_Debugger_Internal.h in Headers */,
 				22B24A961965836200A592DE /* SDMTranslation.h in Headers */,
 				22B24A971965836200A592DE /* SDMTypeTranslation.h in Headers */,
+				22B24A9B1965838600A592DE /* CFStringAddition.h in Headers */,
 				22B24A981965838600A592DE /* Buffer.h in Headers */,
 				22B24A991965838600A592DE /* File.h in Headers */,
 				22B24A9A1965838600A592DE /* Core.h in Headers */,
-				22B24A9B1965838600A592DE /* CFStringAddition.h in Headers */,
 				22B24A9C1965838600A592DE /* CFDataAddition.h in Headers */,
 				22B24A9D1965838700A592DE /* CFDictionaryAddition.h in Headers */,
 				22B24A9E1965838700A592DE /* Logging.h in Headers */,

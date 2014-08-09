@@ -516,7 +516,7 @@ static char *SDMMD_SoftBehavior_DomainKeys[SDM_MD_SoftBehavior_Domain_Key_Count]
 #define kAudioCodecs							"AudioCodecs"
 #define kSupportsCarrierBundleInstall			"SupportsCarrierBundleInstall"
 #define kChapterImageSpecs						"ChapterImageSpecs"
-#define kColorSyncProfile						"ColorSyncProfile"
+#define kiOSColorSyncProfile						"ColorSyncProfile"
 #define kFamilyID								"FamilyID"
 #define kDBVersion								"DBVersion"
 #define kHomeScreenIconWidth					"HomeScreenIconWidth"
@@ -576,7 +576,7 @@ enum SDM_MD_iTunes_Domain_Key {
 	SDM_MD_iTunes_Domain_Key_Count
 };
 
-static char *SDMMD_iTunes_DomainKeys[SDM_MD_iTunes_Domain_Key_Count] = {kMinITunesVersion, kMinMacOSVersion, kSupportsAccessibility, kAccessibilityLanguages, kAlbumArt, kAudioCodecs, kSupportsCarrierBundleInstall, kChapterImageSpecs, kColorSyncProfile, kFamilyID, kDBVersion, kHomeScreenIconWidth, kHomeScreenIconHeight, kHomeScreenIconRows, kHomeScreenIconColumns, kHomeScreenIconDockMaxCount, kIconFolderRows, kIconFolderColumns, kIconFolderMaxPages, kImageSpecifications, kRingtones, kScreenWidth, kScreenHeight, kScreenScaleFactor, kSupportsAntiPhishing, kVideoCodecs, kBatteryPollInterval, kFairPlayCertificate, kFairPlayID, kFairPlayDeviceType, kKeyTypeSupportVersion};
+static char *SDMMD_iTunes_DomainKeys[SDM_MD_iTunes_Domain_Key_Count] = {kMinITunesVersion, kMinMacOSVersion, kSupportsAccessibility, kAccessibilityLanguages, kAlbumArt, kAudioCodecs, kSupportsCarrierBundleInstall, kChapterImageSpecs, kiOSColorSyncProfile, kFamilyID, kDBVersion, kHomeScreenIconWidth, kHomeScreenIconHeight, kHomeScreenIconRows, kHomeScreenIconColumns, kHomeScreenIconDockMaxCount, kIconFolderRows, kIconFolderColumns, kIconFolderMaxPages, kImageSpecifications, kRingtones, kScreenWidth, kScreenHeight, kScreenScaleFactor, kSupportsAntiPhishing, kVideoCodecs, kBatteryPollInterval, kFairPlayCertificate, kFairPlayID, kFairPlayDeviceType, kKeyTypeSupportVersion};
 
 #pragma mark -
 #pragma mark Developer Domain Keys

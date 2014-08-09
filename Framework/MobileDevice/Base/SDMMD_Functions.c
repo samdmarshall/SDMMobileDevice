@@ -313,7 +313,7 @@ sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SDMMD_AMD
 }
 
 CFArrayRef SDMMD_ApplicationLookupDictionary() {
-	const void* values[DefaultApplicationLookupDictionaryCount] = {CFSTR(kAppLookupKeyCFBundleIdentifier), CFSTR(kAppLookupKeyApplicationType), CFSTR(kAppLookupKeyCFBundleDisplayName), CFSTR(kAppLookupKeyCFBundleName), CFSTR(kAppLookupKeyContainer), CFSTR(kAppLookupKeyPath)};
+	const void* values[DefaultApplicationLookupDictionaryCount] = {CFSTR(kAppLookupKeyCFBundleExecutable), CFSTR(kAppLookupKeyCFBundleIdentifier), CFSTR(kAppLookupKeyApplicationType), CFSTR(kAppLookupKeyCFBundleDisplayName), CFSTR(kAppLookupKeyCFBundleName), CFSTR(kAppLookupKeyContainer), CFSTR(kAppLookupKeyPath)};
 	return CFArrayCreate(kCFAllocatorDefault, values, DefaultApplicationLookupDictionaryCount, &kCFTypeArrayCallBacks);
 }
 

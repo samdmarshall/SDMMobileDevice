@@ -124,14 +124,14 @@ void SDMMD_USBMuxAttachedCallback(void *context, struct USBMuxPacket *packet) {
 	if (newDevice && !CFArrayContainsValue(SDMMobileDevice->ivars.deviceList, CFRangeMake(0, CFArrayGetCount(SDMMobileDevice->ivars.deviceList)), newDevice)) {
 		CFMutableArrayRef updateWithNew = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0, SDMMobileDevice->ivars.deviceList);
 		// give priority to usb over wifi
-		//if (newDevice->ivars.connection_type == kAMDeviceConnectionTypeUSB) {
+		if (newDevice->ivars.connection_type == kAMDeviceConnectionTypeUSB) {
 			CFArrayAppendValue(updateWithNew, newDevice);
 			dispatch_async(dispatch_get_main_queue(), ^{
 				CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), kSDMMD_USBMuxListenerDeviceAttachedNotification, NULL, NULL, true);
 			});
 			CFSafeRelease(SDMMobileDevice->ivars.deviceList);
 			SDMMobileDevice->ivars.deviceList = CFArrayCreateCopy(kCFAllocatorDefault, updateWithNew);
-		//} else
+		} else
 		if (newDevice->ivars.connection_type == kAMDeviceConnectionTypeWiFi) {
 			// wifi
 		}

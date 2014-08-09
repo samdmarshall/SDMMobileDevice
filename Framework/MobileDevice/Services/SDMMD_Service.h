@@ -32,6 +32,8 @@
 #include "SDMMD_Error.h"
 #include "SDMMD_Connection.h"
 
+
+
 typedef struct SocketConnection_Internal SocketConnection;
 
 #pragma mark -
