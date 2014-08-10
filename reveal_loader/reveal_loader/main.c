@@ -70,8 +70,8 @@ int RunDeployment(const char * argv[]) {
 	
 	CFStringRef remote_path = NULL;
 	
-	CFStringRef local_bundle_path = CFStringCreateWithCString(kCFAllocatorDefault, argv[1], kCFStringEncodingUTF8);
-	CFStringRef remote_container_path = CFStringCreateWithCString(kCFAllocatorDefault, argv[2], kCFStringEncodingUTF8);
+	CFStringRef local_bundle_path = CFStringCreateWithCString(kCFAllocatorDefault, argv[2], kCFStringEncodingUTF8);
+	CFStringRef remote_container_path = CFStringCreateWithCString(kCFAllocatorDefault, argv[3], kCFStringEncodingUTF8);
 	
 	CFURLRef path_url = CFURLCreateWithString(kCFAllocatorDefault, local_bundle_path, NULL);
 	CFURLRef bundle_url = CFURLCreateCopyDeletingLastPathComponent(kCFAllocatorDefault, path_url);
