@@ -470,23 +470,6 @@ SSL* SDMMD_AMDServiceConnectionGetSecureIOContext(SDMMD_AMConnectionRef connecti
 	return connection->ivars.ssl;
 }
 
-sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connection) {
-	sdmmd_return_t result = kAMDSuccess;
-	if (connection != NULL && connection->ivars.isValid) {
-		connection->ivars.isValid = false;
-		if (connection->ivars.closeOnInvalid && connection->ivars.socket != -1) {
-			if (shutdown(connection->ivars.socket, SHUT_RDWR) == -1) {
-				int err = errno;
-				if (err != ENOTCONN) {
-					printf("%s: serv_conn %p; failure shutdown %d: %d", __FUNCTION__, connection, connection->ivars.socket, err);
-				}
-			}
-		}
-		connection->ivars.socket = -1;
-	}
-	return result;
-}
-
 sdmmd_return_t SDMMD_AMDeviceSecureStartSessionedService(SDMMD_AMDeviceRef device, CFStringRef service, SDMMD_AMConnectionRef *connection) {
 	sdmmd_return_t result = kAMDSuccess;
 	if (device != NULL) {

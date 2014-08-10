@@ -53,7 +53,6 @@ static CFStringRef SDMMD_AFCConnectionRefCopyDebugDesc(CFTypeRef cf) {
 
 static void SDMMD_AFCConnectionRefFinalize(CFTypeRef cf) {
 	SDMMD_AFCConnectionRef connection = (SDMMD_AFCConnectionRef)cf;
-	SDMMD_AMDServiceConnectionInvalidate(connection->ivars.handle);
 	CFSafeRelease(connection->ivars.handle);
 	Safe(dispatch_release, connection->ivars.operationQueue);
 }

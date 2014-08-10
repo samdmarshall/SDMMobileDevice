@@ -47,7 +47,7 @@ void InstallProfileToDevice(char *udid, char *path) {
 		SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(conn), &response);
 		CFSafeRelease(response);
 		
-		SDMMD_AMDServiceConnectionInvalidate(conn);
+		CFSafeRelease(conn);
 		SDMMD_AMDeviceStopSession(device);
 		SDMMD_AMDeviceDisconnect(device);
 		

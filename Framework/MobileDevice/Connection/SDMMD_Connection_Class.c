@@ -28,9 +28,11 @@
 #ifndef _SDM_MD_CONNECTION_CLASS_C_
 #define _SDM_MD_CONNECTION_CLASS_C_
 
+#include <sys/socket.h>
 #include "SDMMD_Connection_Class.h"
 #include "SDMMD_Connection_Internal.h"
 #include "Core.h"
+#include "SDMMD_Error.h"
 
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
@@ -51,10 +53,30 @@ static CFStringRef SDMMD_AMConnectionRefCopyDebugDesc(CFTypeRef cf) {
 	return CFStringCreateWithFormat(CFGetAllocator(connection), NULL, CFSTR("<SDMMD_AMConnectionRef %p>{socket = %d}"), connection, connection->ivars.socket);
 }
 
+sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connection) {
+	sdmmd_return_t result = kAMDSuccess;
+	if (connection != NULL && connection->ivars.isValid) {
+		connection->ivars.isValid = false;
+		if (connection->ivars.closeOnInvalid && connection->ivars.socket != -1) {
+			if (shutdown(connection->ivars.socket, SHUT_RDWR) == -1) {
+				int err = errno;
+				if (err != ENOTCONN) {
+					printf("%s: serv_conn %p; failure shutdown %d: %d", __FUNCTION__, connection, connection->ivars.socket, err);
+				}
+			}
+		}
+		connection->ivars.socket = -1;
+	}
+	return result;
+}
+
 static void SDMMD_AMConnectionRefFinalize(CFTypeRef cf) {
 	SDMMD_AMConnectionRef connection = (SDMMD_AMConnectionRef)cf;
-	Safe(SSL_free,connection->ivars.ssl);
-	connection->ivars.ssl = NULL;
+	sdmmd_return_t result = SDMMD_AMDServiceConnectionInvalidate(connection);
+	if (SDM_MD_CallSuccessful(result)) {
+		Safe(SSL_free,connection->ivars.ssl);
+		connection->ivars.ssl = NULL;
+	}
 }
 
 static CFTypeID _kSDMMD_AMConnectionRefID = _kCFRuntimeNotATypeID;

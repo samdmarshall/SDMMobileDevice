@@ -47,8 +47,6 @@ SDMMD_AMDeviceRef SDMMD_AMDServiceConnectionGetDevice(SDMMD_AMConnectionRef conn
 
 uint32_t SDMMD_AMDServiceConnectionGetSocket(SDMMD_AMConnectionRef connection);
 
-sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connection);
-
 sdmmd_return_t SDMMD_AMDeviceSecureStartSessionedService(SDMMD_AMDeviceRef device, CFStringRef service, SDMMD_AMConnectionRef *connection);
 
 #endif

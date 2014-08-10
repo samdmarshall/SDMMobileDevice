@@ -69,7 +69,6 @@ SDMMD_AMDebugConnectionRef SDMMD_AMDebugConnectionCreateForDevice(SDMMD_AMDevice
 
 void SDMMD_AMDebugConnectionClose(SDMMD_AMDebugConnectionRef dconn) {
 	CFSafeRelease(dconn->device);
-	SDMMD_AMDServiceConnectionInvalidate(dconn->connection);
 	CFSafeRelease(dconn->connection);
 	Safe(free, dconn);
 }
@@ -96,7 +95,7 @@ sdmmd_return_t SDMMD_AMDebugConnectionStart(SDMMD_AMDebugConnectionRef dconn) {
 
 sdmmd_return_t SDMMD_AMDebugConnectionStop(SDMMD_AMDebugConnectionRef dconn) {
 	sdmmd_return_t result = kAMDSuccess;
-	SDMMD_AMDServiceConnectionInvalidate(dconn->connection);
+	CFSafeRelease(dconn->connection);
 	
 	result = SDMMD_AMDeviceStopSession(dconn->device);
 	CheckErrorAndReturn(result);
@@ -147,7 +146,7 @@ sdmmd_return_t SDMMD_copy_image(SDMMD_AMDeviceRef device, CFStringRef path) {
 		CFSafeRelease(makeStaging);
 		CFSafeRelease(copyAFCConn);
 		
-		SDMMD_AMDServiceConnectionInvalidate(copyConn);
+		CFSafeRelease(copyConn);
 	}
 	
 	ExitLabelAndReturn(result);
@@ -466,7 +465,7 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 					}
 					
 				}
-				SDMMD_AMDServiceConnectionInvalidate(connection);
+				CFSafeRelease(connection);
 				CFSafeRelease(device_copy);
 				CheckErrorAndReturn(result);
 			}

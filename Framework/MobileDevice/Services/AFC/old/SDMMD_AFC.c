@@ -64,7 +64,7 @@ SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreate(SDMMD_AMConnectionRef conn) {
 
 void SDMMD_AFCConnectionRelease(SDMMD_AFCConnectionRef conn) {
 	if (conn) {
-		SDMMD_AMDServiceConnectionInvalidate(conn->handle);
+		CFSafeRelease(conn->handle);
 		dispatch_release(conn->operationQueue);
 	}
 }

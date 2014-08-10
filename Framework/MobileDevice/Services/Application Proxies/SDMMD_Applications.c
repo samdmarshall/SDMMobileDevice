@@ -98,8 +98,8 @@ sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDict
 	sdmmd_return_t result = kAMDInvalidArgumentError;
 	if (device) {
 		if (options) {
-			CFDictionaryRef dict = NULL;
-			SDMMD_AMConnectionRef conn = SDMMD_AMDServiceConnectionCreate(0, NULL, dict);
+			CFDictionaryRef options_dict = NULL;
+			SDMMD_AMConnectionRef conn = SDMMD_AMDServiceConnectionCreate(0, NULL, options_dict);
 			result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_INSTALLATION_PROXY), NULL, &conn);
 			if (result == 0) {
 				CFMutableDictionaryRef dict = SDMMD_create_dict();
@@ -114,6 +114,7 @@ sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDict
 			else {
 				printf("%s: Was unable to start the install service on the device: %i\n",__FUNCTION__,device->ivars.device_id);
 			}
+			CFSafeRelease(conn);
 		}
 	}
 	return result;
@@ -235,8 +236,7 @@ sdmmd_return_t SDMMD_AMDeviceCopyApplication(SDMMD_AMDeviceRef device, CFStringR
 		result = SDMMD_AMDeviceTransferApplication(connection, path, NULL, SDMMD_Default_transfer_callback, NULL);
 		CheckErrorAndReturn(result);
 		
-		result = SDMMD_AMDServiceConnectionInvalidate(connection);
-		CheckErrorAndReturn(result);
+		CFSafeRelease(connection);
 		
 		result = SDMMD_AMDeviceStopSession(device);
 		CheckErrorAndReturn(result);

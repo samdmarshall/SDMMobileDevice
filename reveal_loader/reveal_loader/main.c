@@ -25,22 +25,23 @@ int main(int argc, const char * argv[]) {
 	
 	int status = -1;
 	
-	if (argc != 2) {
-		return status;
-	}
-	
 	SDMMobileDevice;
 	
 	sdmmd_return_t result = KERN_SUCCESS;
 	
 	CFStringRef remote_path = NULL;
 	
-	CFStringRef path = CFStringCreateWithCString(kCFAllocatorDefault, argv[1], kCFStringEncodingUTF8);
-	CFURLRef path_url = CFURLCreateWithString(kCFAllocatorDefault, path, NULL);
-	CFURLRef bundle_url = CFURLCreateCopyDeletingLastPathComponent(kCFAllocatorDefault, path_url);
+	CFStringRef local_bundle_path = CFStringCreateWithCString(kCFAllocatorDefault, argv[1], kCFStringEncodingUTF8);
+	CFStringRef remote_container_path = CFStringCreateWithCString(kCFAllocatorDefault, argv[2], kCFStringEncodingUTF8);
 	
-	CFStringRef bundleIdentifier = CFBundleGetIdentifier(CFBundleCreate(kCFAllocatorDefault, bundle_url));
-	CFShow(bundleIdentifier);
+	CFURLRef path_url = CFURLCreateWithString(kCFAllocatorDefault, local_bundle_path, NULL);
+	CFURLRef bundle_url = CFURLCreateCopyDeletingLastPathComponent(kCFAllocatorDefault, path_url);
+	CFSafeRelease(path_url);
+	CFSafeRelease(local_bundle_path);
+	
+	CFBundleRef local_app_bundle = CFBundleCreate(kCFAllocatorDefault, bundle_url);
+	CFSafeRelease(bundle_url);
+	CFStringRef bundleIdentifier = CFBundleGetIdentifier(local_app_bundle);
 	
 	char *local_path = NULL;
 	CFURLRef outAppURL = NULL;
@@ -51,6 +52,8 @@ int main(int argc, const char * argv[]) {
 		CFSafeRelease(outAppURL);
 		CFStringRef fs_path = CFURLCopyFileSystemPath(temp, kCFURLPOSIXPathStyle);
 		local_path = CreateCStringFromCFStringRef(fs_path);
+		CFSafeRelease(fs_path);
+		CFSafeRelease(temp);
 	}
 	
 	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
@@ -74,6 +77,7 @@ int main(int argc, const char * argv[]) {
 					CFDictionarySetValue(optionsDict, CFSTR("BundleIDs"), kCFBooleanTrue);
 					
 					result = SDMMD_AMDeviceLookupApplications(device, optionsDict, &response);
+					CFSafeRelease(optionsDict);
 					if (SDM_MD_CallSuccessful(result)) {
 						CFDictionaryRef details = NULL;
 						if (CFDictionaryContainsKey(response, bundleIdentifier)) {
@@ -81,15 +85,16 @@ int main(int argc, const char * argv[]) {
 							PrintCFType(details);
 						}
 						if (details != NULL) {
-							CFStringRef container = CFDictionaryGetValue(response, CFSTR("Container"));
-							CFStringRef container_uuid = NULL;
-							// find a way to check the container
-							
-							break;
+							CFStringRef container = CFDictionaryGetValue(response, CFSTR("Path"));
+							if (CFStringCompare(remote_container_path, container, 0) == 0) {
+								remote_path = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%@/libReveal.dylib"),container);
+								
+								break;
+							}
 						}
 						
-						CFSafeRelease(details);
 					}
+					CFSafeRelease(response);
 					
 					SDMMD_AMDeviceStopSession(device);
 				}
@@ -115,25 +120,33 @@ int main(int argc, const char * argv[]) {
 				SocketConnection socket = SDMMD_TranslateConnectionToSocket(conn);
 				
 				result = SDMMD_ServiceSendMessage(socket, optionsDict, kCFPropertyListXMLFormat_v1_0);
-				
-				CFMutableDictionaryRef response;
-				result = SDMMD_ServiceReceiveMessage(socket, (CFPropertyListRef *)&response);
+				CFSafeRelease(optionsDict);
 				if (SDM_MD_CallSuccessful(result)) {
-					SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(conn);
-					if (afc) {
-						SDMMD_AFCOperationRef remove_old = SDMMD_AFCOperationCreateRemovePath(CFSTR("Documents/libReveal.dylib"));
-						SDMMD_AFCProcessOperation(afc, &remove_old);
-						status = SDMMD_AMDeviceCopy(afc, local_path, "Documents/libReveal.dylib");
+					CFMutableDictionaryRef response;
+					result = SDMMD_ServiceReceiveMessage(socket, (CFPropertyListRef *)&response);
+					if (SDM_MD_CallSuccessful(result)) {
+						SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(conn);
+						if (afc) {
+							SDMMD_AFCOperationRef remove_old = SDMMD_AFCOperationCreateRemovePath(remote_path);
+							SDMMD_AFCProcessOperation(afc, &remove_old);
+							char *copy_path = CreateCStringFromCFStringRef(remote_path);
+							status = SDMMD_AMDeviceCopy(afc, local_path, copy_path);
+							free(copy_path);
+						}
 					}
 				}
 			}
+			CFSafeRelease(conn);
 			
 			SDMMD_AMDeviceStopSession(device);
 			SDMMD_AMDeviceDisconnect(device);
 		}
 	}
 
-	CFSafeRelease(bundleIdentifier);
+	CFSafeRelease(local_app_bundle);
+	CFSafeRelease(devices);
+	CFSafeRelease(remote_container_path);
+	CFSafeRelease(remote_path);
 
 	if (local_path != NULL) {
 		free(local_path);

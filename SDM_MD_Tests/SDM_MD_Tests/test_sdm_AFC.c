@@ -30,7 +30,7 @@ kern_return_t test_sdm_AFCConnectionCreate(SDMMD_AMDeviceRef sdm) {
 				SDMMD_AFCConnectionRef afc = SDMMD_AFCConnectionCreate(test_sdm_afc_conn);
 				if (afc) {
 					sdm_return = kAMDSuccess;
-					SDMMD_AMDServiceConnectionInvalidate(test_sdm_afc_conn);
+					CFSafeRelease(test_sdm_afc_conn);
 					CFSafeRelease(afc);
 				}
 			}
