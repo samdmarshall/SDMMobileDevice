@@ -21,8 +21,47 @@
 #define DBLog(...) SafeMacro()
 #endif
 
-int main(int argc, const char * argv[]) {
+enum ModeType {
+	ModeType_Invalid = -1,
+	ModeType_Signing = 1,
+	ModeType_Deploy = 2
+};
+
+char * GetRevealPath() {
+	char *local_path = NULL;
+	CFURLRef outAppURL = NULL;
+	OSStatus find_app = LSFindApplicationForInfo(kLSUnknownCreator, CFSTR("com.ittybittyapps.Reveal"), NULL, NULL, &outAppURL);
 	
+	if (find_app != kLSApplicationNotFoundErr) {
+		CFURLRef temp = CFURLCreateCopyAppendingPathComponent(kCFAllocatorDefault, outAppURL, CFSTR("Contents/SharedSupport/iOS-Libraries/libReveal.dylib"), false);
+		CFSafeRelease(outAppURL);
+		CFStringRef fs_path = CFURLCopyFileSystemPath(temp, kCFURLPOSIXPathStyle);
+		local_path = CreateCStringFromCFStringRef(fs_path);
+		CFSafeRelease(fs_path);
+		CFSafeRelease(temp);
+	}
+	
+	return local_path;
+}
+
+int RunSigning(const char * argv[]) {
+	int status = -1;
+	
+	char *local_path = GetRevealPath();
+	
+	if (local_path != NULL) {
+		int result = execl("/usr/bin/codesign", "-f", "-s", "'iPhone Developer'", local_path);
+		status = (result != -1 ? 0 : -1);
+	}
+	
+	if (local_path != NULL) {
+		free(local_path);
+	}
+	
+	return status;
+}
+
+int RunDeployment(const char * argv[]) {
 	int status = -1;
 	
 	SDMMobileDevice;
@@ -43,23 +82,12 @@ int main(int argc, const char * argv[]) {
 	CFSafeRelease(bundle_url);
 	CFStringRef bundleIdentifier = CFBundleGetIdentifier(local_app_bundle);
 	
-	char *local_path = NULL;
-	CFURLRef outAppURL = NULL;
-	OSStatus find_app = LSFindApplicationForInfo(kLSUnknownCreator, CFSTR("com.ittybittyapps.Reveal"), NULL, NULL, &outAppURL);
-	
-	if (find_app != kLSApplicationNotFoundErr) {
-		CFURLRef temp = CFURLCreateCopyAppendingPathComponent(kCFAllocatorDefault, outAppURL, CFSTR("Contents/SharedSupport/iOS-Libraries/libReveal.dylib"), false);
-		CFSafeRelease(outAppURL);
-		CFStringRef fs_path = CFURLCopyFileSystemPath(temp, kCFURLPOSIXPathStyle);
-		local_path = CreateCStringFromCFStringRef(fs_path);
-		CFSafeRelease(fs_path);
-		CFSafeRelease(temp);
-	}
+	char *local_path = GetRevealPath();
 	
 	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
 	CFIndex device_count = CFArrayGetCount(devices);
 	
-	if (devices != NULL && device_count != 0) {
+	if (devices != NULL && device_count != 0 && local_path != NULL) {
 		
 		SDMMD_AMDeviceRef device = NULL;
 		
@@ -142,14 +170,53 @@ int main(int argc, const char * argv[]) {
 			SDMMD_AMDeviceDisconnect(device);
 		}
 	}
-
+	
 	CFSafeRelease(local_app_bundle);
 	CFSafeRelease(devices);
 	CFSafeRelease(remote_container_path);
 	CFSafeRelease(remote_path);
-
+	
 	if (local_path != NULL) {
 		free(local_path);
+	}
+	
+	return status;
+}
+
+int main(int argc, const char * argv[]) {
+	
+	int status = -1;
+	
+	char *signing_mode = "-s";
+	char *deploy_mode = "-d";
+
+	int mode = ModeType_Invalid;
+	
+	if (argc > 2) {
+		if (strncmp(argv[1], signing_mode, sizeof(char[2])) == 0) {
+			mode = ModeType_Signing;
+		}
+		if (strncmp(argv[1], deploy_mode, sizeof(char[2])) == 0) {
+			mode = ModeType_Deploy;
+		}
+	}
+	
+	switch (mode) {
+		case ModeType_Invalid: {
+			printf("Invalid launch arguments!\n");
+			break;
+		}
+		case ModeType_Signing: {
+			status = RunSigning(argv);
+			break;
+		}
+		case ModeType_Deploy: {
+			status = RunDeployment(argv);
+			break;
+		}
+		default: {
+			break;
+		}
 	}
 
 	return status;
