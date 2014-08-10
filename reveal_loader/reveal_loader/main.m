@@ -6,12 +6,22 @@
 //  Copyright (c) 2014 Sam Marshall. All rights reserved.
 //
 
+#include <Foundation/Foundation.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include <SDMMobileDevice/SDMMobileDevice.h>
 #include <SDMMobileDevice/SDMMD_Connection_Private.h>
 #include <SDMMobileDevice/SDMMD_Connection_Internal.h>
 #include "CFStringAddition.h"
+
 #include <ApplicationServices/ApplicationServices.h>
+#include <ServiceManagement/ServiceManagement.h>
+#include <Security/Authorization.h>
+#include <Security/Security.h>
+#include <Security/SecCertificate.h>
+#include <Security/SecCode.h>
+#include <Security/SecStaticCode.h>
+#include <Security/SecCodeHost.h>
+#include <Security/SecRequirement.h>
 
 #define SafeMacro(x) do { x } while(0)
 
@@ -21,41 +31,129 @@
 #define DBLog(...) SafeMacro()
 #endif
 
+#define kTmpReveal "/tmp/libReveal.dylib"
+
 enum ModeType {
 	ModeType_Invalid = -1,
 	ModeType_Signing = 1,
 	ModeType_Deploy = 2
 };
 
-char * GetRevealPath() {
-	char *local_path = NULL;
+int TestSigning();
+
+CFStringRef GetRevealPath() {
+	CFStringRef local_path = NULL;
 	CFURLRef outAppURL = NULL;
 	OSStatus find_app = LSFindApplicationForInfo(kLSUnknownCreator, CFSTR("com.ittybittyapps.Reveal"), NULL, NULL, &outAppURL);
 	
 	if (find_app != kLSApplicationNotFoundErr) {
 		CFURLRef temp = CFURLCreateCopyAppendingPathComponent(kCFAllocatorDefault, outAppURL, CFSTR("Contents/SharedSupport/iOS-Libraries/libReveal.dylib"), false);
 		CFSafeRelease(outAppURL);
-		CFStringRef fs_path = CFURLCopyFileSystemPath(temp, kCFURLPOSIXPathStyle);
-		local_path = CreateCStringFromCFStringRef(fs_path);
-		CFSafeRelease(fs_path);
+		local_path = CFURLCopyFileSystemPath(temp, kCFURLPOSIXPathStyle);
 		CFSafeRelease(temp);
 	}
 	
 	return local_path;
 }
 
-int RunSigning(const char * argv[]) {
-	int status = -1;
+CFStringRef GetRevealTempPath() {
+	CFStringRef temp = NULL;
 	
-	char *local_path = GetRevealPath();
-	
-	if (local_path != NULL) {
-		int result = execl("/usr/bin/codesign", "-f", "-s", "'iPhone Developer'", local_path);
-		status = (result != -1 ? 0 : -1);
+	CFStringRef reveal_path = GetRevealPath();
+	if (reveal_path != NULL) {
+		if ([[NSFileManager defaultManager] fileExistsAtPath:@kTmpReveal]) {
+			if (TestSigning() == -1) {
+				temp = CFSTR(kTmpReveal);
+			}
+		}
+		else {
+			if ([[NSFileManager defaultManager] copyItemAtPath:(__bridge NSString *)reveal_path toPath:@kTmpReveal error:nil]) {
+				temp = CFSTR(kTmpReveal);
+			}
+		}
 	}
 	
+	return temp;
+}
+
+Boolean LookupSigningCert(CFStringRef *cert_name) {
+	Boolean found_cert = false;
+	CFTypeRef results = NULL;
+	CFMutableDictionaryRef search = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+	CFDictionaryAddValue(search, kSecClass, kSecClassCertificate);
+	CFDictionaryAddValue(search, kSecMatchSubjectContains, CFSTR("iPhone Developer:"));
+	CFDictionaryAddValue(search, kSecMatchLimit, kSecMatchLimitAll);
+	OSStatus status = SecItemCopyMatching(search, &results);
+	if (status == errSecSuccess) {
+		CFDataRef signing_cert;
+		status = SecItemExport(results, kSecFormatX509Cert, 0, NULL, &signing_cert);
+		if (status == errSecSuccess) {
+			found_cert = true;
+		}
+		SecCertificateRef certificate = SecCertificateCreateWithData(kCFAllocatorDefault, signing_cert);
+		
+        CFStringRef commonName = NULL;
+        SecCertificateCopyCommonName(certificate, &commonName);
+        *cert_name = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%@"), commonName);
+		
+        CFSafeRelease(commonName);
+	}
+	return found_cert;
+}
+
+int TestSigning() {
+	int status = -1;
+	
+	CFStringRef local_path = CFSTR(kTmpReveal);
+		
 	if (local_path != NULL) {
-		free(local_path);
+		CFStringRef cert = NULL;
+		LookupSigningCert(&cert);
+	
+		NSPipe *output = [[NSPipe alloc] init];
+		
+		NSTask *runCodeSign = [[NSTask alloc] init];
+		[runCodeSign setLaunchPath:@"/usr/bin/codesign"];
+		[runCodeSign setArguments:@[@"-d", (__bridge NSString *)local_path]];
+		[runCodeSign setStandardOutput:output];
+		[runCodeSign launch];
+		[runCodeSign waitUntilExit];
+		
+		NSData *outputData = [[output fileHandleForReading] availableData];
+		NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
+		if ([outputString rangeOfString:@"is not signed"].location != NSNotFound) {
+			status = 0;
+		}
+	}
+	
+	return status;
+
+}
+
+int RunSigning() {
+	int status = -1;
+	
+	
+	CFStringRef local_path = GetRevealTempPath();
+		
+	if (local_path != NULL) {
+		CFStringRef cert = NULL;
+		LookupSigningCert(&cert);
+		
+		NSPipe *output = [[NSPipe alloc] init];
+		NSTask *runCodeSign = [[NSTask alloc] init];
+		[runCodeSign setEnvironment:[[NSProcessInfo processInfo] environment]];
+		[runCodeSign setLaunchPath:@"/usr/bin/codesign"];
+		[runCodeSign setArguments:@[@"--sign", (__bridge NSString *)cert, @"-fvvv", (__bridge NSString *)local_path]];
+		[runCodeSign setStandardError:output];
+		[runCodeSign launch];
+		[runCodeSign waitUntilExit];
+		
+		NSData *outputData = [[output fileHandleForReading] availableData];
+		NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
+		if ([outputString rangeOfString:@"signed Mach-O"].location != NSNotFound) {
+			status = 0;
+		}
 	}
 	
 	return status;
@@ -82,7 +180,7 @@ int RunDeployment(const char * argv[]) {
 	CFSafeRelease(bundle_url);
 	CFStringRef bundleIdentifier = CFBundleGetIdentifier(local_app_bundle);
 	
-	char *local_path = GetRevealPath();
+	NSString *local_path = (__bridge NSString *)GetRevealTempPath();
 	
 	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
 	CFIndex device_count = CFArrayGetCount(devices);
@@ -158,7 +256,7 @@ int RunDeployment(const char * argv[]) {
 							SDMMD_AFCOperationRef remove_old = SDMMD_AFCOperationCreateRemovePath(remote_path);
 							SDMMD_AFCProcessOperation(afc, &remove_old);
 							char *copy_path = CreateCStringFromCFStringRef(remote_path);
-							status = SDMMD_AMDeviceCopy(afc, local_path, copy_path);
+							status = SDMMD_AMDeviceCopy(afc, (char *)[local_path UTF8String], copy_path);
 							free(copy_path);
 						}
 					}
@@ -176,10 +274,6 @@ int RunDeployment(const char * argv[]) {
 	CFSafeRelease(remote_container_path);
 	CFSafeRelease(remote_path);
 	
-	if (local_path != NULL) {
-		free(local_path);
-	}
-	
 	return status;
 }
 
@@ -192,7 +286,7 @@ int main(int argc, const char * argv[]) {
 
 	int mode = ModeType_Invalid;
 	
-	if (argc > 2) {
+	if (argc >= 2) {
 		if (strncmp(argv[1], signing_mode, sizeof(char[2])) == 0) {
 			mode = ModeType_Signing;
 		}
@@ -207,7 +301,7 @@ int main(int argc, const char * argv[]) {
 			break;
 		}
 		case ModeType_Signing: {
-			status = RunSigning(argv);
+			status = RunSigning();
 			break;
 		}
 		case ModeType_Deploy: {

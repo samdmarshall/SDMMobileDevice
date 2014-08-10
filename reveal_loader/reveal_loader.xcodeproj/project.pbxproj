@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		226954651997B3D60047977F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 226954641997B3D60047977F /* Security.framework */; };
 		2271992A199598B700887A85 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22719929199598B700887A85 /* CoreFoundation.framework */; };
-		2271992D199598B700887A85 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 2271992C199598B700887A85 /* main.c */; };
+		2271992D199598B700887A85 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2271992C199598B700887A85 /* main.m */; };
 		22719933199598E800887A85 /* libSDMMobileDeviceStatic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BB5AF219953E1A0078F2AF /* libSDMMobileDeviceStatic.a */; };
 		22719934199598E800887A85 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BB5AF4199543160078F2AF /* IOKit.framework */; };
 		22719935199598E800887A85 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BB5AF8199543250078F2AF /* libcrypto.dylib */; };
@@ -29,9 +30,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		226954631997B3080047977F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
+		226954641997B3D60047977F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		22719928199598B700887A85 /* reveal_loader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = reveal_loader; sourceTree = BUILT_PRODUCTS_DIR; };
 		22719929199598B700887A85 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		2271992C199598B700887A85 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		2271992C199598B700887A85 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		22719937199598E900887A85 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		22BB5ACB19953DEE0078F2AF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		22BB5ACE19953DEE0078F2AF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -51,6 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				226954651997B3D60047977F /* Security.framework in Frameworks */,
 				22719938199598E900887A85 /* ApplicationServices.framework in Frameworks */,
 				22719933199598E800887A85 /* libSDMMobileDeviceStatic.a in Frameworks */,
 				2271992A199598B700887A85 /* CoreFoundation.framework in Frameworks */,
@@ -66,7 +70,8 @@
 		2271992B199598B700887A85 /* reveal_loader */ = {
 			isa = PBXGroup;
 			children = (
-				2271992C199598B700887A85 /* main.c */,
+				226954631997B3080047977F /* Info.plist */,
+				2271992C199598B700887A85 /* main.m */,
 			);
 			path = reveal_loader;
 			sourceTree = "<group>";
@@ -91,6 +96,7 @@
 		22BB5ACA19953DEE0078F2AF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				226954641997B3D60047977F /* Security.framework */,
 				22719937199598E900887A85 /* ApplicationServices.framework */,
 				22BB5AFC199549E90078F2AF /* Python */,
 				22BB5AFA199545BA0078F2AF /* Python.framework */,
@@ -167,7 +173,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2271992D199598B700887A85 /* main.c in Sources */,
+				2271992D199598B700887A85 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -183,8 +189,9 @@
 					"$(inherited)",
 				);
 				LIBRARY_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-Wl,-sectcreate,__TEXT,__info_plist,Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)/usr/local/include/";
 			};
@@ -195,7 +202,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				LIBRARY_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				OTHER_LDFLAGS = "-Wl,-sectcreate,__TEXT,__info_plist,Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)/usr/local/include/";
 			};
