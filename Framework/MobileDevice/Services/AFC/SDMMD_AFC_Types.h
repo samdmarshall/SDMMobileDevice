@@ -130,6 +130,7 @@ enum SDMMD_AFC_Packet_Type {
 	SDMMD_AFC_Packet_DirectoryEnumeratorRefOpenResult,
 	SDMMD_AFC_Packet_DirectoryEnumeratorRefRead,
 	SDMMD_AFC_Packet_DirectoryEnumeratorRefClose,
+	SDMMD_AFC_Packet_WriteAtPosition = 40,
 	SDMMD_AFC_Packet_Count
 };
 

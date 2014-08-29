@@ -141,6 +141,8 @@
 		22B24AA31965838700A592DE /* Array.h in Headers */ = {isa = PBXBuildFile; fileRef = 2278490F18AFE5A100D1D6FB /* Array.h */; };
 		22B24AA41965838700A592DE /* Endian.h in Headers */ = {isa = PBXBuildFile; fileRef = 22D7FA3B18F0C6010034CC66 /* Endian.h */; };
 		22C77D331956211000525576 /* SDMMD_AMDevice_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C77D321956206E00525576 /* SDMMD_AMDevice_Internal.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		22D281D719A79BEC0027A9F8 /* SDMMD_FileRelay.c in Sources */ = {isa = PBXBuildFile; fileRef = 22D281D619A79BEC0027A9F8 /* SDMMD_FileRelay.c */; };
+		22D281D819A79C430027A9F8 /* SDMMD_FileRelay.h in Headers */ = {isa = PBXBuildFile; fileRef = 22D281D519A79BDB0027A9F8 /* SDMMD_FileRelay.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22D5F317179C81FD00C34745 /* SDMMD_Applications.c in Sources */ = {isa = PBXBuildFile; fileRef = 225ACD761760C86200A47071 /* SDMMD_Applications.c */; };
 		22D5F318179C81FD00C34745 /* SDMMD_Applications.h in Headers */ = {isa = PBXBuildFile; fileRef = 225ACD751760C86200A47071 /* SDMMD_Applications.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22D5F319179C820200C34745 /* SDMMD_Notification.c in Sources */ = {isa = PBXBuildFile; fileRef = 225AC5BF175B976500A47071 /* SDMMD_Notification.c */; };
@@ -377,6 +379,8 @@
 		22C892AA189D75A1008B1D2D /* CFDataAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFDataAddition.h; sourceTree = "<group>"; };
 		22C892AD189D75A8008B1D2D /* Buffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Buffer.c; sourceTree = "<group>"; };
 		22C892AE189D75A8008B1D2D /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
+		22D281D519A79BDB0027A9F8 /* SDMMD_FileRelay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SDMMD_FileRelay.h; path = "File Relay/SDMMD_FileRelay.h"; sourceTree = "<group>"; };
+		22D281D619A79BEC0027A9F8 /* SDMMD_FileRelay.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = SDMMD_FileRelay.c; path = "File Relay/SDMMD_FileRelay.c"; sourceTree = "<group>"; };
 		22D7FA3718F0B1AD0034CC66 /* SDMMD_AppleFileConduit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_AppleFileConduit.h; sourceTree = "<group>"; };
 		22D7FA3818F0B1BC0034CC66 /* SDMMD_AppleFileConduit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AppleFileConduit.c; sourceTree = "<group>"; };
 		22D7FA3B18F0C6010034CC66 /* Endian.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Endian.h; sourceTree = "<group>"; };
@@ -560,6 +564,15 @@
 			path = SwiftTest;
 			sourceTree = "<group>";
 		};
+		22D281D419A79BAD0027A9F8 /* File Relay */ = {
+			isa = PBXGroup;
+			children = (
+				22D281D519A79BDB0027A9F8 /* SDMMD_FileRelay.h */,
+				22D281D619A79BEC0027A9F8 /* SDMMD_FileRelay.c */,
+			);
+			name = "File Relay";
+			sourceTree = "<group>";
+		};
 		22DEF960188350E6008E909F /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -696,6 +709,7 @@
 				222C290418A32C23005B3A26 /* AuthInstall */,
 				22FB07D41955DEE200B73D75 /* Notifications */,
 				22FB07D31955DECD00B73D75 /* Application Proxies */,
+				22D281D419A79BAD0027A9F8 /* File Relay */,
 				22FB07D21955DEA900B73D75 /* AFC */,
 				22FB07D01955DE9100B73D75 /* MobileBackup2 */,
 				22FB07D11955DE9B00B73D75 /* pcap */,
@@ -960,6 +974,7 @@
 				22FB07FE1955FE2000B73D75 /* SDMMD_AFC_Types.h in Headers */,
 				22FB082E19560DED00B73D75 /* CFTypeAddition.h in Headers */,
 				2270AC6A1956432E006BBE84 /* SDMMD_USBMux_Protocol.h in Headers */,
+				22D281D819A79C430027A9F8 /* SDMMD_FileRelay.h in Headers */,
 				22FB07E71955EB8900B73D75 /* SDMMD_Classes.h in Headers */,
 				22AD9347178A1609002ACFB1 /* SDMMD_MRecoveryModeDevice.h in Headers */,
 				22AD9350178A1678002ACFB1 /* SDMMD_MRUSBDevice.h in Headers */,
@@ -1186,6 +1201,7 @@
 				22FB0875195614B700B73D75 /* SDMMD_Functions.c in Sources */,
 				22FB0873195613F300B73D75 /* SDMMD_SSL_Functions.c in Sources */,
 				224CAB7E191449580079689D /* SDMMD_MobileBackup2.c in Sources */,
+				22D281D719A79BEC0027A9F8 /* SDMMD_FileRelay.c in Sources */,
 				22AD91C51789D71A002ACFB1 /* SDMMD_Connection.c in Sources */,
 				22FB07F31955F79900B73D75 /* SDMMD_USBMuxListener_Class.c in Sources */,
 				22AD9349178A1622002ACFB1 /* SDMMD_MRecoveryModeDevice.c in Sources */,
@@ -1407,10 +1423,7 @@
 				COPY_PHASE_STRIP = NO;
 				EXECUTABLE_PREFIX = lib;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "STATIC=1";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
@@ -1436,6 +1449,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = "STATIC=1";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;

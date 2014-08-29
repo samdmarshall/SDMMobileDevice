@@ -42,38 +42,33 @@ enum ModeType {
 int TestSigning();
 
 CFStringRef GetRevealPath() {
-	CFStringRef local_path = NULL;
 	CFURLRef outAppURL = NULL;
 	OSStatus find_app = LSFindApplicationForInfo(kLSUnknownCreator, CFSTR("com.ittybittyapps.Reveal"), NULL, NULL, &outAppURL);
 	
 	if (find_app != kLSApplicationNotFoundErr) {
 		CFURLRef temp = CFURLCreateCopyAppendingPathComponent(kCFAllocatorDefault, outAppURL, CFSTR("Contents/SharedSupport/iOS-Libraries/libReveal.dylib"), false);
-		CFSafeRelease(outAppURL);
-		local_path = CFURLCopyFileSystemPath(temp, kCFURLPOSIXPathStyle);
-		CFSafeRelease(temp);
+		return CFURLCopyFileSystemPath(temp, kCFURLPOSIXPathStyle);
 	}
 	
-	return local_path;
+	return NULL;
 }
 
 CFStringRef GetRevealTempPath() {
-	CFStringRef temp = NULL;
-	
 	CFStringRef reveal_path = GetRevealPath();
 	if (reveal_path != NULL) {
-		if ([[NSFileManager defaultManager] fileExistsAtPath:@kTmpReveal]) {
-			if (TestSigning() == -1) {
-				temp = CFSTR(kTmpReveal);
+		if ([[NSFileManager defaultManager] fileExistsAtPath:@kTmpReveal] == YES) {
+			if (TestSigning() != -1) {
+				return CFSTR(kTmpReveal);
 			}
 		}
 		else {
 			if ([[NSFileManager defaultManager] copyItemAtPath:(__bridge NSString *)reveal_path toPath:@kTmpReveal error:nil]) {
-				temp = CFSTR(kTmpReveal);
+				return CFSTR(kTmpReveal);
 			}
 		}
 	}
 	
-	return temp;
+	return NULL;
 }
 
 Boolean LookupSigningCert(CFStringRef *cert_name) {
@@ -102,31 +97,26 @@ Boolean LookupSigningCert(CFStringRef *cert_name) {
 }
 
 int TestSigning() {
-	int status = -1;
+		
+	CFStringRef cert = NULL;
+	LookupSigningCert(&cert);
 	
-	CFStringRef local_path = CFSTR(kTmpReveal);
+	NSPipe *output = [[NSPipe alloc] init];
 		
-	if (local_path != NULL) {
-		CFStringRef cert = NULL;
-		LookupSigningCert(&cert);
-	
-		NSPipe *output = [[NSPipe alloc] init];
+	NSTask *runCodeSign = [[NSTask alloc] init];
+	[runCodeSign setLaunchPath:@"/usr/bin/codesign"];
+	[runCodeSign setArguments:@[@"-d", (__bridge NSString *)CFSTR(kTmpReveal)]];
+	[runCodeSign setStandardOutput:output];
+	[runCodeSign launch];
+	[runCodeSign waitUntilExit];
 		
-		NSTask *runCodeSign = [[NSTask alloc] init];
-		[runCodeSign setLaunchPath:@"/usr/bin/codesign"];
-		[runCodeSign setArguments:@[@"-d", (__bridge NSString *)local_path]];
-		[runCodeSign setStandardOutput:output];
-		[runCodeSign launch];
-		[runCodeSign waitUntilExit];
-		
-		NSData *outputData = [[output fileHandleForReading] availableData];
-		NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
-		if ([outputString rangeOfString:@"is not signed"].location != NSNotFound) {
-			status = 0;
-		}
+	NSData *outputData = [[output fileHandleForReading] availableData];
+	NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
+	if ([outputString rangeOfString:@"is not signed"].location == NSNotFound) {
+		return 0;
 	}
 	
-	return status;
+	return -1;
 
 }
 
@@ -171,6 +161,9 @@ int RunDeployment(const char * argv[]) {
 	CFStringRef local_bundle_path = CFStringCreateWithCString(kCFAllocatorDefault, argv[2], kCFStringEncodingUTF8);
 	CFStringRef remote_container_path = CFStringCreateWithCString(kCFAllocatorDefault, argv[3], kCFStringEncodingUTF8);
 	
+	CFShow(local_bundle_path);
+	//CFShow(remote_container_path);
+	
 	CFURLRef path_url = CFURLCreateWithString(kCFAllocatorDefault, local_bundle_path, NULL);
 	CFURLRef bundle_url = CFURLCreateCopyDeletingLastPathComponent(kCFAllocatorDefault, path_url);
 	CFSafeRelease(path_url);
@@ -211,9 +204,10 @@ int RunDeployment(const char * argv[]) {
 							PrintCFType(details);
 						}
 						if (details != NULL) {
-							CFStringRef container = CFDictionaryGetValue(response, CFSTR("Path"));
-							if (CFStringCompare(remote_container_path, container, 0) == 0) {
-								remote_path = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%@/libReveal.dylib"),container);
+							CFStringRef container = CFDictionaryGetValue(details, CFSTR("Path"));
+							CFRange found_range = CFStringFind(container, remote_container_path, 0);
+							if (found_range.location != kCFNotFound && found_range.length != 0) {
+								remote_path = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%@/libReveal.dylib"),(__bridge CFStringRef)[(__bridge NSString *)container lastPathComponent]);
 								
 								break;
 							}
@@ -234,9 +228,7 @@ int RunDeployment(const char * argv[]) {
 		if (device != NULL) {
 			CFDictionaryRef dict = NULL;
 			SDMMD_AMConnectionRef conn = SDMMD_AMDServiceConnectionCreate(0, NULL, dict);
-			
-			CFShow(device);
-			
+						
 			result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_HOUSE_ARREST), NULL, &conn);
 			if (SDM_MD_CallSuccessful(result)) {
 				CFMutableDictionaryRef optionsDict = SDMMD_create_dict();
@@ -256,13 +248,14 @@ int RunDeployment(const char * argv[]) {
 							SDMMD_AFCOperationRef remove_old = SDMMD_AFCOperationCreateRemovePath(remote_path);
 							SDMMD_AFCProcessOperation(afc, &remove_old);
 							char *copy_path = CreateCStringFromCFStringRef(remote_path);
-							status = SDMMD_AMDeviceCopy(afc, (char *)[local_path UTF8String], copy_path);
+							status = SDMMD_AMDeviceCopy(afc, (char *)[local_path UTF8String], "Documents/libReveal.dylib");
+							SDMMD_AFCOperationRef move_op = SDMMD_AFCOperationCreateRenamePath(CFSTR("Documents/libReveal.dylib"), remote_path);
+							SDMMD_AFCProcessOperation(afc, &move_op);
 							free(copy_path);
 						}
 					}
 				}
 			}
-			CFSafeRelease(conn);
 			
 			SDMMD_AMDeviceStopSession(device);
 			SDMMD_AMDeviceDisconnect(device);

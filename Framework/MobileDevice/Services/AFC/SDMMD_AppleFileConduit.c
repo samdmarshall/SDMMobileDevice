@@ -127,14 +127,16 @@ sdmmd_return_t SDMMD_AFCReceiveOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 	if (result == kAMDSuccess) {
 		SDMMD_AFCPacketHeader *header = (SDMMD_AFCPacketHeader *)CFDataGetBytePtr(headerData);
 		
-		uint32_t body_length = (uint32_t)header->packetLen - (uint32_t)sizeof(struct SDMMD_AFCPacketHeader);
-		CFMutableDataRef bodyData = CFDataCreateMutable(kCFAllocatorDefault, body_length);
-		char *body = calloc(body_length, sizeof(char));
-		CFDataAppendBytes(bodyData, (UInt8*)body, body_length);
-		free(body);
-		result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(conn->ivars.handle), (CFDataRef*)&bodyData);
-		if (bodyData) {
-			(*operation)->ivars.packet->response = bodyData;
+		if (header->packetLen > sizeof(struct SDMMD_AFCPacketHeader)) {
+			uint32_t body_length = (uint32_t)header->packetLen - (uint32_t)sizeof(struct SDMMD_AFCPacketHeader);
+			CFMutableDataRef bodyData = CFDataCreateMutable(kCFAllocatorDefault, body_length);
+			char *body = calloc(body_length, sizeof(char));
+			CFDataAppendBytes(bodyData, (UInt8*)body, body_length);
+			free(body);
+			result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(conn->ivars.handle), (CFDataRef*)&bodyData);
+			if (bodyData) {
+				(*operation)->ivars.packet->response = bodyData;
+			}
 		}
 	}
 	CFSafeRelease(headerData);
@@ -451,6 +453,21 @@ SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateWriteOperation(uint64_t fileR
 	return op;
 }
 
+SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateWriteAtPositionOperation(uint64_t fileRef, CFDataRef data, uint64_t pos) { // _AFCFileDescriptorCreateWriteOperation
+	SDMMD_AFCOperationRef op = SDMMD_AFCOperationCreateEmpty();
+	op->ivars.packet = calloc(1, sizeof(struct sdmmd_AFCPacket));
+	uint32_t data_length = sizeof(uint64_t)*2;
+	uint32_t body_length = (uint32_t)CFDataGetLength(data);
+	op->ivars.packet->header_data = calloc(1, sizeof(uint64_t));
+	memcpy(op->ivars.packet->header_data, &fileRef, data_length);
+	op->ivars.packet->body_data = calloc(body_length, sizeof(char));
+	memcpy(op->ivars.packet->body_data, CFDataGetBytePtr(data), body_length);
+	memcpy(&(op->ivars.packet->header_data[sizeof(uint64_t)]), &pos, sizeof(uint64_t));
+	SDMMD_AFCHeaderInit(&(op->ivars.packet->header), SDMMD_AFC_Packet_WriteAtPosition, data_length, body_length, 0);
+	return op;
+}
+
+
 SDMMD_AFCOperationRef SDMMD_AFCFileDescriptorCreateSeekOperation(uint64_t fileRef, uint32_t pos) { // _AFCFileDescriptorCreateSetPositionOperation
 	SDMMD_AFCOperationRef op = SDMMD_AFCOperationCreateEmpty();
 	op->ivars.packet = calloc(1, sizeof(struct sdmmd_AFCPacket));
@@ -707,7 +724,7 @@ sdmmd_return_t SDMMD_AMDeviceCopyFile(CallBack callback, void *thing2, void *thi
 		
 		uint64_t file_descriptor;
 		memcpy(&file_descriptor, CFDataGetBytePtr(file_create->ivars.packet->response), sizeof(uint64_t));
-			
+		
 		uint64_t offset = 0;
 		uint64_t remainder = 0;
 		uint32_t percent_calc = 30;

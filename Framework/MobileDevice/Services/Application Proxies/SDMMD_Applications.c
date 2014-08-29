@@ -115,7 +115,7 @@ sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDict
 			else {
 				printf("%s: Was unable to start the install service on the device: %i\n",__FUNCTION__,device->ivars.device_id);
 			}
-			CFSafeRelease(conn);
+			//CFSafeRelease(conn);
 		}
 	}
 	return result;
