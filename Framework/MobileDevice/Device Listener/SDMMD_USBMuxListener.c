@@ -234,12 +234,20 @@ SDMMD_USBMuxListenerRef SDMMD_USBMuxCreate() {
  sudo socat -t100 -x -v UNIX-LISTEN:/var/run/usbmuxd,mode=777,reuseaddr,fork UNIX-CONNECT:/var/run/usbmuxx
  */
 
-uint32_t SDMMD_ConnectToUSBMux() {
-	int result = 0;
+uint32_t SDMMD_ConnectToUSBMux(time_t recvTimeoutSec) {
+	int result = 0x0;
 	
 	// Initialize socket
 	uint32_t sock = socket(AF_UNIX, SOCK_STREAM, 0);
 	
+    if (recvTimeoutSec != 0) {
+        struct timeval timeout = { .tv_sec = recvTimeoutSec, .tv_usec = 0 };
+        if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout))) {
+			int err = errno;
+            printf("%s: setsockopt SO_RCVTIMEO failed: %d - %s\n", __FUNCTION__, err, strerror(err));
+        }
+    }
+    
 	// Set send/receive buffer sizes
 	uint32_t bufSize = 0x00010400;
 	if (!result) {
@@ -290,9 +298,10 @@ uint32_t SDMMD_ConnectToUSBMux() {
 	return sock;
 }
 
-sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint16_t port, uint32_t *socketConn) {
-	sdmmd_return_t result = kAMDSuccess;
-	*socketConn = SDMMD_ConnectToUSBMux();
+sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port, uint32_t *socketConn) {
+	sdmmd_return_t result = kAMDMuxConnectError;
+    // 10-sec recv timeout
+	*socketConn = SDMMD_ConnectToUSBMux(10);
 	if (*socketConn) {
 		CFMutableDictionaryRef dict = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 		CFNumberRef deviceNum = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &device->ivars.device_id);
@@ -300,22 +309,38 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint16_t port
 		CFSafeRelease(deviceNum);
         
 		struct USBMuxPacket *connect = SDMMD_USBMuxCreatePacketType(kSDMMD_USBMuxPacketConnectType, dict);
-
+        
+        // Requesting socket connection for specified port number
 		CFNumberRef portNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt16Type, &port);
 		CFDictionarySetValue((CFMutableDictionaryRef)connect->payload, CFSTR("PortNumber"), portNumber);
 		CFSafeRelease(portNumber);
-		
+        
 		SDMMD_USBMuxSend(*socketConn, connect);
         USBMuxPacketRelease(connect);
         
         struct USBMuxPacket * response = SDMMD_USBMuxCreatePacketEmpty();
 		SDMMD_USBMuxReceive(*socketConn, response);
+        
+        // Check response for success, on failure result will be kAMDMuxConnectError
+        if (response->payload) {
+            
+            CFStringRef msgType = NULL;
+            if ((msgType = CFDictionaryGetValue(response->payload, CFSTR("MessageType"))) && CFEqual(msgType, CFSTR("Result"))) {
+                
+                CFNumberRef msgResult = NULL;
+                SInt32 ok = kAMDSuccess;
+                CFNumberRef okResult = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &ok);
+                if ((msgResult = CFDictionaryGetValue(response->payload, CFSTR("Number"))) && CFEqual(msgResult, okResult)) {
+                    // Socket negotiation successful
+                    result = kAMDSuccess;
+                }
+                CFSafeRelease(okResult);
+            }
+        }
+        
         USBMuxPacketRelease(response);
         
 		CFSafeRelease(dict);
-	}
-	else {
-		result = kAMDMuxConnectError;
 	}
 	return result;
 }
@@ -323,7 +348,8 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint16_t port
 void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 	__block uint64_t bad_packet_counter = 0;
 	dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0x0), ^{
-		(*listener)->ivars.socket = SDMMD_ConnectToUSBMux();
+        // no timeout for recv
+		(*listener)->ivars.socket = SDMMD_ConnectToUSBMux(0);
 		(*listener)->ivars.socketSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, (*listener)->ivars.socket, 0x0, (*listener)->ivars.socketQueue);
 		dispatch_source_set_event_handler((*listener)->ivars.socketSource, ^{
             //printf("socketSourceEventHandler: fired\n");
