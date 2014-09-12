@@ -384,6 +384,20 @@ sdmmd_return_t SDMMD_AMDeviceDigestFile(CFStringRef path, unsigned char **digest
 	return result;
 }
 
+sdmmd_return_t SDMMD_AMDeviceSHA256File(CFStringRef path, unsigned char **digest) {
+	sdmmd_return_t result = kAMDSuccess;
+	CFDataRef data = CFDataCreateFromPath(path);
+	if (data) {
+		*digest = DataToSHA256(data);
+	}
+	else {
+		result = kAMDDigestFailedError;
+	}
+	CFSafeRelease(data);
+	
+	return result;
+}
+
 char* SDMMD_ResolveModelToName(CFStringRef model) {
 	char *model_cstr = SDMCFStringGetString(model);
 	char *model_name = "Unknown";

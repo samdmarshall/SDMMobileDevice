@@ -311,7 +311,7 @@ sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port
 		struct USBMuxPacket *connect = SDMMD_USBMuxCreatePacketType(kSDMMD_USBMuxPacketConnectType, dict);
         
         // Requesting socket connection for specified port number
-		CFNumberRef portNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt16Type, &port);
+		CFNumberRef portNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &port);
 		CFDictionarySetValue((CFMutableDictionaryRef)connect->payload, CFSTR("PortNumber"), portNumber);
 		CFSafeRelease(portNumber);
         

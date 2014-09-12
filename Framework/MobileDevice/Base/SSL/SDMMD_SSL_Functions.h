@@ -37,7 +37,7 @@
 #include <pthread.h>
 #include <CoreFoundation/CoreFoundation.h>
 
-#define HASH_LENGTH SHA_DIGEST_LENGTH
+#define SHA1_HASH_LENGTH SHA_DIGEST_LENGTH
 
 CFStringRef SDMMD_CreateUUID();
 void SDMMD_openSSLLockCallBack(int mode, int n, const char * file, int line);
@@ -51,5 +51,6 @@ CFDataRef SDMMD_CreateDataFromPrivateKey(EVP_PKEY *key);
 BIO* SDMMD__create_bio_from_data(CFDataRef data);
 CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef devicePubkey);
 unsigned char * DataToSHA1(CFDataRef data);
+unsigned char * DataToSHA256(CFDataRef data);
 
 #endif

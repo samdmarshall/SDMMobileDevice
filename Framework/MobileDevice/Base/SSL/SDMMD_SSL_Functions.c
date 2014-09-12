@@ -34,6 +34,27 @@
 
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
+typedef struct Hash_Type {
+	FunctionPointer hash_init;
+	FunctionPointer hash_update;
+	FunctionPointer hash_close;
+	int hash_length;
+} ATR_PACK SDM_Hash_Type;
+
+SDM_Hash_Type sha1_hash = {
+	(FunctionPointer)SHA1_Init,
+	(FunctionPointer)SHA1_Update,
+	(FunctionPointer)SHA1_Final,
+	SHA_DIGEST_LENGTH
+};
+
+SDM_Hash_Type sha256_hash = {
+	(FunctionPointer)SHA256_Init,
+	(FunctionPointer)SHA256_Update,
+	(FunctionPointer)SHA256_Final,
+	SHA256_DIGEST_LENGTH
+};
+
 CFStringRef SDMMD_CreateUUID() {
 	CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
 	CFStringRef str = CFUUIDCreateString(kCFAllocatorDefault, uuid);
@@ -361,18 +382,30 @@ CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef devicePubkey) {
 	return record;
 }
 
-unsigned char * DataToSHA1(CFDataRef data) {
-	unsigned char hash[HASH_LENGTH];
-	SHA_CTX ctx;
-	SHA1_Init(&ctx);
-	for (size_t index = 0; index < CFDataGetLength(data); index++) {
-		SHA1_Update(&ctx, PtrAdd(CFDataGetBytePtr(data), index), sizeof(unsigned char));
+unsigned char * DataToHash(CFDataRef data, Pointer context, SDM_Hash_Type info) {
+	unsigned char *digest = (unsigned char *)calloc(info.hash_length, sizeof(unsigned char));
+	if (info.hash_init != NULL && info.hash_update != NULL && info.hash_close != NULL && info.hash_length != 0) {
+		unsigned char hash[info.hash_length];
+		
+		info.hash_init(context);
+		for (size_t index = 0; index < CFDataGetLength(data); index++) {
+			info.hash_update(context, PtrAdd(CFDataGetBytePtr(data), index), sizeof(unsigned char));
+		}
+		info.hash_close(hash, context);
+	
+		memcpy(digest, hash, sizeof(char[info.hash_length]));
 	}
-	SHA1_Final(hash, &ctx);
-	unsigned char *digest = (unsigned char *)malloc(HASH_LENGTH);
-	memset(digest, 0, sizeof(unsigned char[HASH_LENGTH]));
-	memcpy(digest, hash, sizeof(char[HASH_LENGTH]));
 	return digest;
+}
+
+unsigned char * DataToSHA1(CFDataRef data) {
+	SHA_CTX ctx;
+	return DataToHash(data, PtrCast(&ctx, Pointer), sha1_hash);
+}
+
+unsigned char * DataToSHA256(CFDataRef data) {
+	SHA256_CTX ctx;
+	return DataToHash(data, PtrCast(&ctx, Pointer), sha256_hash);
 }
 
 #endif

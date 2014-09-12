@@ -325,6 +325,8 @@ sdmmd_return_t SDMMD_stream_image(SDMMD_AMConnectionRef connection, CFStringRef 
 							}
 						}
 					}
+					CFSafeRelease(getStatus);
+					CFSafeRelease(image_file);
 				}
 			}
 			else {
@@ -394,7 +396,7 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 		CFTypeRef signature = CFDictionaryGetValue(dict, CFSTR("ImageSignature"));
 		CFStringRef image_type = CFDictionaryGetValue(dict, CFSTR("ImageType"));
 		if (image_type) {
-			unsigned char sum_digest[HASH_LENGTH];
+			unsigned char sum_digest[SHA1_HASH_LENGTH];
 			result = SDMMD_AMDeviceDigestFile(path, PtrCast(&sum_digest, unsigned char **));
 			CheckErrorAndReturn(result);
 			
