@@ -53,6 +53,7 @@ typedef struct SocketConnection_Internal SocketConnection;
 #define AMSVC_MIS_AGENT				"com.apple.misagent"
 #define AMSVC_SPRINGBOARD_SERVICES	"com.apple.springboardservices"
 #define AMSVC_ATC					"com.apple.atc" // expects
+#define AMSVC_ATC2					"com.apple.atc2"
 #define AMSVC_PACKETCAPTURE			"com.apple.pcapd"
 #define AMSVC_WEB_INSPECTOR			"com.apple.webinspector"
 #define AMSVC_RASD					"com.apple.rasd" // expects
@@ -73,6 +74,7 @@ typedef struct SocketConnection_Internal SocketConnection;
 #define AMSVC_INSTALLATION_PROXY	"com.apple.mobile.installation_proxy"
 #define AMSVC_FACTORY_PROXY			"com.apple.mobile.factory_proxy"
 #define AMSVC_NOTIFICATION_PROXY	"com.apple.mobile.notification_proxy"
+#define AMSVC_INSEC_NOTIF_PROXY		"com.apple.mobile.insecure_notification_proxy"
 #define AMSVC_HOUSE_ARREST			"com.apple.mobile.house_arrest"
 #define AMSVC_LOCKDOWN				"com.apple.mobile.lockdown" // invalid
 #define AMSVC_SOFTWARE_UPDATE		"com.apple.mobile.software_update" // invalid
@@ -93,6 +95,10 @@ typedef struct SocketConnection_Internal SocketConnection;
 
 #define AMSVC_RADIOS_TEST_MOBILE	"com.apple.radios.wirelesstester.mobile" // expects
 #define AMSVC_RADIOS_TEST_ROOT		"com.apple.radios.wirelesstester.root" // expects
+
+#define AMSVC_STREAM_ZIP			"com.apple.streaming_zip_conduit"
+
+#define AMSVC_PREBOARD				"com.apple.preboardservice"
 
 struct SDM_MD_Service_Identifiers {
 	char *identifier;

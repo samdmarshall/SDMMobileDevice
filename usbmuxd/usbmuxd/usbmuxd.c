@@ -61,8 +61,9 @@ void USBMuxSend(uint32_t sock, struct USBMuxPacket *packet) {
 			ssize_t remainder = payloadSize;
 			while (remainder) {
 				result = send(sock, &buffer[payloadSize-remainder], sizeof(char), 0x0);
-				if (result != sizeof(char))
+				if (result != sizeof(char)) {
 					break;
+				}
 				remainder -= result;
 			}
 		}
@@ -79,8 +80,9 @@ void USBMuxReceive(uint32_t sock, struct USBMuxPacket *packet) {
 			ssize_t remainder = payloadSize;
 			while (remainder) {
 				result = recv(sock, &buffer[payloadSize-remainder], sizeof(char), 0x0);
-				if (result != sizeof(char))
+				if (result != sizeof(char)) {
 					break;
+				}
 				remainder -= result;
 			}
 			CFDataRef xmlData = CFDataCreate(kCFAllocatorDefault, (UInt8 *)buffer, payloadSize);

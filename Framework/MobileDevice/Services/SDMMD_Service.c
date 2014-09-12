@@ -38,6 +38,8 @@
 #include <sys/select.h>
 #include "Core.h"
 
+#define kMilliseconds 1000
+
 int32_t CheckIfExpectingResponse(SocketConnection handle, uint32_t timeout) {
 	fd_set fds;
 	int32_t returnValue = -1;
@@ -50,8 +52,8 @@ int32_t CheckIfExpectingResponse(SocketConnection handle, uint32_t timeout) {
 	}
 
 	if (timeout > 0) {
-		to.tv_sec = (time_t) (timeout / 1000);
-		to.tv_usec = (__darwin_suseconds_t) ((timeout - (to.tv_sec * 1000)) * 1000);
+		to.tv_sec = (time_t) (timeout / kMilliseconds);
+		to.tv_usec = (__darwin_suseconds_t) ((timeout - (to.tv_sec * kMilliseconds)) * kMilliseconds);
 		pto = &to;
 	}
 	else {
@@ -189,7 +191,7 @@ sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data) {
 	uint32_t length = 0;
 	sdmmd_return_t response = kAMDErrorError;
 
-	if (handle.isSSL == true || CheckIfExpectingResponse(handle, 10000)) {
+	if (handle.isSSL == true || CheckIfExpectingResponse(handle, 10 * kMilliseconds)) {
 		
 		// Receive data length header
 		// Note: in iOS 8 the header 4-byte int may have to be read in multiple parts
@@ -221,7 +223,7 @@ sdmmd_return_t SDMMD_DirectServiceReceive(SocketConnection handle, CFDataRef *da
 	uint32_t size = (data && *data ? (uint32_t)CFDataGetLength(*data) : 0);
 
 	if (size) {
-		if (handle.isSSL == true || CheckIfExpectingResponse(handle, 1000)) {
+		if (handle.isSSL == true || CheckIfExpectingResponse(handle, 1 * kMilliseconds)) {
 			unsigned char *buffer = calloc(1, size);
 			uint32_t remainder = size;
 			size_t received;
