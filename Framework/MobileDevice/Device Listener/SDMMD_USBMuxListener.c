@@ -198,6 +198,7 @@ void SDMMD_USBMuxDeviceListCallback(void *context, struct USBMuxPacket *packet) 
 			devicePacket->payload = CFArrayGetValueAtIndex(devices, i);
 			((SDMMD_USBMuxListenerRef)context)->ivars.attachedCallback(context, devicePacket);
 		}
+        CFSafeRelease(deviceFromList);
 	}
 	dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->ivars.semaphore);
 }
