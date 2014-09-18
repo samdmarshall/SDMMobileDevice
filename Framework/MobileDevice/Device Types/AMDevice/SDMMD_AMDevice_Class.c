@@ -67,7 +67,6 @@ static void SDMMD_AMDeviceRefFinalize(CFTypeRef cf) {
 	CFSafeRelease(device->ivars.service_name);
 	CFSafeRelease(device->ivars.network_address);
 	CFSafeRelease(device->ivars.unknownData);
-	Safe(free,device);
 }
 
 static CFTypeID _kSDMMD_AMDeviceRefID = _kCFRuntimeNotATypeID;
