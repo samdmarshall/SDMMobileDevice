@@ -1181,6 +1181,7 @@ sdmmd_return_t SDMMD_AMDeviceDisconnect(SDMMD_AMDeviceRef device) {
 		result = SDMMD_lockdown_connection_destory(device->ivars.lockdown_conn);
 		device->ivars.lockdown_conn = NULL;
 		CFSafeRelease(device->ivars.session);
+        device->ivars.session = NULL;
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 	}
 	else {
