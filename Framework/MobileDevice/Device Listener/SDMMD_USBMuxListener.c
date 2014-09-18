@@ -115,6 +115,7 @@ void SDMMD_USBMuxResponseCallback(void *context, struct USBMuxPacket *packet) {
 				printf("usbmuxd returned%s: %d - %s.\n", (response.code ? " error" : ""), response.code, (response.string ? CFStringGetCStringPtr(response.string, kCFStringEncodingUTF8) : "Unknown Error Description"));
 			}
 		});
+        // Signal that a response was received, see SDMMD_USBMux_Protocol.c
 		dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->ivars.semaphore);
 	}
 }
@@ -353,23 +354,35 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 		(*listener)->ivars.socketSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, (*listener)->ivars.socket, 0x0, (*listener)->ivars.socketQueue);
 		dispatch_source_set_event_handler((*listener)->ivars.socketSource, ^{
             //printf("socketSourceEventHandler: fired\n");
+            
+            // Allocate and receive packet
 			struct USBMuxPacket *packet = (struct USBMuxPacket *)calloc(0x1, sizeof(struct USBMuxPacket));
 			SDMMD_USBMuxReceive((*listener)->ivars.socket, packet);
-			if (CFPropertyListIsValid(packet->payload, kCFPropertyListXMLFormat_v1_0)) {
+            
+            // Validate packet payload
+			if (packet->payload != NULL) {
+                
 				if (CFDictionaryContainsKey(packet->payload, CFSTR("MessageType"))) {
+                    
 					CFStringRef type = CFDictionaryGetValue(packet->payload, CFSTR("MessageType"));
 					if (CFStringCompare(type, SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketResultType], 0x0) == 0x0) {
+                        // Packet ownership transfered to response handler
 						CFArrayAppendValue((*listener)->ivars.responses, packet);
 						(*listener)->ivars.responseCallback((*listener), packet);
 					}
 					else if (CFStringCompare(type, SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketAttachType], 0x0) == 0x0) {
 						(*listener)->ivars.attachedCallback((*listener), packet);
+                        // Destroy received packet
+                        USBMuxPacketRelease(packet);
 					}
 					else if (CFStringCompare(type, SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketDetachType], 0x0) == 0x0) {
 						(*listener)->ivars.detachedCallback((*listener), packet);
+                        // Destroy received packet
+                        USBMuxPacketRelease(packet);
 					}
 				}
 				else {
+                    // Packet ownership transfered to response handler
 					CFArrayAppendValue((*listener)->ivars.responses, packet);
 					if (CFDictionaryContainsKey(packet->payload, CFSTR("Logs"))) {
 						(*listener)->ivars.logsCallback((*listener), packet);
@@ -387,6 +400,8 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 			}
 			else if (packet->body.length == 0) {
 				// ignore this zero length packet
+                // Destroy received packet
+                USBMuxPacketRelease(packet);
 			}
 			else {
 				bad_packet_counter++;
@@ -395,6 +410,9 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener) {
 					printf("eating bad packets, exiting...\n");
 					exit(EXIT_FAILURE);
 				}
+                
+                // Destroy received packet
+                USBMuxPacketRelease(packet);
             }
 		});
         dispatch_source_set_cancel_handler((*listener)->ivars.socketSource, ^{
