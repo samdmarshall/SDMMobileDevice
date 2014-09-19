@@ -38,29 +38,55 @@ void SDMMD_USBMuxSend(uint32_t sock, struct USBMuxPacket *packet);
 void SDMMD_USBMuxReceive(uint32_t sock, struct USBMuxPacket *packet);
 
 void SDMMD_USBMuxListenerSend(SDMMD_USBMuxListenerRef listener, struct USBMuxPacket **packet) {
+    
+    // This semaphore will be signaled when a response is received
 	listener->ivars.semaphore = dispatch_semaphore_create(0x0);
+    
+    // Send the outgoing packet
 	SDMMD_USBMuxSend(listener->ivars.socket, *packet);
+    
+    // Wait for a response-type packet to be received
 	dispatch_semaphore_wait(listener->ivars.semaphore, (*packet)->timeout);
 	
 	CFMutableArrayRef updateWithRemove = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, listener->ivars.responses);
+    
+    // Search responses for a packet that matches the one sent
 	struct USBMuxPacket *responsePacket = NULL;
 	uint32_t removeCounter = 0x0;
 	for (uint32_t i = 0x0; i < CFArrayGetCount(listener->ivars.responses); i++) {
+        
 		struct USBMuxPacket *response = (struct USBMuxPacket *)CFArrayGetValueAtIndex(listener->ivars.responses, i);
 		if ((*packet)->body.tag == response->body.tag) {
+            
+            // Equal tags indicate response to request
+            if (responsePacket) {
+                // Found additional response, destroy old one
+                USBMuxPacketRelease(responsePacket);
+            }
+            
+            // Each matching packet is removed from the responses list
 			responsePacket = response;
 			CFArrayRemoveValueAtIndex(updateWithRemove, i-removeCounter);
 			removeCounter++;
 		}
 	}
+    
+	if (responsePacket == NULL) {
+        // Didn't find an appropriate response, initialize an empty packet to return
+		responsePacket = (struct USBMuxPacket *)calloc(0x1, sizeof(struct USBMuxPacket));
+	}
+    
 	CFSafeRelease(listener->ivars.responses);
 	listener->ivars.responses = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, updateWithRemove);
 	CFSafeRelease(updateWithRemove);
-	USBMuxPacketRelease(*packet);
-	if (!responsePacket) {
-		responsePacket = (struct USBMuxPacket *)calloc(0x1, sizeof(struct USBMuxPacket));
-	}
+	
+    // Destroy sent packet
+    USBMuxPacketRelease(*packet);
+    
+    // Return response packet to caller
 	*packet = responsePacket;
+    
+    // Discard "waiting for response" semaphore
 	dispatch_release(listener->ivars.semaphore);
 }
 

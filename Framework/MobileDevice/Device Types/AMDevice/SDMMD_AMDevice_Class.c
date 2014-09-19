@@ -62,12 +62,12 @@ static void SDMMD_AMDeviceRefFinalize(CFTypeRef cf) {
 	if (device->ivars.lockdown_conn) {
 		Safe(close,(uint32_t)device->ivars.lockdown_conn->connection);
 		Safe(SSL_free,device->ivars.lockdown_conn->ssl);
+        Safe(free, device->ivars.lockdown_conn);
 	}
 	CFSafeRelease(device->ivars.session);
 	CFSafeRelease(device->ivars.service_name);
 	CFSafeRelease(device->ivars.network_address);
 	CFSafeRelease(device->ivars.unknownData);
-	Safe(free,device);
 }
 
 static CFTypeID _kSDMMD_AMDeviceRefID = _kCFRuntimeNotATypeID;
