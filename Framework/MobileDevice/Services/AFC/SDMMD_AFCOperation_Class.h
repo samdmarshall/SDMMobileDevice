@@ -29,7 +29,6 @@
 #define _SDM_MD_AFCOPERATION_CLASS_H_
 
 #include <CoreFoundation/CoreFoundation.h>
-#include "CFRuntime.h"
 
 typedef struct sdmmd_AFCOperation* SDMMD_AFCOperationRef;
 

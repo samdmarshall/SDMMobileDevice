@@ -29,7 +29,6 @@
 #define _SDM_MD_USBMUXLISTENER_CLASS_H_
 
 #include <CoreFoundation/CoreFoundation.h>
-#include <SDMMobileDevice/CFRuntime.h>
 
 typedef struct USBMuxListenerClass * SDMMD_USBMuxListenerRef;
 
