@@ -120,7 +120,7 @@ bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device);
 
 // Pairing is fully tested and finished yet
 sdmmd_return_t SDMMD_AMDevicePair(SDMMD_AMDeviceRef device);
-sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutableDictionaryRef record);
+sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFDictionaryRef options);
 sdmmd_return_t SDMMD_AMDeviceUnpair(SDMMD_AMDeviceRef device);
 
 /*!

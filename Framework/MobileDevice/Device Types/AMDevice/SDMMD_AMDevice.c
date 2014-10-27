@@ -1329,7 +1329,7 @@ sdmmd_return_t SDMMD_AMDevicePair(SDMMD_AMDeviceRef device) {
 	return result;
 }
 
-sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutableDictionaryRef record) {
+sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFDictionaryRef options) {
  	sdmmd_return_t result = kAMDInvalidArgumentError;
 	bool mutexIsLocked = false;
 	bool getValue = true;
@@ -1339,8 +1339,8 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 		result = kAMDDeviceDisconnectedError;
 		if (device->ivars.device_active) {
 			SDMMD__mutex_lock(device->ivars.mutex_lock);
-			if (record) {
-				CFDictionaryRef chapCert = CFDictionaryGetValue(record, CFSTR("ChaperoneCertificate"));
+			if (options) {
+				CFDictionaryRef chapCert = CFDictionaryGetValue(options, CFSTR("ChaperoneCertificate"));
 				if (chapCert) {
 					if (CFPropertyListIsValid(chapCert, kCFPropertyListXMLFormat_v1_0) || CFPropertyListIsValid(chapCert, kCFPropertyListBinaryFormat_v1_0)) {
 						CFIndex chapKeyCount = CFDictionaryGetCount(chapCert);
@@ -1367,7 +1367,7 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 				else {
 					if (value) {
 						if (CFGetTypeID(value) == CFDataGetTypeID()) {
-							record = SDMMD__CreatePairingMaterial(value);
+							CFMutableDictionaryRef record = SDMMD__CreatePairingMaterial(value);
 							if (record) {
 								CFTypeRef buid = SDMMD_AMDCopySystemBonjourUniqueID();
 								if (buid) {
@@ -1379,7 +1379,7 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFMutable
 										
 										CFDataRef escrowBag = NULL;
 										// escrowBag is returned by reference with +1 retain
-										result = SDMMD_send_pair(device, sendPair, chapCopy, NULL, &escrowBag);
+										result = SDMMD_send_pair(device, sendPair, chapCopy, options, &escrowBag);
 										if (!escrowBag) {
 											printf("%s: Could not pair with the device %u: 0x%x\n",__FUNCTION__, device->ivars.device_id, result);
 										}
