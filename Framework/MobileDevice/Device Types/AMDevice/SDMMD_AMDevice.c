@@ -1331,15 +1331,18 @@ sdmmd_return_t SDMMD_AMDevicePair(SDMMD_AMDeviceRef device) {
 
 sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFDictionaryRef options) {
  	sdmmd_return_t result = kAMDInvalidArgumentError;
-	bool mutexIsLocked = false;
 	bool getValue = true;
 	CFMutableDictionaryRef chapCopy = NULL;
  	
 	if (device) {
-		result = kAMDDeviceDisconnectedError;
+        
 		if (device->ivars.device_active) {
-			SDMMD__mutex_lock(device->ivars.mutex_lock);
+            
+            SDMMD__mutex_lock(device->ivars.mutex_lock);
+            
 			if (options) {
+                // Extract the ChaperoneCertificate dictionary from options, if present
+                // It will be sent separately in the pair message
 				CFDictionaryRef chapCert = CFDictionaryGetValue(options, CFSTR("ChaperoneCertificate"));
 				if (chapCert) {
 					if (CFPropertyListIsValid(chapCert, kCFPropertyListXMLFormat_v1_0) || CFPropertyListIsValid(chapCert, kCFPropertyListBinaryFormat_v1_0)) {
@@ -1350,91 +1353,98 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFDiction
 						}
 					}
 					else {
+                        // Clear flag so error is returned (invalid argument)
 						getValue = false;
 					}
 				}
 			}
+            
 			if (getValue) {
-				mutexIsLocked = true;
 				result = kAMDPairingProhibitedError;
-				CFStringRef err = NULL;
-				CFTypeRef wifiAddress = SDMMD_copy_lockdown_value(device, NULL, CFSTR(kWiFiAddress), &err);
-				CFTypeRef value = SDMMD_copy_lockdown_value(device, NULL, CFSTR(kDevicePublicKey), &err);
-				//CFShow(value);
-				if (err) {
-					result = kAMDInvalidResponseError;
-				}
-				else {
-					if (value) {
-						if (CFGetTypeID(value) == CFDataGetTypeID()) {
-							CFMutableDictionaryRef record = SDMMD__CreatePairingMaterial(value);
-							if (record) {
-								CFTypeRef buid = SDMMD_AMDCopySystemBonjourUniqueID();
-								if (buid) {
-									CFDictionarySetValue(record, CFSTR("SystemBUID"), buid);
-									CFMutableDictionaryRef sendPair = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, record);
-									if (sendPair) {
-										CFDictionaryRemoveValue(sendPair, CFSTR("RootPrivateKey"));
-										CFDictionaryRemoveValue(sendPair, CFSTR("HostPrivateKey"));
-										
-										CFDataRef escrowBag = NULL;
-										// escrowBag is returned by reference with +1 retain
-										result = SDMMD_send_pair(device, sendPair, chapCopy, options, &escrowBag);
-										if (!escrowBag) {
-											printf("%s: Could not pair with the device %u: 0x%x\n",__FUNCTION__, device->ivars.device_id, result);
-										}
-										else {
-											if (record) {
-												CFDictionarySetValue(record, CFSTR("EscrowBag"), escrowBag);
-											}
-											if (record && wifiAddress) {
-												if (CFGetTypeID(wifiAddress) == CFStringGetTypeID()) {
-													CFDictionarySetValue(record, CFSTR("WiFiMACAddress"), wifiAddress);
-												}
-											}
-											char *path = calloc(1, sizeof(char[1025]));
-											SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
-											result = SDMMD_store_dict(record, path, true);
-											if (result) {
-												printf("%s: Could not store pairing record at '%s'.\n", __FUNCTION__, path);
-												result = kAMDPermissionError;
-											}
-											else {
-												result = kAMDSuccess;
-											}
-											Safe(free,path);
-										}
-										CFSafeRelease(escrowBag);
-									}
-									else {
-										result = kAMDNoResourcesError;
-									}
-									CFSafeRelease(sendPair);
-								}
-								else {
-									printf("%s: Could not create system BUID.\n",__FUNCTION__);
-								}
-								CFSafeRelease(buid);
-							}
-							else {
-								printf("%s: Could not create pairing material.\n",__FUNCTION__);
-							}
-							CFSafeRelease(record);
-						}
-						else {
-							result = kAMDInvalidResponseError;
-						}
-					}
-				}
-				CFSafeRelease(value);
+				
+                // Retrieve device info for generating pairing record
+				CFTypeRef wifiAddress = SDMMD_copy_lockdown_value(device, NULL, CFSTR(kWiFiAddress), NULL);
+				CFTypeRef devicePubKey = SDMMD_copy_lockdown_value(device, NULL, CFSTR(kDevicePublicKey), NULL);
+                
+                if (devicePubKey && CFGetTypeID(devicePubKey) == CFDataGetTypeID()) {
+                    
+                    // Generate pairing record to send to device and store
+                    CFMutableDictionaryRef record = SDMMD__CreatePairingMaterial(devicePubKey);
+                    if (record) {
+                        
+                        CFTypeRef buid = SDMMD_AMDCopySystemBonjourUniqueID();
+                        if (buid) {
+                            
+                            CFDictionarySetValue(record, CFSTR("SystemBUID"), buid);
+                            
+                            // Create a copy of pairing record to modify and send to device
+                            CFMutableDictionaryRef sendPair = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, record);
+                            if (sendPair) {
+                                // Remove nonessential fields
+                                CFDictionaryRemoveValue(sendPair, CFSTR("RootPrivateKey"));
+                                CFDictionaryRemoveValue(sendPair, CFSTR("HostPrivateKey"));
+                                
+                                CFDataRef escrowBag = NULL;
+                                // Send pairing record and options to device
+                                // escrowBag is returned by reference with +1 retain
+                                result = SDMMD_send_pair(device, sendPair, chapCopy, options, &escrowBag);
+                                if (result == kAMDSuccess && escrowBag != NULL) {
+                                    
+                                    // Store escrow bag from device
+                                    CFDictionarySetValue(record, CFSTR("EscrowBag"), escrowBag);
+                                    
+                                    if (wifiAddress && CFGetTypeID(wifiAddress) == CFStringGetTypeID()) {
+                                        CFDictionarySetValue(record, CFSTR("WiFiMACAddress"), wifiAddress);
+                                    }
+                                    
+                                    // Save pairing record dict to disk
+                                    char *path = calloc(1, sizeof(char[1025]));
+                                    SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
+                                    result = SDMMD_store_dict(record, path, true);
+                                    if (result) {
+                                        printf("%s: Could not store pairing record at '%s'.\n", __FUNCTION__, path);
+                                        result = kAMDPermissionError;
+                                    }
+                                    else {
+                                        result = kAMDSuccess;
+                                    }
+                                    free(path);
+                                }
+                                else {
+                                    printf("%s: Could not pair with the device %u: 0x%x\n",__FUNCTION__, device->ivars.device_id, result);
+                                }
+                                CFSafeRelease(escrowBag);
+                            }
+                            else {
+                                result = kAMDNoResourcesError;
+                            }
+                            CFSafeRelease(sendPair);
+                        }
+                        else {
+                            printf("%s: Could not create system BUID.\n",__FUNCTION__);
+                        }
+                        CFSafeRelease(buid);
+                    }
+                    else {
+                        printf("%s: Could not create pairing material.\n",__FUNCTION__);
+                    }
+                    CFSafeRelease(record);
+                }
+                else {
+                    result = kAMDInvalidResponseError;
+                }
+				CFSafeRelease(devicePubKey);
 				CFSafeRelease(wifiAddress);
 				CFSafeRelease(chapCopy);
 			}
+            
+            SDMMD__mutex_unlock(device->ivars.mutex_lock);
 		}
+        else {
+            result = kAMDDeviceDisconnectedError;
+        }
 	}
-	if (mutexIsLocked) {
-		SDMMD__mutex_unlock(device->ivars.mutex_lock);
-	}
+    
 	return result;
 }
 
