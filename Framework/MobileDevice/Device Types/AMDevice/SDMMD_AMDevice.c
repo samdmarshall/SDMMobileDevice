@@ -534,7 +534,7 @@ sdmmd_return_t SDMMD_send_pair(SDMMD_AMDeviceRef device, CFMutableDictionaryRef 
 		}
 	}
 	
-	if (CFDictionaryContainsValue(response, CFSTR("ExtendedResponse"))) {
+	if (CFDictionaryContainsKey(response, CFSTR("ExtendedResponse"))) {
 		// Return ExtendedResponse
 		CFDictionaryRef extendedResponseDict = CFDictionaryGetValue(response, CFSTR("ExtendedResponse"));
 		
