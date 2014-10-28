@@ -1335,6 +1335,10 @@ sdmmd_return_t SDMMD_AMDevicePair(SDMMD_AMDeviceRef device) {
 }
 
 sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFDictionaryRef options) {
+    return SDMMD_AMDeviceExtendedPairWithOptions(device, options, NULL);
+}
+
+sdmmd_return_t SDMMD_AMDeviceExtendedPairWithOptions(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef * extendedResponse) {
  	sdmmd_return_t result = kAMDInvalidArgumentError;
 	bool getValue = true;
 	CFMutableDictionaryRef chapCopy = NULL;
@@ -1392,7 +1396,7 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFDiction
                                 CFDataRef escrowBag = NULL;
                                 // Send pairing record and options to device
                                 // escrowBag is returned by reference with +1 retain
-                                result = SDMMD_send_pair(device, sendPair, chapCopy, options, &escrowBag, NULL);
+                                result = SDMMD_send_pair(device, sendPair, chapCopy, options, &escrowBag, extendedResponse);
                                 if (result == kAMDSuccess && escrowBag != NULL) {
                                     
                                     // Store escrow bag from device
