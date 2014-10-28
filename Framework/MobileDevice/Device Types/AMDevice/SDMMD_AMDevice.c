@@ -473,7 +473,8 @@ sdmmd_return_t SDMMD_send_unpair(SDMMD_AMDeviceRef device, CFStringRef hostId) {
 	ExitLabelAndReturn(result);
 }
 
-sdmmd_return_t SDMMD_send_pair(SDMMD_AMDeviceRef device, CFMutableDictionaryRef pairRecord, CFTypeRef slip, CFTypeRef options, CFDataRef *escrowBag) {
+sdmmd_return_t SDMMD_send_pair(SDMMD_AMDeviceRef device, CFMutableDictionaryRef pairRecord, CFTypeRef slip, CFTypeRef options,
+                               CFDataRef *escrowBag, CFDictionaryRef *extendedResponse) {
     sdmmd_return_t result = kAMDSuccess;
 	CFMutableDictionaryRef response = NULL;
 	
@@ -520,22 +521,26 @@ sdmmd_return_t SDMMD_send_pair(SDMMD_AMDeviceRef device, CFMutableDictionaryRef 
 	result = SDMMD__ErrorHandler(SDMMD__ConvertLockdowndError, response);
 	
 	if (SDM_MD_CallSuccessful(result)) {
-		
-		CFDataRef bagData = NULL;
-		if (CFDictionaryContainsValue(response, CFSTR("ExtendedResponse"))) {
-			bagData = CFDictionaryGetValue(response, CFSTR("ExtendedResponse"));
-		}
-		else {
-			bagData = CFDictionaryGetValue(response, CFSTR("EscrowBag"));
-		}
-		
+		// Return EscrowBag value
+		CFDataRef bagData = CFDictionaryGetValue(response, CFSTR("EscrowBag"));
+        
 		if (bagData) {
-			*escrowBag = CFRetain(bagData);
+			if (escrowBag) *escrowBag = CFRetain(bagData);
 		}
 		else {
 			result = kAMDInvalidResponseError;
 		}
 	}
+    
+    if (CFDictionaryContainsValue(response, CFSTR("ExtendedResponse"))) {
+        // Return ExtendedResponse
+        CFDictionaryRef extendedResponseDict = CFDictionaryGetValue(response, CFSTR("ExtendedResponse"));
+        
+        if (extendedResponseDict) {
+            if (extendedResponse) *extendedResponse = CFRetain(extendedResponseDict);
+        }
+    }
+    
 	CFSafeRelease(response);
 	
 	ExitLabelAndReturn(result);
@@ -1387,7 +1392,7 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFDiction
                                 CFDataRef escrowBag = NULL;
                                 // Send pairing record and options to device
                                 // escrowBag is returned by reference with +1 retain
-                                result = SDMMD_send_pair(device, sendPair, chapCopy, options, &escrowBag);
+                                result = SDMMD_send_pair(device, sendPair, chapCopy, options, &escrowBag, NULL);
                                 if (result == kAMDSuccess && escrowBag != NULL) {
                                     
                                     // Store escrow bag from device
