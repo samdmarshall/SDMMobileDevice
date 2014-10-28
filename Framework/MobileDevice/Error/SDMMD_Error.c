@@ -136,6 +136,9 @@ sdmmd_dl_return_t SDMMD__ConvertLockdowndError(CFStringRef error) {
 		else if (CFStringCompare(error, CFSTR("EscrowLocked"), 0) == kCFCompareEqualTo) { result = 0xe8000081; }
 		else if (CFStringCompare(error, CFSTR("NotAValidChaperoneHost"), 0) == kCFCompareEqualTo) { result = 0xe8000083; }
 		else if (CFStringCompare(error, CFSTR("PairingProhibitedOverThisConnection"), 0) == kCFCompareEqualTo) { result = 0xe8000082; }
+        else if (CFStringCompare(error, CFSTR("FMiPProtected"), 0) == kCFCompareEqualTo) { result = kAMDFMiPProtectedError; }
+        else if (CFStringCompare(error, CFSTR("MCProtected"), 0) == kCFCompareEqualTo) { result = kAMDMCProtected; }
+        else if (CFStringCompare(error, CFSTR("MCChallengeRequired"), 0) == kCFCompareEqualTo) { result = kAMDMCChallengeRequired; }
 		else {
 			//result = SDMMD__AddNewAMDError(error);
 			result = 0xffffffff;
