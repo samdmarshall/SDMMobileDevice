@@ -1339,41 +1339,41 @@ sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFDiction
 }
 
 sdmmd_return_t SDMMD_AMDeviceExtendedPairWithOptions(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef * extendedResponse) {
- 	sdmmd_return_t result = kAMDInvalidArgumentError;
-	bool getValue = true;
-	CFMutableDictionaryRef chapCopy = NULL;
- 	
-	if (device) {
+    sdmmd_return_t result = kAMDInvalidArgumentError;
+    bool getValue = true;
+    CFMutableDictionaryRef chapCopy = NULL;
+    
+    if (device) {
         
-		if (device->ivars.device_active) {
+        if (device->ivars.device_active) {
             
             SDMMD__mutex_lock(device->ivars.mutex_lock);
             
-			if (options) {
+            if (options) {
                 // Extract the ChaperoneCertificate dictionary from options, if present
                 // It will be sent separately in the pair message
-				CFDictionaryRef chapCert = CFDictionaryGetValue(options, CFSTR("ChaperoneCertificate"));
-				if (chapCert) {
-					if (CFPropertyListIsValid(chapCert, kCFPropertyListXMLFormat_v1_0) || CFPropertyListIsValid(chapCert, kCFPropertyListBinaryFormat_v1_0)) {
-						CFIndex chapKeyCount = CFDictionaryGetCount(chapCert);
-						if (chapKeyCount != 1) {
-							chapCopy = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, chapCert);
-							CFDictionaryRemoveValue(chapCopy, CFSTR("ChaperoneCertificate"));
-						}
-					}
-					else {
+                CFDictionaryRef chapCert = CFDictionaryGetValue(options, CFSTR("ChaperoneCertificate"));
+                if (chapCert) {
+                    if (CFPropertyListIsValid(chapCert, kCFPropertyListXMLFormat_v1_0) || CFPropertyListIsValid(chapCert, kCFPropertyListBinaryFormat_v1_0)) {
+                        CFIndex chapKeyCount = CFDictionaryGetCount(chapCert);
+                        if (chapKeyCount != 1) {
+                            chapCopy = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, chapCert);
+                            CFDictionaryRemoveValue(chapCopy, CFSTR("ChaperoneCertificate"));
+                        }
+                    }
+                    else {
                         // Clear flag so error is returned (invalid argument)
-						getValue = false;
-					}
-				}
-			}
+                        getValue = false;
+                    }
+                }
+            }
             
-			if (getValue) {
-				result = kAMDPairingProhibitedError;
-				
+            if (getValue) {
+                result = kAMDPairingProhibitedError;
+                
                 // Retrieve device info for generating pairing record
-				CFTypeRef wifiAddress = SDMMD_copy_lockdown_value(device, NULL, CFSTR(kWiFiAddress), NULL);
-				CFTypeRef devicePubKey = SDMMD_copy_lockdown_value(device, NULL, CFSTR(kDevicePublicKey), NULL);
+                CFTypeRef wifiAddress = SDMMD_copy_lockdown_value(device, NULL, CFSTR(kWiFiAddress), NULL);
+                CFTypeRef devicePubKey = SDMMD_copy_lockdown_value(device, NULL, CFSTR(kDevicePublicKey), NULL);
                 
                 if (devicePubKey && CFGetTypeID(devicePubKey) == CFDataGetTypeID()) {
                     
@@ -1442,19 +1442,19 @@ sdmmd_return_t SDMMD_AMDeviceExtendedPairWithOptions(SDMMD_AMDeviceRef device, C
                 else {
                     result = kAMDInvalidResponseError;
                 }
-				CFSafeRelease(devicePubKey);
-				CFSafeRelease(wifiAddress);
-				CFSafeRelease(chapCopy);
-			}
+                CFSafeRelease(devicePubKey);
+                CFSafeRelease(wifiAddress);
+                CFSafeRelease(chapCopy);
+            }
             
             SDMMD__mutex_unlock(device->ivars.mutex_lock);
-		}
+        }
         else {
             result = kAMDDeviceDisconnectedError;
         }
-	}
+    }
     
-	return result;
+    return result;
 }
 
 CFStringRef SDMMD_AMDeviceCopyUDID(SDMMD_AMDeviceRef device) {
