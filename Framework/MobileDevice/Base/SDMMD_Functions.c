@@ -248,31 +248,47 @@ sdmmd_return_t SDMMD_store_dict(CFDictionaryRef dict, char *path, bool mode) {
 	return result;
 }
 
-CFTypeRef SDMMD_AMDCopySystemBonjourUniqueID() {
-	char record[1025] = {0};
-	CFTypeRef value = NULL;
-	SDMMD__PairingRecordPathForIdentifier(CFSTR("SystemConfiguration"), record);
-	CFMutableDictionaryRef dict = SDMMD__CreateDictFromFileContents(record);
-	if (!dict) {
-		dict = SDMMD_create_dict();
+CFStringRef SDMMD_AMDCopySystemBonjourUniqueID() {
+	
+	CFStringRef systemBUID = NULL;
+	
+	// Get SystemConfiguration dict from disk
+	char sysconfigPath[1025] = {0};
+	SDMMD__PairingRecordPathForIdentifier(CFSTR("SystemConfiguration"), sysconfigPath);
+	CFMutableDictionaryRef sysconfigDict = SDMMD__CreateDictFromFileContents(sysconfigPath);
+	
+	if (sysconfigDict == NULL) {
+		// No SystemConfiguration dict, create a new one
+		sysconfigDict = SDMMD_create_dict();
 	}
-	if (dict) {
-		value = CFStringCreateCopy(kCFAllocatorDefault, CFDictionaryGetValue(dict, CFSTR("SystemBUID")));
-		if (value == NULL) {
+	
+	if (sysconfigDict) {
+		// Try to get SystemBUID value
+		CFTypeRef value = CFDictionaryGetValue(sysconfigDict, CFSTR("SystemBUID"));
+		
+		if (value != NULL && CFGetTypeID(value) == CFStringGetTypeID()) {
+			// Return existing value
+			systemBUID = CFStringCreateCopy(kCFAllocatorDefault, value);
+		}
+		else {
+			// No valid SystemBUID, generate a new one
 			CFStringRef newUUID = SDMMD_CreateUUID();
 			if (newUUID) {
-				CFDictionarySetValue(dict, CFSTR("SystemBUID"), newUUID);
-				SDMMD_store_dict(dict, record, true);
+				// New BUID generated, store to SystemConfiguration dict
+				CFDictionarySetValue(sysconfigDict, CFSTR("SystemBUID"), newUUID);
+				SDMMD_store_dict(sysconfigDict, sysconfigPath, true);
 				
-				value = newUUID;
+				systemBUID = newUUID;
 			}
 			else {
 				printf("%s: Could not generate UUID!\n",__FUNCTION__);
 			}
 		}
-		CFSafeRelease(dict);
+		
+		CFRelease(sysconfigDict);
 	}
-	return value;
+	
+	return systemBUID;
 }
 
 sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SDMMD_AMDeviceRef device, CFMutableDictionaryRef *dict) {
