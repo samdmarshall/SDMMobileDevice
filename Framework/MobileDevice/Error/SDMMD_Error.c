@@ -137,8 +137,8 @@ sdmmd_dl_return_t SDMMD__ConvertLockdowndError(CFStringRef error) {
 		else if (CFStringCompare(error, CFSTR("NotAValidChaperoneHost"), 0) == kCFCompareEqualTo) { result = 0xe8000083; }
 		else if (CFStringCompare(error, CFSTR("PairingProhibitedOverThisConnection"), 0) == kCFCompareEqualTo) { result = 0xe8000082; }
 		else {
-			//result = SDMMD__AddNewAMDError(error);
-			result = 0xffffffff;
+			// MD.framework uses __AddNewAMDError to dynamically allocate a new error code
+			//	result = SDMMD__AddNewAMDError(error);
 		}		
 	}
 	return result;
@@ -206,9 +206,6 @@ sdmmd_return_t SDMMD__ConvertServiceError(CFStringRef error) {
 		else if (CFStringCompare(error, CFSTR("InstallProhibited"), 0) == kCFCompareEqualTo) { result = kAMDInstallProhibitedError; }
 		else if (CFStringCompare(error, CFSTR("UninstallProhibited"), 0) == kCFCompareEqualTo) { result = kAMDUninstallProhibitedError; }
 		else if (CFStringCompare(error, CFSTR("MissingBundleVersion"), 0) == kCFCompareEqualTo) { result = kAMDMissingBundleVersionError; }
-		else {
-			result = 0xffffffff;
-		}
 	}
 	return result;
 }
