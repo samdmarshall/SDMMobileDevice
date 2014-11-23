@@ -205,7 +205,7 @@ SSL* SDMMD_lockssl_handshake(uint64_t socket, CFTypeRef hostCert, CFTypeRef devi
 								printf("%s: SSL handshake controlled failure %d: %s.\n", __FUNCTION__, err, reason);
 							}
 							Safe(SSL_free,ssl);
-							ssl = 0x0;
+							ssl = NULL;
 						}
 					}
 					else {
