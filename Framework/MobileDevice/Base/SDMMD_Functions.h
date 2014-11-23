@@ -82,48 +82,47 @@ void SDMMD_fire_callback(CallBack handle, void* unknown, CFStringRef status);
 void SDMMD_fire_callback_767f4(CallBack handle, void* unknown, uint32_t percent, CFStringRef string);
 sdmmd_return_t SDMMD_AMDeviceDigestFile(CFStringRef path, unsigned char **digest);
 
-enum SDM_MobileDevice_Model_ID {
-	SDM_MobileDevice_Model_ID_Invalid,
-	SDM_MobileDevice_Model_ID_iPad1_1,
-	SDM_MobileDevice_Model_ID_iPad2_1,
-	SDM_MobileDevice_Model_ID_iPad2_2,
-	SDM_MobileDevice_Model_ID_iPad2_3,
-	SDM_MobileDevice_Model_ID_iPad2_4,
-	SDM_MobileDevice_Model_ID_iPad2_5,
-	SDM_MobileDevice_Model_ID_iPad2_6,
-	SDM_MobileDevice_Model_ID_iPad2_7,
-	SDM_MobileDevice_Model_ID_iPad3_1,
-	SDM_MobileDevice_Model_ID_iPad3_2,
-	SDM_MobileDevice_Model_ID_iPad3_3,
-	SDM_MobileDevice_Model_ID_iPad3_4,
-	SDM_MobileDevice_Model_ID_iPad3_5,
-	SDM_MobileDevice_Model_ID_iPad3_6,
-	SDM_MobileDevice_Model_ID_iPad4_1,
-	SDM_MobileDevice_Model_ID_iPad4_2,
-	SDM_MobileDevice_Model_ID_iPad4_3,
-	SDM_MobileDevice_Model_ID_iPad4_4,
-	SDM_MobileDevice_Model_ID_iPad4_5,
-	SDM_MobileDevice_Model_ID_iPad4_6,
-	SDM_MobileDevice_Model_ID_iPhone1_1,
-	SDM_MobileDevice_Model_ID_iPhone1_2,
-	SDM_MobileDevice_Model_ID_iPhone2_1,
-	SDM_MobileDevice_Model_ID_iPhone3_1,
-	SDM_MobileDevice_Model_ID_iPhone3_2,
-	SDM_MobileDevice_Model_ID_iPhone3_3,
-	SDM_MobileDevice_Model_ID_iPhone4_1,
-	SDM_MobileDevice_Model_ID_iPhone5_1,
-	SDM_MobileDevice_Model_ID_iPhone5_2,
-	SDM_MobileDevice_Model_ID_iPhone5_3,
-	SDM_MobileDevice_Model_ID_iPhone5_4,
-	SDM_MobileDevice_Model_ID_iPhone6_1,
-	SDM_MobileDevice_Model_ID_iPhone6_2,
-	SDM_MobileDevice_Model_ID_iPod1_1,
-	SDM_MobileDevice_Model_ID_iPod2_1,
-	SDM_MobileDevice_Model_ID_iPod3_1,
-	SDM_MobileDevice_Model_ID_iPod4_1,
-	SDM_MobileDevice_Model_ID_iPod5_1,
-	SDM_MobileDevice_Model_ID_Count
-};
+
+#define SDM_MobileDevice_Model_ID_Invalid 0
+#define SDM_MobileDevice_Model_ID_iPad1_1 1
+#define SDM_MobileDevice_Model_ID_iPad2_1 2
+#define SDM_MobileDevice_Model_ID_iPad2_2 3
+#define SDM_MobileDevice_Model_ID_iPad2_3 4
+#define SDM_MobileDevice_Model_ID_iPad2_4 5
+#define SDM_MobileDevice_Model_ID_iPad2_5 6
+#define SDM_MobileDevice_Model_ID_iPad2_6 7
+#define SDM_MobileDevice_Model_ID_iPad2_7 8
+#define SDM_MobileDevice_Model_ID_iPad3_1 9
+#define SDM_MobileDevice_Model_ID_iPad3_2 10
+#define SDM_MobileDevice_Model_ID_iPad3_3 11
+#define SDM_MobileDevice_Model_ID_iPad3_4 12
+#define SDM_MobileDevice_Model_ID_iPad3_5 13
+#define SDM_MobileDevice_Model_ID_iPad3_6 14
+#define SDM_MobileDevice_Model_ID_iPad4_1 15
+#define SDM_MobileDevice_Model_ID_iPad4_2 16
+#define SDM_MobileDevice_Model_ID_iPad4_3 17
+#define SDM_MobileDevice_Model_ID_iPad4_4 18
+#define SDM_MobileDevice_Model_ID_iPad4_5 19
+#define SDM_MobileDevice_Model_ID_iPad4_6 20
+#define SDM_MobileDevice_Model_ID_iPhone1_1 21
+#define SDM_MobileDevice_Model_ID_iPhone1_2 22
+#define SDM_MobileDevice_Model_ID_iPhone2_1 23
+#define SDM_MobileDevice_Model_ID_iPhone3_1 24
+#define SDM_MobileDevice_Model_ID_iPhone3_2 25
+#define SDM_MobileDevice_Model_ID_iPhone3_3 26
+#define SDM_MobileDevice_Model_ID_iPhone4_1 27
+#define SDM_MobileDevice_Model_ID_iPhone5_1 28
+#define SDM_MobileDevice_Model_ID_iPhone5_2 29
+#define SDM_MobileDevice_Model_ID_iPhone5_3 30
+#define SDM_MobileDevice_Model_ID_iPhone5_4 31
+#define SDM_MobileDevice_Model_ID_iPhone6_1 32
+#define SDM_MobileDevice_Model_ID_iPhone6_2 33
+#define SDM_MobileDevice_Model_ID_iPod1_1 34
+#define SDM_MobileDevice_Model_ID_iPod2_1 35
+#define SDM_MobileDevice_Model_ID_iPod3_1 36
+#define SDM_MobileDevice_Model_ID_iPod4_1 37
+#define SDM_MobileDevice_Model_ID_iPod5_1 38
+#define SDM_MobileDevice_Model_ID_Count 39
 
 struct SDM_MobileDevice_Model_Info {
 	char *model;

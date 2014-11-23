@@ -231,7 +231,7 @@ typedef enum SDMMD_Errors {
 
 typedef kern_return_t sdmmd_return_t;
 
-struct SDMMD_DebugReturnCode {
+typedef struct SDMMD_DebugReturnCode {
 	enum SDMMD_Errors result;
 	CFDataRef data;
 } SDMMD_DebugReturnCode;
@@ -257,7 +257,7 @@ typedef enum SDMMD_USBMuxErrorCodes {
 typedef struct SDMMD_SIMStatusCode {
 	CFStringRef codeName;
 	uint32_t resultCode;
-} SDMMD_SIMStatusCode;
+} __attribute__((packed)) SDMMD_SIMStatusCode;
 
 // Implemented in SDMMD_AMDevice.c
 // Initializes KnownSIMCodes and KnownActivationStates
@@ -266,8 +266,6 @@ void SDMMD_AMDevice_Status_Initialize(void);
 #define sdmmd_sim_return_t struct SDMMD_SIMStatusCode
 
 #define kKnownSIMCodesNum 0xd
-
-static struct SDMMD_SIMStatusCode KnownSIMCodes[kKnownSIMCodesNum];
 
 typedef struct SDMMD_ActivationState {
 	CFStringRef statusName;
@@ -278,7 +276,9 @@ typedef struct SDMMD_ActivationState {
 
 #define kKnownActivationStatesNum 0x9
 
-static struct SDMMD_ActivationState KnownActivationStates[kKnownActivationStatesNum];
+static sdmmd_activation_return_t KnownActivationStates[kKnownActivationStatesNum] = {0};
+
+static sdmmd_sim_return_t KnownSIMCodes[kKnownSIMCodesNum] = {0};
 
 typedef enum SDMMD_LockdownError {
 	LD_ERR_OK = 0x0,

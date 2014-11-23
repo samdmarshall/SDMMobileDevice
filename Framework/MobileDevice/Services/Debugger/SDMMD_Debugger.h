@@ -117,7 +117,7 @@ struct SDMMD_AMDebugConnection {
 	SDMMD_AMDeviceRef device;
 	SDMMD_AMConnectionRef connection;
 	bool ackEnabled;
-} __attribute__ ((packed)) SDMMD_AMDebugConnection;
+} __attribute__ ((packed));
 
 typedef struct SDMMD_AMDebugConnection* SDMMD_AMDebugConnectionRef;
 

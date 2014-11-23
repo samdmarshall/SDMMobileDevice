@@ -19,7 +19,7 @@ kern_return_t test_apple_AFCConnectionCreate(struct am_device *apple) {
 		result = AMDeviceStartSession(apple);
 		if (SDM_MD_CallSuccessful(result)) {
 			service_conn_t test_apple_afc_conn;
-			if (SDMMD_AMDeviceGetInterfaceType(apple) == kAMDInterfaceConnectionTypeIndirect) {
+			if (SDMMD_AMDeviceGetInterfaceType((SDMMD_AMDeviceRef)apple) == kAMDInterfaceConnectionTypeIndirect) {
 				result = AMDeviceSecureStartService(apple, CFSTR(AMSVC_AFC), NULL, &test_apple_afc_conn);
 			}
 			else {
@@ -47,7 +47,7 @@ kern_return_t test_apple_AFCOperationCreateGetDeviceInfo(struct am_device *apple
 		result = AMDeviceStartSession(apple);
 		if (SDM_MD_CallSuccessful(result)) {
 			service_conn_t test_apple_afc_conn;
-			if (SDMMD_AMDeviceGetInterfaceType(apple) == kAMDInterfaceConnectionTypeIndirect) {
+			if (SDMMD_AMDeviceGetInterfaceType((SDMMD_AMDeviceRef)apple) == kAMDInterfaceConnectionTypeIndirect) {
 				result = AMDeviceSecureStartService(apple, CFSTR(AMSVC_AFC), NULL, &test_apple_afc_conn);
 			}
 			else {
@@ -83,7 +83,7 @@ kern_return_t test_apple_AFCOperationCreateGetConnectionInfo(struct am_device *a
 		result = AMDeviceStartSession(apple);
 		if (SDM_MD_CallSuccessful(result)) {
 			service_conn_t test_apple_afc_conn;
-			if (SDMMD_AMDeviceGetInterfaceType(apple) == kAMDInterfaceConnectionTypeIndirect) {
+			if (SDMMD_AMDeviceGetInterfaceType((SDMMD_AMDeviceRef)apple) == kAMDInterfaceConnectionTypeIndirect) {
 				result = AMDeviceSecureStartService(apple, CFSTR(AMSVC_AFC), NULL, &test_apple_afc_conn);
 			}
 			else {
@@ -119,7 +119,7 @@ kern_return_t test_apple_AFCOperationCreateReadDirectory(struct am_device *apple
 		result = AMDeviceStartSession(apple);
 		if (SDM_MD_CallSuccessful(result)) {
 			service_conn_t test_apple_afc_conn;
-			if (SDMMD_AMDeviceGetInterfaceType(apple) == kAMDInterfaceConnectionTypeIndirect) {
+			if (SDMMD_AMDeviceGetInterfaceType((SDMMD_AMDeviceRef)apple) == kAMDInterfaceConnectionTypeIndirect) {
 				result = AMDeviceSecureStartService(apple, CFSTR(AMSVC_AFC), NULL, &test_apple_afc_conn);
 			}
 			else {

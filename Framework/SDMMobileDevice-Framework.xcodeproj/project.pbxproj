@@ -130,7 +130,7 @@
 		22B24A981965838600A592DE /* Buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C892AE189D75A8008B1D2D /* Buffer.h */; };
 		22B24A991965838600A592DE /* File.h in Headers */ = {isa = PBXBuildFile; fileRef = 22EFC8B41900281B00C29BFF /* File.h */; };
 		22B24A9A1965838600A592DE /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF961188350E6008E909F /* Core.h */; };
-		22B24A9B1965838600A592DE /* CFStringAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = 22A58E1D191157F600303D31 /* CFStringAddition.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		22B24A9B1965838600A592DE /* CFStringAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = 22A58E1D191157F600303D31 /* CFStringAddition.h */; };
 		22B24A9C1965838600A592DE /* CFDataAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C892AA189D75A1008B1D2D /* CFDataAddition.h */; };
 		22B24A9D1965838700A592DE /* CFDictionaryAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF964188350E6008E909F /* CFDictionaryAddition.h */; };
 		22B24A9E1965838700A592DE /* Logging.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF96D188350E6008E909F /* Logging.h */; };
@@ -1042,20 +1042,20 @@
 				22B24A861965831D00A592DE /* SDMMD_AFCConnection_Class.h in Headers */,
 				22B24A871965831D00A592DE /* SDMMD_AFCOperation_Class.h in Headers */,
 				22B24A881965836200A592DE /* SDMMD_Classes.h in Headers */,
+				22B24A911965836200A592DE /* SDMMD_MRecoveryModeDevice.h in Headers */,
+				22B24A901965836200A592DE /* SDMMD_MRUSBDevice.h in Headers */,
+				22B24A8F1965836200A592DE /* SDMMD_MDFUModeDevice.h in Headers */,
+				22B24A8D1965836200A592DE /* SDMMD_MRestorableDevice.h in Headers */,
+				22B24A8E1965836200A592DE /* SDMMD_MRestoreModeDevice.h in Headers */,
+				22B24A951965836200A592DE /* SDMMD_Debugger_Internal.h in Headers */,
+				22B24A961965836200A592DE /* SDMTranslation.h in Headers */,
+				22B24A921965836200A592DE /* SDMMD_AMDevice_Internal.h in Headers */,
 				22B24A891965836200A592DE /* SDMMD_MCP_Internal.h in Headers */,
 				22B24A8A1965836200A592DE /* SDMMD_Connection_Internal.h in Headers */,
 				22B24A8B1965836200A592DE /* SDMMD_Connection_Private.h in Headers */,
 				22B24A8C1965836200A592DE /* SDMMD_USBMuxListener_Internal.h in Headers */,
-				22B24A8D1965836200A592DE /* SDMMD_MRestorableDevice.h in Headers */,
-				22B24A8E1965836200A592DE /* SDMMD_MRestoreModeDevice.h in Headers */,
-				22B24A8F1965836200A592DE /* SDMMD_MDFUModeDevice.h in Headers */,
-				22B24A901965836200A592DE /* SDMMD_MRUSBDevice.h in Headers */,
-				22B24A911965836200A592DE /* SDMMD_MRecoveryModeDevice.h in Headers */,
-				22B24A921965836200A592DE /* SDMMD_AMDevice_Internal.h in Headers */,
 				22B24A931965836200A592DE /* SDMMD_AFCConnection_Internal.h in Headers */,
 				22B24A941965836200A592DE /* SDMMD_AFCOperation_Internal.h in Headers */,
-				22B24A951965836200A592DE /* SDMMD_Debugger_Internal.h in Headers */,
-				22B24A961965836200A592DE /* SDMTranslation.h in Headers */,
 				22B24A971965836200A592DE /* SDMTypeTranslation.h in Headers */,
 				22B24A9B1965838600A592DE /* CFStringAddition.h in Headers */,
 				22B24A981965838600A592DE /* Buffer.h in Headers */,
@@ -1136,7 +1136,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0610;
 				TargetAttributes = {
 					2299C418195623A600C75891 = {
 						CreatedOnToolsVersion = 6.0;
@@ -1285,8 +1285,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -1306,12 +1305,11 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				INFOPLIST_FILE = "SDMMobileDevice-Info.plist";
 				INSTALL_PATH = "";
 				LD_DYLIB_INSTALL_NAME = "@rpath/$(PRODUCT_NAME).$(WRAPPER_EXTENSION)/$(PRODUCT_NAME)";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = SDMMobileDevice;
@@ -1325,8 +1323,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -1345,12 +1342,11 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				INFOPLIST_FILE = "SDMMobileDevice-Info.plist";
 				INSTALL_PATH = "";
 				LD_DYLIB_INSTALL_NAME = "@rpath/$(PRODUCT_NAME).$(WRAPPER_EXTENSION)/$(PRODUCT_NAME)";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = SDMMobileDevice;
@@ -1364,6 +1360,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -1383,7 +1380,7 @@
 				METAL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.9;
+				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -1392,6 +1389,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -1406,7 +1404,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				METAL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.9;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -1414,12 +1412,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				EXECUTABLE_PREFIX = lib;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1431,7 +1431,7 @@
 				METAL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.9;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -1439,12 +1439,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1455,13 +1457,14 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				METAL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.9;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -1470,10 +1473,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -1484,7 +1488,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx10.9;
+				SDKROOT = macosx;
 				SYMROOT = ../build;
 			};
 			name = Debug;
@@ -1492,6 +1496,7 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -1500,9 +1505,10 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -1513,7 +1519,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx10.9;
+				SDKROOT = macosx;
 				SYMROOT = ../build;
 			};
 			name = Release;

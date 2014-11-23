@@ -39,14 +39,14 @@ extern CFStringRef kSDMMD_USBMuxListenerDeviceDetachedNotification;
 extern CFStringRef kSDMMD_USBMuxListenerDeviceDetachedNotificationFinished;
 extern CFStringRef kSDMMD_USBMuxListenerStoppedListenerNotification;
 
-struct USBMuxPacketBody {
+typedef struct USBMuxPacketBody {
 	uint32_t length;
 	uint32_t reserved;
 	uint32_t type;
 	uint32_t tag;
 } __attribute__ ((packed)) USBMuxPacketBody;
 
-struct USBMuxPacket {
+typedef struct USBMuxPacket {
 	dispatch_time_t timeout;
 	struct USBMuxPacketBody body;
 	CFPropertyListRef payload;

@@ -19,7 +19,7 @@ kern_return_t test_apple_AMDeviceStartService(struct am_device *apple) {
 		result = AMDeviceStartSession(apple);
 		if (SDM_MD_CallSuccessful(result)) {
 			service_conn_t test_apple_conn;
-			if (SDMMD_AMDeviceGetInterfaceType(apple) == kAMDInterfaceConnectionTypeIndirect) {
+			if (SDMMD_AMDeviceGetInterfaceType((SDMMD_AMDeviceRef)apple) == kAMDInterfaceConnectionTypeIndirect) {
 				apple_return = AMDeviceSecureStartService(apple, CFSTR(AMSVC_AFC), NULL, &test_apple_conn);
 			}
 			else {

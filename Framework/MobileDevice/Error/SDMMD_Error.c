@@ -30,6 +30,39 @@
 
 #include "SDMMD_Error.h"
 
+void SDMMD_AMDevice_Status_Initialize()
+{
+	for (int i = 0x0; i < kKnownSIMCodesNum; i++) {
+		KnownSIMCodes[i].resultCode = i;
+	}
+	KnownSIMCodes[0x0].codeName = CFSTR("kCTSIMSupportSIMStatusUnavailable");
+	KnownSIMCodes[0x1].codeName = CFSTR("kCTSIMSupportSIMStatusReady");
+	KnownSIMCodes[0x2].codeName = CFSTR("kCTSIMSupportSIMStatusNotReady");
+	KnownSIMCodes[0x3].codeName = CFSTR("kCTSIMSupportSIMStatusPINLocked");
+	KnownSIMCodes[0x4].codeName = CFSTR("kCTSIMSupportSIMStatusPUKLocked");
+	KnownSIMCodes[0x5].codeName = CFSTR("kCTSIMSupportSIMStatusNetworkLocked");
+	KnownSIMCodes[0x6].codeName = CFSTR("kCTSIMSupportSIMStatusCorporateLocked");
+	KnownSIMCodes[0x7].codeName = CFSTR("kCTSIMSupportSIMStatusOperatorLocked");
+	KnownSIMCodes[0x8].codeName = CFSTR("kCTSIMSupportSIMStatusOperatorSubsetLocked");
+	KnownSIMCodes[0x9].codeName = CFSTR("kCTSIMSupportSIMStatusServiceProviderLocked");
+	KnownSIMCodes[0xa].codeName = CFSTR("kCTSIMSupportSIMStatusMemoryFailure");
+	KnownSIMCodes[0xb].codeName = CFSTR("kCTSIMSupportSIMStatusFixedDialingLocked");
+	KnownSIMCodes[0xc].codeName = CFSTR("kCTSIMSupportSIMStatusBlacklisted");
+	
+	for (int i = 0x0; i < kKnownActivationStatesNum; i++) {
+		KnownActivationStates[i].statusCode = i;
+	}
+	KnownActivationStates[0x0].statusName = CFSTR("Unactivated");
+	KnownActivationStates[0x1].statusName = CFSTR("Activated");
+	KnownActivationStates[0x2].statusName = CFSTR("FactoryActivated");
+	KnownActivationStates[0x3].statusName = CFSTR("SoftActivated");
+	KnownActivationStates[0x4].statusName = CFSTR("MismatchedIMEI");
+	KnownActivationStates[0x5].statusName = CFSTR("MismatchedICCID");
+	KnownActivationStates[0x6].statusName = CFSTR("MissingSIM");
+	KnownActivationStates[0x7].statusName = CFSTR("WildcardActivated");
+	KnownActivationStates[0x8].statusName = CFSTR("Expired");
+}
+
 kern_return_t SDMMD__ErrorHandler(ErrorConvert converter, CFDictionaryRef response) {
 	kern_return_t response_code = kAMDInvalidResponseError;
 	CFTypeRef error = CFDictionaryGetValue(response, CFSTR("Error"));

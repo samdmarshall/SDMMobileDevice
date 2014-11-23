@@ -16,6 +16,7 @@
 #include "SDMMD_AFCConnection_Class.h"
 #include <sys/socket.h>
 #include <sys/un.h>
+#include <CoreFoundation/CoreFoundation.h>
 
 #define SDM_LLDB_SOCKET "/tmp/sdmmd-remote-debugserver"
 #define PREP_CMDS_PATH "/tmp/sdmmd-lldb-prep"

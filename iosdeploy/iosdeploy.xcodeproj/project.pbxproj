@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		222EF6611905AC3E000270C3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 222EF6601905AC3E000270C3 /* CoreFoundation.framework */; };
 		222EF6641905AC3E000270C3 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6631905AC3E000270C3 /* main.c */; };
-		222EF6661905AC3E000270C3 /* iosdeploy.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 222EF6651905AC3E000270C3 /* iosdeploy.1 */; };
+		222EF6661905AC3E000270C3 /* iosdeploy.1 in Copy Files */ = {isa = PBXBuildFile; fileRef = 222EF6651905AC3E000270C3 /* iosdeploy.1 */; };
 		222EF6E11905ACEF000270C3 /* attach.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6E01905ACEF000270C3 /* attach.c */; };
 		222EF6E41905AD0D000270C3 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6E31905AD0D000270C3 /* list.c */; };
 		222EF6E81905AE3E000270C3 /* dev.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6E71905AE3E000270C3 /* dev.c */; };
@@ -20,14 +20,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		222EF65B1905AC3E000270C3 /* CopyFiles */ = {
+		222EF65B1905AC3E000270C3 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
 			dstSubfolderSpec = 0;
 			files = (
-				222EF6661905AC3E000270C3 /* iosdeploy.1 in CopyFiles */,
+				222EF6661905AC3E000270C3 /* iosdeploy.1 in Copy Files */,
 			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 1;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -162,7 +163,7 @@
 			buildPhases = (
 				222EF6591905AC3E000270C3 /* Sources */,
 				222EF65A1905AC3E000270C3 /* Frameworks */,
-				222EF65B1905AC3E000270C3 /* CopyFiles */,
+				222EF65B1905AC3E000270C3 /* Copy Files */,
 			);
 			buildRules = (
 			);
@@ -247,8 +248,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = macosx10.9;
 			};
 			name = Debug;
 		};
@@ -280,7 +281,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.9;
 			};
 			name = Release;
 		};
@@ -295,6 +296,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 				SYMROOT = ../build;
 				USER_HEADER_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)/usr/local/include/";
 			};
@@ -310,6 +312,7 @@
 				);
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 				SYMROOT = ../build;
 				USER_HEADER_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)/usr/local/include/";
 			};
