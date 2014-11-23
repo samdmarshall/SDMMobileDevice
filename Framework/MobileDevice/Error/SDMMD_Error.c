@@ -29,6 +29,15 @@
 #define _SDM_MD_ERROR_C_
 
 #include "SDMMD_Error.h"
+#include "CFStringAddition.h"
+
+kern_return_t SDMMD__AddNewAMDError(int errorCode, CFStringRef errorMessage) {
+	int64_t new_code = AMDErrorMake(errorCode) - kAMDTotalErrors;
+	if (new_code > -1) {
+		//char * message_string = CreateCStringFromCFStringRef(errorMessage);
+	}
+	return -1;
+}
 
 void SDMMD_AMDevice_Status_Initialize()
 {
@@ -173,8 +182,8 @@ sdmmd_dl_return_t SDMMD__ConvertLockdowndError(CFStringRef error) {
 		else if (CFStringCompare(error, CFSTR("MCProtected"), 0) == kCFCompareEqualTo) { result = kAMDMCProtected; }
 		else if (CFStringCompare(error, CFSTR("MCChallengeRequired"), 0) == kCFCompareEqualTo) { result = kAMDMCChallengeRequired; }
 		else {
-			//result = SDMMD__AddNewAMDError(error);
-			result = 0xffffffff;
+			result = SDMMD__AddNewAMDError(SDMMD_ErrorsCreatedAtRuntime+1, error);
+			//result = 0xffffffff;
 		}		
 	}
 	return result;
