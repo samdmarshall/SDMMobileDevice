@@ -17,3 +17,5 @@ xcuserdata
 SDMMobileDevice.xcworkspace/xcuserdata/
 SDMMobileDevice.podspec
 podspec
+*/*.xcodeproj/xcshareddata
+SDMMobileDevice.xcworkspace/xcshareddata

@@ -400,12 +400,12 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 
 sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef service, CFDictionaryRef options, SDMMD_AMConnectionRef *connection) {
 	sdmmd_return_t result = kAMDInvalidArgumentError;
-	//uint32_t socket = -1;
+	uint32_t tmp_socket = -1, socket = -1;
 	if (device && connection) {
 		SSL *ssl_enabled = NULL;
 		if (service) {
 			if (device->ivars.device_active) {
-				CFMutableDictionaryRef optionsCopy;
+				CFMutableDictionaryRef optionsCopy = NULL;
 				if (options) {
 				 	optionsCopy = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, options);
 				}
@@ -417,10 +417,11 @@ sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef 
 					result = SDMMD_AMDeviceSecureStartService(device, service, optionsCopy, connection);
 					CFSafeRelease(optionsCopy);
 					if (result == 0) {
-						//socket = SDMMD_AMDServiceConnectionGetSocket(*connection);
+						socket = SDMMD_AMDServiceConnectionGetSocket(*connection);
 						ssl_enabled = SDMMD_AMDServiceConnectionGetSecureIOContext(*connection);
 						if (ssl_enabled) {
 							result = kAMDNoWifiSyncSupportError;
+							tmp_socket = socket;
 						}
 						else {
 							result = kAMDSuccess;
@@ -436,15 +437,14 @@ sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef 
 				ssl_enabled = NULL;
 			}
 		}
-		/*if (ssl_enabled)
+		if (ssl_enabled) {
 			SSL_free(ssl_enabled);
-		if (socket != 0xff)  {
-			if(close(socket) == 0xff) {
-				printf("SDMMD_AMDeviceStartService: close(2) con socket %d failed: %d\n",socket,errno);
-			}
-		}*/
+		}
+		if (tmp_socket != -1 && close(tmp_socket) == -1) {
+			printf("%s: close(2) con socket %d failed: %d\n",__FUNCTION__, tmp_socket,errno);
+		}
 	}
-	//printf("SDMMD_AMDeviceStartService: returning 0x%x, socket is %d.\n",result, socket);
+	//printf("%s: returning 0x%x, socket is %d.\n",__FUNCTION__, result, socket);
 	return result;
 }
 

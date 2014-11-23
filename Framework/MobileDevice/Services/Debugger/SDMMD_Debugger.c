@@ -82,6 +82,7 @@ sdmmd_return_t SDMMD_AMDebugConnectionStart(SDMMD_AMDebugConnectionRef dconn) {
 	
 	dconn->connection = SDMMD_AMDServiceConnectionCreate(0, NULL, NULL);
 	result = SDMMD_AMDeviceStartService(dconn->device, CFSTR(AMSVC_DEBUG_SERVER), NULL, &(dconn->connection));
+	CheckErrorAndReturn(result);
 	
 	result = SDMMD_AMDeviceStopSession(dconn->device);
 	CheckErrorAndReturn(result);
@@ -167,7 +168,10 @@ sdmmd_return_t SDMMD__hangup_with_image_mounter_service(SDMMD_AMConnectionRef co
 		result = SDMMD_ServiceReceiveMessage(socket, &response);
 		PrintCFDictionary(response);
 	}
-	ExitLabelAndReturn(result);
+	
+ExitLabel:
+	CFSafeRelease(dict);
+	return result;
 }
 
 CFStringRef SDMMD_CopyDeviceSupportPathFromXCRUN() {
