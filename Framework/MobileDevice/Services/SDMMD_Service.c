@@ -37,6 +37,7 @@
 #include <sys/types.h>
 #include <sys/select.h>
 #include "Core.h"
+#include "SDMMD_SSL_Functions.h"
 
 #define kMilliseconds 1000
 
@@ -76,15 +77,22 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 		uint64_t result;
 		// Send 32-bit data length header
 		if (handle.isSSL) {
-			if (SSL_is_init_finished(handle.socket.ssl)) {
+			if (handle.socket.ssl != NULL && SSL_is_init_finished(handle.socket.ssl)) {
 				result = SSL_write(handle.socket.ssl, &msgLen, sizeof(uint32_t));
 			}
 			else {
+				printf("%s: Invalid SSL Socket!\n",__PRETTY_FUNCTION__);
 				return kAMDNotConnectedError;
 			}
 		}
 		else {
-			result = send(handle.socket.conn, &msgLen, sizeof(uint32_t), 0);
+			if (handle.socket.conn != -1) {
+				result = send(handle.socket.conn, &msgLen, sizeof(uint32_t), 0);
+			}
+			else {
+				printf("%s: Invalid Socket!\n",__PRETTY_FUNCTION__);
+				return kAMDNotConnectedError;
+			}
 		}
 		// Send data body
 		if (result == sizeof(uint32_t)) {
@@ -98,6 +106,7 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 			return (result == msgLen ? kAMDSuccess : kAMDInvalidResponseError);
 		}
 		else {
+			printf("%s: Incomplete length.\n",__PRETTY_FUNCTION__);
 			return kAMDNotConnectedError;
 		}
 	}
@@ -112,10 +121,22 @@ sdmmd_return_t SDMMD_DirectServiceSend(SocketConnection handle, CFDataRef data) 
 		uint64_t result = 0;
 		// Send data body
 		if (handle.isSSL) {
-			result = SSL_write(handle.socket.ssl, CFDataGetBytePtr(data), (uint32_t)msgLen);
+			if (handle.socket.ssl != NULL) {
+				result = SSL_write(handle.socket.ssl, CFDataGetBytePtr(data), (uint32_t)msgLen);
+			}
+			else {
+				printf("%s: Invalid SSL Socket!\n",__PRETTY_FUNCTION__);
+				return kAMDNotConnectedError;
+			}
 		}
 		else {
-			result = send(handle.socket.conn, CFDataGetBytePtr(data), msgLen, 0);
+			if (handle.socket.conn != -1) {
+				result = send(handle.socket.conn, CFDataGetBytePtr(data), msgLen, 0);
+			}
+			else {
+				printf("%s: Invalid Socket!\n",__PRETTY_FUNCTION__);
+				return kAMDNotConnectedError;
+			}
 		}
 		return (result == msgLen ? kAMDSuccess : kAMDNotConnectedError);
 	}
@@ -126,47 +147,58 @@ sdmmd_return_t SDMMD_DirectServiceSend(SocketConnection handle, CFDataRef data) 
 
 size_t SDMMD__ServiceReceiveBytesSock(SocketConnection handle, void * buffer, size_t length)
 {
-	ssize_t received;
+	ssize_t received = 0;
 	size_t receivedTotal = 0;
 	
-	do {
-		// Try to read up to length
-		received = recv(handle.socket.conn, &buffer[receivedTotal], length - receivedTotal, 0);
-		if (received == 0) {
-			// EOF
-			break;
-		}
-		else if (received < 0) {
-			printf("recv error: (%s)\n", strerror(errno));
-			break;
-		}
-		
-		// Move ahead length
-		receivedTotal += received;
-		
-	} while (receivedTotal < length);
+	if (handle.socket.conn != -1) {
+		do {
+			// Try to read up to length
+			received = recv(handle.socket.conn, &buffer[receivedTotal], length - receivedTotal, 0);
+			if (received == 0) {
+				// EOF
+				break;
+			}
+			else if (received < 0) {
+				printf("recv error: (%s)\n", strerror(errno));
+				break;
+			}
+			
+			// Move ahead length
+			receivedTotal += received;
+			
+		} while (receivedTotal < length);
+	}
+	else {
+		printf("%s: Invalid Socket!\n",__PRETTY_FUNCTION__);
+	}
 	
 	return receivedTotal;
 }
 
 size_t SDMMD__ServiceReceiveBytesSSL(SocketConnection handle, void * buffer, int length)
 {
-	int received, receivedTotal = 0;
+	int received = 0, receivedTotal = 0;
 	
-	do {
-		// Try to read up to length
-		received = SSL_read(handle.socket.ssl, &buffer[receivedTotal], length - receivedTotal);
-		if (received <= 0) {
-			// Read failed, check if theres an SSL error
-			int ret = SSL_get_error(handle.socket.ssl, received);
-			printf("SSL_read error (%x)\n", ret);
-			break;
-		}
+	if (handle.socket.ssl != NULL) {
+		do {
+			// Try to read up to length
+			received = SSL_read(handle.socket.ssl, &buffer[receivedTotal], length - receivedTotal);
+			if (received <= 0) {
+				// Read failed, check if theres an SSLreceived error
+				int ret = SSL_get_error(handle.socket.ssl, received);
+				char *ssl_error = SDMMD_ssl_strerror(handle.socket.ssl, received);
+				printf("SSL_read error: (%x) (%s)\n", ret, ssl_error);
+				break;
+			}
 		
-		// Move ahead length
-		receivedTotal += received;
+			// Move ahead length
+			receivedTotal += received;
 		
-	} while (receivedTotal < length);
+		} while (receivedTotal < length);
+	}
+	else {
+		printf("%s: Invalid SSL Socket!\n",__PRETTY_FUNCTION__);
+	}
 	
 	return receivedTotal;
 }

@@ -31,7 +31,7 @@
 #include "SDMMD_Error.h"
 #include "CFStringAddition.h"
 
-kern_return_t SDMMD__AddNewAMDError(int errorCode, CFStringRef errorMessage) {
+kern_return_t SDMMD__AddNewAMDError(uint64_t errorCode, CFStringRef errorMessage) {
 	int64_t new_code = AMDErrorMake(errorCode) - kAMDTotalErrors;
 	if (new_code > -1) {
 		//char * message_string = CreateCStringFromCFStringRef(errorMessage);

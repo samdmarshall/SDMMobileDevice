@@ -306,18 +306,20 @@ CF_RETURNS_RETAINED CFStringRef SDMMD_ConvertResponseString(CFDataRef CF_RELEASE
 
 CF_RETURNS_RETAINED CFArrayRef SDMMD_ConvertResponseArray(CFDataRef CF_RELEASES_ARGUMENT response_data) {
 	CFMutableArrayRef response = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
-	char *offset = (char *)CFDataGetBytePtr(response_data);
-	uint32_t length = (uint32_t)CFDataGetLength(response_data);
-	uint32_t counter = 0;
-	while (counter < length) {
-		uint32_t str_length = (uint32_t)strlen(offset);
-		CFStringRef value = CFStringCreateWithBytes(kCFAllocatorDefault, (UInt8*)offset, str_length, kCFStringEncodingUTF8, false);
-		str_length++;
-		counter += str_length;
-		offset = PtrAdd(offset, str_length);
-		
-		CFArrayAppendValue(response, value);
-		CFSafeRelease(value);
+	if (response_data != NULL) {
+		char *offset = (char *)CFDataGetBytePtr(response_data);
+		uint32_t length = (uint32_t)CFDataGetLength(response_data);
+		uint32_t counter = 0;
+		while (counter < length) {
+			uint32_t str_length = (uint32_t)strlen(offset);
+			CFStringRef value = CFStringCreateWithBytes(kCFAllocatorDefault, (UInt8*)offset, str_length, kCFStringEncodingUTF8, false);
+			str_length++;
+			counter += str_length;
+			offset = PtrAdd(offset, str_length);
+			
+			CFArrayAppendValue(response, value);
+			CFSafeRelease(value);
+		}
 	}
 	return response;
 }
