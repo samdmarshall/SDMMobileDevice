@@ -343,9 +343,8 @@ __attribute__ ((unused)) static char*  SDMMD_AMDErrorString(kern_return_t error)
 		return SDMMD_NewErrorLookup[check];
 	}
 	else {
-		return NULL;
+		return SDMMD_ServiceConnectionErrorString[index];
 	}
-	return SDMMD_ServiceConnectionErrorString[index];
 }
 
 static char* SDMMD_AFCConnectionErrorString[0x18] = {"kAFCSuccess", "kAFCUndefinedError", "kAFCBadHeaderError", "kAFCNoResourcesError", "kAFCReadError", "kAFCWriteError", "kAFCUnknownPacketError", "kAFCInvalidArgumentError", "kAFCNotFoundError", "kAFCIsDirectoryError", "kAFCPermissionError", "kAFCNotConnectedError", "kAFCTimeOutError", "kAFCOverrunError", "kAFCEOFError", "kAFCUnsupportedError", "kAFCFileExistsError", "kAFCBusyError", "kAFCNoSpaceError", "kAFCWouldBlockError", "kAFCInputOutputError", "kAFCInterruptedError", "kAFCInProgressError", "kAFCInternalError"};
