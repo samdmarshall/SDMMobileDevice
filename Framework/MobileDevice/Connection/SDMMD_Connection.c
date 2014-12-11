@@ -118,17 +118,26 @@ SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, SSL *ssl) 
 }
 
 SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(uint32_t socket, SSL* ssl, CFDictionaryRef dict) {
-	SDMMD_AMConnectionRef handle = SDMMD_AMConnectionCreateEmpty();
-	handle->ivars.socket = socket;
-	handle->ivars.ssl = ssl;
-	handle->ivars.closeOnInvalid = true;
-	handle->ivars.isValid = true;
-	if (dict) {
-		CFTypeRef value = CFDictionaryGetValue(dict, CFSTR("CloseOnInvalidate"));
-		if (value && CFEqual(value, kCFBooleanFalse)) {
-			handle->ivars.closeOnInvalid = false;
+	SDMMD_AMConnectionRef handle = NULL;
+	
+	if (ssl == NULL || SSL_is_init_finished(ssl)) {
+		// Either non-SSL connection or SSL context is not connected
+		handle = SDMMD_AMConnectionCreateEmpty();
+		handle->ivars.socket = socket;
+		handle->ivars.ssl = ssl;
+		handle->ivars.closeOnInvalid = true;
+		handle->ivars.isValid = true;
+		if (dict) {
+			CFTypeRef value = CFDictionaryGetValue(dict, CFSTR("CloseOnInvalidate"));
+			if (value && CFEqual(value, kCFBooleanFalse)) {
+				handle->ivars.closeOnInvalid = false;
+			}
 		}
 	}
+	else {
+		// SSL context exists but is not connected
+	}
+	
 	return handle;
 }
 
