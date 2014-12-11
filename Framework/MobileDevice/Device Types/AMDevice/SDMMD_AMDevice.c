@@ -191,6 +191,8 @@ SSL* SDMMD_lockssl_handshake(uint64_t socket, CFTypeRef hostCert, CFTypeRef devi
 						SSL_set_verify_depth(ssl, 0);
 						SSL_set_bio(ssl, bioSocket, bioSocket);
 						SSL_set_ex_data(ssl, (uint32_t)SDMMobileDevice->ivars.peer_certificate_data_index, (void*)deviceCert);
+						
+						ERR_clear_error();
 						result = SSL_do_handshake(ssl);
 						if (result == 1) {
 							SSL_CTX_free(sslCTX);
