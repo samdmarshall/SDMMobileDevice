@@ -36,6 +36,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/select.h>
+#include <openssl/err.h>
 #include "Core.h"
 
 #define kMilliseconds 1000
@@ -155,6 +156,7 @@ size_t SDMMD__ServiceReceiveBytesSSL(SocketConnection handle, void * buffer, int
 	
 	do {
 		// Try to read up to length
+		ERR_clear_error();
 		received = SSL_read(handle.socket.ssl, &buffer[receivedTotal], length - receivedTotal);
 		if (received <= 0) {
 			// Read failed, check if theres an SSL error
