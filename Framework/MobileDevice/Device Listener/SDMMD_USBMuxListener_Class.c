@@ -89,7 +89,7 @@ CFTypeID SDMMD_USBMuxListenerRefGetTypeID(void) {
 	return _kSDMMD_USBMuxListenerRefID;
 }
 
-SDMMD_USBMuxListenerRef SDMMD_USBMuxListenerCreateEmpty() {
+CF_RETURNS_RETAINED SDMMD_USBMuxListenerRef SDMMD_USBMuxListenerCreateEmpty() {
 	uint32_t extra = sizeof(USBMuxListenerClassBody);
 	SDMMD_USBMuxListenerRef device = (SDMMD_USBMuxListenerRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, _kSDMMD_USBMuxListenerRefID, extra, NULL);
 	return device;

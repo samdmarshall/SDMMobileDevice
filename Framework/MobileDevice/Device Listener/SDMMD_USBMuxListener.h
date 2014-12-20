@@ -39,7 +39,7 @@
 
 sdmmd_return_t SDMMD_USBMuxConnectByPort(SDMMD_AMDeviceRef device, uint32_t port, uint32_t *socketConn);
 
-SDMMD_USBMuxListenerRef SDMMD_USBMuxCreate();
+CF_RETURNS_RETAINED SDMMD_USBMuxListenerRef SDMMD_USBMuxCreate();
 void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener);
 
 struct USBMuxPacket * SDMMD_USBMuxCreatePacketEmpty(void);

@@ -215,7 +215,7 @@ void SDMMD_USBMuxUnknownCallback(void *context, struct USBMuxPacket *packet) {
 	dispatch_semaphore_signal(((SDMMD_USBMuxListenerRef)context)->ivars.semaphore);
 }
 
-SDMMD_USBMuxListenerRef SDMMD_USBMuxCreate() {
+CF_RETURNS_RETAINED SDMMD_USBMuxListenerRef SDMMD_USBMuxCreate() {
 	SDMMD_USBMuxListenerRef listener = (SDMMD_USBMuxListenerRef)SDMMD_USBMuxListenerCreateEmpty();
 	listener->ivars.socket = -1;
 	listener->ivars.isActive = false;

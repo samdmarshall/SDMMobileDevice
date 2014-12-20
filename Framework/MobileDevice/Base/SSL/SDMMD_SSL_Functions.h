@@ -39,17 +39,17 @@
 
 #define SHA1_HASH_LENGTH SHA_DIGEST_LENGTH
 
-CFStringRef SDMMD_CreateUUID();
+CF_RETURNS_RETAINED CFStringRef SDMMD_CreateUUID();
 void SDMMD_openSSLLockCallBack(int mode, int n, const char * file, int line);
 unsigned long SDMMD_openSSLThreadIDCallBack();
 uint32_t SDMMD_lockssl_init();
 char* SDMMD_ssl_strerror(SSL *ssl, uint32_t ret);
 int SDMMD__add_ext(X509 *cert, int flag, char *name);
-CFDataRef SDMMD__create_data_from_bp(BIO* bio);
-CFDataRef SDMMD_CreateDataFromX509Certificate(X509 *cert);
-CFDataRef SDMMD_CreateDataFromPrivateKey(EVP_PKEY *key);
+CF_RETURNS_RETAINED CFDataRef SDMMD__create_data_from_bp(BIO* bio);
+CF_RETURNS_RETAINED CFDataRef SDMMD_CreateDataFromX509Certificate(X509 *cert);
+CF_RETURNS_RETAINED CFDataRef SDMMD_CreateDataFromPrivateKey(EVP_PKEY *key);
 BIO* SDMMD__create_bio_from_data(CFDataRef data);
-CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef devicePubkey);
+CF_RETURNS_RETAINED CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef devicePubkey);
 unsigned char * DataToSHA1(CFDataRef data);
 unsigned char * DataToSHA256(CFDataRef data);
 

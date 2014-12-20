@@ -56,7 +56,7 @@ void SDMMD_SDMMobileDeviceRefClassInitialize() {
 	_kSDMMD_SDMMobileDeviceRefID = _CFRuntimeRegisterClass((const CFRuntimeClass * const)&_kSDMMD_SDMMobileDeviceRefClass);
 }
 
-SDMMobileDeviceRef SDMMobileDeviceRefCreateEmpty() {
+CF_RETURNS_RETAINED SDMMobileDeviceRef SDMMobileDeviceRefCreateEmpty() {
 	uint32_t extra = sizeof(sdm_mobiledevice_body);
 	SDMMobileDeviceRef manager = (SDMMobileDeviceRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, _kSDMMD_SDMMobileDeviceRefID, extra, NULL);
 	return manager;

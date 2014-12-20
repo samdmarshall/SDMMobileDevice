@@ -89,7 +89,7 @@ CFTypeID SDMMD_AFCOperationRefGetTypeID(void) {
 	return _kSDMMD_AFCOperationRefID;
 }
 
-SDMMD_AFCOperationRef SDMMD_AFCOperationCreateEmpty() {
+CF_RETURNS_RETAINED SDMMD_AFCOperationRef SDMMD_AFCOperationCreateEmpty() {
 	uint32_t extra = sizeof(sdmmd_AFCOperationBody);
 	SDMMD_AFCOperationRef operation = (SDMMD_AFCOperationRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, _kSDMMD_AFCOperationRefID, extra, NULL);
 	return operation;

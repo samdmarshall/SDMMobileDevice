@@ -102,7 +102,7 @@ void SDMMD___ConvertDictEntry(const void* key, const void* value, void* context)
 	}
 }
 
-CFDataRef SDMMD__CreateDataFromFileContents(char *path) {
+CF_RETURNS_RETAINED CFDataRef SDMMD__CreateDataFromFileContents(char *path) {
 	CFDataRef dataBuffer = NULL;
 	unsigned char *data = NULL;
 	
@@ -131,7 +131,7 @@ ExitLabel:
 	return dataBuffer;
 }
 
-CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
+CF_RETURNS_RETAINED CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path) {
 	CFMutableDictionaryRef dict = NULL;
 	CFDataRef fileData = NULL;
 	CFTypeRef propList = NULL;
@@ -155,11 +155,11 @@ ExitLabel:
 	return dict;
 }
 
-CFMutableDictionaryRef SDMMD_create_dict() {
+CF_RETURNS_RETAINED CFMutableDictionaryRef SDMMD_create_dict() {
 	return CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 }
 
-CFMutableDictionaryRef SDMMD__CreateRequestDict(CFStringRef type) {
+CF_RETURNS_RETAINED CFMutableDictionaryRef SDMMD__CreateRequestDict(CFStringRef type) {
 	CFMutableDictionaryRef dict = SDMMD_create_dict();
 	if (dict) {
 		CFDictionarySetValue(dict, CFSTR("Request"), type);
@@ -167,7 +167,7 @@ CFMutableDictionaryRef SDMMD__CreateRequestDict(CFStringRef type) {
 	return dict;
 }
 
-CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type) {
+CF_RETURNS_RETAINED CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type) {
 	CFMutableDictionaryRef dict = SDMMD__CreateRequestDict(type);
 	if (dict) {
 		CFDictionarySetValue(dict, CFSTR("ProtocolVersion"), CFSTR("2"));
@@ -184,7 +184,7 @@ CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type) {
 	
 }
 
-CFStringRef SDMCreateCurrentDateString() {
+CF_RETURNS_RETAINED CFStringRef SDMCreateCurrentDateString() {
 	CFLocaleRef currentLocale = CFLocaleCopyCurrent();
 	CFDateRef date = CFDateCreate(kCFAllocatorDefault, CFAbsoluteTimeGetCurrent());
 	CFDateFormatterRef customDateFormatter = CFDateFormatterCreate(NULL, currentLocale, kCFDateFormatterNoStyle, kCFDateFormatterNoStyle);
@@ -208,7 +208,7 @@ char* SDMCFURLGetString(CFURLRef url) {
 	return SDMCFStringGetString(CFURLGetString(url));
 }
 
-CFStringRef SDMMD__GetPairingRecordDirectoryPath() {
+CF_RETURNS_RETAINED CFStringRef SDMMD__GetPairingRecordDirectoryPath() {
 	return CFSTR("/var/db/lockdown");
 }
 
@@ -248,7 +248,7 @@ sdmmd_return_t SDMMD_store_dict(CFDictionaryRef dict, char *path, bool mode) {
 	return result;
 }
 
-CFStringRef SDMMD_AMDCopySystemBonjourUniqueID() {
+CF_RETURNS_RETAINED CFStringRef SDMMD_AMDCopySystemBonjourUniqueID() {
 	
 	CFStringRef systemBUID = NULL;
 	
@@ -328,12 +328,12 @@ sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SDMMD_AMD
 	return result;
 }
 
-CFArrayRef SDMMD_ApplicationLookupDictionary() {
+CF_RETURNS_RETAINED CFArrayRef SDMMD_ApplicationLookupDictionary() {
 	const void* values[DefaultApplicationLookupDictionaryCount] = {CFSTR(kAppLookupKeyCFBundleExecutable), CFSTR(kAppLookupKeyCFBundleIdentifier), CFSTR(kAppLookupKeyApplicationType), CFSTR(kAppLookupKeyCFBundleDisplayName), CFSTR(kAppLookupKeyCFBundleName), CFSTR(kAppLookupKeyContainer), CFSTR(kAppLookupKeyPath)};
 	return CFArrayCreate(kCFAllocatorDefault, values, DefaultApplicationLookupDictionaryCount, &kCFTypeArrayCallBacks);
 }
 
-CFURLRef SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(CFStringRef path) {
+CF_RETURNS_RETAINED CFURLRef SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(CFStringRef path) {
 	char cpath[1024] = {0};
 	CFURLRef url = NULL;
 	if (CFStringGetCString(path, cpath, 1024, kCFStringEncodingUTF8)) {
@@ -346,7 +346,7 @@ CFURLRef SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(CFStringRef path) {
 	return url;
 }
 
-CFURLRef SDMMD__AMDCFURLCreateWithFileSystemPathRelativeToBase(CFAllocatorRef allocator, CFStringRef path, CFURLPathStyle style, Boolean dir) {
+CF_RETURNS_RETAINED CFURLRef SDMMD__AMDCFURLCreateWithFileSystemPathRelativeToBase(CFAllocatorRef allocator, CFStringRef path, CFURLPathStyle style, Boolean dir) {
 	CFURLRef base = CFURLCreateWithString(allocator, CFSTR("file://localhost/"), NULL);
 	CFURLRef url = CFURLCreateWithFileSystemPathRelativeToBase(allocator, path, style, dir, base);
 	CFSafeRelease(base);

@@ -36,6 +36,6 @@ void SDMMD_SDMMobileDeviceRefClassInitialize();
 
 CFTypeID SDMMobileDeviceRefGetTypeID();
 
-SDMMobileDeviceRef SDMMobileDeviceRefCreateEmpty();
+CF_RETURNS_RETAINED SDMMobileDeviceRef SDMMobileDeviceRefCreateEmpty();
 
 #endif

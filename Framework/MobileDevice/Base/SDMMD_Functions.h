@@ -58,25 +58,25 @@ int SDMMD__mutex_lock(pthread_mutex_t mutex);
 int SDMMD__mutex_unlock(pthread_mutex_t mutex);
 void SDMMD___AppendValue(CFTypeRef append, CFMutableDataRef context);
 void SDMMD___ConvertDictEntry(const void* key, const void* value, void* context);
-CFDataRef SDMMD__CreateDataFromFileContents(char *path);
-CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path);
-CFMutableDictionaryRef SDMMD_create_dict();
-CFMutableDictionaryRef SDMMD__CreateRequestDict(CFStringRef type);
-CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type);
-CFStringRef SDMCreateCurrentDateString();
+CF_RETURNS_RETAINED CFDataRef SDMMD__CreateDataFromFileContents(char *path);
+CF_RETURNS_RETAINED CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path);
+CF_RETURNS_RETAINED CFMutableDictionaryRef SDMMD_create_dict();
+CF_RETURNS_RETAINED CFMutableDictionaryRef SDMMD__CreateRequestDict(CFStringRef type);
+CF_RETURNS_RETAINED CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type);
+CF_RETURNS_RETAINED CFStringRef SDMCreateCurrentDateString();
 char* SDMCFStringGetString(CFStringRef str);
 char* SDMCFURLGetString(CFURLRef url);
-CFStringRef SDMMD__GetPairingRecordDirectoryPath();
+CF_RETURNS_RETAINED CFStringRef SDMMD__GetPairingRecordDirectoryPath();
 void SDMMD__PairingRecordPathForIdentifier(CFStringRef udid, char *path);
 sdmmd_return_t SDMMD_store_dict(CFDictionaryRef dict, char *path, bool mode);
-CFStringRef SDMMD_AMDCopySystemBonjourUniqueID();
+CF_RETURNS_RETAINED CFStringRef SDMMD_AMDCopySystemBonjourUniqueID();
 sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SDMMD_AMDeviceRef device, CFMutableDictionaryRef *dict);
 
 #define DefaultApplicationLookupDictionaryCount 7
 
-CFArrayRef SDMMD_ApplicationLookupDictionary();
-CFURLRef SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(CFStringRef path);
-CFURLRef SDMMD__AMDCFURLCreateWithFileSystemPathRelativeToBase(CFAllocatorRef allocator, CFStringRef path, CFURLPathStyle style, Boolean dir);
+CF_RETURNS_RETAINED CFArrayRef SDMMD_ApplicationLookupDictionary();
+CF_RETURNS_RETAINED CFURLRef SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(CFStringRef path);
+CF_RETURNS_RETAINED CFURLRef SDMMD__AMDCFURLCreateWithFileSystemPathRelativeToBase(CFAllocatorRef allocator, CFStringRef path, CFURLPathStyle style, Boolean dir);
 Boolean SDMMD__AMDCFURLGetCStringForFileSystemPath(CFURLRef urlRef, char *cpath);
 void SDMMD_fire_callback(CallBack handle, void* unknown, CFStringRef status);
 void SDMMD_fire_callback_767f4(CallBack handle, void* unknown, uint32_t percent, CFStringRef string);

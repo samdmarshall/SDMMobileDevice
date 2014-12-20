@@ -58,7 +58,7 @@ typedef AMDInterfaceConnectionType sdmmd_interface_return_t;
  @param device
  	Device object to create a copy of
  */
-SDMMD_AMDeviceRef SDMMD_AMDeviceCreateCopy(SDMMD_AMDeviceRef device);
+CF_RETURNS_RETAINED SDMMD_AMDeviceRef SDMMD_AMDeviceCreateCopy(SDMMD_AMDeviceRef device);
 
 /*!
  @function SDMMD_AMDeviceCreateFromProperties
@@ -67,7 +67,7 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateCopy(SDMMD_AMDeviceRef device);
  @param dict
  	CFDictionaryRef of the device properties, this is created by a USBmuxd callback.
  */
-SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dict);
+CF_RETURNS_RETAINED SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dict);
 
 sdmmd_return_t SDMMD_AMDeviceActivate(SDMMD_AMDeviceRef device, CFDictionaryRef options);
 sdmmd_return_t SDMMD_AMDeviceDeactivate(SDMMD_AMDeviceRef device);

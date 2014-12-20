@@ -162,14 +162,14 @@ int SDMMD__add_ext(X509 *cert, int flag, char *name) {
 	return result;
 }
 
-CFDataRef SDMMD__create_data_from_bp(BIO* bio) {
+CF_RETURNS_RETAINED CFDataRef SDMMD__create_data_from_bp(BIO* bio) {
 	BUF_MEM * memptr = NULL;
 	BIO_get_mem_ptr(bio, &memptr);
 	CFDataRef data = CFDataCreate(kCFAllocatorDefault, (void *)memptr->data, memptr->length);
 	return data;
 }
 
-CFDataRef SDMMD_CreateDataFromX509Certificate(X509 *cert) {
+CF_RETURNS_RETAINED CFDataRef SDMMD_CreateDataFromX509Certificate(X509 *cert) {
 	BIO *bio = BIO_new(BIO_s_mem());
 	CFDataRef data = NULL;
 	if (bio) {
@@ -182,7 +182,7 @@ CFDataRef SDMMD_CreateDataFromX509Certificate(X509 *cert) {
 	return data;
 }
 
-CFDataRef SDMMD_CreateDataFromPrivateKey(EVP_PKEY *key) {
+CF_RETURNS_RETAINED CFDataRef SDMMD_CreateDataFromPrivateKey(EVP_PKEY *key) {
 	BIO_METHOD *method = BIO_s_mem();
 	BIO *bio = BIO_new(method);
 	CFDataRef data = NULL;
@@ -204,7 +204,7 @@ BIO* SDMMD__create_bio_from_data(CFDataRef data) {
 	return bio;
 }
 
-CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef devicePubkey) {
+CF_RETURNS_RETAINED CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef devicePubkey) {
 	CFMutableDictionaryRef record = NULL;
 	RSA *rsaBIOData = NULL;
 	BIO *deviceBIO = SDMMD__create_bio_from_data(devicePubkey);

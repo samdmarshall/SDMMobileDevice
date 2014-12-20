@@ -305,7 +305,7 @@ sdmmd_return_t SDMMD_lockconn_receive_message(SDMMD_AMDeviceRef device, CFMutabl
 	return result;
 }
 
-CFTypeRef SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key, CFStringRef *err) {
+CF_RETURNS_RETAINED CFTypeRef SDMMD_copy_lockdown_value(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key, CFStringRef *err) {
 	CFTypeRef value = NULL;
 	sdmmd_return_t result = kAMDSuccess;
 	
@@ -476,8 +476,7 @@ sdmmd_return_t SDMMD_send_unpair(SDMMD_AMDeviceRef device, CFStringRef hostId) {
 	ExitLabelAndReturn(result);
 }
 
-sdmmd_return_t SDMMD_send_pair(SDMMD_AMDeviceRef device, CFMutableDictionaryRef pairRecord, CFTypeRef slip, CFTypeRef options,
-							   CFDataRef *escrowBag, CFDictionaryRef *extendedResponse) {
+sdmmd_return_t SDMMD_send_pair(SDMMD_AMDeviceRef device, CFMutableDictionaryRef pairRecord, CFTypeRef slip, CFTypeRef options, CFDataRef *escrowBag, CFDictionaryRef *extendedResponse) {
 	sdmmd_return_t result = kAMDSuccess;
 	CFMutableDictionaryRef response = NULL;
 	
@@ -1464,7 +1463,7 @@ sdmmd_return_t SDMMD_AMDeviceExtendedPairWithOptions(SDMMD_AMDeviceRef device, C
 	return result;
 }
 
-CFStringRef SDMMD_AMDeviceCopyUDID(SDMMD_AMDeviceRef device) {
+CF_RETURNS_RETAINED CFStringRef SDMMD_AMDeviceCopyUDID(SDMMD_AMDeviceRef device) {
 	CFStringRef udid = CFSTR("");
 	if (device) {
 		udid = device->ivars.unique_device_id;
@@ -1551,7 +1550,7 @@ sdmmd_return_t SDMMD_AMDeviceSetValue(SDMMD_AMDeviceRef device, CFStringRef doma
 	ExitLabelAndReturn(result);
 }
 
-SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary) {
+CF_RETURNS_RETAINED SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary) {
 	SDMMD_AMDeviceRef device = NULL;
 	if (dictionary) {
 		device = SDMMD_AMDeviceCreateEmpty();
@@ -1626,7 +1625,7 @@ CF_RETURNS_RETAINED CFArrayRef SDMMD_AMDCreateDeviceList() {
 	return deviceArray;
 }
 
-SDMMD_AMDeviceRef SDMMD_AMDeviceCreateCopy(SDMMD_AMDeviceRef device) {
+CF_RETURNS_RETAINED SDMMD_AMDeviceRef SDMMD_AMDeviceCreateCopy(SDMMD_AMDeviceRef device) {
 	SDMMD_AMDeviceRef copy = (SDMMD_AMDeviceRef)calloc(1, sizeof(struct sdmmd_am_device));
 	memcpy(copy, device, sizeof(struct sdmmd_am_device));
 	return copy;

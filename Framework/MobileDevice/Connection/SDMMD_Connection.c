@@ -461,7 +461,7 @@ void SDMMD_AMDServiceConnectionSetDevice(SDMMD_AMConnectionRef *connection, SDMM
 	(*connection)->ivars.device = device;
 }
 
-SDMMD_AMDeviceRef SDMMD_AMDServiceConnectionGetDevice(SDMMD_AMConnectionRef connection) {
+CF_RETURNS_NOT_RETAINED SDMMD_AMDeviceRef SDMMD_AMDServiceConnectionGetDevice(SDMMD_AMConnectionRef connection) {
 	return connection->ivars.device;
 }
 
