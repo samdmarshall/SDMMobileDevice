@@ -101,7 +101,7 @@ CFTypeID SDMMD_AMConnectionRefGetTypeID(void) {
 	return _kSDMMD_AMConnectionRefID;
 }
 
-SDMMD_AMConnectionRef SDMMD_AMConnectionCreateEmpty() {
+CF_RETURNS_RETAINED SDMMD_AMConnectionRef SDMMD_AMConnectionCreateEmpty() {
 	uint32_t extra = sizeof(AMConnectionClassBody);
 	SDMMD_AMConnectionRef device = (SDMMD_AMConnectionRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, _kSDMMD_AMConnectionRefID, extra, NULL);
 	return device;

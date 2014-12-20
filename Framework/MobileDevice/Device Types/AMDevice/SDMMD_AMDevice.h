@@ -142,7 +142,7 @@ sdmmd_return_t SDMMD_AMDeviceStartSession(SDMMD_AMDeviceRef device);
  */
 sdmmd_return_t SDMMD_AMDeviceStopSession(SDMMD_AMDeviceRef device);
 
-CFStringRef SDMMD_AMDeviceCopyUDID(SDMMD_AMDeviceRef device);
+CF_RETURNS_RETAINED CFStringRef SDMMD_AMDeviceCopyUDID(SDMMD_AMDeviceRef device);
 
 /*!
  @function SDMMD_AMDeviceUSBDeviceID
@@ -201,7 +201,7 @@ bool SDMMD_AMDeviceIsAttached(SDMMD_AMDeviceRef device);
  @param key
  	CFStringRef of the key of the value to be requested from the device.
  */
-CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key);
+CF_RETURNS_RETAINED CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key);
 
 /*!
  @function SDMMD_AMDeviceSetValue
@@ -223,7 +223,7 @@ sdmmd_return_t SDMMD_AMDeviceSetValue(SDMMD_AMDeviceRef device, CFStringRef doma
  @discussion
  	Returns a CFArrayRef of all attached devices.
  */
-CFArrayRef SDMMD_AMDCreateDeviceList();
+CF_RETURNS_RETAINED CFArrayRef SDMMD_AMDCreateDeviceList();
 
 sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef dict, CallBack handle, void* unknown);
 

@@ -37,6 +37,6 @@ void SDMMD_AMConnectionRefClassInitialize(void);
 
 CFTypeID SDMMD_AMConnectionRefGetTypeID(void);
 
-SDMMD_AMConnectionRef SDMMD_AMConnectionCreateEmpty();
+CF_RETURNS_RETAINED SDMMD_AMConnectionRef SDMMD_AMConnectionCreateEmpty();
 
 #endif

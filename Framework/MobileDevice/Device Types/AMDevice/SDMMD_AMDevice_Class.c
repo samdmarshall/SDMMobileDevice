@@ -92,7 +92,7 @@ CFTypeID SDMMD_AMDeviceRefGetTypeID(void) {
 	return _kSDMMD_AMDeviceRefID;
 }
 
-SDMMD_AMDeviceRef SDMMD_AMDeviceCreateEmpty() {
+CF_RETURNS_RETAINED SDMMD_AMDeviceRef SDMMD_AMDeviceCreateEmpty() {
 	uint32_t extra = sizeof(AMDeviceClassBody);
 	SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, _kSDMMD_AMDeviceRefID, extra, NULL);
 	return device;

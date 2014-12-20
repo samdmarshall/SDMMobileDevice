@@ -39,7 +39,7 @@ sdmmd_return_t SDMMD_MB2SendFileStream(SDMMD_AMConnectionRef conn, CFStringRef p
 	ExitLabelAndReturn(result);
 }
 
-CFMutableArrayRef SDMMD_MB2StatusResponseMessage() {
+CF_RETURNS_RETAINED CFMutableArrayRef SDMMD_MB2StatusResponseMessage() {
 	CFMutableArrayRef status_response = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
 	CFArrayAppendValue(status_response, CFSTR("DLMessageStatusResponse"));
 	uint64_t code_value = 0;

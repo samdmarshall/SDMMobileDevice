@@ -1512,7 +1512,7 @@ uint32_t SDMMD_AMDeviceGetConnectionID(SDMMD_AMDeviceRef device) {
 	return SDMMD_AMDeviceUSBDeviceID(device);
 }
 
-CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key) {
+CF_RETURNS_RETAINED CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key) {
 	CFTypeRef value = NULL;
 	if (device->ivars.device_active) {
 		
@@ -1618,7 +1618,7 @@ bool SDMMD_AMDeviceIsAttached(SDMMD_AMDeviceRef device) {
 	return result;
 }
 
-CFArrayRef SDMMD_AMDCreateDeviceList() {
+CF_RETURNS_RETAINED CFArrayRef SDMMD_AMDCreateDeviceList() {
 	struct USBMuxPacket *devicesPacket = SDMMD_USBMuxCreatePacketType(kSDMMD_USBMuxPacketListDevicesType, NULL);
 	SDMMD_USBMuxListenerSend(SDMMobileDevice->ivars.usbmuxd, &devicesPacket);
 	USBMuxPacketRelease(devicesPacket);

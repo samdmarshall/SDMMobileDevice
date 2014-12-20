@@ -45,6 +45,6 @@ CFTypeID SDMMD_AMDeviceRefGetTypeID();
  @discussion
  Creating an empty device object, used in conjunction with SDMMD_AMDeviceCreateFromProperties(), returns a SDMMD_AMDeviceRef object.
  */
-SDMMD_AMDeviceRef SDMMD_AMDeviceCreateEmpty();
+CF_RETURNS_RETAINED SDMMD_AMDeviceRef SDMMD_AMDeviceCreateEmpty();
 
 #endif

@@ -79,7 +79,7 @@ CFTypeID SDMMD_AFCConnectionRefGetTypeID(void) {
 	return _kSDMMD_AFCConnectionRefID;
 }
 
-SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreateEmpty() {
+CF_RETURNS_RETAINED SDMMD_AFCConnectionRef SDMMD_AFCConnectionCreateEmpty() {
 	uint32_t extra = sizeof(sdmmd_AFCConnectionClassBody);
 	SDMMD_AFCConnectionRef connection = (SDMMD_AFCConnectionRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, _kSDMMD_AFCConnectionRefID, extra, NULL);
 	return connection;
