@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2202F17E1A5C9E050045C69E /* SDMMobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2202F17D1A5C9E050045C69E /* SDMMobileDevice.framework */; };
+		2202F17F1A5C9E450045C69E /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310D691874F4B10092C107 /* CoreFoundation.framework */; };
 		22247E0A1928F67600719F8D /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = 22247E091928F67600719F8D /* test.c */; };
 		222EF61019055DFD000270C3 /* install.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF60F19055DFD000270C3 /* install.c */; };
-		22310D6A1874F4B10092C107 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310D691874F4B10092C107 /* CoreFoundation.framework */; };
 		22310D6D1874F4B10092C107 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 22310D6C1874F4B10092C107 /* main.c */; };
 		22310D6F1874F4B10092C107 /* iOSConsole.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 22310D6E1874F4B10092C107 /* iOSConsole.1 */; };
 		22648F96189440F700133948 /* power.c in Sources */ = {isa = PBXBuildFile; fileRef = 22648F95189440F700133948 /* power.c */; };
@@ -21,10 +22,6 @@
 		22B955821878DA5F004DCBF0 /* apps.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B955811878DA5F004DCBF0 /* apps.c */; };
 		22B955881878F14F004DCBF0 /* run.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B955871878F14F004DCBF0 /* run.c */; };
 		22EFC8C01900331500C29BFF /* dev.c in Sources */ = {isa = PBXBuildFile; fileRef = 22EFC8BF1900331500C29BFF /* dev.c */; };
-		22FB086819560EED00B73D75 /* libSDMMobileDeviceStatic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22FB086719560EED00B73D75 /* libSDMMobileDeviceStatic.a */; };
-		22FB086F1956100500B73D75 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22648F9A18947DE100133948 /* IOKit.framework */; };
-		22FB08701956100900B73D75 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310DC718750DE70092C107 /* libcrypto.dylib */; };
-		22FB08711956100E00B73D75 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310DC518750DCF0092C107 /* libssl.dylib */; };
 		22FE3F10189E84B2005C2DB2 /* springboard.c in Sources */ = {isa = PBXBuildFile; fileRef = 22FE3F0F189E84B2005C2DB2 /* springboard.c */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +39,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2202F17D1A5C9E050045C69E /* SDMMobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDMMobileDevice.framework; path = ../build/Release/SDMMobileDevice.framework; sourceTree = "<group>"; };
 		22247E081928F66E00719F8D /* test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
 		22247E091928F67600719F8D /* test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test.c; sourceTree = "<group>"; };
 		222EF60E19055DF5000270C3 /* install.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = install.h; sourceTree = "<group>"; };
@@ -97,11 +95,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22FB086819560EED00B73D75 /* libSDMMobileDeviceStatic.a in Frameworks */,
-				22FB08711956100E00B73D75 /* libssl.dylib in Frameworks */,
-				22FB08701956100900B73D75 /* libcrypto.dylib in Frameworks */,
-				22FB086F1956100500B73D75 /* IOKit.framework in Frameworks */,
-				22310D6A1874F4B10092C107 /* CoreFoundation.framework in Frameworks */,
+				2202F17F1A5C9E450045C69E /* CoreFoundation.framework in Frameworks */,
+				2202F17E1A5C9E050045C69E /* SDMMobileDevice.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,6 +142,7 @@
 		22310D681874F4B10092C107 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2202F17D1A5C9E050045C69E /* SDMMobileDevice.framework */,
 				22FB086719560EED00B73D75 /* libSDMMobileDeviceStatic.a */,
 				22648F9A18947DE100133948 /* IOKit.framework */,
 				22B9558B1879DB51004DCBF0 /* libncurses.dylib */,
@@ -444,7 +440,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CODE_SIGN_IDENTITY = "";
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/sam/Projects/SDMMobileDevice/build/Release,
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/sam/Projects/SDMMobileDevice/Framework/../build/Debug,
@@ -462,7 +461,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CODE_SIGN_IDENTITY = "";
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/sam/Projects/SDMMobileDevice/build/Release,
+				);
 				GCC_OPTIMIZATION_LEVEL = 0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
