@@ -774,6 +774,9 @@ sdmmd_return_t SDMMD_AMDeviceCopyFile(CallBack callback, void *thing2, void *thi
 		
 		CFSafeRelease(file_create);
 	}
+	else {
+		result = kAMDNotFoundError;
+	}
 	
 ExitLabel:
 	CFSafeRelease(local_file);
@@ -783,7 +786,7 @@ ExitLabel:
 sdmmd_return_t SDMMD_AMDeviceRemoteCopyFile(CallBack callback, void *thing2, void *thing3, SDMMD_AFCConnectionRef conn, char *local, char *remote) {
 	sdmmd_return_t result = kAMDSuccess;
 	CFDataRef local_file = CFDataCreateFromFilePath(local);
-	if (local_file) {
+	if (local_file != NULL) {
 		uint32_t packets = (uint32_t)((CFDataGetLength(local_file)+kAFCMaxTransferSize-1)/kAFCMaxTransferSize);
 		CFStringRef remote_path = CFStringCreateWithBytes(kCFAllocatorDefault, (const UInt8 *)remote, strlen(remote), kCFStringEncodingUTF8, false);
 		SDMMD_AFCOperationRef file_create = SDMMD_AFCOperationCreateFileRefOpen(remote_path, 2);
@@ -822,6 +825,9 @@ sdmmd_return_t SDMMD_AMDeviceRemoteCopyFile(CallBack callback, void *thing2, voi
 		close(local_fd);
 		
 		CFSafeRelease(file_create);
+	}
+	else {
+		result = kAMDNotFoundError;
 	}
 	
 ExitLabel:
