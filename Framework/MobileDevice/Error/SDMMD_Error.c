@@ -181,6 +181,7 @@ sdmmd_dl_return_t SDMMD__ConvertLockdowndError(CFStringRef error) {
 		else if (CFStringCompare(error, CFSTR("FMiPProtected"), 0) == kCFCompareEqualTo) { result = kAMDFMiPProtectedError; }
 		else if (CFStringCompare(error, CFSTR("MCProtected"), 0) == kCFCompareEqualTo) { result = kAMDMCProtected; }
 		else if (CFStringCompare(error, CFSTR("MCChallengeRequired"), 0) == kCFCompareEqualTo) { result = kAMDMCChallengeRequired; }
+		else if (CFStringCompare(error, CFSTR("PairingDialogResponsePending"), 0) == kCFCompareEqualTo) { result = kAMDPairingDialogResponsePendingError; }
 		else {
 			result = SDMMD__AddNewAMDError(SDMMD_ErrorsCreatedAtRuntime+1, error);
 			//result = 0xffffffff;
