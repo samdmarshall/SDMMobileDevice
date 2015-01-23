@@ -58,10 +58,10 @@ struct AMDeviceClassBody {
 	int32_t unknown1;							// 28
 	CFStringRef unique_device_id;				// 32
 	AMDeviceConnectionType connection_type;		// 40 (1 for USB, 0 for WiFi)
+	int32_t unknown44;							// 44
 	SDMMD_lockdown_conn *lockdown_conn;			// 48
 	CFStringRef session;						// 56 needs to be not zero in AMDeviceSecureStartService  -- connection
-	char mutx[4];								// 64 "MUTX" string
-	pthread_mutex_t mutex_lock;					// 68
+	pthread_mutex_t mutex_lock;					// 64 (64 bytes long)
 	CFStringRef service_name;					// 128 bonjour service name
 	int32_t interface_index;					// 136
 	int8_t device_active;						// 140
