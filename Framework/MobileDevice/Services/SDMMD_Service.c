@@ -81,7 +81,7 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 				result = SSL_write(handle.socket.ssl, &msgLen, sizeof(uint32_t));
 			}
 			else {
-				printf("%s: Invalid SSL Socket!\n",__PRETTY_FUNCTION__);
+				printf("%s: Invalid SSL Socket!\n", __PRETTY_FUNCTION__);
 				return kAMDNotConnectedError;
 			}
 		}
@@ -90,7 +90,7 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 				result = send(handle.socket.conn, &msgLen, sizeof(uint32_t), 0);
 			}
 			else {
-				printf("%s: Invalid Socket!\n",__PRETTY_FUNCTION__);
+				printf("%s: Invalid Socket!\n", __PRETTY_FUNCTION__);
 				return kAMDNotConnectedError;
 			}
 		}
@@ -106,7 +106,7 @@ sdmmd_return_t SDMMD_ServiceSend(SocketConnection handle, CFDataRef data) {
 			return (result == msgLen ? kAMDSuccess : kAMDInvalidResponseError);
 		}
 		else {
-			printf("%s: Incomplete length.\n",__PRETTY_FUNCTION__);
+			printf("%s: Incomplete length.\n", __PRETTY_FUNCTION__);
 			return kAMDNotConnectedError;
 		}
 	}
@@ -125,7 +125,7 @@ sdmmd_return_t SDMMD_DirectServiceSend(SocketConnection handle, CFDataRef data) 
 				result = SSL_write(handle.socket.ssl, CFDataGetBytePtr(data), (uint32_t)msgLen);
 			}
 			else {
-				printf("%s: Invalid SSL Socket!\n",__PRETTY_FUNCTION__);
+				printf("%s: Invalid SSL Socket!\n", __PRETTY_FUNCTION__);
 				return kAMDNotConnectedError;
 			}
 		}
@@ -134,7 +134,7 @@ sdmmd_return_t SDMMD_DirectServiceSend(SocketConnection handle, CFDataRef data) 
 				result = send(handle.socket.conn, CFDataGetBytePtr(data), msgLen, 0);
 			}
 			else {
-				printf("%s: Invalid Socket!\n",__PRETTY_FUNCTION__);
+				printf("%s: Invalid Socket!\n", __PRETTY_FUNCTION__);
 				return kAMDNotConnectedError;
 			}
 		}
