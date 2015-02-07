@@ -659,7 +659,7 @@ sdmmd_return_t SDMMD__CopyEscrowBag(SDMMD_AMDeviceRef device, CFDataRef *bag) {
 			CFTypeRef wifiValue = NULL;
 			if (!CFDictionaryContainsKey(dict, CFSTR("WiFiMACAddress"))) {
 				wifiValue = SDMMD_AMDeviceCopyValue(device, CFSTR("NULL"), CFSTR("WiFiMACAddress"));
-				if (CFGetTypeID(wifiValue) == CFStringGetTypeID()) {
+				if (wifiValue != NULL && CFGetTypeID(wifiValue) == CFStringGetTypeID()) {
 					CFDictionarySetValue(dict, CFSTR("WiFiMACAddress"), wifiValue);
 				}
 				
