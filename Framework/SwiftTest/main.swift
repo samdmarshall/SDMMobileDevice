@@ -34,4 +34,4 @@ var result3 = SDMMD_AMDeviceStopSession(device);
 println(result3);
 var result4 = SDMMD_AMDeviceDisconnect(device);
 println(result4);
-SDMMD_AMDServiceConnectionGetDevice
+//SDMMD_AMDServiceConnectionGetDevice
