@@ -37,13 +37,14 @@
 #include "SDMMD_SSL_Functions.h"
 #include "SDMMD_MCP_Internal.h"
 
-static SDMMobileDeviceRef controller = nil;
+static SDMMobileDeviceRef controller = NULL;
 static dispatch_once_t once;
 
-SDMMobileDeviceRef InitializeSDMMobileDevice() {
+SDMMobileDeviceRef InitializeSDMMobileDevice()
+{
 	dispatch_once(&once, ^{
 		InitializeSDMMobileDeviceClasses();
-		if (!controller) {
+		if (controller == NULL) {
 			controller = SDMMobileDeviceRefCreateEmpty();
 			controller->ivars.deviceList = CFArrayCreate(kCFAllocatorDefault, NULL, 0, &kCFTypeArrayCallBacks);
 			controller->ivars.usbmuxd = SDMMD_USBMuxCreate();

@@ -32,7 +32,8 @@
 #include "SDMMD_MCP_Internal.h"
 #include "Core.h"
 
-static void SDMMD_SDMMobileDeviceRefFinalize(CFTypeRef cf) {
+static void SDMMD_SDMMobileDeviceRefFinalize(CFTypeRef cf)
+{
 	SDMMobileDeviceRef manager = (SDMMobileDeviceRef)cf;
 	CFSafeRelease(manager->ivars.usbmuxd);
 	CFSafeRelease(manager->ivars.deviceList);
@@ -42,7 +43,8 @@ static CFTypeID _kSDMMD_SDMMobileDeviceRefID = _kCFRuntimeNotATypeID;
 
 static CFRuntimeClass _kSDMMD_SDMMobileDeviceRefClass = {0};
 
-void SDMMD_SDMMobileDeviceRefClassInitialize() {
+void SDMMD_SDMMobileDeviceRefClassInitialize()
+{
 	_kSDMMD_SDMMobileDeviceRefClass.version = 0;
 	_kSDMMD_SDMMobileDeviceRefClass.className = "SDMMobileDeviceRef";
 	_kSDMMD_SDMMobileDeviceRefClass.init = NULL;
@@ -53,10 +55,11 @@ void SDMMD_SDMMobileDeviceRefClassInitialize() {
 	_kSDMMD_SDMMobileDeviceRefClass.copyFormattingDesc = NULL;
 	_kSDMMD_SDMMobileDeviceRefClass.copyDebugDesc = NULL;
 	_kSDMMD_SDMMobileDeviceRefClass.reclaim = NULL;
-	_kSDMMD_SDMMobileDeviceRefID = _CFRuntimeRegisterClass((const CFRuntimeClass * const)&_kSDMMD_SDMMobileDeviceRefClass);
+	_kSDMMD_SDMMobileDeviceRefID = _CFRuntimeRegisterClass((const CFRuntimeClass *const) & _kSDMMD_SDMMobileDeviceRefClass);
 }
 
-CF_RETURNS_RETAINED SDMMobileDeviceRef SDMMobileDeviceRefCreateEmpty() {
+SDMMobileDeviceRef SDMMobileDeviceRefCreateEmpty()
+{
 	uint32_t extra = sizeof(sdm_mobiledevice_body);
 	SDMMobileDeviceRef manager = (SDMMobileDeviceRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, _kSDMMD_SDMMobileDeviceRefID, extra, NULL);
 	return manager;

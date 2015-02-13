@@ -31,12 +31,12 @@
 #include <CoreFoundation/CoreFoundation.h>
 
 /* Classes */
-typedef struct am_connection* SDMMD_AMConnectionRef;
+typedef struct am_connection *SDMMD_AMConnectionRef;
 
 void SDMMD_AMConnectionRefClassInitialize(void);
 
 CFTypeID SDMMD_AMConnectionRefGetTypeID(void);
 
-CF_RETURNS_RETAINED SDMMD_AMConnectionRef SDMMD_AMConnectionCreateEmpty();
+SDMMD_AMConnectionRef SDMMD_AMConnectionCreateEmpty();
 
 #endif

@@ -36,24 +36,28 @@
 
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-static Boolean SDMMD_AMConnectionRefEqual(CFTypeRef cf1, CFTypeRef cf2) {
+static Boolean SDMMD_AMConnectionRefEqual(CFTypeRef cf1, CFTypeRef cf2)
+{
 	SDMMD_AMConnectionRef connection1 = (SDMMD_AMConnectionRef)cf1;
 	SDMMD_AMConnectionRef connection2 = (SDMMD_AMConnectionRef)cf2;
-	
+
 	return (connection1->ivars.socket == connection2->ivars.socket);
 }
 
-static CFStringRef SDMMD_AMConnectionRefCopyFormattingDesc(CFTypeRef cf, CFDictionaryRef formatOpts) {
+static CFStringRef SDMMD_AMConnectionRefCopyFormattingDesc(CFTypeRef cf, CFDictionaryRef formatOpts)
+{
 	SDMMD_AMConnectionRef connection = (SDMMD_AMConnectionRef)cf;
 	return CFStringCreateWithFormat(CFGetAllocator(connection), NULL, CFSTR("<SDMMD_AMConnectionRef %p>{socket = %d}"), connection, connection->ivars.socket);
 }
 
-static CFStringRef SDMMD_AMConnectionRefCopyDebugDesc(CFTypeRef cf) {
+static CFStringRef SDMMD_AMConnectionRefCopyDebugDesc(CFTypeRef cf)
+{
 	SDMMD_AMConnectionRef connection = (SDMMD_AMConnectionRef)cf;
 	return CFStringCreateWithFormat(CFGetAllocator(connection), NULL, CFSTR("<SDMMD_AMConnectionRef %p>{socket = %d}"), connection, connection->ivars.socket);
 }
 
-sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connection) {
+sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connection)
+{
 	sdmmd_return_t result = kAMDSuccess;
 	if (connection != NULL && connection->ivars.isValid) {
 		connection->ivars.isValid = false;
@@ -70,11 +74,12 @@ sdmmd_return_t SDMMD_AMDServiceConnectionInvalidate(SDMMD_AMConnectionRef connec
 	return result;
 }
 
-static void SDMMD_AMConnectionRefFinalize(CFTypeRef cf) {
+static void SDMMD_AMConnectionRefFinalize(CFTypeRef cf)
+{
 	SDMMD_AMConnectionRef connection = (SDMMD_AMConnectionRef)cf;
 	sdmmd_return_t result = SDMMD_AMDServiceConnectionInvalidate(connection);
 	if (SDM_MD_CallSuccessful(result)) {
-		Safe(SSL_free,connection->ivars.ssl);
+		Safe(SSL_free, connection->ivars.ssl);
 		connection->ivars.ssl = NULL;
 	}
 }
@@ -83,7 +88,8 @@ static CFTypeID _kSDMMD_AMConnectionRefID = _kCFRuntimeNotATypeID;
 
 static CFRuntimeClass _kSDMMD_AMConnectionRefClass = {0};
 
-void SDMMD_AMConnectionRefClassInitialize(void) {
+void SDMMD_AMConnectionRefClassInitialize(void)
+{
 	_kSDMMD_AMConnectionRefClass.version = 0;
 	_kSDMMD_AMConnectionRefClass.className = "SDMMD_AMConnectionRef";
 	_kSDMMD_AMConnectionRefClass.init = NULL;
@@ -94,14 +100,16 @@ void SDMMD_AMConnectionRefClassInitialize(void) {
 	_kSDMMD_AMConnectionRefClass.copyFormattingDesc = SDMMD_AMConnectionRefCopyFormattingDesc;
 	_kSDMMD_AMConnectionRefClass.copyDebugDesc = SDMMD_AMConnectionRefCopyDebugDesc;
 	_kSDMMD_AMConnectionRefClass.reclaim = NULL;
-	_kSDMMD_AMConnectionRefID = _CFRuntimeRegisterClass((const CFRuntimeClass * const)&_kSDMMD_AMConnectionRefClass);
+	_kSDMMD_AMConnectionRefID = _CFRuntimeRegisterClass((const CFRuntimeClass *const) & _kSDMMD_AMConnectionRefClass);
 }
 
-CFTypeID SDMMD_AMConnectionRefGetTypeID(void) {
+CFTypeID SDMMD_AMConnectionRefGetTypeID(void)
+{
 	return _kSDMMD_AMConnectionRefID;
 }
 
-CF_RETURNS_RETAINED SDMMD_AMConnectionRef SDMMD_AMConnectionCreateEmpty() {
+SDMMD_AMConnectionRef SDMMD_AMConnectionCreateEmpty()
+{
 	uint32_t extra = sizeof(AMConnectionClassBody);
 	SDMMD_AMConnectionRef device = (SDMMD_AMConnectionRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, _kSDMMD_AMConnectionRefID, extra, NULL);
 	return device;

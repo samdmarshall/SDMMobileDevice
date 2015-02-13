@@ -30,12 +30,12 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
-typedef struct USBMuxListenerClass * SDMMD_USBMuxListenerRef;
+typedef struct USBMuxListenerClass *SDMMD_USBMuxListenerRef;
 
 void SDMMD_USBMuxListenerRefClassInitialize(void);
 
 CFTypeID SDMMD_USBMuxListenerRefGetTypeID(void);
 
-CF_RETURNS_RETAINED SDMMD_USBMuxListenerRef SDMMD_USBMuxListenerCreateEmpty();
+SDMMD_USBMuxListenerRef SDMMD_USBMuxListenerCreateEmpty();
 
 #endif

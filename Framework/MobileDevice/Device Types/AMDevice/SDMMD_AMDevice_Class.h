@@ -34,7 +34,7 @@
 
 typedef struct SDMMD_lockdown_conn_internal SDMMD_lockdown_conn;
 
-typedef struct sdmmd_am_device* SDMMD_AMDeviceRef;
+typedef struct sdmmd_am_device *SDMMD_AMDeviceRef;
 
 void SDMMD_AMDeviceRefClassInitialize();
 
@@ -45,6 +45,6 @@ CFTypeID SDMMD_AMDeviceRefGetTypeID();
  @discussion
  Creating an empty device object, used in conjunction with SDMMD_AMDeviceCreateFromProperties(), returns a SDMMD_AMDeviceRef object.
  */
-CF_RETURNS_RETAINED SDMMD_AMDeviceRef SDMMD_AMDeviceCreateEmpty();
+SDMMD_AMDeviceRef SDMMD_AMDeviceCreateEmpty();
 
 #endif

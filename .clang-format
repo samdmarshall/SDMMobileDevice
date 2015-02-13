@@ -1,0 +1,44 @@
+AlignAfterOpenBracket: false
+AlignOperands: false
+AlignTrailingComments: true
+
+AllowAllParametersOfDeclarationOnNextLine: false
+
+AllowShortBlocksOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+
+AlwaysBreakAfterDefinitionReturnType: false
+AlwaysBreakBeforeMultilineStrings: false
+
+BinPackArguments: false
+BinPackParameters: false
+
+BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeBraces: Stroustrup
+BreakBeforeTernaryOperators: false
+
+ColumnLimit: 0
+IndentCaseLabels: true
+IndentWidth: 4
+TabWidth: 4
+UseTab: Always
+
+KeepEmptyLinesAtTheStartOfBlocks: true
+MaxEmptyLinesToKeep: 1
+
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeParens: ControlStatements
+SpaceInEmptyParentheses: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+
+---
+Language: Cpp
+ObjCSpaceAfterProperty: true
+ObjCSpaceBeforeProtocolList: true
+---
+Language: Proto
+DisableFormat: true

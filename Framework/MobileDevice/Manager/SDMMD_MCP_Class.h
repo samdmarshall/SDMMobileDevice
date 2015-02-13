@@ -30,12 +30,12 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
-typedef struct sdm_mobiledevice* SDMMobileDeviceRef;
+typedef struct sdm_mobiledevice *SDMMobileDeviceRef;
 
 void SDMMD_SDMMobileDeviceRefClassInitialize();
 
 CFTypeID SDMMobileDeviceRefGetTypeID();
 
-CF_RETURNS_RETAINED SDMMobileDeviceRef SDMMobileDeviceRefCreateEmpty();
+SDMMobileDeviceRef SDMMobileDeviceRefCreateEmpty();
 
 #endif

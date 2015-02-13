@@ -45,11 +45,12 @@
 #include "SDMMD_AMDevice.h"
 #include "SDMMD_Applications.h"
 #include "CFTypeAddition.h"
-//#include "SDMMD_SSL_Functions.h"
 
+// clang-format off
 #if WIN32
 #define CFRangeMake(a, b) (CFRange){a, b}
 #endif
+// clang-format on
 
 // Missing base function: "mobdevlog"
 
@@ -57,31 +58,30 @@ kern_return_t sdmmd_mutex_init(pthread_mutex_t thread);
 int SDMMD__mutex_lock(pthread_mutex_t mutex);
 int SDMMD__mutex_unlock(pthread_mutex_t mutex);
 void SDMMD___AppendValue(CFTypeRef append, CFMutableDataRef context);
-void SDMMD___ConvertDictEntry(const void* key, const void* value, void* context);
-CF_RETURNS_RETAINED CFDataRef SDMMD__CreateDataFromFileContents(char *path);
-CF_RETURNS_RETAINED CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path);
-CF_RETURNS_RETAINED CFMutableDictionaryRef SDMMD_create_dict();
-CF_RETURNS_RETAINED CFMutableDictionaryRef SDMMD__CreateRequestDict(CFStringRef type);
-CF_RETURNS_RETAINED CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type);
-CF_RETURNS_RETAINED CFStringRef SDMCreateCurrentDateString();
-char* SDMCFStringGetString(CFStringRef str);
-char* SDMCFURLGetString(CFURLRef url);
-CF_RETURNS_RETAINED CFStringRef SDMMD__GetPairingRecordDirectoryPath();
+void SDMMD___ConvertDictEntry(const void *key, const void *value, void *context);
+CFDataRef SDMMD__CreateDataFromFileContents(char *path);
+CFMutableDictionaryRef SDMMD__CreateDictFromFileContents(char *path);
+CFMutableDictionaryRef SDMMD_create_dict();
+CFMutableDictionaryRef SDMMD__CreateRequestDict(CFStringRef type);
+CFMutableDictionaryRef SDMMD__CreateMessageDict(CFStringRef type);
+CFStringRef SDMCreateCurrentDateString();
+char *SDMCFStringGetString(CFStringRef str);
+char *SDMCFURLGetString(CFURLRef url);
+CFStringRef SDMMD__GetPairingRecordDirectoryPath();
 void SDMMD__PairingRecordPathForIdentifier(CFStringRef udid, char *path);
 sdmmd_return_t SDMMD_store_dict(CFDictionaryRef dict, char *path, bool mode);
-CF_RETURNS_RETAINED CFStringRef SDMMD_AMDCopySystemBonjourUniqueID();
+CFStringRef SDMMD_AMDCopySystemBonjourUniqueID();
 sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SDMMD_AMDeviceRef device, CFMutableDictionaryRef *dict);
 
 #define DefaultApplicationLookupDictionaryCount 7
 
-CF_RETURNS_RETAINED CFArrayRef SDMMD_ApplicationLookupDictionary();
-CF_RETURNS_RETAINED CFURLRef SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(CFStringRef path);
-CF_RETURNS_RETAINED CFURLRef SDMMD__AMDCFURLCreateWithFileSystemPathRelativeToBase(CFAllocatorRef allocator, CFStringRef path, CFURLPathStyle style, Boolean dir);
+CFArrayRef SDMMD_ApplicationLookupDictionary();
+CFURLRef SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(CFStringRef path);
+CFURLRef SDMMD__AMDCFURLCreateWithFileSystemPathRelativeToBase(CFAllocatorRef allocator, CFStringRef path, CFURLPathStyle style, Boolean dir);
 Boolean SDMMD__AMDCFURLGetCStringForFileSystemPath(CFURLRef urlRef, char *cpath);
-void SDMMD_fire_callback(CallBack handle, void* unknown, CFStringRef status);
-void SDMMD_fire_callback_767f4(CallBack handle, void* unknown, uint32_t percent, CFStringRef string);
+void SDMMD_fire_callback(CallBack handle, void *unknown, CFStringRef status);
+void SDMMD_fire_callback_767f4(CallBack handle, void *unknown, uint32_t percent, CFStringRef string);
 sdmmd_return_t SDMMD_AMDeviceDigestFile(CFStringRef path, unsigned char **digest);
-
 
 #define SDM_MobileDevice_Model_ID_Invalid 0
 #define SDM_MobileDevice_Model_ID_iPad1_1 1
@@ -129,6 +129,7 @@ struct SDM_MobileDevice_Model_Info {
 	char *name;
 };
 
+// clang-format off
 static struct SDM_MobileDevice_Model_Info SDM_MobileDevice_Model_ID_Names[SDM_MobileDevice_Model_ID_Count] = {
 	{"", "Invalid"},
 	{"iPad1,1", "iPad 1"},
@@ -170,7 +171,8 @@ static struct SDM_MobileDevice_Model_Info SDM_MobileDevice_Model_ID_Names[SDM_Mo
 	{"iPod4,1", "iPod Touch 4G"},
 	{"iPod5,1", "iPod Touch 5G"}
 };
+// clang-format on
 
-char* SDMMD_ResolveModelToName(CFStringRef model);
+char *SDMMD_ResolveModelToName(CFStringRef model);
 
 #endif

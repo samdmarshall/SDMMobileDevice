@@ -34,7 +34,8 @@
 
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-static Boolean SDMMD_AMDeviceRefEqual(CFTypeRef cf1, CFTypeRef cf2) {
+static Boolean SDMMD_AMDeviceRefEqual(CFTypeRef cf1, CFTypeRef cf2)
+{
 	SDMMD_AMDeviceRef device1 = (SDMMD_AMDeviceRef)cf1;
 	SDMMD_AMDeviceRef device2 = (SDMMD_AMDeviceRef)cf2;
 	Boolean result = (device1->ivars.device_id == device2->ivars.device_id);
@@ -45,24 +46,27 @@ static Boolean SDMMD_AMDeviceRefEqual(CFTypeRef cf1, CFTypeRef cf2) {
 	return result;
 }
 
-static CFStringRef SDMMD_AMDeviceRefCopyFormattingDesc(CFTypeRef cf, CFDictionaryRef formatOpts) {
+static CFStringRef SDMMD_AMDeviceRefCopyFormattingDesc(CFTypeRef cf, CFDictionaryRef formatOpts)
+{
 	SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)cf;
 	return CFStringCreateWithFormat(CFGetAllocator(device), NULL, CFSTR("<SDMMD_AMDeviceRef %p>{device = %d}"), device, device->ivars.device_id);
 }
 
-static CFStringRef SDMMD_AMDeviceRefCopyDebugDesc(CFTypeRef cf) {
+static CFStringRef SDMMD_AMDeviceRefCopyDebugDesc(CFTypeRef cf)
+{
 	SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)cf;
 	return CFStringCreateWithFormat(CFGetAllocator(device), NULL, CFSTR("<SDMMD_AMDeviceRef %p>{device = %d}"), device, device->ivars.device_id);
 }
 
-static void SDMMD_AMDeviceRefFinalize(CFTypeRef cf) {
+static void SDMMD_AMDeviceRefFinalize(CFTypeRef cf)
+{
 	SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)cf;
 	CFSafeRelease(device->ivars.unique_device_id);
-	
+
 	if (device->ivars.lockdown_conn) {
-		Safe(close,(uint32_t)device->ivars.lockdown_conn->connection);
-		Safe(SSL_free,device->ivars.lockdown_conn->ssl);
-        Safe(free, device->ivars.lockdown_conn);
+		Safe(close, (uint32_t)device->ivars.lockdown_conn->connection);
+		Safe(SSL_free, device->ivars.lockdown_conn->ssl);
+		Safe(free, device->ivars.lockdown_conn);
 	}
 	CFSafeRelease(device->ivars.session);
 	CFSafeRelease(device->ivars.service_name);
@@ -74,7 +78,8 @@ static CFTypeID _kSDMMD_AMDeviceRefID = _kCFRuntimeNotATypeID;
 
 static CFRuntimeClass _kSDMMD_AMDeviceRefClass = {0};
 
-void SDMMD_AMDeviceRefClassInitialize(void) {
+void SDMMD_AMDeviceRefClassInitialize(void)
+{
 	_kSDMMD_AMDeviceRefClass.version = 0;
 	_kSDMMD_AMDeviceRefClass.className = "SDMMD_AMDeviceRef";
 	_kSDMMD_AMDeviceRefClass.init = NULL;
@@ -85,14 +90,16 @@ void SDMMD_AMDeviceRefClassInitialize(void) {
 	_kSDMMD_AMDeviceRefClass.copyFormattingDesc = SDMMD_AMDeviceRefCopyFormattingDesc;
 	_kSDMMD_AMDeviceRefClass.copyDebugDesc = SDMMD_AMDeviceRefCopyDebugDesc;
 	_kSDMMD_AMDeviceRefClass.reclaim = NULL;
-	_kSDMMD_AMDeviceRefID = _CFRuntimeRegisterClass((const CFRuntimeClass * const)&_kSDMMD_AMDeviceRefClass);
+	_kSDMMD_AMDeviceRefID = _CFRuntimeRegisterClass((const CFRuntimeClass *const) & _kSDMMD_AMDeviceRefClass);
 }
 
-CFTypeID SDMMD_AMDeviceRefGetTypeID(void) {
+CFTypeID SDMMD_AMDeviceRefGetTypeID(void)
+{
 	return _kSDMMD_AMDeviceRefID;
 }
 
-CF_RETURNS_RETAINED SDMMD_AMDeviceRef SDMMD_AMDeviceCreateEmpty() {
+SDMMD_AMDeviceRef SDMMD_AMDeviceCreateEmpty()
+{
 	uint32_t extra = sizeof(AMDeviceClassBody);
 	SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, _kSDMMD_AMDeviceRefID, extra, NULL);
 	return device;

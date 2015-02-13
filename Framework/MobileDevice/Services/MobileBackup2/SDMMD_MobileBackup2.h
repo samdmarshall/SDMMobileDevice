@@ -85,7 +85,7 @@ Send Message:
 #include "SDMMD_Error.h"
 #include "SDMMD_Connection.h"
 
-CF_RETURNS_RETAINED CFMutableArrayRef SDMMD_MB2StatusResponseMessage();
+CFMutableArrayRef SDMMD_MB2StatusResponseMessage();
 sdmmd_return_t SDMMD_MB2SendFile(SDMMD_AMConnectionRef conn, CFStringRef path, CFDataRef file);
 sdmmd_return_t SDMMD_MB2SendFiles(SDMMD_AMConnectionRef conn, CFArrayRef paths, CFArrayRef files);
 

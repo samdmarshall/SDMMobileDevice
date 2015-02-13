@@ -30,13 +30,13 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
-typedef struct sdmmd_AFCOperation* SDMMD_AFCOperationRef;
+typedef struct sdmmd_AFCOperation *SDMMD_AFCOperationRef;
 
 void SDMMD_AFCOperationRefClassInitialize(void);
 
 CFTypeID SDMMD_AFCOperationRefGetTypeID(void);
 
-CF_RETURNS_RETAINED SDMMD_AFCOperationRef SDMMD_AFCOperationCreateEmpty();
+SDMMD_AFCOperationRef SDMMD_AFCOperationCreateEmpty();
 
 CFTypeRef SDMMD_AFCOperationGetPacketResponse(SDMMD_AFCOperationRef operation);
 

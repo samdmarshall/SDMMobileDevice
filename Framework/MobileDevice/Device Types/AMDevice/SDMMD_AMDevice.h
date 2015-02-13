@@ -41,15 +41,13 @@
 */
 #include "SDMMD_Types.h"
 
-
 typedef enum _AMDInterfaceConnectionType {
-    kAMDInterfaceConnectionTypeInvalid  = -1,
-    kAMDInterfaceConnectionTypeUnknown  = 0,
-    kAMDInterfaceConnectionTypeDirect   = 1,
-    kAMDInterfaceConnectionTypeIndirect = 2
+	kAMDInterfaceConnectionTypeInvalid = -1,
+	kAMDInterfaceConnectionTypeUnknown = 0,
+	kAMDInterfaceConnectionTypeDirect = 1,
+	kAMDInterfaceConnectionTypeIndirect = 2
 } AMDInterfaceConnectionType;
 typedef AMDInterfaceConnectionType sdmmd_interface_return_t;
-
 
 /*!
  @function SDMMD_AMDeviceCreateCopy
@@ -58,7 +56,7 @@ typedef AMDInterfaceConnectionType sdmmd_interface_return_t;
  @param device
  	Device object to create a copy of
  */
-CF_RETURNS_RETAINED SDMMD_AMDeviceRef SDMMD_AMDeviceCreateCopy(SDMMD_AMDeviceRef device);
+SDMMD_AMDeviceRef SDMMD_AMDeviceCreateCopy(SDMMD_AMDeviceRef device);
 
 /*!
  @function SDMMD_AMDeviceCreateFromProperties
@@ -67,11 +65,10 @@ CF_RETURNS_RETAINED SDMMD_AMDeviceRef SDMMD_AMDeviceCreateCopy(SDMMD_AMDeviceRef
  @param dict
  	CFDictionaryRef of the device properties, this is created by a USBmuxd callback.
  */
-CF_RETURNS_RETAINED SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dict);
+SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dict);
 
 sdmmd_return_t SDMMD_AMDeviceActivate(SDMMD_AMDeviceRef device, CFDictionaryRef options);
 sdmmd_return_t SDMMD_AMDeviceDeactivate(SDMMD_AMDeviceRef device);
-
 
 /*!
  @function SDMMD_AMDeviceConnect
@@ -121,7 +118,7 @@ bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device);
 // Pairing is fully tested and finished yet
 sdmmd_return_t SDMMD_AMDevicePair(SDMMD_AMDeviceRef device);
 sdmmd_return_t SDMMD_AMDevicePairWithOptions(SDMMD_AMDeviceRef device, CFDictionaryRef options);
-sdmmd_return_t SDMMD_AMDeviceExtendedPairWithOptions(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef * extendedResponse);
+sdmmd_return_t SDMMD_AMDeviceExtendedPairWithOptions(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef *extendedResponse);
 sdmmd_return_t SDMMD_AMDeviceUnpair(SDMMD_AMDeviceRef device);
 
 /*!
@@ -142,7 +139,7 @@ sdmmd_return_t SDMMD_AMDeviceStartSession(SDMMD_AMDeviceRef device);
  */
 sdmmd_return_t SDMMD_AMDeviceStopSession(SDMMD_AMDeviceRef device);
 
-CF_RETURNS_RETAINED CFStringRef SDMMD_AMDeviceCopyUDID(SDMMD_AMDeviceRef device);
+CFStringRef SDMMD_AMDeviceCopyUDID(SDMMD_AMDeviceRef device);
 
 /*!
  @function SDMMD_AMDeviceUSBDeviceID
@@ -201,7 +198,7 @@ bool SDMMD_AMDeviceIsAttached(SDMMD_AMDeviceRef device);
  @param key
  	CFStringRef of the key of the value to be requested from the device.
  */
-CF_RETURNS_RETAINED CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key);
+CFTypeRef SDMMD_AMDeviceCopyValue(SDMMD_AMDeviceRef device, CFStringRef domain, CFStringRef key);
 
 /*!
  @function SDMMD_AMDeviceSetValue
@@ -223,9 +220,9 @@ sdmmd_return_t SDMMD_AMDeviceSetValue(SDMMD_AMDeviceRef device, CFStringRef doma
  @discussion
  	Returns a CFArrayRef of all attached devices.
  */
-CF_RETURNS_RETAINED CFArrayRef SDMMD_AMDCreateDeviceList();
+CFArrayRef SDMMD_AMDCreateDeviceList();
 
-sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef dict, CallBack handle, void* unknown);
+sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef dict, CallBack handle, void *unknown);
 
 /*!
  @function SDMMD_GetSIMStatusCode
@@ -253,6 +250,5 @@ sdmmd_activation_return_t SDMMD_GetActivationStatus(SDMMD_AMDeviceRef device);
     The device to query
  */
 sdmmd_interface_return_t SDMMD_AMDeviceGetInterfaceType(SDMMD_AMDeviceRef device);
-
 
 #endif

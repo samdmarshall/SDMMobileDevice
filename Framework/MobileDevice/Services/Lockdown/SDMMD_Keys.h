@@ -28,6 +28,8 @@
 #ifndef _SDM_MD_KEYS_H_
 #define _SDM_MD_KEYS_H_
 
+// clang-format off
+
 #define kAllDomains "AllDomains"
 #define kAllKeys "AllKeys"
 
@@ -840,5 +842,6 @@ __attribute__ ((unused)) static struct SDM_MD_Domain_Key SDMMDKnownDomain[SDM_MD
 	{kiTunesBackUpDomain, SDMMD_iTunesBackup_DomainKeys, SDM_MD_iTunesBackup_Domain_Key_Count}
 };
 
+// clang-format on
 
 #endif

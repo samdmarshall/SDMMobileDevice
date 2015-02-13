@@ -32,7 +32,7 @@
 #include "SDMMD_Error.h"
 #include "SDMMD_Connection.h"
 
-
+// clang-format off
 
 typedef struct SocketConnection_Internal SocketConnection;
 
@@ -257,6 +257,8 @@ __attribute__ ((unused)) static struct SDM_MD_Service_Identifiers SDMMDServiceId
  	[3] ...
  ]
 */
+
+// clang-format on
 
 #pragma mark -
 #pragma mark Service Command Functions

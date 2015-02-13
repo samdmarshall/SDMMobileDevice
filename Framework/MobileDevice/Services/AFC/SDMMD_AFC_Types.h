@@ -30,6 +30,8 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
+// clang-format off
+
 // Initialize static CFString key arrays
 void SDMMD_AFC_Types_Initialize(void);
 
@@ -175,5 +177,7 @@ static char* SDMMD_gAFCPacketTypeNames[SDMMD_AFC_Packet_Count] = {
 	"DirectoryEnumeratorRefRead",
 	"DirectoryEnumeratorRefClose"
 };
+
+// clang-format on
 
 #endif

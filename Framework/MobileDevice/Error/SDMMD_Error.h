@@ -31,41 +31,47 @@
 #include <CoreFoundation/CoreFoundation.h>
 
 #define EvalAndEval(cond, eval) \
-if cond { \
-	eval; \
-	goto ExitLabel; \
-}
+	if                          \
+		cond                    \
+		{                       \
+			eval;               \
+			goto ExitLabel;     \
+		}
 
 #define ValueIsNullEval(value, eval) EvalAndEval((value == NULL), eval)
 
 #define EvalConditionalAndReturn(cond) EvalConditionalAndReturnWithMessage(cond, "error")
 
 #define EvalConditionalAndReturnWithMessage(cond, message) \
-if cond { \
-	printf("%s: %s\n",__FUNCTION__,message); \
-	goto ExitLabel; \
-}
+	if                                                     \
+		cond                                               \
+		{                                                  \
+			printf("%s: %s\n", __FUNCTION__, message);     \
+			goto ExitLabel;                                \
+		}
 
-#define CheckErrorAndReturn(value) \
-if (!SDM_MD_CallSuccessful(value)) { \
-	goto ExitLabel; \
-}
+#define CheckErrorAndReturn(value)       \
+	if (!SDM_MD_CallSuccessful(value)) { \
+		goto ExitLabel;                  \
+	}
 
 #define ExitLabelAndReturn(value) \
-ExitLabel: \
-return value;
+	ExitLabel:                    \
+	return value;
 
 #define XStringify(s) Stringify(s)
 #define Stringify(s) #s
 
-#define setsockoptCond(socket, type, value, arg, cond) \
-if (setsockopt(sock, type, value, &arg, sizeof(arg))) { \
-	cond \
-	int err = errno; \
-	printf("%s: setsockopt %s failed: %d - %s\n",__FUNCTION__,XStringify(value),err,strerror(err)); \
-}
+#define setsockoptCond(socket, type, value, arg, cond)                                                      \
+	if (setsockopt(sock, type, value, &arg, sizeof(arg))) {                                                 \
+		cond int err = errno;                                                                               \
+		printf("%s: setsockopt %s failed: %d - %s\n", __FUNCTION__, XStringify(value), err, strerror(err)); \
+	}
 
 #define AMDErrorMake(num) (0xe8000000 | (num))
+
+// clang-format off
+
 typedef enum SDMMD_Errors {
 	kAMDSuccess = 0x0,
     kAMDUndefinedError                              = AMDErrorMake(1),   //0xe8000001
@@ -227,6 +233,9 @@ typedef enum SDMMD_Errors {
  	kAMDMCChallengeRequired                         = AMDErrorMake(155), //0xe800009b
  	kAMDMissingBundleVersionError                   = AMDErrorMake(156), //0xe800009c
 } SDMMD_Errors;
+
+// clang-format on
+
 //via: for (int i = 0; i < 157; i++) { NSLog(@"\t%s = AMDErrorMake(%i), //0x%x", AMDErrorString(0xe8000000 + i), i, 0xe8000000 + i); }
 
 typedef kern_return_t sdmmd_return_t;
@@ -330,16 +339,178 @@ sdmmd_dl_return_t SDMMD__ConvertLockdowndError(CFStringRef error);
 
 sdmmd_return_t SDMMD__ConvertServiceError(CFStringRef error);
 
-static char * * SDMMD_NewErrorLookup = {0};
+static char **SDMMD_NewErrorLookup = {0};
 static uint64_t SDMMD_ErrorsCreatedAtRuntime = 0;
 
 #define kAMDTotalErrors 0x9d
 
-static char* SDMMD_ServiceConnectionErrorString[kAMDTotalErrors] = { "kAMDSuccess", "kAMDUndefinedError", "kAMDBadHeaderError", "kAMDNoResourcesError", "kAMDReadError", "kAMDWriteError", "kAMDUnknownPacketError", "kAMDInvalidArgumentError", "kAMDNotFoundError", "kAMDIsDirectoryError", "kAMDPermissionError", "kAMDNotConnectedError", "kAMDTimeOutError", "kAMDOverrunError", "kAMDEOFError", "kAMDUnsupportedError", "kAMDFileExistsError", "kAMDBusyError", "kAMDCryptoError", "kAMDInvalidResponseError", "kAMDMissingKeyError", "kAMDMissingValueError", "kAMDGetProhibitedError", "kAMDSetProhibitedError", "kAMDRemoveProhibitedError", "kAMDImmutableValueError", "kAMDPasswordProtectedError", "kAMDMissingHostIDError", "kAMDInvalidHostIDError", "kAMDSessionActiveError", "kAMDSessionInactiveError", "kAMDMissingSessionIDError", "kAMDInvalidSessionIDError", "kAMDMissingServiceError", "kAMDInvalidServiceError", "kAMDInvalidCheckinError", "kAMDCheckinTimeoutError", "kAMDMissingPairRecordError", "kAMDInvalidActivationRecordError", "kAMDMissingActivationRecordError", "kAMDWrongDroidError", "kAMDSUVerificationError", "kAMDSUPatchError", "kAMDSUFirmwareError", "kAMDProvisioningProfileNotValid", "kAMDSendMessageError", "kAMDReceiveMessageError", "kAMDMissingOptionsError", "kAMDMissingImageTypeError", "kAMDDigestFailedError", "kAMDStartServiceError", "kAMDInvalidDiskImageError", "kAMDMissingDigestError", "kAMDMuxError", "kAMDApplicationAlreadyInstalledError", "kAMDApplicationMoveFailedError", "kAMDApplicationSINFCaptureFailedError", "kAMDApplicationSandboxFailedError", "kAMDApplicationVerificationFailedError", "kAMDArchiveDestructionFailedError", "kAMDBundleVerificationFailedError", "kAMDCarrierBundleCopyFailedError", "kAMDCarrierBundleDirectoryCreationFailedError", "kAMDCarrierBundleMissingSupportedSIMsError", "kAMDCommCenterNotificationFailedError", "kAMDContainerCreationFailedError", "kAMDContainerP0wnFailedError", "kAMDContainerRemovalFailedError", "kAMDEmbeddedProfileInstallFailedError", "kAMDErrorError", "kAMDExecutableTwiddleFailedError", "kAMDExistenceCheckFailedError", "kAMDInstallMapUpdateFailedError", "kAMDManifestCaptureFailedError", "kAMDMapGenerationFailedError", "kAMDMissingBundleExecutableError", "kAMDMissingBundleIdentifierError", "kAMDMissingBundlePathError", "kAMDMissingContainerError", "kAMDNotificationFailedError", "kAMDPackageExtractionFailedError", "kAMDPackageInspectionFailedError", "kAMDPackageMoveFailedError", "kAMDPathConversionFailedError", "kAMDRestoreContainerFailedError", "kAMDSeatbeltProfileRemovalFailedError", "kAMDStageCreationFailedError", "kAMDSymlinkFailedError", "kAMDiTunesArtworkCaptureFailedError", "kAMDiTunesMetadataCaptureFailedError", "kAMDAlreadyArchivedError", "kAMDServiceLimitError", "kAMDInvalidPairRecordError", "kAMDServiceProhibitedError", "kAMDCheckinSetupFailedError", "kAMDCheckinConnectionFailedError", "kAMDCheckinReceiveFailedError", "kAMDCheckinResponseFailedError", "kAMDCheckinSendFailedError", "kAMDMuxCreateListenerError", "kAMDMuxGetListenerError", "kAMDMuxConnectError", "kAMDUnknownCommandError", "kAMDAPIInternalError", "kAMDSavePairRecordFailedError", "kAMDCheckinOutOfMemoryError", "kAMDDeviceTooNewError", "kAMDDeviceRefNoGood", "kAMDCannotTranslateError", "kAMDMobileImageMounterMissingImageSignature", "kAMDMobileImageMounterResponseCreationFailed", "kAMDMobileImageMounterMissingImageType", "kAMDMobileImageMounterMissingImagePath", "kAMDMobileImageMounterImageMapLoadFailed", "kAMDMobileImageMounterAlreadyMounted", "kAMDMobileImageMounterImageMoveFailed", "kAMDMobileImageMounterMountPathMissing", "kAMDMobileImageMounterMountPathNotEmpty", "kAMDMobileImageMounterImageMountFailed", "kAMDMobileImageMounterTrustCacheLoadFailed", "kAMDMobileImageMounterDigestFailed", "kAMDMobileImageMounterDigestCreationFailed", "kAMDMobileImageMounterImageVerificationFailed", "kAMDMobileImageMounterImageInfoCreationFailed", "kAMDMobileImageMounterImageMapStoreFailed", "kAMDBonjourSetupError", "kAMDDeviceOSVersionTooLow", "kAMDNoWifiSyncSupportError", "kAMDDeviceFamilyNotSupported", "kAMDEscrowLockedError", "kAMDPairingProhibitedError", "kAMDProhibitedBySupervision", "kAMDDeviceDisconnectedError", "kAMDTooBigError", "kAMDPackagePatchFailedError", "kAMDIncorrectArchitectureError", "kAMDPluginCopyFailedError", "kAMDBreadcrumbFailedError", "kAMDBreadcrumbUnlockError", "kAMDGeoJSONCaptureFailedError", "kAMDNewsstandArtworkCaptureFailedError", "kAMDMissingCommandError", "kAMDNotEntitledError", "kAMDMissingPackagePathError", "kAMDMissingContainerPathError", "kAMDMissingApplicationIdentifierError", "kAMDMissingAttributeValueError", "kAMDLookupFailedError", "kAMDDictCreationFailedError", "kAMDUserDeniedPairingError", "kAMDPairingDialogResponsePendingError", "kAMDInstallProhibitedError", "kAMDUninstallProhibitedError", "kAMDFMiPProtectedError", "kAMDMCProtected", "kAMDMCChallengeRequired", "kAMDMissingBundleVersionError"};
-__attribute__ ((unused)) static char*  SDMMD_AMDErrorString(kern_return_t error) {
-    kern_return_t index = error & 0xff;
+// clang-format off
+static char* SDMMD_ServiceConnectionErrorString[kAMDTotalErrors] = {
+	"kAMDSuccess",
+	"kAMDUndefinedError",
+	"kAMDBadHeaderError",
+	"kAMDNoResourcesError",
+	"kAMDReadError",
+	"kAMDWriteError",
+	"kAMDUnknownPacketError",
+	"kAMDInvalidArgumentError",
+	"kAMDNotFoundError",
+	"kAMDIsDirectoryError",
+	"kAMDPermissionError",
+	"kAMDNotConnectedError",
+	"kAMDTimeOutError",
+	"kAMDOverrunError",
+	"kAMDEOFError",
+	"kAMDUnsupportedError",
+	"kAMDFileExistsError",
+	"kAMDBusyError",
+	"kAMDCryptoError",
+	"kAMDInvalidResponseError",
+	"kAMDMissingKeyError",
+	"kAMDMissingValueError",
+	"kAMDGetProhibitedError",
+	"kAMDSetProhibitedError",
+	"kAMDRemoveProhibitedError",
+	"kAMDImmutableValueError",
+	"kAMDPasswordProtectedError",
+	"kAMDMissingHostIDError",
+	"kAMDInvalidHostIDError",
+	"kAMDSessionActiveError",
+	"kAMDSessionInactiveError",
+	"kAMDMissingSessionIDError",
+	"kAMDInvalidSessionIDError",
+	"kAMDMissingServiceError",
+	"kAMDInvalidServiceError",
+	"kAMDInvalidCheckinError",
+	"kAMDCheckinTimeoutError",
+	"kAMDMissingPairRecordError",
+	"kAMDInvalidActivationRecordError",
+	"kAMDMissingActivationRecordError",
+	"kAMDWrongDroidError",
+	"kAMDSUVerificationError",
+	"kAMDSUPatchError",
+	"kAMDSUFirmwareError",
+	"kAMDProvisioningProfileNotValid",
+	"kAMDSendMessageError",
+	"kAMDReceiveMessageError",
+	"kAMDMissingOptionsError",
+	"kAMDMissingImageTypeError",
+	"kAMDDigestFailedError",
+	"kAMDStartServiceError",
+	"kAMDInvalidDiskImageError",
+	"kAMDMissingDigestError",
+	"kAMDMuxError",
+	"kAMDApplicationAlreadyInstalledError",
+	"kAMDApplicationMoveFailedError",
+	"kAMDApplicationSINFCaptureFailedError",
+	"kAMDApplicationSandboxFailedError",
+	"kAMDApplicationVerificationFailedError",
+	"kAMDArchiveDestructionFailedError",
+	"kAMDBundleVerificationFailedError",
+	"kAMDCarrierBundleCopyFailedError",
+	"kAMDCarrierBundleDirectoryCreationFailedError",
+	"kAMDCarrierBundleMissingSupportedSIMsError",
+	"kAMDCommCenterNotificationFailedError",
+	"kAMDContainerCreationFailedError",
+	"kAMDContainerP0wnFailedError",
+	"kAMDContainerRemovalFailedError",
+	"kAMDEmbeddedProfileInstallFailedError",
+	"kAMDErrorError",
+	"kAMDExecutableTwiddleFailedError",
+	"kAMDExistenceCheckFailedError",
+	"kAMDInstallMapUpdateFailedError",
+	"kAMDManifestCaptureFailedError",
+	"kAMDMapGenerationFailedError",
+	"kAMDMissingBundleExecutableError",
+	"kAMDMissingBundleIdentifierError",
+	"kAMDMissingBundlePathError",
+	"kAMDMissingContainerError",
+	"kAMDNotificationFailedError",
+	"kAMDPackageExtractionFailedError",
+	"kAMDPackageInspectionFailedError",
+	"kAMDPackageMoveFailedError",
+	"kAMDPathConversionFailedError",
+	"kAMDRestoreContainerFailedError",
+	"kAMDSeatbeltProfileRemovalFailedError",
+	"kAMDStageCreationFailedError",
+	"kAMDSymlinkFailedError",
+	"kAMDiTunesArtworkCaptureFailedError",
+	"kAMDiTunesMetadataCaptureFailedError",
+	"kAMDAlreadyArchivedError",
+	"kAMDServiceLimitError",
+	"kAMDInvalidPairRecordError",
+	"kAMDServiceProhibitedError",
+	"kAMDCheckinSetupFailedError",
+	"kAMDCheckinConnectionFailedError",
+	"kAMDCheckinReceiveFailedError",
+	"kAMDCheckinResponseFailedError",
+	"kAMDCheckinSendFailedError",
+	"kAMDMuxCreateListenerError",
+	"kAMDMuxGetListenerError",
+	"kAMDMuxConnectError",
+	"kAMDUnknownCommandError",
+	"kAMDAPIInternalError",
+	"kAMDSavePairRecordFailedError",
+	"kAMDCheckinOutOfMemoryError",
+	"kAMDDeviceTooNewError",
+	"kAMDDeviceRefNoGood",
+	"kAMDCannotTranslateError",
+	"kAMDMobileImageMounterMissingImageSignature",
+	"kAMDMobileImageMounterResponseCreationFailed",
+	"kAMDMobileImageMounterMissingImageType",
+	"kAMDMobileImageMounterMissingImagePath",
+	"kAMDMobileImageMounterImageMapLoadFailed",
+	"kAMDMobileImageMounterAlreadyMounted",
+	"kAMDMobileImageMounterImageMoveFailed",
+	"kAMDMobileImageMounterMountPathMissing",
+	"kAMDMobileImageMounterMountPathNotEmpty",
+	"kAMDMobileImageMounterImageMountFailed",
+	"kAMDMobileImageMounterTrustCacheLoadFailed",
+	"kAMDMobileImageMounterDigestFailed",
+	"kAMDMobileImageMounterDigestCreationFailed",
+	"kAMDMobileImageMounterImageVerificationFailed",
+	"kAMDMobileImageMounterImageInfoCreationFailed",
+	"kAMDMobileImageMounterImageMapStoreFailed",
+	"kAMDBonjourSetupError",
+	"kAMDDeviceOSVersionTooLow",
+	"kAMDNoWifiSyncSupportError",
+	"kAMDDeviceFamilyNotSupported",
+	"kAMDEscrowLockedError",
+	"kAMDPairingProhibitedError",
+	"kAMDProhibitedBySupervision",
+	"kAMDDeviceDisconnectedError",
+	"kAMDTooBigError",
+	"kAMDPackagePatchFailedError",
+	"kAMDIncorrectArchitectureError",
+	"kAMDPluginCopyFailedError",
+	"kAMDBreadcrumbFailedError",
+	"kAMDBreadcrumbUnlockError",
+	"kAMDGeoJSONCaptureFailedError",
+	"kAMDNewsstandArtworkCaptureFailedError",
+	"kAMDMissingCommandError",
+	"kAMDNotEntitledError",
+	"kAMDMissingPackagePathError",
+	"kAMDMissingContainerPathError",
+	"kAMDMissingApplicationIdentifierError",
+	"kAMDMissingAttributeValueError",
+	"kAMDLookupFailedError",
+	"kAMDDictCreationFailedError",
+	"kAMDUserDeniedPairingError",
+	"kAMDPairingDialogResponsePendingError",
+	"kAMDInstallProhibitedError",
+	"kAMDUninstallProhibitedError",
+	"kAMDFMiPProtectedError", 
+	"kAMDMCProtected", 
+	"kAMDMCChallengeRequired", 
+	"kAMDMissingBundleVersionError"
+};
+// clang-format on
+
+__attribute__((unused)) static char *SDMMD_AMDErrorString(kern_return_t error)
+{
+	kern_return_t index = error & 0xff;
 	int check = AMDErrorMake(error) - kAMDTotalErrors;
-	if (index > kAMDTotalErrors-1 && (check > -1 && SDMMD_ErrorsCreatedAtRuntime > 0 && check < SDMMD_ErrorsCreatedAtRuntime)) {
+	if (index > kAMDTotalErrors - 1 && (check > -1 && SDMMD_ErrorsCreatedAtRuntime > 0 && check < SDMMD_ErrorsCreatedAtRuntime)) {
 		return SDMMD_NewErrorLookup[check];
 	}
 	else {
@@ -347,16 +518,62 @@ __attribute__ ((unused)) static char*  SDMMD_AMDErrorString(kern_return_t error)
 	}
 }
 
-static char* SDMMD_AFCConnectionErrorString[0x18] = {"kAFCSuccess", "kAFCUndefinedError", "kAFCBadHeaderError", "kAFCNoResourcesError", "kAFCReadError", "kAFCWriteError", "kAFCUnknownPacketError", "kAFCInvalidArgumentError", "kAFCNotFoundError", "kAFCIsDirectoryError", "kAFCPermissionError", "kAFCNotConnectedError", "kAFCTimeOutError", "kAFCOverrunError", "kAFCEOFError", "kAFCUnsupportedError", "kAFCFileExistsError", "kAFCBusyError", "kAFCNoSpaceError", "kAFCWouldBlockError", "kAFCInputOutputError", "kAFCInterruptedError", "kAFCInProgressError", "kAFCInternalError"};
-__attribute__ ((unused)) static char* SDMMD_AFCErrorString(kern_return_t error) {
-    uint32_t index = error & 0xff;
-    if (index > 0x18) return NULL;
+// clang-format off
+static char* SDMMD_AFCConnectionErrorString[0x18] = {
+	"kAFCSuccess",
+	"kAFCUndefinedError",
+	"kAFCBadHeaderError",
+	"kAFCNoResourcesError",
+	"kAFCReadError",
+	"kAFCWriteError",
+	"kAFCUnknownPacketError",
+	"kAFCInvalidArgumentError",
+	"kAFCNotFoundError",
+	"kAFCIsDirectoryError",
+	"kAFCPermissionError",
+	"kAFCNotConnectedError",
+	"kAFCTimeOutError",
+	"kAFCOverrunError",
+	"kAFCEOFError",
+	"kAFCUnsupportedError",
+	"kAFCFileExistsError",
+	"kAFCBusyError",
+	"kAFCNoSpaceError",
+	"kAFCWouldBlockError",
+	"kAFCInputOutputError",
+	"kAFCInterruptedError",
+	"kAFCInProgressError",
+	"kAFCInternalError"
+};
+// clang-format on
+__attribute__((unused)) static char *SDMMD_AFCErrorString(kern_return_t error)
+{
+	uint32_t index = error & 0xff;
+	if (index > 0x18)
+		return NULL;
 	return SDMMD_AFCConnectionErrorString[index];
 }
 
 #define SDM_MD_CallSuccessful(result_code) ((result_code == kAMDSuccess) || (result_code == MDERR_USBMUX_OK) || (result_code == LD_ERR_OK))
 
-#define SDMMD_CondSuccess(code, block) if (SDM_MD_CallSuccessful(code)) { if (1) block } else { printf("%s:%s:%i %s\n",__FILE__,__FUNCTION__,__LINE__,SDMMD_AMDErrorString(result)); }
-#define SDMMD_CondSuccessElse(code, block, elseBlock) if (SDM_MD_CallSuccessful(code)) { if (1) block } else { printf("%s:%s:%i %s\n",__FILE__,__FUNCTION__,__LINE__,SDMMD_AMDErrorString(result)); if (1) elseBlock }
+#define SDMMD_CondSuccess(code, block)                                                           \
+	if (SDM_MD_CallSuccessful(code)) {                                                           \
+		if (1)                                                                                   \
+			block                                                                                \
+	}                                                                                            \
+	else {                                                                                       \
+		printf("%s:%s:%i %s\n", __FILE__, __FUNCTION__, __LINE__, SDMMD_AMDErrorString(result)); \
+	}
+
+#define SDMMD_CondSuccessElse(code, block, elseBlock)                                            \
+	if (SDM_MD_CallSuccessful(code)) {                                                           \
+		if (1)                                                                                   \
+			block                                                                                \
+	}                                                                                            \
+	else {                                                                                       \
+		printf("%s:%s:%i %s\n", __FILE__, __FUNCTION__, __LINE__, SDMMD_AMDErrorString(result)); \
+		if (1)                                                                                   \
+			elseBlock                                                                            \
+	}
 
 #endif
