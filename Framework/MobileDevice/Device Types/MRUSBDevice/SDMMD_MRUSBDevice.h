@@ -35,7 +35,7 @@ struct AMRUSBDeviceClassHeader {
 } ATR_PACK AMRUSBDeviceClassHeader;
 
 struct AMRUSBDeviceClassBody {
-	
+
 } ATR_PACK AMRUSBDeviceClassBody;
 
 struct am_rusb_device {
@@ -45,6 +45,6 @@ struct am_rusb_device {
 
 typedef struct am_rusb_device SDMMD_AMRUSBDeviceClass;
 
-#define SDMMD_AMRUSBDeviceRef SDMMD_AMRUSBDeviceClass*
+#define SDMMD_AMRUSBDeviceRef SDMMD_AMRUSBDeviceClass *
 
 #endif

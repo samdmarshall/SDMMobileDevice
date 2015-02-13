@@ -37,60 +37,62 @@
 void SDMMD_USBMuxSend(uint32_t sock, struct USBMuxPacket *packet);
 void SDMMD_USBMuxReceive(uint32_t sock, struct USBMuxPacket *packet);
 
-void SDMMD_USBMuxListenerSend(SDMMD_USBMuxListenerRef listener, struct USBMuxPacket **packet) {
-    
-    // This semaphore will be signaled when a response is received
+void SDMMD_USBMuxListenerSend(SDMMD_USBMuxListenerRef listener, struct USBMuxPacket **packet)
+{
+
+	// This semaphore will be signaled when a response is received
 	listener->ivars.semaphore = dispatch_semaphore_create(0x0);
-    
-    // Send the outgoing packet
+
+	// Send the outgoing packet
 	SDMMD_USBMuxSend(listener->ivars.socket, *packet);
-    
-    // Wait for a response-type packet to be received
+
+	// Wait for a response-type packet to be received
 	dispatch_semaphore_wait(listener->ivars.semaphore, (*packet)->timeout);
-	
+
 	CFMutableArrayRef updateWithRemove = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, listener->ivars.responses);
-    
-    // Search responses for a packet that matches the one sent
+
+	// Search responses for a packet that matches the one sent
 	struct USBMuxPacket *responsePacket = NULL;
 	uint32_t removeCounter = 0x0;
 	for (uint32_t i = 0x0; i < CFArrayGetCount(listener->ivars.responses); i++) {
-        
+
 		struct USBMuxPacket *response = (struct USBMuxPacket *)CFArrayGetValueAtIndex(listener->ivars.responses, i);
 		if ((*packet)->body.tag == response->body.tag) {
-            
-            // Equal tags indicate response to request
-            if (responsePacket) {
-                // Found additional response, destroy old one
-                USBMuxPacketRelease(responsePacket);
-            }
-            
-            // Each matching packet is removed from the responses list
+
+			// Equal tags indicate response to request
+			if (responsePacket) {
+				// Found additional response, destroy old one
+				USBMuxPacketRelease(responsePacket);
+			}
+
+			// Each matching packet is removed from the responses list
 			responsePacket = response;
-			CFArrayRemoveValueAtIndex(updateWithRemove, i-removeCounter);
+			CFArrayRemoveValueAtIndex(updateWithRemove, i - removeCounter);
 			removeCounter++;
 		}
 	}
-    
+
 	if (responsePacket == NULL) {
-        // Didn't find an appropriate response, initialize an empty packet to return
+		// Didn't find an appropriate response, initialize an empty packet to return
 		responsePacket = (struct USBMuxPacket *)calloc(0x1, sizeof(struct USBMuxPacket));
 	}
-    
+
 	CFSafeRelease(listener->ivars.responses);
 	listener->ivars.responses = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, updateWithRemove);
 	CFSafeRelease(updateWithRemove);
-	
-    // Destroy sent packet
-    USBMuxPacketRelease(*packet);
-    
-    // Return response packet to caller
+
+	// Destroy sent packet
+	USBMuxPacketRelease(*packet);
+
+	// Return response packet to caller
 	*packet = responsePacket;
-    
-    // Discard "waiting for response" semaphore
+
+	// Discard "waiting for response" semaphore
 	dispatch_release(listener->ivars.semaphore);
 }
 
-void SDMMD_USBMuxSend(uint32_t sock, struct USBMuxPacket *packet) {
+void SDMMD_USBMuxSend(uint32_t sock, struct USBMuxPacket *packet)
+{
 	CFDataRef xmlData = CFPropertyListCreateXMLData(kCFAllocatorDefault, packet->payload);
 	char *buffer = (char *)CFDataGetBytePtr(xmlData);
 	ssize_t result = send(sock, &packet->body, sizeof(struct USBMuxPacketBody), 0x0);
@@ -99,7 +101,7 @@ void SDMMD_USBMuxSend(uint32_t sock, struct USBMuxPacket *packet) {
 			ssize_t payloadSize = packet->body.length - result;
 			ssize_t remainder = payloadSize;
 			while (remainder) {
-				result = send(sock, &buffer[payloadSize-remainder], sizeof(char), 0x0);
+				result = send(sock, &buffer[payloadSize - remainder], sizeof(char), 0x0);
 				if (result != sizeof(char)) {
 					break;
 				}
@@ -110,11 +112,13 @@ void SDMMD_USBMuxSend(uint32_t sock, struct USBMuxPacket *packet) {
 	CFSafeRelease(xmlData);
 }
 
-void SDMMD_USBMuxListenerReceive(SDMMD_USBMuxListenerRef listener, struct USBMuxPacket *packet) {
+void SDMMD_USBMuxListenerReceive(SDMMD_USBMuxListenerRef listener, struct USBMuxPacket *packet)
+{
 	SDMMD_USBMuxReceive(listener->ivars.socket, packet);
 }
 
-void SDMMD_USBMuxReceive(uint32_t sock, struct USBMuxPacket *packet) {
+void SDMMD_USBMuxReceive(uint32_t sock, struct USBMuxPacket *packet)
+{
 	ssize_t result = recv(sock, &packet->body, sizeof(struct USBMuxPacketBody), 0x0);
 	if (result == sizeof(struct USBMuxPacketBody)) {
 		ssize_t payloadSize = packet->body.length - result;
@@ -122,7 +126,7 @@ void SDMMD_USBMuxReceive(uint32_t sock, struct USBMuxPacket *packet) {
 			char *buffer = calloc(0x1, payloadSize);
 			ssize_t remainder = payloadSize;
 			while (remainder) {
-				result = recv(sock, &buffer[payloadSize-remainder], sizeof(char), 0x0);
+				result = recv(sock, &buffer[payloadSize - remainder], sizeof(char), 0x0);
 				if (result != sizeof(char)) {
 					break;
 				}
@@ -130,7 +134,7 @@ void SDMMD_USBMuxReceive(uint32_t sock, struct USBMuxPacket *packet) {
 			}
 			CFDataRef xmlData = CFDataCreate(kCFAllocatorDefault, (UInt8 *)buffer, payloadSize);
 			packet->payload = CFPropertyListCreateFromXMLData(kCFAllocatorDefault, xmlData, kCFPropertyListImmutable, NULL);
-			Safe(free,buffer);
+			Safe(free, buffer);
 			CFSafeRelease(xmlData);
 		}
 	}

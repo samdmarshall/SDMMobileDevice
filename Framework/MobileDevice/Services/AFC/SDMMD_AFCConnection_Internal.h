@@ -42,6 +42,6 @@ struct sdmmd_AFCConnectionClassBody {
 struct sdmmd_AFCConnectionClass {
 	CFRuntimeBase base;
 	struct sdmmd_AFCConnectionClassBody ivars;
-} __attribute__ ((packed)) sdmmd_AFCConnectionClass;
+} __attribute__((packed)) sdmmd_AFCConnectionClass;
 
 #endif

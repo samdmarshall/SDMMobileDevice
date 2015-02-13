@@ -30,6 +30,4 @@
 
 #include "SDMMD_MRecoveryModeDevice.h"
 
-
-
 #endif

@@ -99,27 +99,26 @@ typedef enum DebuggerCommandType {
 	kDebugqProcessInfo = 58,
 	kDebugQSetWorkingDir = 59,
 	kDebugQSetMaxPacketSize = 60,
-	
+
 	kDebugCUSTOMCOMMAND,
 	kDebugCommandCount
 } DebuggerCommandType;
 
-
 struct DebuggerCommand {
 	DebuggerCommandType commandCode; // enum DebuggerCommandType
-	CFStringRef command; // only use if custom command
-	CFArrayRef arguments; // command arguments as CFStringRef <- these are encoded
+	CFStringRef command;			 // only use if custom command
+	CFArrayRef arguments;			 // command arguments as CFStringRef <- these are encoded
 };
 
-typedef struct DebuggerCommand* DebuggerCommandRef;
+typedef struct DebuggerCommand *DebuggerCommandRef;
 
 struct SDMMD_AMDebugConnection {
 	SDMMD_AMDeviceRef device;
 	SDMMD_AMConnectionRef connection;
 	bool ackEnabled;
-} __attribute__ ((packed));
+} __attribute__((packed));
 
-typedef struct SDMMD_AMDebugConnection* SDMMD_AMDebugConnectionRef;
+typedef struct SDMMD_AMDebugConnection *SDMMD_AMDebugConnectionRef;
 
 typedef struct SDMMD_DebugCommandType {
 	char *code;
@@ -147,13 +146,13 @@ static struct SDMMD_DebugCommandType KnownDebugCommands[kDebugCommandCount] = {
 	{"M", CFSTR("Write Memory")},
 	{"_M", CFSTR("Allocate memory")},
 	{"_m", CFSTR("Deallocate memory")}, // _mXXXXXX where "XXXXXX" is the address previously allocated
-	{"p", CFSTR("Read one register")}, // "p XX" where XX is the register
+	{"p", CFSTR("Read one register")},  // "p XX" where XX is the register
 	{"P", CFSTR("Write one register")}, // "Pnn=rrrrr" nn=register, rrrrr=value
-	{"R", CFSTR("Restart inferior")}, 
+	{"R", CFSTR("Restart inferior")},
 	{"s", CFSTR("Single step")},
 	{"S", CFSTR("Single step with signal")}, // "S sig [;addr]"
 	{"t", CFSTR("Search memory backwards")},
-	{"T", CFSTR("Is thread alive")}, // "T XX"
+	{"T", CFSTR("Is thread alive")},				// "T XX"
 	{"vAttach;", CFSTR("Attach to a new process")}, // vAttach;pid
 	{"vAttachWait;", CFSTR("Wait for a new process to start up then attach to it")},
 	{"vCont;", CFSTR("Verbose resume with thread actions")},
@@ -170,7 +169,7 @@ static struct SDMMD_DebugCommandType KnownDebugCommands[kDebugCommandCount] = {
 	{"Z4", CFSTR("Insert access watchpoint")},
 	{"z4", CFSTR("Remove access watchpoint")},
 	{"qC", CFSTR("Query current thread ID")}, // returns "QC" then the current thread of attached process as a string in hex
-	{"qGetPid", CFSTR("Query process id")}, // returns the attached pid number as a string in hex
+	{"qGetPid", CFSTR("Query process id")},   // returns the attached pid number as a string in hex
 	{"qCRC", CFSTR("Compute CRC of memory region")},
 	{"qfThreadInfo", CFSTR("Get list of active threads (first req)")},
 	{"qsThreadInfo", CFSTR("Get list of active threads (subsequent req)")},
@@ -188,9 +187,8 @@ static struct SDMMD_DebugCommandType KnownDebugCommands[kDebugCommandCount] = {
 	{"qProcessInfo", CFSTR("Get process info")},
 	{"QSetWorkingDir:", CFSTR("Setting working directory, only do so when we have no process")},
 	{"QSetMaxPacketSize:", CFSTR("Setting max packet size")},
-	
-	{"", CFSTR("")}
-};
+
+	{"", CFSTR("")}};
 
 #pragma mark -
 #pragma mark FUNCTIONS
@@ -203,7 +201,7 @@ sdmmd_return_t SDMMD_AMDebugConnectionStart(SDMMD_AMDebugConnectionRef dconn);
 sdmmd_return_t SDMMD_AMDebugConnectionStop(SDMMD_AMDebugConnectionRef dconn);
 
 sdmmd_return_t SDMMD_AMDeviceMountDeveloperImage(SDMMD_AMDeviceRef device); // use me instead of the one below for convenience
-sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef dict, CallBack handle, void* unknown);
+sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef dict, CallBack handle, void *unknown);
 
 DebuggerCommandRef SDMMD_CreateDebuggingCommand(DebuggerCommandType commandCode, CFStringRef command, CFArrayRef arguments);
 void SDMMD_DebuggingCommandRelease(DebuggerCommandRef command);

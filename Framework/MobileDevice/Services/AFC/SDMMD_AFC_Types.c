@@ -33,18 +33,18 @@ CFStringRef AFC_File_Info_Keys[AFC_File_Info_Key_count];
 
 void SDMMD_AFC_Types_Initialize()
 {
-    AFC_Device_Info_Keys[AFC_Device_Info_Key_FSBlockSize] = CFSTR(kAFC_Device_Info_FSBlockSize);
-    AFC_Device_Info_Keys[AFC_Device_Info_Key_FSFreeBytes] = CFSTR(kAFC_Device_Info_FSFreeBytes);
-    AFC_Device_Info_Keys[AFC_Device_Info_Key_FSTotalBytes] = CFSTR(kAFC_Device_Info_FSTotalBytes);
-    AFC_Device_Info_Keys[AFC_Device_Info_Key_Model] = CFSTR(kAFC_Device_Info_Model);
-    
-    AFC_Connection_Info_Keys[AFC_Connection_Info_Key_ExtendedStatus] = CFSTR(kAFC_Connection_Info_ExtendedStatus);
-    AFC_Connection_Info_Keys[AFC_Connection_Info_Key_Version] = CFSTR(kAFC_Connection_Info_Version);
-    
-    AFC_File_Info_Keys[AFC_File_Info_Key_birthtime] = CFSTR(kAFC_File_Info_st_birthtime);
-    AFC_File_Info_Keys[AFC_File_Info_Key_blocks] = CFSTR(kAFC_File_Info_st_blocks);
-    AFC_File_Info_Keys[AFC_File_Info_Key_ifmt] = CFSTR(kAFC_File_Info_st_ifmt);
-    AFC_File_Info_Keys[AFC_File_Info_Key_mtime] = CFSTR(kAFC_File_Info_st_mtime);
-    AFC_File_Info_Keys[AFC_File_Info_Key_nlink] = CFSTR(kAFC_File_Info_st_nlink);
-    AFC_File_Info_Keys[AFC_File_Info_Key_size] = CFSTR(kAFC_File_Info_st_size);
+	AFC_Device_Info_Keys[AFC_Device_Info_Key_FSBlockSize] = CFSTR(kAFC_Device_Info_FSBlockSize);
+	AFC_Device_Info_Keys[AFC_Device_Info_Key_FSFreeBytes] = CFSTR(kAFC_Device_Info_FSFreeBytes);
+	AFC_Device_Info_Keys[AFC_Device_Info_Key_FSTotalBytes] = CFSTR(kAFC_Device_Info_FSTotalBytes);
+	AFC_Device_Info_Keys[AFC_Device_Info_Key_Model] = CFSTR(kAFC_Device_Info_Model);
+
+	AFC_Connection_Info_Keys[AFC_Connection_Info_Key_ExtendedStatus] = CFSTR(kAFC_Connection_Info_ExtendedStatus);
+	AFC_Connection_Info_Keys[AFC_Connection_Info_Key_Version] = CFSTR(kAFC_Connection_Info_Version);
+
+	AFC_File_Info_Keys[AFC_File_Info_Key_birthtime] = CFSTR(kAFC_File_Info_st_birthtime);
+	AFC_File_Info_Keys[AFC_File_Info_Key_blocks] = CFSTR(kAFC_File_Info_st_blocks);
+	AFC_File_Info_Keys[AFC_File_Info_Key_ifmt] = CFSTR(kAFC_File_Info_st_ifmt);
+	AFC_File_Info_Keys[AFC_File_Info_Key_mtime] = CFSTR(kAFC_File_Info_st_mtime);
+	AFC_File_Info_Keys[AFC_File_Info_Key_nlink] = CFSTR(kAFC_File_Info_st_nlink);
+	AFC_File_Info_Keys[AFC_File_Info_Key_size] = CFSTR(kAFC_File_Info_st_size);
 }

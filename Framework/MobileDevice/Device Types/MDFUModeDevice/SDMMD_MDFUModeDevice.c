@@ -30,6 +30,4 @@
 
 #include "SDMMD_MDFUModeDevice.h"
 
-
-
 #endif

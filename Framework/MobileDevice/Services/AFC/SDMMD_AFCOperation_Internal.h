@@ -37,12 +37,12 @@ typedef struct SDMMD_AFCPacketHeader {
 	uint64_t headerLen;
 	uint64_t pid;
 	uint64_t type;
-} __attribute__ ((packed)) SDMMD_AFCPacketHeader;
+} __attribute__((packed)) SDMMD_AFCPacketHeader;
 
 struct sdmmd_AFCPacket {
 	SDMMD_AFCPacketHeader header;
-	void* header_data;
-	void* body_data;
+	void *header_data;
+	void *body_data;
 	CFTypeRef response;
 } sdmmd_AFCPacket;
 
@@ -54,6 +54,6 @@ struct sdmmd_AFCOperationBody {
 struct sdmmd_AFCOperation {
 	CFRuntimeBase base;
 	struct sdmmd_AFCOperationBody ivars;
-} __attribute__ ((packed)) sdmmd_AFCOperation;
+} __attribute__((packed)) sdmmd_AFCOperation;
 
 #endif

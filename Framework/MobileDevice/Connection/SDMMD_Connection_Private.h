@@ -34,8 +34,8 @@
 #include <SDMMobileDevice/SDMMD_Connection_Class.h>
 #include <SDMMobileDevice/SDMMD_Connection_Internal.h>
 
-SSL* SDMMD_AMDServiceConnectionGetSecureIOContext(SDMMD_AMConnectionRef connection);
-SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, SSL* ssl);
-SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(uint32_t socket, SSL* ssl, CFDictionaryRef dict);
+SSL *SDMMD_AMDServiceConnectionGetSecureIOContext(SDMMD_AMConnectionRef connection);
+SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, SSL *ssl);
+SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(uint32_t socket, SSL *ssl, CFDictionaryRef dict);
 
 #endif

@@ -45,8 +45,7 @@
 #define kDeveloperImageStreamSize 0x400000
 
 static char *kHexEncodeString = "0123456789ABCDEF";
-#define kHexDecode(byte) ((byte >= '0' && byte <= '9') ? (byte - '0') : ( (byte >= 'a' && byte <= 'f') ? (10 + byte - 'a') : ((byte >= 'A' && byte <= 'F') ? (10 + byte - 'A') : byte)))
-
+#define kHexDecode(byte) ((byte >= '0' && byte <= '9') ? (byte - '0') : ((byte >= 'a' && byte <= 'f') ? (10 + byte - 'a') : ((byte >= 'A' && byte <= 'F') ? (10 + byte - 'A') : byte)))
 
 #define kHexCodeApplyMask(byte) (byte & 0xf)
 #define kHexCodeApplyShift(byte) (byte >> 0x4)
@@ -57,7 +56,8 @@ static char *kHexEncodeString = "0123456789ABCDEF";
 #define kHexDecodeFirstByte(byte) (kHexCodeApplyMask(kHexCodeApplyShift(byte)))
 #define kHexDecodeSecondByte(byte) (kHexCodeApplyMask(byte))
 
-SDMMD_AMDebugConnectionRef SDMMD_AMDebugConnectionCreateForDevice(SDMMD_AMDeviceRef device) {
+SDMMD_AMDebugConnectionRef SDMMD_AMDebugConnectionCreateForDevice(SDMMD_AMDeviceRef device)
+{
 	SDMMD_AMDebugConnectionRef dconn = calloc(0x1, sizeof(struct SDMMD_AMDebugConnection));
 	if (dconn) {
 		dconn->device = SDMMD_AMDeviceCreateCopy(device);
@@ -67,47 +67,50 @@ SDMMD_AMDebugConnectionRef SDMMD_AMDebugConnectionCreateForDevice(SDMMD_AMDevice
 	return dconn;
 }
 
-void SDMMD_AMDebugConnectionClose(SDMMD_AMDebugConnectionRef dconn) {
+void SDMMD_AMDebugConnectionClose(SDMMD_AMDebugConnectionRef dconn)
+{
 	CFSafeRelease(dconn->device);
 	CFSafeRelease(dconn->connection);
 	Safe(free, dconn);
 }
 
-sdmmd_return_t SDMMD_AMDebugConnectionStart(SDMMD_AMDebugConnectionRef dconn) {
+sdmmd_return_t SDMMD_AMDebugConnectionStart(SDMMD_AMDebugConnectionRef dconn)
+{
 	sdmmd_return_t result = SDMMD_AMDeviceConnect(dconn->device);
 	CheckErrorAndReturn(result);
-	
+
 	result = SDMMD_AMDeviceStartSession(dconn->device);
 	CheckErrorAndReturn(result);
-	
+
 	dconn->connection = SDMMD_AMDServiceConnectionCreate(0, NULL, NULL);
 	result = SDMMD_AMDeviceStartService(dconn->device, CFSTR(AMSVC_DEBUG_SERVER), NULL, &(dconn->connection));
 	CheckErrorAndReturn(result);
-	
+
 	result = SDMMD_AMDeviceStopSession(dconn->device);
 	CheckErrorAndReturn(result);
-	
+
 	result = SDMMD_AMDeviceDisconnect(dconn->device);
 	CheckErrorAndReturn(result);
 
-	
 	ExitLabelAndReturn(result);
 }
 
-sdmmd_return_t SDMMD_AMDebugConnectionStop(SDMMD_AMDebugConnectionRef dconn) {
+sdmmd_return_t SDMMD_AMDebugConnectionStop(SDMMD_AMDebugConnectionRef dconn)
+{
 	sdmmd_return_t result = kAMDSuccess;
 	CFSafeRelease(dconn->connection);
-	
+
 	result = SDMMD_AMDeviceStopSession(dconn->device);
 	CheckErrorAndReturn(result);
-	
+
 	result = SDMMD_AMDeviceDisconnect(dconn->device);
 	CheckErrorAndReturn(result);
-	
+
 	ExitLabelAndReturn(result);
 }
 
-bool SDMMD_device_os_is_at_least(SDMMD_AMDeviceRef device, CFStringRef version) {
+bool SDMMD_device_os_is_at_least(SDMMD_AMDeviceRef device, CFStringRef version)
+{
 	bool result = false;
 	if (device) {
 		SDMMD_AMDeviceConnect(device);
@@ -120,40 +123,41 @@ bool SDMMD_device_os_is_at_least(SDMMD_AMDeviceRef device, CFStringRef version) 
 	return result;
 }
 
-
-sdmmd_return_t SDMMD_copy_image(SDMMD_AMDeviceRef device, CFStringRef path) {
+sdmmd_return_t SDMMD_copy_image(SDMMD_AMDeviceRef device, CFStringRef path)
+{
 	sdmmd_return_t result = kAMDUndefinedError;
 	if (device) {
-		result = kAMDSuccess;//SDMMD_AMDeviceConnect(device);
+		result = kAMDSuccess; //SDMMD_AMDeviceConnect(device);
 		CheckErrorAndReturn(result);
-		
+
 		result = SDMMD_AMDeviceStartSession(device);
 		CheckErrorAndReturn(result);
-		
+
 		SDMMD_AMConnectionRef copyConn = NULL;
 		result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_AFC), NULL, &copyConn);
 		CheckErrorAndReturn(result);
-		
+
 		SDMMD_AFCConnectionRef copyAFCConn = SDMMD_AFCConnectionCreate(copyConn);
 		SDMMD_AFCOperationRef makeStaging = SDMMD_AFCOperationCreateMakeDirectory(CFSTR("PublicStaging"));
 		result = SDMMD_AFCProcessOperation(copyAFCConn, &makeStaging);
 		CheckErrorAndReturn(result);
-		
+
 		// SDM copy file AFC
 		char *pathString = SDMCFStringGetString(path);
 		result = SDMMD_AMDeviceCopyFile(SDMMD_Default_AFC_CopyFile_Callback, NULL, NULL, copyAFCConn, pathString, "PublicStaging/staging.dimage");
 		Safe(free, pathString);
-		
+
 		CFSafeRelease(makeStaging);
 		CFSafeRelease(copyAFCConn);
-		
+
 		CFSafeRelease(copyConn);
 	}
-	
+
 	ExitLabelAndReturn(result);
 }
 
-sdmmd_return_t SDMMD__hangup_with_image_mounter_service(SDMMD_AMConnectionRef connection) {
+sdmmd_return_t SDMMD__hangup_with_image_mounter_service(SDMMD_AMConnectionRef connection)
+{
 	sdmmd_return_t result = kAMDNoResourcesError;
 	CFMutableDictionaryRef dict = SDMMD_create_dict();
 	if (dict) {
@@ -163,35 +167,37 @@ sdmmd_return_t SDMMD__hangup_with_image_mounter_service(SDMMD_AMConnectionRef co
 		SocketConnection socket = SDMMD_TranslateConnectionToSocket(connection);
 		result = SDMMD_ServiceSendMessage(socket, dict, kCFPropertyListXMLFormat_v1_0);
 		CheckErrorAndReturn(result);
-		
+
 		CFPropertyListRef response = NULL;
 		result = SDMMD_ServiceReceiveMessage(socket, &response);
 		PrintCFDictionary(response);
 	}
-	
+
 ExitLabel:
 	CFSafeRelease(dict);
 	return result;
 }
 
-CFStringRef SDMMD_CopyDeviceSupportPathFromXCRUN() {
-    FILE *output_pipe;
-    char *xcrun_command = "xcrun -sdk iphoneos --show-sdk-platform-path";
+CFStringRef SDMMD_CopyDeviceSupportPathFromXCRUN()
+{
+	FILE *output_pipe;
+	char *xcrun_command = "xcrun -sdk iphoneos --show-sdk-platform-path";
 
 	output_pipe = (FILE *)popen(xcrun_command, "r");
-    if (output_pipe == NULL) {
+	if (output_pipe == NULL) {
 		perror("Error encountered while opening pipe");
 	}
 	char *path = calloc(1, sizeof(char[1024]));
-    fgets(path, sizeof(char[1024]), output_pipe);
-    pclose(output_pipe);
+	fgets(path, sizeof(char[1024]), output_pipe);
+	pclose(output_pipe);
 	strtok(path, "\n");
 	CFStringRef xcrun_path = CFStringCreateWithCString(NULL, path, kCFStringEncodingUTF8);
-	Safe(free,path);
-    return xcrun_path;
+	Safe(free, path);
+	return xcrun_path;
 }
 
-CFStringRef SDMMD_PathToDeviceSupport(SDMMD_AMDeviceRef device) {
+CFStringRef SDMMD_PathToDeviceSupport(SDMMD_AMDeviceRef device)
+{
 	CFStringRef dev_support_path = NULL;
 	if (device) {
 		SDMMD_AMDeviceConnect(device);
@@ -231,18 +237,20 @@ CFStringRef SDMMD_PathToDeviceSupport(SDMMD_AMDeviceRef device) {
 	return dev_support_path;
 }
 
-CFStringRef SDMMD_PathToDeviceSupportDiskImage(CFStringRef device_support) {
+CFStringRef SDMMD_PathToDeviceSupportDiskImage(CFStringRef device_support)
+{
 	CFStringRef image_path = device_support;
 	if (image_path) {
-		image_path = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%@/DeveloperDiskImage.dmg"),device_support);
+		image_path = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%@/DeveloperDiskImage.dmg"), device_support);
 	}
 	return image_path;
 }
 
-CFDictionaryRef SDMMD_CreateImageDictionary(CFStringRef device_support_image) {
+CFDictionaryRef SDMMD_CreateImageDictionary(CFStringRef device_support_image)
+{
 	CFMutableDictionaryRef dict = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 	if (dict) {
-		CFStringRef signature_path = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%@.signature"),device_support_image);
+		CFStringRef signature_path = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%@.signature"), device_support_image);
 		char *signature_path_cstr = SDMCFStringGetString(signature_path);
 		if (FileExistsAtPath(signature_path_cstr)) {
 			CFDataRef signature_data = CFDataCreateFromFilePath(signature_path_cstr);
@@ -255,7 +263,8 @@ CFDictionaryRef SDMMD_CreateImageDictionary(CFStringRef device_support_image) {
 	return dict;
 }
 
-sdmmd_return_t SDMMD_AMDeviceMountDeveloperImage(SDMMD_AMDeviceRef device) {
+sdmmd_return_t SDMMD_AMDeviceMountDeveloperImage(SDMMD_AMDeviceRef device)
+{
 	sdmmd_return_t result = kAMDMissingOptionsError;
 	if (device) {
 		CFStringRef device_support = SDMMD_PathToDeviceSupport(device);
@@ -269,7 +278,8 @@ sdmmd_return_t SDMMD_AMDeviceMountDeveloperImage(SDMMD_AMDeviceRef device) {
 	return result;
 }
 
-sdmmd_return_t SDMMD_stream_image(SDMMD_AMConnectionRef connection, CFStringRef path, CFStringRef image_type) {
+sdmmd_return_t SDMMD_stream_image(SDMMD_AMConnectionRef connection, CFStringRef path, CFStringRef image_type)
+{
 	sdmmd_return_t result = kAMDSuccess;
 	char fspath[0x400] = {0};
 	Boolean fsRep = CFStringGetFileSystemRepresentation(path, fspath, 0x400);
@@ -284,19 +294,19 @@ sdmmd_return_t SDMMD_stream_image(SDMMD_AMConnectionRef connection, CFStringRef 
 		result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(connection), streamDict, kCFPropertyListXMLFormat_v1_0);
 		CFSafeRelease(streamDict);
 		CFSafeRelease(size);
-		
+
 		CheckErrorAndReturn(result);
-		
+
 		CFDictionaryRef response;
-		result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&response);
-		
+		result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef *)&response);
+
 		CheckErrorAndReturn(result);
-		
+
 		if (response) {
 			result = SDMMD__ErrorHandler(SDMMD_ImageMounterErrorConvert, response);
-			
+
 			CheckErrorAndReturn(result);
-			
+
 			CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
 			if (status) {
 				if (CFStringCompare(status, CFSTR("ReceiveBytesAck"), 0) == 0) {
@@ -315,13 +325,13 @@ sdmmd_return_t SDMMD_stream_image(SDMMD_AMConnectionRef connection, CFStringRef 
 						CFSafeRelease(image_stream);
 					}
 					CFDictionaryRef getStatus;
-					result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&getStatus);
-					
+					result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef *)&getStatus);
+
 					if (result == 0) {
 						result = SDMMD__ErrorHandler(SDMMD_ImageMounterErrorConvert, response);
-						
+
 						CheckErrorAndReturn(result);
-						
+
 						CFTypeRef streamStatus = CFDictionaryGetValue(getStatus, CFSTR("Status"));
 						if (streamStatus) {
 							if (CFStringCompare(streamStatus, CFSTR("Complete"), 0x0) == 0) {
@@ -344,11 +354,12 @@ sdmmd_return_t SDMMD_stream_image(SDMMD_AMConnectionRef connection, CFStringRef 
 	else {
 		result = kAMDNoResourcesError;
 	}
-	
+
 	ExitLabelAndReturn(result);
 }
 
-sdmmd_return_t SDMMD_mount_image(SDMMD_AMConnectionRef connection, CFStringRef image_type, CFDataRef signature, bool *mounted) {
+sdmmd_return_t SDMMD_mount_image(SDMMD_AMConnectionRef connection, CFStringRef image_type, CFDataRef signature, bool *mounted)
+{
 	sdmmd_return_t result = kAMDSuccess;
 	CFMutableDictionaryRef mountDict = SDMMD_create_dict();
 	if (mountDict) {
@@ -361,16 +372,16 @@ sdmmd_return_t SDMMD_mount_image(SDMMD_AMConnectionRef connection, CFStringRef i
 		result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(connection), mountDict, kCFPropertyListXMLFormat_v1_0);
 		CFSafeRelease(mountDict);
 		CheckErrorAndReturn(result);
-		
+
 		CFDictionaryRef response;
-		result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&response);
+		result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef *)&response);
 		CheckErrorAndReturn(result);
-		
+
 		if (response) {
 			result = SDMMD__ErrorHandler(SDMMD_ImageMounterErrorConvert, response);
-					
+
 			CheckErrorAndReturn(result);
-					
+
 			CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
 			if (status) {
 				if (CFEqual(status, CFSTR("Complete"))) {
@@ -392,7 +403,8 @@ sdmmd_return_t SDMMD_mount_image(SDMMD_AMConnectionRef connection, CFStringRef i
 	ExitLabelAndReturn(result);
 }
 
-sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef dict, CallBack handle, void* unknown) {
+sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef dict, CallBack handle, void *unknown)
+{
 	sdmmd_return_t result = kAMDSuccess;
 	if (dict) {
 		SDMMD_AMConnectionRef connection = NULL;
@@ -403,12 +415,12 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 			unsigned char sum_digest[SHA1_HASH_LENGTH];
 			result = SDMMD_AMDeviceDigestFile(path, PtrCast(&sum_digest, unsigned char **));
 			CheckErrorAndReturn(result);
-			
+
 			SDMMD_AMDeviceRef device_copy = SDMMD_AMDeviceCreateCopy(device);
 			if (SDMMD_AMDeviceIsValid(device_copy)) {
 				result = SDMMD_AMDeviceSecureStartSessionedService(device, CFSTR(AMSVC_MOBILE_IMAGE_MOUNT), &connection);
 				CheckErrorAndReturn(result);
-				
+
 				SDMMD_fire_callback(handle, unknown, CFSTR("LookingUpImage"));
 				if (connection) {
 					CFMutableDictionaryRef commandDict = SDMMD_create_dict();
@@ -419,24 +431,24 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 					else {
 						result = kAMDNoResourcesError;
 					}
-					
+
 					CheckErrorAndReturn(result);
-					
+
 					result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(connection), commandDict, kCFPropertyListXMLFormat_v1_0);
 					CFSafeRelease(commandDict);
-					
+
 					CheckErrorAndReturn(result);
-					
+
 					CFDictionaryRef response;
-					result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef*)&response);
-					
+					result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(connection), (CFPropertyListRef *)&response);
+
 					CheckErrorAndReturn(result);
-					
+
 					if (response) {
 						result = SDMMD__ErrorHandler(SDMMD__ConvertServiceError, response);
-						
+
 						CheckErrorAndReturn(result);
-						
+
 						CFTypeRef image = CFDictionaryGetValue(response, CFSTR("ImagePresent"));
 						if (image) {
 							if (CFEqual(image, kCFBooleanTrue)) {
@@ -447,7 +459,7 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 							}
 						}
 					}
-					
+
 					if (!digest) {
 						bool use_stream = SDMMD_device_os_is_at_least(device, CFSTR("7.0"));
 						if (use_stream) {
@@ -459,17 +471,16 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 							result = SDMMD_copy_image(device, path);
 						}
 					}
-					
+
 					CheckErrorAndReturn(result);
-					
+
 					bool mounted = false;
 					SDMMD_fire_callback(handle, unknown, CFSTR("MountingImage"));
 					result = SDMMD_mount_image(connection, image_type, signature, &mounted);
-					
+
 					if (mounted) {
 						result = SDMMD__hangup_with_image_mounter_service(connection);
 					}
-					
 				}
 				CFSafeRelease(connection);
 				CFSafeRelease(device_copy);
@@ -486,11 +497,12 @@ sdmmd_return_t SDMMD_AMDeviceMountImage(SDMMD_AMDeviceRef device, CFStringRef pa
 	else {
 		result = kAMDMissingOptionsError;
 	}
-	
+
 	ExitLabelAndReturn(result);
 }
 
-uint32_t GenerateChecksumForData(char *strPtr, uint32_t length) {
+uint32_t GenerateChecksumForData(char *strPtr, uint32_t length)
+{
 	uint32_t checksum = 0;
 	for (uint32_t i = 0; i < length; i++) {
 		checksum += strPtr[i];
@@ -498,28 +510,30 @@ uint32_t GenerateChecksumForData(char *strPtr, uint32_t length) {
 	return checksum;
 }
 
-BufferRef SDMMD_EncodeDebuggingString(CFStringRef command) {
+BufferRef SDMMD_EncodeDebuggingString(CFStringRef command)
+{
 	char *commandString = SDMCFStringGetString(command);
-	CFIndex encodedLength = ((2*strlen(commandString))+kChecksumHashLength+1);
+	CFIndex encodedLength = ((2 * strlen(commandString)) + kChecksumHashLength + 1);
 	char *encoded = calloc(1, S(char)*encodedLength);
 	for (CFIndex position = 0, index = 0; index < strlen(commandString); index++) {
-		position = (index*(S(char)*2));
+		position = (index * (S(char)*2));
 		encoded[position] = kHexEncodeFirstByte(commandString[index]);
-		encoded[position+1] = kHexEncodeSecondByte(commandString[index]);
+		encoded[position + 1] = kHexEncodeSecondByte(commandString[index]);
 	}
-	Safe(free,commandString);
+	Safe(free, commandString);
 	BufferRef commandBuffer = calloc(1, S(struct CoreInternalBuffer));
 	commandBuffer->data = encoded;
 	commandBuffer->length = encodedLength;
 	return commandBuffer;
 }
 
-void SDMMD_FormatDebuggingCommand(BufferRef buffer, CFStringRef command, bool shouldACK) {
+void SDMMD_FormatDebuggingCommand(BufferRef buffer, CFStringRef command, bool shouldACK)
+{
 	BufferRef encoded = SDMMD_EncodeDebuggingString(command);
 	AppendBufferToBuffer(buffer, encoded);
 	BufferRefRelease(encoded);
-	char checksumHash[kChecksumHashLength] = { '#', '0', '0' };
-	uint32_t encodedCommandLength = (uint32_t)(buffer->length-kChecksumHashLength-1);
+	char checksumHash[kChecksumHashLength] = {'#', '0', '0'};
+	uint32_t encodedCommandLength = (uint32_t)(buffer->length - kChecksumHashLength - 1);
 	if (shouldACK) {
 		uint32_t checksum = GenerateChecksumForData(&(buffer->data[1]), encodedCommandLength);
 		checksumHash[1] = kHexEncodeFirstByte(checksum);
@@ -528,7 +542,8 @@ void SDMMD_FormatDebuggingCommand(BufferRef buffer, CFStringRef command, bool sh
 	memcpy(&(buffer->data[encodedCommandLength]), checksumHash, kChecksumHashLength);
 }
 
-DebuggerCommandRef SDMMD_CreateDebuggingCommand(DebuggerCommandType commandCode, CFStringRef command, CFArrayRef arguments) {
+DebuggerCommandRef SDMMD_CreateDebuggingCommand(DebuggerCommandType commandCode, CFStringRef command, CFArrayRef arguments)
+{
 	DebuggerCommandRef debugCommand = calloc(1, sizeof(struct DebuggerCommand));
 	debugCommand->commandCode = commandCode;
 	if (debugCommand->commandCode == kDebugCUSTOMCOMMAND) {
@@ -541,13 +556,15 @@ DebuggerCommandRef SDMMD_CreateDebuggingCommand(DebuggerCommandType commandCode,
 	return debugCommand;
 }
 
-void SDMMD_DebuggingCommandRelease(DebuggerCommandRef command) {
+void SDMMD_DebuggingCommandRelease(DebuggerCommandRef command)
+{
 	CFSafeRelease(command->command);
 	CFSafeRelease(command->arguments);
-	Safe(free,command);
+	Safe(free, command);
 }
 
-sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCommandRef command, CFDataRef *response) {
+sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCommandRef command, CFDataRef *response)
+{
 	sdmmd_return_t result = kAMDSuccess;
 	SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
 	BufferRef buffer = CreateBufferRef();
@@ -559,8 +576,8 @@ sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCom
 	}
 	else {
 		unsigned long length = strlen(KnownDebugCommands[command->commandCode].code);
-		string = calloc(1, S(char)*(length+1));
-		strlcpy(string, KnownDebugCommands[command->commandCode].code, length+1);
+		string = calloc(1, S(char)*(length + 1));
+		strlcpy(string, KnownDebugCommands[command->commandCode].code, length + 1);
 	}
 	AppendStringToBuffer(buffer, string);
 	Safe(free, string);
@@ -573,10 +590,10 @@ sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCom
 	}
 	SDMMD_FormatDebuggingCommand(buffer, entireCommand, dconn->ackEnabled);
 	CFSafeRelease(entireCommand);
-	CFDataRef sending = CFDataCreate(kCFAllocatorDefault, PtrCast(buffer->data, UInt8*), (CFIndex)(buffer->length));
+	CFDataRef sending = CFDataCreate(kCFAllocatorDefault, PtrCast(buffer->data, UInt8 *), (CFIndex)(buffer->length));
 	result = SDMMD_ServiceSend(debuggingSocket, sending);
 	CheckErrorAndReturn(result);
-	
+
 	result = SDMMD_DebuggingReceive(dconn, response);
 	if (SDM_MD_CallSuccessful(result) && command->commandCode == kDebugQStartNoAckMode) {
 		dconn->ackEnabled = false;
@@ -585,14 +602,15 @@ sdmmd_return_t SDMMD_DebuggingSend(SDMMD_AMDebugConnectionRef dconn, DebuggerCom
 ExitLabel:
 	BufferRefRelease(buffer);
 	CFSafeRelease(sending);
-	
+
 	return result;
 }
 
-bool SDMMD_DebuggingReceiveInternalCheck(SocketConnection connection, char *receivedChar) {
+bool SDMMD_DebuggingReceiveInternalCheck(SocketConnection connection, char *receivedChar)
+{
 	bool didReceiveChar = false;
 	CFMutableDataRef receivedData = CFDataCreateMutable(kCFAllocatorDefault, 1);
-	sdmmd_return_t result = SDMMD_DirectServiceReceive(connection, PtrCast(&receivedData, CFDataRef*));
+	sdmmd_return_t result = SDMMD_DirectServiceReceive(connection, PtrCast(&receivedData, CFDataRef *));
 	char *buffer = calloc(1, S(char));
 	memcpy(buffer, CFDataGetBytePtr(receivedData), sizeof(char));
 	if (SDM_MD_CallSuccessful(result) && receivedChar[0] != 0) {
@@ -608,12 +626,14 @@ bool SDMMD_DebuggingReceiveInternalCheck(SocketConnection connection, char *rece
 	return didReceiveChar;
 }
 
-bool SDMMD_ValidateChecksumForBuffer(BufferRef buffer) {
-	uint32_t checksum = GenerateChecksumForData(&(buffer->data[1]), (uint32_t)(buffer->length-kChecksumHashLength-1));
-	return ((kHexDecode(buffer->data[buffer->length-2]) == kHexDecodeFirstByte(checksum)) && (kHexDecode(buffer->data[buffer->length-1]) && kHexDecodeSecondByte(checksum)) ? true : false);
+bool SDMMD_ValidateChecksumForBuffer(BufferRef buffer)
+{
+	uint32_t checksum = GenerateChecksumForData(&(buffer->data[1]), (uint32_t)(buffer->length - kChecksumHashLength - 1));
+	return ((kHexDecode(buffer->data[buffer->length - 2]) == kHexDecodeFirstByte(checksum)) && (kHexDecode(buffer->data[buffer->length - 1]) && kHexDecodeSecondByte(checksum)) ? true : false);
 }
 
-sdmmd_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef dconn, CFDataRef *response) {
+sdmmd_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef dconn, CFDataRef *response)
+{
 	sdmmd_return_t result = kAMDSuccess;
 	bool shouldReceive = true, skipPrefix = false;
 	char *commandPrefix = "$";
@@ -649,7 +669,7 @@ sdmmd_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef dconn, CFDataRe
 		}
 		bool validResponse = SDMMD_ValidateChecksumForBuffer(responseBuffer);
 		if (validResponse) {
-			*response = CFDataCreate(kCFAllocatorDefault, PtrCast(&(responseBuffer->data[1]), UInt8*), (CFIndex)(responseBuffer->length-kChecksumHashLength-0x1));
+			*response = CFDataCreate(kCFAllocatorDefault, PtrCast(&(responseBuffer->data[1]), UInt8 *), (CFIndex)(responseBuffer->length - kChecksumHashLength - 0x1));
 		}
 		else {
 			result = kAMDInvalidResponseError;

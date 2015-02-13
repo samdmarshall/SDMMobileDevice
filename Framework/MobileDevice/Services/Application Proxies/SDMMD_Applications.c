@@ -39,7 +39,8 @@
 
 #define kAppLookupMasterKey "ReturnAttributes"
 
-void SDMMD_browse_callback(CFDictionaryRef dict, void* response) {
+void SDMMD_browse_callback(CFDictionaryRef dict, void *response)
+{
 	if (dict) {
 		if (CFDictionaryContainsKey(dict, CFSTR(kAppLookupKeyCFBundleIdentifier))) {
 			CFTypeRef bundleId = CFDictionaryGetValue(dict, CFSTR(kAppLookupKeyCFBundleIdentifier));
@@ -48,8 +49,9 @@ void SDMMD_browse_callback(CFDictionaryRef dict, void* response) {
 	}
 }
 
-void SDMMD_lookup_callback(CFDictionaryRef dict, void* response) {
-	response = (void*)dict;
+void SDMMD_lookup_callback(CFDictionaryRef dict, void *response)
+{
+	response = (void *)dict;
 	CFShow(response);
 }
 
@@ -68,7 +70,8 @@ void SDMMD_lookup_callback(CFDictionaryRef dict, void* response) {
  
  */
 
-sdmmd_return_t SDMMD_AMDeviceLookupAppInfo(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef *response) {
+sdmmd_return_t SDMMD_AMDeviceLookupAppInfo(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef *response)
+{
 	sdmmd_return_t result = kAMDInvalidArgumentError;
 	if (device) {
 		if (options) {
@@ -86,7 +89,7 @@ sdmmd_return_t SDMMD_AMDeviceLookupAppInfo(SDMMD_AMDeviceRef device, CFDictionar
 				}
 			}
 			else {
-				printf("%s: Was unable to start the install service on the device: %i\n",__FUNCTION__,device->ivars.device_id);
+				printf("%s: Was unable to start the install service on the device: %i\n", __FUNCTION__, device->ivars.device_id);
 			}
 			CFSafeRelease(conn);
 		}
@@ -94,8 +97,8 @@ sdmmd_return_t SDMMD_AMDeviceLookupAppInfo(SDMMD_AMDeviceRef device, CFDictionar
 	return result;
 }
 
-
-sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef *response) {
+sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDictionaryRef options, CFDictionaryRef *response)
+{
 	sdmmd_return_t result = kAMDInvalidArgumentError;
 	if (device) {
 		if (options) {
@@ -113,7 +116,7 @@ sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDict
 				}
 			}
 			else {
-				printf("%s: Was unable to start the install service on the device: %i\n",__FUNCTION__,device->ivars.device_id);
+				printf("%s: Was unable to start the install service on the device: %i\n", __FUNCTION__, device->ivars.device_id);
 			}
 			//CFSafeRelease(conn);
 		}
@@ -121,7 +124,8 @@ sdmmd_return_t SDMMD_AMDeviceLookupApplications(SDMMD_AMDeviceRef device, CFDict
 	return result;
 }
 
-void SDMMD_preflight_transfer(char *path, struct stat *statRef, char *rStatRef) {
+void SDMMD_preflight_transfer(char *path, struct stat *statRef, char *rStatRef)
+{
 	int statResult = stat(path, statRef);
 	if (statResult != 0xff) {
 		if ((*(int16_t *)(statRef + 0x4) & 0xffff & 0xf000) != 0x4000) {
@@ -134,7 +138,8 @@ void SDMMD_preflight_transfer(char *path, struct stat *statRef, char *rStatRef) 
 	}
 }
 
-sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFStringRef path, CFDictionaryRef options, CallBack transferCallback, void* unknown) {
+sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFStringRef path, CFDictionaryRef options, CallBack transferCallback, void *unknown)
+{
 	sdmmd_return_t result = kAMDInvalidArgumentError;
 	if (path && conn) {
 		char *cpath = calloc(1, sizeof(char[1024]));
@@ -152,14 +157,14 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 					SDMMD_fire_callback_767f4(transferCallback, unknown, 0, CFSTR("PreflightingTransfer"));
 					//SDMMD_preflight_transfer(&cpath, &pathStat, &remoteStat);
 					SDMMD_fire_callback_767f4(transferCallback, unknown, 0, CFSTR("TransferingPackage"));
-					SDMMD_AFCConnectionRef afcConn = SDMMD_AFCConnectionCreate(conn);//(r12, conn, 0x0, 0x0, &var_72);
+					SDMMD_AFCConnectionRef afcConn = SDMMD_AFCConnectionCreate(conn); //(r12, conn, 0x0, 0x0, &var_72);
 					if (afcConn) {
 						result = kAMDSuccess;
 						CheckErrorAndReturn(result);
-						
+
 						result = SDMMD_AMDeviceCopy(afcConn, cpath, copyPath);
 					}
-					
+
 					/*
 					CFDataRef touchResponse;
 					result = SDMMD_check_can_touch(afcConn, &touchResponse);
@@ -215,38 +220,40 @@ sdmmd_return_t SDMMD_AMDeviceTransferApplication(SDMMD_AMConnectionRef conn, CFS
 		}
 		Safe(free, cpath);
 	}
-	
+
 	ExitLabelAndReturn(result);
 }
 
-sdmmd_return_t SDMMD_AMDeviceCopyApplication(SDMMD_AMDeviceRef device, CFStringRef path) {
+sdmmd_return_t SDMMD_AMDeviceCopyApplication(SDMMD_AMDeviceRef device, CFStringRef path)
+{
 	sdmmd_return_t result = kAMDNotConnectedError;
 	SDMMD_AMConnectionRef connection = NULL;
 	if (device) {
 		result = SDMMD_AMDeviceConnect(device);
 		CheckErrorAndReturn(result);
-		
+
 		result = SDMMD_AMDeviceStartSession(device);
 		CheckErrorAndReturn(result);
-		
+
 		result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_AFC), NULL, &connection);
 		CheckErrorAndReturn(result);
-		
+
 		result = SDMMD_AMDeviceTransferApplication(connection, path, NULL, SDMMD_Default_transfer_callback, NULL);
 		CheckErrorAndReturn(result);
-		
+
 		CFSafeRelease(connection);
-		
+
 		result = SDMMD_AMDeviceStopSession(device);
 		CheckErrorAndReturn(result);
-		
+
 		result = SDMMD_AMDeviceDisconnect(device);
 		CheckErrorAndReturn(result);
 	}
 	ExitLabelAndReturn(result);
 }
 
-sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn, SDMMD_AMDeviceRef device, CFURLRef path, CFDictionaryRef options, CallBack installCallback, void* unknown) {
+sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn, SDMMD_AMDeviceRef device, CFURLRef path, CFDictionaryRef options, CallBack installCallback, void *unknown)
+{
 	sdmmd_return_t result = kAMDSuccess;
 	SDMMD_AMConnectionRef connection = NULL;
 	bool hasConnection = (conn ? true : false);
@@ -256,12 +263,12 @@ sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn
 			hasConnection = true;
 		}
 		else {
-			printf("%s: Was unable to start the install service on the device 0x%x.\n",__FUNCTION__,result);
+			printf("%s: Was unable to start the install service on the device 0x%x.\n", __FUNCTION__, result);
 		}
 	}
 	if (hasConnection) {
 		CFStringRef lastComp = CFURLCopyLastPathComponent(path);
-		if (CFStringGetLength(lastComp)==0) {
+		if (CFStringGetLength(lastComp) == 0) {
 			CFSafeRelease(lastComp);
 			CFURLRef pathURL = CFURLCreateCopyDeletingLastPathComponent(kCFAllocatorDefault, path);
 			lastComp = CFURLCopyLastPathComponent(pathURL);
@@ -271,33 +278,34 @@ sdmmd_return_t SDMMD_AMDeviceSecureInstallApplication(SDMMD_AMConnectionRef conn
 			CFStringRef format = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("PublicStaging/%@"), lastComp);
 			if (format) {
 				char *appName = SDMCFStringGetString(format);
-				printf("%s: Attempting install of %s.\n",__FUNCTION__,appName);
+				printf("%s: Attempting install of %s.\n", __FUNCTION__, appName);
 				result = SDMMD_perform_command(connection, CFSTR("Install"), 0, installCallback, 4, unknown, CFSTR("PackagePath"), format, CFSTR("ClientOptions"), options);
 				if (result) {
-					printf("%s: Old style of install failed for (%s).\n",__FUNCTION__,appName);
+					printf("%s: Old style of install failed for (%s).\n", __FUNCTION__, appName);
 				}
 				Safe(free, appName);
 			}
 			else {
-				printf("%s: Unable to create CFString!\n",__FUNCTION__);
+				printf("%s: Unable to create CFString!\n", __FUNCTION__);
 			}
 			CFSafeRelease(format);
 		}
 		else {
 			char *lastCompString = SDMCFStringGetString(lastComp);
-			printf("%s: Could not copy last path component from url %s.\n",__FUNCTION__,lastCompString);
+			printf("%s: Could not copy last path component from url %s.\n", __FUNCTION__, lastCompString);
 			Safe(free, lastCompString);
 		}
 		CFSafeRelease(lastComp);
 	}
 	CFSafeRelease(connection);
 	char *pathString = SDMCFURLGetString(path);
-	printf("%s: Installation of package %s returned 0x%x.\n",__FUNCTION__,pathString,result);
+	printf("%s: Installation of package %s returned 0x%x.\n", __FUNCTION__, pathString, result);
 	Safe(free, pathString);
 	return result;
 }
 
-sdmmd_return_t SDMMD_AMDeviceInstallApplication(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef options, CallBack installCallback, void* unknown) {
+sdmmd_return_t SDMMD_AMDeviceInstallApplication(SDMMD_AMDeviceRef device, CFStringRef path, CFDictionaryRef options, CallBack installCallback, void *unknown)
+{
 	sdmmd_return_t result = kAMDSuccess;
 	uint32_t socket = -1;
 	SDMMD_AMConnectionRef conn = SDMMD__CreateTemporaryServConn(socket, 0);
@@ -308,7 +316,7 @@ sdmmd_return_t SDMMD_AMDeviceInstallApplication(SDMMD_AMDeviceRef device, CFStri
 			result = SDMMD_AMDeviceSecureInstallApplication(conn, device, url, options, installCallback, unknown);
 		}
 		else {
-			printf("%s: SDMMD_AMDCFURLCreateFromFileSystemPathWithSmarts failed on %s.\n",__FUNCTION__,urlString);
+			printf("%s: SDMMD_AMDCFURLCreateFromFileSystemPathWithSmarts failed on %s.\n", __FUNCTION__, urlString);
 		}
 		Safe(free, urlString);
 		CFSafeRelease(url);
@@ -320,30 +328,31 @@ sdmmd_return_t SDMMD_AMDeviceInstallApplication(SDMMD_AMDeviceRef device, CFStri
 	return result;
 }
 
-sdmmd_return_t SDMMD_AMDeviceInstallApp(SDMMD_AMDeviceRef device, CFStringRef path) {
+sdmmd_return_t SDMMD_AMDeviceInstallApp(SDMMD_AMDeviceRef device, CFStringRef path)
+{
 	sdmmd_return_t result = kAMDNotConnectedError;
 	SDMMD_AMConnectionRef connection = NULL;
 	if (device) {
 		result = SDMMD_AMDeviceConnect(device);
 		CheckErrorAndReturn(result);
-		
+
 		result = SDMMD_AMDeviceStartSession(device);
 		CheckErrorAndReturn(result);
-		
+
 		result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_AFC), NULL, &connection);
 		CheckErrorAndReturn(result);
-		
-		CFStringRef keys[] = { CFSTR("PackageType") };
-		CFStringRef values[] = { CFSTR("Developer") };
+
+		CFStringRef keys[] = {CFSTR("PackageType")};
+		CFStringRef values[] = {CFSTR("Developer")};
 		CFDictionaryRef options = CFDictionaryCreate(NULL, (const void **)&keys, (const void **)&values, 1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 		result = SDMMD_AMDeviceInstallApplication(device, path, options, SDMMD_Default_install_callback, NULL);
 		CheckErrorAndReturn(result);
-		
+
 		CFSafeRelease(connection);
-		
+
 		result = SDMMD_AMDeviceStopSession(device);
 		CheckErrorAndReturn(result);
-		
+
 		result = SDMMD_AMDeviceDisconnect(device);
 		CheckErrorAndReturn(result);
 	}

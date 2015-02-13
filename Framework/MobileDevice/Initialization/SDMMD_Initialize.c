@@ -34,12 +34,13 @@
 #include "SDMMD_USBMuxListener_Types.h"
 #include "SDMMD_AFC_Types.h"
 
-void InitializeSDMMobileDeviceClasses() {
-    // Initialize static CFStringRef keys
-    SDMMD_USBMuxListener_Types_Initialize();
-    SDMMD_AFC_Types_Initialize();
-    
-    // Initialize CFType classes
+void InitializeSDMMobileDeviceClasses()
+{
+	// Initialize static CFStringRef keys
+	SDMMD_USBMuxListener_Types_Initialize();
+	SDMMD_AFC_Types_Initialize();
+
+	// Initialize CFType classes
 	SDMMD_USBMuxListenerRefClassInitialize();
 	SDMMD_AMDeviceRefClassInitialize();
 	SDMMD_AMConnectionRefClassInitialize();

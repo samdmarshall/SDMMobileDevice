@@ -43,20 +43,20 @@ struct SocketConnection_Internal {
 };
 
 struct AMConnectionClassBody {
-	uint32_t socket;			// 16
-	unsigned char unknown0[4];	// 20
-	SSL *ssl;					// 24
-	unsigned char unknown1[4];	// 28
-	int8_t closeOnInvalid;		// 32
-	int8_t isValid;				// 33
-	unsigned char unknown2[2];	// 34
-	SDMMD_AMDeviceRef device;	// 36
-	char service[128];			// 40
-} __attribute__ ((packed)) AMConnectionClassBody; // size 0x98
+	uint32_t socket;							 // 16
+	unsigned char unknown0[4];					 // 20
+	SSL *ssl;									 // 24
+	unsigned char unknown1[4];					 // 28
+	int8_t closeOnInvalid;						 // 32
+	int8_t isValid;								 // 33
+	unsigned char unknown2[2];					 // 34
+	SDMMD_AMDeviceRef device;					 // 36
+	char service[128];							 // 40
+} __attribute__((packed)) AMConnectionClassBody; // size 0x98
 
 struct am_connection {
 	CFRuntimeBase base;
 	struct AMConnectionClassBody ivars;
-} __attribute__ ((packed)) am_connection;
+} __attribute__((packed)) am_connection;
 
 #endif

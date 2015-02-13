@@ -35,28 +35,28 @@
 #pragma mark -
 
 struct AMDFUModeDeviceClassHeader {
-	unsigned char header[16];	// 16
-} __attribute__ ((packed)) AMDFUModeDeviceClassHeader; // 0x10
+	unsigned char header[16];						  // 16
+} __attribute__((packed)) AMDFUModeDeviceClassHeader; // 0x10
 
 struct AMDFUModeDeviceClassBody {
 	// 16
 	// 24
-	uint32_t current_progress;	// 32
-	uint32_t overall_progress;	// 36
+	uint32_t current_progress; // 32
+	uint32_t overall_progress; // 36
 	// 40
-	int8_t a;					// 48
-	int32_t valid_product; 		// 52
-	// 56
-} __attribute__ ((packed)) AMDFUModeDeviceClassBody; // 0x30
+	int8_t a;										// 48
+	int32_t valid_product;							// 52
+													// 56
+} __attribute__((packed)) AMDFUModeDeviceClassBody; // 0x30
 
 struct am_dfu_device {
 	struct AMDFUModeDeviceClassHeader base;
 	struct AMDFUModeDeviceClassBody ivars;
-} __attribute__ ((packed)) am_dfu_device;
+} __attribute__((packed)) am_dfu_device;
 
 typedef struct am_dfu_device SDMMD_AMDFUModeDeviceClass;
 
-#define SDMMD_AMDFUModeDeviceRef SDMMD_AMDFUModeDeviceClass*
+#define SDMMD_AMDFUModeDeviceRef SDMMD_AMDFUModeDeviceClass *
 
 #pragma mark -
 #pragma mark FUNCTIONS

@@ -55,6 +55,6 @@ struct am_restorable_device {
 
 typedef struct am_restorable_device SDMMD_AMRestorableDeviceClass;
 
-#define SDMMD_AMRestorableDeviceRef SDMMD_AMRestorableDeviceClass*
+#define SDMMD_AMRestorableDeviceRef SDMMD_AMRestorableDeviceClass *
 
 #endif

@@ -44,13 +44,13 @@ typedef struct USBMuxPacketBody {
 	uint32_t reserved;
 	uint32_t type;
 	uint32_t tag;
-} __attribute__ ((packed)) USBMuxPacketBody;
+} __attribute__((packed)) USBMuxPacketBody;
 
 typedef struct USBMuxPacket {
 	dispatch_time_t timeout;
 	struct USBMuxPacketBody body;
 	CFPropertyListRef payload;
-} __attribute__ ((packed)) USBMuxPacket;
+} __attribute__((packed)) USBMuxPacket;
 
 typedef enum SDMMD_USBMuxPacketMessageType {
 	kSDMMD_USBMuxPacketInvalidType = 0x0,

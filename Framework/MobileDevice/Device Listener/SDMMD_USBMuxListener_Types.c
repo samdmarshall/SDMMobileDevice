@@ -38,23 +38,23 @@ CFStringRef SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketMessageCount];
 
 void SDMMD_USBMuxListener_Types_Initialize()
 {
-    kSDMMD_USBMuxListenerDeviceAttachedNotification = CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotification");
-    kSDMMD_USBMuxListenerDeviceAttachedNotificationFinished = CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotificationFinished");
-    kSDMMD_USBMuxListenerDeviceDetachedNotification = CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotification");
-    kSDMMD_USBMuxListenerDeviceDetachedNotificationFinished = CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotificationFinished");
-    kSDMMD_USBMuxListenerStoppedListenerNotification = CFSTR("SDMMD_USBMuxListenerStoppedListenerNotification");
-    
-    SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketInvalidType] = CFSTR("Invalid");
-    SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketConnectType] = CFSTR("Connect");
-    SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketListenType] = CFSTR("Listen");
-    SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketResultType] = CFSTR("Result");
-    SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketAttachType] = CFSTR("Attached");
-    SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketDetachType] = CFSTR("Detached");
-    SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketLogsType] = CFSTR("Logs");
-    SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketListDevicesType] = CFSTR("ListDevices");
-    SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketListListenersType] = CFSTR("ListListeners");
-    SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketReadBUIDType] = CFSTR("ReadBUID");
-    SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketReadPairRecordType] = CFSTR("ReadPairRecord");
-    SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketSavePairRecordType] = CFSTR("SavePairRecord");
-    SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketDeletePairRecordType] = CFSTR("DeletePairRecord");
+	kSDMMD_USBMuxListenerDeviceAttachedNotification = CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotification");
+	kSDMMD_USBMuxListenerDeviceAttachedNotificationFinished = CFSTR("SDMMD_USBMuxListenerDeviceAttachedNotificationFinished");
+	kSDMMD_USBMuxListenerDeviceDetachedNotification = CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotification");
+	kSDMMD_USBMuxListenerDeviceDetachedNotificationFinished = CFSTR("SDMMD_USBMuxListenerDeviceDetachedNotificationFinished");
+	kSDMMD_USBMuxListenerStoppedListenerNotification = CFSTR("SDMMD_USBMuxListenerStoppedListenerNotification");
+
+	SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketInvalidType] = CFSTR("Invalid");
+	SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketConnectType] = CFSTR("Connect");
+	SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketListenType] = CFSTR("Listen");
+	SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketResultType] = CFSTR("Result");
+	SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketAttachType] = CFSTR("Attached");
+	SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketDetachType] = CFSTR("Detached");
+	SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketLogsType] = CFSTR("Logs");
+	SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketListDevicesType] = CFSTR("ListDevices");
+	SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketListListenersType] = CFSTR("ListListeners");
+	SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketReadBUIDType] = CFSTR("ReadBUID");
+	SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketReadPairRecordType] = CFSTR("ReadPairRecord");
+	SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketSavePairRecordType] = CFSTR("SavePairRecord");
+	SDMMD_USBMuxPacketMessage[kSDMMD_USBMuxPacketDeletePairRecordType] = CFSTR("DeletePairRecord");
 }

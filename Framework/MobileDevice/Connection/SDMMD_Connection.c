@@ -37,10 +37,11 @@
 #include "SDMMD_Connection_Private.h"
 #include "Core.h"
 
-sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef command, uint64_t code, CallBack handle, uint32_t argsCount, void* paramStart, ...) {
+sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef command, uint64_t code, CallBack handle, uint32_t argsCount, void *paramStart, ...)
+{
 	sdmmd_return_t result = kAMDSuccess;
 	CFMutableDictionaryRef message = SDMMD_create_dict();
-	
+
 	if (message) {
 		va_list args;
 
@@ -60,13 +61,13 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 		CFSafeRelease(message);
 		if (result == 0) {
 			CFDictionaryRef response = NULL;
-			result = SDMMD_ServiceReceiveStream(sock, (CFPropertyListRef*)&response);
+			result = SDMMD_ServiceReceiveStream(sock, (CFPropertyListRef *)&response);
 			if (result == 0 && response) {
 				while (result == 0) {
 					result = SDMMD__ErrorHandler(SDMMD__ConvertServiceError, response);
-					
+
 					CheckErrorAndReturn(result);
-					
+
 					CFTypeRef status = CFDictionaryGetValue(response, CFSTR("Status"));
 					if (status) {
 						if (CFStringCompare(status, CFSTR("Complete"), 0) != 0) {
@@ -86,7 +87,7 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 							break;
 						}
 					}
-					SDMMD_ServiceReceiveStream(sock, (CFPropertyListRef*)&response);
+					SDMMD_ServiceReceiveStream(sock, (CFPropertyListRef *)&response);
 				}
 			}
 			else {
@@ -102,14 +103,15 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 	else {
 		result = kAMDUndefinedError;
 	}
-	
+
 	ExitLabelAndReturn(result);
 }
 
-SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, SSL *ssl) {
+SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, SSL *ssl)
+{
 	SDMMD_AMConnectionRef handle = NULL;
 	CFStringRef closeInvalid = CFSTR("CloseOnInvalidate");
-	CFDictionaryRef dict = CFDictionaryCreate(kCFAllocatorDefault, (const void**)&closeInvalid, (const void**)&kCFBooleanFalse, 0x1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+	CFDictionaryRef dict = CFDictionaryCreate(kCFAllocatorDefault, (const void **)&closeInvalid, (const void **)&kCFBooleanFalse, 0x1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 	if (dict) {
 		handle = SDMMD_AMDServiceConnectionCreate(socket, ssl, dict);
 		CFSafeRelease(dict);
@@ -117,9 +119,10 @@ SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, SSL *ssl) 
 	return handle;
 }
 
-SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(uint32_t socket, SSL* ssl, CFDictionaryRef dict) {
+SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(uint32_t socket, SSL *ssl, CFDictionaryRef dict)
+{
 	SDMMD_AMConnectionRef handle = NULL;
-	
+
 	if (ssl == NULL || SSL_is_init_finished(ssl)) {
 		// Either non-SSL connection or SSL context is not connected
 		handle = SDMMD_AMConnectionCreateEmpty();
@@ -137,37 +140,38 @@ SDMMD_AMConnectionRef SDMMD_AMDServiceConnectionCreate(uint32_t socket, SSL* ssl
 	else {
 		// SSL context exists but is not connected
 	}
-	
+
 	return handle;
 }
 
-sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef service, CFTypeRef escrowBag, uint32_t *port, bool *enableSSL) {
+sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef service, CFTypeRef escrowBag, uint32_t *port, bool *enableSSL)
+{
 	sdmmd_return_t result = kAMDSuccess;
-	ValueIsNullEval(device, {result = kAMDInvalidArgumentError;});
-	ValueIsNullEval(device->ivars.lockdown_conn, {result = kAMDNotConnectedError;});
-	ValueIsNullEval(service, {result = kAMDInvalidArgumentError;});
-	
+	ValueIsNullEval(device, {result = kAMDInvalidArgumentError; });
+	ValueIsNullEval(device->ivars.lockdown_conn, {result = kAMDNotConnectedError; });
+	ValueIsNullEval(service, {result = kAMDInvalidArgumentError; });
+
 	if (port != 0 && enableSSL != 0) {
 		CFMutableDictionaryRef dict = SDMMD__CreateMessageDict(CFSTR("StartService"));
-		ValueIsNullEval(dict, {result = kAMDNoResourcesError;});
-		
+		ValueIsNullEval(dict, {result = kAMDNoResourcesError; });
+
 		CFDictionarySetValue(dict, CFSTR("Service"), service);
 		if (escrowBag) {
 			CFDictionarySetValue(dict, CFSTR("EscrowBag"), escrowBag);
 		}
-		
+
 		result = SDMMD_lockconn_send_message(device, dict);
 		CFSafeRelease(dict);
 		CheckErrorAndReturn(result);
-		
+
 		CFMutableDictionaryRef response = NULL;
 		result = SDMMD_lockconn_receive_message(device, &response);
 		CheckErrorAndReturn(result);
-		
+
 		if (response) {
 			result = SDMMD__ErrorHandler(SDMMD__ConvertLockdowndError, response);
 			CheckErrorAndReturn(result);
-			
+
 			CFTypeRef portNumber = CFDictionaryGetValue(response, CFSTR("Port"));
 			if (portNumber) {
 				if (CFGetTypeID(portNumber) == CFNumberGetTypeID()) {
@@ -183,23 +187,24 @@ sdmmd_return_t SDMMD_send_service_start(SDMMD_AMDeviceRef device, CFStringRef se
 			}
 		}
 	}
-	
+
 	ExitLabelAndReturn(result);
 }
 
-sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStringRef service, CFDictionaryRef options, SDMMD_AMConnectionRef *connection) {
-    uint32_t port = 0;
-    uint32_t socket = -1;
-    CFDataRef escrowBag = NULL;
+sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStringRef service, CFDictionaryRef options, SDMMD_AMConnectionRef *connection)
+{
+	uint32_t port = 0;
+	uint32_t socket = -1;
+	CFDataRef escrowBag = NULL;
 	sdmmd_return_t result = kAMDSuccess;
 	bool enableSSL = false;
 	char *cservice = calloc(200, sizeof(char));
-    if (service) {
+	if (service) {
 		CFStringGetCString(service, cservice, 200, kCFStringEncodingUTF8);
-    }
+	}
 	SSL *ssl = NULL;
 	bool mutexLock = false;
-    if (device) {
+	if (device) {
 		result = kAMDDeviceDisconnectedError;
 		if (device->ivars.device_active) {
 			if ((device->ivars.session) && (service) && (connection)) {
@@ -226,13 +231,13 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 							result = SDMMD__CopyEscrowBag(device, &escrowBag);
 							if (result) {
 								char *udidString = SDMCFStringGetString(device->ivars.unique_device_id);
-								printf("%s: Could not get escrow keybag for device %s!\n",__FUNCTION__, (device->ivars.unique_device_id ? udidString : "device with no name"));
+								printf("%s: Could not get escrow keybag for device %s!\n", __FUNCTION__, (device->ivars.unique_device_id ? udidString : "device with no name"));
 								Safe(free, udidString);
 								mutexLock = true;
 								ssl = NULL;
 								CFSafeRelease(escrowBag);
-								Safe(SSL_free,ssl);
-								
+								Safe(SSL_free, ssl);
+
 								canConnect = false;
 							}
 						}
@@ -256,19 +261,19 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 							}
 						}
 					}
-					
+
 					result = SDMMD_send_service_start(device, service, escrowBag, &port, &enableSSL);
 					mutexLock = true;
 					if (result) {
 						if (result != kAMDPasswordProtectedError) {
 							ssl = NULL;
 							CFSafeRelease(escrowBag);
-							Safe(SSL_free,ssl);
+							Safe(SSL_free, ssl);
 						}
 						else {
 							if (escrowBag) {
 								char *udidString = SDMCFStringGetString(device->ivars.unique_device_id);
-								printf("%s: Escrow bag mismatch for device %s!",__FUNCTION__, (device->ivars.unique_device_id ? udidString : "device with no name"));
+								printf("%s: Escrow bag mismatch for device %s!", __FUNCTION__, (device->ivars.unique_device_id ? udidString : "device with no name"));
 								Safe(free, udidString);
 								char *path = calloc(1024, sizeof(char));
 								SDMMD__PairingRecordPathForIdentifier(device->ivars.unique_device_id, path);
@@ -282,9 +287,9 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 									}
 								}
 								CFSafeRelease(fileDict);
-								Safe(free,path);
+								Safe(free, path);
 								CFSafeRelease(escrowBag);
-								Safe(SSL_free,ssl);
+								Safe(SSL_free, ssl);
 							}
 						}
 					}
@@ -365,24 +370,24 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 						}
 						else {
 							char *udidString = SDMCFStringGetString(device->ivars.unique_device_id);
-							printf("%s: Could not connect to \"%s\" service on port %d, device %d - %s.",__FUNCTION__, cservice, port, device->ivars.device_id, udidString);
-							Safe(free,udidString);
+							printf("%s: Could not connect to \"%s\" service on port %d, device %d - %s.", __FUNCTION__, cservice, port, device->ivars.device_id, udidString);
+							Safe(free, udidString);
 							//ssl = NULL;
 						}
 						CFSafeRelease(escrowBag);
-						Safe(SSL_free,ssl);
+						Safe(SSL_free, ssl);
 					}
 				}
 			}
 			else {
 				result = kAMDInvalidArgumentError;
 				CFSafeRelease(escrowBag);
-				Safe(SSL_free,ssl);
+				Safe(SSL_free, ssl);
 			}
 		}
 		else {
 			CFSafeRelease(escrowBag);
-			Safe(SSL_free,ssl);
+			Safe(SSL_free, ssl);
 		}
 	}
 	else {
@@ -390,7 +395,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 		mutexLock = false;
 		result = kAMDInvalidArgumentError;
 		CFSafeRelease(escrowBag);
-		Safe(SSL_free,ssl);
+		Safe(SSL_free, ssl);
 	}
 
 	/*if (socket == -1) {
@@ -398,16 +403,17 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartService(SDMMD_AMDeviceRef device, CFStri
 			printf("SDMMD_AMDeviceSecureStartService: close(2) on socket %d failed: %d.\n", socket, errno);
 		}
 	}*/
-	
+
 	if (mutexLock) {
 		SDMMD__mutex_unlock(device->ivars.mutex_lock);
 	}
 	//printf("SDMMD_AMDeviceSecureStartService: Returned %x starting service %s on device at port %d, out fd = %d.\n", result, cservice, port, socket);
-	Safe(free,cservice);
+	Safe(free, cservice);
 	return result;
 }
 
-sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef service, CFDictionaryRef options, SDMMD_AMConnectionRef *connection) {
+sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef service, CFDictionaryRef options, SDMMD_AMConnectionRef *connection)
+{
 	sdmmd_return_t result = kAMDInvalidArgumentError;
 	uint32_t tmp_socket = -1, socket = -1;
 	if (device && connection) {
@@ -416,7 +422,7 @@ sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef 
 			if (device->ivars.device_active) {
 				CFMutableDictionaryRef optionsCopy = NULL;
 				if (options) {
-				 	optionsCopy = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, options);
+					optionsCopy = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, options);
 				}
 				else {
 					optionsCopy = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
@@ -450,36 +456,42 @@ sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef 
 			SSL_free(ssl_enabled);
 		}
 		if (tmp_socket != -1 && close(tmp_socket) == -1) {
-			printf("%s: close(2) con socket %d failed: %d\n",__FUNCTION__, tmp_socket,errno);
+			printf("%s: close(2) con socket %d failed: %d\n", __FUNCTION__, tmp_socket, errno);
 		}
 	}
 	//printf("%s: returning 0x%x, socket is %d.\n",__FUNCTION__, result, socket);
 	return result;
 }
 
-void SDMMD_AMDServiceConnectionSetDevice(SDMMD_AMConnectionRef *connection, SDMMD_AMDeviceRef device) {
+void SDMMD_AMDServiceConnectionSetDevice(SDMMD_AMConnectionRef *connection, SDMMD_AMDeviceRef device)
+{
 	(*connection)->ivars.device = device;
 }
 
-CF_RETURNS_NOT_RETAINED SDMMD_AMDeviceRef SDMMD_AMDServiceConnectionGetDevice(SDMMD_AMConnectionRef connection) {
+CF_RETURNS_NOT_RETAINED SDMMD_AMDeviceRef SDMMD_AMDServiceConnectionGetDevice(SDMMD_AMConnectionRef connection)
+{
 	return connection->ivars.device;
 }
 
-void SDMMD_AMDServiceConnectionSetServiceName(SDMMD_AMConnectionRef *connection, CFStringRef service) {
+void SDMMD_AMDServiceConnectionSetServiceName(SDMMD_AMConnectionRef *connection, CFStringRef service)
+{
 	if (service) {
 		CFStringGetCString(service, (*connection)->ivars.service, 128, kCFStringEncodingUTF8);
 	}
 }
 
-uint32_t SDMMD_AMDServiceConnectionGetSocket(SDMMD_AMConnectionRef connection) {
+uint32_t SDMMD_AMDServiceConnectionGetSocket(SDMMD_AMConnectionRef connection)
+{
 	return connection->ivars.socket;
 }
 
-SSL* SDMMD_AMDServiceConnectionGetSecureIOContext(SDMMD_AMConnectionRef connection) {
+SSL *SDMMD_AMDServiceConnectionGetSecureIOContext(SDMMD_AMConnectionRef connection)
+{
 	return connection->ivars.ssl;
 }
 
-sdmmd_return_t SDMMD_AMDeviceSecureStartSessionedService(SDMMD_AMDeviceRef device, CFStringRef service, SDMMD_AMConnectionRef *connection) {
+sdmmd_return_t SDMMD_AMDeviceSecureStartSessionedService(SDMMD_AMDeviceRef device, CFStringRef service, SDMMD_AMConnectionRef *connection)
+{
 	sdmmd_return_t result = kAMDSuccess;
 	if (device != NULL) {
 		result = SDMMD_AMDeviceConnect(device);
@@ -489,7 +501,7 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartSessionedService(SDMMD_AMDeviceRef devic
 				result = SDMMD_AMDeviceSecureStartService(device, service, NULL, connection);
 				if (result) {
 					char *serviceString = SDMCFStringGetString(service);
-					printf("%s: Could not start service %s for device %i.\n",__FUNCTION__, serviceString, device->ivars.device_id);
+					printf("%s: Could not start service %s for device %i.\n", __FUNCTION__, serviceString, device->ivars.device_id);
 					Safe(free, serviceString);
 				}
 				SDMMD_AMDeviceStopSession(device);
@@ -501,4 +513,3 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartSessionedService(SDMMD_AMDeviceRef devic
 }
 
 #endif
-

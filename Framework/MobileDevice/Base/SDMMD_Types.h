@@ -33,11 +33,12 @@
 #define kTestFileForAFC "iTunes_Control/iTunes/IC-Info.sidv"
 #define kTestCreateFileForAFC "sdm_md_test_file.dat"
 
-typedef void (*CallBack)(CFDictionaryRef dict, void* arg);
+typedef void (*CallBack)(CFDictionaryRef dict, void *arg);
 
-__attribute__ ((unused)) static void SDMMD_Default_AFC_CopyFile_Callback(CFDictionaryRef dict, void* arg) {
-    uint32_t percent = 0;
-    CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
+__attribute__((unused)) static void SDMMD_Default_AFC_CopyFile_Callback(CFDictionaryRef dict, void *arg)
+{
+	uint32_t percent = 0;
+	CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
 	if (CFEqual(status, CFSTR("CopyingFile"))) {
 		CFStringRef local_path = CFDictionaryGetValue(dict, CFSTR("LocalPath"));
 		CFStringRef remote_path = CFDictionaryGetValue(dict, CFSTR("RemotePath"));
@@ -46,35 +47,39 @@ __attribute__ ((unused)) static void SDMMD_Default_AFC_CopyFile_Callback(CFDicti
 	}
 }
 
-__attribute__ ((unused)) static void SDMMD_Default_mount_callback(CFDictionaryRef dict, void* arg) {
+__attribute__((unused)) static void SDMMD_Default_mount_callback(CFDictionaryRef dict, void *arg)
+{
 	CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
 	if (CFEqual(status, CFSTR("LookingUpImage"))) {
 		printf("[  0%%] Looking up developer disk image\n");
-	} else if (CFEqual(status, CFSTR("CopyingImage"))) {
+	}
+	else if (CFEqual(status, CFSTR("CopyingImage"))) {
 		printf("[ 30%%] Copying \"DeveloperDiskImage.dmg\" to device\n");
-    } else if (CFEqual(status, CFSTR("MountingImage"))) {
+	}
+	else if (CFEqual(status, CFSTR("MountingImage"))) {
 		printf("[ 90%%] Mounting developer disk image\n");
 	}
 }
 
-__attribute__ ((unused)) static void SDMMD_Default_transfer_callback(CFDictionaryRef dict, void* arg) {
-    int percent;
-    CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
-    CFNumberGetValue(CFDictionaryGetValue(dict, CFSTR("PercentComplete")), kCFNumberSInt32Type, &percent);
-    if (CFEqual(status, CFSTR("CopyingFile"))) {
-        CFStringRef path = CFDictionaryGetValue(dict, CFSTR("Path"));
-        if (!CFStringHasSuffix(path, CFSTR(".ipa"))) {
-            printf("[%3d%%] Copying %s to device\n", percent, CFStringGetCStringPtr(path, kCFStringEncodingUTF8));
-			
-        }
-    }
+__attribute__((unused)) static void SDMMD_Default_transfer_callback(CFDictionaryRef dict, void *arg)
+{
+	int percent;
+	CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
+	CFNumberGetValue(CFDictionaryGetValue(dict, CFSTR("PercentComplete")), kCFNumberSInt32Type, &percent);
+	if (CFEqual(status, CFSTR("CopyingFile"))) {
+		CFStringRef path = CFDictionaryGetValue(dict, CFSTR("Path"));
+		if (!CFStringHasSuffix(path, CFSTR(".ipa"))) {
+			printf("[%3d%%] Copying %s to device\n", percent, CFStringGetCStringPtr(path, kCFStringEncodingUTF8));
+		}
+	}
 }
 
-__attribute__ ((unused)) static void SDMMD_Default_install_callback(CFDictionaryRef dict, void* arg) {
-    int percent;
-    CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
-    CFNumberGetValue(CFDictionaryGetValue(dict, CFSTR("PercentComplete")), kCFNumberSInt32Type, &percent);
-    printf("[%3d%%] %s\n", percent, CFStringGetCStringPtr(status, kCFStringEncodingUTF8));
+__attribute__((unused)) static void SDMMD_Default_install_callback(CFDictionaryRef dict, void *arg)
+{
+	int percent;
+	CFStringRef status = CFDictionaryGetValue(dict, CFSTR("Status"));
+	CFNumberGetValue(CFDictionaryGetValue(dict, CFSTR("PercentComplete")), kCFNumberSInt32Type, &percent);
+	printf("[%3d%%] %s\n", percent, CFStringGetCStringPtr(status, kCFStringEncodingUTF8));
 }
 
 #endif
