@@ -32,7 +32,8 @@ CFDictionaryRef CreateSpringboardApp(CFStringRef bundleID);
 CFDictionaryRef CreateSpringboardFolder(CFStringRef name, CFArrayRef contents);
 CFPropertyListRef FormatHomescreen(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFArrayRef dock, CFArrayRef pages);
 
-bool AppHasBundleID(CFDictionaryRef app, CFStringRef bundleID, CFDictionaryRef *appInfo) {
+bool AppHasBundleID(CFDictionaryRef app, CFStringRef bundleID, CFDictionaryRef *appInfo)
+{
 	bool foundBundleID = false;
 	Boolean isApp = CFDictionaryContainsKey(app, CFSTR("bundleIdentifier"));
 	if (isApp) {
@@ -45,7 +46,8 @@ bool AppHasBundleID(CFDictionaryRef app, CFStringRef bundleID, CFDictionaryRef *
 	return foundBundleID;
 }
 
-bool FolderContainsBundleID(CFDictionaryRef folder, CFStringRef bundleID, CFDictionaryRef *appInfo) {
+bool FolderContainsBundleID(CFDictionaryRef folder, CFStringRef bundleID, CFDictionaryRef *appInfo)
+{
 	bool foundBundleID = false;
 	if (CFDictionaryContainsKey(folder, CFSTR(kListType))) {
 		CFStringRef type = CFDictionaryGetValue(folder, CFSTR(kListType));
@@ -68,7 +70,8 @@ bool FolderContainsBundleID(CFDictionaryRef folder, CFStringRef bundleID, CFDict
 	return foundBundleID;
 }
 
-enum SpringboardIconType ResolveSpringboardItemTypeInternal(CFDictionaryRef item) {
+enum SpringboardIconType ResolveSpringboardItemTypeInternal(CFDictionaryRef item)
+{
 	uint8_t type = SpringboardIconTypeInvalid;
 	CFStringRef typeValue = CFDictionaryGetValue(item, CFSTR("Type"));
 	if (CFStringCompare(typeValue, CFSTR("Application"), 0x0) == 0x0) {
@@ -80,7 +83,8 @@ enum SpringboardIconType ResolveSpringboardItemTypeInternal(CFDictionaryRef item
 	return type;
 }
 
-enum SpringboardIconType ResolveSpringboardItemType(CFDictionaryRef item) {
+enum SpringboardIconType ResolveSpringboardItemType(CFDictionaryRef item)
+{
 	uint8_t type = SpringboardIconTypeInvalid;
 	Boolean isApp = CFDictionaryContainsKey(item, CFSTR("bundleIdentifier"));
 	if (isApp) {
@@ -93,7 +97,8 @@ enum SpringboardIconType ResolveSpringboardItemType(CFDictionaryRef item) {
 	return type;
 }
 
-bool PageContainsBundleID(CFArrayRef page, CFStringRef bundleID, CFDictionaryRef *appInfo) {
+bool PageContainsBundleID(CFArrayRef page, CFStringRef bundleID, CFDictionaryRef *appInfo)
+{
 	bool foundBundleID = false;
 	CFIndex itemsCount = CFArrayGetCount(page);
 	for (CFIndex index = 0x0; index < itemsCount; index++) {
@@ -119,12 +124,12 @@ bool PageContainsBundleID(CFArrayRef page, CFStringRef bundleID, CFDictionaryRef
 		if (foundBundleID) {
 			break;
 		}
-		
 	}
 	return foundBundleID;
 }
 
-bool HomescreenHasApp(CFPropertyListRef homescreen, CFStringRef bundleID, CFDictionaryRef *appInfo) {
+bool HomescreenHasApp(CFPropertyListRef homescreen, CFStringRef bundleID, CFDictionaryRef *appInfo)
+{
 	bool foundBundleID = false;
 	CFIndex pages = CFArrayGetCount(homescreen);
 	for (CFIndex index = 0x0; index < pages; index++) {
@@ -134,7 +139,8 @@ bool HomescreenHasApp(CFPropertyListRef homescreen, CFStringRef bundleID, CFDict
 	return foundBundleID;
 }
 
-CFMutableDictionaryRef CreateEmptyFolder(CFStringRef name) {
+CFMutableDictionaryRef CreateEmptyFolder(CFStringRef name)
+{
 	CFMutableDictionaryRef folder = SDMMD_create_dict();
 	CFDictionarySetValue(folder, CFSTR(kDisplayName), name);
 	CFMutableArrayRef apps = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
@@ -143,7 +149,8 @@ CFMutableDictionaryRef CreateEmptyFolder(CFStringRef name) {
 	return folder;
 }
 
-CFMutableArrayRef AppendApp(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFMutableArrayRef screen, CFDictionaryRef item) {
+CFMutableArrayRef AppendApp(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFMutableArrayRef screen, CFDictionaryRef item)
+{
 	CFDictionaryRef appInfo = NULL;
 	CFStringRef appID = CFDictionaryGetValue(item, CFSTR("Contents"));
 	bool appInstalled = HomescreenHasApp(homescreen, appID, &appInfo);
@@ -154,21 +161,22 @@ CFMutableArrayRef AppendApp(struct SpringboardDeviceInfo *info, CFPropertyListRe
 	return screen;
 }
 
-CFMutableArrayRef AppendFolder(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFMutableArrayRef screen, CFDictionaryRef item) {
+CFMutableArrayRef AppendFolder(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFMutableArrayRef screen, CFDictionaryRef item)
+{
 	CFDictionaryRef folderContents = CFDictionaryGetValue(item, CFSTR("Contents"));
 	CFStringRef folderName = CFDictionaryGetValue(folderContents, CFSTR("Name"));
 	CFMutableDictionaryRef folder = CreateEmptyFolder(folderName);
 	CFMutableArrayRef addApps = (CFMutableArrayRef)CFDictionaryGetValue(folder, CFSTR(kIconLists));
 	CFArrayRef folderApps = CFDictionaryGetValue(folderContents, CFSTR("Contents"));
 	CFIndex appCount = CFArrayGetCount(folderApps);
-	CFIndex folderAppCount = (info->folderColumn*info->folderRow);
-	CFIndex appPages = ceil(appCount/folderAppCount);
+	CFIndex folderAppCount = (info->folderColumn * info->folderRow);
+	CFIndex appPages = ceil(appCount / folderAppCount);
 	CFIndex pageCount = (appPages < info->folderMaxPage ? appPages : info->folderMaxPage);
 	for (CFIndex index = 0x0; index < pageCount; index++) {
 		CFMutableArrayRef folderPage = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
-		CFIndex contentsCount = (appPages-index > 1 ? folderAppCount : (appCount%folderAppCount));
+		CFIndex contentsCount = (appPages - index > 1 ? folderAppCount : (appCount % folderAppCount));
 		for (CFIndex folderIndex = 0x0; index < contentsCount; folderIndex++) {
-			CFDictionaryRef item = CFArrayGetValueAtIndex(folderApps, (index*folderAppCount)+folderIndex);
+			CFDictionaryRef item = CFArrayGetValueAtIndex(folderApps, (index * folderAppCount) + folderIndex);
 			folderPage = AppendItem(info, homescreen, folderPage, item);
 		}
 		addApps = AppendItem(info, homescreen, addApps, item);
@@ -177,7 +185,8 @@ CFMutableArrayRef AppendFolder(struct SpringboardDeviceInfo *info, CFPropertyLis
 	return screen;
 }
 
-CFMutableArrayRef AppendItem(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFMutableArrayRef screen, CFDictionaryRef item) {
+CFMutableArrayRef AppendItem(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFMutableArrayRef screen, CFDictionaryRef item)
+{
 	uint8_t type = ResolveSpringboardItemType(item);
 	switch (type) {
 		case SpringboardIconTypeInvalid: {
@@ -199,7 +208,8 @@ CFMutableArrayRef AppendItem(struct SpringboardDeviceInfo *info, CFPropertyListR
 	return screen;
 }
 
-CFArrayRef CreateSpringboardDock(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFArrayRef springboardItems) {
+CFArrayRef CreateSpringboardDock(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFArrayRef springboardItems)
+{
 	CFMutableArrayRef screen = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
 	CFIndex itemCount = CFArrayGetCount(springboardItems);
 	CFIndex dockCount = (itemCount < info->dockCount ? itemCount : info->dockCount);
@@ -210,10 +220,11 @@ CFArrayRef CreateSpringboardDock(struct SpringboardDeviceInfo *info, CFPropertyL
 	return screen;
 }
 
-CFArrayRef CreateSpringboardScreen(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFArrayRef springboardItems) {
+CFArrayRef CreateSpringboardScreen(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFArrayRef springboardItems)
+{
 	CFMutableArrayRef screen = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
 	CFIndex itemCount = CFArrayGetCount(springboardItems);
-	CFIndex screenTotal = (info->screenColumn*info->screenRow);
+	CFIndex screenTotal = (info->screenColumn * info->screenRow);
 	CFIndex screenCount = (itemCount < screenTotal ? itemCount : screenTotal);
 	for (CFIndex index = 0x0; index < screenCount; index++) {
 		CFDictionaryRef item = CFArrayGetValueAtIndex(springboardItems, index);
@@ -222,30 +233,34 @@ CFArrayRef CreateSpringboardScreen(struct SpringboardDeviceInfo *info, CFPropert
 	return screen;
 }
 
-CFDictionaryRef CreateSpringboardItem(CFStringRef type, CFTypeRef value) {
+CFDictionaryRef CreateSpringboardItem(CFStringRef type, CFTypeRef value)
+{
 	CFMutableDictionaryRef sbItem = SDMMD_create_dict();
 	CFDictionarySetValue(sbItem, CFSTR("Type"), type);
 	CFDictionarySetValue(sbItem, CFSTR("Contents"), value);
 	return sbItem;
 }
 
-CFDictionaryRef CreateSpringboardApp(CFStringRef bundleID) {
+CFDictionaryRef CreateSpringboardApp(CFStringRef bundleID)
+{
 	return CreateSpringboardItem(CFSTR("Application"), bundleID);
 }
 
-CFDictionaryRef CreateSpringboardFolder(CFStringRef name, CFArrayRef contents) {
+CFDictionaryRef CreateSpringboardFolder(CFStringRef name, CFArrayRef contents)
+{
 	CFMutableDictionaryRef value = SDMMD_create_dict();
 	CFDictionarySetValue(value, CFSTR("Name"), name);
 	CFDictionarySetValue(value, CFSTR("Contents"), contents);
 	return CreateSpringboardItem(CFSTR("Folder"), value);
 }
 
-CFPropertyListRef FormatHomescreen(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFArrayRef dock, CFArrayRef pages) {
+CFPropertyListRef FormatHomescreen(struct SpringboardDeviceInfo *info, CFPropertyListRef homescreen, CFArrayRef dock, CFArrayRef pages)
+{
 	CFMutableArrayRef newFormat = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
-	
+
 	CFArrayRef newDock = CreateSpringboardDock(info, homescreen, dock);
 	CFArrayAppendValue(newFormat, newDock);
-	
+
 	CFIndex pageCount = CFArrayGetCount(pages);
 	for (CFIndex index = 0x0; index < pageCount; index++) {
 		CFArrayRef page = CFArrayGetValueAtIndex(pages, index);
@@ -253,41 +268,43 @@ CFPropertyListRef FormatHomescreen(struct SpringboardDeviceInfo *info, CFPropert
 		CFIndex currentPageCount = CFArrayGetCount(newFormat) - 0x1;
 		if (currentPageCount < info->screenMaxPage) {
 			CFArrayAppendValue(newFormat, screen);
-		} else {
+		}
+		else {
 			break;
 		}
 	}
-	
+
 	return newFormat;
 }
 
-struct SpringboardDeviceInfo* CreateSpringboardInfoFromDevice(SDMMD_AMDeviceRef device) {
+struct SpringboardDeviceInfo *CreateSpringboardInfoFromDevice(SDMMD_AMDeviceRef device)
+{
 	struct SpringboardDeviceInfo *info = calloc(0x1, S(struct SpringboardDeviceInfo));
-	
+
 	CFNumberRef dockCount = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesMobileDomain), CFSTR(kHomeScreenIconDockMaxCount));
 	CFNumberGetValue(dockCount, kCFNumberSInt32Type, &(info->dockCount));
 	CFSafeRelease(dockCount);
-	
+
 	CFNumberRef screenRow = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesMobileDomain), CFSTR(kHomeScreenIconRows));
 	CFNumberGetValue(screenRow, kCFNumberSInt32Type, &(info->screenRow));
 	CFSafeRelease(screenRow);
-	
+
 	CFNumberRef screenColumn = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesMobileDomain), CFSTR(kHomeScreenIconColumns));
 	CFNumberGetValue(screenColumn, kCFNumberSInt32Type, &(info->screenColumn));
 	CFSafeRelease(screenColumn);
-	
+
 	CFNumberRef screenMaxPage = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesMobileDomain), CFSTR(kHomeScreenMaxPages));
 	CFNumberGetValue(screenMaxPage, kCFNumberSInt32Type, &(info->screenMaxPage));
 	CFSafeRelease(screenMaxPage);
-	
+
 	CFNumberRef folderRow = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesMobileDomain), CFSTR(kIconFolderRows));
 	CFNumberGetValue(folderRow, kCFNumberSInt32Type, &(info->folderRow));
 	CFSafeRelease(folderRow);
-	
+
 	CFNumberRef folderColumn = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesMobileDomain), CFSTR(kIconFolderColumns));
 	CFNumberGetValue(folderColumn, kCFNumberSInt32Type, &(info->folderColumn));
 	CFSafeRelease(folderColumn);
-	
+
 	CFNumberRef folderMaxPage = SDMMD_AMDeviceCopyValue(device, CFSTR(kiTunesMobileDomain), CFSTR(kIconFolderMaxPages));
 	CFNumberGetValue(folderMaxPage, kCFNumberSInt32Type, &(info->folderMaxPage));
 	CFSafeRelease(folderMaxPage);
@@ -295,11 +312,12 @@ struct SpringboardDeviceInfo* CreateSpringboardInfoFromDevice(SDMMD_AMDeviceRef 
 	return info;
 }
 
-void SpringboardQuery(char *udid) {
+void SpringboardQuery(char *udid)
+{
 	SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 	if (device) {
 		//struct SpringboardDeviceInfo *info = CreateSpringboardInfoFromDevice(device);
-		
+
 		SDMMD_AMConnectionRef springboard = AttachToDeviceAndService(device, AMSVC_SPRINGBOARD_SERVICES);
 		CFMutableDictionaryRef request = SDMMD_create_dict();
 		CFDictionarySetValue(request, CFSTR(kCommand), CFSTR(kCommandGetIconState));
@@ -313,7 +331,7 @@ void SpringboardQuery(char *udid) {
 				PrintCFType(response);
 			}
 		}
-		
+
 		/*
 		CFMutableDictionaryRef setrequest = SDMMD_create_dict();
 		CFDictionarySetValue(setrequest, CFSTR(kCommand), CFSTR(kCommandSetIconState));

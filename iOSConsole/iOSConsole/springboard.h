@@ -29,7 +29,7 @@ struct SpringboardDeviceInfo {
 };
 
 void SpringboardQuery(char *udid);
-struct SpringboardDeviceInfo* CreateSpringboardInfoFromDevice(SDMMD_AMDeviceRef device);
+struct SpringboardDeviceInfo *CreateSpringboardInfoFromDevice(SDMMD_AMDeviceRef device);
 
 CFDictionaryRef CreateSpringboardApp(CFStringRef bundleID);
 CFDictionaryRef CreateSpringboardFolder(CFStringRef name, CFArrayRef contents);

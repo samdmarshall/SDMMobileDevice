@@ -58,35 +58,35 @@ static struct option long_options[OptionsCount] = {
 	{"develop", no_argument, 0x0, 'x'},
 	{"install", required_argument, 0x0, 't'},
 	{"profile", required_argument, 0x0, 'c'},
-	{"test", no_argument, 0x0, 'z'}
-};
+	{"test", no_argument, 0x0, 'z'}};
 
 static bool optionsEnable[OptionsCount] = {};
 
-int main(int argc, const char * argv[]) {
+int main(int argc, const char *argv[])
+{
 	SDMMobileDevice;
-	
+
 	char *udid = NULL;
-	
+
 	char *service = NULL;
-	
+
 	char *help = NULL;
-	
+
 	char *domain = NULL;
 	char *key = NULL;
-	
+
 	char *bundle = NULL;
-	
+
 	char *diagArg = NULL;
-	
+
 	bool searchArgs = true;
-	
+
 	char *installPath = NULL;
-	
+
 	int c;
 	while (searchArgs) {
 		int option_index = 0x0;
-		c = getopt_long (argc, (char * const *)argv, "lh:d:ais:q:p:t:c:z",long_options, &option_index);
+		c = getopt_long(argc, (char *const *)argv, "lh:d:ais:q:p:t:c:z", long_options, &option_index);
 		if (c == -1) {
 			break;
 		}
@@ -127,19 +127,19 @@ int main(int argc, const char * argv[]) {
 					CFArrayRef argsArray = CFStringCreateArrayBySeparatingStrings(kCFAllocatorDefault, argValue, CFSTR("="));
 					CFIndex argsCounter = CFArrayGetCount(argsArray);
 					if (argsCounter >= 0x1) {
-						domain = (char*)SDMCFStringGetString(CFArrayGetValueAtIndex(argsArray, 0x0));
-						if (strncmp(domain, "all", sizeof(char)*0x3) == 0x0) {
+						domain = (char *)SDMCFStringGetString(CFArrayGetValueAtIndex(argsArray, 0x0));
+						if (strncmp(domain, "all", sizeof(char) * 0x3) == 0x0) {
 							Safe(free, domain);
-							domain = calloc(0x1, sizeof(char)*(strlen(kAllDomains)+0x1));
+							domain = calloc(0x1, sizeof(char) * (strlen(kAllDomains) + 0x1));
 							memcpy(domain, kAllDomains, strlen(kAllDomains));
 						}
 						optionsEnable[OptionsQuery] = true;
 					}
 					if (argsCounter == 0x2) {
-						key = (char*)SDMCFStringGetString(CFArrayGetValueAtIndex(argsArray, 0x1));
+						key = (char *)SDMCFStringGetString(CFArrayGetValueAtIndex(argsArray, 0x1));
 					}
 					else {
-						key = calloc(0x1, sizeof(char)*(strlen(kAllKeys)+0x1));
+						key = calloc(0x1, sizeof(char) * (strlen(kAllKeys) + 0x1));
 						memcpy(key, kAllKeys, strlen(kAllKeys));
 					}
 					CFSafeRelease(argsArray);
@@ -199,31 +199,31 @@ int main(int argc, const char * argv[]) {
 	}
 	if (optionsEnable[OptionsHelp]) {
 		if (!help) {
-			printf("%s [service|query] : list available services or queries\n",helpArg);
-			printf("%s : list attached devices\n",listArg);
-			printf("%s [UDID] : specify a device\n",deviceArg);
-			printf("%s [service] : attach to [service]\n",attachArg);
-			printf("%s <domain>=<key> : query value for <key> in <domain>, specify 'null' for global domain\n",queryArg);
-			printf("%s : display installed apps\n",appsArg);
-			printf("%s : display info of a device\n",infoArg);
-			printf("%s [bundle id] : run an application with specified [bundle id]\n",runArg);
-			printf("%s [sleep|reboot|shutdown] : perform diag power operations on a device\n",powerArg);
-			printf("%s : setup device for development\n",devArg);
-			printf("%s [.app path] : install specificed .app to a device\n",installArg);
-			printf("%s [.mobileconfig path] : install specificed .mobileconfig to a device\n",profileArg);
+			printf("%s [service|query] : list available services or queries\n", helpArg);
+			printf("%s : list attached devices\n", listArg);
+			printf("%s [UDID] : specify a device\n", deviceArg);
+			printf("%s [service] : attach to [service]\n", attachArg);
+			printf("%s <domain>=<key> : query value for <key> in <domain>, specify 'null' for global domain\n", queryArg);
+			printf("%s : display installed apps\n", appsArg);
+			printf("%s : display info of a device\n", infoArg);
+			printf("%s [bundle id] : run an application with specified [bundle id]\n", runArg);
+			printf("%s [sleep|reboot|shutdown] : perform diag power operations on a device\n", powerArg);
+			printf("%s : setup device for development\n", devArg);
+			printf("%s [.app path] : install specificed .app to a device\n", installArg);
+			printf("%s [.mobileconfig path] : install specificed .mobileconfig to a device\n", profileArg);
 		}
 		else {
 			if (strncmp(help, "service", strlen("service")) == 0x0) {
 				printf(" shorthand : service identifier\n--------------------------------\n");
 				for (uint32_t i = 0x0; i < SDM_MD_Service_Count; i++) {
-					printf("%10s : %s\n",SDMMDServiceIdentifiers[i].shorthand, SDMMDServiceIdentifiers[i].identifier);
+					printf("%10s : %s\n", SDMMDServiceIdentifiers[i].shorthand, SDMMDServiceIdentifiers[i].identifier);
 				}
 			}
 			if (strncmp(help, "query", strlen("query")) == 0x0) {
 				for (uint32_t i = 0x0; i < SDM_MD_Domain_Count; i++) {
-					printf("Domain: %s\n",SDMMDKnownDomain[i].domain);
+					printf("Domain: %s\n", SDMMDKnownDomain[i].domain);
 					for (uint32_t j = 0x0; j < SDMMDKnownDomain[i].keyCount; j++) {
-						printf("\t%s\n",SDMMDKnownDomain[i].keys[j]);
+						printf("\t%s\n", SDMMDKnownDomain[i].keys[j]);
 					}
 					printf("\n\n");
 				}
@@ -235,7 +235,6 @@ int main(int argc, const char * argv[]) {
 	}
 	if (optionsEnable[OptionsDevice]) {
 		if (optionsEnable[OptionsInfo]) {
-			
 		}
 		else if (optionsEnable[OptionsApps]) {
 			LookupAppsOnDevice(udid);
@@ -253,9 +252,11 @@ int main(int argc, const char * argv[]) {
 			if (diagArg) {
 				if (strncmp(diagArg, "sleep", strlen("sleep")) == 0x0) {
 					SendSleepToDevice(udid);
-				} else if (strncmp(diagArg, "reboot", strlen("reboot")) == 0x0) {
+				}
+				else if (strncmp(diagArg, "reboot", strlen("reboot")) == 0x0) {
 					SendRebootToDevice(udid);
-				} else if (strncmp(diagArg, "shutdown", strlen("shutdown")) == 0x0) {
+				}
+				else if (strncmp(diagArg, "shutdown", strlen("shutdown")) == 0x0) {
 					SendShutdownToDevice(udid);
 				}
 			}
@@ -275,7 +276,6 @@ int main(int argc, const char * argv[]) {
 	}
 	Safe(free, domain);
 	Safe(free, key);
-	
-    return 0;
-}
 
+	return 0;
+}

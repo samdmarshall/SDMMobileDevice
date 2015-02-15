@@ -19,62 +19,65 @@
 #include "Core.h"
 #include "SDMMD_Connection_Internal.h"
 
-void ServiceSocketCallback(CFSocketRef s, CFSocketCallBackType callbackType, CFDataRef address, const void *data, void *info) {
-    CFSocketNativeHandle socket = (CFSocketNativeHandle)(*((CFSocketNativeHandle *)data));
-	printf("callback: %lu\n",callbackType);
-    struct msghdr message;
-    struct iovec iov[0x1];
-    struct cmsghdr *control_message = NULL;
-    char ctrl_buf[CMSG_SPACE(sizeof(int))];
-    char dummy_data[0x1];
-	
-    memset(&message, 0x0, sizeof(struct msghdr));
-    memset(ctrl_buf, 0x0, CMSG_SPACE(sizeof(int)));
-	
-    dummy_data[0] = ' ';
-    iov[0x0].iov_base = dummy_data;
-    iov[0x0].iov_len = sizeof(dummy_data);
-	
-    message.msg_name = NULL;
-    message.msg_namelen = 0x0;
-    message.msg_iov = iov;
-    message.msg_iovlen = 0x1;
-    message.msg_controllen = CMSG_SPACE(sizeof(int));
-    message.msg_control = ctrl_buf;
-	
-    control_message = CMSG_FIRSTHDR(&message);
-    control_message->cmsg_level = SOL_SOCKET;
-    control_message->cmsg_type = SCM_RIGHTS;
-    control_message->cmsg_len = CMSG_LEN(sizeof(int));
-	
-    *((int *) CMSG_DATA(control_message)) = PtrCast(info,int);
-	
-    sendmsg(socket, &message, 0x0);
-    //CFSocketInvalidate(s);
-    //CFSafeRelease(s);
+void ServiceSocketCallback(CFSocketRef s, CFSocketCallBackType callbackType, CFDataRef address, const void *data, void *info)
+{
+	CFSocketNativeHandle socket = (CFSocketNativeHandle)(*((CFSocketNativeHandle *)data));
+	printf("callback: %lu\n", callbackType);
+	struct msghdr message;
+	struct iovec iov[0x1];
+	struct cmsghdr *control_message = NULL;
+	char ctrl_buf[CMSG_SPACE(sizeof(int))];
+	char dummy_data[0x1];
+
+	memset(&message, 0x0, sizeof(struct msghdr));
+	memset(ctrl_buf, 0x0, CMSG_SPACE(sizeof(int)));
+
+	dummy_data[0] = ' ';
+	iov[0x0].iov_base = dummy_data;
+	iov[0x0].iov_len = sizeof(dummy_data);
+
+	message.msg_name = NULL;
+	message.msg_namelen = 0x0;
+	message.msg_iov = iov;
+	message.msg_iovlen = 0x1;
+	message.msg_controllen = CMSG_SPACE(sizeof(int));
+	message.msg_control = ctrl_buf;
+
+	control_message = CMSG_FIRSTHDR(&message);
+	control_message->cmsg_level = SOL_SOCKET;
+	control_message->cmsg_type = SCM_RIGHTS;
+	control_message->cmsg_len = CMSG_LEN(sizeof(int));
+
+	*((int *)CMSG_DATA(control_message)) = PtrCast(info, int);
+
+	sendmsg(socket, &message, 0x0);
+	//CFSocketInvalidate(s);
+	//CFSafeRelease(s);
 }
 
-void CreateLocalSocket(char *udid, struct SDM_MD_Service_Identifiers service) {
+void CreateLocalSocket(char *udid, struct SDM_MD_Service_Identifiers service)
+{
 	SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 	SDMMD_AMConnectionRef serviceCon = AttachToDeviceAndService(device, service.identifier);
 	if (serviceCon) {
-		char *socketPath = calloc(0x1, sizeof(char)*0x400);
+		char *socketPath = calloc(0x1, sizeof(char) * 0x400);
 		strlcat(socketPath, "/tmp/sdm_", 0xa);
-		strlcat(&(socketPath[0x9]), service.shorthand, 0xa+strlen(service.shorthand));
-		printf("Creating socket at %s\n",socketPath);
-		
+		strlcat(&(socketPath[0x9]), service.shorthand, 0xa + strlen(service.shorthand));
+		printf("Creating socket at %s\n", socketPath);
+
 		SocketConnection serviceSocket = SDMMD_TranslateConnectionToSocket(serviceCon);
 		CFSocketContext context;
 		if (serviceSocket.isSSL) {
-			context = (CFSocketContext){ 0x0, serviceSocket.socket.ssl, NULL, NULL, NULL };
-		} else {
-			context = (CFSocketContext){ 0x0, &serviceSocket.socket.conn, NULL, NULL, NULL };
+			context = (CFSocketContext){0x0, serviceSocket.socket.ssl, NULL, NULL, NULL};
+		}
+		else {
+			context = (CFSocketContext){0x0, &serviceSocket.socket.conn, NULL, NULL, NULL};
 		}
 		CFSocketRef serviceSock = CFSocketCreate(NULL, AF_UNIX, 0x0, 0x0, kCFSocketAcceptCallBack, &ServiceSocketCallback, &context);
-		
+
 		int yes = 0x1;
 		setsockopt(CFSocketGetNative(serviceSock), SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
-		
+
 		struct sockaddr_un address;
 		memset(&address, 0x0, sizeof(address));
 		address.sun_family = AF_UNIX;
@@ -83,18 +86,19 @@ void CreateLocalSocket(char *udid, struct SDM_MD_Service_Identifiers service) {
 		CFDataRef address_data = CFDataCreate(NULL, (const UInt8 *)&address, sizeof(address));
 
 		unlink(socketPath);
-		
+
 		CFSocketSetAddress(serviceSock, address_data);
 		CFSafeRelease(address_data);
 		CFRunLoopSourceRef socketSource = CFSocketCreateRunLoopSource(NULL, serviceSock, 0);
 		CFRunLoopAddSource(CFRunLoopGetMain(), socketSource, kCFRunLoopCommonModes);
 		CFSafeRelease(socketSource);
-		Safe(free,socketPath);
+		Safe(free, socketPath);
 		CFRunLoopRun();
 	}
 }
 
-void PerformService(char *udid, char *service, ...) {
+void PerformService(char *udid, char *service, ...)
+{
 	if ((udid && strlen(udid) == 0x28) && (service)) {
 		uint32_t index = 0x0;
 		for (index = 0x0; index < SDM_MD_Service_Count; index++) {
@@ -255,7 +259,8 @@ void PerformService(char *udid, char *service, ...) {
 				break;
 			};
 		}
-	} else {
+	}
+	else {
 		printf("invalid udid or service name\n");
 	}
 }

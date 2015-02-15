@@ -39,14 +39,16 @@ static UInt8 newlineBytes[0x3] = {0xa, 0x0, 0x0};
 static dispatch_queue_t operatingQueue;
 static dispatch_queue_t updatelogQueue;
 
-void Syslog(char *udid) {
+void Syslog(char *udid)
+{
 	operatingQueue = dispatch_queue_create("com.samdmarshall.mobile.syslog.operations", DISPATCH_QUEUE_SERIAL);
 	updatelogQueue = dispatch_queue_create("com.samdmarshall.mobile.syslog.updatelog", DISPATCH_QUEUE_SERIAL);
 	AttachToSyslog(udid);
 	PrintSysLog();
 }
 
-void EnableExtendedLogging(SDMMD_AMDeviceRef device) {
+void EnableExtendedLogging(SDMMD_AMDeviceRef device)
+{
 	sdmmd_return_t result = SDMMD_AMDeviceConnect(device);
 	if (SDM_MD_CallSuccessful(result)) {
 		result = SDMMD_AMDeviceStartSession(device);
@@ -58,10 +60,12 @@ void EnableExtendedLogging(SDMMD_AMDeviceRef device) {
 					if (SDM_MD_CallSuccessful(result)) {
 						printf("Enabling extended logging...\n");
 					}
-				} else {
+				}
+				else {
 					printf("Extended logging already enabled.\n");
 				}
-			} else {
+			}
+			else {
 				PrintCFType(value);
 			}
 			CFSafeRelease(value);
@@ -71,7 +75,8 @@ void EnableExtendedLogging(SDMMD_AMDeviceRef device) {
 	}
 }
 
-void AttachToSyslog(char *udid) {
+void AttachToSyslog(char *udid)
+{
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0x0), ^{
 		SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 		if (device) {
@@ -110,10 +115,11 @@ void AttachToSyslog(char *udid) {
 	});
 }
 
-void PrintSysLog() {
+void PrintSysLog()
+{
 	int token;
 	uint32_t status[0x2] = {0x0};
-	status[0x0] = notify_register_dispatch(updateLogNotifyName, &token, updatelogQueue, ^(int token){
+	status[0x0] = notify_register_dispatch(updateLogNotifyName, &token, updatelogQueue, ^(int token) {
 		dispatch_sync(operatingQueue, ^{
 			CFDataRef logData;
 			Boolean foundLine = false;
@@ -176,13 +182,14 @@ void PrintSysLog() {
 			}
 		});
 	});
-	status[0x1] = notify_register_dispatch(exitNotifyName, &token, dispatch_get_main_queue(), ^(int token){
+	status[0x1] = notify_register_dispatch(exitNotifyName, &token, dispatch_get_main_queue(), ^(int token) {
 		printf("\n\nLost Connection with Device\n");
 		CFRunLoopStop(CFRunLoopGetMain());
 	});
 	if (status[0x0] == KERN_SUCCESS && status[0x1] == KERN_SUCCESS) {
 		CFRunLoopRun();
-	} else {
+	}
+	else {
 		printf("Failed to register callback to parse syslog.");
 	}
 }

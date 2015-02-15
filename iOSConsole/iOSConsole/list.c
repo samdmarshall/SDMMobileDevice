@@ -16,18 +16,19 @@
 
 #include "list.h"
 
-void ListConnectedDevices() {
+void ListConnectedDevices()
+{
 	CFArrayRef devices = SDMMD_AMDCreateDeviceList();
 	CFIndex numberOfDevices = CFArrayGetCount(devices);
-	LogLine(PrintCode_Norm,"Currently connected devices: (%ld)",numberOfDevices);
+	LogLine(PrintCode_Norm, "Currently connected devices: (%ld)", numberOfDevices);
 	if (numberOfDevices) {
 		// return type (uint32_t) corresponds with known return codes (SDMMD_Error.h)
 		sdmmd_return_t result;
-		
+
 		uint32_t index;
 		// Iterating over connected devices
 		for (index = 0; index < numberOfDevices; index++) {
-			
+
 			// getting the device object from the array of connected devices
 			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, index);
 			bool validDevice = SDMMD_AMDeviceIsValid(device);
@@ -42,7 +43,7 @@ void ListConnectedDevices() {
 						deviceModel = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kProductType));
 					}
 					SDMMD_AMDeviceStopSession(device);
-					
+
 					CFTypeRef deviceUDID = SDMMD_AMDeviceCopyUDID(device);
 					if (!deviceUDID) {
 						deviceUDID = SDMMD_AMDeviceCopyValue(device, NULL, CFSTR(kUniqueDeviceID));
@@ -71,14 +72,14 @@ void ListConnectedDevices() {
 							break;
 						}
 					}
-					printf("%d) %s : %s (%s) (%s)\n",index+0x1,udid_cstr,name_cstr,SDMMD_ResolveModelToName(deviceModel), connection_type);
+					printf("%d) %s : %s (%s) (%s)\n", index + 0x1, udid_cstr, name_cstr, SDMMD_ResolveModelToName(deviceModel), connection_type);
 					Safe(free, udid_cstr);
 					Safe(free, name_cstr);
-					
+
 					CFSafeRelease(deviceName);
 					CFSafeRelease(deviceUDID);
 					CFSafeRelease(deviceModel);
-					
+
 					SDMMD_AMDeviceDisconnect(device);
 				}
 			}

@@ -17,7 +17,8 @@
 #include "SDMMD_Connection_Internal.h"
 #include "Core.h"
 
-void WhatDoesThisDo(char *udid) {
+void WhatDoesThisDo(char *udid)
+{
 	SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 	if (device) {
 		sdmmd_return_t result = kAMDInvalidArgumentError;
@@ -27,34 +28,32 @@ void WhatDoesThisDo(char *udid) {
 		SDMMD_AMConnectionRef conn = SDMMD_AMDServiceConnectionCreate(0, NULL, dict);
 		result = SDMMD_AMDeviceSecureStartService(device, CFSTR(AMSVC_DIAG_RELAY), NULL, &conn);
 		if (result == 0) {
-			
+
 			CFMutableDictionaryRef optionsDict = SDMMD_create_dict();
 			CFDictionarySetValue(optionsDict, CFSTR("Request"), CFSTR("GasGauge"));
-			
+
 			result = SDMMD_ServiceSendMessage(SDMMD_TranslateConnectionToSocket(conn), optionsDict, kCFPropertyListXMLFormat_v1_0);
-			
+
 			CFMutableDictionaryRef response;
 			result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(conn), (CFPropertyListRef *)&response);
 			if (SDM_MD_CallSuccessful(result)) {
 				PrintCFType(response);
 			}
-			
-			result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(conn), (CFPropertyListRef *)&response);
-			if (SDM_MD_CallSuccessful(result)) {
-				PrintCFType(response);
-			}
-			
+
 			result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(conn), (CFPropertyListRef *)&response);
 			if (SDM_MD_CallSuccessful(result)) {
 				PrintCFType(response);
 			}
 
+			result = SDMMD_ServiceReceiveMessage(SDMMD_TranslateConnectionToSocket(conn), (CFPropertyListRef *)&response);
+			if (SDM_MD_CallSuccessful(result)) {
+				PrintCFType(response);
+			}
 		}
 		else {
-			printf("%s: Was unable to start the service on the device: %i\n",__FUNCTION__,SDMMD_AMDeviceUSBDeviceID(device));
+			printf("%s: Was unable to start the service on the device: %i\n", __FUNCTION__, SDMMD_AMDeviceUSBDeviceID(device));
 		}
 	}
 }
-
 
 #endif
