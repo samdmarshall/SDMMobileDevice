@@ -732,24 +732,24 @@ bool SDMMD_isDeviceAttachedUSB(uint32_t location_id)
 
 bool SDMMD_isDeviceAttached(uint32_t device_id)
 {
-	// this needs to be changed to query against USBMuxd for device dictionaries
 	bool result = false;
-	if (SDMMobileDevice->ivars.deviceList) {
-		CFArrayRef devices = CFArrayCreateCopy(kCFAllocatorDefault, SDMMobileDevice->ivars.deviceList);
-		if (devices) {
-			for (uint32_t i = 0; i < CFArrayGetCount(devices); i++) {
-				SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, i);
-				if (device) {
-					uint32_t fetched_id = SDMMD_AMDeviceGetConnectionID(device);
-					result = (fetched_id == device_id); // ? SDMMD_isDeviceAttachedUSB(device->ivars.location_id) : false);
-					if (result) {
-						break;
-					}
+	
+	CFArrayRef devices = CFArrayCreateCopy(kCFAllocatorDefault, SDMMobileDevice->ivars.deviceList);
+	
+	if (devices) {
+		for (uint32_t i = 0; i < CFArrayGetCount(devices); i++) {
+			SDMMD_AMDeviceRef device = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(devices, i);
+			if (device) {
+				uint32_t fetched_id = SDMMD_AMDeviceGetConnectionID(device);
+				result = (fetched_id == device_id); // ? SDMMD_isDeviceAttachedUSB(device->ivars.location_id) : false);
+				if (result) {
+					break;
 				}
 			}
-			CFSafeRelease(devices);
 		}
 	}
+	CFSafeRelease(devices);
+	
 	return result;
 }
 
@@ -1330,6 +1330,7 @@ sdmmd_return_t SDMMD_AMDeviceUnpair(SDMMD_AMDeviceRef device)
 bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device)
 {
 	bool result = false;
+	
 	if (device) {
 		SDMMD__mutex_lock(device->ivars.mutex_lock);
 		char *path = calloc(1, sizeof(char[1025]));
@@ -1354,6 +1355,7 @@ bool SDMMD_AMDeviceIsPaired(SDMMD_AMDeviceRef device)
 	else {
 		printf("%s: No device.\n", __FUNCTION__);
 	}
+	
 	return result;
 }
 
@@ -1487,7 +1489,7 @@ sdmmd_return_t SDMMD_AMDeviceExtendedPairWithOptions(SDMMD_AMDeviceRef device, C
 			result = kAMDDeviceDisconnectedError;
 		}
 	}
-
+	
 	return result;
 }
 

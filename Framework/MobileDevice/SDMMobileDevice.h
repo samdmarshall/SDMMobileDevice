@@ -39,5 +39,10 @@
 #include "SDMMD_Applications.h"
 #include "SDMMD_Notification.h"
 #include "SDMMD_Debugger.h"
+#include "SDMMD_FileRelay.h"
+#include "SDMMD_MobileBackup2.h"
+#include "SDMMD_pcap.h"
+#include "SDMMD_MobileConfig.h"
+#include "SDMMD_USBMux_Protocol.h"
 
 #endif

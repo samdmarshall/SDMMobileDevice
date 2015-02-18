@@ -183,17 +183,17 @@ void SDMMD_USBMuxLogsCallback(void *context, struct USBMuxPacket *packet)
 
 void SDMMD_USBMuxDeviceListCallback(void *context, struct USBMuxPacket *packet)
 {
-	// SDM: used to prune bad records from being retained
-	CFMutableArrayRef newList = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
-	for (uint32_t i = 0x0; i < CFArrayGetCount(SDMMobileDevice->ivars.deviceList); i++) {
-		SDMMD_AMDeviceRef deviceFromList = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(SDMMobileDevice->ivars.deviceList, i);
-		if (SDMMD_AMDeviceIsValid(deviceFromList)) {
-			CFArrayAppendValue(newList, deviceFromList);
-		}
-	}
-	CFSafeRelease(SDMMobileDevice->ivars.deviceList);
-	SDMMobileDevice->ivars.deviceList = CFArrayCreateCopy(kCFAllocatorDefault, newList);
-	CFSafeRelease(newList);
+//	// SDM: used to prune bad records from being retained
+//	CFMutableArrayRef newList = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
+//	for (uint32_t i = 0x0; i < CFArrayGetCount(SDMMobileDevice->ivars.deviceList); i++) {
+//		SDMMD_AMDeviceRef deviceFromList = (SDMMD_AMDeviceRef)CFArrayGetValueAtIndex(SDMMobileDevice->ivars.deviceList, i);
+//		if (SDMMD_AMDeviceIsValid(deviceFromList)) {
+//			CFArrayAppendValue(newList, deviceFromList);
+//		}
+//	}
+//	CFSafeRelease(SDMMobileDevice->ivars.deviceList);
+//	SDMMobileDevice->ivars.deviceList = CFArrayCreateCopy(kCFAllocatorDefault, newList);
+//	CFSafeRelease(newList);
 
 	CFArrayRef devices = CFDictionaryGetValue(packet->payload, CFSTR("DeviceList"));
 	for (uint32_t i = 0x0; i < CFArrayGetCount(devices); i++) {
@@ -228,6 +228,7 @@ SDMMD_USBMuxListenerRef SDMMD_USBMuxCreate()
 	SDMMD_USBMuxListenerRef listener = (SDMMD_USBMuxListenerRef)SDMMD_USBMuxListenerCreateEmpty();
 	listener->ivars.socket = -1;
 	listener->ivars.isActive = false;
+	listener->ivars.operationQueue = dispatch_queue_create("com.samdmarshall.sdmmobiledevice.usbmux-operation-queue", DISPATCH_QUEUE_SERIAL);
 	listener->ivars.socketQueue = dispatch_queue_create("com.samdmarshall.sdmmobiledevice.socketQueue", NULL);
 	listener->ivars.responseCallback = SDMMD_USBMuxResponseCallback;
 	listener->ivars.attachedCallback = SDMMD_USBMuxAttachedCallback;
@@ -439,7 +440,7 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener)
 			SDMMD_USBMuxListenerSend(*listener, &startListen);
 			if (startListen->payload) {
 				struct USBMuxResponseCode response = SDMMD_USBMuxParseReponseCode(startListen->payload);
-				if (response.code == 0x0){
+				if (response.code == 0){
 					(*listener)->ivars.isActive = true;
                 }
 				else {
@@ -485,7 +486,7 @@ struct USBMuxPacket *SDMMD_USBMuxCreatePacketType(SDMMD_USBMuxPacketMessageType 
 		void *keys[count];
 		void *values[count];
 		CFDictionaryGetKeysAndValues(dict, (const void **)keys, (const void **)values);
-		for (uint32_t i = 0x0; i < count; i++) {
+		for (uint32_t i = 0; i < count; i++) {
 			CFDictionarySetValue((CFMutableDictionaryRef)packet->payload, keys[i], values[i]);
 		}
 	}

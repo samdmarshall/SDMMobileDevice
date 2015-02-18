@@ -238,7 +238,7 @@ sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data)
 			length = ntohl(length);
 
 			// Receive data body
-			unsigned char *buffer = calloc(0x1, length);
+			unsigned char *buffer = calloc(1, length);
 			received = SDMMD__ServiceReceiveBytes(handle, buffer, length);
 
 			// Create data object only from received byte length

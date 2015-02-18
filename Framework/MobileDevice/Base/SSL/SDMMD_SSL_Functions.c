@@ -155,10 +155,10 @@ char *SDMMD_ssl_strerror(SSL *ssl, uint32_t ret)
 
 int SDMMD__add_ext(X509 *cert, int flag, char *name)
 {
-	int result = 0x0;
+	int result = 0;
 	X509V3_CTX ctx;
-	X509V3_set_ctx(&ctx, cert, cert, 0x0, 0x0, 0x0);
-	X509_EXTENSION *ex = X509V3_EXT_conf_nid(0x0, &ctx, flag, name);
+	X509V3_set_ctx(&ctx, cert, cert, 0, 0, 0);
+	X509_EXTENSION *ex = X509V3_EXT_conf_nid(0, &ctx, flag, name);
 	if (ex) {
 		result = X509_add_ext(cert, ex, -1);
 		X509_EXTENSION_free(ex);
@@ -194,7 +194,7 @@ CFDataRef SDMMD_CreateDataFromPrivateKey(EVP_PKEY *key)
 	BIO *bio = BIO_new(method);
 	CFDataRef data = NULL;
 	if (bio) {
-		int result = PEM_write_bio_PrivateKey(bio, key, 0x0, 0x0, 0x0, 0x0, 0x0);
+		int result = PEM_write_bio_PrivateKey(bio, key, 0, 0, 0, 0, 0);
 		if (result) {
 			data = SDMMD__create_data_from_bp(bio);
 		}
@@ -276,15 +276,15 @@ CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef devicePubkey)
 	}
 	else {
 		X509_set_pubkey(rootX509, rootEVP);
-		X509_set_version(rootX509, 0x2);
+		X509_set_version(rootX509, 2);
 
 		ASN1_INTEGER *rootSerial = X509_get_serialNumber(rootX509);
-		ASN1_INTEGER_set(rootSerial, 0x0);
+		ASN1_INTEGER_set(rootSerial, 0);
 
 		ASN1_TIME *rootAsn1time = ASN1_TIME_new();
-		ASN1_TIME_set(rootAsn1time, 0x0);
+		ASN1_TIME_set(rootAsn1time, 0);
 		X509_set_notBefore(rootX509, rootAsn1time);
-		ASN1_TIME_set(rootAsn1time, 0x12cc0300);
+		ASN1_TIME_set(rootAsn1time, 0x12cc0300); // 60 sec * 60 minutes * 24 hours * 365 days * 10 years
 		X509_set_notAfter(rootX509, rootAsn1time);
 		ASN1_TIME_free(rootAsn1time);
 
@@ -303,15 +303,15 @@ CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef devicePubkey)
 	}
 	else {
 		X509_set_pubkey(hostX509, hostEVP);
-		X509_set_version(hostX509, 0x2);
+		X509_set_version(hostX509, 2);
 
 		ASN1_INTEGER *hostSerial = X509_get_serialNumber(hostX509);
-		ASN1_INTEGER_set(hostSerial, 0x0);
+		ASN1_INTEGER_set(hostSerial, 0);
 
 		ASN1_TIME *hostAsn1time = ASN1_TIME_new();
-		ASN1_TIME_set(hostAsn1time, 0x0);
+		ASN1_TIME_set(hostAsn1time, 0);
 		X509_set_notBefore(hostX509, hostAsn1time);
-		ASN1_TIME_set(hostAsn1time, 0x12cc0300);
+		ASN1_TIME_set(hostAsn1time, 0x12cc0300); // 60 sec * 60 minutes * 24 hours * 365 days * 10 years
 		X509_set_notAfter(hostX509, hostAsn1time);
 		ASN1_TIME_free(hostAsn1time);
 
@@ -331,15 +331,15 @@ CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef devicePubkey)
 	}
 	else {
 		X509_set_pubkey(deviceX509, deviceEVP);
-		X509_set_version(deviceX509, 0x2);
+		X509_set_version(deviceX509, 2);
 
 		ASN1_INTEGER *deviceSerial = X509_get_serialNumber(deviceX509);
-		ASN1_INTEGER_set(deviceSerial, 0x0);
+		ASN1_INTEGER_set(deviceSerial, 0);
 
 		ASN1_TIME *deviceAsn1time = ASN1_TIME_new();
-		ASN1_TIME_set(deviceAsn1time, 0x0);
+		ASN1_TIME_set(deviceAsn1time, 0);
 		X509_set_notBefore(deviceX509, deviceAsn1time);
-		ASN1_TIME_set(deviceAsn1time, 0x12cc0300);
+		ASN1_TIME_set(deviceAsn1time, 0x12cc0300); // 60 sec * 60 minutes * 24 hours * 365 days * 10 years
 		X509_set_notAfter(deviceX509, deviceAsn1time);
 		ASN1_TIME_free(deviceAsn1time);
 
@@ -360,7 +360,7 @@ CFMutableDictionaryRef SDMMD__CreatePairingMaterial(CFDataRef devicePubkey)
 	CFDataRef hostPrivKey = SDMMD_CreateDataFromPrivateKey(hostEVP);
 	CFStringRef hostId = SDMMD_CreateUUID();
 
-	record = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+	record = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 	if (record) {
 		CFDictionarySetValue(record, CFSTR("RootCertificate"), rootCert);
 

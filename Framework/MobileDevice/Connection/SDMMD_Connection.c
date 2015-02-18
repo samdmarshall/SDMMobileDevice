@@ -59,11 +59,11 @@ sdmmd_return_t SDMMD_perform_command(SDMMD_AMConnectionRef conn, CFStringRef com
 		SocketConnection sock = SDMMD_TranslateConnectionToSocket(conn);
 		result = SDMMD_ServiceSendStream(sock, message, kCFPropertyListXMLFormat_v1_0);
 		CFSafeRelease(message);
-		if (result == 0) {
+		if (result == kAMDSuccess) {
 			CFDictionaryRef response = NULL;
 			result = SDMMD_ServiceReceiveStream(sock, (CFPropertyListRef *)&response);
-			if (result == 0 && response) {
-				while (result == 0) {
+			if (result == kAMDSuccess && response) {
+				while (result == kAMDSuccess) {
 					result = SDMMD__ErrorHandler(SDMMD__ConvertServiceError, response);
 
 					CheckErrorAndReturn(result);
@@ -431,7 +431,7 @@ sdmmd_return_t SDMMD_AMDeviceStartService(SDMMD_AMDeviceRef device, CFStringRef 
 					CFDictionarySetValue(optionsCopy, CFSTR("CloseOnInvalidate"), kCFBooleanFalse);
 					result = SDMMD_AMDeviceSecureStartService(device, service, optionsCopy, connection);
 					CFSafeRelease(optionsCopy);
-					if (result == 0) {
+					if (result == kAMDSuccess) {
 						socket = SDMMD_AMDServiceConnectionGetSocket(*connection);
 						ssl_enabled = SDMMD_AMDServiceConnectionGetSecureIOContext(*connection);
 						if (ssl_enabled) {
@@ -495,9 +495,9 @@ sdmmd_return_t SDMMD_AMDeviceSecureStartSessionedService(SDMMD_AMDeviceRef devic
 	sdmmd_return_t result = kAMDSuccess;
 	if (device != NULL) {
 		result = SDMMD_AMDeviceConnect(device);
-		if (result == 0) {
+		if (result == kAMDSuccess) {
 			result = SDMMD_AMDeviceStartSession(device);
-			if (result == 0) {
+			if (result == kAMDSuccess) {
 				result = SDMMD_AMDeviceSecureStartService(device, service, NULL, connection);
 				if (result) {
 					char *serviceString = SDMCFStringGetString(service);
