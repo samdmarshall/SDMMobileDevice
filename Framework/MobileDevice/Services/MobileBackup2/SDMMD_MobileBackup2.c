@@ -31,7 +31,7 @@ sdmmd_return_t SDMMD_MB2SendFileStream(SDMMD_AMConnectionRef conn, CFStringRef p
 	CFSafeRelease(data_separator);
 	CheckErrorAndReturn(result);
 
-	char zero_chunk[1] = {0x0};
+	char zero_chunk[1] = {0};
 	CFDataRef data_end = CFDataCreate(kCFAllocatorDefault, (const UInt8 *)zero_chunk, sizeof(uint8_t));
 	result = SDMMD_ServiceSend(SDMMD_TranslateConnectionToSocket(conn), data_end);
 	CFSafeRelease(data_end);
@@ -59,7 +59,7 @@ sdmmd_return_t SDMMD_MB2SendEndStream(SDMMD_AMConnectionRef conn)
 {
 	sdmmd_return_t result = kAMDSuccess;
 
-	uint32_t zero_stream = 0x0;
+	uint32_t zero_stream = 0;
 	CFDataRef stream_end = CFDataCreate(kCFAllocatorDefault, (const UInt8 *)&zero_stream, sizeof(uint32_t));
 	result = SDMMD_DirectServiceSend(SDMMD_TranslateConnectionToSocket(conn), stream_end);
 	CFSafeRelease(stream_end);

@@ -52,12 +52,12 @@ void SDMMD_USBMuxListenerSend(SDMMD_USBMuxListenerRef listener, struct USBMuxPac
 		// Wait for a response-type packet to be received
 		dispatch_semaphore_wait(listener->ivars.semaphore, block_packet->timeout);
 		
-		CFMutableArrayRef updateWithRemove = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, listener->ivars.responses);
+		CFMutableArrayRef updateWithRemove = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0, listener->ivars.responses);
 		
 		// Search responses for a packet that matches the one sent
 		struct USBMuxPacket *responsePacket = NULL;
-		uint32_t removeCounter = 0x0;
-		for (uint32_t i = 0x0; i < CFArrayGetCount(listener->ivars.responses); i++) {
+		uint32_t removeCounter = 0;
+		for (uint32_t i = 0; i < CFArrayGetCount(listener->ivars.responses); i++) {
 			
 			struct USBMuxPacket *response = (struct USBMuxPacket *)CFArrayGetValueAtIndex(listener->ivars.responses, i);
 			if ((*packet)->body.tag == response->body.tag) {
@@ -77,11 +77,11 @@ void SDMMD_USBMuxListenerSend(SDMMD_USBMuxListenerRef listener, struct USBMuxPac
 		
 		if (responsePacket == NULL) {
 			// Didn't find an appropriate response, initialize an empty packet to return
-			responsePacket = (struct USBMuxPacket *)calloc(0x1, sizeof(struct USBMuxPacket));
+			responsePacket = (struct USBMuxPacket *)calloc(1, sizeof(struct USBMuxPacket));
 		}
 		
 		CFSafeRelease(listener->ivars.responses);
-		listener->ivars.responses = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0x0, updateWithRemove);
+		listener->ivars.responses = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0, updateWithRemove);
 		CFSafeRelease(updateWithRemove);
 		
 		// Destroy sent packet
@@ -102,13 +102,13 @@ void SDMMD_USBMuxSend(uint32_t sock, struct USBMuxPacket *packet)
 {
 	CFDataRef xmlData = CFPropertyListCreateXMLData(kCFAllocatorDefault, packet->payload);
 	char *buffer = (char *)CFDataGetBytePtr(xmlData);
-	ssize_t result = send(sock, &packet->body, sizeof(struct USBMuxPacketBody), 0x0);
+	ssize_t result = send(sock, &packet->body, sizeof(struct USBMuxPacketBody), 0);
 	if (result == sizeof(struct USBMuxPacketBody)) {
 		if (packet->body.length > result) {
 			ssize_t payloadSize = packet->body.length - result;
 			ssize_t remainder = payloadSize;
 			while (remainder) {
-				result = send(sock, &buffer[payloadSize - remainder], sizeof(char), 0x0);
+				result = send(sock, &buffer[payloadSize - remainder], sizeof(char), 0);
 				if (result != sizeof(char)) {
 					break;
 				}
@@ -126,14 +126,14 @@ void SDMMD_USBMuxListenerReceive(SDMMD_USBMuxListenerRef listener, struct USBMux
 
 void SDMMD_USBMuxReceive(uint32_t sock, struct USBMuxPacket *packet)
 {
-	ssize_t result = recv(sock, &packet->body, sizeof(struct USBMuxPacketBody), 0x0);
+	ssize_t result = recv(sock, &packet->body, sizeof(struct USBMuxPacketBody), 0);
 	if (result == sizeof(struct USBMuxPacketBody)) {
 		ssize_t payloadSize = packet->body.length - result;
 		if (payloadSize) {
-			char *buffer = calloc(0x1, payloadSize);
+			char *buffer = calloc(1, payloadSize);
 			ssize_t remainder = payloadSize;
 			while (remainder) {
-				result = recv(sock, &buffer[payloadSize - remainder], sizeof(char), 0x0);
+				result = recv(sock, &buffer[payloadSize - remainder], sizeof(char), 0);
 				if (result != sizeof(char)) {
 					break;
 				}

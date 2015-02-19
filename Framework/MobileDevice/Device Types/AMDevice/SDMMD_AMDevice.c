@@ -65,7 +65,7 @@
 
 SDMMD_lockdown_conn *SDMMD_lockdown_connection_create(uint32_t socket)
 {
-	SDMMD_lockdown_conn *lockdown = calloc(0x1, sizeof(SDMMD_lockdown_conn));
+	SDMMD_lockdown_conn *lockdown = calloc(1, sizeof(SDMMD_lockdown_conn));
 	if (socket != 0) {
 		lockdown->connection = socket;
 		Safe(free, lockdown->pointer);
@@ -1135,7 +1135,7 @@ sdmmd_return_t SDMMD__connect_to_port(SDMMD_AMDeviceRef device, uint32_t port, b
 sdmmd_return_t SDMMD_AMDeviceConnect(SDMMD_AMDeviceRef device)
 {
 	sdmmd_return_t result = kAMDSuccess;
-	uint32_t socket = 0xffffffff;
+	uint32_t socket = -1;
 	uint32_t lockdownPort = 62078;
 	if (!device) {
 		result = kAMDInvalidArgumentError;
@@ -1607,10 +1607,10 @@ SDMMD_AMDeviceRef SDMMD_AMDeviceCreateFromProperties(CFDictionaryRef dictionary)
 				device->ivars.connection_type = kAMDeviceConnectionTypeUSB;
 
 				CFNumberRef productId = CFDictionaryGetValue(properties, CFSTR("ProductID"));
-				CFNumberGetValue(productId, kCFNumberSInt16Type /*0x2*/, &device->ivars.product_id);
+				CFNumberGetValue(productId, kCFNumberSInt16Type, &device->ivars.product_id);
 
 				CFNumberRef locationId = CFDictionaryGetValue(properties, CFSTR("LocationID"));
-				CFNumberGetValue(locationId, kCFNumberSInt32Type /*0x4*/, &device->ivars.location_id);
+				CFNumberGetValue(locationId, kCFNumberSInt32Type, &device->ivars.location_id);
 			}
 			else if (CFStringCompare(linkType, CFSTR("Network"), 0) == 0 || CFStringCompare(linkType, CFSTR("WiFi"), 0) == 0) {
 				device->ivars.connection_type = kAMDeviceConnectionTypeWiFi;

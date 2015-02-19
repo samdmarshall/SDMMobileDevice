@@ -231,9 +231,9 @@ sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data)
 
 		// Receive data length header
 		// Note: in iOS 8 the header 4-byte int may have to be read in multiple parts
-		received = SDMMD__ServiceReceiveBytes(handle, &length, 0x4);
+		received = SDMMD__ServiceReceiveBytes(handle, &length, 4);
 
-		if (received == 0x4) {
+		if (received == 4) {
 			// Convert from device byte order
 			length = ntohl(length);
 
@@ -318,7 +318,7 @@ sdmmd_return_t SDMMD_ServiceReceiveMessage(SocketConnection handle, CFPropertyLi
 
 	// Return an empty dictionary if a receive OR parse failure occurred
 	if (result != kAMDSuccess) {
-		*data = CFDictionaryCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+		*data = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 	}
 
 	return result;

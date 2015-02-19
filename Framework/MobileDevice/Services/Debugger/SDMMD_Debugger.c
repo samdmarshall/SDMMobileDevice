@@ -58,7 +58,7 @@ static char *kHexEncodeString = "0123456789ABCDEF";
 
 SDMMD_AMDebugConnectionRef SDMMD_AMDebugConnectionCreateForDevice(SDMMD_AMDeviceRef device)
 {
-	SDMMD_AMDebugConnectionRef dconn = calloc(0x1, sizeof(struct SDMMD_AMDebugConnection));
+	SDMMD_AMDebugConnectionRef dconn = calloc(1, sizeof(struct SDMMD_AMDebugConnection));
 	if (dconn) {
 		dconn->device = SDMMD_AMDeviceCreateCopy(device);
 		dconn->connection = NULL;
