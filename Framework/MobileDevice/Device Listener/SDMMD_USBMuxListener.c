@@ -186,7 +186,7 @@ void SDMMD_USBMuxDeviceListCallback(void *context, struct USBMuxPacket *packet)
 	CFArrayRef devices = CFDictionaryGetValue(packet->payload, CFSTR("DeviceList"));
 	for (uint32_t i = 0; i < CFArrayGetCount(devices); i++) {
 		SDMMD_AMDeviceRef deviceFromList = SDMMD_AMDeviceCreateFromProperties(CFArrayGetValueAtIndex(devices, i));
-		if (deviceFromList && !CFArrayContainsValue(SDMMobileDevice->ivars.deviceList, CFRangeMake(0x0, CFArrayGetCount(SDMMobileDevice->ivars.deviceList)), deviceFromList)) {
+		if (deviceFromList && !CFArrayContainsValue(SDMMobileDevice->ivars.deviceList, CFRangeMake(0, CFArrayGetCount(SDMMobileDevice->ivars.deviceList)), deviceFromList)) {
 			struct USBMuxPacket *devicePacket = calloc(1, sizeof(struct USBMuxPacket));
 			memcpy(devicePacket, packet, sizeof(struct USBMuxPacket));
 			devicePacket->payload = CFArrayGetValueAtIndex(devices, i);
