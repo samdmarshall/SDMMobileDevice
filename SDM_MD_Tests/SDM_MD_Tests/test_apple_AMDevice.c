@@ -12,6 +12,69 @@
 #include <SDMMobileDevice/SDMMobileDevice.h>
 #include "test_apple_AMDevice.h"
 
+#if PLS_IGNORE
+{
+	{result, setup_AMDeviceConnect, apple, NULL},
+	{result, test_AMDeviceConnect, apple, NULL},
+	{result, teardown_AMDeviceConnect, apple, NULL}
+}
+#endif
+
+kern_return_t setup_AMDeviceConnect(struct am_device *apple) {
+	if (apple == NULL) {
+		return kAMDDeviceDisconnectedError;
+	}
+	return kAMDSuccess;
+}
+
+kern_return_t test_AMDeviceConnect(struct am_device *apple) {
+	kern_return_t result = AMDeviceConnect(apple);
+	if (result != kAMDSuccess) {
+		printf("\t\tAMDeviceConnect: %08x %s\n",result,SDMMD_AMDErrorString(result));
+	}
+	return result;
+}
+
+kern_return_t teardown_AMDeviceConnect(struct am_device *apple) {
+	if (apple == NULL) {
+		return kAMDDeviceDisconnectedError;
+	}
+	return AMDeviceDisconnect(apple);
+}
+
+kern_return_t setup_AMDeviceStartSession(struct am_device *apple) {
+	kern_return_t result = setup_AMDeviceConnect(apple);
+	if (result != kAMDSuccess) {
+		return result;
+	}
+	
+	result = AMDeviceConnect(apple);
+	if (result != kAMDSuccess) {
+		return result;
+	}
+	
+	return result;
+}
+
+kern_return_t test_AMDeviceStartSession(struct am_device *apple) {
+	kern_return_t result = AMDeviceStartSession(apple);
+	if (result != kAMDSuccess) {
+		printf("\t\tAMDeviceStartSession: %08x %s\n",result,SDMMD_AMDErrorString(result));
+	}
+	return result;
+}
+
+kern_return_t teardown_AMDeviceStartSession(struct am_device *apple) {
+	kern_return_t result = AMDeviceStopSession(apple);
+	if (result != kAMDSuccess) {
+		return result;
+	}
+	return teardown_AMDeviceConnect(apple);
+}
+
+
+#pragma mark -
+
 kern_return_t test_apple_AMDeviceConnect(struct am_device *apple) {
 	kern_return_t apple_return = AMDeviceConnect(apple);
 	if (apple_return != kAMDSuccess) {
