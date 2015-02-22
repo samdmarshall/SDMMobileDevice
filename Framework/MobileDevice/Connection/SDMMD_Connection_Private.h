@@ -29,10 +29,16 @@
 #define _SDM_MD_CONNECTION_PRIVATE_H_
 
 #include <CoreFoundation/CoreFoundation.h>
+#if IS_FRAMEWORK
 #include <SDMMobileDevice/CFRuntime.h>
-#include <openssl/ssl.h>
 #include <SDMMobileDevice/SDMMD_Connection_Class.h>
 #include <SDMMobileDevice/SDMMD_Connection_Internal.h>
+#else
+#include "CFRuntime.h"
+#include "SDMMD_Connection_Class.h"
+#include "SDMMD_Connection_Internal.h"
+#endif
+#include <openssl/ssl.h>
 
 SSL *SDMMD_AMDServiceConnectionGetSecureIOContext(SDMMD_AMConnectionRef connection);
 SDMMD_AMConnectionRef SDMMD__CreateTemporaryServConn(uint32_t socket, SSL *ssl);

@@ -14,6 +14,8 @@
 		<string>github.com:samdmarshall/SDMMobileDevice.git</string>
 		<key>69DB9D35-4562-46FC-9ADE-37339C753AA0</key>
 		<string>ssh://github.com/samdmarshall/Core-Lib.git</string>
+		<key>BFDCAB8EF53E1C343EC98714349F0C6B2EB9D8B8</key>
+		<string>github.com:mountsi/sample1.git</string>
 		<key>E03DDEF6-B97D-41E3-B129-83B8A6249CEB</key>
 		<string>ssh://github.com/samdmarshall/SDMMobileDevice.git</string>
 		<key>E3836662-8199-4399-9034-FC52A1A354C7</key>
@@ -29,6 +31,8 @@
 		<string>..</string>
 		<key>69DB9D35-4562-46FC-9ADE-37339C753AA0</key>
 		<string>../../SDM_MD_Demo/Core</string>
+		<key>BFDCAB8EF53E1C343EC98714349F0C6B2EB9D8B8</key>
+		<string>../sample1</string>
 		<key>E03DDEF6-B97D-41E3-B129-83B8A6249CEB</key>
 		<string>../../SDM_MD_Demo</string>
 		<key>E3836662-8199-4399-9034-FC52A1A354C7</key>
@@ -59,6 +63,14 @@
 			<string>E3836662-8199-4399-9034-FC52A1A354C7</string>
 			<key>IDESourceControlWCCName</key>
 			<string>Macro Utilities</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>BFDCAB8EF53E1C343EC98714349F0C6B2EB9D8B8</string>
+			<key>IDESourceControlWCCName</key>
+			<string>sample1</string>
 		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>

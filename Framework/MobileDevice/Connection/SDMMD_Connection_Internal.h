@@ -29,10 +29,15 @@
 #define _SDM_MD_CONNECTION_INTERNAL_H_
 
 #include <CoreFoundation/CoreFoundation.h>
+#if IS_FRAMEWORK
 #include <SDMMobileDevice/CFRuntime.h>
-#include <openssl/ssl.h>
-
 #include <SDMMobileDevice/SDMMD_AMDevice_Class.h>
+#else
+#include "CFRuntime.h"
+#include "SDMMD_AMDevice_Class.h"
+#endif
+
+#include <openssl/ssl.h>
 
 struct SocketConnection_Internal {
 	bool isSSL;

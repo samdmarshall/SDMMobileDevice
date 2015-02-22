@@ -149,6 +149,7 @@
 		22D5F31A179C820200C34745 /* SDMMD_Notification.h in Headers */ = {isa = PBXBuildFile; fileRef = 225AC5BE175B976500A47071 /* SDMMD_Notification.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22D7FA3918F0B1BC0034CC66 /* SDMMD_AppleFileConduit.c in Sources */ = {isa = PBXBuildFile; fileRef = 22D7FA3818F0B1BC0034CC66 /* SDMMD_AppleFileConduit.c */; };
 		22D7FA3A18F0B2F50034CC66 /* SDMMD_AppleFileConduit.h in Headers */ = {isa = PBXBuildFile; fileRef = 22D7FA3718F0B1AD0034CC66 /* SDMMD_AppleFileConduit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22DB11761A9A4A15003641B6 /* SDMMD_FileRelay.h in Headers */ = {isa = PBXBuildFile; fileRef = 22D281D519A79BDB0027A9F8 /* SDMMD_FileRelay.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22FB07DC1955E88000B73D75 /* SDMMD_Initialize.c in Sources */ = {isa = PBXBuildFile; fileRef = 22FB07DB1955E88000B73D75 /* SDMMD_Initialize.c */; };
 		22FB07DE1955E95300B73D75 /* SDMMD_Initialize.h in Headers */ = {isa = PBXBuildFile; fileRef = 22FB07DD1955E88A00B73D75 /* SDMMD_Initialize.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22FB07E11955E9C700B73D75 /* SDMMD_MCP_Class.c in Sources */ = {isa = PBXBuildFile; fileRef = 22FB07E01955E9C700B73D75 /* SDMMD_MCP_Class.c */; };
@@ -1040,6 +1041,7 @@
 				22B24A841965831D00A592DE /* SDMMD_USBMux_Protocol.h in Headers */,
 				22B24A851965831D00A592DE /* SDMMD_AFC_Types.h in Headers */,
 				22B24A861965831D00A592DE /* SDMMD_AFCConnection_Class.h in Headers */,
+				22DB11761A9A4A15003641B6 /* SDMMD_FileRelay.h in Headers */,
 				22B24A871965831D00A592DE /* SDMMD_AFCOperation_Class.h in Headers */,
 				22B24A881965836200A592DE /* SDMMD_Classes.h in Headers */,
 				22B24A911965836200A592DE /* SDMMD_MRecoveryModeDevice.h in Headers */,
@@ -1310,6 +1312,10 @@
 				INSTALL_PATH = "";
 				LD_DYLIB_INSTALL_NAME = "@rpath/$(PRODUCT_NAME).$(WRAPPER_EXTENSION)/$(PRODUCT_NAME)";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				OTHER_CFLAGS = (
+					"-D",
+					"IS_FRAMEWORK=1",
+				);
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = SDMMobileDevice;
@@ -1347,6 +1353,10 @@
 				INSTALL_PATH = "";
 				LD_DYLIB_INSTALL_NAME = "@rpath/$(PRODUCT_NAME).$(WRAPPER_EXTENSION)/$(PRODUCT_NAME)";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				OTHER_CFLAGS = (
+					"-D",
+					"IS_FRAMEWORK=1",
+				);
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = SDMMobileDevice;

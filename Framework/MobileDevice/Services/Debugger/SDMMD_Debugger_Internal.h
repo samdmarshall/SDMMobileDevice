@@ -29,7 +29,11 @@
 #define SDMMobileDevice_Framework_SDMMD_Debugger_Internal_h
 
 #include <CoreFoundation/CoreFoundation.h>
+#if IS_FRAMEWORK
 #include <SDMMobileDevice/SDMMD_AMDevice.h>
+#else
+#include "SDMMD_AMDevice.h"
+#endif
 
 CFStringRef SDMMD_CopyDeviceSupportPathFromXCRUN();
 CFStringRef SDMMD_PathToDeviceSupport(SDMMD_AMDeviceRef device);
