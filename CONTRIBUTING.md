@@ -9,6 +9,8 @@
 
 To properly address the bug I need as much contextual information about how to reproduce it as possible. This means crash report logs and example code that will reproduce the same issue are necessary for me to make progress with your report. 
 
+NOTE: when creating the sample project that reproduces the issue it must be entirely self-contained. Please check-out any submodules or other dependencies and include them with the sample. To be able to take action on any particular problem I expect that when I download the sample I can open it in Xcode and hit "build". Thanks!
+
 ## Feature Requests/Enhancements
 
 When filing enhancements to this library, please show that MobileDevice.framework also supports the desired feature. 
