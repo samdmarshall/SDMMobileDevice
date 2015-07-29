@@ -1,3 +1,20 @@
+# Opening Issues
+
+## Bug Reports
+
+**Required Materials:**
+
+* Symbolicated Crash Report(s) 
+* Example project that reproduces the issue
+
+To properly address the bug I need as much contextual information about how to reproduce it as possible. This means crash report logs and example code that will reproduce the same issue are necessary for me to make progress with your report. 
+
+## Feature Requests/Enhancements
+
+When filing enhancements to this library, please show that MobileDevice.framework also supports the desired feature. 
+
+---
+
 # Submitting Pull Requests
 Pull requests are very welcome to this project, however I have a couple of guidelines that should be followed when submitting a pull request.
 
