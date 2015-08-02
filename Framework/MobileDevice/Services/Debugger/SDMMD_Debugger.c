@@ -610,7 +610,7 @@ bool SDMMD_DebuggingReceiveInternalCheck(SocketConnection connection, char *rece
 {
 	bool didReceiveChar = false;
 	CFMutableDataRef receivedData = CFDataCreateMutable(kCFAllocatorDefault, 1);
-	sdmmd_return_t result = SDMMD_DirectServiceReceive(connection, PtrCast(&receivedData, CFDataRef *));
+	sdmmd_return_t result = SDMMD_DirectServiceReceive(connection, &receivedData);
 	char *buffer = calloc(1, S(char));
 	memcpy(buffer, CFDataGetBytePtr(receivedData), sizeof(char));
 	if (SDM_MD_CallSuccessful(result) && receivedChar[0] != 0) {

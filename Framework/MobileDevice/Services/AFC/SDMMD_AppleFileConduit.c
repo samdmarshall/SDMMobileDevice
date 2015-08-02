@@ -127,7 +127,7 @@ sdmmd_return_t SDMMD_AFCReceiveOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 	CFDataAppendBytes(headerData, (UInt8 *)zeros, sizeof(SDMMD_AFCPacketHeader));
 	free(zeros);
 
-	result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(conn->ivars.handle), (CFDataRef *)&headerData);
+	result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(conn->ivars.handle), &headerData);
 	if (result == kAMDSuccess) {
 		SDMMD_AFCPacketHeader *header = (SDMMD_AFCPacketHeader *)CFDataGetBytePtr(headerData);
 
@@ -137,7 +137,7 @@ sdmmd_return_t SDMMD_AFCReceiveOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 			char *body = calloc(body_length, sizeof(char));
 			CFDataAppendBytes(bodyData, (UInt8 *)body, body_length);
 			free(body);
-			result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(conn->ivars.handle), (CFDataRef *)&bodyData);
+			result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(conn->ivars.handle), &bodyData);
 			if (bodyData) {
 				(*operation)->ivars.packet->response = bodyData;
 			}

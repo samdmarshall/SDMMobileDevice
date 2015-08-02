@@ -254,7 +254,7 @@ sdmmd_return_t SDMMD_ServiceReceive(SocketConnection handle, CFDataRef *data)
 	return response;
 }
 
-sdmmd_return_t SDMMD_DirectServiceReceive(SocketConnection handle, CFDataRef *data)
+sdmmd_return_t SDMMD_DirectServiceReceive(SocketConnection handle, CFMutableDataRef *data)
 {
 	uint32_t size = (data && *data ? (uint32_t)CFDataGetLength(*data) : 0);
 
@@ -275,7 +275,14 @@ sdmmd_return_t SDMMD_DirectServiceReceive(SocketConnection handle, CFDataRef *da
 				}
 				remainder -= received;
 			}
-			*data = CFDataCreate(kCFAllocatorDefault, buffer, size);
+            if (*data) {
+                CFDataReplaceBytes(*data, CFRangeMake(0, size), buffer, size);
+            }
+            else {
+                CFDataRef receivedData = CFDataCreate(kCFAllocatorDefault, buffer, size);
+                *data = CFDataCreateMutableCopy(kCFAllocatorDefault, size, receivedData);
+                CFSafeRelease(receivedData);
+            }
 			free(buffer);
 		}
 		return kAMDSuccess;
