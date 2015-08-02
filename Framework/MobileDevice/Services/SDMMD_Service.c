@@ -275,14 +275,14 @@ sdmmd_return_t SDMMD_DirectServiceReceive(SocketConnection handle, CFMutableData
 				}
 				remainder -= received;
 			}
-            if (*data) {
-                CFDataReplaceBytes(*data, CFRangeMake(0, size), buffer, size);
-            }
-            else {
-                CFDataRef receivedData = CFDataCreate(kCFAllocatorDefault, buffer, size);
-                *data = CFDataCreateMutableCopy(kCFAllocatorDefault, size, receivedData);
-                CFSafeRelease(receivedData);
-            }
+			if (*data) {
+				CFDataReplaceBytes(*data, CFRangeMake(0, size), buffer, size);
+			}
+			else {
+				CFDataRef receivedData = CFDataCreate(kCFAllocatorDefault, buffer, size);
+				*data = CFDataCreateMutableCopy(kCFAllocatorDefault, size, receivedData);
+				CFSafeRelease(receivedData);
+			}
 			free(buffer);
 		}
 		return kAMDSuccess;
