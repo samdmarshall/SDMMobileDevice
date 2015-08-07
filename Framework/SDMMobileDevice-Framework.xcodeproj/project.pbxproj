@@ -8,6 +8,22 @@
 
 /* Begin PBXBuildFile section */
 		135697D817FEB9CB00039D19 /* SDMTranslation.h in Headers */ = {isa = PBXBuildFile; fileRef = 135697D717FEB9CB00039D19 /* SDMTranslation.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		15FA8DC01B7562B500F25F49 /* SDMMD_AMAuthInstall.c in Sources */ = {isa = PBXBuildFile; fileRef = 15FA8DB91B7562B500F25F49 /* SDMMD_AMAuthInstall.c */; };
+		15FA8DC11B7562B500F25F49 /* SDMMD_AMAuthInstall.c in Sources */ = {isa = PBXBuildFile; fileRef = 15FA8DB91B7562B500F25F49 /* SDMMD_AMAuthInstall.c */; };
+		15FA8DC21B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.c in Sources */ = {isa = PBXBuildFile; fileRef = 15FA8DBA1B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.c */; };
+		15FA8DC31B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.c in Sources */ = {isa = PBXBuildFile; fileRef = 15FA8DBA1B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.c */; };
+		15FA8DC41B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.h in Headers */ = {isa = PBXBuildFile; fileRef = 15FA8DBB1B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		15FA8DC51B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.h in Headers */ = {isa = PBXBuildFile; fileRef = 15FA8DBB1B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		15FA8DC61B7562B500F25F49 /* SDMMD_AMAuthInstallApImg4.c in Sources */ = {isa = PBXBuildFile; fileRef = 15FA8DBC1B7562B500F25F49 /* SDMMD_AMAuthInstallApImg4.c */; };
+		15FA8DC71B7562B500F25F49 /* SDMMD_AMAuthInstallApImg4.c in Sources */ = {isa = PBXBuildFile; fileRef = 15FA8DBC1B7562B500F25F49 /* SDMMD_AMAuthInstallApImg4.c */; };
+		15FA8DC81B7562B500F25F49 /* SDMMD_AMAuthInstallApImg4.h in Headers */ = {isa = PBXBuildFile; fileRef = 15FA8DBD1B7562B500F25F49 /* SDMMD_AMAuthInstallApImg4.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		15FA8DC91B7562B500F25F49 /* SDMMD_AMAuthInstallApImg4.h in Headers */ = {isa = PBXBuildFile; fileRef = 15FA8DBD1B7562B500F25F49 /* SDMMD_AMAuthInstallApImg4.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		15FA8DCA1B7562B500F25F49 /* SDMMD_AMAuthInstallMonet.c in Sources */ = {isa = PBXBuildFile; fileRef = 15FA8DBE1B7562B500F25F49 /* SDMMD_AMAuthInstallMonet.c */; };
+		15FA8DCB1B7562B500F25F49 /* SDMMD_AMAuthInstallMonet.c in Sources */ = {isa = PBXBuildFile; fileRef = 15FA8DBE1B7562B500F25F49 /* SDMMD_AMAuthInstallMonet.c */; };
+		15FA8DCC1B7562B500F25F49 /* SDMMD_AMAuthInstallMonet.h in Headers */ = {isa = PBXBuildFile; fileRef = 15FA8DBF1B7562B500F25F49 /* SDMMD_AMAuthInstallMonet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		15FA8DCD1B7562B500F25F49 /* SDMMD_AMAuthInstallMonet.h in Headers */ = {isa = PBXBuildFile; fileRef = 15FA8DBF1B7562B500F25F49 /* SDMMD_AMAuthInstallMonet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		15FA8DCE1B75631C00F25F49 /* SDMMD_AMAuthInstall.h in Headers */ = {isa = PBXBuildFile; fileRef = 222C290518A32C5B005B3A26 /* SDMMD_AMAuthInstall.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		15FA8DCF1B75632700F25F49 /* SDMMD_AMAuthInstall.h in Headers */ = {isa = PBXBuildFile; fileRef = 222C290518A32C5B005B3A26 /* SDMMD_AMAuthInstall.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		220B5B1A188373A10082AF84 /* SDMMD_Types.h in Headers */ = {isa = PBXBuildFile; fileRef = 22DEF9811883722B008E909F /* SDMMD_Types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		220B5BD018837FDC0082AF84 /* SDMMobileDevice.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 220B5BCF18837FDC0082AF84 /* SDMMobileDevice.entitlements */; };
 		220B5C03188390780082AF84 /* Img4Ticket8960Cert.crt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 220B5BD4188390440082AF84 /* Img4Ticket8960Cert.crt */; };
@@ -286,6 +302,13 @@
 
 /* Begin PBXFileReference section */
 		135697D717FEB9CB00039D19 /* SDMTranslation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMTranslation.h; sourceTree = "<group>"; };
+		15FA8DB91B7562B500F25F49 /* SDMMD_AMAuthInstall.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AMAuthInstall.c; sourceTree = "<group>"; };
+		15FA8DBA1B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AMAuthInstallApImg3.c; sourceTree = "<group>"; };
+		15FA8DBB1B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AMAuthInstallApImg3.h; sourceTree = "<group>"; };
+		15FA8DBC1B7562B500F25F49 /* SDMMD_AMAuthInstallApImg4.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AMAuthInstallApImg4.c; sourceTree = "<group>"; };
+		15FA8DBD1B7562B500F25F49 /* SDMMD_AMAuthInstallApImg4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AMAuthInstallApImg4.h; sourceTree = "<group>"; };
+		15FA8DBE1B7562B500F25F49 /* SDMMD_AMAuthInstallMonet.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AMAuthInstallMonet.c; sourceTree = "<group>"; };
+		15FA8DBF1B7562B500F25F49 /* SDMMD_AMAuthInstallMonet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AMAuthInstallMonet.h; sourceTree = "<group>"; };
 		220B5BCF18837FDC0082AF84 /* SDMMobileDevice.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = SDMMobileDevice.entitlements; sourceTree = "<group>"; };
 		220B5BD4188390440082AF84 /* Img4Ticket8960Cert.crt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Img4Ticket8960Cert.crt; sourceTree = "<group>"; };
 		220B5BD5188390440082AF84 /* Img4Ticket8960DevCert.crt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Img4Ticket8960DevCert.crt; sourceTree = "<group>"; };
@@ -552,6 +575,13 @@
 			isa = PBXGroup;
 			children = (
 				222C290518A32C5B005B3A26 /* SDMMD_AMAuthInstall.h */,
+				15FA8DB91B7562B500F25F49 /* SDMMD_AMAuthInstall.c */,
+				15FA8DBF1B7562B500F25F49 /* SDMMD_AMAuthInstallMonet.h */,
+				15FA8DBE1B7562B500F25F49 /* SDMMD_AMAuthInstallMonet.c */,
+				15FA8DBB1B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.h */,
+				15FA8DBA1B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.c */,
+				15FA8DBD1B7562B500F25F49 /* SDMMD_AMAuthInstallApImg4.h */,
+				15FA8DBC1B7562B500F25F49 /* SDMMD_AMAuthInstallApImg4.c */,
 			);
 			name = AuthInstall;
 			path = MobileDevice/Services/AuthInstall;
@@ -976,6 +1006,10 @@
 				22FB082E19560DED00B73D75 /* CFTypeAddition.h in Headers */,
 				2270AC6A1956432E006BBE84 /* SDMMD_USBMux_Protocol.h in Headers */,
 				22D281D819A79C430027A9F8 /* SDMMD_FileRelay.h in Headers */,
+				15FA8DC41B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.h in Headers */,
+				15FA8DCC1B7562B500F25F49 /* SDMMD_AMAuthInstallMonet.h in Headers */,
+				15FA8DC81B7562B500F25F49 /* SDMMD_AMAuthInstallApImg4.h in Headers */,
+				15FA8DCF1B75632700F25F49 /* SDMMD_AMAuthInstall.h in Headers */,
 				22FB07E71955EB8900B73D75 /* SDMMD_Classes.h in Headers */,
 				22AD9347178A1609002ACFB1 /* SDMMD_MRecoveryModeDevice.h in Headers */,
 				22AD9350178A1678002ACFB1 /* SDMMD_MRUSBDevice.h in Headers */,
@@ -1040,8 +1074,12 @@
 				22B24A831965831D00A592DE /* SDMMD_AMDevice_Class.h in Headers */,
 				22B24A841965831D00A592DE /* SDMMD_USBMux_Protocol.h in Headers */,
 				22B24A851965831D00A592DE /* SDMMD_AFC_Types.h in Headers */,
+				15FA8DC51B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.h in Headers */,
+				15FA8DCD1B7562B500F25F49 /* SDMMD_AMAuthInstallMonet.h in Headers */,
+				15FA8DC91B7562B500F25F49 /* SDMMD_AMAuthInstallApImg4.h in Headers */,
 				22B24A861965831D00A592DE /* SDMMD_AFCConnection_Class.h in Headers */,
 				22DB11761A9A4A15003641B6 /* SDMMD_FileRelay.h in Headers */,
+				15FA8DCE1B75631C00F25F49 /* SDMMD_AMAuthInstall.h in Headers */,
 				22B24A871965831D00A592DE /* SDMMD_AFCOperation_Class.h in Headers */,
 				22B24A881965836200A592DE /* SDMMD_Classes.h in Headers */,
 				22B24A911965836200A592DE /* SDMMD_MRecoveryModeDevice.h in Headers */,
@@ -1194,6 +1232,8 @@
 				22D7FA3918F0B1BC0034CC66 /* SDMMD_AppleFileConduit.c in Sources */,
 				225AD7331765FE7700A47071 /* SDMMD_USBMuxListener.c in Sources */,
 				22FB07E41955EA5600B73D75 /* SDMMD_AMDevice_Class.c in Sources */,
+				15FA8DCA1B7562B500F25F49 /* SDMMD_AMAuthInstallMonet.c in Sources */,
+				15FA8DC61B7562B500F25F49 /* SDMMD_AMAuthInstallApImg4.c in Sources */,
 				22AD8E661787465A002ACFB1 /* SDMMD_AMDevice.c in Sources */,
 				22FB07F91955FC3500B73D75 /* SDMMD_AFCOperation_Class.c in Sources */,
 				22A58E1E191157F600303D31 /* CFStringAddition.c in Sources */,
@@ -1214,7 +1254,9 @@
 				22FB07FC1955FC5700B73D75 /* SDMMD_AFCConnection_Class.c in Sources */,
 				22AD936A178A17B0002ACFB1 /* SDMMD_MRestoreModeDevice.c in Sources */,
 				22FB07E11955E9C700B73D75 /* SDMMD_MCP_Class.c in Sources */,
+				15FA8DC01B7562B500F25F49 /* SDMMD_AMAuthInstall.c in Sources */,
 				22FB08051955FF5400B73D75 /* SDMMD_USBMux_Protocol.c in Sources */,
+				15FA8DC21B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.c in Sources */,
 				22FB07EC1955ECCD00B73D75 /* SDMMD_Connection_Class.c in Sources */,
 				22D5F317179C81FD00C34745 /* SDMMD_Applications.c in Sources */,
 				22D5F319179C820200C34745 /* SDMMD_Notification.c in Sources */,
@@ -1242,6 +1284,7 @@
 				22FB084819560E9A00B73D75 /* File.c in Sources */,
 				22FB084919560E9A00B73D75 /* CFStringAddition.c in Sources */,
 				22FB084A19560E9A00B73D75 /* CFDataAddition.c in Sources */,
+				15FA8DCB1B7562B500F25F49 /* SDMMD_AMAuthInstallMonet.c in Sources */,
 				22FB084B19560E9A00B73D75 /* CFDictionaryAddition.c in Sources */,
 				22FB084C19560E9A00B73D75 /* CFTypeAddition.c in Sources */,
 				22FB084D19560E9A00B73D75 /* SDMMD_MCP_Class.c in Sources */,
@@ -1255,13 +1298,16 @@
 				22FB085519560E9A00B73D75 /* SDMMD_MDFUModeDevice.c in Sources */,
 				22FB085619560E9A00B73D75 /* SDMMD_MRUSBDevice.c in Sources */,
 				22FB085719560E9A00B73D75 /* SDMMD_MRecoveryModeDevice.c in Sources */,
+				15FA8DC31B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.c in Sources */,
 				22FB085819560E9A00B73D75 /* SDMMD_AMDevice_Class.c in Sources */,
+				15FA8DC71B7562B500F25F49 /* SDMMD_AMAuthInstallApImg4.c in Sources */,
 				22FB085919560E9A00B73D75 /* SDMMD_AMDevice.c in Sources */,
 				3FB24BE41979DE08004A6F00 /* SDMMD_AFC_Types.c in Sources */,
 				22FB085A19560E9A00B73D75 /* SDMMD_Service.c in Sources */,
 				22FB085B19560E9A00B73D75 /* SDMMD_USBMux_Protocol.c in Sources */,
 				22FB085C19560E9A00B73D75 /* SDMMD_Notification.c in Sources */,
 				22FB085D19560E9A00B73D75 /* SDMMD_Applications.c in Sources */,
+				15FA8DC11B7562B500F25F49 /* SDMMD_AMAuthInstall.c in Sources */,
 				22FB085E19560E9A00B73D75 /* SDMMD_AFCConnection_Class.c in Sources */,
 				22FB085F19560E9A00B73D75 /* SDMMD_AFCOperation_Class.c in Sources */,
 				22FB086019560E9A00B73D75 /* SDMMD_AppleFileConduit.c in Sources */,
