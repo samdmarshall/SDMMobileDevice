@@ -156,7 +156,14 @@ sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 		(*operation)->ivars.packet->header.pid = k64BitMask; //conn->operationCount;
 		result = SDMMD_AFCSendOperation(conn, *operation);
 		dispatch_semaphore_wait(conn->ivars.semaphore, (*operation)->ivars.timeout);
-		SDMMD_AFCReceiveOperation(conn, operation);
+		CheckErrorAndReturn(result);
+		
+		result = SDMMD_AFCReceiveOperation(conn, operation);
+		CheckErrorAndReturn(result);
+		
+		CFDataRef response_data = (*operation)->ivars.packet->response;
+		bool validResponse = (response_data != NULL);
+		
 		switch ((*operation)->ivars.packet->header.type) {
 			case SDMMD_AFC_Packet_Status: {
 				break;
@@ -165,7 +172,12 @@ sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 				break;
 			}
 			case SDMMD_AFC_Packet_ReadDirectory: {
-				(*operation)->ivars.packet->response = SDMMD_ConvertResponseArray((*operation)->ivars.packet->response);
+				if (validResponse) {
+					(*operation)->ivars.packet->response = SDMMD_ConvertResponseArray(response_data);
+				}
+				else {
+					result = kAMDReadError;
+				}
 				break;
 			}
 			case SDMMD_AFC_Packet_ReadFile: {
@@ -188,20 +200,23 @@ sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 			}
 			case SDMMD_AFC_Packet_GetFileInfo: {
 				bool should_parse = false;
-				CFIndex data_length = CFDataGetLength((*operation)->ivars.packet->response);
-				if (data_length == sizeof(uint64_t)) {
-					uint64_t response;
-					memcpy(&response, CFDataGetBytePtr((*operation)->ivars.packet->response), data_length);
-					if (response != 8 && response != 4) {
-						// this file can be accessed.
+				if (validResponse) {
+					CFIndex data_length = CFDataGetLength(response_data);
+					if (data_length == sizeof(uint64_t)) {
+						uint64_t response;
+						memcpy(&response, CFDataGetBytePtr(response_data), data_length);
+						if (response != 8 && response != 4) {
+							// this file can be accessed.
+							should_parse = true;
+						}
+					}
+					else {
 						should_parse = true;
 					}
 				}
-				else {
-					should_parse = true;
-				}
+				
 				if (should_parse) {
-					(*operation)->ivars.packet->response = SDMMD_ConvertResponseDictionary((*operation)->ivars.packet->response);
+					(*operation)->ivars.packet->response = SDMMD_ConvertResponseDictionary(response_data);
 				}
 				else {
 					result = kAMDReadError;
@@ -209,7 +224,12 @@ sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 				break;
 			}
 			case SDMMD_AFC_Packet_GetDeviceInfo: {
-				(*operation)->ivars.packet->response = SDMMD_ConvertResponseDictionary((*operation)->ivars.packet->response);
+				if (validResponse) {
+					(*operation)->ivars.packet->response = SDMMD_ConvertResponseDictionary(response_data);
+				}
+				else {
+					result = kAMDReadError;
+				}
 				break;
 			}
 			case SDMMD_AFC_Packet_WriteFileAtomic: {
@@ -243,7 +263,12 @@ sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 				break;
 			}
 			case SDMMD_AFC_Packet_GetConnectionInfo: {
-				(*operation)->ivars.packet->response = SDMMD_ConvertResponseDictionary((*operation)->ivars.packet->response);
+				if (validResponse) {
+					(*operation)->ivars.packet->response = SDMMD_ConvertResponseDictionary(response_data);
+				}
+				else {
+					result = kAMDReadError;
+				}
 				break;
 			}
 			case SDMMD_AFC_Packet_SetConnectionOptions: {
@@ -298,6 +323,8 @@ sdmmd_return_t SDMMD_AFCProcessOperation(SDMMD_AFCConnectionRef conn, SDMMD_AFCO
 				break;
 			}
 		}
+		
+	ExitLabel:
 		
 		dispatch_release(conn->ivars.semaphore);
 		conn->ivars.operationCount++;
