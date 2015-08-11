@@ -58,8 +58,6 @@ You are already almost done!
 If you wish you use this as source code, it will require the following libraries:
 
 * CoreFoundation.framework
-* libcrypto.dylib
-* libssl.dylib
 * IOKit.framework
 
 If you have trouble locating any of these, please look at the "-Framework" xcode project file to get the paths for these libraries.
@@ -71,10 +69,6 @@ See this [file](./Framework/SDMMobileDevice.entitlements)
 ***
 
 ### FAQ
-
-Q. Why do I get so many warnings when compiling?
-
-A. The warnings are from the openssl and libcrypto calls that Apple has deprecated starting in 10.7, I am looking to replace these with CommonCrypto or bundling openssl and libcrypto so these errors don't happen.
 
 Q. When is the Cocoa version coming?
 
