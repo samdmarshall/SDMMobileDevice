@@ -244,6 +244,7 @@
 		3FB24BE41979DE08004A6F00 /* SDMMD_AFC_Types.c in Sources */ = {isa = PBXBuildFile; fileRef = 3FB24BE21979DE08004A6F00 /* SDMMD_AFC_Types.c */; };
 		3FB24BE91979E1CF004A6F00 /* SDMMD_USBMuxListener_Types.c in Sources */ = {isa = PBXBuildFile; fileRef = 3FB24BE81979E1CF004A6F00 /* SDMMD_USBMuxListener_Types.c */; };
 		3FB24BEA1979E1CF004A6F00 /* SDMMD_USBMuxListener_Types.c in Sources */ = {isa = PBXBuildFile; fileRef = 3FB24BE81979E1CF004A6F00 /* SDMMD_USBMuxListener_Types.c */; };
+		E87F7EAE1B7A3034002397B2 /* lib in Resources */ = {isa = PBXBuildFile; fileRef = E87F7EAD1B7A3034002397B2 /* lib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -448,6 +449,7 @@
 		3F38D21B18AECE1200DE5FA9 /* SDMTypeTranslation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMTypeTranslation.h; sourceTree = "<group>"; };
 		3FB24BE21979DE08004A6F00 /* SDMMD_AFC_Types.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AFC_Types.c; sourceTree = "<group>"; };
 		3FB24BE81979E1CF004A6F00 /* SDMMD_USBMuxListener_Types.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_USBMuxListener_Types.c; sourceTree = "<group>"; };
+		E87F7EAD1B7A3034002397B2 /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; name = lib; path = ../openssl/lib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -959,6 +961,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E87F7EAD1B7A3034002397B2 /* lib */,
 				22FB081519560D8C00B73D75 /* CoreFoundation.framework */,
 				22648F9818947C4300133948 /* IOKit.framework */,
 				22AD924A1789DCA7002ACFB1 /* libcrypto.dylib */,
@@ -1212,6 +1215,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E87F7EAE1B7A3034002397B2 /* lib in Resources */,
 				220B5BD018837FDC0082AF84 /* SDMMobileDevice.entitlements in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1465,7 +1469,7 @@
 		22FB084119560E5800B73D75 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1486,13 +1490,14 @@
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
 		22FB084219560E5800B73D75 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1512,6 +1517,7 @@
 				METAL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
 		};
@@ -1537,6 +1543,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../openssl/include/";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
@@ -1567,6 +1574,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../openssl/include/";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
