@@ -5,6 +5,7 @@ SDMMobileDevice
 * [License](./LICENSE)
 * [What is this?](#what-is-this)
 * [What can this project do for me?](#what-can-this-project-do-for-me)
+* [Before you begin](#before-you-begin)
 * [How do I use this?](#how-do-i-use-this)
 * [FAQ](#faq)
 * [Help](#help)
@@ -29,9 +30,11 @@ This framework gives access to a number of technologies that have previously bee
 5. Installation of applications onto iOS devices
 6. File transfers
 
-
-
 ***
+
+### Before you begin
+1. Run [build-OpenSSL-iOS-Mac.sh](./openssl/build-OpenSSL-iOS-Mac.sh) in order to download and build OpenSSL
+2. Make sure both 'openssl/include' and 'openssl/lib/Mac' have been created and populated
 
 ### How do I use this?
 SDMMobileDevice is an OS X framework and can be used in two ways:
