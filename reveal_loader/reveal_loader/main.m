@@ -11,7 +11,7 @@
 #include <SDMMobileDevice/SDMMobileDevice.h>
 #include <SDMMobileDevice/SDMMD_Connection_Private.h>
 #include <SDMMobileDevice/SDMMD_Connection_Internal.h>
-#include "CFStringAddition.h"
+//#include "CFStringAddition.h" //Already in CoreFoundation
 
 #include <ApplicationServices/ApplicationServices.h>
 #include <ServiceManagement/ServiceManagement.h>

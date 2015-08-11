@@ -12,9 +12,9 @@
 		2271992D199598B700887A85 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2271992C199598B700887A85 /* main.m */; };
 		22719933199598E800887A85 /* libSDMMobileDeviceStatic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BB5AF219953E1A0078F2AF /* libSDMMobileDeviceStatic.a */; };
 		22719934199598E800887A85 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BB5AF4199543160078F2AF /* IOKit.framework */; };
-		22719935199598E800887A85 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BB5AF8199543250078F2AF /* libcrypto.dylib */; };
-		22719936199598E800887A85 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BB5AF61995431D0078F2AF /* libssl.dylib */; };
 		22719938199598E900887A85 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22719937199598E900887A85 /* ApplicationServices.framework */; };
+		E87F7ECB1B7A3C6B002397B2 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E87F7EC91B7A3C6B002397B2 /* libcrypto.a */; };
+		E87F7ECC1B7A3C6B002397B2 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E87F7ECA1B7A3C6B002397B2 /* libssl.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -43,10 +43,10 @@
 		22BB5ADC19953DEE0078F2AF /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		22BB5AF219953E1A0078F2AF /* libSDMMobileDeviceStatic.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDMMobileDeviceStatic.a; path = ../build/Release/libSDMMobileDeviceStatic.a; sourceTree = "<group>"; };
 		22BB5AF4199543160078F2AF /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
-		22BB5AF61995431D0078F2AF /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
-		22BB5AF8199543250078F2AF /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		22BB5AFA199545BA0078F2AF /* Python.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Python.framework; path = ../../../../../System/Library/Frameworks/Python.framework; sourceTree = "<group>"; };
 		22BB5AFC199549E90078F2AF /* Python */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = Python; path = ../../../../../System/Library/Frameworks/Python.framework/Versions/2.7/Python; sourceTree = "<group>"; };
+		E87F7EC91B7A3C6B002397B2 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../openssl/lib/Mac/libcrypto.a; sourceTree = "<group>"; };
+		E87F7ECA1B7A3C6B002397B2 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = ../openssl/lib/Mac/libssl.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,11 +56,11 @@
 			files = (
 				226954651997B3D60047977F /* Security.framework in Frameworks */,
 				22719938199598E900887A85 /* ApplicationServices.framework in Frameworks */,
+				E87F7ECC1B7A3C6B002397B2 /* libssl.a in Frameworks */,
+				E87F7ECB1B7A3C6B002397B2 /* libcrypto.a in Frameworks */,
 				22719933199598E800887A85 /* libSDMMobileDeviceStatic.a in Frameworks */,
 				2271992A199598B700887A85 /* CoreFoundation.framework in Frameworks */,
 				22719934199598E800887A85 /* IOKit.framework in Frameworks */,
-				22719935199598E800887A85 /* libcrypto.dylib in Frameworks */,
-				22719936199598E800887A85 /* libssl.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,12 +96,12 @@
 		22BB5ACA19953DEE0078F2AF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E87F7EC91B7A3C6B002397B2 /* libcrypto.a */,
+				E87F7ECA1B7A3C6B002397B2 /* libssl.a */,
 				226954641997B3D60047977F /* Security.framework */,
 				22719937199598E900887A85 /* ApplicationServices.framework */,
 				22BB5AFC199549E90078F2AF /* Python */,
 				22BB5AFA199545BA0078F2AF /* Python.framework */,
-				22BB5AF8199543250078F2AF /* libcrypto.dylib */,
-				22BB5AF61995431D0078F2AF /* libssl.dylib */,
 				22BB5AF4199543160078F2AF /* IOKit.framework */,
 				22BB5AF219953E1A0078F2AF /* libSDMMobileDeviceStatic.a */,
 				22BB5ACB19953DEE0078F2AF /* Cocoa.framework */,
@@ -189,7 +189,6 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				LIBRARY_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
@@ -197,7 +196,6 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)/usr/local/include/";
 			};
 			name = Debug;
 		};
@@ -206,14 +204,12 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD)";
-				LIBRARY_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OTHER_LDFLAGS = (
 					"-Wl,-sectcreate,__TEXT,__info_plist,Info.plist",
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)/usr/local/include/";
 			};
 			name = Release;
 		};
@@ -254,11 +250,17 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/../openssl/include/",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/../openssl/lib/Mac",
+					"$(CONFIGURATION_BUILD_DIR)",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 				SYMROOT = ../build;
+				USER_HEADER_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)/usr/local/include/";
 			};
 			name = Debug;
 		};
@@ -294,10 +296,16 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/../openssl/include/",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/../openssl/lib/Mac",
+					"$(CONFIGURATION_BUILD_DIR)",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				SDKROOT = macosx;
 				SYMROOT = ../build;
+				USER_HEADER_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)/usr/local/include/";
 			};
 			name = Release;
 		};

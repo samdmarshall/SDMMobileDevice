@@ -83,8 +83,6 @@
 		22AD91C31789D715002ACFB1 /* SDMMD_Service.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215A8AF175010A300AD1981 /* SDMMD_Service.c */; };
 		22AD91C41789D71A002ACFB1 /* SDMMD_Connection.h in Headers */ = {isa = PBXBuildFile; fileRef = 225ACB73175FC15E00A47071 /* SDMMD_Connection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22AD91C51789D71A002ACFB1 /* SDMMD_Connection.c in Sources */ = {isa = PBXBuildFile; fileRef = 225ACB74175FC15E00A47071 /* SDMMD_Connection.c */; };
-		22AD92471789DC7E002ACFB1 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AD92461789DC7E002ACFB1 /* libssl.dylib */; };
-		22AD924B1789DCA7002ACFB1 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AD924A1789DCA7002ACFB1 /* libcrypto.dylib */; };
 		22AD9347178A1609002ACFB1 /* SDMMD_MRecoveryModeDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AA3F1751328100AD1981 /* SDMMD_MRecoveryModeDevice.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		22AD9348178A160B002ACFB1 /* SDMMD_Keys.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215A9FB17512A9F00AD1981 /* SDMMD_Keys.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22AD9349178A1622002ACFB1 /* SDMMD_MRecoveryModeDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AA401751328100AD1981 /* SDMMD_MRecoveryModeDevice.c */; };
@@ -244,7 +242,6 @@
 		3FB24BE41979DE08004A6F00 /* SDMMD_AFC_Types.c in Sources */ = {isa = PBXBuildFile; fileRef = 3FB24BE21979DE08004A6F00 /* SDMMD_AFC_Types.c */; };
 		3FB24BE91979E1CF004A6F00 /* SDMMD_USBMuxListener_Types.c in Sources */ = {isa = PBXBuildFile; fileRef = 3FB24BE81979E1CF004A6F00 /* SDMMD_USBMuxListener_Types.c */; };
 		3FB24BEA1979E1CF004A6F00 /* SDMMD_USBMuxListener_Types.c in Sources */ = {isa = PBXBuildFile; fileRef = 3FB24BE81979E1CF004A6F00 /* SDMMD_USBMuxListener_Types.c */; };
-		E87F7EAE1B7A3034002397B2 /* lib in Resources */ = {isa = PBXBuildFile; fileRef = E87F7EAD1B7A3034002397B2 /* lib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -396,8 +393,6 @@
 		22AD8E8317875BAA002ACFB1 /* SDMMobileDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMobileDevice.h; sourceTree = "<group>"; };
 		22AD8F231789B3DF002ACFB1 /* SDMMD_MCP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_MCP.h; sourceTree = "<group>"; };
 		22AD8F241789B3DF002ACFB1 /* SDMMD_MCP.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_MCP.c; sourceTree = "<group>"; };
-		22AD92461789DC7E002ACFB1 /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
-		22AD924A1789DCA7002ACFB1 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		22AD9A44178F2CBF002ACFB1 /* CFRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFRuntime.h; sourceTree = "<group>"; };
 		22C77D321956206E00525576 /* SDMMD_AMDevice_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMMD_AMDevice_Internal.h; sourceTree = "<group>"; };
 		22C892A9189D75A1008B1D2D /* CFDataAddition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CFDataAddition.c; sourceTree = "<group>"; };
@@ -449,7 +444,8 @@
 		3F38D21B18AECE1200DE5FA9 /* SDMTypeTranslation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDMTypeTranslation.h; sourceTree = "<group>"; };
 		3FB24BE21979DE08004A6F00 /* SDMMD_AFC_Types.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AFC_Types.c; sourceTree = "<group>"; };
 		3FB24BE81979E1CF004A6F00 /* SDMMD_USBMuxListener_Types.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_USBMuxListener_Types.c; sourceTree = "<group>"; };
-		E87F7EAD1B7A3034002397B2 /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; name = lib; path = ../openssl/lib; sourceTree = "<group>"; };
+		E87F7EB51B7A35A0002397B2 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../openssl/lib/Mac/libcrypto.a; sourceTree = "<group>"; };
+		E87F7EB71B7A35A3002397B2 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = ../openssl/lib/Mac/libssl.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -459,8 +455,6 @@
 			files = (
 				22648F9918947C4300133948 /* IOKit.framework in Frameworks */,
 				2215A84017500DE700AD1981 /* CoreFoundation.framework in Frameworks */,
-				22AD92471789DC7E002ACFB1 /* libssl.dylib in Frameworks */,
-				22AD924B1789DCA7002ACFB1 /* libcrypto.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -961,11 +955,10 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E87F7EAD1B7A3034002397B2 /* lib */,
+				E87F7EB71B7A35A3002397B2 /* libssl.a */,
+				E87F7EB51B7A35A0002397B2 /* libcrypto.a */,
 				22FB081519560D8C00B73D75 /* CoreFoundation.framework */,
 				22648F9818947C4300133948 /* IOKit.framework */,
-				22AD924A1789DCA7002ACFB1 /* libcrypto.dylib */,
-				22AD92461789DC7E002ACFB1 /* libssl.dylib */,
 				2215A83F17500DE700AD1981 /* CoreFoundation.framework */,
 			);
 			name = Frameworks;
@@ -1215,7 +1208,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E87F7EAE1B7A3034002397B2 /* lib in Resources */,
 				220B5BD018837FDC0082AF84 /* SDMMobileDevice.entitlements in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1485,6 +1477,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				METAL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = NO;
@@ -1513,6 +1506,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "STATIC=1";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				METAL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1544,6 +1538,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../openssl/include/";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../openssl/lib/Mac";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
@@ -1575,6 +1570,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../openssl/include/";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../openssl/lib/Mac";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
