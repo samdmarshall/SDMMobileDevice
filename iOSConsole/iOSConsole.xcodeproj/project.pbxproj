@@ -21,10 +21,10 @@
 		22B955821878DA5F004DCBF0 /* apps.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B955811878DA5F004DCBF0 /* apps.c */; };
 		22B955881878F14F004DCBF0 /* run.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B955871878F14F004DCBF0 /* run.c */; };
 		22DB11751A9A49EB003641B6 /* libSDMMobileDeviceStatic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22DB11141A92C096003641B6 /* libSDMMobileDeviceStatic.a */; };
-		22DB11771A9A4B9D003641B6 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310DC518750DCF0092C107 /* libssl.dylib */; };
-		22DB11781A9A4BA2003641B6 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310DC718750DE70092C107 /* libcrypto.dylib */; };
 		22EFC8C01900331500C29BFF /* dev.c in Sources */ = {isa = PBXBuildFile; fileRef = 22EFC8BF1900331500C29BFF /* dev.c */; };
 		22FE3F10189E84B2005C2DB2 /* springboard.c in Sources */ = {isa = PBXBuildFile; fileRef = 22FE3F0F189E84B2005C2DB2 /* springboard.c */; };
+		E87F7EC11B7A3BAD002397B2 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E87F7EBF1B7A3BAD002397B2 /* libcrypto.a */; };
+		E87F7EC21B7A3BAD002397B2 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E87F7EC01B7A3BAD002397B2 /* libssl.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -50,8 +50,6 @@
 		22310D691874F4B10092C107 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		22310D6C1874F4B10092C107 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		22310D6E1874F4B10092C107 /* iOSConsole.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = iOSConsole.1; sourceTree = "<group>"; };
-		22310DC518750DCF0092C107 /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
-		22310DC718750DE70092C107 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		22648F94189440EF00133948 /* power.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = power.h; sourceTree = "<group>"; };
 		22648F95189440F700133948 /* power.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = power.c; sourceTree = "<group>"; };
 		22648F9A18947DE100133948 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -91,6 +89,8 @@
 		22FB086719560EED00B73D75 /* libSDMMobileDeviceStatic.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDMMobileDeviceStatic.a; path = /Users/sam/Projects/SDMMobileDevice/Framework/../build/Debug/libSDMMobileDeviceStatic.a; sourceTree = "<absolute>"; };
 		22FE3F0E189E84A4005C2DB2 /* springboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = springboard.h; sourceTree = "<group>"; };
 		22FE3F0F189E84B2005C2DB2 /* springboard.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = springboard.c; sourceTree = "<group>"; };
+		E87F7EBF1B7A3BAD002397B2 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../openssl/lib/Mac/libcrypto.a; sourceTree = "<group>"; };
+		E87F7EC01B7A3BAD002397B2 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = ../openssl/lib/Mac/libssl.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,10 +98,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22DB11781A9A4BA2003641B6 /* libcrypto.dylib in Frameworks */,
-				22DB11771A9A4B9D003641B6 /* libssl.dylib in Frameworks */,
+				E87F7EC21B7A3BAD002397B2 /* libssl.a in Frameworks */,
 				22DB11751A9A49EB003641B6 /* libSDMMobileDeviceStatic.a in Frameworks */,
 				2202F17F1A5C9E450045C69E /* CoreFoundation.framework in Frameworks */,
+				E87F7EC11B7A3BAD002397B2 /* libcrypto.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,13 +147,13 @@
 		22310D681874F4B10092C107 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E87F7EBF1B7A3BAD002397B2 /* libcrypto.a */,
+				E87F7EC01B7A3BAD002397B2 /* libssl.a */,
 				22DB11141A92C096003641B6 /* libSDMMobileDeviceStatic.a */,
 				2202F17D1A5C9E050045C69E /* SDMMobileDevice.framework */,
 				22FB086719560EED00B73D75 /* libSDMMobileDeviceStatic.a */,
 				22648F9A18947DE100133948 /* IOKit.framework */,
 				22B9558B1879DB51004DCBF0 /* libncurses.dylib */,
-				22310DC718750DE70092C107 /* libcrypto.dylib */,
-				22310DC518750DCF0092C107 /* libssl.dylib */,
 				22310D691874F4B10092C107 /* CoreFoundation.framework */,
 			);
 			name = Frameworks;
@@ -402,6 +402,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../openssl/include/";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../openssl/lib/Mac";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -436,6 +438,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../openssl/include/";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../openssl/lib/Mac";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				SDKROOT = macosx;
 			};
@@ -449,11 +453,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/sam/Projects/SDMMobileDevice/build/Release,
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/sam/Projects/SDMMobileDevice/Framework/../build/Debug,
-					/Users/sam/Projects/SDMMobileDevice/Framework/../build/Release,
 				);
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -473,11 +472,6 @@
 					/Users/sam/Projects/SDMMobileDevice/build/Release,
 				);
 				GCC_OPTIMIZATION_LEVEL = 0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/sam/Projects/SDMMobileDevice/Framework/../build/Debug,
-					/Users/sam/Projects/SDMMobileDevice/Framework/../build/Release,
-				);
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
