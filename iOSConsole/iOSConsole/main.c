@@ -86,7 +86,7 @@ int main(int argc, const char *argv[])
 	int c;
 	while (searchArgs) {
 		int option_index = 0x0;
-		c = getopt_long(argc, (char *const *)argv, "lh:d:ais:q:p:t:c:z", long_options, &option_index);
+		c = getopt_long(argc, (char *const *)argv, "lh:d:ais:q:r:p:t:c:z", long_options, &option_index);
 		if (c == -1) {
 			break;
 		}
@@ -246,7 +246,7 @@ int main(int argc, const char *argv[])
 			PerformQuery(udid, domain, key);
 		}
 		else if (optionsEnable[OptionsRun]) {
-			RunAppOnDeviceWithIdentifier(udid, bundle);
+			RunAppOnDeviceWithIdentifier(udid, bundle, false);
 		}
 		else if (optionsEnable[OptionsDiag]) {
 			if (diagArg) {

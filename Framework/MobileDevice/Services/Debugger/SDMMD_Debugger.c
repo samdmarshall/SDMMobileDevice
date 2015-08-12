@@ -606,23 +606,39 @@ ExitLabel:
 	return result;
 }
 
+sdmmd_return_t SDMMD_DebuggingSendSingleByte(SDMMD_AMDebugConnectionRef dconn, char toSend)
+{
+	SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
+	CFDataRef data = CFDataCreate(kCFAllocatorDefault, (UInt8 *)&toSend, 1);
+	sdmmd_return_t result = SDMMD_ServiceSend(debuggingSocket, data);
+	CFSafeRelease(data);
+	return result;
+}
+
+sdmmd_return_t SDMMD_DebuggingSendAck(SDMMD_AMDebugConnectionRef dconn)
+{
+	return SDMMD_DebuggingSendSingleByte(dconn, '+');
+}
+
+sdmmd_return_t SDMMD_DebuggingSendNack(SDMMD_AMDebugConnectionRef dconn)
+{
+	return SDMMD_DebuggingSendSingleByte(dconn, '-');
+}
+
 bool SDMMD_DebuggingReceiveInternalCheck(SocketConnection connection, char *receivedChar)
 {
 	bool didReceiveChar = false;
 	CFMutableDataRef receivedData = CFDataCreateMutable(kCFAllocatorDefault, 1);
+	CFDataSetLength(receivedData, 1);
 	sdmmd_return_t result = SDMMD_DirectServiceReceive(connection, &receivedData);
-	char *buffer = calloc(1, S(char));
-	memcpy(buffer, CFDataGetBytePtr(receivedData), sizeof(char));
+	char buffer = 0;
+	memcpy(&buffer, CFDataGetBytePtr(receivedData), sizeof(char));
 	if (SDM_MD_CallSuccessful(result) && receivedChar[0] != 0) {
-		didReceiveChar = ((memcmp(buffer, receivedChar, S(char)) == 0) ? true : false);
-	}
-	else {
-		didReceiveChar = false;
+		didReceiveChar = (buffer == *receivedChar);
 	}
 	if (!didReceiveChar) {
-		memcpy(receivedChar, buffer, S(char));
+		*receivedChar = buffer;
 	}
-	Safe(free, buffer);
 	return didReceiveChar;
 }
 
@@ -636,44 +652,61 @@ sdmmd_return_t SDMMD_DebuggingReceive(SDMMD_AMDebugConnectionRef dconn, CFDataRe
 {
 	sdmmd_return_t result = kAMDSuccess;
 	bool shouldReceive = true, skipPrefix = false;
-	char *commandPrefix = "$";
+	char commandPrefix = '$';
 	BufferRef responseBuffer = CreateBufferRef();
 	SocketConnection debuggingSocket = SDMMD_TranslateConnectionToSocket(dconn->connection);
 	if (dconn->ackEnabled) {
-		char ack[1];
-		memcpy(ack, (KnownDebugCommands[kDebugACK].code), S(char));
-		shouldReceive = SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, ack);
-		if (strncmp(ack, commandPrefix, S(char)) == 0) {
+		char ack;
+		memcpy(&ack, (KnownDebugCommands[kDebugACK].code), S(char));
+		shouldReceive = SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, &ack);
+
+		if (strncmp(&ack, &commandPrefix, S(char)) == 0) {
 			shouldReceive = true;
 			skipPrefix = true;
-			memcpy(responseBuffer->data, commandPrefix, sizeof(char));
+			memcpy(responseBuffer->data, &commandPrefix, sizeof(char));
 		}
 	}
+
 	if (shouldReceive && !skipPrefix) {
-		shouldReceive = SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, commandPrefix);
+		shouldReceive = SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, &commandPrefix);
+
 		if (shouldReceive) {
-			memcpy(responseBuffer->data, commandPrefix, sizeof(char));
+			memcpy(responseBuffer->data, &commandPrefix, sizeof(char));
 		}
 	}
+
 	if (shouldReceive) {
 		uint32_t checksumLength = kChecksumHashLength;
 		bool receivingChecksumResponse = false;
 		while ((checksumLength > 0)) {
 			uint64_t oldSize = IncrementBufferRefBySize(responseBuffer, sizeof(char));
-			char *data = "#";
-			receivingChecksumResponse = SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, data);
+			char data = '#';
+			if (SDMMD_DebuggingReceiveInternalCheck(debuggingSocket, &data)) {
+				receivingChecksumResponse = true;
+			};
 			if (receivingChecksumResponse) {
 				checksumLength--;
 			}
-			memcpy(&(responseBuffer->data[oldSize]), data, sizeof(char));
+			memcpy(&(responseBuffer->data[oldSize]), &data, sizeof(char));
 		}
+
 		bool validResponse = SDMMD_ValidateChecksumForBuffer(responseBuffer);
 		if (validResponse) {
 			*response = CFDataCreate(kCFAllocatorDefault, PtrCast(&(responseBuffer->data[1]), UInt8 *), (CFIndex)(responseBuffer->length - kChecksumHashLength - 0x1));
+
+			if (dconn->ackEnabled) {
+				// Confirm valid command
+				SDMMD_DebuggingSendAck(dconn);
+			}
 		}
 		else {
 			result = kAMDInvalidResponseError;
+			if (dconn->ackEnabled) {
+				// Report invalid command
+				SDMMD_DebuggingSendNack(dconn);
+			}
 		}
+
 		BufferRefRelease(responseBuffer);
 	}
 	return result;
