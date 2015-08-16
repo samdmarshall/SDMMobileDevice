@@ -60,7 +60,7 @@
 		2270F37819658E3F0050DCFA /* CFDictionaryAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CFDictionaryAddition.h; path = ../Core/Core/CoreFoundation/CFDictionaryAddition.h; sourceTree = "<group>"; };
 		2270F37919658E3F0050DCFA /* CFStringAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CFStringAddition.h; path = ../Core/Core/CoreFoundation/CFStringAddition.h; sourceTree = "<group>"; };
 		2270F37A19658E3F0050DCFA /* CFTypeAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CFTypeAddition.h; path = ../Core/Core/CoreFoundation/CFTypeAddition.h; sourceTree = "<group>"; };
-		22B24AA519658A5F00A592DE /* libSDMMobileDeviceStatic.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDMMobileDeviceStatic.a; path = ../build/Release/libSDMMobileDeviceStatic.a; sourceTree = "<group>"; };
+		22B24AA519658A5F00A592DE /* libSDMMobileDeviceStatic.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDMMobileDeviceStatic.a; path = "../build/$(CONFIGURATION)/libSDMMobileDeviceStatic.a"; sourceTree = "<group>"; };
 		22FB086D19560FA600B73D75 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -180,7 +180,7 @@
 		222EF6551905AC3E000270C3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = "Sam Marshall";
 			};
 			buildConfigurationList = 222EF6581905AC3E000270C3 /* Build configuration list for PBXProject "iosdeploy" */;
@@ -248,8 +248,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				ONLY_ACTIVE_ARCH = NO;
-				SDKROOT = macosx10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -281,7 +281,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				SDKROOT = macosx10.9;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -291,7 +291,7 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/sam/Projects/SDMMobileDevice/build/Release,
+					"$(BUILD_CONFIGURATION_DIR)",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-all_load";
@@ -308,7 +308,7 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/sam/Projects/SDMMobileDevice/build/Release,
+					"$(BUILD_CONFIGURATION_DIR)",
 				);
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";

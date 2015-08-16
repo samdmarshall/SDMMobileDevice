@@ -40,8 +40,7 @@
 		22B3D7FF18E74EE40007F104 /* SDM_MD_Tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SDM_MD_Tests; sourceTree = BUILT_PRODUCTS_DIR; };
 		22B3D80218E74EE40007F104 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		22B3D80518E74EE40007F104 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
-		22B3D80E18E74F1E0007F104 /* SDMMobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDMMobileDevice.framework; path = ../build/Release/SDMMobileDevice.framework; sourceTree = "<group>"; };
-		22B3D81018E74F2E0007F104 /* MobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileDevice.framework; path = ../../../../../System/Library/PrivateFrameworks/MobileDevice.framework; sourceTree = "<group>"; };
+		22B3D81018E74F2E0007F104 /* MobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileDevice.framework; path = /System/Library/PrivateFrameworks/MobileDevice.framework; sourceTree = "<absolute>"; };
 		22B3D81218E74FBF0007F104 /* test_AMDevice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_AMDevice.c; sourceTree = "<group>"; };
 		22B3D81418E74FD50007F104 /* tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tests.h; sourceTree = "<group>"; };
 		22B3D81518E74FE30007F104 /* test_AMDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_AMDevice.h; sourceTree = "<group>"; };
@@ -66,7 +65,7 @@
 		22EC43DD18F05BED003BA4C9 /* test_apple_AFC.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_apple_AFC.c; sourceTree = "<group>"; };
 		22EC43DF18F05BF8003BA4C9 /* test_sdm_AFC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_sdm_AFC.h; sourceTree = "<group>"; };
 		22EC43E018F05C01003BA4C9 /* test_sdm_AFC.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_sdm_AFC.c; sourceTree = "<group>"; };
-		22FB086519560EDB00B73D75 /* SDMMobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDMMobileDevice.framework; path = ../build/Debug/SDMMobileDevice.framework; sourceTree = "<group>"; };
+		22FB086519560EDB00B73D75 /* SDMMobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDMMobileDevice.framework; path = "../build/$(CONFIGURATION)/SDMMobileDevice.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,7 +105,6 @@
 				22FB086519560EDB00B73D75 /* SDMMobileDevice.framework */,
 				22B3D81718E75A690007F104 /* MobileDevice.h */,
 				22B3D81018E74F2E0007F104 /* MobileDevice.framework */,
-				22B3D80E18E74F1E0007F104 /* SDMMobileDevice.framework */,
 				22B3D80218E74EE40007F104 /* CoreFoundation.framework */,
 			);
 			name = Frameworks;
@@ -209,7 +207,7 @@
 		22B3D7F718E74EE40007F104 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = "Sam Marshall";
 			};
 			buildConfigurationList = 22B3D7FA18E74EE40007F104 /* Build configuration list for PBXProject "SDM_MD_Tests" */;
@@ -285,7 +283,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -330,7 +328,6 @@
 					"$(inherited)",
 					"$(BUILD_DIR)/$(CONFIGURATION)",
 					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
-					/Users/sam/Projects/SDMMobileDevice/build/Debug,
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "";
@@ -348,7 +345,6 @@
 					"$(inherited)",
 					"$(BUILD_DIR)/$(CONFIGURATION)",
 					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
-					/Users/sam/Projects/SDMMobileDevice/build/Debug,
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "";

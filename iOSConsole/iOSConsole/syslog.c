@@ -89,16 +89,22 @@ void AttachToSyslog(char *udid)
 				
 				syslogBuffer = CFDataCreateMutable(kCFAllocatorDefault, 0x0);
 				// header to syslog
-				unsigned char syslogHeaderBuffer[SysLogHeaderSize*0x3];
-				CFDataRef syslogHeader = CFDataCreate(kCFAllocatorDefault, syslogHeaderBuffer, SysLogHeaderSize*0x3);
-				result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(syslog), (CFDataRef*)&syslogHeader);
+				CFMutableDataRef syslogHeader = CFDataCreateMutable(kCFAllocatorDefault, 0);
+				char *zeros = calloc(1, SysLogHeaderSize*3);
+				CFDataAppendBytes(syslogHeader, (UInt8*)zeros, SysLogHeaderSize*3);
+				free(zeros);
+				
+				result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(syslog), &syslogHeader);
 				CFSafeRelease(syslogHeader);
 				
 				while (SDM_MD_CallSuccessful(result)) {
 					if (SDMMD_AMDeviceIsValid(device)) {
-						unsigned char syslogRelayBuffer[SysLogBufferSize];
-						CFDataRef syslogData = CFDataCreate(kCFAllocatorDefault, syslogRelayBuffer, SysLogBufferSize);
-						result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(syslog), (CFDataRef*)&syslogData);
+						CFMutableDataRef syslogData = CFDataCreateMutable(kCFAllocatorDefault, 0);
+						char *zeros = calloc(1, SysLogBufferSize);
+						CFDataAppendBytes(syslogData, (UInt8*)zeros, SysLogBufferSize);
+						free(zeros);
+						
+						result = SDMMD_DirectServiceReceive(SDMMD_TranslateConnectionToSocket(syslog), &syslogData);
 						dispatch_sync(operatingQueue, ^{
 							CFDataAppendBytes(syslogBuffer, CFDataGetBytePtr(syslogData), SysLogBufferSize);
 							notify_post(updateLogNotifyName);

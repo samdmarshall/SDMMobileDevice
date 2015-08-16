@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		15FA286E1B80E28A002C7FBC /* libSDMMobileDeviceStatic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 15FA286D1B80E28A002C7FBC /* libSDMMobileDeviceStatic.a */; };
 		2202F17F1A5C9E450045C69E /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310D691874F4B10092C107 /* CoreFoundation.framework */; };
 		22247E0A1928F67600719F8D /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = 22247E091928F67600719F8D /* test.c */; };
 		222EF61019055DFD000270C3 /* install.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF60F19055DFD000270C3 /* install.c */; };
@@ -20,7 +21,6 @@
 		22B9557D1878A7A2004DCBF0 /* service.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B9557C1878A7A2004DCBF0 /* service.c */; };
 		22B955821878DA5F004DCBF0 /* apps.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B955811878DA5F004DCBF0 /* apps.c */; };
 		22B955881878F14F004DCBF0 /* run.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B955871878F14F004DCBF0 /* run.c */; };
-		22DB11751A9A49EB003641B6 /* libSDMMobileDeviceStatic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22DB11141A92C096003641B6 /* libSDMMobileDeviceStatic.a */; };
 		22DB11771A9A4B9D003641B6 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310DC518750DCF0092C107 /* libssl.dylib */; };
 		22DB11781A9A4BA2003641B6 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310DC718750DE70092C107 /* libcrypto.dylib */; };
 		22EFC8C01900331500C29BFF /* dev.c in Sources */ = {isa = PBXBuildFile; fileRef = 22EFC8BF1900331500C29BFF /* dev.c */; };
@@ -41,7 +41,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2202F17D1A5C9E050045C69E /* SDMMobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDMMobileDevice.framework; path = ../build/Release/SDMMobileDevice.framework; sourceTree = "<group>"; };
+		15FA286D1B80E28A002C7FBC /* libSDMMobileDeviceStatic.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDMMobileDeviceStatic.a; path = "../build/$(CONFIGURATION)/libSDMMobileDeviceStatic.a"; sourceTree = "<group>"; };
 		22247E081928F66E00719F8D /* test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
 		22247E091928F67600719F8D /* test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test.c; sourceTree = "<group>"; };
 		222EF60E19055DF5000270C3 /* install.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = install.h; sourceTree = "<group>"; };
@@ -85,10 +85,8 @@
 		22B955871878F14F004DCBF0 /* run.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = run.c; sourceTree = "<group>"; };
 		22B955891878F157004DCBF0 /* run.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = run.h; sourceTree = "<group>"; };
 		22B9558B1879DB51004DCBF0 /* libncurses.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libncurses.dylib; path = usr/lib/libncurses.dylib; sourceTree = SDKROOT; };
-		22DB11141A92C096003641B6 /* libSDMMobileDeviceStatic.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDMMobileDeviceStatic.a; path = /Users/sam/Projects/SDMMobileDevice/Framework/../build/Release/libSDMMobileDeviceStatic.a; sourceTree = "<absolute>"; };
 		22EFC8BE1900330E00C29BFF /* dev.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = dev.h; sourceTree = "<group>"; };
 		22EFC8BF1900331500C29BFF /* dev.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dev.c; sourceTree = "<group>"; };
-		22FB086719560EED00B73D75 /* libSDMMobileDeviceStatic.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDMMobileDeviceStatic.a; path = /Users/sam/Projects/SDMMobileDevice/Framework/../build/Debug/libSDMMobileDeviceStatic.a; sourceTree = "<absolute>"; };
 		22FE3F0E189E84A4005C2DB2 /* springboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = springboard.h; sourceTree = "<group>"; };
 		22FE3F0F189E84B2005C2DB2 /* springboard.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = springboard.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -98,9 +96,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15FA286E1B80E28A002C7FBC /* libSDMMobileDeviceStatic.a in Frameworks */,
 				22DB11781A9A4BA2003641B6 /* libcrypto.dylib in Frameworks */,
 				22DB11771A9A4B9D003641B6 /* libssl.dylib in Frameworks */,
-				22DB11751A9A49EB003641B6 /* libSDMMobileDeviceStatic.a in Frameworks */,
 				2202F17F1A5C9E450045C69E /* CoreFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -147,9 +145,7 @@
 		22310D681874F4B10092C107 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				22DB11141A92C096003641B6 /* libSDMMobileDeviceStatic.a */,
-				2202F17D1A5C9E050045C69E /* SDMMobileDevice.framework */,
-				22FB086719560EED00B73D75 /* libSDMMobileDeviceStatic.a */,
+				15FA286D1B80E28A002C7FBC /* libSDMMobileDeviceStatic.a */,
 				22648F9A18947DE100133948 /* IOKit.framework */,
 				22B9558B1879DB51004DCBF0 /* libncurses.dylib */,
 				22310DC718750DE70092C107 /* libcrypto.dylib */,
@@ -448,12 +444,11 @@
 				CODE_SIGN_IDENTITY = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/sam/Projects/SDMMobileDevice/build/Release,
+					"$(CONFIGURATION_BUILD_DIR)",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/sam/Projects/SDMMobileDevice/Framework/../build/Debug,
-					/Users/sam/Projects/SDMMobileDevice/Framework/../build/Release,
+					"$(CONFIGURATION_BUILD_DIR)",
 				);
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -470,13 +465,12 @@
 				CODE_SIGN_IDENTITY = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/sam/Projects/SDMMobileDevice/build/Release,
+					"$(CONFIGURATION_BUILD_DIR)",
 				);
 				GCC_OPTIMIZATION_LEVEL = 0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/sam/Projects/SDMMobileDevice/Framework/../build/Debug,
-					/Users/sam/Projects/SDMMobileDevice/Framework/../build/Release,
+					"$(CONFIGURATION_BUILD_DIR)",
 				);
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
