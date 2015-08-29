@@ -73,7 +73,7 @@ sdmmd_return_t SDMMD_store_dict(CFDictionaryRef dict, char *path, bool mode);
 CFStringRef SDMMD_AMDCopySystemBonjourUniqueID();
 sdmmd_return_t SDMMD__CreatePairingRecordFromRecordOnDiskForIdentifier(SDMMD_AMDeviceRef device, CFMutableDictionaryRef *dict);
 
-#define DefaultApplicationLookupDictionaryCount 7
+#define DefaultApplicationLookupDictionaryCount 9
 
 CFArrayRef SDMMD_ApplicationLookupDictionary();
 CFURLRef SDMMD__AMDCFURLCreateFromFileSystemPathWithSmarts(CFStringRef path);

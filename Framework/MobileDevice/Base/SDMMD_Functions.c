@@ -357,6 +357,8 @@ CFArrayRef SDMMD_ApplicationLookupDictionary()
 		CFSTR(kAppLookupKeyCFBundleDisplayName),
 		CFSTR(kAppLookupKeyCFBundleName),
 		CFSTR(kAppLookupKeyContainer),
+		CFSTR(kAppLookupKeySignerIdentity),
+		CFSTR(kAppLookupKeyApplicationDSID),
 		CFSTR(kAppLookupKeyPath)
 	};
 	// clang-format on
