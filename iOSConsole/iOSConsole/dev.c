@@ -22,7 +22,8 @@
 #define PREP_CMDS_PATH "/tmp/sdmmd-lldb-prep"
 
 #define LLDB_PREP_CMDS CFSTR("\
-target modules search-paths add /usr \"{SYMBOLS_PATH}/usr\" /System \"{SYMBOLS_PATH}/System\" \"{CONTAINER_PATH}\" \"{DISK_CONTAINER}\" \"{CONTAINER_PATH}\" \"{DISK_CONTAINER}\" /Developer \"{SYMBOLS_PATH}/Developer\"\n\
+platform select remote-ios \n\
+target create \"{APP_PATH}\"\n\
 ")
 
 void SetupDeviceForDevelopment(char *udid)
@@ -223,7 +224,7 @@ void StartDebuggingAndDetach(char *udid, char *app_path)
 		pid_t parent = getpid();
 		int pid = fork();
 		if (pid == 0) {
-			system("xcrun -sdk iphoneos lldb /tmp/sdmmd-lldb-prep");
+			execl("xcrun", "-sdk", "iphoneos", "lldb", "-s", "/tmp/sdmmd-lldb-prep");
 			kill(parent, SIGHUP);
 			_exit(0);
 		}

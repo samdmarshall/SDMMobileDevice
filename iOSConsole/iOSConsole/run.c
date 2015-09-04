@@ -9,13 +9,14 @@
 #ifndef iOSConsole_run_c
 #define iOSConsole_run_c
 
+#include <CoreFoundation/CoreFoundation.h>
+
 #include "run.h"
 #include "apps.h"
 #include "attach.h"
-#include <CoreFoundation/CoreFoundation.h>
 #include "SDMMobileDevice.h"
 
-void RunAppOnDeviceWithIdentifier(char *udid, char *identifier)
+void RunAppOnDeviceWithIdentifier(char *udid, char *identifier, bool waitForDebugger)
 {
 	SDMMD_AMDeviceRef device = FindDeviceFromUDID(udid);
 	if (device) {
@@ -88,32 +89,60 @@ void RunAppOnDeviceWithIdentifier(char *udid, char *identifier)
 							CFSafeRelease(setLaunchArgsResponse);
 							SDMMD_DebuggingCommandRelease(setLaunchArgs);
 
-							// setting thread to attach
-							CFMutableArrayRef setThreadArgs = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
-							CFArrayAppendValue(setThreadArgs, CFSTR(""));
-							DebuggerCommandRef setThread = SDMMD_CreateDebuggingCommand(kDebugCUSTOMCOMMAND, CFSTR("Hc0"), setThreadArgs);
-							CFSafeRelease(setThreadArgs);
+							// Check for launch success
+							CFMutableArrayRef launchSuccessArgs = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
+							DebuggerCommandRef launchSuccessCommand = SDMMD_CreateDebuggingCommand(kDebugqLaunchSuccess, NULL, launchSuccessArgs);
+							CFSafeRelease(launchSuccessArgs);
 
-							CFDataRef setThreadResponse = NULL;
-							result = SDMMD_DebuggingSend(dconn, setThread, &setThreadResponse);
-							CFSafeRelease(setThreadResponse);
-							SDMMD_DebuggingCommandRelease(setThread);
+							CFDataRef launchSuccessResponse = NULL;
+							result = SDMMD_DebuggingSend(dconn, launchSuccessCommand, &launchSuccessResponse);
 
-							// setting continue with execution
-							CFMutableArrayRef contArgs = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
-							CFArrayAppendValue(contArgs, CFSTR(""));
-							DebuggerCommandRef cont = SDMMD_CreateDebuggingCommand(kDebugc, NULL, contArgs);
-							CFSafeRelease(contArgs);
+							if (launchSuccessResponse) {
+								char *launchSuccessResponseAsString = (char *)CFDataGetBytePtr(launchSuccessResponse);
+								launchSuccess = !strncmp(launchSuccessResponseAsString, "OK", 2);
 
-							CFDataRef contResponse = NULL;
-							result = SDMMD_DebuggingSend(dconn, cont, &contResponse);
-							CFSafeRelease(contResponse);
-							SDMMD_DebuggingCommandRelease(cont);
+								if (!launchSuccess) {
+									printf("Launch failure: %s\n", launchSuccessResponseAsString);
+								}
+							}
 
-							launchSuccess = true;
-						}
-						if (launchSuccess) {
-							CFRunLoopRun();
+							CFSafeRelease(launchSuccessResponse);
+							SDMMD_DebuggingCommandRelease(launchSuccessCommand);
+
+							if (launchSuccess) {
+								printf("Launch success\n");
+
+								if (!waitForDebugger) {
+									printf("Continuing with execution...\n");
+
+									// setting thread to attach
+									CFMutableArrayRef setThreadArgs = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
+									CFArrayAppendValue(setThreadArgs, CFSTR(""));
+									DebuggerCommandRef setThread = SDMMD_CreateDebuggingCommand(kDebugCUSTOMCOMMAND, CFSTR("Hc0"), setThreadArgs);
+									CFSafeRelease(setThreadArgs);
+
+									CFDataRef setThreadResponse = NULL;
+									result = SDMMD_DebuggingSend(dconn, setThread, &setThreadResponse);
+									CFSafeRelease(setThreadResponse);
+									SDMMD_DebuggingCommandRelease(setThread);
+
+									// setting continue with execution
+									CFMutableArrayRef contArgs = CFArrayCreateMutable(kCFAllocatorDefault, 0x0, &kCFTypeArrayCallBacks);
+									CFArrayAppendValue(contArgs, CFSTR(""));
+									DebuggerCommandRef cont = SDMMD_CreateDebuggingCommand(kDebugc, NULL, contArgs);
+									CFSafeRelease(contArgs);
+
+									CFDataRef contResponse = NULL;
+									result = SDMMD_DebuggingSend(dconn, cont, &contResponse);
+									CFSafeRelease(contResponse);
+									SDMMD_DebuggingCommandRelease(cont);
+								}
+								else {
+									printf("Waiting for debugger to attach...\n");
+
+									CFRunLoopRun();
+								}
+							}
 						}
 						/*
 						sdmmd_return_t result = SDMMD_StartDebuggingSessionOnDevice(device, &connection);
