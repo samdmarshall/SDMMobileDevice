@@ -2,7 +2,7 @@
 //  main.swift
 //  SwiftTest
 //
-//  Created by Sam Marshall on 6/21/14.
+//  Created by Samantha Marshall on 6/21/14.
 //
 //
 

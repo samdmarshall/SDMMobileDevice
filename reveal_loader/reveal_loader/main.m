@@ -2,8 +2,8 @@
 //  main.c
 //  revealer
 //
-//  Created by Sam Marshall on 8/8/14.
-//  Copyright (c) 2014 Sam Marshall. All rights reserved.
+//  Created by Samantha Marshall on 8/8/14.
+//  Copyright (c) 2014 Samantha Marshall. All rights reserved.
 //
 
 #include <Foundation/Foundation.h>

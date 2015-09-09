@@ -2,7 +2,7 @@
 //  SDMMD_FileRelay.h
 //  SDMMobileDevice-Framework
 //
-//  Created by Sam Marshall on 8/22/14.
+//  Created by Samantha Marshall on 8/22/14.
 //
 //
 

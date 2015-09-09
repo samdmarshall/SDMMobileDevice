@@ -2,7 +2,7 @@
 //  SDMMD_MobileConfig.h
 //  SDMMobileDevice-Framework
 //
-//  Created by Sam Marshall on 4/21/14.
+//  Created by Samantha Marshall on 4/21/14.
 //
 //
 

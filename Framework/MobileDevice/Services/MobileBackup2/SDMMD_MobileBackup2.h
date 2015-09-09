@@ -2,7 +2,7 @@
 //  SDMMD_MobileBackup2.h
 //  SDMMobileDevice-Framework
 //
-//  Created by Sam Marshall on 4/30/14.
+//  Created by Samantha Marshall on 4/30/14.
 //
 //
 

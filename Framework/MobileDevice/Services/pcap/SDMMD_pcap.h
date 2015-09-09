@@ -2,7 +2,7 @@
 //  SDMMD_pcap.h
 //  SDMMobileDevice-Framework
 //
-//  Created by Sam Marshall on 5/19/14.
+//  Created by Samantha Marshall on 5/19/14.
 //
 //
 

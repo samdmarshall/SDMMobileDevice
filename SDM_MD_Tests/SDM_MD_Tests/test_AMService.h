@@ -2,8 +2,8 @@
 //  test_AMService.h
 //  SDM_MD_Tests
 //
-//  Created by Sam Marshall on 3/29/14.
-//  Copyright (c) 2014 Sam Marshall. All rights reserved.
+//  Created by Samantha Marshall on 3/29/14.
+//  Copyright (c) 2014 Samantha Marshall. All rights reserved.
 //
 
 #ifndef SDM_MD_Tests_test_AMService_h

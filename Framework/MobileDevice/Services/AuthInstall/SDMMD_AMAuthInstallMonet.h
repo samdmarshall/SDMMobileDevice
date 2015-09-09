@@ -2,7 +2,7 @@
 //  SDMMD_AMAuthInstallMonet.h
 //  SDMMobileDevice-Framework
 //
-//  Created by Sam Marshall on 4/22/14.
+//  Created by Samantha Marshall on 4/22/14.
 //
 //
 

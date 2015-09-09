@@ -2,8 +2,8 @@
 //  install.c
 //  iOSConsole
 //
-//  Created by Sam Marshall on 4/21/14.
-//  Copyright (c) 2014 Sam Marshall. All rights reserved.
+//  Created by Samantha Marshall on 4/21/14.
+//  Copyright (c) 2014 Samantha Marshall. All rights reserved.
 //
 
 #ifndef iOSConsole_install_c
