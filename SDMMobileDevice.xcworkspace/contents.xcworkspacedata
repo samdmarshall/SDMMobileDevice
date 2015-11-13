@@ -19,4 +19,7 @@
    <FileRef
       location = "group:Framework/SDMMobileDevice-Framework.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:openssl-0.9.8zg/OpenSSL.xcodeproj">
+   </FileRef>
 </Workspace>

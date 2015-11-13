@@ -21,8 +21,6 @@
 		22B9557D1878A7A2004DCBF0 /* service.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B9557C1878A7A2004DCBF0 /* service.c */; };
 		22B955821878DA5F004DCBF0 /* apps.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B955811878DA5F004DCBF0 /* apps.c */; };
 		22B955881878F14F004DCBF0 /* run.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B955871878F14F004DCBF0 /* run.c */; };
-		22DB11771A9A4B9D003641B6 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310DC518750DCF0092C107 /* libssl.dylib */; };
-		22DB11781A9A4BA2003641B6 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22310DC718750DE70092C107 /* libcrypto.dylib */; };
 		22EFC8C01900331500C29BFF /* dev.c in Sources */ = {isa = PBXBuildFile; fileRef = 22EFC8BF1900331500C29BFF /* dev.c */; };
 		22FE3F10189E84B2005C2DB2 /* springboard.c in Sources */ = {isa = PBXBuildFile; fileRef = 22FE3F0F189E84B2005C2DB2 /* springboard.c */; };
 /* End PBXBuildFile section */
@@ -41,6 +39,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		15719C2F1BF576D200F01FF9 /* OpenSSL.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = OpenSSL.xcconfig; path = ../OpenSSL.xcconfig; sourceTree = "<group>"; };
 		15FA286D1B80E28A002C7FBC /* libSDMMobileDeviceStatic.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDMMobileDeviceStatic.a; path = "../build/$(CONFIGURATION)/libSDMMobileDeviceStatic.a"; sourceTree = "<group>"; };
 		22247E081928F66E00719F8D /* test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
 		22247E091928F67600719F8D /* test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test.c; sourceTree = "<group>"; };
@@ -97,8 +96,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				15FA286E1B80E28A002C7FBC /* libSDMMobileDeviceStatic.a in Frameworks */,
-				22DB11781A9A4BA2003641B6 /* libcrypto.dylib in Frameworks */,
-				22DB11771A9A4B9D003641B6 /* libssl.dylib in Frameworks */,
 				2202F17F1A5C9E450045C69E /* CoreFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -127,6 +124,7 @@
 		22310D5D1874F4B10092C107 = {
 			isa = PBXGroup;
 			children = (
+				15719C2F1BF576D200F01FF9 /* OpenSSL.xcconfig */,
 				2270F36B19658E1A0050DCFA /* Core */,
 				22310D6B1874F4B10092C107 /* iOSConsole */,
 				22310D681874F4B10092C107 /* Frameworks */,
@@ -368,6 +366,7 @@
 /* Begin XCBuildConfiguration section */
 		22310D701874F4B10092C107 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 15719C2F1BF576D200F01FF9 /* OpenSSL.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -406,6 +405,7 @@
 		};
 		22310D711874F4B10092C107 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 15719C2F1BF576D200F01FF9 /* OpenSSL.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -439,9 +439,10 @@
 		};
 		22310D731874F4B10092C107 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 15719C2F1BF576D200F01FF9 /* OpenSSL.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(CONFIGURATION_BUILD_DIR)",
@@ -450,7 +451,10 @@
 					"$(inherited)",
 					"$(CONFIGURATION_BUILD_DIR)",
 				);
-				OTHER_LDFLAGS = "-all_load";
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SYMROOT = ../build;
@@ -460,9 +464,10 @@
 		};
 		22310D741874F4B10092C107 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 15719C2F1BF576D200F01FF9 /* OpenSSL.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(CONFIGURATION_BUILD_DIR)",
@@ -472,7 +477,10 @@
 					"$(inherited)",
 					"$(CONFIGURATION_BUILD_DIR)",
 				);
-				OTHER_LDFLAGS = "-all_load";
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SYMROOT = ../build;

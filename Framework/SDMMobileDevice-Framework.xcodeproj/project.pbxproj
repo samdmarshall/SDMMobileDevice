@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		135697D817FEB9CB00039D19 /* SDMTranslation.h in Headers */ = {isa = PBXBuildFile; fileRef = 135697D717FEB9CB00039D19 /* SDMTranslation.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		15719C2E1BF576B500F01FF9 /* OpenSSL.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 15719C2D1BF576B500F01FF9 /* OpenSSL.xcconfig */; };
 		15FA8DC01B7562B500F25F49 /* SDMMD_AMAuthInstall.c in Sources */ = {isa = PBXBuildFile; fileRef = 15FA8DB91B7562B500F25F49 /* SDMMD_AMAuthInstall.c */; };
 		15FA8DC11B7562B500F25F49 /* SDMMD_AMAuthInstall.c in Sources */ = {isa = PBXBuildFile; fileRef = 15FA8DB91B7562B500F25F49 /* SDMMD_AMAuthInstall.c */; };
 		15FA8DC21B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.c in Sources */ = {isa = PBXBuildFile; fileRef = 15FA8DBA1B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.c */; };
@@ -83,8 +84,6 @@
 		22AD91C31789D715002ACFB1 /* SDMMD_Service.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215A8AF175010A300AD1981 /* SDMMD_Service.c */; };
 		22AD91C41789D71A002ACFB1 /* SDMMD_Connection.h in Headers */ = {isa = PBXBuildFile; fileRef = 225ACB73175FC15E00A47071 /* SDMMD_Connection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22AD91C51789D71A002ACFB1 /* SDMMD_Connection.c in Sources */ = {isa = PBXBuildFile; fileRef = 225ACB74175FC15E00A47071 /* SDMMD_Connection.c */; };
-		22AD92471789DC7E002ACFB1 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AD92461789DC7E002ACFB1 /* libssl.dylib */; };
-		22AD924B1789DCA7002ACFB1 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22AD924A1789DCA7002ACFB1 /* libcrypto.dylib */; };
 		22AD9347178A1609002ACFB1 /* SDMMD_MRecoveryModeDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215AA3F1751328100AD1981 /* SDMMD_MRecoveryModeDevice.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		22AD9348178A160B002ACFB1 /* SDMMD_Keys.h in Headers */ = {isa = PBXBuildFile; fileRef = 2215A9FB17512A9F00AD1981 /* SDMMD_Keys.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22AD9349178A1622002ACFB1 /* SDMMD_MRecoveryModeDevice.c in Sources */ = {isa = PBXBuildFile; fileRef = 2215AA401751328100AD1981 /* SDMMD_MRecoveryModeDevice.c */; };
@@ -302,6 +301,7 @@
 
 /* Begin PBXFileReference section */
 		135697D717FEB9CB00039D19 /* SDMTranslation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMTranslation.h; sourceTree = "<group>"; };
+		15719C2D1BF576B500F01FF9 /* OpenSSL.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = OpenSSL.xcconfig; path = ../OpenSSL.xcconfig; sourceTree = "<group>"; };
 		15FA8DB91B7562B500F25F49 /* SDMMD_AMAuthInstall.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AMAuthInstall.c; sourceTree = "<group>"; };
 		15FA8DBA1B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDMMD_AMAuthInstallApImg3.c; sourceTree = "<group>"; };
 		15FA8DBB1B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMMD_AMAuthInstallApImg3.h; sourceTree = "<group>"; };
@@ -457,8 +457,6 @@
 			files = (
 				22648F9918947C4300133948 /* IOKit.framework in Frameworks */,
 				2215A84017500DE700AD1981 /* CoreFoundation.framework in Frameworks */,
-				22AD92471789DC7E002ACFB1 /* libssl.dylib in Frameworks */,
-				22AD924B1789DCA7002ACFB1 /* libcrypto.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -949,6 +947,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				15719C2D1BF576B500F01FF9 /* OpenSSL.xcconfig */,
 				220B5BD3188390440082AF84 /* Certs */,
 				220B5BCF18837FDC0082AF84 /* SDMMobileDevice.entitlements */,
 				2215A83817500DDC00AD1981 /* SDMMobileDevice-Info.plist */,
@@ -1213,6 +1212,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				220B5BD018837FDC0082AF84 /* SDMMobileDevice.entitlements in Resources */,
+				15719C2E1BF576B500F01FF9 /* OpenSSL.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1331,6 +1331,7 @@
 /* Begin XCBuildConfiguration section */
 		2215A83A17500DDC00AD1981 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 15719C2D1BF576B500F01FF9 /* OpenSSL.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
@@ -1362,7 +1363,6 @@
 					"-D",
 					"IS_FRAMEWORK=1",
 				);
-				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = SDMMobileDevice;
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -1373,6 +1373,7 @@
 		};
 		2215A83B17500DDC00AD1981 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 15719C2D1BF576B500F01FF9 /* OpenSSL.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
@@ -1403,7 +1404,6 @@
 					"-D",
 					"IS_FRAMEWORK=1",
 				);
-				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = SDMMobileDevice;
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -1464,6 +1464,7 @@
 		};
 		22FB084119560E5800B73D75 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 15719C2D1BF576B500F01FF9 /* OpenSSL.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
@@ -1491,6 +1492,7 @@
 		};
 		22FB084219560E5800B73D75 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 15719C2D1BF576B500F01FF9 /* OpenSSL.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;

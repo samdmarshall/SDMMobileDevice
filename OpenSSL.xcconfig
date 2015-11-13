@@ -1,0 +1,13 @@
+//
+//  OpenSSL.xcconfig
+//  SDMMobileDevice-Framework
+//
+//  Created by Samantha Marshall on 11/12/15.
+//
+//
+
+OPEN_SSL_PATH = $(PROJECT_DIR)/../openssl-0.9.8zg
+
+HEADER_SEARCH_PATHS = $(inherited) $(OPEN_SSL_PATH)/include/**
+LIBRARY_SEARCH_PATHS = $(inherited) $(OPEN_SSL_PATH)/build/$(CONFIGURATION)/
+OTHER_LDFLAGS = $(inherited) -lssl -lcrypto

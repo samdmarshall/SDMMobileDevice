@@ -12,8 +12,6 @@
 		2271992D199598B700887A85 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2271992C199598B700887A85 /* main.m */; };
 		22719933199598E800887A85 /* libSDMMobileDeviceStatic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BB5AF219953E1A0078F2AF /* libSDMMobileDeviceStatic.a */; };
 		22719934199598E800887A85 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BB5AF4199543160078F2AF /* IOKit.framework */; };
-		22719935199598E800887A85 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BB5AF8199543250078F2AF /* libcrypto.dylib */; };
-		22719936199598E800887A85 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BB5AF61995431D0078F2AF /* libssl.dylib */; };
 		22719938199598E900887A85 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22719937199598E900887A85 /* ApplicationServices.framework */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +28,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		153AB9951BF578A600244C2E /* OpenSSL.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = OpenSSL.xcconfig; path = ../OpenSSL.xcconfig; sourceTree = "<group>"; };
 		226954631997B3080047977F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		226954641997B3D60047977F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		22719928199598B700887A85 /* reveal_loader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = reveal_loader; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -59,8 +58,6 @@
 				22719933199598E800887A85 /* libSDMMobileDeviceStatic.a in Frameworks */,
 				2271992A199598B700887A85 /* CoreFoundation.framework in Frameworks */,
 				22719934199598E800887A85 /* IOKit.framework in Frameworks */,
-				22719935199598E800887A85 /* libcrypto.dylib in Frameworks */,
-				22719936199598E800887A85 /* libssl.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +76,7 @@
 		22BB5ABF19953DEE0078F2AF = {
 			isa = PBXGroup;
 			children = (
+				153AB9951BF578A600244C2E /* OpenSSL.xcconfig */,
 				2271992B199598B700887A85 /* reveal_loader */,
 				22BB5ACA19953DEE0078F2AF /* Frameworks */,
 				22BB5AC919953DEE0078F2AF /* Products */,
@@ -194,6 +192,7 @@
 				OTHER_LDFLAGS = (
 					"-Wl,-sectcreate,__TEXT,__info_plist,Info.plist",
 					"-all_load",
+					"$(inherited)",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)/usr/local/include/";
@@ -209,6 +208,7 @@
 				OTHER_LDFLAGS = (
 					"-Wl,-sectcreate,__TEXT,__info_plist,Info.plist",
 					"-all_load",
+					"$(inherited)",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)/usr/local/include/";
@@ -217,6 +217,7 @@
 		};
 		22BB5AEA19953DEE0078F2AF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 153AB9951BF578A600244C2E /* OpenSSL.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -233,7 +234,6 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -257,11 +257,13 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SYMROOT = ../build;
+				USER_HEADER_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)/usr/local/include/";
 			};
 			name = Debug;
 		};
 		22BB5AEB19953DEE0078F2AF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 153AB9951BF578A600244C2E /* OpenSSL.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -280,7 +282,6 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -296,6 +297,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				SDKROOT = macosx;
 				SYMROOT = ../build;
+				USER_HEADER_SEARCH_PATHS = "$(CONFIGURATION_BUILD_DIR)/usr/local/include/";
 			};
 			name = Release;
 		};

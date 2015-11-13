@@ -14,8 +14,6 @@
 		222EF6E41905AD0D000270C3 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6E31905AD0D000270C3 /* list.c */; };
 		222EF6E81905AE3E000270C3 /* dev.c in Sources */ = {isa = PBXBuildFile; fileRef = 222EF6E71905AE3E000270C3 /* dev.c */; };
 		22B24AA619658A5F00A592DE /* libSDMMobileDeviceStatic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B24AA519658A5F00A592DE /* libSDMMobileDeviceStatic.a */; };
-		22FB086B19560F9600B73D75 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 222EF6DD1905AC97000270C3 /* libssl.dylib */; };
-		22FB086C19560F9C00B73D75 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 222EF6DB1905AC93000270C3 /* libcrypto.dylib */; };
 		22FB086E19560FA600B73D75 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22FB086D19560FA600B73D75 /* IOKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +32,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		153AB9941BF5787400244C2E /* OpenSSL.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = OpenSSL.xcconfig; path = ../OpenSSL.xcconfig; sourceTree = "<group>"; };
 		222EF65D1905AC3E000270C3 /* iosdeploy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iosdeploy; sourceTree = BUILT_PRODUCTS_DIR; };
 		222EF6601905AC3E000270C3 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		222EF6631905AC3E000270C3 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
@@ -71,8 +70,6 @@
 			files = (
 				22B24AA619658A5F00A592DE /* libSDMMobileDeviceStatic.a in Frameworks */,
 				22FB086E19560FA600B73D75 /* IOKit.framework in Frameworks */,
-				22FB086C19560F9C00B73D75 /* libcrypto.dylib in Frameworks */,
-				22FB086B19560F9600B73D75 /* libssl.dylib in Frameworks */,
 				222EF6611905AC3E000270C3 /* CoreFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -83,6 +80,7 @@
 		222EF6541905AC3E000270C3 = {
 			isa = PBXGroup;
 			children = (
+				153AB9941BF5787400244C2E /* OpenSSL.xcconfig */,
 				2270F36C19658E1F0050DCFA /* Core */,
 				222EF6621905AC3E000270C3 /* iosdeploy */,
 				222EF65F1905AC3E000270C3 /* Frameworks */,
@@ -217,6 +215,7 @@
 /* Begin XCBuildConfiguration section */
 		222EF6671905AC3E000270C3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 153AB9941BF5787400244C2E /* OpenSSL.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -255,6 +254,7 @@
 		};
 		222EF6681905AC3E000270C3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 153AB9941BF5787400244C2E /* OpenSSL.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -294,7 +294,10 @@
 					"$(BUILD_CONFIGURATION_DIR)",
 				);
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "-all_load";
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SYMROOT = ../build;
@@ -310,7 +313,10 @@
 					"$(inherited)",
 					"$(BUILD_CONFIGURATION_DIR)",
 				);
-				OTHER_LDFLAGS = "-all_load";
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SYMROOT = ../build;
