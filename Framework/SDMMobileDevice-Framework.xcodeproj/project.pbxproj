@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		135697D817FEB9CB00039D19 /* SDMTranslation.h in Headers */ = {isa = PBXBuildFile; fileRef = 135697D717FEB9CB00039D19 /* SDMTranslation.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		15719C2E1BF576B500F01FF9 /* OpenSSL.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 15719C2D1BF576B500F01FF9 /* OpenSSL.xcconfig */; };
 		15FA8DC01B7562B500F25F49 /* SDMMD_AMAuthInstall.c in Sources */ = {isa = PBXBuildFile; fileRef = 15FA8DB91B7562B500F25F49 /* SDMMD_AMAuthInstall.c */; };
 		15FA8DC11B7562B500F25F49 /* SDMMD_AMAuthInstall.c in Sources */ = {isa = PBXBuildFile; fileRef = 15FA8DB91B7562B500F25F49 /* SDMMD_AMAuthInstall.c */; };
 		15FA8DC21B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.c in Sources */ = {isa = PBXBuildFile; fileRef = 15FA8DBA1B7562B500F25F49 /* SDMMD_AMAuthInstallApImg3.c */; };
@@ -1175,7 +1174,8 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastSwiftUpdateCheck = 0710;
+				LastUpgradeCheck = 0710;
 				TargetAttributes = {
 					2299C418195623A600C75891 = {
 						CreatedOnToolsVersion = 6.0;
@@ -1212,7 +1212,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				220B5BD018837FDC0082AF84 /* SDMMobileDevice.entitlements in Resources */,
-				15719C2E1BF576B500F01FF9 /* OpenSSL.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1364,6 +1363,7 @@
 					"IS_FRAMEWORK=1",
 				);
 				PREBINDING = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.samdmarshall.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = SDMMobileDevice;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -1405,6 +1405,7 @@
 					"IS_FRAMEWORK=1",
 				);
 				PREBINDING = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.samdmarshall.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = SDMMobileDevice;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -1530,6 +1531,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_VERSION = "";

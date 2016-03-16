@@ -408,7 +408,7 @@ void SDMMD_USBMuxStartListener(SDMMD_USBMuxListenerRef *listener)
 			}
 			else {
 				bad_packet_counter++;
-                printf("%s: failed to decodeCFPropertyList from packet payload\n",__FUNCTION__);
+                printf("%s: failed to decode CFPropertyList from packet payload\n",__FUNCTION__);
 				if (bad_packet_counter > 10) {
 					printf("eating bad packets, exiting...\n");
 					exit(EXIT_FAILURE);

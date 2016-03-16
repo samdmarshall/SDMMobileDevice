@@ -145,7 +145,7 @@ SSL *SDMMD_lockssl_handshake(uint64_t socket, CFTypeRef hostCert, CFTypeRef devi
 	BIO_METHOD *bioMethod = BIO_s_socket();
 	BIO *bioSocket = BIO_new(bioMethod);
 	if (bioSocket) {
-		BIO_set_fd(bioSocket, socket, 0);
+		BIO_set_fd(bioSocket, (int)socket, 0);
 		X509 *cert = SDMMD__decode_certificate(hostCert);
 		if (cert == NULL) {
 			printf("_create_ssl_context: Could not certificate.\n");
