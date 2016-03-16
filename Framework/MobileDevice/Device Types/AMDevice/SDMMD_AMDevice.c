@@ -952,6 +952,7 @@ sdmmd_return_t SDMMD_send_session_stop(SDMMD_AMDeviceRef device, CFTypeRef sessi
 		SDMMD_lockconn_disable_ssl(device->ivars.lockdown_conn);
 		result = kAMDSuccess;
 	}
+	CFSafeRelease(response);
 
 	ExitLabelAndReturn(result);
 }
