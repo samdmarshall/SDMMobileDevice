@@ -161,7 +161,7 @@ SSL *SDMMD_lockssl_handshake(uint64_t socket, CFTypeRef hostCert, CFTypeRef devi
 			Safe(BIO_free, dataBIO);
 			if (rsa) {
 				if (hostCert) {
-					sslCTX = SSL_CTX_new(SSLv3_method());
+					sslCTX = SSL_CTX_new(TLSv1_method());
 					if (sslCTX) {
 						result = SSL_CTX_use_certificate(sslCTX, cert);
 						if (result == 0) {
