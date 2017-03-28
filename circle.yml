@@ -1,0 +1,13 @@
+machine:
+  xcode:
+    version: "8.2"
+
+dependencies:
+  override:
+    - git submodule update --init --recursive 
+
+test:
+  override:
+    - make clean framework
+    - make clean static
+    - make clean iosconsole
