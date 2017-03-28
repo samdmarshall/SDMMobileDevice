@@ -103,14 +103,14 @@ core: setup $(CORE_SOURCES) $(CORE_OBJECTS)
 	xcrun libtool -static $(CORE_OBJECTS) -o build/libCore.a
 	
 openssl: setup
-	-cd openssl-0.9.8zg && $(MAKE) clean
+	-cd openssl-0.9.8zg/ && $(MAKE) clean
 	cd openssl-0.9.8zg/ && ./Configure darwin64-x86_64-cc shared
 	cd openssl-0.9.8zg/ && $(MAKE) build_ssl
 	mv openssl-0.9.8zg/libcrypto.a build/libcrypto.a
 	mv openssl-0.9.8zg/libssl.a build/libssl.a
 
 clean:
-	cd openssl-0.9.8zg/ && $(MAKE) clean
+	-cd openssl-0.9.8zg/ && $(MAKE) clean
 	-rm -rdf build/
 	-rm ./Framework/src/*.o
 	-rm ./iOSConsole/*.o
