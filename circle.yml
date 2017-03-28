@@ -1,0 +1,5 @@
+test:
+  override:
+    - make clean framework
+    - make clean static
+    - make clean iosconsole
